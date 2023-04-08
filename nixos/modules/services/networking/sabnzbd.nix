@@ -15,12 +15,12 @@ in
 
   options = {
     services.sabnzbd = {
-      enable = mkEnableOption "the sabnzbd server";
+      enable = mkEnableOption (lib.mdDoc "the sabnzbd server");
 
       package = mkOption {
         type = types.package;
         default = pkgs.sabnzbd;
-        defaultText = "pkgs.sabnzbd";
+        defaultText = lib.literalExpression "pkgs.sabnzbd";
         description = lib.mdDoc "The sabnzbd executable package run by the service.";
       };
 

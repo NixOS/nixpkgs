@@ -1,42 +1,22 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchFromGitHub
 , protobuf
 , dill
 , grpcio
-, pulumi-bin
+, pulumi
 , isPy27
 , semver
+, pytestCheckHook
 , pyyaml
 , six
-
-
-# for tests
-, go
-, pulumictl
-, pylint
-, pytest
-, pytest-timeout
-, wheel
-, pytest-asyncio
-
-, mypy
 }:
-let
-  data = import ./data.nix {};
-in
 buildPythonPackage rec {
-  pname = "pulumi";
-  version = pulumi-bin.version;
-  disabled = isPy27;
+  inherit (pulumi) version src;
 
-  src = fetchFromGitHub {
-    owner = "pulumi";
-    repo = "pulumi";
-    rev = "v${pulumi-bin.version}";
-    sha256 = "sha256-vqEZEHTpJV65a3leWwYhyi3dzAsN67BXOvk5hnTPeuI=";
-  };
+  pname = "pulumi";
+
+  disabled = isPy27;
 
   propagatedBuildInputs = [
     semver
@@ -47,29 +27,36 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
-    pulumi-bin
-    pulumictl
-    mypy
-    go
-    pytest
-    pytest-timeout
-    pytest-asyncio
-    wheel
+  nativeCheckInputs = [
+    pulumi.pkgs.pulumi-language-python
+    pytestCheckHook
   ];
 
-  sourceRoot="source/sdk/python/lib";
+  pytestFlagsArray = [
+    "test/"
+  ];
+
+  sourceRoot = "${src.name}/sdk/python/lib";
+
   # we apply the modifications done in the pulumi/sdk/python/Makefile
   # but without the venv code
   postPatch = ''
     cp ../../README.md .
-    sed -i "s/\''${VERSION}/${version}/g" setup.py
+    substituteInPlace setup.py \
+      --replace "3.0.0" "${version}" \
+      --replace "grpcio==1.51.3" "grpcio"
   '';
 
-  # disabled because tests try to fetch go packages from the net
-  doCheck = false;
+  # Allow local networking in tests on Darwin
+  __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = ["pulumi"];
+  # Verify that the version substitution works
+  preCheck = ''
+    pip show "${pname}" | grep "Version: ${version}" > /dev/null \
+      || (echo "ERROR: Version substitution seems to be broken"; exit 1)
+  '';
+
+  pythonImportsCheck = [ "pulumi" ];
 
   meta = with lib; {
     description = "Modern Infrastructure as Code. Any cloud, any language";

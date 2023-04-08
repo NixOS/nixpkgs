@@ -113,9 +113,6 @@ import ../make-test-python.nix (
       podman.wait_for_unit("sockets.target")
       podman.wait_for_unit("ghostunnel-server-podman-socket.service")
 
-      with subtest("Create default network"):
-          podman.succeed("docker network create default")
-
       with subtest("Root docker cli also works"):
           podman.succeed("docker version")
 

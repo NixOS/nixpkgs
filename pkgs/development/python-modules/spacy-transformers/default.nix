@@ -2,8 +2,8 @@
 , callPackage
 , fetchPypi
 , buildPythonPackage
-, dataclasses
-, pytorch
+, pythonRelaxDepsHook
+, torch
 , pythonOlder
 , spacy
 , spacy-alignments
@@ -13,30 +13,31 @@
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
-  version = "1.1.7";
+  version = "1.2.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lrC1JEQu3/YX4o5azs4UDTsrtfim3IJyD6plCbx5G3E=";
+    hash = "sha256-Up9ZlLlAM0CDXEYDI95KsLzA0TBz/uZFqEgZLmNIABA=";
   };
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
   propagatedBuildInputs = [
-    pytorch
+    torch
     spacy
     spacy-alignments
     srsly
     transformers
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "transformers>=3.4.0,<4.18.0" "transformers>=3.4.0 # ,<4.18.0"
-  '';
+  pythonRelaxDeps = [
+    "transformers"
+  ];
 
   # Test fails due to missing arguments for trfs2arrays().
   doCheck = false;
@@ -50,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "spaCy pipelines for pretrained BERT, XLNet and GPT-2";
     homepage = "https://github.com/explosion/spacy-transformers";
+    changelog = "https://github.com/explosion/spacy-transformers/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

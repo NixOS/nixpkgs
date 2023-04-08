@@ -25,7 +25,7 @@ in {
 
     services.spacecookie = {
 
-      enable = mkEnableOption "spacecookie";
+      enable = mkEnableOption (lib.mdDoc "spacecookie");
 
       package = mkOption {
         type = types.package;
@@ -90,7 +90,7 @@ in {
           };
 
           options.log = {
-            enable = mkEnableOption "logging for spacecookie"
+            enable = mkEnableOption (lib.mdDoc "logging for spacecookie")
               // { default = true; example = false; };
 
             hide-ips = mkOption {

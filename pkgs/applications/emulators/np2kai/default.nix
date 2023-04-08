@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     export GIT_VERSION=${builtins.substring 0 7 src.rev}
-    buildFlags="$buildFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES -l$NIX_BUILD_CORES}"
+    buildFlags="$buildFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
   '' + optionalString enableX11 ''
     cd x11
     substituteInPlace Makefile.am \
@@ -157,7 +157,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # TODO Remove when bumping past rev22
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
 
   buildPhase = optionalString enableSDL ''
     cd sdl2

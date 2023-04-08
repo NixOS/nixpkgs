@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , python
 , pytestCheckHook
@@ -11,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "funcparserlib";
-  version = "1.0.0a0";
+  version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -20,25 +19,16 @@ buildPythonPackage rec {
     owner = "vlasovskikh";
     repo = pname;
     rev = version;
-    sha256 = "sha256-YfcboKjyc5ASzrp0duu2R6psf51MGZIeZ0owo5QNSnU=";
+    hash = "sha256-moWaOzyF/yhDQCLEp7bc0j8wNv7FM7cvvpCwon3j+gI=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     six
-  ];
-
-  patches = [
-    # Support for poetry-core, https://github.com/vlasovskikh/funcparserlib/pull/73
-    (fetchpatch {
-      name = "support-poetry-core.patch";
-      url = "https://github.com/vlasovskikh/funcparserlib/commit/61ed558fc146b7a30879919325dfa8aae77be556.patch";
-      sha256 = "sha256-tqdR3r4/t7RWBYZeAabaN7oYf6VxkVVz006XICX9rYI=";
-    })
   ];
 
   pythonImportsCheck = [

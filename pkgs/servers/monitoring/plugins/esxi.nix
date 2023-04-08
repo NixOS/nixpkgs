@@ -6,6 +6,7 @@ let
 in python3Packages.buildPythonApplication rec {
   pname = lib.replaceStrings [ "_" ] [ "-" ] bName;
   version = "20200710";
+  format = "other";
 
   src = fetchFromGitHub {
     owner  = "Napsty";

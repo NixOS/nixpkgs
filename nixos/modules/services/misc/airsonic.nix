@@ -9,7 +9,7 @@ in {
   options = {
 
     services.airsonic = {
-      enable = mkEnableOption "Airsonic, the Free and Open Source media streaming server (fork of Subsonic and Libresonic)";
+      enable = mkEnableOption (lib.mdDoc "Airsonic, the Free and Open Source media streaming server (fork of Subsonic and Libresonic)");
 
       user = mkOption {
         type = types.str;
@@ -48,7 +48,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 4040;
         description = lib.mdDoc ''
           The port on which Airsonic will listen for

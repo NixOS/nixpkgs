@@ -1,7 +1,9 @@
 { lib
 , stdenv
+, arrow-cpp
 , bokeh
 , buildPythonPackage
+, click
 , cloudpickle
 , distributed
 , fastparquet
@@ -26,19 +28,20 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2022.7.0";
+  version = "2023.2.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-O5/TNeta0V0v9WTpPmF/kJMJ40ANo6rcRtzurr5/SwA=";
+    hash = "sha256-7cuTxJ5SxOEf0v+SvSiaz7x8YYTx/qIS+KktbtubiDU=";
   };
 
   propagatedBuildInputs = [
+    click
     cloudpickle
     fsspec
     packaging
@@ -67,14 +70,15 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
-    fastparquet
-    pyarrow
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
     pytest-xdist
     scipy
     zarr
+  ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
+    fastparquet
+    pyarrow
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -97,9 +101,6 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
-    # Ignore warning about pyarrow 5.0.0 feautres
-    "-W"
-    "ignore::FutureWarning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -110,6 +111,11 @@ buildPythonPackage rec {
     "test_read_dir_nometa"
   ] ++ [
     "test_chunksize_files"
+    # TypeError: 'ArrowStringArray' with dtype string does not support reduction 'min'
+    "test_set_index_string"
+    # numpy 1.24
+    # RuntimeWarning: invalid value encountered in cast
+    "test_setitem_extended_API_2d_mask"
   ];
 
   __darwinAllowLocalNetworking = true;

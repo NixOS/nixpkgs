@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   checkInputs = [ alcotest ];
   propagatedBuildInputs = [ ppxlib ];
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {
     homepage = "https://github.com/johnwhitington/ppx_blob";

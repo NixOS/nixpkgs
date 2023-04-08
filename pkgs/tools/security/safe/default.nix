@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "safe";
-  version = "1.6.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "starkandwayne";
     repo = "safe";
     rev = "v${version}";
-    sha256 = "sha256-ankX4BeMvBEd0e01mQHfaPg4z1z+IZqELaSEJ5deF8Y=";
+    sha256 = "sha256-sg0RyZ5HpYu7M11bNy17Sjxm7C3pkQX3I17edbALuvU=";
   };
 
-  vendorSha256 = "sha256-7hX35FfFxfoiI/dSxWhZH8iJoRWa4slAJF0lULq8KL4=";
+  vendorHash = "sha256-w8gHCqOfmZg4JZgg1nZBtTJ553Rbp0a0JsoQVDFjehM=";
 
   subPackages = [ "." ];
 

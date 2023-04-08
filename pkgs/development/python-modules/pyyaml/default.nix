@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "yaml";
     repo = "pyyaml";
     rev = version;
-    sha256 = "sha256-wcII32mRgRRmAgojntyxBMQkjvxU2jylCgVzlHAj2Xc=";
+    hash = "sha256-wcII32mRgRRmAgojntyxBMQkjvxU2jylCgVzlHAj2Xc=";
   };
 
   nativeBuildInputs = [ cython ];

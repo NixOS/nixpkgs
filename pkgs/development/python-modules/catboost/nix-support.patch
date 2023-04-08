@@ -1,5 +1,5 @@
 diff --git a/catboost/python-package/setup.py b/catboost/python-package/setup.py
-index 17f1d8ff14..07da618cd1 100644
+index fe9251a21f..86b880c5d0 100644
 --- a/catboost/python-package/setup.py
 +++ b/catboost/python-package/setup.py
 @@ -80,7 +80,7 @@ class Helper(object):
@@ -15,23 +15,23 @@ index 17f1d8ff14..07da618cd1 100644
  
      def build_with_make(self, topsrc_dir, build_dir, catboost_ext, put_dir, verbose, dry_run):
          logging.info('Buildling {} with gnu make'.format(catboost_ext))
--        makefile = 'python{}.{}CLANG50-LINUX-X86_64.makefile'.format(python_version()[0], 'CUDA.' if self.with_cuda else '')
-+        makefile = 'python{}.{}CLANG7-LINUX-X86_64.makefile'.format(python_version()[0], 'CUDA.' if self.with_cuda else '')
+-        makefile = 'python{}.{}CLANG11-LINUX-X86_64.makefile'.format(python_version()[0], 'CUDA.' if self.with_cuda else '')
++        makefile = 'python{}.{}CLANG12-LINUX-X86_64.makefile'.format(python_version()[0], 'CUDA.' if self.with_cuda else '')
          make_cmd = [
              'make', '-f', '../../make/' + makefile,
--            'CC=clang-5.0',
--            'CXX=clang++-5.0',
+-            'CC=clang-11',
+-            'CXX=clang++-11',
 +            'CC=clang',
 +            'CXX=clang++',
-+            'PYTHON=python2',
++            'PYTHON=python{}'.format(python_version()[0]),
              'BUILD_ROOT=' + build_dir,
              'SOURCE_ROOT=' + topsrc_dir,
          ]
-diff --git a/make/python2.CLANG7-LINUX-X86_64.makefile b/make/python2.CLANG7-LINUX-X86_64.makefile
-index e54b7078e8..fb7b208af9 100644
---- a/make/python2.CLANG7-LINUX-X86_64.makefile
-+++ b/make/python2.CLANG7-LINUX-X86_64.makefile
-@@ -4,33 +4,6 @@ BUILD_ROOT = $(shell pwd)
+diff --git a/make/python2.CLANG12-LINUX-X86_64.makefile b/make/python2.CLANG12-LINUX-X86_64.makefile
+index b49a36fb3f..33996af995 100644
+--- a/make/python2.CLANG12-LINUX-X86_64.makefile
++++ b/make/python2.CLANG12-LINUX-X86_64.makefile
+@@ -4,31 +4,6 @@ BUILD_ROOT = $(shell pwd)
  SOURCE_ROOT = $(shell pwd)
  PYTHON = $(shell which python)
  
@@ -43,8 +43,8 @@ index e54b7078e8..fb7b208af9 100644
 -_CC_VERSION = $(shell echo '$(_CC_TEST)' | $(CC) -E -P -)
 -$(info _CC_VERSION = '$(_CC_VERSION)')
 -
--ifneq '$(_CC_VERSION)' '7 0'
--    $(error clang 7.0 is required)
+-ifneq '$(_CC_VERSION)' '12 0'
+-    $(error clang 12.0 is required)
 -endif
 -endif
 -
@@ -56,20 +56,18 @@ index e54b7078e8..fb7b208af9 100644
 -_CXX_VERSION = $(shell echo '$(_CXX_TEST)' | $(CXX) -E -P -)
 -$(info _CXX_VERSION = '$(_CXX_VERSION)')
 -
--ifneq '$(_CXX_VERSION)' '7 0'
--    $(error clang 7.0 is required)
+-ifneq '$(_CXX_VERSION)' '12 0'
+-    $(error clang 12.0 is required)
 -endif
 -endif
--
--
+ 
+ 
  all\
-         ::\
-         $(BUILD_ROOT)/catboost/python-package/catboost/_catboost.so\
-diff --git a/make/python2.CUDA.CLANG7-LINUX-X86_64.makefile b/make/python2.CUDA.CLANG7-LINUX-X86_64.makefile
-index 2a22a79b25..522fb54a7c 100644
---- a/make/python2.CUDA.CLANG7-LINUX-X86_64.makefile
-+++ b/make/python2.CUDA.CLANG7-LINUX-X86_64.makefile
-@@ -4,33 +4,6 @@ BUILD_ROOT = $(shell pwd)
+diff --git a/make/python2.CUDA.CLANG12-LINUX-X86_64.makefile b/make/python2.CUDA.CLANG12-LINUX-X86_64.makefile
+index 82935b297e..093cc86532 100644
+--- a/make/python2.CUDA.CLANG12-LINUX-X86_64.makefile
++++ b/make/python2.CUDA.CLANG12-LINUX-X86_64.makefile
+@@ -4,31 +4,6 @@ BUILD_ROOT = $(shell pwd)
  SOURCE_ROOT = $(shell pwd)
  PYTHON = $(shell which python)
  
@@ -81,8 +79,8 @@ index 2a22a79b25..522fb54a7c 100644
 -_CC_VERSION = $(shell echo '$(_CC_TEST)' | $(CC) -E -P -)
 -$(info _CC_VERSION = '$(_CC_VERSION)')
 -
--ifneq '$(_CC_VERSION)' '7 0'
--    $(error clang 7.0 is required)
+-ifneq '$(_CC_VERSION)' '12 0'
+-    $(error clang 12.0 is required)
 -endif
 -endif
 -
@@ -94,20 +92,18 @@ index 2a22a79b25..522fb54a7c 100644
 -_CXX_VERSION = $(shell echo '$(_CXX_TEST)' | $(CXX) -E -P -)
 -$(info _CXX_VERSION = '$(_CXX_VERSION)')
 -
--ifneq '$(_CXX_VERSION)' '7 0'
--    $(error clang 7.0 is required)
+-ifneq '$(_CXX_VERSION)' '12 0'
+-    $(error clang 12.0 is required)
 -endif
 -endif
--
--
+ 
+ 
  all\
-         ::\
-         $(BUILD_ROOT)/catboost/python-package/catboost/_catboost.so\
-diff --git a/make/python3.CLANG7-LINUX-X86_64.makefile b/make/python3.CLANG7-LINUX-X86_64.makefile
-index fee6750bcb..dc55908371 100644
---- a/make/python3.CLANG7-LINUX-X86_64.makefile
-+++ b/make/python3.CLANG7-LINUX-X86_64.makefile
-@@ -4,33 +4,6 @@ BUILD_ROOT = $(shell pwd)
+diff --git a/make/python3.CLANG12-LINUX-X86_64.makefile b/make/python3.CLANG12-LINUX-X86_64.makefile
+index 1c5d646ae4..6c091fbe17 100644
+--- a/make/python3.CLANG12-LINUX-X86_64.makefile
++++ b/make/python3.CLANG12-LINUX-X86_64.makefile
+@@ -4,31 +4,6 @@ BUILD_ROOT = $(shell pwd)
  SOURCE_ROOT = $(shell pwd)
  PYTHON = $(shell which python)
  
@@ -119,8 +115,8 @@ index fee6750bcb..dc55908371 100644
 -_CC_VERSION = $(shell echo '$(_CC_TEST)' | $(CC) -E -P -)
 -$(info _CC_VERSION = '$(_CC_VERSION)')
 -
--ifneq '$(_CC_VERSION)' '7 0'
--    $(error clang 7.0 is required)
+-ifneq '$(_CC_VERSION)' '12 0'
+-    $(error clang 12.0 is required)
 -endif
 -endif
 -
@@ -132,20 +128,18 @@ index fee6750bcb..dc55908371 100644
 -_CXX_VERSION = $(shell echo '$(_CXX_TEST)' | $(CXX) -E -P -)
 -$(info _CXX_VERSION = '$(_CXX_VERSION)')
 -
--ifneq '$(_CXX_VERSION)' '7 0'
--    $(error clang 7.0 is required)
+-ifneq '$(_CXX_VERSION)' '12 0'
+-    $(error clang 12.0 is required)
 -endif
 -endif
--
--
+ 
+ 
  all\
-         ::\
-         $(BUILD_ROOT)/catboost/python-package/catboost/_catboost.so\
-diff --git a/make/python3.CUDA.CLANG7-LINUX-X86_64.makefile b/make/python3.CUDA.CLANG7-LINUX-X86_64.makefile
-index 5146830476..ff8535b03e 100644
---- a/make/python3.CUDA.CLANG7-LINUX-X86_64.makefile
-+++ b/make/python3.CUDA.CLANG7-LINUX-X86_64.makefile
-@@ -4,33 +4,6 @@ BUILD_ROOT = $(shell pwd)
+diff --git a/make/python3.CUDA.CLANG12-LINUX-X86_64.makefile b/make/python3.CUDA.CLANG12-LINUX-X86_64.makefile
+index fcdb75a719..4e1dbc3cd7 100644
+--- a/make/python3.CUDA.CLANG12-LINUX-X86_64.makefile
++++ b/make/python3.CUDA.CLANG12-LINUX-X86_64.makefile
+@@ -4,31 +4,6 @@ BUILD_ROOT = $(shell pwd)
  SOURCE_ROOT = $(shell pwd)
  PYTHON = $(shell which python)
  
@@ -157,8 +151,8 @@ index 5146830476..ff8535b03e 100644
 -_CC_VERSION = $(shell echo '$(_CC_TEST)' | $(CC) -E -P -)
 -$(info _CC_VERSION = '$(_CC_VERSION)')
 -
--ifneq '$(_CC_VERSION)' '7 0'
--    $(error clang 7.0 is required)
+-ifneq '$(_CC_VERSION)' '12 0'
+-    $(error clang 12.0 is required)
 -endif
 -endif
 -
@@ -170,12 +164,10 @@ index 5146830476..ff8535b03e 100644
 -_CXX_VERSION = $(shell echo '$(_CXX_TEST)' | $(CXX) -E -P -)
 -$(info _CXX_VERSION = '$(_CXX_VERSION)')
 -
--ifneq '$(_CXX_VERSION)' '7 0'
--    $(error clang 7.0 is required)
+-ifneq '$(_CXX_VERSION)' '12 0'
+-    $(error clang 12.0 is required)
 -endif
 -endif
--
--
+ 
+ 
  all\
-         ::\
-         $(BUILD_ROOT)/catboost/python-package/catboost/_catboost.so\

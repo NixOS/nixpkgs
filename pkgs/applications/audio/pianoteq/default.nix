@@ -1,4 +1,4 @@
-{ lib, stdenv, curl, gnugrep, jq, xorg, alsa-lib, freetype, p7zip, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper }:
+{ lib, stdenv, curl, jq, xorg, alsa-lib, freetype, p7zip, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper }:
 let
   versionForFile = v: builtins.replaceStrings ["."] [""] v;
 
@@ -93,14 +93,11 @@ let
     fetchWithCurlScript {
       inherit name sha256;
       script = ''
-          "''${curl[@]}" --silent --request POST \
+          "''${curl[@]}" --silent --request GET \
             --cookie cookies \
-            --header "modartt-json: request" \
-            --header "origin: https://www.modartt.com" \
-            --header "content-type: application/json; charset=UTF-8" \
-            --header "accept: application/json, text/javascript, */*" \
-            --data-raw '{"file": "${name}", "get": "url"}' \
-            https://www.modartt.com/json/download -o /dev/null
+            --header "accept: */*" \
+            https://www.modartt.com/ -o /dev/null
+
           json=$(
             "''${curl[@]}" --silent --request POST \
             --cookie cookies \
@@ -109,8 +106,9 @@ let
             --header "content-type: application/json; charset=UTF-8" \
             --header "accept: application/json, text/javascript, */*" \
             --data-raw '{"file": "${name}", "get": "url"}' \
-            https://www.modartt.com/json/download
+            https://www.modartt.com/api/0/download
           )
+
           url=$(echo $json | ${jq}/bin/jq -r .url)
           "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
       '';
@@ -140,7 +138,7 @@ let
           --header "content-type: application/json; charset=UTF-8" \
           --header "accept: application/json, text/javascript, */*" \
           --data @login.json \
-          https://www.modartt.com/json/session
+          https://www.modartt.com/api/0/session
 
         json=$(
           "''${curl[@]}" --silent --request POST \
@@ -150,10 +148,10 @@ let
           --header "content-type: application/json; charset=UTF-8" \
           --header "accept: application/json, text/javascript, */*" \
           --data-raw '{"file": "${name}", "get": "url"}' \
-          https://www.modartt.com/json/download
+          https://www.modartt.com/api/0/download
         )
-        url=$(echo $json | ${jq}/bin/jq -r .url)
 
+        url=$(echo $json | ${jq}/bin/jq -r .url)
         "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
       '';
     };
@@ -162,20 +160,20 @@ in {
   # TODO currently can't install more than one because `lame` clashes
   stage-trial = mkPianoteq rec {
     name = "stage-trial";
-    version = "7.5.4";
+    version = "8.0.5";
     archdir = "x86-64bit";
     src = fetchPianoteqTrial {
       name = "pianoteq_stage_linux_trial_v${versionForFile version}.7z";
-      sha256 = "sha256-ybtq+hjnaQxpLxv2KE0ZcbQXtn5DJJsnMwCmh3rlrIc=";
+      sha256 = "sha256-9Lo4e1SM1gw2/+TmpDUdZCOQcHEpT/aaG6P80/GRPQY=";
     };
   };
   standard-trial = mkPianoteq rec {
     name = "standard-trial";
-    version = "7.5.4";
+    version = "8.0.5";
     archdir = "x86-64bit";
     src = fetchPianoteqTrial {
       name = "pianoteq_linux_trial_v${versionForFile version}.7z";
-      sha256 = "sha256-3a3+SKTEhvDtqK5Kg4E6KiLvn5+j6JN6ntIb72u2bdQ=";
+      sha256 = "sha256-qxViVIbld8zTMj1+TIfOsIOhmujOGJux2/u2J4hvsqw=";
     };
   };
   stage-6 = mkPianoteq rec {

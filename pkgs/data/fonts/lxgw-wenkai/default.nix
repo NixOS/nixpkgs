@@ -1,17 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let version = "1.222"; in
-fetchzip {
-  name = "lxgw-wenkai-${version}";
-  url = "https://github.com/lxgw/LxgwWenKai/releases/download/v${version}/lxgw-wenkai-v${version}.tar.gz";
+stdenvNoCC.mkDerivation rec {
+  pname = "lxgw-wenkai";
+  version = "1.250";
 
-  postFetch = ''
-    tar -xzvf $downloadedFile --strip-components=1
+  src = fetchurl {
+    url = "https://github.com/lxgw/LxgwWenKai/releases/download/v${version}/${pname}-v${version}.tar.gz";
+    hash = "sha256-Nkd0xXYCnR0NZAk/JCxy+zOlxIxD52Px4F9o2L9mgRE=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
-  '';
+    mv *.ttf $out/share/fonts/truetype
 
-  sha256 = "sha256-u2NTEYZrotOHktc2R5RWMFqeZ775/IpYJSUBO6PWijM=";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://lxgw.github.io/";

@@ -77,29 +77,27 @@ in
     environment.memoryAllocator.provider = mkOption {
       type = types.enum ([ "libc" ] ++ attrNames providers);
       default = "libc";
-      description = ''
+      description = lib.mdDoc ''
         The system-wide memory allocator.
 
         Briefly, the system-wide memory allocator providers are:
-        <itemizedlist>
-        <listitem><para><literal>libc</literal>: the standard allocator provided by libc</para></listitem>
-        ${toString (mapAttrsToList
-            (name: value: "<listitem><para><literal>${name}</literal>: ${value.description}</para></listitem>")
-            providers)}
-        </itemizedlist>
 
-        <warning>
-        <para>
+        - `libc`: the standard allocator provided by libc
+        ${concatStringsSep "\n" (mapAttrsToList
+            (name: value: "- `${name}`: ${replaceStrings [ "\n" ] [ " " ] value.description}")
+            providers)}
+
+        ::: {.warning}
         Selecting an alternative allocator (i.e., anything other than
-        <literal>libc</literal>) may result in instability, data loss,
+        `libc`) may result in instability, data loss,
         and/or service failure.
-        </para>
-        </warning>
+        :::
       '';
     };
   };
 
   config = mkIf (cfg.provider != "libc") {
+    boot.kernel.sysctl."vm.max_map_count" = mkIf (cfg.provider == "graphene-hardened") (mkDefault 1048576);
     environment.etc."ld-nix.so.preload".text = ''
       ${providerLibPath}
     '';

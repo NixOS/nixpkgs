@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication {
     sha256 = "0m3dnc3816ja3kmik1wabb706dkqdf5sxvabwgf2rcrq891xcddd";
   };
 
-  propagatedBuildInputs = [ python3Packages.PyICU python3Packages.slob ];
+  propagatedBuildInputs = [ python3Packages.pyicu python3Packages.slob ];
 
   meta = with lib; {
     description = "Tool to convert XDXF dictionary files to slob format";

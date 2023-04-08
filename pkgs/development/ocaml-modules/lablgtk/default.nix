@@ -1,16 +1,19 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, gtksourceview }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, gtksourceview
+, camlp-streams, gnumake42
+}:
 
 let param =
   let check = lib.versionAtLeast ocaml.version; in
   if check "4.06" then rec {
-    version = "2.18.12";
+    version = "2.18.13";
     src = fetchFromGitHub {
       owner = "garrigue";
       repo = "lablgtk";
       rev = version;
-      sha256 = "sha256:0asib87c42apwf1ln8541x6i3mvyajqbarifvz11in0mqn5k7g7h";
+      sha256 = "sha256-69Svno0qLaUifMscnVuPUJlCo9d8Lee+1qiYx34G3Po=";
     };
-    NIX_CFLAGS_COMPILE = null;
+    env = { };
+    buildInputs = [ camlp-streams ];
   } else if check "3.12" then {
     version = "2.18.5";
     src = fetchurl {
@@ -21,16 +24,18 @@ let param =
     # gcc-10. Otherwise build fails as:
     #   ld: ml_gtktree.o:(.bss+0x0): multiple definition of
     #     `ml_table_extension_events'; ml_gdkpixbuf.o:(.bss+0x0): first defined here
-    NIX_CFLAGS_COMPILE = "-fcommon";
+    env.NIX_CFLAGS_COMPILE = "-fcommon";
   } else throw "lablgtk is not available for OCaml ${ocaml.version}";
 in
 
 stdenv.mkDerivation {
-  pname = "lablgtk";
-  inherit (param) version src NIX_CFLAGS_COMPILE;
+  pname = "ocaml${ocaml.version}-lablgtk";
+  inherit (param) version src env;
 
-  nativeBuildInputs = [ pkg-config ocaml findlib ];
-  buildInputs = [ gtk2 libgnomecanvas gtksourceview ];
+  # gnumake42: https://github.com/garrigue/lablgtk/issues/162
+  nativeBuildInputs = [ pkg-config ocaml findlib gnumake42 ];
+  buildInputs = [ gtk2 libgnomecanvas gtksourceview ]
+  ++ param.buildInputs or [];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
   buildFlags = [ "world" ];

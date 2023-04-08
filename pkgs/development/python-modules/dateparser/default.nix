@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchFromGitHub
+, fetchpatch
 , python-dateutil
 , pytz
 , regex
@@ -12,36 +13,48 @@
 , langdetect
 , parameterized
 , pytestCheckHook
-, GitPython
+, gitpython
+, parsel
+, requests
 , ruamel-yaml
 }:
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.1.1";
+  version = "1.1.8";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "dateparser";
-    rev = "v${version}";
-    sha256 = "sha256-bDup3q93Zq+pvwsy/lQy2byOMjG6C/+7813hWQMbZRU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-52g8defF5bsisBv2QoyUymXcf0sljOI9PjeR4l0Pw6k=";
   };
 
   propagatedBuildInputs = [
-    # install_requires
-    python-dateutil pytz regex tzlocal
-    # extra_requires
-    hijri-converter convertdate fasttext langdetect
+    python-dateutil
+    pytz
+    regex
+    tzlocal
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    calendars = [ hijri-converter convertdate ];
+    fasttext = [ fasttext ];
+    langdetect = [ langdetect ];
+  };
+
+  nativeCheckInputs = [
     parameterized
     pytestCheckHook
-    GitPython
+    gitpython
+    parsel
+    requests
     ruamel-yaml
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   preCheck = ''
     export HOME="$TEMPDIR"
@@ -59,6 +72,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dateparser" ];
 
   meta = with lib; {
+    changelog = "https://github.com/scrapinghub/dateparser/blob/${src.rev}/HISTORY.rst";
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
     license = licenses.bsd3;

@@ -34,13 +34,13 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "1.9.9.1403";
+  version = "1.9.9.1428";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "bc72c0de3fff771540a2a45aaafafed539387b3c";
-    hash = "sha256-205i61mbeQG2MzSE9NtPHSuNeyMbjZzbZVCFFzjqKqQ=";
+    rev = "74fe7934ec60cc31565f088796f56e911f51679c";
+    hash = "sha256-85Pz6psyK3VXOIrINcoIeHZT5j9UfJqWIxTavwqHx04=";
   };
 
   buildInputs = [ flac libmad libvorbis mpg123 ]
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
 
   EXECUTABLE = binName;
 
-  OPTS = [ "-DLINKALL" ]
+  OPTS = [ "-DLINKALL" "-DGPIO" ]
     ++ optional dsdSupport "-DDSD"
     ++ optional (!faad2Support) "-DNO_FAAD"
     ++ optional ffmpegSupport "-DFFMPEG"
@@ -78,11 +78,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Lightweight headless squeezebox client emulator";
     homepage = "https://github.com/ralph-irving/squeezelite";
     license = with licenses; [ gpl3Plus ] ++ optional dsdSupport bsd2;
-    maintainers = with maintainers; [ samdoshi ];
+    maintainers = with maintainers; [ adamcstephens ];
     platforms = platforms.linux;
   };
 }

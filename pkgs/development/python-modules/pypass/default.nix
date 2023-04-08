@@ -18,10 +18,8 @@
 , xclip
 }:
 
-# NOTE: pypass can also be used as an application, but probably the most
-# important usecase is as a library. So, let's use buildPythonPackage and
-# support any Python version instead of defining it as an application with
-# buildPythonApplication.
+# Use the `pypass` top-level attribute, if you're interested in the
+# application
 buildPythonPackage rec {
   pname = "pypass";
   version = "0.2.1";
@@ -56,7 +54,7 @@ buildPythonPackage rec {
     pexpect
   ] ++ lib.optional (pythonOlder "3.4") enum34;
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   # Configuration so that the tests work
   preCheck = ''

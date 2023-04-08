@@ -12,13 +12,13 @@
 
 mkYarnPackage rec {
   pname = "grafana-image-renderer";
-  version = "3.4.0";
+  version = "3.6.4";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
     rev = "v${version}";
-    sha256 = "sha256-6yw+zp83T6VVa4A9KYX6rzMKG5GoyJ7M8Z+cEHE4uts=";
+    sha256 = "sha256-CWA2xmVWvPeKCvssQAMHMYJ3CxJ7sIC7GX3qb3QFLuA=";
   };
 
   buildPhase = ''

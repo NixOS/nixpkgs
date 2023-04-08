@@ -3,10 +3,10 @@
 , fetchFromGitHub
 , appstream-glib
 , desktop-file-utils
-, libepoxy
 , glib
 , gtk4
-, wayland
+, libepoxy
+, libadwaita
 , meson
 , mpv
 , ninja
@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "celluloid";
-  version = "0.23";
+  version = "0.25";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
     rev = "v${version}";
-    hash = "sha256-YKDud/UJJx9ko5k+Oux8mUUme0MXaRMngESE14Hhxv8=";
+    hash = "sha256-GCRpcC/olMUbMG2fadNcXTKF/Zl0+GY2+eSRLQhnWxI=";
   };
 
   nativeBuildInputs = [
@@ -36,11 +36,12 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook4
   ];
+
   buildInputs = [
-    libepoxy
     glib
     gtk4
-    wayland
+    libadwaita
+    libepoxy
     mpv
   ];
 
@@ -49,6 +50,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/celluloid-player/celluloid";
@@ -61,9 +64,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
-  };
-
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
   };
 }

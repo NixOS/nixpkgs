@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "python-metar";
     repo = "python-metar";
     rev = "v${version}";
-    sha256 = "sha256-pl2NWRfFCYyM2qvBt4Ic3wgbGkYZvAO6pX2Set8zYW8=";
+    hash = "sha256-pl2NWRfFCYyM2qvBt4Ic3wgbGkYZvAO6pX2Set8zYW8=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "metar" ];
 

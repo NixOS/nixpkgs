@@ -18,10 +18,10 @@ stdenvNoCC.mkDerivation rec {
     owner = "gvolpe";
     repo = pname;
     rev = version;
-    sparseCheckout = ''
-      BeautyLine-V3
-    '';
-    sha256 = "sha256-VEQWMY77cVz6UDn7FeMYYyYgXmXl1lLYs8MlFUuGRZE=";
+    sparseCheckout = [
+      "BeautyLine-V3"
+    ];
+    sha256 = "sha256-IkkypAj250+OXbf19TampCnqYsSbJVIjeYlxJoyhpzk=";
   };
 
   sourceRoot = "${src.name}/BeautyLine-V3";

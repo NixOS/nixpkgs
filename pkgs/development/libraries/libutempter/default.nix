@@ -1,19 +1,19 @@
 { stdenv, fetchurl, lib, glib }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "libutempter";
-  version = "1.1.6";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = "mirror://ubuntu/pool/main/libu/libutempter/libutempter_${version}.orig.tar.bz2";
-    sha256 = "15y3xbgznjxnfmix4xg3bwmqdvghdw7slbhazb0ybmyf65gmd65q";
+    url = "http://ftp.altlinux.org/pub/people/ldv/utempter/libutempter-${version}.tar.gz";
+    sha256 = "sha256-ln/vNy85HeUBhDrYdXDGz12r2WUfAPF4MJD7wSsqNMs=";
   };
 
   buildInputs = [ glib ];
 
   patches = [ ./exec_path.patch ];
+
+  patchFlags = [ "-p2" ];
 
   prePatch = ''
     substituteInPlace Makefile --replace 2711 0711
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
     "mandir=\${out}/share/man"
   ];
 
-  meta = {
+  meta = with lib; {
+    homepage = "https://github.com/altlinux/libutempter";
     description = "Interface for terminal emulators such as screen and xterm to record user sessions to utmp and wtmp files";
     longDescription = ''
       The bundled utempter binary must be able to run as a user belonging to group utmp.

@@ -6,15 +6,15 @@
 
 buildPythonPackage rec {
   pname = "pkginfo";
-  version = "1.8.3";
+  version = "1.9.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qE2kMY3Yb4cKlEeoyYNAqgYha/xvK3vcS4dmmErhhnw=";
+    hash = "sha256-j9WJbocYpDcvDqnMnZb2QXybmG4jpNEW3aJrYswp0EY=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

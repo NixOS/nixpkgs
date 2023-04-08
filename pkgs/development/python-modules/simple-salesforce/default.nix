@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "simple-salesforce";
-  version = "1.12.1";
+  version = "1.12.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-eDaqL4CsP5wOqfwrkeWJdg+rlcMnFT3l7A9xgVnhx0w=";
+    hash = "sha256-lCZdX+gf9ROU1MIRw/ppTNO8jIGUxE1+gbHh6sK5L2s=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     zeep
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytz
     responses

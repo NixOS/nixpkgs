@@ -11,11 +11,17 @@ mkDerivation rec {
     sha256 = "sha256-xr7SYzQZiY4Bp8w1AxDX2TS/WRyrcln8JYGqTADq+ng=";
   };
 
+  # Needed with GCC 12
+  postPatch = ''
+    sed '1i#include <iterator>' -i src/lyxfind.cpp
+    sed '1i#include <cstring>'  -i src/insets/InsetListings.cpp
+  '';
+
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [
     qtbase qtsvg python3 file/*for libmagic*/ bc
-    hunspell makeWrapper # enchant
+    hunspell # enchant
   ];
 
   configureFlags = [

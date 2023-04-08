@@ -1,9 +1,9 @@
-{ pname, version, src, openasar, meta, stdenv, binaryName, desktopName, lib, undmg, withOpenASAR ? false }:
+{ pname, version, src, openasar, meta, stdenv, binaryName, desktopName, lib, undmg, makeWrapper, branch, withOpenASAR ? false }:
 
 stdenv.mkDerivation {
   inherit pname version src meta;
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [ undmg makeWrapper ];
 
   sourceRoot = ".";
 
@@ -12,6 +12,10 @@ stdenv.mkDerivation {
 
     mkdir -p $out/Applications
     cp -r "${desktopName}.app" $out/Applications
+
+    # wrap executable to $out/bin
+    mkdir -p $out/bin
+    makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}"
 
     runHook postInstall
   '';

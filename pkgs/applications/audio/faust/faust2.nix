@@ -20,13 +20,13 @@ with lib.strings;
 
 let
 
-  version = "2.41.1";
+  version = "2.54.9";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    sha256 = "sha256-x0nBWyILrNJijs7CIvRrgYG6vgB3UlxLj9i7E4cHr9I=";
+    sha256 = "sha256-7eSZUsZ0h0vWJIpZWXaS+SHV6N2i9nv6Gr6a9cuu4Fg=";
     fetchSubmodules = true;
   };
 
@@ -34,7 +34,7 @@ let
     homepage = "https://faust.grame.fr/";
     downloadPage = "https://github.com/grame-cncm/faust/";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ magnetophon pmahoney ];
   };
 

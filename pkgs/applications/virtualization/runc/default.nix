@@ -6,7 +6,6 @@
 , pkg-config
 , which
 , libapparmor
-, apparmor-parser
 , libseccomp
 , libselinux
 , makeWrapper
@@ -16,13 +15,13 @@
 
 buildGoModule rec {
   pname = "runc";
-  version = "1.1.3";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "sha256-s0VRj/hjevtTZ9rUQsAsI2pg4ygahlrBIfFdETWy9W0=";
+    sha256 = "sha256-r5as3hb0zt+XPfxAPeH+YIc/n6IRlscPOZMGfhVE5C4=";
   };
 
   vendorSha256 = null;

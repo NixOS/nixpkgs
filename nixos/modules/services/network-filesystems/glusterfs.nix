@@ -33,7 +33,7 @@ in
 
     services.glusterfs = {
 
-      enable = mkEnableOption "GlusterFS Daemon";
+      enable = mkEnableOption (lib.mdDoc "GlusterFS Daemon");
 
       logLevel = mkOption {
         type = types.enum ["DEBUG" "INFO" "WARNING" "ERROR" "CRITICAL" "TRACE" "NONE"];

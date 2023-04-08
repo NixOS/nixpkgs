@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ManneW";
     repo = "vilfo-api-client-python";
     rev = version;
-    sha256 = "sha256-j06Bbv0hWSmrlCv8RfgvfGTyOF+vSX+zZnX3AvG5Hys=";
+    hash = "sha256-j06Bbv0hWSmrlCv8RfgvfGTyOF+vSX+zZnX3AvG5Hys=";
   };
 
   postPatch = ''
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     semver
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     responses
   ];

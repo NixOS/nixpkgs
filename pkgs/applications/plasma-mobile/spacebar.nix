@@ -3,33 +3,40 @@
 
 , cmake
 , extra-cmake-modules
+, wrapQtAppsHook
 
+, c-ares
+, curl
 , kcontacts
 , ki18n
 , kio
+, kirigami-addons
 , kirigami2
 , knotifications
 , kpeople
 , libphonenumber
-, libqofono
 , modemmanager-qt
 , protobuf
 , qcoro
 , qtquickcontrols2
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "spacebar";
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   buildInputs = [
+    c-ares
+    curl
     kcontacts
     ki18n
     kio
+    kirigami-addons
     kirigami2
     knotifications
     kpeople

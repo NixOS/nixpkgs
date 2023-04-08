@@ -42,6 +42,7 @@
 , vulkan-headers
 , wayland
 , wayland-protocols
+, wayland-scanner
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , cups
@@ -62,7 +63,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.6.6";
+  version = "4.8.3";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -74,8 +75,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "e7/k0TVp98KX7UmDSscmPjGLe/EC0ycctGbVlx9ZrnA=";
+    sha256 = "s2L5aNCFtNPZNA1NOMcGN33tnVN05pSitrfmKS48unQ=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -88,6 +93,8 @@ stdenv.mkDerivation rec {
     sassc
     gi-docgen
     libxml2 # for xmllint
+  ] ++ lib.optionals waylandSupport [
+    wayland-scanner
   ] ++ setupHooks;
 
   buildInputs = [
@@ -168,11 +175,10 @@ stdenv.mkDerivation rec {
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
-  NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
+  env.NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
     files=(
-      build-aux/meson/post-install.py
       build-aux/meson/gen-demo-header.py
       demos/gtk-demo/geninclude.py
       gdk/broadway/gen-c-array.py
@@ -183,6 +189,7 @@ stdenv.mkDerivation rec {
 
     chmod +x ''${files[@]}
     patchShebangs ''${files[@]}
+
   '';
 
   preInstall = ''

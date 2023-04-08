@@ -146,7 +146,7 @@ in
         enable = mkDefault config.boot.isContainer;
       };
 
-    environment.etc.issue =
+    environment.etc.issue = mkDefault
       { # Friendly greeting on the virtual consoles.
         source = pkgs.writeText "issue" ''
 

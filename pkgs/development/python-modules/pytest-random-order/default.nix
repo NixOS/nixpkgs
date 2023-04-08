@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.4";
+  version = "1.1.0";
   pname = "pytest-random-order";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6b2159342a4c8c10855bc4fc6d65ee890fc614cb2b4ff688979b008a82a0ff52";
+    hash = "sha256-2+beu5NTp6+YTMnt2+s1d91Nu8wVKaeePSH2jtm0VgU=";
   };
 
   disabled = pythonOlder "3.5";

@@ -1,41 +1,41 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
-, pkg-config
-, zlib
-, libiconv
-, Security
+, stdenv
+, darwin
+, curl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.20.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    hash = "sha256-56XP8e05rdslkrjmHRuYszqcBFZ7xCuj74mfGS9jznQ=";
+    hash = "sha256-iI9J1BGD7/SDLoJ2WfizAEHUXBJH4DiUbfGingef9lM=";
   };
 
-  cargoSha256 = "sha256-NZ2/N09LFAvXFGpJj4kx7jpt1G6akXsrVe6XqQPCN9g=";
+  cargoSha256 = "sha256-qvV7rJx0Yrv5CLRqSshGf1JUL6nW5KDb7Sv7B6M6WDs=";
 
   nativeBuildInputs = [
     installShellFiles
-    pkg-config
-    zlib
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  nativeCheckInputs = [
+    curl
   ];
 
   checkFlags = [
     "--skip=bind_ipv4_ipv6::case_2"
-    "--skip=cant_navigate_up_the_root"
+    "--skip=qrcode_hidden_in_tty_when_disabled"
+    "--skip=qrcode_shown_in_tty_when_enabled"
   ];
 
   postInstall = ''
@@ -48,13 +48,13 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/miniserve --print-completions zsh)
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
+    changelog = "https://github.com/svenstaro/miniserve/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
-    # https://hydra.nixos.org/build/162650896/nixlog/1
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    maintainers = with maintainers; [ figsoda ];
   };
 }

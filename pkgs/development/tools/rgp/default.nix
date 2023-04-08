@@ -19,15 +19,15 @@
 }:
 
 let
-  buildNum = "2022-04-20-920";
+  buildNum = "2023-02-15-1051";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rgp";
-  version = "1.13";
+  version = "1.14.1";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-/Z7mSZVAvaTAY9RU7suK/gA0RJIeeLdN6LWiseVq9Js=";
+    hash = "sha256-1JxW6vXfOYDaCnHWEq8crjuu0QrUCwahm+ipOKVDQPA=";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/opt/rgp/scripts/*
     patchShebangs $out/opt/rgp/scripts
 
-    for prog in RadeonDeveloperPanel RadeonDeveloperService RadeonDeveloperServiceCLI RadeonGPUAnalyzer RadeonGPUProfiler rga rtda; do
+    for prog in RadeonDeveloperPanel RadeonDeveloperService RadeonDeveloperServiceCLI RadeonGPUAnalyzer RadeonGPUProfiler RadeonMemoryVisualizer RadeonRaytracingAnalyzer rga rtda; do
       # makeWrapper is needed so that executables are started from the opt
       # directory, where qt.conf and other tools are
       makeWrapper \

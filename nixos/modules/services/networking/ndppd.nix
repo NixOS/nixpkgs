@@ -43,7 +43,7 @@ let
       timeout = mkOption {
         type = types.int;
         description = lib.mdDoc ''
-          Controls how long to wait for a Neighbor Advertisment Message before
+          Controls how long to wait for a Neighbor Advertisement Message before
           invalidating the entry, in milliseconds.
         '';
         default = 500;
@@ -74,7 +74,7 @@ let
         type = types.nullOr types.str;
         description = lib.mdDoc ''
           This is the target address is to match against. If no netmask
-          is provided, /128 is assumed. The addresses of serveral rules
+          is provided, /128 is assumed. The addresses of several rules
           may or may not overlap.
           Defaults to the name of the attrset.
         '';
@@ -103,21 +103,21 @@ let
 
 in {
   options.services.ndppd = {
-    enable = mkEnableOption "daemon that proxies NDP (Neighbor Discovery Protocol) messages between interfaces";
+    enable = mkEnableOption (lib.mdDoc "daemon that proxies NDP (Neighbor Discovery Protocol) messages between interfaces");
     interface = mkOption {
       type = types.nullOr types.str;
-      description = ''
+      description = lib.mdDoc ''
         Interface which is on link-level with router.
-        (Legacy option, use services.ndppd.proxies.&lt;interface&gt;.rules.&lt;network&gt; instead)
+        (Legacy option, use services.ndppd.proxies.\<interface\>.rules.\<network\> instead)
       '';
       default = null;
       example = "eth0";
     };
     network = mkOption {
       type = types.nullOr types.str;
-      description = ''
+      description = lib.mdDoc ''
         Network that we proxy.
-        (Legacy option, use services.ndppd.proxies.&lt;interface&gt;.rules.&lt;network&gt; instead)
+        (Legacy option, use services.ndppd.proxies.\<interface\>.rules.\<network\> instead)
       '';
       default = null;
       example = "1111::/64";

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yash";
-  version = "2.52";
+  version = "2.53";
 
   src = fetchurl {
     url = "https://osdn.net/dl/yash/yash-${version}.tar.xz";
-    hash = "sha256-VRN77/2DhIgFuM75DAxq9UB0SvzBA+Gw973z7xmRtck=";
+    hash = "sha256-5DDuhF39dxHE+GTVGN+H3Xi0BWAyfElPWczEcxWFMF0=";
   };
 
   strictDeps = true;

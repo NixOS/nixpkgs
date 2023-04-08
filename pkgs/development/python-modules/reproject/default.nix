@@ -2,7 +2,6 @@
 , astropy
 , astropy-extension-helpers
 , astropy-healpix
-, astropy-helpers
 , buildPythonPackage
 , cython
 , fetchPypi
@@ -16,19 +15,18 @@
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.8";
-  format = "setuptools";
+  version = "0.10.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Z54sY3R6GViTvMLHrJclrAZ1dH4/9bzIrgqDd9nFbJY=";
+    hash = "sha256-OKxPPKcVVrEVUGR8Zaphn7ur9HOuqQKa9gnMo2RQQME=";
   };
 
   nativeBuildInputs = [
     astropy-extension-helpers
-    astropy-helpers
     cython
     setuptools-scm
   ];
@@ -36,19 +34,22 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     astropy
     astropy-healpix
-    astropy-helpers
     numpy
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-astropy
     pytestCheckHook
   ];
 
-  preCheck = ''
-    cd build/lib*
-  '';
+  pytestFlagsArray = [
+    "build/lib*"
+    # Avoid failure due to user warning: Distutils was imported before Setuptools
+    "-p no:warnings"
+    # Uses network
+    "--ignore build/lib*/reproject/interpolation/"
+  ];
 
   pythonImportsCheck = [
     "reproject"

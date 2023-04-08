@@ -1,4 +1,4 @@
-{ lib, stdenv, writeScript, callPackage, buildFHSUserEnv, undaemonize, unwrapped ? callPackage ./runtime.nix {} }:
+{ lib, stdenv, writeScript, callPackage, buildFHSUserEnv, unwrapped ? callPackage ./runtime.nix {} }:
 
 buildFHSUserEnv rec {
   name = "houdini-${unwrapped.version}";

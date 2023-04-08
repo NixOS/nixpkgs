@@ -112,7 +112,9 @@ in
   # Interface
 
   options.services.sanoid = {
-    enable = mkEnableOption "Sanoid ZFS snapshotting service";
+    enable = mkEnableOption (lib.mdDoc "Sanoid ZFS snapshotting service");
+
+    package = lib.mkPackageOptionMD pkgs "sanoid" {};
 
     interval = mkOption {
       type = types.str;
@@ -130,8 +132,8 @@ in
       type = types.attrsOf (types.submodule ({ config, options, ... }: {
         freeformType = datasetSettingsType;
         options = commonOptions // datasetOptions;
-        config.use_template = mkAliasDefinitions (mkDefault options.useTemplate or { });
-        config.process_children_only = mkAliasDefinitions (mkDefault options.processChildrenOnly or { });
+        config.use_template = modules.mkAliasAndWrapDefsWithPriority id (options.useTemplate or { });
+        config.process_children_only = modules.mkAliasAndWrapDefsWithPriority id (options.processChildrenOnly or { });
       }));
       default = { };
       description = lib.mdDoc "Datasets to snapshot.";
@@ -181,7 +183,7 @@ in
         ExecStartPre = (map (buildAllowCommand "allow" [ "snapshot" "mount" "destroy" ]) datasets);
         ExecStopPost = (map (buildAllowCommand "unallow" [ "snapshot" "mount" "destroy" ]) datasets);
         ExecStart = lib.escapeShellArgs ([
-          "${pkgs.sanoid}/bin/sanoid"
+          "${cfg.package}/bin/sanoid"
           "--cron"
           "--configdir"
           (pkgs.writeTextDir "sanoid.conf" configFile)

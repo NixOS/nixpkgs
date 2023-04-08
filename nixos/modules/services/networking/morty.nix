@@ -17,7 +17,7 @@ in
     services.morty = {
 
       enable = mkEnableOption
-        "Morty proxy server. See https://github.com/asciimoo/morty";
+        (lib.mdDoc "Morty proxy server. See https://github.com/asciimoo/morty");
 
       ipv6 = mkOption {
         type = types.bool;
@@ -50,7 +50,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         description = lib.mdDoc "Listing port";
       };

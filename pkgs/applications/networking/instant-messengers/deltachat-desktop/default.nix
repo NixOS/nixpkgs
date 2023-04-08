@@ -1,15 +1,17 @@
 { lib
+, buildNpmPackage
 , copyDesktopItems
-, electron_18
+, electron_22
 , buildGoModule
 , esbuild
 , fetchFromGitHub
+, fetchpatch
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
-, nodePackages
 , noto-fonts-emoji
 , pkg-config
+, python3
 , roboto
 , rustPlatform
 , sqlcipher
@@ -19,45 +21,48 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.86.0";
+    version = "1.110.0";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
       rev = version;
-      hash = "sha256-VLS93Ffeit2rVmXxYkXcnf8eDA3DC2/wKYZTh56QCk0=";
+      hash = "sha256-SPBuStrBp9fnrLfFT2ec9yYItZsvQF9BHdJxi+plbgw=";
     };
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${old.pname}-${version}";
-      hash = "sha256-4rpoDQ3o0WdWg/TmazTI+J0hL/MxwHcNMXWMq7GE7Tk=";
+      hash = "sha256-Y4+CkaV9njHqmmiZnDtfZ5OwMVk583FtncxOgAqACkA=";
     };
   });
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
-      version = "0.12.29";
+      version = "0.14.54";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-oU++9E3StUoyrMVRMZz8/1ntgPI62M1NoNz9sH/N5Bg=";
+        hash = "sha256-qCtpy69ROCspRgPKmCV0YY/EOSWiNU/xwDblU0bQp4w=";
       };
-      vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
+      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
   };
-in nodePackages.deltachat-desktop.override rec {
+in buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.30.1";
+  version = "1.34.5";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-gZjZbXiqhFVfThZOsvL/nKkf6MX+E3KB5ldEAIuzBYA=";
+    hash = "sha256-gNcYcxyztUrcxbOO7kaTSCyxqdykjp7Esm3jPJ/d4gc=";
   };
+
+  npmDepsHash = "sha256-I0PhE+GXFgOdvH5aLZRyn3lVmXgATX2kmltXYC9chog=";
 
   nativeBuildInputs = [
     makeWrapper
     pkg-config
+    python3
   ] ++ lib.optionals stdenv.isLinux [
     copyDesktopItems
   ];
@@ -73,23 +78,25 @@ in nodePackages.deltachat-desktop.override rec {
   USE_SYSTEM_LIBDELTACHAT = "true";
   VERSION_INFO_GIT_REF = src.rev;
 
-  preRebuild = ''
-    substituteInPlace package.json \
-      --replace "node ./bin/check-nodejs-version.js" true
+  preBuild = ''
+    rm -r node_modules/deltachat-node/node/prebuilds
   '';
 
-  postInstall = ''
-    rm -r node_modules/deltachat-node/node/prebuilds
+  npmBuildScript = "build4production";
 
-    npm run build4production
+  installPhase = ''
+    runHook preInstall
 
     npm prune --production
 
-    install -D $out/lib/node_modules/deltachat-desktop/build/icon.png \
-      $out/share/icons/hicolor/scalable/apps/deltachat.png
+    mkdir -p $out/lib/node_modules/deltachat-desktop
+    cp -r . $out/lib/node_modules/deltachat-desktop
 
     awk '!/^#/ && NF' build/packageignore_list \
-      | xargs -I {} sh -c "rm -rf {}" || true
+      | xargs -I {} sh -c "rm -rf $out/lib/node_modules/deltachat-desktop/{}" || true
+
+    install -D build/icon.png \
+      $out/share/icons/hicolor/scalable/apps/deltachat.png
 
     ln -sf ${noto-fonts-emoji}/share/fonts/noto/NotoColorEmoji.ttf \
       $out/lib/node_modules/deltachat-desktop/html-dist/fonts/noto/emoji
@@ -98,9 +105,11 @@ in nodePackages.deltachat-desktop.override rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${electron_18}/bin/electron $out/bin/deltachat \
+    makeWrapper ${electron_22}/bin/electron $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
+
+    runHook postInstall
   '';
 
   desktopItems = lib.singleton (makeDesktopItem {
@@ -112,10 +121,13 @@ in nodePackages.deltachat-desktop.override rec {
     comment = meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
     startupWMClass = "DeltaChat";
-    mimeTypes = [ "x-scheme-handler/openpgp4fpr" "x-scheme-handler/mailto" ];
+    mimeTypes = [
+      "x-scheme-handler/openpgp4fpr"
+      "x-scheme-handler/dcaccount"
+      "x-scheme-handler/dclogin"
+      "x-scheme-handler/mailto"
+    ];
   });
-
-  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Email-based instant messaging for Desktop";

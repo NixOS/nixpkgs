@@ -10,6 +10,7 @@
 , libtirpc
 , makeWrapper
 , substituteAll
+, removeReferencesTo
 , go
 }:
 let
@@ -83,10 +84,10 @@ stdenv.mkDerivation rec {
     HOME="$(mktemp -d)"
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-L${libtirpc.dev}/lib" "-ltirpc" ];
 
-  nativeBuildInputs = [ pkg-config go rpcsvc-proto makeWrapper ];
+  nativeBuildInputs = [ pkg-config go rpcsvc-proto makeWrapper removeReferencesTo ];
 
   buildInputs = [ libelf libcap libseccomp libtirpc ];
 
@@ -105,8 +106,10 @@ stdenv.mkDerivation rec {
       libraryPath = lib.makeLibraryPath [ "$out" driverLink "${driverLink}-32" ];
     in
     ''
+      remove-references-to -t "${go}" $out/lib/libnvidia-container-go.so.1.9.0
       wrapProgram $out/bin/nvidia-container-cli --prefix LD_LIBRARY_PATH : ${libraryPath}
     '';
+  disallowedReferences = [ go ];
 
   meta = with lib; {
     homepage = "https://github.com/NVIDIA/libnvidia-container";

@@ -18,16 +18,18 @@
 , python-dateutil
 , python-xmp-toolkit
 , qpdf
+, setuptools
 , setuptools-scm
 , substituteAll
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "5.4.2";
-  format = "setuptools";
+  version = "7.1.2";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pikepdf";
@@ -39,7 +41,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-b4QUn+wfkk6Yx74ViBg6yaE1+bXtxidoyXYgBaJ9iiM=";
+    hash = "sha256-Lm05lqqZM1zucdIDgSnYsCcfo7wCDLcY02vv7CyHTGo=";
   };
 
   patches = [
@@ -51,24 +53,24 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    sed -i 's|\S*/opt/homebrew.*|pass|' setup.py
-
     substituteInPlace setup.py \
-      --replace setuptools_scm_git_archive ""
+      --replace "shims_enabled = not cflags_defined" "shims_enabled = False"
   '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
-    pybind11
     qpdf
   ];
 
   nativeBuildInputs = [
+    pybind11
+    setuptools
     setuptools-scm
+    wheel
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     attrs
     hypothesis
     pytest-xdist

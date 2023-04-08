@@ -47,7 +47,7 @@ let
 in
   {
     options.services.ihatemoney = {
-      enable = mkEnableOption "ihatemoney webapp. Note that this will set uwsgi to emperor mode";
+      enable = mkEnableOption (lib.mdDoc "ihatemoney webapp. Note that this will set uwsgi to emperor mode");
       backend = mkOption {
         type = types.enum [ "sqlite" "postgresql" ];
         default = "sqlite";
@@ -68,7 +68,7 @@ in
         example = {
           http = ":8000";
         };
-        description = lib.mdDoc "Additionnal configuration of the UWSGI vassal running ihatemoney. It should notably specify on which interfaces and ports the vassal should listen.";
+        description = lib.mdDoc "Additional configuration of the UWSGI vassal running ihatemoney. It should notably specify on which interfaces and ports the vassal should listen.";
       };
       defaultSender = {
         name = mkOption {
@@ -88,10 +88,10 @@ in
         default = true;
         description = lib.mdDoc "Use secure cookies. Disable this when ihatemoney is served via http instead of https";
       };
-      enableDemoProject = mkEnableOption "access to the demo project in ihatemoney";
-      enablePublicProjectCreation = mkEnableOption "permission to create projects in ihatemoney by anyone";
-      enableAdminDashboard = mkEnableOption "ihatemoney admin dashboard";
-      enableCaptcha = mkEnableOption "a simplistic captcha for some forms";
+      enableDemoProject = mkEnableOption (lib.mdDoc "access to the demo project in ihatemoney");
+      enablePublicProjectCreation = mkEnableOption (lib.mdDoc "permission to create projects in ihatemoney by anyone");
+      enableAdminDashboard = mkEnableOption (lib.mdDoc "ihatemoney admin dashboard");
+      enableCaptcha = mkEnableOption (lib.mdDoc "a simplistic captcha for some forms");
       legalLink = mkOption {
         type = types.nullOr types.str;
         default = null;

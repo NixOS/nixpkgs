@@ -3,16 +3,14 @@
 
 buildDunePackage rec {
   pname = "merlin";
-  version = "3.4.2";
+  version = "3.8.0";
 
   src = fetchurl {
-    url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-v${version}.tbz";
-    sha256 = "e1b7b897b11119d92995c558530149fd07bd67a4aaf140f55f3c4ffb5e882a81";
+    url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-${version}.tbz";
+    sha256 = "sha256-wmBGNwXL3BduF4o1sUXtAOUHJ4xmMvsWAxl/QdNj/28=";
   };
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.02.3";
+  minimalOCamlVersion = "4.02.3";
 
   patches = [
     (substituteAll {

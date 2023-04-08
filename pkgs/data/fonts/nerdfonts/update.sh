@@ -5,9 +5,14 @@ latest_release=$(curl --silent https://api.github.com/repos/ryanoasis/nerd-fonts
 version=$(jq -r '.tag_name' <<<"$latest_release")
 
 dirname="$(dirname "$0")"
-echo \""${version#v}"\" >"$dirname/version.nix"
-
-echo Using version "$version"
+echo \""${version#v}"\" >"$dirname/version-new.nix"
+if diff -q "$dirname/version-new.nix" "$dirname/version.nix"; then
+    echo No new version available, current: $version
+    exit 0
+else
+    echo Updated to version "$version"
+    mv "$dirname/version-new.nix" "$dirname/version.nix"
+fi
 
 printf '{\n' > "$dirname/shas.nix"
 

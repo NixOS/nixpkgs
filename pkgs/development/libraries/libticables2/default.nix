@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , pkg-config
 , autoreconfHook
 , glib
@@ -14,6 +15,15 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
     sha256 = "08j5di0cgix9vcpdv7b8xhxdjkk9zz7fqfnv3l4apk3jdr8vcvqc";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "add-support-for-aarch64-macos-target-triple.patch";
+      url = "https://github.com/debrouxl/tilibs/commit/ef41c51363b11521460f33e8c332db7b0a9ca085.patch";
+      stripLen = 2;
+      sha256 = "sha256-oTR1ACEZI0fjErpnFXTCnfLT1mo10Ypy0q0D8NOPNsM=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

@@ -10,6 +10,7 @@
 , pydocstyle
 , pyflakes
 , vulture
+, setuptools
 , isort
 , pylint
 , pytestCheckHook
@@ -17,7 +18,7 @@
 
 let pylama = buildPythonPackage rec {
   pname = "pylama";
-  version = "8.3.8";
+  version = "8.4.1";
 
   format = "setuptools";
 
@@ -26,7 +27,7 @@ let pylama = buildPythonPackage rec {
     owner = "klen";
     repo = "pylama";
     rev = version;
-    hash = "sha256-g6Lq5NaieUI/alxqoVFfL5VaCHwB/jLcp02/N1W69yE=";
+    hash = "sha256-WOGtZ412tX3YH42JCd5HIngunluwtMmQrOSUZp23LPU=";
   };
 
   patches = [
@@ -43,13 +44,14 @@ let pylama = buildPythonPackage rec {
     pycodestyle
     pydocstyle
     pyflakes
+    setuptools
     vulture
   ];
 
   # escape infinite recursion pylint -> isort -> pylama
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pylint
     pytestCheckHook
   ];

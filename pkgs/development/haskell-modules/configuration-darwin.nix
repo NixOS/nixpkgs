@@ -18,6 +18,10 @@ self: super: ({
     __darwinAllowLocalNetworking = true;
   });
 
+  streaming-commons = super.streaming-commons.overrideAttrs (_: {
+    __darwinAllowLocalNetworking = true;
+  });
+
   halive = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.halive;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
@@ -35,6 +39,13 @@ self: super: ({
   apecs-physics = addPkgconfigDepends [
     darwin.apple_sdk.frameworks.ApplicationServices
   ] super.apecs-physics;
+
+  # Framework deps are hidden behind a flag
+  hmidi = addExtraLibraries [
+    darwin.apple_sdk.frameworks.CoreFoundation
+    darwin.apple_sdk.frameworks.CoreAudio
+    darwin.apple_sdk.frameworks.CoreMIDI
+  ] super.hmidi;
 
   # "erf table" test fails on Darwin
   # https://github.com/bos/math-functions/issues/63
@@ -294,6 +305,18 @@ self: super: ({
 
   # https://github.com/haskell-crypto/cryptonite/issues/360
   cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
+
+  # Build segfaults unless `fixity-th` is disabled.
+  # https://github.com/tweag/ormolu/issues/927
+  ormolu = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.ormolu);
+  fourmolu = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.fourmolu);
+
+  # https://github.com/NixOS/nixpkgs/issues/149692
+  Agda = removeConfigureFlag "-foptimise-heavily" super.Agda;
 
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 

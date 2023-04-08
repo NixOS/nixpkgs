@@ -31,7 +31,7 @@ buildPythonPackage rec {
       --replace "yaml.load" "yaml.safe_load"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
     pyyaml

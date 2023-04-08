@@ -20,6 +20,7 @@
 , Cocoa
 , lit
 , makeWrapper
+, darwin
 , enableManpages ? false
 }:
 
@@ -38,7 +39,22 @@ stdenv.mkDerivation (rec {
       substitute '${./resource-dir.patch}' "$out" --subst-var clangLibDir
     '')
     ./gnu-install-dirs.patch
-  ];
+  ]
+  # This is a stopgap solution if/until the macOS SDK used for x86_64 is
+  # updated.
+  #
+  # The older 10.12 SDK used on x86_64 as of this writing has a `mach/machine.h`
+  # header that does not define `CPU_SUBTYPE_ARM64E` so we replace the one use
+  # of this preprocessor symbol in `lldb` with its expansion.
+  #
+  # See here for some context:
+  # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
+  ++ lib.optional (
+    stdenv.targetPlatform.isDarwin
+      && !stdenv.targetPlatform.isAarch64
+      && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
+  ) ./cpu_subtype_arm64e_replacement.patch;
+
 
   outputs = [ "out" "lib" "dev" ];
 
@@ -85,8 +101,11 @@ stdenv.mkDerivation (rec {
 
   doCheck = false;
 
+  doInstallCheck = true;
+
   installCheckPhase = ''
     if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
+        echo "ERROR: python files not installed where expected!";
         return 1;
     fi
   '';
@@ -102,7 +121,6 @@ stdenv.mkDerivation (rec {
   '';
 
   meta = llvm_meta // {
-    broken = stdenv.isDarwin;
     homepage = "https://lldb.llvm.org/";
     description = "A next-generation high-performance debugger";
     longDescription = ''

@@ -11,7 +11,7 @@ in {
   ];
 
   options.hardware.ksm = {
-    enable = mkEnableOption "Kernel Same-Page Merging";
+    enable = mkEnableOption (lib.mdDoc "Kernel Same-Page Merging");
     sleep = mkOption {
       type = types.nullOr types.int;
       default = null;

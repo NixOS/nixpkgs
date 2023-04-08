@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "uacme";
-  version = "1.7.2";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "ndilieto";
     repo = "uacme";
     rev = "v${version}";
-    hash = "sha256-mbH5Z/ieV4fiLCLWag1aLPNA89sexd5upNF3KHTfhKM=";
+    hash = "sha256-ywir6wLZCTgb7SurJ5S/1UIV1Lw4/Er1wwdgl630Eso=";
   };
 
   configureFlags = [ "--with-openssl" ];
@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "ACMEv2 client written in plain C with minimal dependencies";
     homepage = "https://github.com/ndilieto/uacme";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ malvo ];
+    maintainers = with maintainers; [ malte-v ];
   };
 }

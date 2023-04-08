@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
+{ lib, stdenv, fetchFromGitHub, openssl, zlib, pcre, libxcrypt, libxml2, libxslt
 , substituteAll, gd, geoip, gperftools, jemalloc, nixosTests
 , withDebug ? false
 , withMail ? false
@@ -10,18 +10,18 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.3.3";
+  version = "2.4.0";
   pname = "tengine";
 
   src = fetchFromGitHub {
     owner = "alibaba";
     repo = pname;
     rev = version;
-    sha256 = "0p43qsldwhx4zfwp585x8kps0akrf7b0gxdgf0sh0yqcp7l28gmx";
+    hash = "sha256-h/eSa2wCPvnX29wdtDHNQh8r1No1/YGinZNYU2MnsTM=";
   };
 
   buildInputs =
-    [ openssl zlib pcre libxml2 libxslt gd geoip gperftools jemalloc ]
+    [ openssl zlib pcre libxcrypt libxml2 libxslt gd geoip gperftools jemalloc ]
     ++ concatMap (mod: mod.inputs or []) modules;
 
   patches = singleton (substituteAll {
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough"
+  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough"
     + optionalString stdenv.isDarwin " -Wno-error=deprecated-declarations";
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);

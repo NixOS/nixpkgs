@@ -5,16 +5,18 @@
 , fetchFromGitHub
 , fsspec
 , funcy
-, GitPython
+, gitpython
 , pathspec
 , pygit2
 , pygtrie
 , pythonOlder
+, setuptools
+, shortuuid
 }:
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "0.0.25";
+  version = "0.1.17";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,24 +25,30 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-269vJNclTBWEqM9AJbF96R1I6Ru3q8YBd5A8Rmw7Jjo=";
+    hash = "sha256-hY46bowYJFmGfEmynTtGgXXkF9D5AcqApO7I/BIl/Lw=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "asyncssh>=2.7.1,<2.9" "asyncssh>=2.7.1" \
+      --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     asyncssh
     dulwich
     fsspec
     funcy
-    GitPython
+    gitpython
     pathspec
     pygit2
     pygtrie
+    shortuuid
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "asyncssh>=2.7.1,<2.9" "asyncssh>=2.7.1"
-  '';
 
   # Requires a running Docker instance
   doCheck = false;
@@ -52,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SCM wrapper and fsspec filesystem";
     homepage = "https://github.com/iterative/scmrepo";
+    changelog = "https://github.com/iterative/scmrepo/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

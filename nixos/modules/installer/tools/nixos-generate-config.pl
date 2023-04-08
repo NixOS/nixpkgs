@@ -127,9 +127,6 @@ if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
 push @kernelModules, "kvm-intel" if hasCPUFeature "vmx";
 push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
 
-push @attrs, "hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "AuthenticAMD";
-push @attrs, "hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "GenuineIntel";
-
 
 # Look at the PCI devices and add necessary modules.  Note that most
 # modules are auto-detected so we don't need to list them here.
@@ -324,11 +321,15 @@ if ($virt eq "systemd-nspawn") {
 }
 
 
-# Provide firmware for devices that are not detected by this script,
-# unless we're in a VM/container.
-push @imports, "(modulesPath + \"/installer/scan/not-detected.nix\")"
-    if $virt eq "none";
+# Check if we're on bare metal, not in a VM/container.
+if ($virt eq "none") {
+    # Provide firmware for devices that are not detected by this script.
+    push @imports, "(modulesPath + \"/installer/scan/not-detected.nix\")";
 
+    # Update the microcode.
+    push @attrs, "hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "AuthenticAMD";
+    push @attrs, "hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "GenuineIntel";
+}
 
 # For a device name like /dev/sda1, find a more stable path like
 # /dev/disk/by-uuid/X or /dev/disk/by-label/Y.
@@ -514,21 +515,6 @@ EOF
                 }
             }
         }
-    }
-}
-
-# For lack of a better way to determine it, guess whether we should use a
-# bigger font for the console from the display mode on the first
-# framebuffer. A way based on the physical size/actual DPI reported by
-# the monitor would be nice, but I don't know how to do this without X :)
-my $fb_modes_file = "/sys/class/graphics/fb0/modes";
-if (-f $fb_modes_file && -r $fb_modes_file) {
-    my $modes = read_file($fb_modes_file);
-    $modes =~ m/([0-9]+)x([0-9]+)/;
-    my $console_width = $1, my $console_height = $2;
-    if ($console_width > 1920) {
-        push @attrs, "# high-resolution display";
-        push @attrs, 'hardware.video.hidpi.enable = lib.mkDefault true;';
     }
 }
 

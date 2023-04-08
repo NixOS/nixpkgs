@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "adriconf";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nxqrs8c1sRruZLwFwK/JfXQPfpEq08Pe2n7ojQkH3SM=";
+    sha256 = "sha256-RhHmrjb5TvJnZ6R0aefqdmwMBpu4iTrxSHru7JAwrgs=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

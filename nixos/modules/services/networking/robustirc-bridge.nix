@@ -8,7 +8,7 @@ in
 {
   options = {
     services.robustirc-bridge = {
-      enable = mkEnableOption "RobustIRC bridge";
+      enable = mkEnableOption (lib.mdDoc "RobustIRC bridge");
 
       extraFlags = mkOption {
         type = types.listOf types.str;

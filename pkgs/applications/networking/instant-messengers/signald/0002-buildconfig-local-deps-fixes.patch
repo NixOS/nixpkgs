@@ -1,4 +1,4 @@
-From f319e1db47ae1eeddb6021cafe7b4f8551a702d7 Mon Sep 17 00:00:00 2001
+From 4bf0aef4003f7494103a93ae1c2957b2cd32bb59 Mon Sep 17 00:00:00 2001
 From: Maximilian Bosch <maximilian@mbosch.me>
 Date: Sat, 26 Feb 2022 12:36:15 +0100
 Subject: [PATCH 2/2] buildconfig/local deps fixes
@@ -8,7 +8,7 @@ Subject: [PATCH 2/2] buildconfig/local deps fixes
  1 file changed, 18 insertions(+), 8 deletions(-)
 
 diff --git a/build.gradle b/build.gradle
-index eaa6e0e..9a2f4e2 100644
+index ea3fea1..24415d8 100644
 --- a/build.gradle
 +++ b/build.gradle
 @@ -10,11 +10,21 @@ import org.gradle.nativeplatform.platform.internal.ArchitectureInternal
@@ -35,7 +35,7 @@ index eaa6e0e..9a2f4e2 100644
  
  compileJava.options.encoding = 'UTF-8'
  
-@@ -83,7 +93,10 @@ static String getVersion() {
+@@ -82,7 +92,10 @@ static String getVersion() {
  
  repositories {
      maven {url "https://gitlab.com/api/v4/groups/6853927/-/packages/maven"} // https://gitlab.com/groups/signald/-/packages
@@ -47,16 +47,16 @@ index eaa6e0e..9a2f4e2 100644
  }
  
  dependencies {
-@@ -104,6 +117,8 @@ dependencies {
-     implementation 'io.prometheus:simpleclient_httpserver:0.15.0'
-     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
-     implementation 'io.sentry:sentry:5.7.3'
+@@ -101,6 +114,8 @@ dependencies {
+     implementation 'io.prometheus:simpleclient:0.16.0'
+     implementation 'io.prometheus:simpleclient_hotspot:0.16.0'
+     implementation 'io.prometheus:simpleclient_httpserver:0.16.0'
 +    implementation 'com.github.gmazzo.buildconfig:com.github.gmazzo.buildconfig.gradle.plugin:3.0.3'
-+    implementation 'org.jetbrains.kotlin:kotlin-scripting-jvm:1.4.31'
-     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
- }
- 
-@@ -167,8 +182,3 @@ allprojects {
++    implementation 'org.jetbrains.kotlin:kotlin-scripting-jvm:1.7.10'
+     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
+     implementation 'io.sentry:sentry:6.11.0'
+     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+@@ -166,8 +181,3 @@ allprojects {
          }
      }
  }
@@ -67,5 +67,5 @@ index eaa6e0e..9a2f4e2 100644
 -}
 \ No newline at end of file
 -- 
-2.36.0
+2.38.3
 

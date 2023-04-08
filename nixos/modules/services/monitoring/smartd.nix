@@ -4,8 +4,7 @@ with lib;
 
 let
 
-  host = config.networking.hostName or "unknown"
-       + optionalString (config.networking.domain != null) ".${config.networking.domain}";
+  host = config.networking.fqdnOrHostName;
 
   cfg = config.services.smartd;
   opt = options.services.smartd;
@@ -95,7 +94,7 @@ in
 
     services.smartd = {
 
-      enable = mkEnableOption "smartd daemon from <literal>smartmontools</literal> package";
+      enable = mkEnableOption (lib.mdDoc "smartd daemon from `smartmontools` package");
 
       autodetect = mkOption {
         default = true;
@@ -135,9 +134,9 @@ in
             default = "root";
             example = "example@domain.tld";
             type = types.str;
-            description = ''
+            description = lib.mdDoc ''
               Sender of the notification messages.
-              Acts as the value of <literal>email</literal> in the emails' <literal>From: ... </literal> field.
+              Acts as the value of `email` in the emails' `From: ...` field.
             '';
           };
 

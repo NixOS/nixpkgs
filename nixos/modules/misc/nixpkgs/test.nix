@@ -59,5 +59,11 @@ lib.recurseIntoAttrs {
           For a future proof system configuration, we recommend to remove
           the legacy definitions.
         ''];
+    assert getErrors {
+        nixpkgs.localSystem = pkgs.stdenv.hostPlatform;
+        nixpkgs.hostPlatform = pkgs.stdenv.hostPlatform;
+        nixpkgs.pkgs = pkgs;
+      } == [];
+
     pkgs.emptyFile;
 }

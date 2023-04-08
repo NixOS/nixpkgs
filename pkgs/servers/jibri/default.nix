@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dpkg, jre8_headless, makeWrapper, writeText, xorg }:
+{ lib, stdenv, fetchurl, dpkg, jdk11_headless, makeWrapper, writeText, xorg }:
 
 let
   xorgModulePaths = writeText "module-paths" ''
@@ -13,10 +13,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jibri";
-  version = "8.0-93-g51fe7a2";
+  version = "8.0-140-gccc7278";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "8jBSkFIBi7NYxV41VtFmGfevVp6+emRWdoQ1l4dS6PA=";
+    sha256 = "TiKCK41ar3X1aOrGitnNBr/iWru1HOjjGkwLBB76M1M=";
   };
 
   dontBuild = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
     cat '${xorgModulePaths}' >> $out/etc/jitsi/jibri/xorg-video-dummy.conf
 
-    makeWrapper ${jre8_headless}/bin/java $out/bin/jibri --add-flags "-jar $out/opt/jitsi/jibri/jibri.jar"
+    makeWrapper ${jdk11_headless}/bin/java $out/bin/jibri --add-flags "-jar $out/opt/jitsi/jibri/jibri.jar"
 
     runHook postInstall
   '';

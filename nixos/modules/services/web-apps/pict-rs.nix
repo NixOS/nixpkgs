@@ -5,12 +5,10 @@ let
 in
 {
   meta.maintainers = with maintainers; [ happysalada ];
-  # Don't edit the docbook xml directly, edit the md and generate it:
-  # `pandoc pict-rs.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > pict-rs.xml`
-  meta.doc = ./pict-rs.xml;
+  meta.doc = ./pict-rs.md;
 
   options.services.pict-rs = {
-    enable = mkEnableOption "pict-rs server";
+    enable = mkEnableOption (lib.mdDoc "pict-rs server");
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/pict-rs";

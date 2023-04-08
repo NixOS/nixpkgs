@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "brother_ql";
     inherit version;
-    sha256 = "sha256-H1xXoDnwEsnCBDl/RwAB9267dINCHr3phdDLPGFOhmA=";
+    hash = "sha256-H1xXoDnwEsnCBDl/RwAB9267dINCHr3phdDLPGFOhmA=";
   };
 
   propagatedBuildInputs = [ future packbits pillow pyusb click attrs ];

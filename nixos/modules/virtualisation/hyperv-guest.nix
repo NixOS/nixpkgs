@@ -8,7 +8,7 @@ let
 in {
   options = {
     virtualisation.hypervGuest = {
-      enable = mkEnableOption "Hyper-V Guest Support";
+      enable = mkEnableOption (lib.mdDoc "Hyper-V Guest Support");
 
       videoMode = mkOption {
         type = types.str;
@@ -55,8 +55,6 @@ in {
 
     systemd = {
       packages = [ config.boot.kernelPackages.hyperv-daemons.lib ];
-
-      services.hv-vss.unitConfig.ConditionPathExists = [ "/dev/vmbus/hv_vss" ];
 
       targets.hyperv-daemons = {
         wantedBy = [ "multi-user.target" ];

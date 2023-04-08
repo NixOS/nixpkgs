@@ -1,15 +1,31 @@
-{ lib, stdenv
-, libopcodes, libbfd, elfutils, readline
-, linuxPackages_latest, zlib
+{ lib, stdenv, fetchurl
+, libopcodes, libopcodes_2_38
+, libbfd, libbfd_2_38
+, elfutils, readline
+, zlib
 , python3, bison, flex
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bpftools";
-  inherit (linuxPackages_latest.kernel) version src;
+  version = "5.19.12";
+
+  src = fetchurl {
+    url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
+    sha256 = "sha256-xDalSMcxLOb8WjRyy+rYle749ShB++fHH9jki9/isLo=";
+  };
+
+  patches = [
+    ./strip-binary-name.patch
+    # fix unknown type name '__vector128' on ppc64le
+    ./include-asm-types-for-ppc64le.patch
+  ];
 
   nativeBuildInputs = [ python3 bison flex ];
-  buildInputs = [ libopcodes libbfd elfutils zlib readline ];
+  buildInputs = (if (lib.versionAtLeast version "5.20")
+                 then [ libopcodes libbfd ]
+                 else [ libopcodes_2_38 libbfd_2_38 ])
+    ++ [ elfutils zlib readline ];
 
   preConfigure = ''
     patchShebangs scripts/bpf_doc.py

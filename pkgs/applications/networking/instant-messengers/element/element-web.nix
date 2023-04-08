@@ -1,5 +1,5 @@
 { lib
-, mkYarnPackage
+, stdenv
 , runCommand
 , fetchFromGitHub
 , fetchYarnDeps
@@ -7,55 +7,59 @@
 , jq
 , yarn
 , fixup_yarn_lock
+, nodejs
 , jitsi-meet
-, conf ? { }
 }:
 
 let
-  pinData = lib.importJSON ./pin.json;
+  pinData = import ./pin.nix;
+  inherit (pinData.hashes) webSrcHash webYarnHash;
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
-    piwik = false; # disable analytics
   };
-  configOverrides = writeText "element-config-overrides.json" (builtins.toJSON (noPhoningHome // conf));
-
 in
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   pname = "element-web";
-  inherit (pinData) version;
 
   src = fetchFromGitHub {
     owner = "vector-im";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = pinData.webSrcHash;
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    sha256 = webSrcHash;
   };
 
-  packageJSON = ./element-web-package.json;
-  # Remove the matrix-analytics-events dependency from the matrix-react-sdk
-  # dependencies list. It doesn't seem to be necessary since we already are
-  # installing it individually, and it causes issues with the offline mode.
-  yarnLock = (runCommand "${pname}-modified-lock" {} ''
-    sed '/matrix-analytics-events "github/d' ${src}/yarn.lock > "$out"
-  '');
   offlineCache = fetchYarnDeps {
-    inherit yarnLock;
-    sha256 = pinData.webYarnHash;
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    sha256 = webYarnHash;
   };
 
-  nativeBuildInputs = [ jq ];
+  nativeBuildInputs = [ yarn fixup_yarn_lock jq nodejs ];
 
   configurePhase = ''
     runHook preConfigure
-    ln -s $node_modules node_modules
+
+    export HOME=$PWD/tmp
+    # with the update of openssl3, some key ciphers are not supported anymore
+    # this flag will allow those codecs again as a workaround
+    # see https://medium.com/the-node-js-collection/node-js-17-is-here-8dba1e14e382#5f07
+    # and https://github.com/vector-im/element-web/issues/21043
+    export NODE_OPTIONS=--openssl-legacy-provider
+    mkdir -p $HOME
+
+    fixup_yarn_lock yarn.lock
+    yarn config --offline set yarn-offline-mirror $offlineCache
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules
+
     runHook postConfigure
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    export VERSION=${version}
+    export VERSION=${finalAttrs.version}
     yarn build:res --offline
+    yarn build:module_system --offline
     yarn build:bundle --offline
 
     runHook postBuild
@@ -66,21 +70,18 @@ mkYarnPackage rec {
 
     cp -R webapp $out
     cp ${jitsi-meet}/libs/external_api.min.js $out/jitsi_external_api.min.js
-    echo "${version}" > "$out/version"
-    jq -s '.[0] * .[1]' "config.sample.json" "${configOverrides}" > "$out/config.json"
+    echo "${finalAttrs.version}" > "$out/version"
+    jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
 
     runHook postInstall
   '';
 
-  # Do not attempt generating a tarball for element-web again.
-  doDist = false;
-
   meta = {
     description = "A glossy Matrix collaboration client for the web";
     homepage = "https://element.io/";
-    changelog = "https://github.com/vector-im/element-web/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/vector-im/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = lib.teams.matrix.members;
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
   };
-}
+})

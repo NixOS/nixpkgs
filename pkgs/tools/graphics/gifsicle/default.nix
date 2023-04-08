@@ -3,8 +3,6 @@
 , static ? stdenv.hostPlatform.isStatic
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "gifsicle";
   version = "1.93";
@@ -14,11 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kvZweXMr9MHaCH5q4JBSBYRuWsd3ulyqZtEqc6qUNEc=";
   };
 
-  buildInputs = optionals gifview [ xorgproto libXt libX11 ];
+  buildInputs = lib.optionals gifview [ xorgproto libXt libX11 ];
 
-  configureFlags = optional (!gifview) "--disable-gifview";
+  configureFlags = lib.optional (!gifview) "--disable-gifview";
 
-  LDFLAGS = optionalString static "-static";
+  LDFLAGS = lib.optionalString static "-static";
 
   doCheck = true;
   checkPhase = ''
@@ -29,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Command-line tool for creating, editing, and getting information about GIF images and animations";
     homepage = "https://www.lcdf.org/gifsicle/";
     license = lib.licenses.gpl2;
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

@@ -1,33 +1,42 @@
 { lib, buildDunePackage
 , astring, digestif, fmt, jsonm, logs, ocaml_lwt, ocamlgraph, uri
-, repr, ppx_irmin, bheap, uutf
+, repr, ppx_irmin, bheap, uutf, mtime, lwt, optint
+, vector, hex, alcotest, qcheck-alcotest
 }:
 
 buildDunePackage {
   pname = "irmin";
 
-  inherit (ppx_irmin) src version;
+  inherit (ppx_irmin) src version strictDeps;
 
-  useDune2 = true;
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.10";
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     astring
+    bheap
     digestif
     fmt
     jsonm
     logs
-    ocaml_lwt
+    lwt
+    mtime
     ocamlgraph
-    uri
-    repr
-    bheap
+    optint
     ppx_irmin
+    repr
+    uri
     uutf
   ];
 
-  # circular dependency on irmin-mem
-  doCheck = false;
+  checkInputs = [
+    vector
+    hex
+    alcotest
+    qcheck-alcotest
+  ];
+
+  doCheck = true;
 
   meta = ppx_irmin.meta // {
     description = "A distributed database built on the same principles as Git";

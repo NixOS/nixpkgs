@@ -22,6 +22,6 @@ stdenv.mkDerivation {
     homepage = "https://embree.github.io/";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

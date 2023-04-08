@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "elfinfo";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "elfinfo";
     rev = version;
-    sha256 = "1n8bg0rcq9fqa6rdnk6x9ngvm59hcayblkpjv9j5myn2vmm6fv8m";
+    sha256 = "sha256-vnlPSNyabFjucxHU1w5EPIO9UmTiuCKEzGMC+EZRTtM=";
   };
 
   vendorSha256 = null;
@@ -20,7 +20,7 @@ buildGoModule rec {
     description = "Small utility for showing information about ELF files";
     homepage = "https://elfinfo.roboticoverlords.org/";
     changelog = "https://github.com/xyproto/elfinfo/releases/tag/${version}";
-    license = licenses.mit;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ dtzWill ];
   };
 }

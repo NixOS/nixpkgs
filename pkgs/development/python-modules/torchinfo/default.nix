@@ -3,13 +3,13 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
-, pytorch
+, torch
 , torchvision
 }:
 
 buildPythonPackage rec {
   pname = "torchinfo";
-  version = "1.64";
+  version = "1.7.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,15 +18,15 @@ buildPythonPackage rec {
     owner = "TylerYep";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-gcl8RxCD017FP4LtB60WVtOh7jg2Otv/vNd9hKneEAU=";
+    hash = "sha256-O+I7BNQ5moV/ZcbbuP/IFoi0LO0WsGHBbSfgPmFu1Ec=";
   };
 
   propagatedBuildInputs = [
-    pytorch
+    torch
     torchvision
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -37,8 +37,13 @@ buildPythonPackage rec {
     "test_google"
   ];
 
+  disabledTestPaths = [
+    # Wants "compressai", which we don't package (2023-03-23)
+    "tests/torchinfo_xl_test.py"
+  ];
+
   pythonImportsCheck = [
-    "torchvision"
+    "torchinfo"
   ];
 
   meta = with lib; {

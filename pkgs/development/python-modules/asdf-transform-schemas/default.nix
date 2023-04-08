@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "asdf-transform-schemas";
-  version = "0.2.2";
+  version = "0.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "asdf_transform_schemas";
     inherit version;
-    hash = "sha256-9xqTCe0+vQmxk3roV8lM7JKIeHBEDrPphou77XJlaxU=";
+    hash = "sha256-DPL/eyLMtAj+WN3ZskQaWbpz/jI+QW1ZueCkcop9LdY=";
   };
 
   nativeBuildInputs = [

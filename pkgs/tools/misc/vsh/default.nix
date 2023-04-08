@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "vsh";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "fishi0x01";
     repo = "vsh";
     rev = "v${version}";
-    sha256 = "0skd16j969mb2kgq503wskaw8clyhkw135ny2nsqv5j2zjpr71ap";
+    sha256 = "13qa9r7kij6aqhackzmsn38vyhmajgmhflnrd9rarfhhyg6ldv4z";
   };
 
   # vendor directory is part of repository

@@ -6,7 +6,7 @@ let
 in {
   options.programs.ccache = {
     # host configuration
-    enable = mkEnableOption "CCache";
+    enable = mkEnableOption (lib.mdDoc "CCache");
     cacheDir = mkOption {
       type = types.path;
       description = lib.mdDoc "CCache directory";
@@ -17,7 +17,7 @@ in {
       type = types.listOf types.str;
       description = lib.mdDoc "Nix top-level packages to be compiled using CCache";
       default = [];
-      example = [ "wxGTK30" "ffmpeg" "libav_all" ];
+      example = [ "wxGTK32" "ffmpeg" "libav_all" ];
     };
   };
 

@@ -1,39 +1,38 @@
-{ buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pytestCheckHook
+{ lib
+, stdenv
+, buildPythonPackage
 , cairosvg
-, flit-core
-, fonttools
-, pydyf
-, pyphen
 , cffi
 , cssselect2
-, html5lib
-, tinycss2
+, fetchPypi
+, flit-core
+, fontconfig
+, fonttools
+, ghostscript
 , glib
 , harfbuzz
+, html5lib
 , pango
-, fontconfig
-, lib
-, stdenv
-, ghostscript
-, isPy3k
-, substituteAll
 , pillow
+, pydyf
+, pyphen
+, pytestCheckHook
+, pythonOlder
+, substituteAll
+, tinycss2
 }:
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "54.3";
-  disabled = !isPy3k;
-
+  version = "58.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    sha256 = "sha256-4E2gQGMFZsRMqiAgM/B/hYdl9TZwkEWoCXOfPQSOidY=";
+    hash = "sha256-cPSCytjlPCw+rpz4avQS65NAWxash4G1GeozJtR1vW8=";
   };
 
   patches = [
@@ -45,12 +44,6 @@ buildPythonPackage rec {
       pango = "${pango.out}/lib/libpango-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       pangocairo = "${pango.out}/lib/libpangocairo-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       harfbuzz = "${harfbuzz.out}/lib/libharfbuzz${stdenv.hostPlatform.extensions.sharedLibrary}";
-    })
-    # Disable tests for new Ghostscript
-    # Remove when next version is released
-    (fetchpatch {
-      url = "https://github.com/Kozea/WeasyPrint/commit/e544398b00d76bc0317ea7e2abe40dc46b380910.patch";
-      sha256 = "sha256-oQO3j9Mo1x98WaLPROxsOn0qkeYRJrCx5QWWKoHvabE=";
     })
   ];
 
@@ -69,7 +62,7 @@ buildPythonPackage rec {
     tinycss2
   ] ++ fonttools.optional-dependencies.woff;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ghostscript
   ];
@@ -86,6 +79,11 @@ buildPythonPackage rec {
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  makeWrapperArgs = [
+    "--set FONTCONFIG_FILE ${FONTCONFIG_FILE}"
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--isort --flake8 --cov --no-cov-on-fail" ""
@@ -96,9 +94,13 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
+  pythonImportsCheck = [
+    "weasyprint"
+  ];
+
   meta = with lib; {
-    homepage = "https://weasyprint.org/";
     description = "Converts web documents to PDF";
+    homepage = "https://weasyprint.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ elohmeier ];
   };

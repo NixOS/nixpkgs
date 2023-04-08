@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "async-profiler";
-  version = "2.8.1";
+  version = "2.9";
 
   src = fetchFromGitHub {
     owner = "jvm-profiling-tools";
     repo = "async-profiler";
     rev = "v${version}";
-    sha256 = "sha256-TbsLYPAaL2nzzRxvCD+7oaIf0s9X2s6BHIT/KD6CN74=";
+    sha256 = "sha256-ngLUg6Fq6Ay06klGa/y8lod8W6rYMqhMhXFn5OBCSpk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

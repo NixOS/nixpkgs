@@ -22,10 +22,10 @@ with lib;
       };
 
       secretsFile = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           The secret data used to encode the SRS address.
           to generate, use a command like:
-          <literal>for n in $(seq 5); do dd if=/dev/urandom count=1 bs=1024 status=none | sha256sum | sed 's/  -$//' | sed 's/^/          /'; done</literal>
+          `for n in $(seq 5); do dd if=/dev/urandom count=1 bs=1024 status=none | sha256sum | sed 's/  -$//' | sed 's/^/          /'; done`
         '';
         type = types.path;
         default = "/var/lib/pfix-srsd/secrets";

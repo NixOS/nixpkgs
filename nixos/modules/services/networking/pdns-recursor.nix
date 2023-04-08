@@ -27,7 +27,7 @@ let
 
 in {
   options.services.pdns-recursor = {
-    enable = mkEnableOption "PowerDNS Recursor, a recursive DNS server";
+    enable = mkEnableOption (lib.mdDoc "PowerDNS Recursor, a recursive DNS server");
 
     dns.address = mkOption {
       type = oneOrMore types.str;
@@ -38,7 +38,7 @@ in {
     };
 
     dns.port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 53;
       description = lib.mdDoc ''
         Port number Recursor DNS server will bind to.
@@ -67,7 +67,7 @@ in {
     };
 
     api.port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 8082;
       description = lib.mdDoc ''
         Port number Recursor REST API server will bind to.

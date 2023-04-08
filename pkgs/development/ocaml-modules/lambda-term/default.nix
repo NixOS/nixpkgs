@@ -1,9 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, zed, lwt_log, lwt_react, mew_vi }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, zed, lwt_log, lwt_react, mew_vi, uucp, logs }:
 
 let params =
   if lib.versionAtLeast ocaml.version "4.08" then {
-    version = "3.2.0";
-    sha256 = "sha256:048k26644wq5wlwk0j179dxrxyz9nxqqq4vvhyh6pqpgxdajd44i";
+    version = "3.3.1";
+    sha256 = "sha256-C124bhdrY+XzL93zzNEbCr+U+7CYBZDm0hlAw+iqat4=";
   } else {
     version = "3.1.0";
     sha256 = "1k0ykiz0vhpyyj9fkss29ajas4fh1xh449j702xkvayqipzj1mkg";
@@ -14,7 +14,7 @@ buildDunePackage rec {
   pname = "lambda-term";
   inherit (params) version;
 
-  useDune2 = true;
+  duneVersion = if lib.versionAtLeast ocaml.version "4.08" then "3" else "2";
 
   src = fetchFromGitHub {
     owner = "ocaml-community";
@@ -23,7 +23,8 @@ buildDunePackage rec {
     inherit (params) sha256;
   };
 
-  propagatedBuildInputs = [ zed lwt_log lwt_react mew_vi ];
+  propagatedBuildInputs = [ zed lwt_log lwt_react mew_vi ]
+    ++ lib.optionals (lib.versionAtLeast version "3.3.1") [ uucp logs ] ;
 
   meta = {
     description = "Terminal manipulation library for OCaml";

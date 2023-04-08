@@ -3,16 +3,19 @@
 , stdenv
 , acl
 , gnome
-, gtkmm3
+, glibmm_2_68
+, gtkmm4
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, itstool
+, wrapGAppsHook4
+, gtk4
 }:
 
 stdenv.mkDerivation rec {
   pname = "eiciel";
-  version = "0.9.13.1";
+  version = "0.10.0";
 
   outputs = [ "out" "nautilusExtension" ];
 
@@ -20,31 +23,28 @@ stdenv.mkDerivation rec {
     owner = "rofirrim";
     repo = "eiciel";
     rev = version;
-    sha256 = "0rhhw0h1hyg5kvxhjxkdz03vylgax6912mg8j4lvcz6wlsa4wkvj";
+    sha256 = "0lhnrxhbg80pqjy9f8yiqi7x48rb6m2cmkffv25ssjynsmdnar0s";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    itstool
+    wrapGAppsHook4
+    gtk4
   ];
 
   buildInputs = [
     acl
-    gtkmm3
+    glibmm_2_68
+    gtkmm4
     gnome.nautilus
   ];
 
   mesonFlags = [
-    "-Dnautilus-extension-dir=${placeholder "nautilusExtension"}/lib/nautilus/extensions-3.0"
+    "-Dnautilus-extension-dir=${placeholder "nautilusExtension"}/lib/nautilus/extensions-4"
   ];
-
-  postPatch = ''
-    substituteInPlace meson.build --replace "compiler.find_library('libacl')" "compiler.find_library('acl')"
-    chmod +x img/install_icons.sh
-    patchShebangs img/install_icons.sh
-  '';
 
   meta = with lib; {
     description = "Graphical editor for ACLs and extended attributes";

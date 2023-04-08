@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tree";
-  version = "2.0.2";
+  version = "2.0.4";
 
   src = fetchFromGitLab {
     owner = "OldManProgrammer";
     repo = "unix-tree";
     rev = version;
-    sha256 = "sha256-ex4fD8dZJGplL3oMaSokMBn6PRJ8/s83CnWQaAjBcao=";
+    sha256 = "sha256-2voXL31JHh09yBBLuHhYyZsUapiPVF/cgRmTU6wSXk4=";
   };
 
   preConfigure = ''

@@ -1,7 +1,6 @@
 pytestXdistHook() {
     pytestFlagsArray+=(
         "--numprocesses=$NIX_BUILD_CORES"
-        "--forked"
     )
 }
 

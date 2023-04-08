@@ -37,7 +37,7 @@ let
 in {
   options = {
     services.mxisd = {
-      enable = mkEnableOption "matrix federated identity server";
+      enable = mkEnableOption (lib.mdDoc "matrix federated identity server");
 
       package = mkOption {
         type = types.package;
@@ -49,9 +49,9 @@ in {
       environmentFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to an environment-file which may contain secrets to be
-          substituted via <package>envsubst</package>.
+          substituted via `envsubst`.
         '';
       };
 

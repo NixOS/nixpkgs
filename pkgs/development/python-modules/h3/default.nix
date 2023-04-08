@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "h3";
-  version = "3.7.4";
+  version = "3.7.6";
 
   # pypi version does not include tests
   src = fetchFromGitHub {
     owner = "uber";
     repo = "h3-py";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-/DtQD2M+5kBn1RxAOobVqtu32+1cxN8lZSuGH613Bwc=";
+    hash = "sha256-QNiuiHJ4IMxpi39iobPSSlYUUj5oxpxO4B2+HXVQ/Zk=";
   };
 
   dontConfigure = true;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   nativeBuildInputs = [
     scikit-build cmake cython

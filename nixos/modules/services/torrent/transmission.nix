@@ -19,19 +19,23 @@ in
   imports = [
     (mkRenamedOptionModule ["services" "transmission" "port"]
                            ["services" "transmission" "settings" "rpc-port"])
-    (mkAliasOptionModule ["services" "transmission" "openFirewall"]
-                         ["services" "transmission" "openPeerPorts"])
+    (mkAliasOptionModuleMD ["services" "transmission" "openFirewall"]
+                           ["services" "transmission" "openPeerPorts"])
   ];
   options = {
     services.transmission = {
-      enable = mkEnableOption ''the headless Transmission BitTorrent daemon.
+      enable = mkEnableOption (lib.mdDoc "transmission") // {
+        description = lib.mdDoc ''
+          Whether to enable the headless Transmission BitTorrent daemon.
 
-        Transmission daemon can be controlled via the RPC interface using
-        transmission-remote, the WebUI (http://127.0.0.1:9091/ by default),
-        or other clients like stig or tremc.
+          Transmission daemon can be controlled via the RPC interface using
+          transmission-remote, the WebUI (http://127.0.0.1:9091/ by default),
+          or other clients like stig or tremc.
 
-        Torrents are downloaded to <xref linkend="opt-services.transmission.home"/>/${downloadsDir} by default and are
-        accessible to users in the "transmission" group'';
+          Torrents are downloaded to [](#opt-services.transmission.home)/${downloadsDir} by default and are
+          accessible to users in the "transmission" group.
+        '';
+      };
 
       settings = mkOption {
         description = lib.mdDoc ''
@@ -40,7 +44,7 @@ in
           (each time the service starts).
 
           See [Transmission's Wiki](https://github.com/transmission/transmission/wiki/Editing-Configuration-Files)
-          for documentation of settings not explicitely covered by this module.
+          for documentation of settings not explicitly covered by this module.
         '';
         default = {};
         type = types.submodule {
@@ -67,7 +71,7 @@ in
           options.incomplete-dir-enabled = mkOption {
             type = types.bool;
             default = true;
-            description = "";
+            description = lib.mdDoc "";
           };
           options.message-level = mkOption {
             type = types.ints.between 0 3;
@@ -104,9 +108,9 @@ in
             type = types.str;
             default = "127.0.0.1";
             example = "0.0.0.0";
-            description = ''
+            description = lib.mdDoc ''
               Where to listen for RPC connections.
-              Use \"0.0.0.0\" to listen on all interfaces.
+              Use `0.0.0.0` to listen on all interfaces.
             '';
           };
           options.rpc-port = mkOption {
@@ -170,6 +174,8 @@ in
         };
       };
 
+      package = mkPackageOptionMD pkgs "transmission" {};
+
       downloadDirPermissions = mkOption {
         type = with types; nullOr str;
         default = null;
@@ -229,18 +235,22 @@ in
         '';
       };
 
-      openPeerPorts = mkEnableOption "opening of the peer port(s) in the firewall";
+      openPeerPorts = mkEnableOption (lib.mdDoc "opening of the peer port(s) in the firewall");
 
-      openRPCPort = mkEnableOption "opening of the RPC port in the firewall";
+      openRPCPort = mkEnableOption (lib.mdDoc "opening of the RPC port in the firewall");
 
-      performanceNetParameters = mkEnableOption ''tweaking of kernel parameters
-        to open many more connections at the same time.
+      performanceNetParameters = mkEnableOption (lib.mdDoc "performance tweaks") // {
+        description = lib.mdDoc ''
+          Whether to enable tweaking of kernel parameters
+          to open many more connections at the same time.
 
-        Note that you may also want to increase
-        <literal>peer-limit-global"</literal>.
-        And be aware that these settings are quite aggressive
-        and might not suite your regular desktop use.
-        For instance, SSH sessions may time out more easily'';
+          Note that you may also want to increase
+          `peer-limit-global`.
+          And be aware that these settings are quite aggressive
+          and might not suite your regular desktop use.
+          For instance, SSH sessions may time out more easily.
+        '';
+      };
     };
   };
 
@@ -279,7 +289,7 @@ in
           install -D -m 600 -o '${cfg.user}' -g '${cfg.group}' /dev/stdin \
            '${cfg.home}/${settingsDir}/settings.json'
         '')];
-        ExecStart="${pkgs.transmission}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart="${cfg.package}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir} ${escapeShellArgs cfg.extraFlags}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
         Group = cfg.group;
@@ -345,7 +355,7 @@ in
         PrivateUsers = true;
         ProtectClock = true;
         ProtectControlGroups = true;
-        # ProtectHome=true would not allow BindPaths= to work accross /home,
+        # ProtectHome=true would not allow BindPaths= to work across /home,
         # and ProtectHome=tmpfs would break statfs(),
         # preventing transmission-daemon to report the available free space.
         # However, RootDirectory= is used, so this is not a security concern
@@ -377,7 +387,7 @@ in
     };
 
     # It's useful to have transmission in path, e.g. for remote control
-    environment.systemPackages = [ pkgs.transmission ];
+    environment.systemPackages = [ cfg.package ];
 
     users.users = optionalAttrs (cfg.user == "transmission") ({
       transmission = {
@@ -423,7 +433,7 @@ in
       # https://trac.transmissionbt.com/browser/trunk/libtransmission/tr-udp.c?rev=11956.
       # at least up to the values hardcoded here:
       (mkIf cfg.settings.utp-enabled {
-        "net.core.rmem_max" = mkDefault "4194304"; # 4MB
+        "net.core.rmem_max" = mkDefault 4194304; # 4MB
         "net.core.wmem_max" = mkDefault "1048576"; # 1MB
       })
       (mkIf cfg.performanceNetParameters {
@@ -449,7 +459,7 @@ in
     ];
 
     security.apparmor.policies."bin.transmission-daemon".profile = ''
-      include "${pkgs.transmission.apparmor}/bin.transmission-daemon"
+      include "${cfg.package.apparmor}/bin.transmission-daemon"
     '';
     security.apparmor.includes."local/bin.transmission-daemon" = ''
       r ${config.systemd.services.transmission.environment.CURL_CA_BUNDLE},

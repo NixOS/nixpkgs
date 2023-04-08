@@ -1,4 +1,5 @@
 { lib
+, bluetooth-data-tools
 , bluetooth-sensor-state-data
 , buildPythonPackage
 , fetchFromGitHub
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "govee-ble";
-  version = "0.14.1";
+  version = "0.23.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-gAhrhHTPwNipAFS22GXKjeVXqx0AGorvsqqEWKwRLzA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/uv4P7wB/5QQW2IA+PT6VMPWd91Aoyxsez+8ptrIa5M=";
   };
 
   nativeBuildInputs = [
@@ -28,12 +29,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
     sensor-state-data
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -49,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Govee BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/govee-ble";
+    changelog = "https://github.com/bluetooth-devices/govee-ble/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

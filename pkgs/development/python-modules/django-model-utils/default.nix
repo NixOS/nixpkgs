@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-model-utils";
     rev = version;
-    sha256 = "sha256-TLqvpP/ZaGGFdqnN+UHbhXv1K1YVYTYBkCiWCjYrFh8=";
+    hash = "sha256-TLqvpP/ZaGGFdqnN+UHbhXv1K1YVYTYBkCiWCjYrFh8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   # requires postgres database
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     psycopg2
     pytest-django

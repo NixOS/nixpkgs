@@ -16,7 +16,7 @@ buildPythonPackage rec {
       --replace "get_version(pypi=True)" '"${version}"'
   '';
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   pythonImportsCheck = [ "versiontag" ];
 

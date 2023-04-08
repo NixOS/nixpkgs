@@ -1,5 +1,5 @@
 diff --git a/numba/cuda/cuda_paths.py b/numba/cuda/cuda_paths.py
-index b9988bc..a642680 100644
+index 0da435d33..7b1fde087 100644
 --- a/numba/cuda/cuda_paths.py
 +++ b/numba/cuda/cuda_paths.py
 @@ -24,10 +24,7 @@ def _find_valid_path(options):
@@ -14,15 +14,12 @@ index b9988bc..a642680 100644
      ]
      by, libdir = _find_valid_path(options)
      return by, libdir
-@@ -35,18 +32,16 @@ def _get_libdevice_path_decision():
+@@ -35,16 +32,14 @@ def _get_libdevice_path_decision():
  
  def _nvvm_lib_dir():
      if IS_WIN32:
 -        return 'nvvm', 'bin'
 +        return 'bin',
-     elif IS_OSX:
--        return 'nvvm', 'lib'
-+        return 'lib',
      else:
 -        return 'nvvm', 'lib64'
 +        return 'lib64',
@@ -33,13 +30,13 @@ index b9988bc..a642680 100644
 -        ('Conda environment', get_conda_ctk()),
 -        ('CUDA_HOME', get_cuda_home(*_nvvm_lib_dir())),
 -        ('System', get_system_ctk(*_nvvm_lib_dir())),
-+        ('Nix store', get_nix_ctk(*_nvvm_lib_dir())),        
++        ('Nix store', get_nix_ctk(*_nvvm_lib_dir())),
      ]
      by, path = _find_valid_path(options)
      return by, path
-@@ -74,14 +69,12 @@ def _cudalib_path():
-     elif IS_OSX:
-         return 'lib'
+@@ -64,14 +59,12 @@ def _cudalib_path():
+     if IS_WIN32:
+         return 'bin'
      else:
 -        return 'lib64'
 +        return 'lib'
@@ -54,7 +51,7 @@ index b9988bc..a642680 100644
      ]
      by, libdir = _find_valid_path(options)
      return by, libdir
-@@ -92,6 +85,22 @@ def _get_cudalib_dir():
+@@ -82,6 +75,22 @@ def _get_cudalib_dir():
      return _env_path_tuple(by, libdir)
  
  

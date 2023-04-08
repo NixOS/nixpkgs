@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl8821cu";
-  version = "${kernel.version}-unstable-2022-05-07";
+  version = "${kernel.version}-unstable-2022-12-07";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8821cu-20210118";
-    rev = "e3cf788e1dddaba3273190755ce424f93fe593e4";
-    hash = "sha256-VUZU/oFSaxewy/BF/2k4OssAi4AWSWweqXYZPHmsQvY=";
+    rev = "7b8c45a270454f05e2dbf3beeb4afcf817db65da";
+    hash = "sha256-Dg+At0iHvi4pl8umhQyml1bODhkeK8YWYpEckqqzNcQ=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';

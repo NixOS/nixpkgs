@@ -1,16 +1,25 @@
-{ lib, fetchFromGitHub, buildPythonApplication, qt5
-, psutil, pypresence, pyqt5, python, qtawesome, requests }:
+{ lib
+, fetchFromGitHub
+, buildPythonApplication
+, qt5
+, legendary-gl
+, pypresence
+, pyqt5
+, python
+, qtawesome
+, requests
+, typing-extensions
+}:
 
 buildPythonApplication rec {
   pname = "rare";
-  version = "1.8.9";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "Dummerle";
     repo = "Rare";
-    rev = version;
-    sha256 = "sha256-2l8Id+bA5Ugb8+3ioiZ78dUtDusU8cvZEAMhmYBcJFc=";
-    fetchSubmodules = true;
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-+STwVsDdvjP7HaqmaQVug+6h0n0rw/j4LGQQSNdLVQQ=";
   };
 
   nativeBuildInputs = [
@@ -18,19 +27,21 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    psutil
+    legendary-gl
     pypresence
     pyqt5
     qtawesome
     requests
+    typing-extensions
+  ];
+
+  patches = [
+    ./fix-instance.patch
+    # Not able to run pythonRelaxDepsHook because of https://github.com/NixOS/nixpkgs/issues/198342
+    ./legendary-gl-version.patch
   ];
 
   dontWrapQtApps = true;
-
-  preBuild = ''
-    # Solves "PermissionError: [Errno 13] Permission denied: '/homeless-shelter'"
-    export HOME=$(mktemp -d)
-  '';
 
   postInstall = ''
     install -Dm644 misc/rare.desktop -t $out/share/applications/

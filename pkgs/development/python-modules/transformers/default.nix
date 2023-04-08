@@ -17,14 +17,14 @@
 , scikit-learn
 , pillow
 , pyyaml
-, pytorch
+, torch
 , tokenizers
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.20.1";
+  version = "4.26.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3Kx7/3IJM428KXfOPRnPK4TYnAIXVOIMl33j8n5Cw60=";
+    hash = "sha256-JRW3uSPgWgvtH4WFQLHD1ma8L1qq05MSemJbcdYMC6E=";
   };
 
   propagatedBuildInputs = [
@@ -67,7 +67,7 @@ buildPythonPackage rec {
       # tf2onnx
     ];
     torch = [
-      pytorch
+      torch
     ];
     tokenizers = [
       tokenizers

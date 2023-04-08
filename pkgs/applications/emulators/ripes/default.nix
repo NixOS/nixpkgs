@@ -12,14 +12,14 @@
 
 mkDerivation rec {
   pname = "ripes";
-  version = "2.2.4";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "mortbopet";
     repo = "Ripes";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-Aal2A4xypzaY7Oa+boIrXk7ITNKnh5OZIP7DkJjcGu4=";
+    sha256 = "sha256-fRkab0G2zjK1VYzH21yhL7Cr0rS4I8ir8gwH9ALy60A=";
   };
 
   nativeBuildInputs = [

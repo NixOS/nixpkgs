@@ -85,7 +85,9 @@ in
   # Interface
 
   options.services.syncoid = {
-    enable = mkEnableOption "Syncoid ZFS synchronization service";
+    enable = mkEnableOption (lib.mdDoc "Syncoid ZFS synchronization service");
+
+    package = lib.mkPackageOptionMD pkgs "sanoid" {};
 
     interval = mkOption {
       type = types.str;
@@ -200,7 +202,7 @@ in
             '';
           };
 
-          recursive = mkEnableOption ''the transfer of child datasets'';
+          recursive = mkEnableOption (lib.mdDoc ''the transfer of child datasets'');
 
           sshKey = mkOption {
             type = types.nullOr types.path;
@@ -331,7 +333,7 @@ in
               ExecStopPost =
                 (map (buildUnallowCommand c.localSourceAllow) (localDatasetName c.source)) ++
                 (map (buildUnallowCommand c.localTargetAllow) (localDatasetName c.target));
-              ExecStart = lib.escapeShellArgs ([ "${pkgs.sanoid}/bin/syncoid" ]
+              ExecStart = lib.escapeShellArgs ([ "${cfg.package}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
                 ++ optional c.recursive "-r"
                 ++ optionals (c.sshKey != null) [ "--sshkey" c.sshKey ]

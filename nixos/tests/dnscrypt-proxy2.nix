@@ -1,4 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: let
+  localProxyPort = 43;
+in {
   name = "dnscrypt-proxy2";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ joachifm ];
@@ -9,7 +11,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     # for a caching DNS client.
     client =
     { ... }:
-    let localProxyPort = 43; in
     {
       security.apparmor.enable = true;
 
@@ -25,12 +26,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       };
 
       services.dnsmasq.enable = true;
-      services.dnsmasq.servers = [ "127.0.0.1#${toString localProxyPort}" ];
+      services.dnsmasq.settings.server = [ "127.0.0.1#${toString localProxyPort}" ];
     };
   };
 
   testScript = ''
     client.wait_for_unit("dnsmasq")
     client.wait_for_unit("dnscrypt-proxy2")
+    client.wait_until_succeeds("ss --numeric --udp --listening | grep -q ${toString localProxyPort}")
   '';
 })

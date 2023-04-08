@@ -6,7 +6,7 @@ let
   cfg = config.services.zerotierone;
 in
 {
-  options.services.zerotierone.enable = mkEnableOption "ZeroTierOne";
+  options.services.zerotierone.enable = mkEnableOption (lib.mdDoc "ZeroTierOne");
 
   options.services.zerotierone.joinNetworks = mkOption {
     default = [];
@@ -19,7 +19,7 @@ in
 
   options.services.zerotierone.port = mkOption {
     default = 9993;
-    type = types.int;
+    type = types.port;
     description = lib.mdDoc ''
       Network port used by ZeroTier.
     '';

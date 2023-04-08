@@ -86,7 +86,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   inherit ruby;
   inherit dontBuild;
   inherit dontStrip;
-  inherit type;
+  gemType = type;
 
   nativeBuildInputs = [
     ruby makeWrapper
@@ -136,14 +136,14 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   # As of ruby 3.0, ruby headers require -fdeclspec when building with clang
   # Introduced in https://github.com/ruby/ruby/commit/0958e19ffb047781fe1506760c7cbd8d7fe74e57
-  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.cc.isClang && lib.versionAtLeast ruby.version.major "3") [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isClang && lib.versionAtLeast ruby.version.major "3") [
     "-fdeclspec"
-  ];
+  ]);
 
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
 
-    if [[ "$type" == "gem" ]]; then
+    if [[ "$gemType" == "gem" ]]; then
       if [[ -z "$gemspec" ]]; then
         gemspec="$(find . -name '*.gemspec')"
         echo "found the following gemspecs:"
@@ -158,7 +158,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       gempkg=$(echo "$output" | grep -oP 'File: \K(.*)')
 
       echo "gem package built: $gempkg"
-    elif [[ "$type" == "git" ]]; then
+    elif [[ "$gemType" == "git" ]]; then
       git init
       # remove variations to improve the likelihood of a bit-reproducible output
       rm -rf .git/logs/ .git/hooks/ .git/index .git/FETCH_HEAD .git/ORIG_HEAD .git/refs/remotes/origin/HEAD .git/config
@@ -250,6 +250,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   meta = {
     # default to Ruby's platforms
     platforms = ruby.meta.platforms;
+    mainProgram = gemName;
   } // meta;
 })
 

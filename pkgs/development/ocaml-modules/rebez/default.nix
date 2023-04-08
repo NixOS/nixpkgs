@@ -17,7 +17,7 @@ buildDunePackage rec {
     description = "Cubic bezier implementation in Reason / OCaml";
     homepage = "https://github.com/jchavarri/rebez/";
     license = licenses.mit;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
     mainProgram = "RebezApp.exe";
   };
 }

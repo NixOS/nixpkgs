@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "Chia-Network";
     repo = "clvm";
     rev = version;
-    sha256 = "sha256-kTmuiy0IbTGjDokZjxp3p8lr/0uVxG/0pRN2hETLBtA=";
+    hash = "sha256-kTmuiy0IbTGjDokZjxp3p8lr/0uVxG/0pRN2hETLBtA=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     blspy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

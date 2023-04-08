@@ -9,23 +9,41 @@
 , zlib
 , libpng
 , boost
-, guile
+, guile_3_0
 , stdenv
 }:
 
 mkDerivation {
   pname = "libfive-unstable";
-  version = "2020-02-15";
+  version = "2022-05-19";
 
   src = fetchFromGitHub {
     owner = "libfive";
     repo = "libfive";
-    rev = "5b7717a25064478cd6bdb190683566eaf4c7afdd";
-    sha256 = "102zw2n3vzv84i323is4qrwwqqha8v1cniw54ss8f4bq6dmic0bg";
+    rev = "d83cc22709ff1f7c478be07ff2419e30e024834e";
+    sha256 = "lNJg2LCpFcTewSA00s7omUtzhVxycAXvo6wEM/JjrN0=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config ];
-  buildInputs = [ eigen zlib libpng boost guile ];
+  buildInputs = [ eigen zlib libpng boost guile_3_0 ];
+
+  preConfigure = ''
+    substituteInPlace studio/src/guile/interpreter.cpp \
+      --replace "qputenv(\"GUILE_LOAD_COMPILED_PATH\", \"libfive/bind/guile\");" \
+                "qputenv(\"GUILE_LOAD_COMPILED_PATH\", \"libfive/bind/guile:$out/lib/guile/3.0/ccache\");"
+
+    substituteInPlace libfive/bind/guile/CMakeLists.txt \
+      --replace "LIBFIVE_FRAMEWORK_DIR=$<TARGET_FILE_DIR:libfive>" \
+                "LIBFIVE_FRAMEWORK_DIR=$out/lib" \
+      --replace "LIBFIVE_STDLIB_DIR=$<TARGET_FILE_DIR:libfive-stdlib>" \
+                "LIBFIVE_STDLIB_DIR=$out/lib"
+
+    export XDG_CACHE_HOME=$(mktemp -d)/.cache
+  '';
+
+  cmakeFlags = [
+    "-DGUILE_CCACHE_DIR=${placeholder "out"}/lib/guile/3.0/ccache"
+  ];
 
   postInstall = if stdenv.isDarwin then ''
     # No rules to install the mac app, so do it manually.
@@ -47,6 +65,5 @@ mkDerivation {
     maintainers = with maintainers; [ hodapp kovirobi ];
     license = with licenses; [ mpl20 gpl2Plus ];
     platforms = with platforms; linux ++ darwin;
-    broken = true;
   };
 }

@@ -8,7 +8,7 @@ in
 {
   options = {
     services.lidarr = {
-      enable = mkEnableOption "Lidarr";
+      enable = mkEnableOption (lib.mdDoc "Lidarr");
 
       dataDir = mkOption {
         type = types.str;

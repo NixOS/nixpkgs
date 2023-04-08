@@ -18,13 +18,12 @@
 , zlib
 }:
 
-with lib;
 let
-  pVersion = "1.12.0.20210602";
-  pVersionTriple = splitVersion pVersion;
-  majorVersion = elemAt pVersionTriple 0;
-  minorVersion = elemAt pVersionTriple 1;
-  patchVersion = elemAt pVersionTriple 2;
+  pVersion = "1.13.0.20220615";
+  pVersionTriple = lib.splitVersion pVersion;
+  majorVersion = lib.elemAt pVersionTriple 0;
+  minorVersion = lib.elemAt pVersionTriple 1;
+  patchVersion = lib.elemAt pVersionTriple 2;
   baseVersion = "${majorVersion}.${minorVersion}.${patchVersion}";
   jdk = jdk11;
 in
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
-    sha256 = "sha256-qX4RPuZdeiEduJAEpzOi/QnbJ+kaD0PZ3WHrmGsvqHc=";
+    sha256 = "sha256-LwtP76kb9xgdcsWCSCXeRbhFVyFS3xkl15F075Cq4Os=";
   };
 
   desktopItem = makeDesktopItem {
@@ -79,7 +78,7 @@ stdenv.mkDerivation rec {
     mv $out/share/pixmaps/eclipse64.png $out/share/pixmaps/eclipse.png
   '';
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip makeWrapper ];
   buildInputs = [
     fontconfig
     freetype
@@ -90,7 +89,6 @@ stdenv.mkDerivation rec {
     libX11
     libXrender
     libXtst
-    makeWrapper
     zlib
     shared-mime-info
     webkitgtk

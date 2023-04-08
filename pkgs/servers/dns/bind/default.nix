@@ -4,15 +4,16 @@
 , enablePython ? false, python3
 , enableGSSAPI ? true, libkrb5
 , buildPackages, nixosTests
+, cmocka, tzdata
 }:
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.18.5";
+  version = "9.18.12";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DO4HjXTwvcTsN0Q1Amsl3niS8mVAoYsioC73KKEdyuc=";
+    sha256 = "sha256-R3Zrt7BjqrutBUOGsZCqf2wUUkQnr9Qnww7EJlEgJ+c=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -48,9 +49,31 @@ stdenv.mkDerivation rec {
     for f in "$lib/lib/"*.la "$dev/bin/"bind*-config; do
       sed -i "$f" -e 's|-L${openssl.dev}|-L${lib.getLib openssl}|g'
     done
+
+    cat <<EOF >$out/etc/rndc.conf
+    include "/etc/bind/rndc.key";
+    options {
+        default-key "rndc-key";
+        default-server 127.0.0.1;
+        default-port 953;
+    };
+    EOF
   '';
 
-  doCheck = false; # requires root and the net
+  enableParallelBuilding = true;
+  # TODO: investigate the aarch64-linux failures; see this and linked discussions:
+  # https://github.com/NixOS/nixpkgs/pull/192962
+  doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux);
+  checkTarget = "unit";
+  checkInputs = [
+    cmocka
+  ] ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
+    tzdata
+  ];
+  preCheck = lib.optionalString stdenv.hostPlatform.isMusl ''
+    # musl doesn't respect TZDIR, skip timezone-related tests
+    sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
+  '';
 
   passthru.tests = {
     inherit (nixosTests) bind;

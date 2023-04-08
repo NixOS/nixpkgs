@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "radioboat";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "slashformotion";
     repo = "radioboat";
     rev = "v${version}";
-    sha256 = "sha256-e6SZv5gb7NOpCU3blFsH7A6ETWL8QlxtpDmmk8DKn8I=";
+    sha256 = "sha256-nY8h09SDTQPKLAHgWr3q8yRGtw3bIWvAFVu05rqXPcg=";
   };
 
-  vendorSha256 = "sha256-X3KiqaiOQYQBfVckh50C+4oxIVN6gXyNuQtBwGvjdFQ=";
+  vendorSha256 = "sha256-76Q77BXNe6NGxn6ocYuj58M4aPGCWTekKV5tOyxBv2U=";
 
   ldflags = [
     "-s"
@@ -42,7 +42,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { attrPath = pname; };
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = radioboat;
       command = "radioboat version";

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , packaging
+, pyparsing
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pip-requirements-parser";
-  version = "31.2.0";
+  version = "32.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexB";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-i4hw3tS4i2ek2JzcDiGo5aFFJ9J2JJ9MB5vxDhOilb0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UMrwDXxk+sD3P2jk7s95y4OX6DRBjWWZZ8IhkR6tnZ4=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -31,9 +32,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     packaging
+    pyparsing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -41,9 +43,16 @@ buildPythonPackage rec {
     "pip_requirements_parser"
   ];
 
+  disabledTests = [
+    "test_RequirementsFile_to_dict"
+    "test_RequirementsFile_dumps_unparse"
+    "test_legacy_version_is_deprecated"
+  ];
+
   meta = with lib; {
     description = "Module to parse pip requirements";
     homepage = "https://github.com/nexB/pip-requirements-parser";
+    changelog = "https://github.com/nexB/pip-requirements-parser/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

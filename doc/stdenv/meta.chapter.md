@@ -11,58 +11,12 @@ meta = with lib; {
   '';
   homepage = "https://www.gnu.org/software/hello/manual/";
   license = licenses.gpl3Plus;
-  maintainers = [ maintainers.eelco ];
+  maintainers = with maintainers; [ eelco ];
   platforms = platforms.all;
 };
 ```
 
-Meta-attributes are not passed to the builder of the package. Thus, a change to a meta-attribute doesn’t trigger a recompilation of the package. The value of a meta-attribute must be a string.
-
-The meta-attributes of a package can be queried from the command-line using `nix-env`:
-
-```ShellSession
-$ nix-env -qa hello --json
-{
-    "hello": {
-        "meta": {
-            "description": "A program that produces a familiar, friendly greeting",
-            "homepage": "https://www.gnu.org/software/hello/manual/",
-            "license": {
-                "fullName": "GNU General Public License version 3 or later",
-                "shortName": "GPLv3+",
-                "url": "http://www.fsf.org/licensing/licenses/gpl.html"
-            },
-            "longDescription": "GNU Hello is a program that prints \"Hello, world!\" when you run it.\nIt is fully customizable.\n",
-            "maintainers": [
-                "Ludovic Court\u00e8s <ludo@gnu.org>"
-            ],
-            "platforms": [
-                "i686-linux",
-                "x86_64-linux",
-                "armv5tel-linux",
-                "armv7l-linux",
-                "mips32-linux",
-                "x86_64-darwin",
-                "i686-cygwin",
-                "i686-freebsd",
-                "x86_64-freebsd",
-                "i686-openbsd",
-                "x86_64-openbsd"
-            ],
-            "position": "/home/user/dev/nixpkgs/pkgs/applications/misc/hello/default.nix:14"
-        },
-        "name": "hello-2.9",
-        "system": "x86_64-linux"
-    }
-}
-```
-
-`nix-env` knows about the `description` field specifically:
-
-```ShellSession
-$ nix-env -qa hello --description
-hello-2.3  A program that produces a familiar, friendly greeting
-```
+Meta-attributes are not passed to the builder of the package. Thus, a change to a meta-attribute doesn’t trigger a recompilation of the package.
 
 ## Standard meta-attributes {#sec-standard-meta-attributes}
 
@@ -80,7 +34,7 @@ Right: `"A library for decoding PNG images"`
 
 ### `longDescription` {#var-meta-longDescription}
 
-An arbitrarily long description of the package.
+An arbitrarily long description of the package in [CommonMark](https://commonmark.org) Markdown.
 
 ### `branch` {#var-meta-branch}
 
@@ -112,7 +66,7 @@ For details, see [Licenses](#sec-meta-license).
 
 ### `maintainers` {#var-meta-maintainers}
 
-A list of the maintainers of this Nix expression. Maintainers are defined in [`nixpkgs/maintainers/maintainer-list.nix`](https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix). There is no restriction to becoming a maintainer, just add yourself to that list in a separate commit titled “maintainers: add alice”, and reference maintainers with `maintainers = with lib.maintainers; [ alice bob ]`.
+A list of the maintainers of this Nix expression. Maintainers are defined in [`nixpkgs/maintainers/maintainer-list.nix`](https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix). There is no restriction to becoming a maintainer, just add yourself to that list in a separate commit titled “maintainers: add alice” in the same pull request, and reference maintainers with `maintainers = with lib.maintainers; [ alice bob ]`.
 
 ### `mainProgram` {#var-meta-mainProgram}
 
@@ -147,7 +101,7 @@ $ cd path/to/nixpkgs
 $ nix-build -A your-package.tests
 ```
 
-#### Package tests
+#### Package tests {#var-meta-tests-packages}
 
 Tests that are part of the source package are often executed in the `installCheckPhase`.
 
@@ -159,7 +113,7 @@ Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
 
 For more on how to write and run package tests, see <xref linkend="sec-package-tests"/>.
 
-#### NixOS tests
+#### NixOS tests {#var-meta-tests-nixos}
 
 The NixOS tests are available as `nixosTests` in parameters of derivations. For instance, the OpenSMTPD derivation includes lines similar to:
 
@@ -212,6 +166,10 @@ runCommand "my-package-test" {
 ### `timeout` {#var-meta-timeout}
 
 A timeout (in seconds) for building the derivation. If the derivation takes longer than this time to build, it can fail due to breaking the timeout. However, all computers do not have the same computing power, hence some builders may decide to apply a multiplicative factor to this value. When filling this value in, try to keep it approximately consistent with other values already present in `nixpkgs`.
+
+`meta` attributes are not stored in the instantiated derivation.
+Therefore, this setting may be lost when the package is used as a dependency.
+To be effective, it must be presented directly to an evaluation process that handles the `meta.timeout` attribute.
 
 ### `hydraPlatforms` {#var-meta-hydraPlatforms}
 

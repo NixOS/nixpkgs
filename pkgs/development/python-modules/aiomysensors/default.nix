@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiomysensors";
-  version = "0.3.0";
+  version = "0.3.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-EGVoHEJrpGtp8OrhQhRZVaN1GhL4QCo/azp6pzgYYcs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hLUITEPUoUKGqN3AnacahnKwoKdfGN3mp34df74gsbE=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pyserial-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to connect to MySensors gateways";
     homepage = "https://github.com/MartinHjelmare/aiomysensors";
+    changelog = "https://github.com/MartinHjelmare/aiomysensors/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

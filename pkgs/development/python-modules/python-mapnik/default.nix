@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
+, substituteAll
 , isPyPy
 , python
 , pillow
@@ -17,35 +19,43 @@
 , mapnik
 , proj
 , zlib
+, libxml2
+, sqlite
+, nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "python-mapnik";
-  version = "unstable-2020-02-24";
+  version = "unstable-2020-09-08";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "python-mapnik";
-    rev = "7da019cf9eb12af8f8aa88b7d75789dfcd1e901b";
-    sha256 = "0snn7q7w1ab90311q8wgd1z64kw1svm5w831q0xd6glqhah86qc8";
+    rev = "a2c2a86eec954b42d7f00093da03807d0834b1b4";
+    hash = "sha256-GwDdrutJOHtW7pIWiUAiu1xucmRvp7YFYB3YSCrDsrY=";
+    # Only needed for test data
+    fetchSubmodules = true;
   };
 
-  disabled = isPyPy;
-  doCheck = false; # doesn't find needed test data files
-  preBuild = ''
-    export BOOST_PYTHON_LIB="boost_python${"${lib.versions.major python.version}${lib.versions.minor python.version}"}"
-    export BOOST_THREAD_LIB="boost_thread"
-    export BOOST_SYSTEM_LIB="boost_system"
-    export PYCAIRO=true
-  '';
+  patches = [
+    # https://github.com/mapnik/python-mapnik/issues/239
+    (fetchpatch {
+      url = "https://github.com/koordinates/python-mapnik/commit/318b1edac16f48a7f21902c192c1dd86f6210a44.patch";
+      hash = "sha256-cfU8ZqPPGCqoHEyGvJ8Xy/bGpbN2vSDct6A3N5+I8xM=";
+    })
+    ./find-pycairo-with-pkg-config.patch
+    # python-mapnik seems to depend on having the mapnik src directory
+    # structure available at build time. We just hardcode the paths.
+    (substituteAll {
+      src = ./find-libmapnik.patch;
+      libmapnik = "${mapnik}/lib";
+    })
+  ];
 
   nativeBuildInputs = [
     mapnik # for mapnik_config
     pkg-config
-  ];
-
-  patches = [
-    ./find-pycairo-with-pkg-config.patch
   ];
 
   buildInputs = [
@@ -60,16 +70,72 @@ buildPythonPackage rec {
     libwebp
     proj
     zlib
+    libxml2
+    sqlite
   ];
 
   propagatedBuildInputs = [ pillow pycairo ];
+
+  configureFlags = [
+    "XMLPARSER=libxml2"
+  ];
+
+  disabled = isPyPy;
+
+  preBuild = ''
+    export BOOST_PYTHON_LIB="boost_python${"${lib.versions.major python.version}${lib.versions.minor python.version}"}"
+    export BOOST_THREAD_LIB="boost_thread"
+    export BOOST_SYSTEM_LIB="boost_system"
+    export PYCAIRO=true
+    export XMLPARSER=libxml2
+  '';
+
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    # import from $out
+    rm -r mapnik
+  '';
+
+  # https://github.com/mapnik/python-mapnik/issues/255
+  disabledTests = [
+    "test_adding_datasource_to_layer"
+    "test_compare_map"
+    "test_dataraster_coloring"
+    "test_dataraster_query_point"
+    "test_good_files"
+    "test_layer_init"
+    "test_load_save_map"
+    "test_loading_fontset_from_map"
+    "test_normalizing_definition"
+    "test_pdf_printing"
+    "test_proj_antimeridian_bbox"
+    "test_proj_transform_between_init_and_literal"
+    "test_pycairo_pdf_surface1"
+    "test_pycairo_svg_surface1"
+    "test_query_tolerance"
+    "test_raster_warping"
+    "test_raster_warping_does_not_overclip_source"
+    "test_render_points"
+    "test_render_with_scale_factor"
+    "test_style_level_image_filter"
+    "test_that_coordinates_do_not_overflow_and_polygon_is_rendered_csv"
+    "test_that_coordinates_do_not_overflow_and_polygon_is_rendered_memory"
+    "test_transparency_levels"
+    "test_visual_zoom_all_rendering1"
+    "test_visual_zoom_all_rendering2"
+    "test_wgs84_inverse_forward"
+  ];
 
   pythonImportsCheck = [ "mapnik" ];
 
   meta = with lib; {
     description = "Python bindings for Mapnik";
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with maintainers; [ ];
     homepage = "https://mapnik.org";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
   };
 }

@@ -2,18 +2,29 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchpatch,
   wrapQtAppsHook,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nanovna-saver";
-  version = "0.4.0";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "NanoVNA-Saver";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1n1bh46spdyk7kgvv95hyfy9f904czhzlvk41vliqkak56hj2ss1";
+    sha256 = "sha256-CLfgDQt2rOXtWwvEhlXEstPp28nFhuhiAPYL6EjZVu4=";
   };
+
+  # Fix for https://github.com/NanoVNA-Saver/nanovna-saver/issues/579
+  # Try dropping the patch in the next release after v0.5.4
+  patches = [
+    (fetchpatch {
+      name = "remote-changelog-from-setup-py.patch";
+      url = "https://github.com/NanoVNA-Saver/${pname}/commit/d654ea0441939e4e1c599d1333b587a185394fbe.diff";
+      sha256 = "sha256-ifOhiWD0EYyQZRKp2W3G6crmWslca+/21APmhpfP/xE=";
+    })
+  ];
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
@@ -47,6 +58,6 @@ python3.pkgs.buildPythonApplication rec {
       generally display and analyze the resulting data.
     '';
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zaninime ];
+    maintainers = with maintainers; [ zaninime tmarkus ];
   };
 }

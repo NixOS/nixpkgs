@@ -17,7 +17,7 @@ let
 
   cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
-  pluginsEnv = package.python.withPackages (ps: [ps.octoprint] ++ (cfg.plugins ps));
+  pluginsEnv = package.python.withPackages (ps: [ ps.octoprint ] ++ (cfg.plugins ps));
 
   package = pkgs.octoprint;
 
@@ -29,7 +29,7 @@ in
 
     services.octoprint = {
 
-      enable = mkEnableOption "OctoPrint, web interface for 3D printers";
+      enable = mkEnableOption (lib.mdDoc "OctoPrint, web interface for 3D printers");
 
       host = mkOption {
         type = types.str;
@@ -45,6 +45,12 @@ in
         description = lib.mdDoc ''
           Port to bind OctoPrint to.
         '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Open ports in the firewall for OctoPrint.";
       };
 
       user = mkOption {
@@ -67,7 +73,7 @@ in
 
       plugins = mkOption {
         type = types.functionTo (types.listOf types.package);
-        default = plugins: [];
+        default = plugins: [ ];
         defaultText = literalExpression "plugins: []";
         example = literalExpression "plugins: with plugins; [ themeify stlviewer ]";
         description = lib.mdDoc "Additional plugins to be used. Available plugins are passed through the plugins input.";
@@ -75,7 +81,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = lib.mdDoc "Extra options which are added to OctoPrint's YAML configuration file.";
       };
 
@@ -100,6 +106,9 @@ in
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
+      # this will allow octoprint access to raspberry specific hardware to check for throttling
+      # read-only will not work: "VCHI initialization failed" error
+      "a /dev/vchiq - - - - u:octoprint:rw"
     ];
 
     systemd.services.octoprint = {
@@ -128,6 +137,6 @@ in
       };
     };
 
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
   };
-
 }

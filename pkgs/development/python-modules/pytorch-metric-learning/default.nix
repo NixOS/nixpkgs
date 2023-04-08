@@ -1,11 +1,12 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
 , numpy
 , scikit-learn
 , pytestCheckHook
-, pytorch
+, torch
 , torchvision
 , tqdm
 , faiss
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname   = "pytorch-metric-learning";
-  version = "1.5.1";
+  version = "2.0.1";
 
   disabled = isPy27;
 
@@ -21,12 +22,12 @@ buildPythonPackage rec {
     owner = "KevinMusgrave";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-d7Ngd4SzGTJXtpgs2Jqb+y1aeMt9YUqIOft5ByDtRsc=";
+    hash = "sha256-zB0g6GJcqWRhjJZgUWmTdG4fhBBfFR6yEM2FEOVLWIs=";
   };
 
   propagatedBuildInputs = [
     numpy
-    pytorch
+    torch
     scikit-learn
     torchvision
     tqdm
@@ -39,7 +40,7 @@ buildPythonPackage rec {
   '';
 
   # package only requires `unittest`, but use `pytest` to exclude tests
-  checkInputs = [
+  nativeCheckInputs = [
     faiss
     pytestCheckHook
   ];
@@ -56,6 +57,10 @@ buildPythonPackage rec {
     "test_pca"
     # flaky
     "test_distributed_classifier_loss_and_miner"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
+    "test_global_embedding_space_tester"
+    "test_with_same_parent_label_tester"
   ];
 
   meta = {

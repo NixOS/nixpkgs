@@ -20,13 +20,13 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.htop;
-      defaultText = "pkgs.htop";
+      defaultText = lib.literalExpression "pkgs.htop";
       description = lib.mdDoc ''
         The htop package that should be used.
       '';
     };
 
-    enable = mkEnableOption "htop process monitor";
+    enable = mkEnableOption (lib.mdDoc "htop process monitor");
 
     settings = mkOption {
       type = with types; attrsOf (oneOf [ str int bool (listOf (oneOf [ str int bool ])) ]);

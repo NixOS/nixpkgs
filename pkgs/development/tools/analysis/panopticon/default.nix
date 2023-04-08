@@ -36,7 +36,6 @@ rustPlatform.buildRustPackage rec {
      '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A libre cross-platform disassembler";
     longDescription = ''
       Panopticon is a cross platform disassembler for reverse
@@ -47,5 +46,7 @@ rustPlatform.buildRustPackage rec {
     '';
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ leenaars ];
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isDarwin || (stdenv.isLinux && stdenv.isAarch64);
   };
 }

@@ -1,7 +1,7 @@
 # Getdns and Stubby are released together, see https://getdnsapi.net/releases/
 
 { lib, stdenv, fetchurl, cmake, darwin, doxygen, libidn2, libyaml, openssl
-, systemd, unbound, yq }:
+, systemd, unbound, yq, nimPackages }:
 let
   metaCommon = with lib; {
     maintainers = with maintainers; [ leenaars ehmry ];
@@ -12,7 +12,7 @@ in rec {
 
   getdns = stdenv.mkDerivation rec {
     pname = "getdns";
-    version = "1.7.0";
+    version = "1.7.3";
     outputs = [ "out" "dev" "lib" "man" ];
 
     src = fetchurl {
@@ -20,14 +20,25 @@ in rec {
           with builtins;
           concatStringsSep "-" (splitVersion version)
         }/${pname}-${version}.tar.gz";
-      sha256 = "sha256-6ocTzl4HesdrFBjOtq/SXm1OOelgD29egdOjoTpg9lI=";
+      sha256 =
+        # upstream publishes hashes in hex format
+        "f1404ca250f02e37a118aa00cf0ec2cbe11896e060c6d369c6761baea7d55a2c";
     };
 
     nativeBuildInputs = [ cmake doxygen ];
 
     buildInputs = [ libidn2 openssl unbound ];
 
+    # https://github.com/getdnsapi/getdns/issues/517
+    postPatch = ''
+      substituteInPlace getdns.pc.in \
+        --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+        --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    '';
+
     postInstall = "rm -r $out/share/doc";
+
+    passthru.tests.nim = nimPackages.getdns;
 
     meta = with lib;
       metaCommon // {
@@ -49,7 +60,7 @@ in rec {
 
   stubby = stdenv.mkDerivation rec {
     pname = "stubby";
-    version = "0.4.0";
+    version = "0.4.3";
     outputs = [ "out" "man" "stubbyExampleJson" ];
 
     inherit (getdns) src;

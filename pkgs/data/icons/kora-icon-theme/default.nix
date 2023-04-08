@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation rec  {
   pname = "kora-icon-theme";
-  version = "1.5.3";
+  version = "1.5.6";
 
   src = fetchFromGitHub  {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
-    sha256 = "sha256-j4W9w/icGjfkbbb0xYF3NfSFsp5RkNCc805E089JaFQ=";
+    sha256 = "sha256-vAeml+upESUVlJ95Rm0+vlZ+NQZWEZl00scDkb3W7Yo=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,6 @@ stdenvNoCC.mkDerivation rec  {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     rev-prefix = "v";
   };
 

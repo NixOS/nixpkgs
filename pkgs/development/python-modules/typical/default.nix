@@ -45,7 +45,7 @@ buildPythonPackage rec {
     ujson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mypy
     pydantic
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/seandstewart/typical/commit/66b3c34f8969b7fb1f684f0603e514405bab0dd7.patch";
-      sha256 = "sha256-c7qJOtHmJRnVEGl+OADB3HpjvMK8aYDD9+0gplOn9pQ=";
+      hash = "sha256-c7qJOtHmJRnVEGl+OADB3HpjvMK8aYDD9+0gplOn9pQ=";
     })
   ];
 

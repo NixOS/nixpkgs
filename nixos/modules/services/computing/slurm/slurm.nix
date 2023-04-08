@@ -76,7 +76,7 @@ in
       };
 
       dbdserver = {
-        enable = mkEnableOption "SlurmDBD service";
+        enable = mkEnableOption (lib.mdDoc "SlurmDBD service");
 
         dbdHost = mkOption {
           type = types.str;
@@ -117,7 +117,7 @@ in
       };
 
       client = {
-        enable = mkEnableOption "slurm client daemon";
+        enable = mkEnableOption (lib.mdDoc "slurm client daemon");
       };
 
       enableStools = mkOption {
@@ -281,11 +281,11 @@ in
         type = types.path;
         internal = true;
         default = etcSlurm;
-        defaultText = literalDocBook ''
+        defaultText = literalMD ''
           Directory created from generated config files and
-          <literal>config.${opt.extraConfigPaths}</literal>.
+          `config.${opt.extraConfigPaths}`.
         '';
-        description = ''
+        description = lib.mdDoc ''
           Path to directory with slurm config files. This option is set by default from the
           Slurm module and is meant to make the Slurm config file available to other modules.
         '';
@@ -383,7 +383,7 @@ in
       "d /var/spool/slurmd 755 root root -"
     ];
 
-    services.openssh.forwardX11 = mkIf cfg.client.enable (mkDefault true);
+    services.openssh.settings.X11Forwarding = mkIf cfg.client.enable (mkDefault true);
 
     systemd.services.slurmctld = mkIf (cfg.server.enable) {
       path = with pkgs; [ wrappedSlurm munge coreutils ]

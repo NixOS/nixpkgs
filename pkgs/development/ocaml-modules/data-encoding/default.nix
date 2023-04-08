@@ -1,30 +1,39 @@
 { lib
 , fetchFromGitLab
 , buildDunePackage
+, ppx_hash
+, either
 , ezjsonm
 , zarith
+, zarith_stubs_js ? null
 , hex
 , json-data-encoding
 , json-data-encoding-bson
 , alcotest
 , crowbar
+, ppx_expect
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "data-encoding";
-  version = "0.4.0";
+  version = "0.6";
+
+  duneVersion = "3";
+  minimalOCamlVersion = "4.10";
 
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "data-encoding";
-    rev = "v0.4";
-    sha256 = "1f88l9azpfk730hps5v6zlg4yyyyhj1gl27qy3cbbkzjc82d2rhx";
+    rev = "v${version}";
+    hash = "sha256-oQEV7lTG+/q1UcPsepPM4yN4qia6tEtRPkTkTVdGXE0=";
   };
-  useDune2 = true;
 
   propagatedBuildInputs = [
+    either
     ezjsonm
+    ppx_hash
     zarith
+    zarith_stubs_js
     hex
     json-data-encoding
     json-data-encoding-bson
@@ -33,6 +42,7 @@ buildDunePackage {
   checkInputs = [
     alcotest
     crowbar
+    ppx_expect
   ];
 
   doCheck = true;

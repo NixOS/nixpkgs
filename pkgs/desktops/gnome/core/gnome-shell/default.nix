@@ -20,6 +20,7 @@
 , shared-mime-info
 , libgweather
 , librsvg
+, webp-pixbuf-loader
 , geoclue2
 , perl
 , docbook_xml_dtd_45
@@ -29,7 +30,7 @@
 , gobject-introspection
 , wrapGAppsHook
 , libxslt
-, gcr
+, gcr_4
 , accountsservice
 , gdk-pixbuf
 , gdm
@@ -43,7 +44,7 @@
 , glib
 , gjs
 , mutter
-, evolution-data-server
+, evolution-data-server-gtk4
 , gtk3
 , gtk4
 , libadwaita
@@ -61,19 +62,18 @@
 , mesa
 }:
 
-# http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "42.4";
+  version = "43.3";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "h1/ylw6p+3oFUG4yoNUNyRf0G0yjcTS0E3f5yChzxU4=";
+    sha256 = "Sf+NBfVfpPHCLwXQOFhSzrQpprY4DBuoRh5ipG1MBx4=";
   };
 
   patches = [
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gnome-keyring
     glib
-    gcr
+    gcr_4
     accountsservice
     libsecret
     polkit
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     gjs
     mutter
     libpulseaudio
-    evolution-data-server
+    evolution-data-server-gtk4
     libical
     gtk3
     gtk4
@@ -187,6 +187,17 @@ stdenv.mkDerivation rec {
     rm data/theme/gnome-shell.css
   '';
 
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(
       # Until glib’s xdgmime is patched
@@ -201,6 +212,8 @@ stdenv.mkDerivation rec {
       wrapGApp $out/share/gnome-shell/$svc
     done
   '';
+
+  separateDebugInfo = true;
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";

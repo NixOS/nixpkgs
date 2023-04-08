@@ -17,7 +17,7 @@ in
 {
   options = {
     services.matterbridge = {
-      enable = mkEnableOption "Matterbridge chat platform bridge";
+      enable = mkEnableOption (lib.mdDoc "Matterbridge chat platform bridge");
 
       configPath = mkOption {
         type = with types; nullOr str;

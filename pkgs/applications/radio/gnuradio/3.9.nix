@@ -28,7 +28,6 @@
 , libunwind
 , thrift
 , cppzmq
-, zeromq
 # Needed only if qt-gui is disabled, from some reason
 , icu
 # GUI related
@@ -46,13 +45,13 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.9";
-  minor = "7";
+  minor = "8";
   patch = "0";
 }
 }:
 
 let
-  sourceSha256 = "sha256-6HEvQsV2JCkgNvBYsy1jfSTUIwEnrKJTzXNIVcPeWFQ=";
+  sourceSha256 = "sha256-0umGUOjD5l84CBBeDy1uFgUyEDpI9o9/SEQ8BZm22j4=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -71,7 +70,7 @@ let
         # building with boost 1.7x fails
         ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pkgs; [
-        Mako
+        mako
         six
       ];
     };
@@ -118,7 +117,7 @@ let
     gnuradio-companion = {
       pythonRuntime = with python.pkgs; [
         pyyaml
-        Mako
+        mako
         numpy
         pygobject3
       ];
@@ -228,7 +227,7 @@ let
       runtime = [ gsl libsodium ];
     };
     gr-zeromq = {
-      runtime = [ cppzmq zeromq ];
+      runtime = [ cppzmq ];
       cmakeEnableFlag = "GR_ZEROMQ";
     };
     gr-network = {
@@ -280,7 +279,7 @@ stdenv.mkDerivation rec {
     ./modtool-newmod-permissions.patch
   ];
   passthru = shared.passthru // {
-    # Deps that are potentially overriden and are used inside GR plugins - the same version must
+    # Deps that are potentially overridden and are used inside GR plugins - the same version must
     inherit
       boost
       volk
@@ -296,7 +295,7 @@ stdenv.mkDerivation rec {
     # This is the only python reference worth removing, if needed.
     + lib.optionalString (!hasFeature "python-support") ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
+      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
       ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
     ''
   ;

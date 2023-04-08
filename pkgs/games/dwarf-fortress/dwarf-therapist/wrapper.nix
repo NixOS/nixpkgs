@@ -10,7 +10,7 @@ in
 
 stdenv.mkDerivation {
   pname = "dwarf-therapist";
-  version = dwarf-therapist.version;
+  inherit (dwarf-therapist) version meta;
 
   wrapper = substituteAll {
     src = ./dwarf-therapist.in;

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "poppler-data";
-  version = "0.4.11";
+  version = "0.4.12";
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/${pname}-${version}.tar.gz";
-    sha256 = "LOwFzRuwOvmKiwah4i9ubhplseLzgWyzBpuwh0gl8Iw=";
+    sha256 = "yDW2QKQM41fhuDZmqr2V7f+iTd3dSbja/2OtuFHNq3Q=";
   };
 
   nativeBuildInputs = [

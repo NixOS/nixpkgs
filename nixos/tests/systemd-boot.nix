@@ -101,13 +101,13 @@ in
       # Replace version inside sd-boot with something older. See magic[] string in systemd src/boot/efi/boot.c
       machine.succeed(
           """
-        find /boot -iname '*.efi' -print0 | \
+        find /boot -iname '*boot*.efi' -print0 | \
         xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot .* ####/#### LoaderInfo: systemd-boot 000.0-1-notnixos ####/' '{}'
       """
       )
 
       output = machine.succeed("/run/current-system/bin/switch-to-configuration boot")
-      assert "updating systemd-boot from (000.0-1-notnixos) to " in output
+      assert "updating systemd-boot from 000.0-1-notnixos to " in output
     '';
   };
 

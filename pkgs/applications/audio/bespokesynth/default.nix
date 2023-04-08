@@ -66,6 +66,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    sed '1i#include <memory>' -i Source/TitleBar.h # gcc12
+  '';
+
   cmakeBuildType = "Release";
 
   cmakeFlags = lib.optionals enableVST2 [ "-DBESPOKE_VST2_SDK_LOCATION=${vst-sdk}/VST2_SDK" ];
@@ -104,7 +108,7 @@ stdenv.mkDerivation rec {
     CoreAudioKit
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
     # Fails to find fp.h on its own
     "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/CarbonCore.framework/Versions/Current/Headers/"
   ]);

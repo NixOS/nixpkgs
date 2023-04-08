@@ -10,6 +10,7 @@
 , black
 , magic-wormhole
 , mitmproxy
+, typer
 }:
 
 buildPythonPackage rec {
@@ -19,19 +20,19 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-doLcivswKXABZ0V16gDRgU2AjWo2r0Fagr1IHTe6e44=";
+    hash = "sha256-doLcivswKXABZ0V16gDRgU2AjWo2r0Fagr1IHTe6e44=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   passthru.tests = {
-    inherit black flask magic-wormhole mitmproxy;
+    inherit black flask magic-wormhole mitmproxy typer;
   };
 
   meta = with lib; {

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyfido";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0b28bhyhscaw7dbc92dxswann05x8mz92cagyawdfm8jnc67gq4b";
+    hash = "sha256-hh2g46GVCkiMHElEP6McY8FdzGNzZV7pgA5DQhodP20=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

@@ -1,20 +1,23 @@
-{ luarocks, fetchFromGitHub, nix-update-script }:
-luarocks.overrideAttrs(old: {
+{ luarocks, fetchFromGitHub, unstableGitUpdater }:
+
+luarocks.overrideAttrs (old: {
   pname = "luarocks-nix";
+  version = "unstable-2023-02-26";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "luarocks-nix";
-    rev = "b1ff9eeb64c7c1dc5fc177008d6f2be9191c6aa2";
-    sha256 = "sha256-mkzrf/6yMyLMIEDwsuCIxi1HJvg57ybyZPXVheFAAHE=";
+    rev = "4cfea3d5d826db4cfbc809ef8bb5f0a9f3a18919";
+    sha256 = "sha256-7L8B+/C7Kzt25Ec+OsM2rliYB2/wyZQ3OT63V7AaOxo=";
   };
-  patches = [];
+
+  patches = [ ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "luarocks-nix";
-    };
+    updateScript = unstableGitUpdater { };
   };
 
-  meta.mainProgram = "luarocks";
+  meta = old.meta // {
+    mainProgram = "luarocks";
+  };
 })

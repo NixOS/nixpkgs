@@ -14,7 +14,7 @@
 #
 # Be careful, virtuoso-opensource also provides a different isql command !
 
-# There are at least two ways to run firebird. superserver has been choosen
+# There are at least two ways to run firebird. superserver has been chosen
 # however there are no strong reasons to prefer this or the other one AFAIK
 # Eg superserver is said to be most efficiently using resources according to
 # http://www.firebirdsql.org/manual/qsg25-classic-or-super.html
@@ -40,7 +40,7 @@ in
 
     services.firebird = {
 
-      enable = mkEnableOption "the Firebird super server";
+      enable = mkEnableOption (lib.mdDoc "the Firebird super server");
 
       package = mkOption {
         default = pkgs.firebird;

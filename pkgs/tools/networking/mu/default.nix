@@ -14,20 +14,20 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.8.8";
+  version = "1.8.14";
 
   src = fetchFromGitHub {
     owner = "djcb";
     repo = "mu";
     rev = "v${version}";
-    hash = "sha256-kgskeQM6zESkjDWmgGqhZlGnH8naZ5k0sw+70ZzW2/E=";
+    hash = "sha256-m6if0Br9WRPR8POwOM0Iwido3UR/V0BlkuaLcWsf/c0=";
   };
 
   postPatch = ''
     # Fix mu4e-builddir (set it to $out)
     substituteInPlace mu4e/mu4e-config.el.in \
       --replace "@abs_top_builddir@" "$out"
-    substituteInPlace lib/utils/mu-utils.cc \
+    substituteInPlace lib/utils/mu-test-utils.cc \
       --replace "/bin/rm" "${coreutils}/bin/rm"
   '';
 
@@ -39,8 +39,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config meson ninja ];
-
-  enableParallelBuilding = true;
 
   doCheck = true;
 

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "certstrap";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = "certstrap";
     rev = "v${version}";
-    sha256 = "sha256-kmlbz6Faw5INzw+fB1KXjo9vmuaZEp4PvuMldqyFrPo=";
+    sha256 = "sha256-mbZtomR8nnawXr3nGVSEuVObe79M1CqTlYN/aEpKmcU=";
   };
 
-  vendorSha256 = null;
+  vendorSha256 = "sha256-r7iYhTmFKTjfv11fEerC72M7JBp64rWfbkoTKzObNqM=";
 
   subPackages = [ "." ];
 

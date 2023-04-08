@@ -4,15 +4,16 @@
 , python3
 , unstableGitUpdater
 }:
+
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "unstable-2022-06-18";
+  version = "unstable-2023-03-30";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "d3c4ba4839dd7a4339ae024752e6c6424884c185";
-    sha256 = "sha256-2Fq56JIk5qcKpWffz1k/EJ+xYAnUpuxvCryq88l//8E=";
+    rev = "fec7ddd8aefd9561fffd7f1ccecd7231002dc884";
+    sha256 = "sha256-Kwmsy0hKOOT6sbmmYx/LVOM+mO06jZv2zxwy1ClZuy4=";
   };
 
   sourceRoot = "source/klippy";
@@ -20,16 +21,17 @@ stdenv.mkDerivation rec {
   # NB: This is needed for the postBuild step
   nativeBuildInputs = [ (python3.withPackages ( p: with p; [ cffi ] )) ];
 
-  buildInputs = [ (python3.withPackages (p: with p; [ cffi pyserial greenlet jinja2 markupsafe ])) ];
+  buildInputs = [ (python3.withPackages (p: with p; [ cffi pyserial greenlet jinja2 markupsafe numpy ])) ];
 
   # we need to run this to prebuild the chelper.
-  postBuild = "python ./chelper/__init__.py";
+  postBuild = ''
+    python ./chelper/__init__.py
+  '';
 
-  # 2022-06-28: Python 3 is already supported in klipper, alas shebangs remained
-  # the same - we replace them in patchPhase.
-  patchPhase = ''
-    for F in klippy.py console.py parsedump.py; do
-      substituteInPlace $F \
+  # Python 3 is already supported but shebangs aren't updated yet
+  postPatch = ''
+    for file in klippy.py console.py parsedump.py; do
+      substituteInPlace $file \
         --replace '/usr/bin/env python2' '/usr/bin/env python'
     done
   '';

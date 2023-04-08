@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.7.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ALqyl5GLOxwsojR0/hfjO4yD3AEkyQK+faa3smMW94c=";
+    hash = "sha256-VZgrt9Fy1PyMoItuCx9R3DxJWYZu7gmL+KnBfOrm0y4=";
   };
 
-  vendorSha256 = "sha256-K+CAC2OrmjzpRF0DLSYp21BgvkxtJCF2FdpzYx/CqGI=";
+  vendorHash = "sha256-ePM7TITBiwTqJEgew+1FTyuyywmAu8ZSPlhCghH3k5k=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -32,7 +32,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git # Required for TestGitCloner
     protobuf # Required for buftesting.GetProtocFilePaths
   ];
@@ -43,6 +43,9 @@ buildGoModule rec {
     # To skip TestCloneBranchAndRefToBucket
     export CI=true
   '';
+
+  # Allow tests that bind or connect to localhost on macOS.
+  __darwinAllowLocalNetworking = true;
 
   installPhase = ''
     runHook preInstall
@@ -73,6 +76,6 @@ buildGoModule rec {
     changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = licenses.asl20;
-    maintainers = with maintainers; [ raboof jk lrewega ];
+    maintainers = with maintainers; [ jk lrewega ];
   };
 }

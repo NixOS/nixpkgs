@@ -9,7 +9,7 @@
 , lxml
 , nose
 , parsedatetime
-, PyICU
+, pyicu
 , python-slugify
 , pytimeparse
 , pythonOlder
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "wireservice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tuUoLvztCYHIPJTBgw1eByM0zfaHDyc+h7SWsxutKos=";
+    hash = "sha256-tuUoLvztCYHIPJTBgw1eByM0zfaHDyc+h7SWsxutKos=";
   };
 
   propagatedBuildInputs = [
@@ -41,12 +41,12 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cssselect
     glibcLocales
     lxml
     nose
-    PyICU
+    pyicu
     pytz
   ];
 

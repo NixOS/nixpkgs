@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 
 let
-  rev = "37e27f9165300c89607144b646545fac576ec510";
+  rev = "ee299797bcd54d5b8c58d2da8576c54cea1a03a2";
 in
 stdenv.mkDerivation rec {
   pname = "rtl88xxau-aircrack";
@@ -11,19 +11,16 @@ stdenv.mkDerivation rec {
     owner = "aircrack-ng";
     repo = "rtl8812au";
     inherit rev;
-    sha256 = "sha256-TpmpueKAaCe7Nlmv8pMvgMXGVmXVa/1mBwtEoy4JyCY=";
+    sha256 = "sha256-JUyUOqLMD9nSo6i87K/6Ljp+pWSqSBz/IZiFWu03rQw=";
   };
 
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
-
-  NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
 
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
@@ -40,6 +37,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.jethro ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    broken = kernel.kernelAtLeast "5.18";
   };
 }

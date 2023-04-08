@@ -19,7 +19,7 @@ in
       # !!! All these option descriptions needs to be cleaned up.
 
       client = {
-        enable = mkEnableOption "the Synergy client (receive keyboard and mouse events from a Synergy server)";
+        enable = mkEnableOption (lib.mdDoc "the Synergy client (receive keyboard and mouse events from a Synergy server)");
 
         screenName = mkOption {
           default = "";
@@ -45,7 +45,7 @@ in
       };
 
       server = {
-        enable = mkEnableOption "the Synergy server (send keyboard and mouse events)";
+        enable = mkEnableOption (lib.mdDoc "the Synergy server (send keyboard and mouse events)");
 
         configFile = mkOption {
           type = types.path;
@@ -115,7 +115,7 @@ in
         description = "Synergy server";
         wantedBy = optional cfgS.autoStart "graphical-session.target";
         path = [ pkgs.synergy ];
-        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f${optionalString (cfgS.address != "") " -a ${cfgS.address}"}${optionalString (cfgS.screenName != "") " -n ${cfgS.screenName}"}${optionalString cfgS.tls.enable " --enable-crypto"}${optionalString (cfgS.tls.cert != null) (" --tls-cert=${cfgS.tls.cert}")}'';
+        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f${optionalString (cfgS.address != "") " -a ${cfgS.address}"}${optionalString (cfgS.screenName != "") " -n ${cfgS.screenName}"}${optionalString cfgS.tls.enable " --enable-crypto"}${optionalString (cfgS.tls.cert != null) (" --tls-cert ${cfgS.tls.cert}")}'';
         serviceConfig.Restart = "on-failure";
       };
     })

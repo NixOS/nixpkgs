@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "delve";
-  version = "1.9.0";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    sha256 = "sha256-paNr9aiRG6NP6DIGUojl7VPPPMTeJRpDW8ThDNOQhWM=";
+    sha256 = "sha256-X1vds6+brQ5pl7MG2/n0CqCoS0nbjnQUcIgJqji/u60=";
   };
 
   vendorSha256 = null;
@@ -46,5 +46,6 @@ buildGoModule rec {
     homepage = "https://github.com/go-delve/delve";
     maintainers = with maintainers; [ SuperSandro2000 vdemeester ];
     license = licenses.mit;
+    mainProgram = "dlv";
   };
 }

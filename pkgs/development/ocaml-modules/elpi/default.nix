@@ -11,7 +11,7 @@
 , version ? if lib.versionAtLeast ocaml.version "4.08" then "1.16.5"
     else if lib.versionAtLeast ocaml.version "4.07" then "1.15.2" else "1.14.1"
 }:
-with lib;
+
 let fetched = coqPackages.metaFetch ({
     release."1.16.5".sha256 = "sha256-tKX5/cVPoBeHiUe+qn7c5FIRYCwY0AAukN7vSd/Nz9A=";
     release."1.15.2".sha256 = "sha256-XgopNP83POFbMNyl2D+gY1rmqGg03o++Ngv3zJfCn2s=";
@@ -31,14 +31,21 @@ buildDunePackage rec {
   pname = "elpi";
   inherit (fetched) version src;
 
-  minimalOCamlVersion = "4.04";
+  patches = lib.optional (lib.versionAtLeast version "1.16" || version == "dev")
+    ./atd_2_10.patch;
 
-  buildInputs = [ perl ncurses ]
-  ++ optional (versionAtLeast version "1.15" || version == "dev") menhir
-  ++ optional (versionAtLeast version "1.16" || version == "dev") atdgen;
+  minimalOCamlVersion = "4.04";
+  duneVersion = "3";
+
+  # atdgen is both a library and executable
+  nativeBuildInputs = [ perl ]
+  ++ [ (if lib.versionAtLeast version "1.15" || version == "dev" then menhir else camlp5) ]
+  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
+  buildInputs = [ ncurses ]
+  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
 
   propagatedBuildInputs = [ re stdlib-shims ]
-  ++ (if versionAtLeast version "1.15" || version == "dev"
+  ++ (if lib.versionAtLeast version "1.15" || version == "dev"
      then [ menhirLib ]
      else [ camlp5 ]
   )
@@ -47,7 +54,7 @@ buildDunePackage rec {
      else [ ppxlib_0_15 ppx_deriving_0_15 ]
   );
 
-  meta = {
+  meta = with lib; {
     description = "Embeddable λProlog Interpreter";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.vbgl ];

@@ -2,9 +2,9 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
-, asciidoc
 , cmake
 , expat
+, flac
 , fontconfig
 , freetype
 , fribidi
@@ -27,30 +27,30 @@
 , libXpm
 , libXrandr
 , libjpeg
+, libogg
 , libpng
 , libpthreadstubs
 , libsndfile
 , libtiff
 , libxcb
 , mkfontdir
-, pcre
+, pcre2
 , perl
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "2.9.8";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
-    repo = pname;
-    rev = version;
-    hash = "sha256-SjLXPlwL3tMBD7RCJkL60lqcld/ZXIxgjeNrAn8A6KU=";
+    repo = "icewm";
+    rev = finalAttrs.version;
+    hash = "sha256-9fw3vqcorWZZROYm1vbDOrlkzEbuk7X2dOO/Edo3AOg=";
   };
 
   nativeBuildInputs = [
-    asciidoc
     cmake
     perl
     pkg-config
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
+    flac
     fontconfig
     freetype
     fribidi
@@ -80,13 +81,14 @@ stdenv.mkDerivation rec {
     libXpm
     libXrandr
     libjpeg
+    libogg
     libpng
     libpthreadstubs
     libsndfile
     libtiff
     libxcb
     mkfontdir
-    pcre
+    pcre2
   ];
 
   cmakeFlags = [
@@ -96,7 +98,8 @@ stdenv.mkDerivation rec {
 
   # install legacy themes
   postInstall = ''
-    cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} $out/share/icewm/themes/
+    cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} \
+      $out/share/icewm/themes/
   '';
 
   meta = with lib; {
@@ -119,4 +122,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
   };
-}
+})

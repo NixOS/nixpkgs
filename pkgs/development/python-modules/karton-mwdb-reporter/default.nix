@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-QVxczXT74Xt0AtCSDm4nhIK4qtHQ6bqmVNb/CALZSE4=";
   };
 
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Karton service that uploads analyzed artifacts and metadata to MWDB Core";
     homepage = "https://github.com/CERT-Polska/karton-mwdb-reporter";
+    changelog = "https://github.com/CERT-Polska/karton-mwdb-reporter/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

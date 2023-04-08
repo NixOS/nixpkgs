@@ -1,56 +1,41 @@
-{ stdenv, lib, rustPlatform, fetchgit
-, minijail-tools, pkg-config, wayland-scanner
+{ lib, rustPlatform, fetchgit, pkg-config, protobuf, python3, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "103.3";
+  version = "111.1";
 
   src = fetchgit {
-    url = "https://chromium.googlesource.com/crosvm/crosvm";
-    rev = "e7db3a5cc78ca90ab06aadd5f08bb151090269b6";
-    sha256 = "0hyz0mg5fn6hi97awfpxfykgv68m935r037sdf85v3vcwjy5n5ki";
+    url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
+    rev = "9ad89972330f70fca5a29967f226cf905977bf7f";
+    sha256 = "hvP3V7kzfPXOIe+6GBWupfhW5SM3ifoqmx7dyTgSTeU=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
-  patches = [
-    ./default-seccomp-policy-dir.diff
+  cargoSha256 = "S8zeOB+S5ZTuHqWNjxDIa4ev24ose/fByYwPrhR9OY8=";
+
+  nativeBuildInputs = [
+    pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
   ];
-
-  cargoLock.lockFile = ./Cargo.lock;
-
-  nativeBuildInputs = [ minijail-tools pkg-config wayland-scanner ];
 
   buildInputs = [
     libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
   ];
 
-  arch = stdenv.hostPlatform.parsed.cpu.name;
-
-  postPatch = ''
-    cp ${cargoLock.lockFile} Cargo.lock
-    sed -i "s|/usr/share/policy/crosvm/|$PWD/seccomp/$arch/|g" \
-        seccomp/$arch/*.policy
+  preConfigure = ''
+    patchShebangs third_party/minijail/tools/*.py
   '';
 
-  preBuild = ''
-    export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
-
-    for policy in seccomp/$arch/*.policy; do
-        compile_seccomp_policy \
-            --default-action trap $policy ''${policy%.policy}.bpf
-    done
-  '';
+  # crosvm mistakenly expects the stable protocols to be in the root
+  # of the pkgdatadir path, rather than under the "stable"
+  # subdirectory.
+  PKG_CONFIG_WAYLAND_PROTOCOLS_PKGDATADIR =
+    "${wayland-protocols}/share/wayland-protocols/stable";
 
   buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
-
-  postInstall = ''
-    mkdir -p $out/share/policy/
-    cp -v seccomp/$arch/*.bpf $out/share/policy/
-  '';
 
   passthru.updateScript = ./update.py;
 

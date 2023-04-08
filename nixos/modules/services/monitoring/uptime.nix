@@ -51,9 +51,9 @@ in {
       type = types.bool;
     };
 
-    enableWebService = mkEnableOption "the uptime monitoring program web service";
+    enableWebService = mkEnableOption (lib.mdDoc "the uptime monitoring program web service");
 
-    enableSeparateMonitoringService = mkEnableOption "the uptime monitoring service" // {
+    enableSeparateMonitoringService = mkEnableOption (lib.mdDoc "the uptime monitoring service") // {
       default = cfg.enableWebService;
       defaultText = literalExpression "config.${opt.enableWebService}";
     };

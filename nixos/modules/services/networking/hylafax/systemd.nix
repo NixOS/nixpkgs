@@ -96,7 +96,7 @@ let
   hardenService =
     # Add some common systemd service hardening settings,
     # but allow each service (here) to override
-    # settings by explicitely setting those to `null`.
+    # settings by explicitly setting those to `null`.
     # More hardening would be nice but makes
     # customizing hylafax setups very difficult.
     # If at all, it should only be added along

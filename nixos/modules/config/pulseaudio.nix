@@ -102,7 +102,7 @@ in {
           each user that tries to use the sound system. The server runs
           with user privileges. If true, one system-wide PulseAudio
           server is launched on boot, running as the user "pulse", and
-          only users in the "audio" group will have access to the server.
+          only users in the "pulse-access" group will have access to the server.
           Please read the PulseAudio documentation for more details.
 
           Don't enable this option unless you know what you are doing.
@@ -190,17 +190,17 @@ in {
 
       zeroconf = {
         discovery.enable =
-          mkEnableOption "discovery of pulseaudio sinks in the local network";
+          mkEnableOption (lib.mdDoc "discovery of pulseaudio sinks in the local network");
         publish.enable =
-          mkEnableOption "publishing the pulseaudio sink in the local network";
+          mkEnableOption (lib.mdDoc "publishing the pulseaudio sink in the local network");
       };
 
       # TODO: enable by default?
       tcp = {
-        enable = mkEnableOption "tcp streaming support";
+        enable = mkEnableOption (lib.mdDoc "tcp streaming support");
 
         anonymousClients = {
-          allowAll = mkEnableOption "all anonymous clients to stream to the server";
+          allowAll = mkEnableOption (lib.mdDoc "all anonymous clients to stream to the server");
           allowedIpRanges = mkOption {
             type = types.listOf types.str;
             default = [];
@@ -263,7 +263,7 @@ in {
           (drv: drv.override { pulseaudio = overriddenPackage; })
           cfg.extraModules;
         modulePaths = builtins.map
-          (drv: "${drv}/${overriddenPackage.pulseDir}/modules")
+          (drv: "${drv}/lib/pulseaudio/modules")
           # User-provided extra modules take precedence
           (overriddenModules ++ [ overriddenPackage ]);
       in lib.concatStringsSep ":" modulePaths;
@@ -310,6 +310,7 @@ in {
       };
 
       users.groups.pulse.gid = gid;
+      users.groups.pulse-access = {};
 
       systemd.services.pulseaudio = {
         description = "PulseAudio System-Wide Server";

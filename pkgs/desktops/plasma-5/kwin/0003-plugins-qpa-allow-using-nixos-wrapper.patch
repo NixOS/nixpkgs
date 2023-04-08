@@ -13,9 +13,9 @@ index efd236b..a69c046 100644
 --- a/src/plugins/qpa/main.cpp
 +++ b/src/plugins/qpa/main.cpp
 @@ -23,7 +23,7 @@ public:
+
  QPlatformIntegration *KWinIntegrationPlugin::create(const QString &system, const QStringList &paramList)
  {
-     Q_UNUSED(paramList)
 -    if (!QCoreApplication::applicationFilePath().endsWith(QLatin1String("kwin_wayland")) && !qEnvironmentVariableIsSet("KWIN_FORCE_OWN_QPA")) {
 +    if (!QCoreApplication::applicationFilePath().endsWith(QLatin1String("kwin_wayland")) && !QCoreApplication::applicationFilePath().endsWith(QLatin1String(".kwin_wayland-wrapped")) && !qEnvironmentVariableIsSet("KWIN_FORCE_OWN_QPA")) {
          // Not KWin

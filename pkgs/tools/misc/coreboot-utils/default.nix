@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, makeWrapper, gnugrep, gnused, file, buildEnv }:
+{ lib, stdenv, fetchurl, pkg-config, zlib, pciutils, openssl, coreutils, acpica-tools, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
-  version = "4.14";
+  version = "4.19";
 
   commonMeta = with lib; {
     description = "Various coreboot-related tools";
@@ -16,7 +16,7 @@ let
 
     src = fetchurl {
       url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
-      sha256 = "0viw2x4ckjwiylb92w85k06b0g9pmamjy2yqs7fxfqbmfadkf1yr";
+      sha256 = "sha256-Zcyy9GU1uZbgBmobdvgcjPH/PiffhLP5fYrXs+fPCkM=";
     };
 
     enableParallelBuilding = true;
@@ -32,12 +32,13 @@ let
     ];
 
     meta = commonMeta // args.meta;
-  } // (removeAttrs args ["meta"]));
+  } // (removeAttrs args [ "meta" ]));
 
   utils = {
     msrtool = generic {
       pname = "msrtool";
       meta.description = "Dump chipset-specific MSR registers";
+      meta.platforms = [ "x86_64-linux" "i686-linux" ];
       buildInputs = [ pciutils zlib ];
       preConfigure = "export INSTALL=install";
     };
@@ -83,6 +84,8 @@ let
     amdfwtool = generic {
       pname = "amdfwtool";
       meta.description = "Create AMD firmware combination";
+      buildInputs = [ openssl ];
+      nativeBuildInputs = [ pkg-config ];
       installPhase = ''
         runHook preInstall
 
@@ -104,13 +107,15 @@ let
 
         runHook postInstall
       '';
-      postFixup = let
-        binPath = [ coreutils acpica-tools gnugrep gnused file ];
-      in "wrapProgram $out/bin/acpidump-all --set PATH ${lib.makeBinPath binPath}";
+      postFixup = ''
+        wrapProgram $out/bin/acpidump-all \
+          --set PATH ${lib.makeBinPath [ coreutils acpica-tools gnugrep gnused file ]}
+      '';
     };
   };
 
-in utils // {
+in
+utils // {
   coreboot-utils = (buildEnv {
     name = "coreboot-utils-${version}";
     paths = lib.attrValues utils;

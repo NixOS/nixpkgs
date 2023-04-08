@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, m4, ncurses, ocaml, writeText }:
+{ lib, stdenv, fetchurl, ncurses, ocaml, writeText }:
 
 stdenv.mkDerivation rec {
-  pname = "ocaml-findlib";
-  version = "1.9.3";
+  pname = "ocaml${ocaml.version}-findlib";
+  version = "1.9.6";
 
   src = fetchurl {
     url = "http://download.camlcity.org/download/findlib-${version}.tar.gz";
-    sha256 = "sha256:0hfcwamcvinmww59b5i4yxbf0kxyzkp5qv3d1c7ybn9q52vgq463";
+    sha256 = "sha256-LfmWJ5rha2Bttf9Yefk9v63giY258aPoL3+EX6opMKI=";
   };
 
-  nativeBuildInputs = [m4 ocaml];
-  buildInputs = [ ncurses ];
+  nativeBuildInputs = [ ocaml ];
+  buildInputs = lib.optional (lib.versionOlder ocaml.version "4.07") ncurses;
 
   patches = [ ./ldconf.patch ./install_topfind.patch ];
 
@@ -44,6 +44,16 @@ stdenv.mkDerivation rec {
           mkdir -p $OCAMLFIND_DESTDIR
         fi
     }
+    detectOcamlConflicts () {
+      local conflict
+      conflict="$(ocamlfind list |& grep "has multiple definitions" || true)"
+      if [[ -n "$conflict" ]]; then
+        echo "Conflicting ocaml packages detected";
+        echo "$conflict"
+        echo "Set dontDetectOcamlConflicts to false to disable this check."
+        exit 1
+      fi
+    }
 
     # run for every buildInput
     addEnvHooks "$targetOffset" addOCamlPath
@@ -51,6 +61,10 @@ stdenv.mkDerivation rec {
     preInstallHooks+=(createOcamlDestDir)
     # run even in nix-shell, and even without buildInputs
     addEnvHooks "$hostOffset" exportOcamlDestDir
+    # runs after all calls to addOCamlPath
+    if [[ -z "''${dontDetectOcamlConflicts-}" ]]; then
+      postHooks+=("detectOcamlConflicts")
+    fi
   '';
 
   meta = {

@@ -38,5 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hexagonal-sun/bic";
     platforms = platforms.unix;
     maintainers = with maintainers; [ hexagonal-sun ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

@@ -9,12 +9,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.4";
+  version = "1.0.6";
   pname = "nftables";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.bz2";
-    hash = "sha256-kn+x/qH2haMowQz3ketlXX4e1J0xDupcsxAd/Y1sujU=";
+    url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.xz";
+    hash = "sha256-JAdDDd2CmHZw5I3C/anigLqoMHq+wEqxjWCd89sAXkw=";
   };
 
   nativeBuildInputs = [
@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ajs124 ];
+    mainProgram = "nft";
   };
 }

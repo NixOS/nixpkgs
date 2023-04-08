@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-objects";
-  version = "0.1.7";
+  version = "0.21.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Edp2MRhe/eTUosL4XQfVbtwFWBg3D5RDWRb6r1C4MgE=";
+    hash = "sha256-JUpK4sAn5ZivjlpHO3XSBXZVDSWkjch/HRqHNrdC7b4=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for DVC objects";
     homepage = "https://github.com/iterative/dvc-objects";
+    changelog = "https://github.com/iterative/dvc-objects/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

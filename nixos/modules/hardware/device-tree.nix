@@ -14,6 +14,15 @@ let
         '';
       };
 
+      filter = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "*rpi*.dtb";
+        description = lib.mdDoc ''
+          Only apply to .dtb files matching glob expression.
+        '';
+      };
+
       dtsFile = mkOption {
         type = types.nullOr types.path;
         description = lib.mdDoc ''
@@ -56,24 +65,7 @@ let
     };
   };
 
-  # this requires kernel package
-  dtbsWithSymbols = pkgs.stdenv.mkDerivation {
-    name = "dtbs-with-symbols";
-    inherit (cfg.kernelPackage) src nativeBuildInputs depsBuildBuild;
-    patches = map (patch: patch.patch) cfg.kernelPackage.kernelPatches;
-    buildPhase = ''
-      patchShebangs scripts/*
-      substituteInPlace scripts/Makefile.lib \
-        --replace 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget))' 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget)) -@'
-      make ${pkgs.stdenv.hostPlatform.linux-kernel.baseConfig} ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
-      make dtbs ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
-    '';
-    installPhase = ''
-      make dtbs_install INSTALL_DTBS_PATH=$out/dtbs  ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
-    '';
-  };
-
-  filterDTBs = src: if isNull cfg.filter
+  filterDTBs = src: if cfg.filter == null
     then "${src}/dtbs"
     else
       pkgs.runCommand "dtbs-filtered" {} ''
@@ -82,6 +74,8 @@ let
         find . -type f -name '${cfg.filter}' -print0 \
           | xargs -0 cp -v --no-preserve=mode --target-directory $out --parents
       '';
+
+  filteredDTBs = filterDTBs cfg.kernelPackage;
 
   # Compile single Device Tree overlay source
   # file (.dts) into its compiled variant (.dtbo)
@@ -99,8 +93,8 @@ let
   # Fill in `dtboFile` for each overlay if not set already.
   # Existence of one of these is guarded by assertion below
   withDTBOs = xs: flip map xs (o: o // { dtboFile =
-    if isNull o.dtboFile then
-      if !isNull o.dtsFile then compileDTS o.name o.dtsFile
+    if o.dtboFile == null then
+      if o.dtsFile != null then compileDTS o.name o.dtsFile
       else compileDTS o.name (pkgs.writeText "dts" o.dtsText)
     else o.dtboFile; } );
 
@@ -165,6 +159,7 @@ in
           '';
           type = types.listOf (types.coercedTo types.path (path: {
             name = baseNameOf path;
+            filter = null;
             dtboFile = path;
           }) overlayType);
           description = lib.mdDoc ''
@@ -176,7 +171,7 @@ in
           default = null;
           type = types.nullOr types.path;
           internal = true;
-          description = ''
+          description = lib.mdDoc ''
             A path containing the result of applying `overlays` to `kernelPackage`.
           '';
         };
@@ -186,7 +181,7 @@ in
   config = mkIf (cfg.enable) {
 
     assertions = let
-      invalidOverlay = o: isNull o.dtsFile && isNull o.dtsText && isNull o.dtboFile;
+      invalidOverlay = o: (o.dtsFile == null) && (o.dtsText == null) && (o.dtboFile == null);
     in lib.singleton {
       assertion = lib.all (o: !invalidOverlay o) cfg.overlays;
       message = ''
@@ -197,7 +192,7 @@ in
     };
 
     hardware.deviceTree.package = if (cfg.overlays != [])
-      then pkgs.deviceTree.applyOverlays (filterDTBs dtbsWithSymbols) (withDTBOs cfg.overlays)
-      else (filterDTBs cfg.kernelPackage);
+      then pkgs.deviceTree.applyOverlays filteredDTBs (withDTBOs cfg.overlays)
+      else filteredDTBs;
   };
 }

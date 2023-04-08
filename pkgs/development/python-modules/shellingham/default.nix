@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
@@ -8,18 +9,22 @@
 
 buildPythonPackage rec {
   pname = "shellingham";
-  version = "1.4.0";
+  version = "1.5.0.post1";
   format = "pyproject";
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = pname;
-    rev = version;
-    sha256 = "0f686ym3ywjffis5jfqkhsshjgii64060hajysczflhffrjn9jcp";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nAXI1GxSpmmpJuatPYUeAClA88B9c/buPEWhq7RKvs8=";
   };
 
-  checkInputs = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

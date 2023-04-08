@@ -19,18 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
     sed -i "/--no-cov-on-fail/d" setup.cfg
-  '';
-
-  preCheck = ''
-    # Confuses source vs dist imports in pytest
-    rm -r dist
   '';
 
   disabledTestPaths = [

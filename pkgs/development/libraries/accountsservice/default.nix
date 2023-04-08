@@ -16,6 +16,7 @@
 , python3
 , vala
 , gettext
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -61,11 +62,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     dbus
+    gettext
     glib
     polkit
     systemd
+    libxcrypt
   ];
 
   mesonFlags = [

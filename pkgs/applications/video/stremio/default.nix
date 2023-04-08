@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/applications}
     ln -s $out/opt/stremio/stremio $out/bin/stremio
     mv $out/opt/stremio/smartcode-stremio.desktop $out/share/applications
+    install -Dm 644 images/stremio_window.png $out/share/pixmaps/smartcode-stremio.png
     ln -s ${nodejs}/bin/node $out/opt/stremio/node
     ln -s $server $out/opt/stremio/server.js
   '';

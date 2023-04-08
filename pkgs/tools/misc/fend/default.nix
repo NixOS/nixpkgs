@@ -3,22 +3,34 @@
 , fetchFromGitHub
 , rustPlatform
 , darwin
+, pandoc
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "1.0.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6zYz6DMnYSGyDXqP5K8bKauy23YA2tzBmGk72f5+bgY=";
+    sha256 = "sha256-9qvIxKg/fj08wYY2fK5J1nWzojStUb9ArXwvA/cTOcQ=";
   };
 
-  cargoSha256 = "sha256-ydt2YGx5WWk42Vq4RXhiRf6kIne7Q/6XwIu+HEnhDVw=";
+  cargoHash = "sha256-kVnA8w2YVg6+h1V1O4cvciuB7GM4/LULFsGrzy8xUMQ=";
 
+  nativeBuildInputs = [ pandoc installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+
+  postBuild = ''
+    patchShebangs --build ./documentation/build.sh
+    ./documentation/build.sh
+  '';
+
+  preFixup = ''
+    installManPage documentation/fend.1
+  '';
 
   doInstallCheck = true;
 

@@ -21,13 +21,13 @@
 
 mkDerivation rec {
   pname = "ovito";
-  version = "3.7.1";
+  version = "3.7.11";
 
   src = fetchFromGitLab {
     owner = "stuko";
     repo = "ovito";
     rev = "v${version}";
-    sha256 = "sha256-6b/yqfrpeZ6i6DoPe3lcftvuzwvK7rfZhgyHc9GtyBs=";
+    sha256 = "sha256-Z3uwjOYJ7di/LLllbzdKjzUE7m119i03bA8dJPqhxWA=";
   };
 
   nativeBuildInputs = [

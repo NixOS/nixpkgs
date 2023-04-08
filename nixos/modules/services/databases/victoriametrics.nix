@@ -2,7 +2,7 @@
 let cfg = config.services.victoriametrics; in
 {
   options.services.victoriametrics = with lib; {
-    enable = mkEnableOption "victoriametrics";
+    enable = mkEnableOption (lib.mdDoc "victoriametrics");
     package = mkOption {
       type = types.package;
       default = pkgs.victoriametrics;

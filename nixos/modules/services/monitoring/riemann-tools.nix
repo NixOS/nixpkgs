@@ -37,7 +37,7 @@ in {
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           A list of commandline-switches forwarded to a riemann-tool.
           See for example `riemann-health --help` for available options.
         '';

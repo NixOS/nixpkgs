@@ -10,7 +10,7 @@ in
 {
   options = {
     services.influxdb2 = {
-      enable = mkEnableOption "the influxdb2 server";
+      enable = mkEnableOption (lib.mdDoc "the influxdb2 server");
 
       package = mkOption {
         default = pkgs.influxdb2-server;
@@ -40,6 +40,7 @@ in
       after = [ "network.target" ];
       environment = {
         INFLUXD_CONFIG_PATH = configFile;
+        ZONEINFO = "${pkgs.tzdata}/share/zoneinfo";
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/influxd --bolt-path \${STATE_DIRECTORY}/influxd.bolt --engine-path \${STATE_DIRECTORY}/engine";

@@ -36,6 +36,17 @@ let
         description = lib.mdDoc "Addresses who may request zone transfers.";
         default = [ ];
       };
+      allowQuery = mkOption {
+        type = types.listOf types.str;
+        description = lib.mdDoc ''
+          List of address ranges allowed to query this zone. Instead of the address(es), this may instead
+          contain the single string "any".
+
+          NOTE: This overrides the global-level `allow-query` setting, which is set to the contents
+          of `cachenetworks`.
+        '';
+        default = [ "any" ];
+      };
       extraConfig = mkOption {
         type = types.str;
         description = lib.mdDoc "Extra zone config to be appended at the end of the zone section.";
@@ -69,7 +80,7 @@ let
       ${cfg.extraConfig}
 
       ${ concatMapStrings
-          ({ name, file, master ? true, slaves ? [], masters ? [], extraConfig ? "" }:
+          ({ name, file, master ? true, slaves ? [], masters ? [], allowQuery ? [], extraConfig ? "" }:
             ''
               zone "${name}" {
                 type ${if master then "master" else "slave"};
@@ -87,7 +98,7 @@ let
                      };
                    ''
                 }
-                allow-query { any; };
+                allow-query { ${concatMapStrings (ip: "${ip}; ") allowQuery}};
                 ${extraConfig}
               };
             '')
@@ -104,7 +115,7 @@ in
 
     services.bind = {
 
-      enable = mkEnableOption "BIND domain name server";
+      enable = mkEnableOption (lib.mdDoc "BIND domain name server");
 
 
       package = mkOption {
@@ -117,62 +128,64 @@ in
       cacheNetworks = mkOption {
         default = [ "127.0.0.0/24" ];
         type = types.listOf types.str;
-        description = "
+        description = lib.mdDoc ''
           What networks are allowed to use us as a resolver.  Note
           that this is for recursive queries -- all networks are
-          allowed to query zones configured with the `zones` option.
+          allowed to query zones configured with the `zones` option
+          by default (although this may be overridden within each
+          zone's configuration, via the `allowQuery` option).
           It is recommended that you limit cacheNetworks to avoid your
           server being used for DNS amplification attacks.
-        ";
+        '';
       };
 
       blockedNetworks = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        description = "
+        description = lib.mdDoc ''
           What networks are just blocked.
-        ";
+        '';
       };
 
       ipv4Only = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = lib.mdDoc ''
           Only use ipv4, even if the host supports ipv6.
-        ";
+        '';
       };
 
       forwarders = mkOption {
         default = config.networking.nameservers;
         defaultText = literalExpression "config.networking.nameservers";
         type = types.listOf types.str;
-        description = "
+        description = lib.mdDoc ''
           List of servers we should forward requests to.
-        ";
+        '';
       };
 
       forward = mkOption {
         default = "first";
         type = types.enum ["first" "only"];
-        description = "
+        description = lib.mdDoc ''
           Whether to forward 'first' (try forwarding but lookup directly if forwarding fails) or 'only'.
-        ";
+        '';
       };
 
       listenOn = mkOption {
         default = [ "any" ];
         type = types.listOf types.str;
-        description = "
+        description = lib.mdDoc ''
           Interfaces to listen on.
-        ";
+        '';
       };
 
       listenOnIpv6 = mkOption {
         default = [ "any" ];
         type = types.listOf types.str;
-        description = "
+        description = lib.mdDoc ''
           Ipv6 interfaces to listen on.
-        ";
+        '';
       };
 
       directory = mkOption {
@@ -184,9 +197,9 @@ in
       zones = mkOption {
         default = [ ];
         type = with types; coercedTo (listOf attrs) bindZoneCoerce (attrsOf (types.submodule bindZoneOptions));
-        description = "
+        description = lib.mdDoc ''
           List of zones we claim authority over.
-        ";
+        '';
         example = {
           "example.com" = {
             master = false;
@@ -201,9 +214,9 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = lib.mdDoc ''
           Extra lines to be added verbatim to the generated named configuration file.
-        ";
+        '';
       };
 
       extraOptions = mkOption {
@@ -219,10 +232,10 @@ in
         type = types.path;
         default = confFile;
         defaultText = literalExpression "confFile";
-        description = "
+        description = lib.mdDoc ''
           Overridable config file to use for named. By default, that
           generated by nixos.
-        ";
+        '';
       };
 
     };

@@ -1,4 +1,7 @@
-{ stdenv, lib, callPackage, fetchurl, isInsiders ? false }:
+{ stdenv, lib, callPackage, fetchurl
+, isInsiders ? false
+, commandLineArgs ? ""
+}:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -15,22 +18,23 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "04frcbgjvnik1b4ipvyk6v99i9mydkwj9g6b58rns4xd52p9v3sj";
-    x86_64-darwin = "1jhj15jn0xqahjldyibqp22l2bs4g1s76rzwp27nmcmp7d9frrlj";
-    aarch64-linux = "03vpq8l4392xaqp48jp7994hp29ayr9ny69svyrrdhyasrcsrb9c";
-    aarch64-darwin = "0k0nw4jx3cqcjla4ms2p2b57axgn9f69glp1qc9bqv28cbdnyzv8";
-    armv7l-linux = "0vz3cfwmcm0s79z3sx0c2l2nnsprassp4yxqh6gy5g4p9b7rr61k";
+    x86_64-linux = "0znr64f0rs513vkj7f3by2dzllxk3msic5sajc5scv9cwy3j6xld";
+    x86_64-darwin = "0qqqbmmhr1r7rxij6cc4d7shyjvm3ni4cwv0xy3qikfr7v9w948a";
+    aarch64-linux = "0qjrz73q0ilshhqcgk6lxzkpd617p5153nrba9islxrashsqb9bj";
+    aarch64-darwin = "0cdrkn756817whr476inn5j9myhbz6dq11bli0byn829g2jh8s4h";
+    armv7l-linux = "1dqw1ha69zsdhvf2n2ps0mvqbamqs90wnc6z02pzs3jz9cxxl15j";
   }.${system} or throwSystem;
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.70.1";
+    version = "1.77.1";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
+    inherit commandLineArgs;
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
@@ -38,9 +42,17 @@ in
       inherit sha256;
     };
 
+    # We don't test vscode on CI, instead we test vscodium
+    tests = {};
+
     sourceRoot = "";
 
     updateScript = ./update-vscode.sh;
+
+    # Editing the `code` binary within the app bundle causes the bundle's signature
+    # to be invalidated, which prevents launching starting with macOS Ventura, because VS Code is notarized.
+    # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
+    dontFixup = stdenv.isDarwin;
 
     meta = with lib; {
       description = ''

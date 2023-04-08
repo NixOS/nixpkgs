@@ -1,21 +1,20 @@
 { fetchFromGitHub
 , lib
-, stdenv
+, stdenvNoCC
 , python3
 , sassc
 , sass
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mint-themes";
-  version = "2.0.4";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    # they don't exactly do tags, it's just a named commit
-    rev = "73d6cfea807ea84a645f43424c60916cb6214693";
-    hash = "sha256-WyEabE3K7xuBzXuLqJO0N4nxrc67bKT5YD9yn/bELl0=";
+    rev = version;
+    hash = "sha256-FvX4r7AZgSq52T9CKE9RagsKgQXExTYPptQBXadA3eI=";
   };
 
   nativeBuildInputs = [

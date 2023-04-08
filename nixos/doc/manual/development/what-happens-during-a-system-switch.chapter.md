@@ -47,7 +47,7 @@ Most of these actions are either self-explaining but some of them have to do
 with our units or the activation script. For this reason, these topics are
 explained in the next sections.
 
-```{=docbook}
-<xi:include href="unit-handling.section.xml" />
-<xi:include href="activation-script.section.xml" />
+```{=include=} sections
+unit-handling.section.md
+activation-script.section.md
 ```

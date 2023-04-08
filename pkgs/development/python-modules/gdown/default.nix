@@ -1,22 +1,25 @@
 { lib
 , beautifulsoup4
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , filelock
 , requests
 , tqdm
 , setuptools
 , six
+, pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "gdown";
-  version = "4.5.1";
+  version = "4.7.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ghcGEGPYr8qtnY4tVBD7wJicKz8JRqa9m/65RhYWzGo=";
+    hash = "sha256-NH8jdpZ5qvfvpz5WVScPzajKVr5l64Skoh0UOYlUEEU=";
   };
 
   propagatedBuildInputs = [
@@ -26,8 +29,7 @@ buildPythonApplication rec {
     tqdm
     setuptools
     six
-  ]
-  ++ requests.optional-dependencies.socks;
+  ] ++ requests.optional-dependencies.socks;
 
   checkPhase = ''
     $out/bin/gdown --help > /dev/null
@@ -40,6 +42,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "A CLI tool for downloading large files from Google Drive";
     homepage = "https://github.com/wkentaro/gdown";
+    changelog = "https://github.com/wkentaro/gdown/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ breakds ];
   };

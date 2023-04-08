@@ -1,7 +1,6 @@
 { mkDerivation
 , extra-cmake-modules
 , fetchFromGitHub
-, kdoctools
 , kiconthemes
 , kio
 , kjobwidgets
@@ -13,13 +12,13 @@
 
 mkDerivation rec {
   pname = "k4dirstat";
-  version = "3.4.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "jeromerobert";
     repo = pname;
     rev = version;
-    hash = "sha256-+JhMSatgCunzxIVSYIzt1L7O36LYbcFw7vmokgNffPY=";
+    hash = "sha256-nedtCa3h62pAmJYGIYp9jkNYiqe9WevVjwNAqVaaFuc=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];

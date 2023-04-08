@@ -1,14 +1,14 @@
 { lib, nimPackages, fetchFromGitHub }:
 
 nimPackages.buildNimPackage rec {
-  pname = "tridactly-native";
-  version = "0.3.6";
+  pname = "tridactyl-native";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "tridactyl";
     repo = "native_messenger";
-    rev = "5cc315da79a1caa8fd5b27b192377d8824a311c1";
-    sha256 = "sha256-9IyVDJgdZleeNltD1b4PfqxeWAtFsPHtmq1ZC5Z0O9k=";
+    rev = "62f19dba573b924703829847feb1bfee68885514";
+    sha256 = "sha256-YGDVcfFcI9cRCCZ4BrO5xTuI9mrGq1lfbEITB7o3vQQ=";
   };
   buildInputs = with nimPackages; [ tempfile ];
 

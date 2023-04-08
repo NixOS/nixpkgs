@@ -5,7 +5,7 @@ let
 in
 {
   options.services.usbrelayd = with types; {
-    enable = mkEnableOption "USB Relay MQTT daemon";
+    enable = mkEnableOption (lib.mdDoc "USB Relay MQTT daemon");
 
     broker = mkOption {
       type = str;
@@ -34,10 +34,6 @@ in
 
     services.udev.packages = [ pkgs.usbrelayd ];
     systemd.packages = [ pkgs.usbrelayd ];
-    users.users.usbrelay = {
-      isSystemUser = true;
-      group = "usbrelay";
-    };
     users.groups.usbrelay = { };
   };
 

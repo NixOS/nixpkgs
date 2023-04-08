@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];
 
-  checkInputs = [ pytestCheckHook pytest-mock ];
+  nativeCheckInputs = [ pytestCheckHook pytest-mock ];
 
   meta = with lib; {
     homepage = "https://github.com/raphaelm/python-fints/";

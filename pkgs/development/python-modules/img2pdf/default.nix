@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy27
 , fetchPypi
+, fetchpatch
 , pikepdf
 , pillow
 , stdenv
@@ -26,6 +27,14 @@ buildPythonPackage rec {
     sha256 = "8ec898a9646523fd3862b154f3f47cd52609c24cc3e2dc1fb5f0168f0cbe793c";
   };
 
+  patches = [
+    (fetchpatch {
+      # https://gitlab.mister-muffin.de/josch/img2pdf/issues/148
+      url = "https://gitlab.mister-muffin.de/josch/img2pdf/commit/57d7e07e6badb252c12015388b58fcb5285d3158.patch";
+      hash = "sha256-H/g55spe/oVJRxO2Vh+F+ZgR6aLoRUrNeu5WnuU7k/k=";
+    })
+  ];
+
   propagatedBuildInputs = [
     pikepdf
     pillow
@@ -34,7 +43,7 @@ buildPythonPackage rec {
   # https://gitlab.mister-muffin.de/josch/img2pdf/issues/128
   doCheck = !stdenv.isAarch64;
 
-  checkInputs = [
+  nativeCheckInputs = [
     exiftool
     ghostscript
     imagemagick
@@ -52,6 +61,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_tiff_rgb"
+    "test_png_gray1"  # https://gitlab.mister-muffin.de/josch/img2pdf/issues/154
   ];
 
   pythonImportsCheck = [ "img2pdf" ];

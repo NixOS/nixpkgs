@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "chaos";
-  version = "0.2.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "chaos-client";
-    rev = "v${version}";
-    sha256 = "sha256-uND88KGlUxGH3lGlcNdjSRsti/7FofruFJIcftdgzcE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TpzTDNkfwL2CgEZwk2b5Zojhh61hXBm3PgjLkav6B3M=";
   };
 
-  vendorSha256 = "sha256-pzh/t8GeJXLIydSGoQ3vOzZ6xdHov6kdYgu2lKh/BNo=";
+  vendorHash = "sha256-Zu3TxBFTrXkAOmtUELjSdyzlE6CIr4SUBSdvaRnKy+k=";
 
   subPackages = [
     "cmd/chaos/"
@@ -23,6 +23,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool to communicate with Chaos DNS API";
     homepage = "https://github.com/projectdiscovery/chaos-client";
+    changelog = "https://github.com/projectdiscovery/chaos-client/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

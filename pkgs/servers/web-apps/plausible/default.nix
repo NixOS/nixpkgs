@@ -55,6 +55,7 @@ beamPackages.mixRelease {
   };
 
   postBuild = ''
+    export NODE_OPTIONS=--openssl-legacy-provider # required for webpack compatibility with OpenSSL 3 (https://github.com/webpack/webpack/issues/14532)
     ln -sf ${yarnDeps}/node_modules assets/node_modules
     npm run deploy --prefix ./assets
 
@@ -67,7 +68,7 @@ beamPackages.mixRelease {
     license = licenses.agpl3Plus;
     homepage = "https://plausible.io/";
     description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics.";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

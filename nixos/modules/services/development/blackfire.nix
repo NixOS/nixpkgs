@@ -11,12 +11,12 @@ let
 in {
   meta = {
     maintainers = pkgs.blackfire.meta.maintainers;
-    doc = ./blackfire.xml;
+    doc = ./blackfire.md;
   };
 
   options = {
     services.blackfire-agent = {
-      enable = lib.mkEnableOption "Blackfire profiler agent";
+      enable = lib.mkEnableOption (lib.mdDoc "Blackfire profiler agent");
       settings = lib.mkOption {
         description = lib.mdDoc ''
           See https://blackfire.io/docs/up-and-running/configuration/agent

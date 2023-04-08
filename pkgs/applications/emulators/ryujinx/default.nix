@@ -1,40 +1,47 @@
 { lib
 , buildDotnetModule
-, fetchFromGitHub
 , dotnetCorePackages
+, stdenvNoCC
+, fetchFromGitHub
+, wrapGAppsHook
 , libX11
 , libgdiplus
 , ffmpeg
-, SDL2_mixer
 , openal
 , libsoundio
 , sndio
 , pulseaudio
 , gtk3
 , gdk-pixbuf
-, wrapGAppsHook
 , vulkan-loader
+, libICE
+, libSM
+, libXi
+, libXcursor
+, libXext
+, libXrandr
+, fontconfig
+, glew
+, libGL
+, SDL2
+, SDL2_mixer
 }:
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.213"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.692"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "e8f1ca84277240c4d6215eb9cd85713aab73e2f7";
-    sha256 = "0ha5wn9h9rqxbkjbz7sm5m8q3rbsiiddh72wx0s3sga5w8054cb3";
+    rev = "1b41b285ac7f551c3495ced436ce3930ad7223b4";
+    sha256 = "07s42xmdagi97i7c3mm9qak9msgv4c75say10dl4nha784kxkbvp";
   };
 
-  projectFile = "Ryujinx.sln";
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+
   nugetDeps = ./deps.nix;
-
-  dotnetFlags = [ "/p:ExtraDefineConstants=DISABLE_UPDATER" ];
-
-  # TODO: Add the headless frontend. Currently errors on the following:
-  # System.Exception: SDL2 initlaization failed with error "No available video device"
-  executables = [ "Ryujinx" ];
 
   nativeBuildInputs = [
     wrapGAppsHook
@@ -56,10 +63,40 @@ buildDotnetModule rec {
     pulseaudio
     vulkan-loader
     ffmpeg
+
+    # Avalonia UI
+    libICE
+    libSM
+    libXi
+    libXcursor
+    libXext
+    libXrandr
+    fontconfig
+    glew
+
+    # Headless executable
+    libGL
+    SDL2
   ];
 
-  patches = [
-    ./appdir.patch # Ryujinx attempts to write to the nix store. This patch redirects it to "~/.config/Ryujinx" on Linux.
+  projectFile = "Ryujinx.sln";
+  testProjectFile = "Ryujinx.Tests/Ryujinx.Tests.csproj";
+  doCheck = true;
+
+  dotnetFlags = [
+    "/p:ExtraDefineConstants=DISABLE_UPDATER%2CFORCE_EXTERNAL_BASE_DIR"
+  ];
+
+  executables = [
+    "Ryujinx.Headless.SDL2"
+    "Ryujinx.Ava"
+    "Ryujinx"
+  ];
+
+  makeWrapperArgs = [
+    # Without this Ryujinx fails to start on wayland. See https://github.com/Ryujinx/Ryujinx/issues/2714
+    "--set GDK_BACKEND x11"
+    "--set SDL_VIDEODRIVER x11"
   ];
 
   preInstall = ''
@@ -72,12 +109,14 @@ buildDotnetModule rec {
     mkdir -p $out/share/{applications,icons/hicolor/scalable/apps,mime/packages}
     pushd ${src}/distribution/linux
 
-    install -D ./ryujinx.desktop $out/share/applications/ryujinx.desktop
-    install -D ./ryujinx-mime.xml $out/share/mime/packages/ryujinx-mime.xml
-    install -D ./ryujinx-logo.svg $out/share/icons/hicolor/scalable/apps/ryujinx.svg
+    install -D ./Ryujinx.desktop $out/share/applications/Ryujinx.desktop
+    install -D ./mime/Ryujinx.xml $out/share/mime/packages/Ryujinx.xml
+    install -D ../misc/Logo.svg $out/share/icons/hicolor/scalable/apps/Ryujinx.svg
 
-    substituteInPlace $out/share/applications/ryujinx.desktop --replace \
-      "Exec=Ryujinx" "Exec=$out/bin/Ryujinx"
+    substituteInPlace $out/share/applications/Ryujinx.desktop \
+      --replace "Exec=Ryujinx" "Exec=$out/bin/Ryujinx"
+
+    ln -s $out/bin/Ryujinx $out/bin/ryujinx
 
     popd
   '';

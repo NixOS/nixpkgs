@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.8.2";
+  version = "5.8.3";
   # upstream only supports 3.10+
   disabled = pythonOlder "3.10";
 
@@ -13,12 +13,12 @@ buildPythonPackage rec {
     owner = "neogeny";
     repo = "TatSu";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-eJJ438zjXRZ7dk36RPkFvhcIA5RYo5MsjptZIpjCrVI=";
+    hash = "sha256-cKEMRbH/xNtYM0lmNVazv3i0Q1tmVrVPrB6F2s02Sro=";
   };
 
   nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ colorama regex ];
-  checkInputs = [ pytestCheckHook pytest-mypy ];
+  nativeCheckInputs = [ pytestCheckHook pytest-mypy ];
 
   pythonImportsCheck = [ "tatsu" ];
 

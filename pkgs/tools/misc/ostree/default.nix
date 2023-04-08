@@ -8,13 +8,14 @@
 , gobject-introspection
 , gjs
 , nixosTests
+, curl
 , glib
 , systemd
 , xz
 , e2fsprogs
 , libsoup
 , glib-networking
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , gpgme
 , which
 , makeWrapper
@@ -42,13 +43,13 @@ let
   ]));
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2022.5";
+  version = "2023.2";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "sha256-kUxNmTvBEdfdMK6XIbb/6KtW6x/W6BsJewn0AMwbBT8=";
+    sha256 = "sha256-zrB4h1Wgv/VzjURUNVL7+IPPcd9IG6o8pyiNp6QCu4U=";
   };
 
   patches = [
@@ -81,10 +82,11 @@ in stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
+    curl
     glib
     systemd
     e2fsprogs
@@ -108,6 +110,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
+    "--with-curl"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"

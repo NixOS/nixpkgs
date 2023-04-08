@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild
 , topkg, result, lwt, cmdliner, fmt
+, fmtSupport ? lib.versionAtLeast ocaml.version "4.08"
 , js_of_ocaml
 , jsooSupport ? true
 }:
@@ -22,13 +23,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [ fmt cmdliner lwt topkg ]
+  buildInputs = [ cmdliner lwt topkg ]
+    ++ lib.optional fmtSupport fmt
     ++ lib.optional jsooSupport js_of_ocaml;
   propagatedBuildInputs = [ result ];
 
   strictDeps = true;
 
-  buildPhase = "${topkg.run} build --with-js_of_ocaml ${lib.boolToString jsooSupport}";
+  buildPhase = "${topkg.run} build --with-js_of_ocaml ${lib.boolToString jsooSupport} --with-fmt ${lib.boolToString fmtSupport}";
 
   inherit (topkg) installPhase;
 

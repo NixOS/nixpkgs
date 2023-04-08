@@ -17,10 +17,11 @@
 , libdrm
 , libjpeg_turbo
 , libopus
-, libsoup
+, libsoup_3
 , libusb1
 , lz4
 , meson
+, mesonEmulatorHook
 , ninja
 , openssl
 , perl
@@ -33,6 +34,7 @@
 , usbredir
 , vala
 , wayland-protocols
+, wayland-scanner
 , zlib
 , withPolkit ? stdenv.isLinux
 }:
@@ -79,12 +81,15 @@ stdenv.mkDerivation rec {
       "# meson.add_install_script('../build-aux/setcap-or-suid',"
   '';
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     docbook_xsl
     gettext
     gobject-introspection
     gtk-doc
-    libsoup
     meson
     ninja
     perl
@@ -93,6 +98,10 @@ stdenv.mkDerivation rec {
     python3.pkgs.pyparsing
     python3.pkgs.six
     vala
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland-scanner
   ];
 
   propagatedBuildInputs = [
@@ -108,6 +117,7 @@ stdenv.mkDerivation rec {
     libcacard
     libjpeg_turbo
     libopus
+    libsoup_3
     libusb1
     lz4
     openssl
@@ -115,6 +125,7 @@ stdenv.mkDerivation rec {
     pixman
     spice-protocol
     usbredir
+    vala
     zlib
   ] ++ lib.optionals withPolkit [
     polkit
@@ -134,6 +145,8 @@ stdenv.mkDerivation rec {
     "-Dpolkit=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
     "-Dlibcap-ng=disabled"
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "-Dcoroutine=gthread" # Fixes "Function missing:makecontext"
   ];
 
   meta = with lib; {

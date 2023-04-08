@@ -6,8 +6,8 @@ Date:   Wed Sep 1 15:38:56 2021 +0000
 
 diff --git a/Makefile b/Makefile
 index b5adb8a5f2e9..1a914ef16739 100644
---- a/Makefile
-+++ b/Makefile
+--- a/tools/compat/Makefile
++++ b/tools/compat/Makefile
 @@ -76,11 +76,6 @@ _CURDIR:=	${.CURDIR}
  
  SRCS:=		${SRCS:M*.c}

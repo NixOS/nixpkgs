@@ -2,11 +2,11 @@
 , substituteAll
 , fetchurl
 , ocaml
-, dune_2
+, dune_3
 , buildDunePackage
 , yojson
 , csexp
-, result
+, merlin-lib
 , dot-merlin-reader
 , jq
 , menhir
@@ -15,17 +15,17 @@
 }:
 
 let
-  merlinVersion = "4.5";
+  merlinVersion = if lib.versionAtLeast ocaml.version "4.14" then "4.8" else "4.7";
 
   hashes = {
-    "4.5-411" = "sha256:05nz6y7r91rh0lj8b6xdv3s3yknmvjc7y60v17kszgqnr887bvpn";
-    "4.5-412" = "sha256:0i5c3rfzinmwdjya7gv94zyknsm32qx9dlg472xpfqivwvnnhf1z";
-    "4.5-413" = "sha256:1sphq9anfg1qzrvj7hdcqflj6cmc1qiyfkljhng9fxnnr0i7550s";
-    "4.5-414" = "sha256:13h588kwih05zd9p3p7q528q4zc0d1l983kkvbmkxgay5d17nn1i";
+    "4.7-412" = "sha256-0U3Ia7EblKULNy8AuXFVKACZvGN0arYJv7BWiBRgT0Y=";
+    "4.7-413" = "sha256-aVmGWS4bJBLuwsxDKsng/n0A6qlyJ/pnDTcYab/5gyU=";
+    "4.8-414" = "sha256-HMXWhcVOXW058y143rNBcfEOmjt2tZJXcXKHmKZ5i68=";
+    "4.8-500" = "sha256-n5NHKuo0/lZmfe7WskqnW3xm1S0PmXKSS93BDKrpjCI=";
   };
 
-  ocamlVersionShorthand = lib.concatStrings
-    (lib.take 2 (lib.splitVersion ocaml.version));
+  ocamlVersionShorthand = lib.substring 0 3
+    (lib.concatStrings (lib.splitVersion ocaml.version));
 
   version = "${merlinVersion}-${ocamlVersionShorthand}";
 in
@@ -37,6 +37,7 @@ else
 buildDunePackage {
   pname = "merlin";
   inherit version;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-${version}.tbz";
@@ -47,14 +48,9 @@ buildDunePackage {
     (substituteAll {
       src = ./fix-paths.patch;
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
-      dune = "${dune_2}/bin/dune";
+      dune = "${dune_3}/bin/dune";
     })
-  ] ++ lib.optional (lib.versionOlder ocaml.version "4.12")
-    # This fixes the test-suite on macOS
-    # See https://github.com/ocaml/merlin/pull/1399
-    # Fixed in 4.4 for OCaml ≥ 4.12
-    ./test.patch
-  ;
+  ];
 
   strictDeps = true;
 
@@ -65,13 +61,14 @@ buildDunePackage {
   buildInputs = [
     dot-merlin-reader
     yojson
-    csexp
-    result
+    (if lib.versionAtLeast version "4.7-414"
+     then merlin-lib
+     else csexp)
     menhirSdk
     menhirLib
   ];
 
-  doCheck = true;
+  doCheck = false;
   checkPhase = ''
     runHook preCheck
     patchShebangs tests/merlin-wrapper

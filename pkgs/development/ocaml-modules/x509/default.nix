@@ -8,11 +8,13 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.08";
 
   pname = "x509";
-  version = "0.16.0";
+  version = "0.16.4";
+
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-x509/releases/download/v${version}/x509-${version}.tbz";
-    sha256 = "sha256:159mhfwsiv08sj0zk7s3k813f0mc9vpziwpf6j9r32y3nizp59k7";
+    hash = "sha256-XegxhdASQK/I7Xd0gJSLumTGbCYFpWsjR7PlZSWqaVo=";
   };
 
   checkInputs = [ alcotest cstruct-unix ];

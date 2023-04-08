@@ -1,5 +1,7 @@
-{ nix-update }:
+{ lib, nix-update }:
 
-{ attrPath }:
+{ attrPath ? null
+, extraArgs ? [ ]
+}:
 
-[ "${nix-update}/bin/nix-update" attrPath ]
+[ "${nix-update}/bin/nix-update" ] ++ extraArgs ++ lib.optional (attrPath != null) attrPath

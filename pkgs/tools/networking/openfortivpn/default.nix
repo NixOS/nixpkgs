@@ -2,19 +2,19 @@
 , openssl
 , ppp
 , systemd
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withPpp ? stdenv.isLinux
 }:
 
 stdenv.mkDerivation rec {
   pname = "openfortivpn";
-  version = "1.17.2";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pZcYbm1fWqGWYJzexph7i9nPAHH6HP+B8Y6uUkOCRk8=";
+    sha256 = "sha256-xsH/Nb1/69R2EvAisDnrHWehjDIMBmElCV6evuTwBIQ=";
   };
 
   # we cannot write the config file to /etc and as we don't need the file, so drop it

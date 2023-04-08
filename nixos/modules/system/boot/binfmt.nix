@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) mkOption types optionalString stringAfter;
+  inherit (lib) mkOption mkDefault types optionalString stringAfter;
 
   cfg = config.boot.binfmt;
 
@@ -134,11 +134,11 @@ let
       mask = ''\xff\xff\xff\xff'';
     };
     x86_64-windows = {
-      magicOrExtension = ".exe";
+      magicOrExtension = "exe";
       recognitionType = "extension";
     };
     i686-windows = {
-      magicOrExtension = ".exe";
+      magicOrExtension = "exe";
       recognitionType = "extension";
     };
   };
@@ -256,7 +256,7 @@ in {
             interpreterSandboxPath = mkOption {
               internal = true;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Path of the interpreter to expose in the build sandbox.
               '';
               type = types.nullOr types.path;
@@ -281,7 +281,7 @@ in {
   config = {
     boot.binfmt.registrations = builtins.listToAttrs (map (system: {
       name = system;
-      value = let
+      value = { config, ... }: let
         interpreter = getEmulator system;
         qemuArch = getQemuArch system;
 
@@ -292,13 +292,13 @@ in {
         in
           if preserveArgvZero then "${wrapper}/bin/${wrapperName}"
           else interpreter;
-      in {
-        inherit preserveArgvZero;
+      in ({
+        preserveArgvZero = mkDefault preserveArgvZero;
 
-        interpreter = interpreterReg;
-        wrapInterpreterInShell = !preserveArgvZero;
-        interpreterSandboxPath = dirOf (dirOf interpreterReg);
-      } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}"));
+        interpreter = mkDefault interpreterReg;
+        wrapInterpreterInShell = mkDefault (!config.preserveArgvZero);
+        interpreterSandboxPath = mkDefault (dirOf (dirOf config.interpreter));
+      } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}")));
     }) cfg.emulatedSystems);
     nix.settings = lib.mkIf (cfg.emulatedSystems != []) {
       extra-platforms = cfg.emulatedSystems ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux";
@@ -316,10 +316,13 @@ in {
       mkdir -p -m 0755 /run/binfmt
       ${lib.concatStringsSep "\n" (lib.mapAttrsToList activationSnippet config.boot.binfmt.registrations)}
     '';
-    systemd.additionalUpstreamSystemUnits = lib.mkIf (config.boot.binfmt.registrations != {}) [
-      "proc-sys-fs-binfmt_misc.automount"
-      "proc-sys-fs-binfmt_misc.mount"
-      "systemd-binfmt.service"
-    ];
+    systemd = lib.mkIf (config.boot.binfmt.registrations != {}) {
+      additionalUpstreamSystemUnits = [
+        "proc-sys-fs-binfmt_misc.automount"
+        "proc-sys-fs-binfmt_misc.mount"
+        "systemd-binfmt.service"
+      ];
+      services.systemd-binfmt.restartTriggers = [ (builtins.toJSON config.boot.binfmt.registrations) ];
+    };
   };
 }

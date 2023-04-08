@@ -29,9 +29,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl dbus sqlite ] ++ lib.optional withNotmuch notmuch;
 
-  checkInputs = [ file ];
+  nativeCheckInputs = [ file ];
 
-  buildFeatures = lib.optional withNotmuch [ "notmuch" ];
+  buildFeatures = lib.optionals withNotmuch [ "notmuch" ];
 
   postInstall = ''
     mkdir -p $out/share/man/man1
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     description = "Experimental terminal mail client aiming for configurability and extensibility with sane defaults";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ _0x4A6F matthiasbeyer erictapen ];
+    maintainers = with maintainers; [ _0x4A6F matthiasbeyer ];
     platforms = platforms.linux;
   };
 }

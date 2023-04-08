@@ -1,7 +1,7 @@
 { config, lib, pkgs }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScope pkgs.newScope (self: {
 
-  harec = callPackage ./harec { };
-  hare = callPackage ./hare { };
+  harec = pkgs.callPackage ./harec { };
+  hare = pkgs.callPackage ./hare { };
 })

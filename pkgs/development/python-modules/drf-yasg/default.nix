@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.21.3";
+  version = "1.21.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-su67Q4+mQVA6CNrHkb4kGD6ibbz+NxqYJOqR9uOpiKo=";
+    hash = "sha256-zu8MO13EOJeBr9eG5tw2l68qL+DYck7h9jfCPXW7xbI=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     djangorestframework
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-django
     datadiff

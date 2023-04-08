@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre8, nixosTests }:
+{ lib, stdenv, fetchzip, makeWrapper, jdk11, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "nifi";
-  version = "1.16.3";
+  version = "1.20.0";
 
-  src = fetchurl {
-    url = "https://archive.apache.org/dist/nifi/${version}/nifi-${version}-bin.tar.gz";
-    sha256 = "sha256-57ZtgK1Z8G/nX2rtf7osmymvE4RukGi7CIvCvRQNKuE=";
+  src = fetchzip {
+    url = "mirror://apache/nifi/${version}/nifi-${version}-bin.zip";
+    sha256 = "sha256-xeBu20AeG035nB/jUsOsAvqDtwklM+9ZsZlJoAZ4iu4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre8 ];
+  buildInputs = [ jdk11 ];
 
   installPhase = ''
     mv ../$sourceRoot $out
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/nifi.sh \
       --replace "/bin/sh" "${stdenv.shell}"
     substituteInPlace $out/bin/nifi-env.sh \
-      --replace "#export JAVA_HOME=/usr/java/jdk1.8.0/" "export JAVA_HOME=${jre8}"
+      --replace "#export JAVA_HOME=/usr/java/jdk1.8.0/" "export JAVA_HOME=${jdk11}"
   '';
 
   passthru = {

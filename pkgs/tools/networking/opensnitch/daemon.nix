@@ -11,6 +11,8 @@
 , iptables
 , makeWrapper
 , protoc-gen-go-grpc
+, testers
+, opensnitch
 }:
 
 buildGoModule rec {
@@ -40,9 +42,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config protobuf go-protobuf makeWrapper protoc-gen-go-grpc ];
 
-  vendorSha256 = "sha256-81BKMLuEXA/NeIjO7icBm48ROq6KxAxHtvP0nV5yM5A=";
+  vendorSha256 = "sha256-jWP0oF+jZRFMi5Y2y0SARMoP8wTKVZ8UWra9JNzdSOw=";
 
   preBuild = ''
+    # Fix inconsistent vendoring build error
+    # https://github.com/evilsocket/opensnitch/issues/770
+    cp ${./go.mod} go.mod
+    cp ${./go.sum} go.sum
+
     make -C ../proto ../daemon/ui/protocol/ui.pb.go
   '';
 
@@ -65,11 +72,16 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ iptables ]}
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = opensnitch;
+    command = "opensnitchd -version";
+  };
+
   meta = with lib; {
     description = "An application firewall";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.raboof ];
+    maintainers = with maintainers; [ onny ];
     platforms = platforms.linux;
   };
 }

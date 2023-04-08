@@ -10,7 +10,7 @@ in {
 
   options = {
     programs.msmtp = {
-      enable = mkEnableOption "msmtp - an SMTP client";
+      enable = mkEnableOption (lib.mdDoc "msmtp - an SMTP client");
 
       setSendmail = mkOption {
         type = types.bool;
@@ -45,7 +45,7 @@ in {
             passwordeval = "cat /secrets/password.txt";
           };
         };
-        description = ''
+        description = lib.mdDoc ''
           Named accounts and their respective configurations.
           The special name "default" allows a default account to be defined.
           See msmtp(1) for the available options.

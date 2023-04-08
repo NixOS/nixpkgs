@@ -30,6 +30,7 @@
 , libxkbcommon
 , udev
 , zlib
+, libkrb5
   # Runtime
 , coreutils
 , pciutils
@@ -44,24 +45,26 @@ let
   throwSystem = throw "Unsupported system: ${system}";
 
   # Zoom versions are released at different times for each platform
-  version = {
-    aarch64-darwin =import ./arm64-darwin-version.nix;
-    x86_64-darwin = import ./x86_64-darwin-version.nix;
-    x86_64-linux = import ./x86_64-linux-version.nix;
-   }.${system} or throwSystem;
+  # and often with different versions.  We write them on three lines
+  # like this (rather than using {}) so that the updater script can
+  # find where to edit them.
+  versions.aarch64-darwin = "5.14.2.17213";
+  versions.x86_64-darwin = "5.14.2.17213";
+  versions.x86_64-linux = "5.14.2.2046";
 
   srcs = {
     aarch64-darwin = fetchurl {
-      url = "https://zoom.us/client/${version}/Zoom.pkg?archType=arm64";
-      sha256 = import ./arm64-darwin-sha.nix;
+      url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
+      name = "zoomusInstallerFull.pkg";
+      hash = "sha256-jXSjfPIQepSeG5B/CLBHiCbRP1ceczHt+Mu3KYLonkU=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://zoom.us/client/${version}/Zoom.pkg";
-      sha256 = import ./x86_64-darwin-sha.nix;
+      url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
+      hash = "sha256-F/k9NE2GVzn5etkPWCMX80kkyRzVznsKo3rgtztcYn8=";
     };
     x86_64-linux = fetchurl {
-      url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = import ./x86_64-linux-sha.nix;
+      url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
+      hash = "sha256-k16JlqabzdNC/UXoPWM2yYzs66rOtJvhExHpjVka5M0=";
     };
   };
 
@@ -100,16 +103,19 @@ let
     xorg.libxshmfence
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
     xorg.libXfixes
     xorg.libXtst
     udev
     zlib
+    libkrb5
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
 in
 stdenv.mkDerivation rec {
   pname = "zoom";
-  inherit version;
+  version = versions.${system} or throwSystem;
 
   src = srcs.${system} or throwSystem;
 
@@ -150,7 +156,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/Zoom.desktop \
         --replace "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
 
-    for i in zopen zoom ZoomLauncher; do
+    for i in aomhost zopen zoom ZoomLauncher; do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
     done
 

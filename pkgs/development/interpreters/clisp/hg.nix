@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
       (''./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''
       + lib.concatMapStrings (x: " " + x) withModules);
 
-  NIX_CFLAGS_COMPILE = "-O0 ${lib.optionalString (!stdenv.is64bit) "-falign-functions=4"}";
+  env.NIX_CFLAGS_COMPILE = "-O0 ${lib.optionalString (!stdenv.is64bit) "-falign-functions=4"}";
 
   # TODO : make mod-check fails
   doCheck = false;
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "ANSI Common Lisp Implementation";
     homepage = "http://clisp.cons.org";
-    maintainers = with lib.maintainers; [raskin tohl];
+    maintainers = lib.teams.lisp.members;
     # problems on Darwin: https://github.com/NixOS/nixpkgs/issues/20062
     platforms = lib.platforms.linux;
   };

@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libversion";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "repology";
     repo = "libversion";
     rev = version;
-    sha256 = "13x5djdpv6aryxsbw6a3b6vwzi9f4aa3gn9dqb7axzppggayawyk";
+    hash = "sha256-REmXD0NFd7Af01EU/f2IGoTKiju6ErTI7WUinvrAzaA=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  doCheck = true;
   checkTarget = "test";
+  doCheck = true;
 
   meta = with lib; {
     description = "Advanced version string comparison library";

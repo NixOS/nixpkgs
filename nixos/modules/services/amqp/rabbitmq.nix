@@ -136,7 +136,7 @@ in
       };
 
       managementPlugin = {
-        enable = mkEnableOption "the management plugin";
+        enable = mkEnableOption (lib.mdDoc "the management plugin");
         port = mkOption {
           default = 15672;
           type = types.port;

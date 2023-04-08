@@ -137,6 +137,33 @@ let
         See [documentation](https://www.wireguard.com/netns/).
         '';
       };
+
+      fwMark = mkOption {
+        default = null;
+        type = with types; nullOr str;
+        example = "0x6e6978";
+        description = lib.mdDoc ''
+          Mark all wireguard packets originating from
+          this interface with the given firewall mark. The firewall mark can be
+          used in firewalls or policy routing to filter the wireguard packets.
+          This can be useful for setup where all traffic goes through the
+          wireguard tunnel, because the wireguard packets need to be routed
+          differently.
+        '';
+      };
+
+      mtu = mkOption {
+        default = null;
+        type = with types; nullOr int;
+        example = 1280;
+        description = lib.mdDoc ''
+          Set the maximum transmission unit in bytes for the wireguard
+          interface. Beware that the wireguard packets have a header that may
+          add up to 80 bytes to the mtu. By default, the MTU is (1500 - 80) =
+          1420. However, if the MTU of the upstream network is lower, the MTU
+          of the wireguard network has to be adjusted as well.
+        '';
+      };
     };
 
   };
@@ -149,7 +176,7 @@ let
 
       publicKey = mkOption {
         example = "xTIBA5rboUvnH4htodjb6e697QjLERt1NAB4mZqp8Dg=";
-        type = types.str;
+        type = types.singleLineStr;
         description = lib.mdDoc "The base64 public key of the peer.";
       };
 
@@ -194,19 +221,20 @@ let
         default = null;
         example = "demo.wireguard.io:12913";
         type = with types; nullOr str;
-        description = ''Endpoint IP or hostname of the peer, followed by a colon,
-        and then a port number of the peer.
+        description = lib.mdDoc ''
+          Endpoint IP or hostname of the peer, followed by a colon,
+          and then a port number of the peer.
 
-        Warning for endpoints with changing IPs:
-        The WireGuard kernel side cannot perform DNS resolution.
-        Thus DNS resolution is done once by the <literal>wg</literal> userspace
-        utility, when setting up WireGuard. Consequently, if the IP address
-        behind the name changes, WireGuard will not notice.
-        This is especially common for dynamic-DNS setups, but also applies to
-        any other DNS-based setup.
-        If you do not use IP endpoints, you likely want to set
-        <option>networking.wireguard.dynamicEndpointRefreshSeconds</option>
-        to refresh the IPs periodically.
+          Warning for endpoints with changing IPs:
+          The WireGuard kernel side cannot perform DNS resolution.
+          Thus DNS resolution is done once by the `wg` userspace
+          utility, when setting up WireGuard. Consequently, if the IP address
+          behind the name changes, WireGuard will not notice.
+          This is especially common for dynamic-DNS setups, but also applies to
+          any other DNS-based setup.
+          If you do not use IP endpoints, you likely want to set
+          {option}`networking.wireguard.dynamicEndpointRefreshSeconds`
+          to refresh the IPs periodically.
         '';
       };
 
@@ -220,6 +248,21 @@ let
           changes.
 
           Setting this to `0` disables periodic reexecution.
+        '';
+      };
+
+      dynamicEndpointRefreshRestartSeconds = mkOption {
+        default = null;
+        example = 5;
+        type = with types; nullOr ints.unsigned;
+        description = lib.mdDoc ''
+          When the dynamic endpoint refresh that is configured via
+          dynamicEndpointRefreshSeconds exits (likely due to a failure),
+          restart that service after this many seconds.
+
+          If set to `null` the value of
+          {option}`networking.wireguard.dynamicEndpointRefreshSeconds`
+          will be used as the default.
         '';
       };
 
@@ -260,7 +303,7 @@ let
           set -e
 
           # If the parent dir does not already exist, create it.
-          # Otherwise, does nothing, keeping existing permisions intact.
+          # Otherwise, does nothing, keeping existing permissions intact.
           mkdir -p --mode 0755 "${dirOf values.privateKeyFile}"
 
           if [ ! -f "${values.privateKeyFile}" ]; then
@@ -272,7 +315,7 @@ let
 
   peerUnitServiceName = interfaceName: publicKey: dynamicRefreshEnabled:
     let
-      keyToUnitName = replaceChars
+      keyToUnitName = replaceStrings
         [ "/" "-"    " "     "+"     "="      ]
         [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
       unitName = keyToUnitName publicKey;
@@ -320,7 +363,16 @@ let
                 # cannot be used with systemd timers (see `man systemd.timer`),
                 # which is why `simple` with a loop is the best choice here.
                 # It also makes starting and stopping easiest.
+                #
+                # Restart if the service exits (e.g. when wireguard gives up after "Name or service not known" dns failures):
+                Restart = "always";
+                RestartSec = if null != peer.dynamicEndpointRefreshRestartSeconds
+                             then peer.dynamicEndpointRefreshRestartSeconds
+                             else peer.dynamicEndpointRefreshSeconds;
               };
+        unitConfig = lib.optionalAttrs dynamicRefreshEnabled {
+          StartLimitIntervalSec = 0;
+        };
 
         script = let
           wg_setup = concatStringsSep " " (
@@ -363,6 +415,19 @@ let
         '';
       };
 
+  # the target is required to start new peer units when they are added
+  generateInterfaceTarget = name: values:
+    let
+      mkPeerUnit = peer: (peerUnitServiceName name peer.publicKey (peer.dynamicEndpointRefreshSeconds != 0)) + ".service";
+    in
+    nameValuePair "wireguard-${name}"
+      rec {
+        description = "WireGuard Tunnel - ${name}";
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "wireguard-${name}.service" ] ++ map mkPeerUnit values.peers;
+        after = wants;
+      };
+
   generateInterfaceUnit = name: values:
     # exactly one way to specify the private key must be set
     #assert (values.privateKey != null) != (values.privateKeyFile != null);
@@ -381,7 +446,6 @@ let
         after = [ "network-pre.target" ];
         wants = [ "network.target" ];
         before = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
         environment.DEVICE = name;
         path = with pkgs; [ kmod iproute2 wireguard-tools ];
 
@@ -397,6 +461,7 @@ let
 
           ${ipPreMove} link add dev "${name}" type wireguard
           ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''}
+          ${optionalString (values.mtu != null) ''${ipPostMove} link set "${name}" mtu ${toString values.mtu}''}
 
           ${concatMapStringsSep "\n" (ip:
             ''${ipPostMove} address add "${ip}" dev "${name}"''
@@ -405,6 +470,7 @@ let
           ${concatStringsSep " " (
             [ ''${wg} set "${name}" private-key "${privKey}"'' ]
             ++ optional (values.listenPort != null) ''listen-port "${toString values.listenPort}"''
+            ++ optional (values.fwMark != null) ''fwmark "${values.fwMark}"''
           )}
 
           ${ipPostMove} link set up dev "${name}"
@@ -435,7 +501,13 @@ in
     networking.wireguard = {
 
       enable = mkOption {
-        description = lib.mdDoc "Whether to enable WireGuard.";
+        description = lib.mdDoc ''
+          Whether to enable WireGuard.
+
+          Please note that {option}`systemd.network.netdevs` has more features
+          and is better maintained. When building new things, it is advised to
+          use that instead.
+        '';
         type = types.bool;
         # 2019-05-25: Backwards compatibility.
         default = cfg.interfaces != {};
@@ -444,7 +516,13 @@ in
       };
 
       interfaces = mkOption {
-        description = lib.mdDoc "WireGuard interfaces.";
+        description = lib.mdDoc ''
+          WireGuard interfaces.
+
+          Please note that {option}`systemd.network.netdevs` has more features
+          and is better maintained. When building new things, it is advised to
+          use that instead.
+        '';
         default = {};
         example = {
           wg0 = {
@@ -498,6 +576,8 @@ in
       // (mapAttrs' generateKeyServiceUnit
       (filterAttrs (name: value: value.generatePrivateKeyFile) cfg.interfaces));
 
-  });
+      systemd.targets = mapAttrs' generateInterfaceTarget cfg.interfaces;
+    }
+  );
 
 }

@@ -13,7 +13,7 @@ in {
   options = {
 
     services.quorum = {
-      enable = mkEnableOption "Quorum blockchain daemon";
+      enable = mkEnableOption (lib.mdDoc "Quorum blockchain daemon");
 
       user = mkOption {
         type = types.str;

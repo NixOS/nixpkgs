@@ -138,6 +138,26 @@ let
     concatMapStringsSep "\n" (line: prefix + line) (splitString "\n" str);
 
   indent = prefixStringLines "  ";
+
+  # A scalable variant of the X11 "core" cursor
+  #
+  # If not running a fancy desktop environment, the cursor is likely set to
+  # the default `cursor.pcf` bitmap font. This is 17px wide, so it's very
+  # small and almost invisible on 4K displays.
+  fontcursormisc_hidpi = pkgs.xorg.fontxfree86type1.overrideAttrs (old:
+    let
+      # The scaling constant is 230/96: the scalable `left_ptr` glyph at
+      # about 23 points is rendered as 17px, on a 96dpi display.
+      # Note: the XLFD font size is in decipoints.
+      size = 2.39583 * cfg.dpi;
+      sizeString = builtins.head (builtins.split "\\." (toString size));
+    in
+    {
+      postInstall = ''
+        alias='cursor -xfree86-cursor-medium-r-normal--0-${sizeString}-0-0-p-0-adobe-fontspecific'
+        echo "$alias" > $out/lib/X11/fonts/Type1/fonts.alias
+      '';
+    });
 in
 
 {
@@ -151,8 +171,10 @@ in
       (mkRemovedOptionModule
         [ "services" "xserver" "startDbusSession" ]
         "The user D-Bus session is now always socket activated and this option can safely be removed.")
-      (mkRemovedOptionModule ["services" "xserver" "useXFS" ]
+      (mkRemovedOptionModule [ "services" "xserver" "useXFS" ]
         "Use services.xserver.fontPath instead of useXFS")
+      (mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
+        "Option services.xserver.useGlamor was removed because it is unnecessary. Drivers that uses Glamor will use it automatically.")
     ];
 
 
@@ -254,7 +276,7 @@ in
 
       videoDrivers = mkOption {
         type = types.listOf types.str;
-        default = [ "amdgpu" "radeon" "nouveau" "modesetting" "fbdev" ];
+        default = [ "modesetting" "fbdev" ];
         example = [
           "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
           "amdgpu-pro"
@@ -292,7 +314,7 @@ in
       drivers = mkOption {
         type = types.listOf types.attrs;
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           A list of attribute sets specifying drivers to be loaded by
           the X11 server.
         '';
@@ -429,23 +451,25 @@ in
           firstPrimary = head heads // { primary = true; };
           newHeads = singleton firstPrimary ++ tail heads;
         in if heads != [] && !hasPrimary then newHeads else heads;
-        description = ''
+        description = lib.mdDoc ''
           Multiple monitor configuration, just specify a list of XRandR
           outputs. The individual elements should be either simple strings or
           an attribute set of output options.
 
           If the element is a string, it is denoting the physical output for a
           monitor, if it's an attribute set, you must at least provide the
-          <option>output</option> option.
+          {option}`output` option.
 
           The monitors will be mapped from left to right in the order of the
           list.
 
           By default, the first monitor will be set as the primary monitor if
           none of the elements contain an option that has set
-          <option>primary</option> to <literal>true</literal>.
+          {option}`primary` to `true`.
 
-          <note><para>Only one monitor is allowed to be primary.</para></note>
+          ::: {.note}
+          Only one monitor is allowed to be primary.
+          :::
 
           Be careful using this option with multiple graphic adapters or with
           drivers that have poor support for XRandR, unexpected things might
@@ -555,15 +579,6 @@ in
         '';
       };
 
-      useGlamor = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to use the Glamor module for 2D acceleration,
-          if possible.
-        '';
-      };
-
       enableCtrlAltBackspace = mkOption {
         type = types.bool;
         default = false;
@@ -579,6 +594,15 @@ in
         default = true;
         description = lib.mdDoc ''
           Whether to terminate X upon server reset.
+        '';
+      };
+
+      upscaleDefaultCursor = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Upscale the default X cursor to be more visible on high-density displays.
+          Requires `config.services.xserver.dpi` to be set.
         '';
       };
     };
@@ -597,7 +621,8 @@ in
                     || dmConf.sddm.enable
                     || dmConf.xpra.enable
                     || dmConf.sx.enable
-                    || dmConf.startx.enable);
+                    || dmConf.startx.enable
+                    || config.services.greetd.enable);
       in mkIf (default) (mkDefault true);
 
     # so that the service won't be enabled when only startx is used
@@ -631,6 +656,10 @@ in
                 + "${toString (length primaryHeads)} heads set to primary: "
                 + concatMapStringsSep ", " (x: x.output) primaryHeads;
       })
+      {
+        assertion = cfg.upscaleDefaultCursor -> cfg.dpi != null;
+        message = "Specify `config.services.xserver.dpi` to upscale the default cursor.";
+      }
     ];
 
     environment.etc =
@@ -794,13 +823,6 @@ in
           '')}
         EndSection
 
-        ${if cfg.useGlamor then ''
-          Section "Module"
-            Load "dri2"
-            Load "glamoregl"
-          EndSection
-        '' else ""}
-
         # For each supported driver, add a "Device" and "Screen"
         # section.
         ${flip concatMapStrings cfg.drivers (driver: ''
@@ -808,7 +830,6 @@ in
           Section "Device"
             Identifier "Device-${driver.name}[0]"
             Driver "${driver.driverName or driver.name}"
-            ${if cfg.useGlamor then ''Option "AccelMethod" "glamor"'' else ""}
           ${indent cfg.deviceSection}
           ${indent (driver.deviceSection or "")}
           ${indent xrandrDeviceSection}
@@ -863,6 +884,10 @@ in
       '';
 
     fonts.enableDefaultFonts = mkDefault true;
+    fonts.fonts = [
+      (if cfg.upscaleDefaultCursor then fontcursormisc_hidpi else pkgs.xorg.fontcursormisc)
+      pkgs.xorg.fontmiscmisc
+    ];
 
   };
 

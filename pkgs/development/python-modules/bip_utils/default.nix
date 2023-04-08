@@ -3,32 +3,54 @@
 , fetchFromGitHub
 , pythonOlder
 , ecdsa
-, pysha3
+, coincurve
+, pynacl
+, crcmod
+, ed25519-blake2b
+, py-sr25519-bindings
+, cbor2
+, pycryptodome
 }:
 
 buildPythonPackage rec {
-  pname = "bip_utils";
-  version = "2.5.1";
+  pname = "bip-utils";
+  version = "2.7.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ebellocchia";
-    repo = pname;
+    repo = "bip_utils";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-lH8hd+JA1FhGH60MYIIuwHjr/4wFbYeuw/hd60kr1xc=";
+    hash = "sha256-m7/CC5/T6qR2Ot4y5WQlzOAR0czz6XHCjJskES+2nns=";
   };
 
-  propagatedBuildInputs = [ ecdsa pysha3 ];
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "coincurve>=15.0.1,<18.0.0" "coincurve"
+  '';
+
+  propagatedBuildInputs = [
+    ecdsa
+    cbor2
+    pynacl
+    coincurve
+    crcmod
+    ed25519-blake2b
+    py-sr25519-bindings
+    pycryptodome
+  ];
 
   pythonImportsCheck = [
     "bip_utils"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of BIP39, BIP32, BIP44, BIP49 and BIP84 for wallet seeds, keys and addresses generation";
     homepage = "https://github.com/ebellocchia/bip_utils";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ prusnak ];
+    changelog = "https://github.com/ebellocchia/bip_utils/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ prusnak stargate01 ];
   };
 }

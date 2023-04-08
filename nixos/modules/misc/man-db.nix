@@ -7,17 +7,27 @@ in
 {
   options = {
     documentation.man.man-db = {
-      enable = lib.mkEnableOption "man-db as the default man page viewer" // {
+      enable = lib.mkEnableOption (lib.mdDoc "man-db as the default man page viewer") // {
         default = config.documentation.man.enable;
         defaultText = lib.literalExpression "config.documentation.man.enable";
         example = false;
+      };
+
+      skipPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [];
+        internal = true;
+        description = lib.mdDoc ''
+          Packages to *not* include in the man-db.
+          This can be useful to avoid unnecessary rebuilds due to packages that change frequently, like nixos-version.
+        '';
       };
 
       manualPages = lib.mkOption {
         type = lib.types.path;
         default = pkgs.buildEnv {
           name = "man-paths";
-          paths = config.environment.systemPackages;
+          paths = lib.subtractLists cfg.skipPackages config.environment.systemPackages;
           pathsToLink = [ "/share/man" ];
           extraOutputsToInstall = [ "man" ]
             ++ lib.optionals config.documentation.dev.enable [ "devman" ];
@@ -52,9 +62,11 @@ in
     environment.systemPackages = [ cfg.package ];
     environment.etc."man_db.conf".text =
       let
-        manualCache = pkgs.runCommandLocal "man-cache" { } ''
+        manualCache = pkgs.runCommand "man-cache" {
+          nativeBuildInputs = [ cfg.package ];
+        } ''
           echo "MANDB_MAP ${cfg.manualPages}/share/man $out" > man.conf
-          ${cfg.package}/bin/mandb -C man.conf -psc >/dev/null 2>&1
+          mandb -C man.conf -psc >/dev/null 2>&1
         '';
       in
       ''

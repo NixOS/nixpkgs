@@ -5,6 +5,7 @@
 , binaryName ? "firefox"
 , application ? "browser"
 , applicationName ? "Mozilla Firefox"
+, branding ? null
 , src
 , unpackPhase ? null
 , extraPatches ? []
@@ -22,6 +23,7 @@
 , pkgs
 , stdenv
 , fetchpatch
+, patchelf
 
 # build time
 , autoconf
@@ -87,7 +89,7 @@
 , gssSupport ? true, libkrb5
 , jackSupport ? stdenv.isLinux, libjack2
 , jemallocSupport ? true, jemalloc
-, ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
+, ltoSupport ? (stdenv.isLinux && stdenv.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
 , pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
@@ -101,11 +103,11 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `!privacySupport` or `false`.
 
-, crashreporterSupport ? !privacySupport
+, crashreporterSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV, curl
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , mlsAPISupport ? geolocationSupport
-, webrtcSupport ? !privacySupport
+, webrtcSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV
 
 # digital rights managemewnt
 
@@ -141,7 +143,7 @@ assert stdenv.cc.libc or null != null;
 assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
 
 let
-  flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
+  inherit (lib) enableFeature;
 
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
@@ -219,7 +221,7 @@ buildStdenv.mkDerivation ({
     "profilingPhase"
   ];
 
-  patches = lib.optionals (lib.versionOlder version "103") [
+  patches = lib.optionals (lib.versionOlder version "102.6.0") [
     (fetchpatch {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1773259
       name = "rust-cbindgen-0.24.2-compat.patch";
@@ -227,14 +229,14 @@ buildStdenv.mkDerivation ({
       hash = "sha256-+wNZhkDB3HSknPRD4N6cQXY7zMT/DzNXx29jQH0Gb1o=";
     })
   ]
-  ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
-  ++ lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch
+  ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
+  ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
   ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
   ++ extraPatches;
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
-    patchShebangs mach
+    patchShebangs mach build
   ''
   + extraPostPatch;
 
@@ -264,7 +266,7 @@ buildStdenv.mkDerivation ({
     which
     wrapGAppsHook
   ]
-  ++ lib.optionals crashreporterSupport [ dump_syms ]
+  ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
   ++ lib.optionals pgoSupport [ xvfb-run ]
   ++ extraNativeBuildInputs;
 
@@ -291,14 +293,9 @@ buildStdenv.mkDerivation ({
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
     unset AS
 
-  '' + lib.optionalString (lib.versionAtLeast version "100.0") ''
     # Use our own python
     export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
-  '' + lib.optionalString (lib.versionOlder version "100.0") ''
-    # Use our own python
-    export MACH_USE_SYSTEM_PYTHON=1
 
-  '' + lib.optionalString (lib.versionAtLeast version "95.0") ''
     # RBox WASM Sandboxing
     export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
     export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
@@ -360,6 +357,7 @@ buildStdenv.mkDerivation ({
     "--with-system-png" # needs APNG support
     "--with-system-webp"
     "--with-system-zlib"
+    "--with-wasi-sysroot=${wasiSysRoot}"
     # for firefox, host is buildPlatform, target is hostPlatform
     "--host=${buildStdenv.buildPlatform.config}"
     "--target=${buildStdenv.hostPlatform.config}"
@@ -372,29 +370,28 @@ buildStdenv.mkDerivation ({
   # elf-hack is broken when using clang+lld:
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
-  ++ lib.optional (lib.versionAtLeast version "95") "--with-wasi-sysroot=${wasiSysRoot}"
-
-  ++ flag alsaSupport "alsa"
-  ++ flag jackSupport "jack"
-  ++ flag pulseaudioSupport "pulseaudio"
-  ++ lib.optional (lib.versionAtLeast version "100") (flag sndioSupport "sndio")
-  ++ flag ffmpegSupport "ffmpeg"
-  ++ flag jemallocSupport "jemalloc"
-  ++ flag geolocationSupport "necko-wifi"
-  ++ flag gssSupport "negotiateauth"
-  ++ flag webrtcSupport "webrtc"
-  ++ flag crashreporterSupport "crashreporter"
   ++ lib.optional (!drmSupport) "--disable-eme"
-
-  ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
-                    else [ "--disable-debug" "--enable-optimize" ])
-  # --enable-release adds -ffunction-sections & LTO that require a big amount of
-  # RAM and the 32-bit memory space cannot handle that linking
-  ++ flag (!debugBuild && !stdenv.is32bit) "release"
-  ++ flag enableDebugSymbols "debug-symbols"
+  ++ [
+    (enableFeature alsaSupport "alsa")
+    (enableFeature crashreporterSupport "crashreporter")
+    (enableFeature ffmpegSupport "ffmpeg")
+    (enableFeature geolocationSupport "necko-wifi")
+    (enableFeature gssSupport "negotiateauth")
+    (enableFeature jackSupport "jack")
+    (enableFeature jemallocSupport "jemalloc")
+    (enableFeature pulseaudioSupport "pulseaudio")
+    (enableFeature sndioSupport "sndio")
+    (enableFeature webrtcSupport "webrtc")
+    (enableFeature debugBuild "debug")
+    (if debugBuild then "--enable-profiling" else "--enable-optimize")
+    # --enable-release adds -ffunction-sections & LTO that require a big amount
+    # of RAM, and the 32-bit memory space cannot handle that linking
+    (enableFeature (!debugBuild && !stdenv.is32bit) "release")
+    (enableFeature enableDebugSymbols "debug-symbols")
+  ]
   ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
-
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
+  ++ lib.optional (branding != null) "--with-branding=${branding}"
   ++ extraConfigureFlags;
 
   buildInputs = [
@@ -434,11 +431,11 @@ buildStdenv.mkDerivation ({
     zip
     zlib
   ]
-  ++ [ (if (lib.versionAtLeast version "92") then nss_latest else nss_esr) ]
+  ++ [ (if (lib.versionAtLeast version "103") then nss_latest else nss_esr) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
-  ++ lib.optional  (sndioSupport && lib.versionAtLeast version "100") sndio
+  ++ lib.optional  sndioSupport sndio
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ++ lib.optional  jemallocSupport jemalloc
@@ -503,40 +500,8 @@ buildStdenv.mkDerivation ({
     gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
   '';
 
-  # Workaround: The separateDebugInfo hook skips artifacts whose build ID's length is not 40.
-  # But we got 16-length build ID here. The function body is mainly copied from pkgs/build-support/setup-hooks/separate-debug-info.sh
-  # Remove it when https://github.com/NixOS/nixpkgs/pull/146275 is merged.
-  preFixup = lib.optionalString enableDebugSymbols ''
-    _separateDebugInfo() {
-        [ -e "$prefix" ] || return 0
-
-        local dst="''${debug:-$out}"
-        if [ "$prefix" = "$dst" ]; then return 0; fi
-
-        dst="$dst/lib/debug/.build-id"
-
-        # Find executables and dynamic libraries.
-        local i
-        while IFS= read -r -d $'\0' i; do
-            if ! isELF "$i"; then continue; fi
-
-            # Extract the Build ID. FIXME: there's probably a cleaner way.
-            local id="$($READELF -n "$i" | sed 's/.*Build ID: \([0-9a-f]*\).*/\1/; t; d')"
-            if [[ -z "$id" ]]; then
-                echo "could not find build ID of $i, skipping" >&2
-                continue
-            fi
-
-            # Extract the debug info.
-            header "separating debug info from $i (build ID $id)"
-            mkdir -p "$dst/''${id:0:2}"
-            $OBJCOPY --only-keep-debug "$i" "$dst/''${id:0:2}/''${id:2}.debug"
-            $STRIP --strip-debug "$i"
-
-            # Also a create a symlink <original-name>.debug.
-            ln -sfn ".build-id/''${id:0:2}/''${id:2}.debug" "$dst/../$(basename "$i")"
-        done < <(find "$prefix" -type f -print0)
-    }
+  postFixup = lib.optionalString crashreporterSupport ''
+    patchelf --add-rpath "${lib.makeLibraryPath [ curl ]}" $out/lib/${binaryName}/crashreporter
   '';
 
   doInstallCheck = true;

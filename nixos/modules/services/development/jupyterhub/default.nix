@@ -30,7 +30,7 @@ in {
   meta.maintainers = with maintainers; [ costrouc ];
 
   options.services.jupyterhub = {
-    enable = mkEnableOption "Jupyterhub development server";
+    enable = mkEnableOption (lib.mdDoc "Jupyterhub development server");
 
     authentication = mkOption {
       type = types.str;
@@ -119,7 +119,7 @@ in {
 
     kernels = mkOption {
       type = types.nullOr (types.attrsOf(types.submodule (import ../jupyter/kernel-options.nix {
-        inherit lib;
+        inherit lib pkgs;
       })));
 
       default = null;

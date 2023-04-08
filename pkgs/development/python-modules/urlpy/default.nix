@@ -22,7 +22,7 @@ buildPythonPackage rec {
     publicsuffix2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Simple URL parsing, canonicalization and equivalence";
     homepage = "https://github.com/nexB/urlpy";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

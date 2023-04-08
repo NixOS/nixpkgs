@@ -14,22 +14,23 @@
 
 buildPythonPackage rec {
   pname = "gidgethub";
-  version = "5.2.0";
+  version = "5.2.1";
   format = "flit";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-w1m3aRlOcvmE0uMo3g7o64G3AjQrCkTcXOuskhBOz0s=";
+    hash = "sha256-pTP4WleVUmFDPCUHAUdjBMw3QDfAq2aw5TcrSEZ0nVw=";
   };
 
   propagatedBuildInputs = [
     uritemplate
     pyjwt
-  ];
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     aiohttp
     httpx

@@ -149,15 +149,15 @@ let
             };
           };
         });
-        description = ''
+        description = lib.mdDoc ''
           Output scale configuration.
 
           Either configure by pixels or a scaling factor. When using pixel method the
-          <citerefentry><refentrytitle>xrandr</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+          {manpage}`xrandr(1)`
           option
-          <parameter class="command">--scale-from</parameter>
+          `--scale-from`
           will be used; when using factor method the option
-          <parameter class="command">--scale</parameter>
+          `--scale`
           will be used.
 
           This option is a shortcut version of the transform option and they are mutually
@@ -242,7 +242,7 @@ in {
   options = {
 
     services.autorandr = {
-      enable = mkEnableOption "handling of hotplug and sleep events by autorandr";
+      enable = mkEnableOption (lib.mdDoc "handling of hotplug and sleep events by autorandr");
 
       defaultTarget = mkOption {
         default = "default";
@@ -254,11 +254,17 @@ in {
         '';
       };
 
+      ignoreLid = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc "Treat outputs as connected even if their lids are closed";
+      };
+
       hooks = mkOption {
         type = hooksModule;
         description = lib.mdDoc "Global hook scripts";
         default = { };
-        example = ''
+        example = literalExpression ''
           {
             postswitch = {
               "notify-i3" = "''${pkgs.i3}/bin/i3-msg restart";
@@ -279,7 +285,7 @@ in {
                     exit 1
                 esac
                 echo "Xft.dpi: $DPI" | ''${pkgs.xorg.xrdb}/bin/xrdb -merge
-              '''
+              ''';
             };
           }
         '';
@@ -340,7 +346,13 @@ in {
       startLimitIntervalSec = 5;
       startLimitBurst = 1;
       serviceConfig = {
-        ExecStart = "${pkgs.autorandr}/bin/autorandr --batch --change --default ${cfg.defaultTarget}";
+        ExecStart = ''
+          ${pkgs.autorandr}/bin/autorandr \
+            --batch \
+            --change \
+            --default ${cfg.defaultTarget} \
+            ${optionalString cfg.ignoreLid "--ignore-lid"}
+        '';
         Type = "oneshot";
         RemainAfterExit = false;
         KillMode = "process";

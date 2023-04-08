@@ -12,7 +12,6 @@ let
     concatStringsSep
     elem
     filter
-    findFirst
     foldl'
     getAttrFromPath
     head
@@ -22,6 +21,7 @@ let
     isBool
     isFunction
     isList
+    isPath
     isString
     length
     mapAttrs
@@ -34,7 +34,6 @@ let
     recursiveUpdate
     reverseList sort
     setAttrByPath
-    toList
     types
     warnIf
     zipAttrsWith
@@ -46,7 +45,9 @@ let
     showFiles
     showOption
     unknownModule
-    literalExpression
+    ;
+  inherit (lib.strings)
+    isConvertibleWithToString
     ;
 
   showDeclPrefix = loc: decl: prefix:
@@ -160,87 +161,58 @@ rec {
             ${if prefix == []
               then null  # unset => visible
               else "internal"} = true;
+            # TODO: hidden during the markdown transition to not expose downstream
+            # users of the docs infra to markdown if they're not ready for it.
+            # we don't make this visible conditionally because it can impact
+            # performance (https://github.com/NixOS/nixpkgs/pull/208407#issuecomment-1368246192)
+            visible = false;
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
-            description = ''
+            description = lib.mdDoc ''
               Additional arguments passed to each module in addition to ones
-              like <literal>lib</literal>, <literal>config</literal>,
-              and <literal>pkgs</literal>, <literal>modulesPath</literal>.
-              </para>
-              <para>
+              like `lib`, `config`,
+              and `pkgs`, `modulesPath`.
+
               This option is also available to all submodules. Submodules do not
               inherit args from their parent module, nor do they provide args to
               their parent module or sibling submodules. The sole exception to
-              this is the argument <literal>name</literal> which is provided by
+              this is the argument `name` which is provided by
               parent modules to a submodule and contains the attribute name
               the submodule is bound to, or a unique generated name if it is
               not bound to an attribute.
-              </para>
-              <para>
+
               Some arguments are already passed by default, of which the
-              following <emphasis>cannot</emphasis> be changed with this option:
-              <itemizedlist>
-               <listitem>
-                <para>
-                 <varname>lib</varname>: The nixpkgs library.
-                </para>
-               </listitem>
-               <listitem>
-                <para>
-                 <varname>config</varname>: The results of all options after merging the values from all modules together.
-                </para>
-               </listitem>
-               <listitem>
-                <para>
-                 <varname>options</varname>: The options declared in all modules.
-                </para>
-               </listitem>
-               <listitem>
-                <para>
-                 <varname>specialArgs</varname>: The <literal>specialArgs</literal> argument passed to <literal>evalModules</literal>.
-                </para>
-               </listitem>
-               <listitem>
-                <para>
-                 All attributes of <varname>specialArgs</varname>
-                </para>
-                <para>
-                 Whereas option values can generally depend on other option values
-                 thanks to laziness, this does not apply to <literal>imports</literal>, which
-                 must be computed statically before anything else.
-                </para>
-                <para>
-                 For this reason, callers of the module system can provide <literal>specialArgs</literal>
-                 which are available during import resolution.
-                </para>
-                <para>
-                 For NixOS, <literal>specialArgs</literal> includes
-                 <varname>modulesPath</varname>, which allows you to import
-                 extra modules from the nixpkgs package tree without having to
-                 somehow make the module aware of the location of the
-                 <literal>nixpkgs</literal> or NixOS directories.
-              <programlisting>
-              { modulesPath, ... }: {
-                imports = [
-                  (modulesPath + "/profiles/minimal.nix")
-                ];
-              }
-              </programlisting>
-                </para>
-               </listitem>
-              </itemizedlist>
-              </para>
-              <para>
+              following *cannot* be changed with this option:
+              - {var}`lib`: The nixpkgs library.
+              - {var}`config`: The results of all options after merging the values from all modules together.
+              - {var}`options`: The options declared in all modules.
+              - {var}`specialArgs`: The `specialArgs` argument passed to `evalModules`.
+              - All attributes of {var}`specialArgs`
+
+                Whereas option values can generally depend on other option values
+                thanks to laziness, this does not apply to `imports`, which
+                must be computed statically before anything else.
+
+                For this reason, callers of the module system can provide `specialArgs`
+                which are available during import resolution.
+
+                For NixOS, `specialArgs` includes
+                {var}`modulesPath`, which allows you to import
+                extra modules from the nixpkgs package tree without having to
+                somehow make the module aware of the location of the
+                `nixpkgs` or NixOS directories.
+                ```
+                { modulesPath, ... }: {
+                  imports = [
+                    (modulesPath + "/profiles/minimal.nix")
+                  ];
+                }
+                ```
+
               For NixOS, the default value for this option includes at least this argument:
-              <itemizedlist>
-               <listitem>
-                <para>
-                 <varname>pkgs</varname>: The nixpkgs package set according to
-                 the <option>nixpkgs.pkgs</option> option.
-                </para>
-               </listitem>
-              </itemizedlist>
+              - {var}`pkgs`: The nixpkgs package set according to
+                the {option}`nixpkgs.pkgs` option.
             '';
           };
 
@@ -248,21 +220,21 @@ rec {
             type = types.bool;
             internal = true;
             default = true;
-            description = "Whether to check whether all option definitions have matching declarations.";
+            description = lib.mdDoc "Whether to check whether all option definitions have matching declarations.";
           };
 
           _module.freeformType = mkOption {
             type = types.nullOr types.optionType;
             internal = true;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               If set, merge all definitions that don't have an associated option
               together using this type. The result then gets combined with the
-              values of all declared options to produce the final <literal>
-              config</literal> value.
+              values of all declared options to produce the final `
+              config` value.
 
-              If this is <literal>null</literal>, definitions without an option
-              will throw an error unless <option>_module.check</option> is
+              If this is `null`, definitions without an option
+              will throw an error unless {option}`_module.check` is
               turned off.
             '';
           };
@@ -270,7 +242,7 @@ rec {
           _module.specialArgs = mkOption {
             readOnly = true;
             internal = true;
-            description = ''
+            description = lib.mdDoc ''
               Externally provided module arguments that can't be modified from
               within a configuration, but can be used in module imports.
             '';
@@ -321,7 +293,18 @@ rec {
         if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
           let
             firstDef = head merged.unmatchedDefns;
-            baseMsg = "The option `${showOption (prefix ++ firstDef.prefix)}' does not exist. Definition values:${showDefs [ firstDef ]}";
+            baseMsg =
+              let
+                optText = showOption (prefix ++ firstDef.prefix);
+                defText =
+                  builtins.addErrorContext
+                    "while evaluating the error message for definitions for `${optText}', which is an option that does not exist"
+                    (builtins.addErrorContext
+                      "while evaluating a definition from `${firstDef.file}'"
+                      ( showDefs [ firstDef ])
+                    );
+              in
+                "The option `${optText}' does not exist. Definition values:${defText}";
           in
             if attrNames options == [ "_module" ]
               then
@@ -424,7 +407,7 @@ rec {
             key = module.key;
             module = module;
             modules = collectedImports.modules;
-            disabled = module.disabledModules ++ collectedImports.disabled;
+            disabled = (if module.disabledModules != [] then [{ file = module._file; disabled = module.disabledModules; }] else []) ++ collectedImports.disabled;
           }) initialModules);
 
       # filterModules :: String -> { disabled, modules } -> [ Module ]
@@ -433,8 +416,30 @@ rec {
       # modules recursively. It returns the final list of unique-by-key modules
       filterModules = modulesPath: { disabled, modules }:
         let
-          moduleKey = m: if isString m then toString modulesPath + "/" + m else toString m;
-          disabledKeys = map moduleKey disabled;
+          moduleKey = file: m:
+            if isString m
+            then
+              if builtins.substring 0 1 m == "/"
+              then m
+              else toString modulesPath + "/" + m
+
+            else if isConvertibleWithToString m
+            then
+              if m?key && m.key != toString m
+              then
+                throw "Module `${file}` contains a disabledModules item that is an attribute set that can be converted to a string (${toString m}) but also has a `.key` attribute (${m.key}) with a different value. This makes it ambiguous which module should be disabled."
+              else
+                toString m
+
+            else if m?key
+            then
+              m.key
+
+            else if isAttrs m
+            then throw "Module `${file}` contains a disabledModules item that is an attribute set, presumably a module, that does not have a `key` attribute. This means that the module system doesn't have any means to identify the module that should be disabled. Make sure that you've put the correct value in disabledModules: a string path relative to modulesPath, a path value, or an attribute set with a `key` attribute."
+            else throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${builtins.typeOf m}.";
+
+          disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabled;
           keyFilter = filter (attrs: ! elem attrs.key disabledKeys);
         in map (attrs: attrs.module) (builtins.genericClosure {
           startSet = keyFilter modules;
@@ -472,13 +477,14 @@ rec {
           config = addFreeformType (addMeta (m.config or {}));
         }
     else
+      # shorthand syntax
       lib.throwIfNot (isAttrs m) "module ${file} (${key}) does not look like a module."
       { _file = toString m._file or file;
         key = toString m.key or key;
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = addFreeformType (addMeta (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]));
+        config = addFreeformType (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]);
       };
 
   applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
@@ -502,7 +508,7 @@ rec {
       ) (lib.functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
-      # context on the explicited arguments of "args" too. This update
+      # context on the explicit arguments of "args" too. This update
       # operator is used to make the "args@{ ... }: with args.lib;" notation
       # works.
     in f (args // extraArgs)
@@ -561,15 +567,19 @@ rec {
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.${attr}; in
               if !(builtins.isAttrs subtree) then
-                throw ''
-                  You're trying to declare a value of type `${builtins.typeOf subtree}'
-                  rather than an attribute-set for the option
+                throw (if attr == "config" then ''
+                  You're trying to define a value of type `${builtins.typeOf subtree}'
+                  rather than an attribute set for the option
                   `${builtins.concatStringsSep "." prefix}'!
 
                   This usually happens if `${builtins.concatStringsSep "." prefix}' has option
                   definitions inside that are not matched. Please check how to properly define
                   this option by e.g. referring to `man 5 configuration.nix'!
-                ''
+                '' else ''
+                  An option declaration for `${builtins.concatStringsSep "." prefix}' has type
+                  `${builtins.typeOf subtree}' rather than an attribute set.
+                  Did you mean to define this outside of `options'?
+                '')
               else
                 mapAttrs (n: f module) subtree
               ) modules);
@@ -635,7 +645,6 @@ rec {
                 }
               else
                 let
-                  firstNonOption = findFirst (m: !isOption m.options) "" decls;
                   nonOptions = filter (m: !isOption m.options) decls;
                 in
                 throw "The option `${showOption loc}' in module `${(lib.head optionDecls)._file}' would be a parent of the following options, but its type `${(lib.head optionDecls).options.type.description or "<no description>"}' does not support nested options.\n${
@@ -683,11 +692,7 @@ rec {
      'opts' is a list of modules.  Each module has an options attribute which
      correspond to the definition of 'loc' in 'opt.file'. */
   mergeOptionDecls =
-   let
-    coerceOption = file: opt:
-      if isFunction opt then setDefaultModuleLocation file opt
-      else setDefaultModuleLocation file { options = opt; };
-   in loc: opts:
+   loc: opts:
     foldl' (res: opt:
       let t  = res.type;
           t' = opt.options.type;
@@ -752,6 +757,7 @@ rec {
         inherit (res.defsFinal') highestPrio;
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
+        definitionsWithLocations = res.defsFinal;
         inherit (res) isDefined;
         # This allows options to be correctly displayed using `${options.path.to.it}`
         __toString = _: showOption loc;
@@ -871,7 +877,7 @@ rec {
 
   filterOverrides' = defs:
     let
-      getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPriority;
+      getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultOverridePriority;
       highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in {
@@ -880,7 +886,7 @@ rec {
     };
 
   /* Sort a list of properties.  The sort priority of a property is
-     1000 by default, but can be overridden by wrapping the property
+     defaultOrderPriority by default, but can be overridden by wrapping the property
      using mkOrder. */
   sortProperties = defs:
     let
@@ -889,7 +895,7 @@ rec {
         then def // { value = def.value.content; inherit (def.value) priority; }
         else def;
       defs' = map strip defs;
-      compare = a: b: (a.priority or 1000) < (b.priority or 1000);
+      compare = a: b: (a.priority or defaultOrderPriority) < (b.priority or defaultOrderPriority);
     in sort compare defs';
 
   # This calls substSubModules, whose entire purpose is only to ensure that
@@ -925,9 +931,12 @@ rec {
 
   mkOptionDefault = mkOverride 1500; # priority of option defaults
   mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
+  defaultOverridePriority = 100;
   mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+
+  defaultPriority = lib.warnIf (lib.isInOldestRelease 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead." defaultOverridePriority;
 
   mkFixStrictness = lib.warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
@@ -937,10 +946,8 @@ rec {
     };
 
   mkBefore = mkOrder 500;
+  defaultOrderPriority = 1000;
   mkAfter = mkOrder 1500;
-
-  # The default priority for things that don't have a priority specified.
-  defaultPriority = 100;
 
   # Convenient property used to transfer all definitions and their
   # properties from one option to another. This property is useful for
@@ -968,10 +975,10 @@ rec {
   # Similar to mkAliasAndWrapDefinitions but copies over the priority from the
   # option as well.
   #
-  # If a priority is not set, it assumes a priority of defaultPriority.
+  # If a priority is not set, it assumes a priority of defaultOverridePriority.
   mkAliasAndWrapDefsWithPriority = wrap: option:
     let
-      prio = option.highestPrio or defaultPriority;
+      prio = option.highestPrio or defaultOverridePriority;
       defsWithPrio = map (mkOverride prio) option.definitions;
     in mkAliasIfDef option (wrap (mkMerge defsWithPrio));
 
@@ -1136,6 +1143,15 @@ rec {
     use = id;
   };
 
+  /* Transitional version of mkAliasOptionModule that uses MD docs. */
+  mkAliasOptionModuleMD = from: to: doRename {
+    inherit from to;
+    visible = true;
+    warn = false;
+    use = id;
+    markdown = true;
+  };
+
   /* mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b
 
     Create config definitions with the same priority as the definition of another option.
@@ -1153,10 +1169,10 @@ rec {
   # to definitions.
   mkDerivedConfig = opt: f:
     mkOverride
-      (opt.highestPrio or defaultPriority)
+      (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
-  doRename = { from, to, visible, warn, use, withPriority ? true }:
+  doRename = { from, to, visible, warn, use, withPriority ? true, markdown ? false }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
@@ -1167,16 +1183,18 @@ rec {
     {
       options = setAttrByPath from (mkOption {
         inherit visible;
-        description = "Alias of <option>${showOption to}</option>.";
+        description = if markdown
+          then lib.mdDoc "Alias of {option}`${showOption to}`."
+          else "Alias of <option>${showOption to}</option>.";
         apply = x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;
       });
       config = mkMerge [
-        {
+        (optionalAttrs (options ? warnings) {
           warnings = optional (warn && fromOpt.isDefined)
             "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
-        }
+        })
         (if withPriority
           then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
           else mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)

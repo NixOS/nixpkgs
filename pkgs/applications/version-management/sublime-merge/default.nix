@@ -4,13 +4,13 @@ let
   common = opts: callPackage (import ./common.nix opts);
 in {
   sublime-merge = common {
-    buildVersion = "2074";
-    sha256 = "REo59Lpi0fmAOp0XJa4Iln3VKxR5kRiMpz2zfqz1MQs=";
+    buildVersion = "2083";
+    x64sha256 = "bWHbP8j228jUDr1XDLRciq7hcET6o6Udr/lLODXRudc=";
   } {};
 
   sublime-merge-dev = common {
-    buildVersion = "2073";
-    sha256 = "AQ0ESdi45LHndRNJnkYS+o9L+dlRJkw3nzBfJo8FYPc=";
+    buildVersion = "2085";
+    x64sha256 = "40yI6EtP2l22aPP50an3ycvdEcAqJphhGhYYoOPyHw0=";
     dev = true;
   } {};
 }

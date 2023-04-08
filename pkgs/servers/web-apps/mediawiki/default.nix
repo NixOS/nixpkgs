@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, writeText }:
+{ lib, stdenv, fetchurl, writeText, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.38.2";
+  version = "1.39.3";
 
   src = fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
-    sha256 = "sha256-aX6zvb8x0JgQBmEzzHtcotlinHfuphzhagW8mXA9U6Y=";
+    hash = "sha256-41dpNDh2r0JJbaQ64vRyJPuMd5uPRXBcQUfG/zUizB0=";
   };
 
   postPatch = ''
@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests.mediawiki) mysql postgresql;
+  };
 
   meta = with lib; {
     description = "The collaborative editing software that runs Wikipedia";

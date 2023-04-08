@@ -18,6 +18,7 @@ let
     # expected to have a `scriptName` passthru attribute that points to the
     # name of the script that would reside in the script's derivation's
     # `$out/share/mpv/scripts/`.
+    # A script can optionally also provide an `extraWrapperArgs` passthru attribute.
     scripts ? [],
     extraUmpvWrapperArgs ? []
   }:
@@ -49,6 +50,8 @@ let
           # attribute of the script derivation from the `scripts`
           "--script=${script}/share/mpv/scripts/${script.scriptName}"
         ]
+        # scripts can also set the `extraWrapperArgs` passthru
+        ++ (script.extraWrapperArgs or [])
       ) scripts
     )) ++ extraMakeWrapperArgs)
     ;

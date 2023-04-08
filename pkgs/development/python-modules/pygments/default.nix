@@ -10,12 +10,12 @@
 let pygments = buildPythonPackage
   rec {
     pname = "pygments";
-    version = "2.12.0";
+    version = "2.14.0";
 
     src = fetchPypi {
       pname = "Pygments";
       inherit version;
-      sha256 = "sha256-XrEWEY+WEv8e6JrJZDe7a0no8E2KE7UUuib2ICCOJus=";
+      hash = "sha256-s+0GqeismpquWm9dvniopYZV0XtDuTwHjwlN3Edq4pc=";
     };
 
     propagatedBuildInputs = [
@@ -24,7 +24,7 @@ let pygments = buildPythonPackage
 
     # circular dependencies if enabled by default
     doCheck = false;
-    checkInputs = [
+    nativeCheckInputs = [
       lxml
       pytestCheckHook
       wcag-contrast-ratio
@@ -44,6 +44,7 @@ let pygments = buildPythonPackage
     meta = with lib; {
       homepage = "https://pygments.org/";
       description = "A generic syntax highlighter";
+      mainProgram = "pygmentize";
       license = licenses.bsd2;
       maintainers = with maintainers; [ SuperSandro2000 ];
     };

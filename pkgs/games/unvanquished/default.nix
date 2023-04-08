@@ -33,15 +33,15 @@
 }:
 
 let
-  version = "0.52.1";
-  binary-deps-version = "5";
+  version = "0.54.0";
+  binary-deps-version = "8";
 
   src = fetchFromGitHub {
     owner = "Unvanquished";
     repo = "Unvanquished";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-zNysAPPnnWO31K81oFiKHF4IStraveOlYwRqa1yyOLo=";
+    sha256 = "sha256-X2c6BHI4W6fOurLiBWIBZzJrZ+7RHMEwN8GJGz6e350=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
@@ -50,8 +50,8 @@ let
     version = binary-deps-version;
 
     src = fetchzip {
-      url = "https://dl.unvanquished.net/deps/linux64-${version}.tar.bz2";
-      sha256 = "sha256-N/zkUhPFnU15QSe4NGmVLmhU7UslYrzz9ZUWuLbydyE=";
+      url = "https://dl.unvanquished.net/deps/linux-amd64-default_${version}.tar.xz ";
+      sha256 = "sha256-6r9j0HRMDC/7i8f4f5bBK4NmwsTpSChHrRWwz0ENAZo=";
     };
 
     dontPatchELF = true;
@@ -119,7 +119,7 @@ let
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256-/dPr3ASNew1naB9FLcZ70jZtqQXWRflUmr4jsnRskiA=";
+    outputHash = "sha256-ua9Q5E5C4t8z/yNQp6qn1i9NNDAk4ohzvgpMbCBxb8Q=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [ aria2 cacert ];
@@ -135,28 +135,11 @@ in stdenv.mkDerivation rec {
   inherit version src binary-deps-version;
 
   preConfigure = ''
-    mkdir daemon/external_deps/linux64-${binary-deps-version}/
-    cp -r ${unvanquished-binary-deps}/* daemon/external_deps/linux64-${binary-deps-version}/
-    chmod +w -R daemon/external_deps/linux64-${binary-deps-version}/
+    TARGET="linux-amd64-default_${binary-deps-version}"
+    mkdir daemon/external_deps/"$TARGET"
+    cp -r ${unvanquished-binary-deps}/* daemon/external_deps/"$TARGET"/
+    chmod +w -R daemon/external_deps/"$TARGET"/
   '';
-
-  patches = [
-    (fetchpatch {
-      name = "fix-sdl-eventqueue-part1.patch";
-      url = "https://github.com/DaemonEngine/Daemon/commit/3a978c485f2a7e02c0bc5aeed2c7c4378026cb33.patch";
-      sha256 = "sha256-wVDscGf5zOOmivItNK913l0cfNFR6RpApewrxbmfG8s=";
-      stripLen = 1;
-      extraPrefix = "daemon/";
-    })
-    (fetchpatch {
-      name = "fix-sdl-eventqueue-part2.patch";
-      url = "https://github.com/DaemonEngine/Daemon/commit/54f98909c8871a57efb40263b215b81f22010b22.patch";
-      sha256 = "sha256-9qlyJnUEyZgFaclpXthKHm3qq+cW4E4LMOpLukcwBCU=";
-      stripLen = 1;
-      extraPrefix = "daemon/";
-      excludes = [ "*/CMakeLists.txt" ];
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -220,7 +203,7 @@ in stdenv.mkDerivation rec {
     for f in daemon daemon-tty daemonded nacl_loader nacl_helper_bootstrap; do
       install -Dm0755 -t $out/lib/ $f
     done
-    install -Dm0644 -t $out/lib/ irt_core-x86_64.nexe
+    install -Dm0644 -t $out/lib/ irt_core-amd64.nexe
 
     mkdir $out/bin/
     ${wrapBinary "daemon"     "unvanquished"}

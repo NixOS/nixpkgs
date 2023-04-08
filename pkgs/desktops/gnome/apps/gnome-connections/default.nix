@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, vala_0_56
+, vala
 , gettext
 , itstool
 , python3
@@ -23,18 +23,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-connections";
-  version = "42.1.2";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-2ObnJ0EJHYkt/IQoH2JVUdBWjNSC1I21ik7bivoTd7Y=";
+    hash = "sha256-hdrYL5PAsvYJ/o7H7N7scGAKVWEq/A4/AndMJaC7MJ8=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    vala_0_56
+    vala
     gettext
     itstool
     python3

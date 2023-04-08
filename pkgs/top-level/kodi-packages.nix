@@ -9,7 +9,7 @@ in
 let self = rec {
 
   addonDir = "/share/kodi/addons";
-  rel = "Matrix";
+  rel = "Nexus";
 
   callPackage = newScope self;
 
@@ -99,6 +99,8 @@ let self = rec {
   vfs-sftp = callPackage ../applications/video/kodi/addons/vfs-sftp { };
 
   vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
+
+  visualization-waveform = callPackage ../applications/video/kodi/addons/visualization-waveform { };
 
   youtube = callPackage ../applications/video/kodi/addons/youtube { };
 

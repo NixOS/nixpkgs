@@ -3,9 +3,9 @@
 , bleak
 , bleak-retry-connector
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
 , poetry-core
-, pycryptodome
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs-ble";
-  version = "1.4.0";
+  version = "2.1.14";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-DGNq/+3RJUTWixwR86zIE3rrNxRow6S8x0wZPMO+EiU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aTtcp6u+/fPHRB/FShdzfCv5haja+Vyo/WLm7GLvadw=";
   };
 
   nativeBuildInputs = [
@@ -33,10 +33,10 @@ buildPythonPackage rec {
     async-timeout
     bleak
     bleak-retry-connector
-    pycryptodome
+    cryptography
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Yale BLE devices";
     homepage = "https://github.com/bdraco/yalexs-ble";
+    changelog = "https://github.com/bdraco/yalexs-ble/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

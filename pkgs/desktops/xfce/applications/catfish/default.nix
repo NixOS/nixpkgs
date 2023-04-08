@@ -41,7 +41,6 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pyxdg
     python3Packages.ptyprocess
     python3Packages.pycairo
-    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ];
 
   propagatedBuildInputs = [
@@ -65,10 +64,7 @@ python3Packages.buildPythonApplication rec {
   # Disable check because there is no test in the source distribution
   doCheck = false;
 
-  passthru.updateScript = gitUpdater {
-    inherit pname version;
-    rev-prefix = "${pname}-";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "${pname}-"; };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/apps/catfish/start";

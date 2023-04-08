@@ -6,9 +6,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       enable = true;
       emergencyAccess = true;
     };
-    fileSystems = lib.mkVMOverride {
-      "/".autoResize = true;
-    };
+    virtualisation.fileSystems."/".autoResize = true;
   };
 
   testScript = ''

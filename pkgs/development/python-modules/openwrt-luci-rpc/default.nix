@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "openwrt-luci-rpc";
-  version = "1.1.11";
+  version = "1.1.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DkitN+mwCZ14QEn2fTOqUrQTtoncR1ifP3WDSQ6qkkk=";
+    hash = "sha256-ZvPMJbYCNKMXuTrHwXQvBZ/mMenYTsV1X4COiVxvJGY=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

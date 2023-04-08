@@ -28,8 +28,8 @@ let
   };
 
   env = {
-    SANE_CONFIG_DIR = config.hardware.sane.configDir;
-    LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
+    SANE_CONFIG_DIR = "/etc/sane-config";
+    LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
   backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
@@ -48,12 +48,12 @@ in
     hardware.sane.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable support for SANE scanners.
 
-        <note><para>
-          Users in the "scanner" group will gain access to the scanner, or the "lp" group if it's also a printer.
-        </para></note>
+        ::: {.note}
+        Users in the "scanner" group will gain access to the scanner, or the "lp" group if it's also a printer.
+        :::
       '';
     };
 
@@ -66,14 +66,16 @@ in
     hardware.sane.extraBackends = mkOption {
       type = types.listOf types.path;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Packages providing extra SANE backends to enable.
 
-        <note><para>
-          The example contains the package for HP scanners.
-        </para></note>
+        ::: {.note}
+        The example contains the package for HP scanners, and the package for
+        Apple AirScan and Microsoft WSD support (supports many
+        vendors/devices).
+        :::
       '';
-      example = literalExpression "[ pkgs.hplipWithPlugin ]";
+      example = literalExpression "[ pkgs.hplipWithPlugin pkgs.sane-airscan ]";
     };
 
     hardware.sane.disabledDefaultBackends = mkOption {
@@ -89,7 +91,7 @@ in
     hardware.sane.configDir = mkOption {
       type = types.str;
       internal = true;
-      description = "The value of SANE_CONFIG_DIR.";
+      description = lib.mdDoc "The value of SANE_CONFIG_DIR.";
     };
 
     hardware.sane.netConf = mkOption {
@@ -124,13 +126,22 @@ in
       '';
     };
 
+    hardware.sane.openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Open ports needed for discovery of scanners on the local network, e.g.
+        needed for Canon scanners (BJNP protocol).
+      '';
+    };
+
     services.saned.enable = mkOption {
       type = types.bool;
       default = false;
       description = lib.mdDoc ''
         Enable saned network daemon for remote connection to scanners.
 
-        saned would be runned from `scanner` user; to allow
+        saned would be run from `scanner` user; to allow
         access to hardware that doesn't have `scanner` group
         you should add needed groups to this user.
       '';
@@ -156,9 +167,12 @@ in
 
       environment.systemPackages = backends;
       environment.sessionVariables = env;
+      environment.etc."sane-config".source = config.hardware.sane.configDir;
+      environment.etc."sane-libs".source = "${saneConfig}/lib/sane";
       services.udev.packages = backends;
 
       users.groups.scanner.gid = config.ids.gids.scanner;
+      networking.firewall.allowedUDPPorts = mkIf config.hardware.sane.openFirewall [ 8612 ];
     })
 
     (mkIf config.services.saned.enable {

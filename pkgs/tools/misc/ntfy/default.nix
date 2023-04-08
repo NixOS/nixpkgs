@@ -1,13 +1,30 @@
 { lib
+, stdenv
 , python39
 , fetchFromGitHub
 , fetchpatch
+, withXmpp ? !stdenv.isDarwin
+, withMatrix ? true
+, withSlack ? true
+, withEmoji ? true
+, withPid ? true
+, withDbus ? stdenv.isLinux
 }:
 
 let
   python = python39.override {
     packageOverrides = self: super: {
       ntfy-webpush = self.callPackage ./webpush.nix { };
+
+      # databases, on which slack-sdk depends, is incompatible with SQLAlchemy 2.0
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
+        version = "1.4.46";
+        src = self.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+        };
+      });
     };
   };
 in python.pkgs.buildPythonApplication rec {
@@ -23,20 +40,26 @@ in python.pkgs.buildPythonApplication rec {
     sha256 = "09f02cn4i1l2aksb3azwfb70axqhn7d0d0vl2r6640hqr74nc1cv";
   };
 
-  checkInputs = with python.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     mock
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python.pkgs; ([
     requests ruamel-yaml appdirs
-    sleekxmpp dnspython
-    emoji
-    psutil
-    matrix-client
-    dbus-python
     ntfy-webpush
+  ] ++ (lib.optionals withXmpp [
+    sleekxmpp dnspython
+  ]) ++ (lib.optionals withMatrix [
+    matrix-client
+  ]) ++ (lib.optionals withSlack [
     slack-sdk
-  ];
+  ]) ++ (lib.optionals withEmoji [
+    emoji
+  ]) ++ (lib.optionals withPid [
+    psutil
+  ]) ++ (lib.optionals withDbus [
+    dbus-python
+  ]));
 
   patches = [
     # Fix Slack integration no longer working.
@@ -54,6 +77,12 @@ in python.pkgs.buildPythonApplication rec {
       sha256 = "sha256-V8dIy/K957CPFQQS1trSI3gZOjOcVNQLgdWY7g17bRw=";
     })
   ];
+
+  postPatch = ''
+    # We disable the Darwin specific things because it relies on pyobjc, which we don't have.
+    substituteInPlace setup.py \
+      --replace "':sys_platform == \"darwin\"'" "'darwin'"
+  '';
 
   checkPhase = ''
     HOME=$(mktemp -d) ${python.interpreter} setup.py test

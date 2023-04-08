@@ -8,16 +8,15 @@
 
 buildDunePackage rec {
   pname = "awa";
-  version = "0.1.0";
+  version = "0.2.0";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/awa-ssh/releases/download/v${version}/awa-${version}.tbz";
-    sha256 = "sha256-aPnFDp52oYVHr/56lFw0gtVJ0KvHawyM5FGtpHPOVY8=";
+    hash = "sha256-hsmTuoubBdsEyGe8zmfG7JihY0LFM4lErpPKUVobIX8=";
   };
-
-  nativeBuildInputs = [ ppx_cstruct ];
 
   propagatedBuildInputs = [
     mirage-crypto mirage-crypto-ec mirage-crypto-rng mirage-crypto-pk x509
@@ -25,6 +24,8 @@ buildDunePackage rec {
     logs base64 zarith
     ppx_sexp_conv eqaf
   ];
+
+  buildInputs = [ ppx_cstruct ];
 
   doCheck = true;
   checkInputs = [ cstruct-unix cmdliner fmt ];

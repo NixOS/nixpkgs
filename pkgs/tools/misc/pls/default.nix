@@ -20,11 +20,16 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     freezegun
     jsonschema
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'rich = "^12.5.1"' 'rich = "*"' \
+  '';
 
   pytestFlagsArray = [ "tests/" "--ignore=tests/e2e" ];
 

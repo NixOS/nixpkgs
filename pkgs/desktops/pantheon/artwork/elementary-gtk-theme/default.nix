@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "elementary-gtk-theme";
-  version = "7.0.0";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "stylesheet";
     rev = version;
-    sha256 = "sha256-ZnQ54ktH0/ZyFH6c180YzbkK/TyIDziiwAXi/zqHpe4=";
+    sha256 = "sha256-AFiREZ4pDIwQ4OeZDIHEJUNSeUsMjAlDd5h0pB0ilNw=";
   };
 
   nativeBuildInputs = [
@@ -34,9 +34,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

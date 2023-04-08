@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "peternijssen";
     repo = "spiderpy";
     rev = version;
-    sha256 = "sha256-Yujy8HSMbK2DQ/913r2c74hKPYDfcHFKq04ysqxG+go=";
+    hash = "sha256-Yujy8HSMbK2DQ/913r2c74hKPYDfcHFKq04ysqxG+go=";
   };
 
   nativeBuildInputs = [

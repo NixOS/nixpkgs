@@ -19,11 +19,13 @@ in stdenv.mkDerivation {
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-include sys/select.h" ]);
+
   meta = with lib; {
     homepage = "https://github.com/pothosware/SoapyRemote";
     description = "SoapySDR plugin for remote access to SDRs";
     license = licenses.boost;
     maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

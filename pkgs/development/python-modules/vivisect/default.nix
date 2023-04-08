@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchPypi
 , wrapQtAppsHook
 
@@ -21,11 +21,14 @@
 
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "1.0.8";
+  version = "1.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Y8y6sAQJa9baPPdhtuR9Jv1tJkNWJsS1hJ1lknkHWU4=";
+    hash = "sha256-tAIhsHFds3qwPngfOsR1+xDKgi29ACnvFAYoklRnCAI=";
   };
 
   postPatch = ''
@@ -64,7 +67,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pure python disassembler, debugger, emulator, and static analysis framework";
     homepage = "https://github.com/vivisect/vivisect";
+    changelog = "https://github.com/vivisect/vivisect/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

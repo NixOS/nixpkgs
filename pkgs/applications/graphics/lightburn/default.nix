@@ -1,4 +1,4 @@
-{ lib, stdenv, patchelf, fetchurl, p7zip
+{ lib, stdenv, fetchurl, p7zip
 , nss, nspr, libusb1
 , qtbase, qtmultimedia, qtserialport
 , autoPatchelfHook, wrapQtAppsHook

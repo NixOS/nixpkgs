@@ -1,14 +1,12 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, udev }:
+{ lib, stdenv, rustPlatform, fetchCrate, pkg-config, udev }:
 
 rustPlatform.buildRustPackage rec {
   pname = "elf2uf2-rs";
-  version = "unstable-2021-12-12";
+  version = "1.3.7";
 
-  src = fetchFromGitHub {
-    owner = "JoNil";
-    repo = pname;
-    rev = "91ae98873ed01971ab1543b98266a5ad2ec09210";
-    sha256 = "sha256-DGrT+YdDLdTYy5SWcQ+DNbpifGjrF8UTXyEeE/ug564=";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-2ZilZIYXCNrKJlkHBsz/2/pMtF+UDfjDlt53ylcwgus=";
   };
 
   nativeBuildInputs = [
@@ -19,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     udev
   ];
 
-  cargoSha256 = "sha256-5ui1+987xICP2wUSHy4YzKskn52W51Pi4DbEh+GbSPE=";
+  cargoSha256 = "sha256-+3Rqlzkrw9XfM3PelGNbnRGaWQLbzVJ7iJgvGgVt5FE=";
 
   meta = with lib; {
     description = "Convert ELF files to UF2 for USB Flashing Bootloaders";

@@ -1,4 +1,4 @@
-{ frameworks, libs, libobjc, Libsystem, libnetwork }: with frameworks; with libs;
+{ frameworks, libs, libobjc, libnetwork }: with frameworks; with libs;
 {
   AGL                              = { inherit Carbon OpenGL; };
   AVFoundation                     = { inherit ApplicationServices AVFCapture AVFCore CoreGraphics simd UniformTypeIdentifiers; };
@@ -75,7 +75,7 @@
   FileProviderUI                   = {};
   FinderSync                       = {};
   ForceFeedback                    = { inherit IOKit; };
-  Foundation                       = { inherit ApplicationServices CoreFoundation Security SystemConfiguration libobjc; };
+  Foundation                       = { inherit ApplicationServices CoreFoundation Security SystemConfiguration Combine libobjc; };
   GLKit                            = {};
   GLUT                             = { inherit OpenGL; };
   GSS                              = {};
@@ -89,9 +89,7 @@
   IOBluetooth                      = { inherit CoreBluetooth IOKit; };
   IOBluetoothUI                    = { inherit IOBluetooth; };
   IOKit                            = {};
-  # `IOSurface` should depend on `Libsystem` (in place of `xpc`) but this currently causes build
-  # issues due to incompatibility issues between `Libsystem` and `libcxx`.
-  IOSurface                        = { inherit IOKit xpc; };
+  IOSurface                        = { inherit IOKit; };
   IOUSBHost                        = {};
   IdentityLookup                   = {};
   ImageCaptureCore                 = {};
@@ -171,7 +169,7 @@
   Speech                           = {};
   SpriteKit                        = {};
   StoreKit                         = {};
-  SwiftUI                          = {};
+  SwiftUI                          = { inherit AppKit DeveloperToolsSupport UniformTypeIdentifiers; };
   SyncServices                     = {};
   System                           = {};
   SystemConfiguration              = { inherit Security; };

@@ -1,27 +1,27 @@
-{ stdenv, lib, fetchurl, iptables, libuuid, pkg-config
+{ stdenv, lib, fetchurl, iptables-legacy, libuuid, openssl, pkg-config
 , which, iproute2, gnused, coreutils, gawk, makeWrapper
 , nixosTests
 }:
 
 let
-  scriptBinEnv = lib.makeBinPath [ which iproute2 iptables gnused coreutils gawk ];
+  scriptBinEnv = lib.makeBinPath [ which iproute2 iptables-legacy gnused coreutils gawk ];
 in
 stdenv.mkDerivation rec {
   pname = "miniupnpd";
-  version = "2.1.20190502";
+  version = "2.3.3";
 
   src = fetchurl {
-    url = "http://miniupnp.free.fr/files/download.php?file=miniupnpd-${version}.tar.gz";
-    sha256 = "1m8d0g9b0bjwsnqccw1yapp6n0jghmgzwixwjflwmvi2fi6hdp4b";
-    name = "miniupnpd-${version}.tar.gz";
+    url = "https://miniupnp.tuxfamily.org/files/miniupnpd-${version}.tar.gz";
+    sha256 = "sha256-b9cBn5Nv+IxB58gi9G8QtRvXLWZZePZYZIPedbMMNr8=";
   };
 
-  buildInputs = [ iptables libuuid ];
+  buildInputs = [ iptables-legacy libuuid openssl ];
   nativeBuildInputs= [ pkg-config makeWrapper ];
 
-  makefile = "Makefile.linux";
 
-  buildFlags = [ "miniupnpd" "genuuid" ];
+  # ./configure is not a standard configure file, errors with:
+  # Option not recognized : --prefix=
+  dontAddPrefix = true;
 
   installFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
 
@@ -34,10 +34,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     bittorrent-integration = nixosTests.bittorrent;
+    inherit (nixosTests) upnp;
   };
 
   meta = with lib; {
-    homepage = "http://miniupnp.free.fr/";
+    homepage = "https://miniupnp.tuxfamily.org/";
     description = "A daemon that implements the UPnP Internet Gateway Device (IGD) specification";
     platforms = platforms.linux;
     license = licenses.bsd3;

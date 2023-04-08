@@ -7,17 +7,17 @@
 
 stdenv.mkDerivation rec {
   pname = "cpp-utilities";
-  version = "5.18.0";
+  version = "5.22.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-i/ihEPJHyWzRywzpXhYpauA8lL51yjoiWod8Nc/6gV0=";
+    sha256 = "sha256-c36FzKDAaalKVIrqVSCoslrKVopW77cGdGwfiMbaXe4=";
   };
 
   nativeBuildInputs = [ cmake ];
-  checkInputs = [ cppunit ];
+  nativeCheckInputs = [ cppunit ];
   # Otherwise, tests fail since the resulting shared object libc++utilities.so is only available in PWD of the make files
   preCheck = ''
     checkFlagsArray+=(

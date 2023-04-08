@@ -41,13 +41,13 @@ in
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea Control Agent";
+          enable = mkEnableOption (lib.mdDoc "Kea Control Agent");
 
           extraArgs = mkOption {
             type = listOf str;
             default = [];
             description = lib.mdDoc ''
-              List of additonal arguments to pass to the daemon.
+              List of additional arguments to pass to the daemon.
             '';
           };
 
@@ -80,13 +80,13 @@ in
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea DHCP4 server";
+          enable = mkEnableOption (lib.mdDoc "Kea DHCP4 server");
 
           extraArgs = mkOption {
             type = listOf str;
             default = [];
             description = lib.mdDoc ''
-              List of additonal arguments to pass to the daemon.
+              List of additional arguments to pass to the daemon.
             '';
           };
 
@@ -140,13 +140,13 @@ in
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea DHCP6 server";
+          enable = mkEnableOption (lib.mdDoc "Kea DHCP6 server");
 
           extraArgs = mkOption {
             type = listOf str;
             default = [];
             description = lib.mdDoc ''
-              List of additonal arguments to pass to the daemon.
+              List of additional arguments to pass to the daemon.
             '';
           };
 
@@ -201,13 +201,13 @@ in
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea DDNS server";
+          enable = mkEnableOption (lib.mdDoc "Kea DDNS server");
 
           extraArgs = mkOption {
             type = listOf str;
             default = [];
             description = lib.mdDoc ''
-              List of additonal arguments to pass to the daemon.
+              List of additional arguments to pass to the daemon.
             '';
           };
 
@@ -298,7 +298,7 @@ in
       ];
 
       serviceConfig = {
-        ExecStart = "${package}/bin/kea-ctrl-agent -c /etc/kea/ctrl-agent.conf ${lib.escapeShellArgs cfg.dhcp4.extraArgs}";
+        ExecStart = "${package}/bin/kea-ctrl-agent -c /etc/kea/ctrl-agent.conf ${lib.escapeShellArgs cfg.ctrl-agent.extraArgs}";
         KillMode = "process";
         Restart = "on-failure";
       } // commonServiceConfig;

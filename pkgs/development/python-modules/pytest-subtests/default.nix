@@ -8,21 +8,21 @@
 
 buildPythonPackage rec {
   pname = "pytest-subtests";
-  version = "0.8.0";
+  version = "0.10.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Rus3YCLpJpUIFszCNQLeMnetzBOWZS3bMyjOAokFLE0=";
+    hash = "sha256-2ZYaZ8F5HoweMtznpw7R5U87HmQQh/IJTy03CHq3+xc=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

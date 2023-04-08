@@ -2,32 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "apr";
-  version = "1.7.0";
+  version = "1.7.2";
 
   src = fetchurl {
     url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
-    sha256 = "1spp6r2a3xcl5yajm9safhzyilsdzgagc2dadif8x6z9nbq4iqg2";
+    sha256 = "sha256-ded8yGd2wDDApcQI370L8qC3Xu1TUeUtVDn6HlUJpD4=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "CVE-2021-35940.patch";
-      url = "https://dist.apache.org/repos/dist/release/apr/patches/apr-1.7.0-CVE-2021-35940.patch";
-      sha256 = "1qd511dyqa1b7bj89iihrlbaavbzl6yyblqginghmcnhw8adymbs";
-      # convince fetchpatch to restore missing `a/`, `b/` to paths
-      extraPrefix = "";
-    })
-
-    # Fix cross.
-    (fetchpatch {
-      url = "https://github.com/apache/apr/commit/374210c50ee9f4dbf265f0172dcf2d45b97d0550.patch";
-      sha256 = "04k62c5dh043jhkgs5qma6yqkq4q7nh0zswr81il4l7q1zil581y";
-    })
-    (fetchpatch {
-      url = "https://github.com/apache/apr/commit/866e1df66be6704a584feaf5c3d241e3d631d03a.patch";
-      sha256 = "0hhm5v5wx985c28dq6d9ngnyqihpsphq4mw7rwylk39k2p90ppcm";
-    })
-  ] ++ lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
+    ./cross-assume-dev-zero-mmappable.patch
+  ];
 
   # This test needs the net
   postPatch = ''
@@ -42,10 +26,28 @@ stdenv.mkDerivation rec {
       configureFlagsArray+=("--with-installbuilddir=$dev/share/build")
     '';
 
-  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # For cross builds, provide answers to the configure time tests.
+    # These answers are valid on x86_64-linux and aarch64-linux.
     "ac_cv_file__dev_zero=yes"
-    "ac_cv_func_setpgrp_void=0"
-    "apr_cv_tcp_nodelay_with_cork=1"
+    "ac_cv_func_setpgrp_void=yes"
+    "apr_cv_tcp_nodelay_with_cork=yes"
+    "ac_cv_define_PTHREAD_PROCESS_SHARED=yes"
+    "apr_cv_process_shared_works=yes"
+    "apr_cv_mutex_robust_shared=yes"
+    "ap_cv_atomic_builtins=yes"
+    "apr_cv_mutex_recursive=yes"
+    "apr_cv_epoll=yes"
+    "apr_cv_epoll_create1=yes"
+    "apr_cv_dup3=yes"
+    "apr_cv_accept4=yes"
+    "apr_cv_sock_cloexec=yes"
+    "ac_cv_struct_rlimit=yes"
+    "ac_cv_func_sem_open=yes"
+    "ac_cv_negative_eai=yes"
+    "apr_cv_gai_addrconfig=yes"
+    "ac_cv_o_nonblock_inherited=no"
+    "apr_cv_pthreads_lib=-lpthread"
     "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/cc"
   ] ++ lib.optionals (stdenv.hostPlatform.system == "i686-cygwin") [
     # Including the Windows headers breaks unistd.h.

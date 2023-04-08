@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, python3, gfortran, blas, lapack
 , fftw, libint, libvori, libxc, mpi, gsl, scalapack, openssh, makeWrapper
-, libxsmm, spglib, which, pkg-config
+, libxsmm, spglib, which, pkg-config, plumed, zlib
 , enableElpa ? false
 , elpa
 } :
@@ -11,13 +11,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "cp2k";
-  version = "9.1.0";
+  version = "2023.1";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
     rev = "v${version}";
-    hash = "sha256-P9RwZmrE1E0UTQVasQxWAqa3LBLyJNGeJo8T6u5WWcw=";
+    hash = "sha256-SG5Gz0cDiSfbSZ8m4K+eARMLU4iMk/xK3esN5yt05RE=";
     fetchSubmodules = true;
   };
 
@@ -34,6 +34,8 @@ in stdenv.mkDerivation rec {
     scalapack
     blas
     lapack
+    plumed
+    zlib
   ] ++ lib.optional enableElpa elpa;
 
   propagatedBuildInputs = [ mpi ];
@@ -64,7 +66,8 @@ in stdenv.mkDerivation rec {
     AR         = ar -r
     DFLAGS     = -D__FFTW3 -D__LIBXC -D__LIBINT -D__parallel -D__SCALAPACK \
                  -D__MPI_VERSION=3 -D__F2008 -D__LIBXSMM -D__SPGLIB \
-                 -D__MAX_CONTR=4 -D__LIBVORI ${lib.optionalString enableElpa "-D__ELPA"}
+                 -D__MAX_CONTR=4 -D__LIBVORI ${lib.optionalString enableElpa "-D__ELPA"} \
+                 -D__PLUMED2
     CFLAGS    = -fopenmp
     FCFLAGS    = \$(DFLAGS) -O2 -ffree-form -ffree-line-length-none \
                  -ftree-vectorize -funroll-loops -msse2 \
@@ -77,8 +80,11 @@ in stdenv.mkDerivation rec {
                  -lxcf03 -lxc -lxsmmf -lxsmm -lsymspg \
                  -lint2 -lstdc++ -lvori \
                  -lgomp -lpthread -lm \
-                 -fopenmp ${lib.optionalString enableElpa "$(pkg-config --libs elpa)"}
+                 -fopenmp ${lib.optionalString enableElpa "$(pkg-config --libs elpa)"} \
+                 -lz -ldl -lstdc++ ${lib.optionalString (mpi.pname == "openmpi") "$(mpicxx --showme:link)"} \
+                 -lplumed
     LDFLAGS    = \$(FCFLAGS) \$(LIBS)
+    include ${plumed}/lib/plumed/src/lib/Plumed.inc
     EOF
   '';
 

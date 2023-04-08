@@ -1,33 +1,24 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, cairo, libxkbcommon
-, pango, fribidi, harfbuzz, pcre, pkg-config
-, ncursesSupport ? true, ncurses ? null
-, waylandSupport ? true, wayland ? null, wayland-protocols ? null
-, x11Support ? true, xorg ? null
+, pango, fribidi, harfbuzz, pcre, pkg-config, scdoc
+, ncursesSupport ? true, ncurses
+, waylandSupport ? true, wayland, wayland-protocols, wayland-scanner
+, x11Support ? true, xorg
 }:
-
-assert ncursesSupport -> ncurses != null;
-assert waylandSupport -> ! lib.elem null [wayland wayland-protocols];
-assert x11Support -> xorg != null;
 
 stdenv.mkDerivation rec {
   pname = "bemenu";
-  version = "0.6.10";
+  version = "0.6.14";
 
   src = fetchFromGitHub {
     owner = "Cloudef";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pv/GxTGmpGc8RHjKO8F03jybS0uO+SS3z4KCZfHYV0Q=";
+    sha256 = "sha256-bMnnuT+LNNKphmvVcD1aaNZxasSGOEcAveC4stCieG8=";
   };
 
-  nativeBuildInputs = [ pkg-config pcre ];
-
-  makeFlags = ["PREFIX=$(out)"];
-
-  buildFlags = ["clients"]
-    ++ lib.optional ncursesSupport "curses"
-    ++ lib.optional waylandSupport "wayland"
-    ++ lib.optional x11Support "x11";
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config scdoc ]
+    ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = with lib; [
     cairo
@@ -41,6 +32,13 @@ stdenv.mkDerivation rec {
       xorg.libX11 xorg.libXinerama xorg.libXft
       xorg.libXdmcp xorg.libpthreadstubs xorg.libxcb
     ];
+
+  makeFlags = ["PREFIX=$(out)"];
+
+  buildFlags = ["clients"]
+    ++ lib.optional ncursesSupport "curses"
+    ++ lib.optional waylandSupport "wayland"
+    ++ lib.optional x11Support "x11";
 
   meta = with lib; {
     homepage = "https://github.com/Cloudef/bemenu";

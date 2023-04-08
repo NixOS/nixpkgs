@@ -13,27 +13,21 @@
 
 buildGoModule rec {
   pname = "gomuks";
-  version = "0.2.4";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "bTOfnEmJHTuniewH//SugNNDuKIFMQb1Safs0UVKH1c=";
+    sha256 = "sha256-gLyjqmGZudj8PmsYUGXHOjetZzi6u5CFI7Y50y2XAzk=";
   };
 
-  vendorSha256 = "PuNROoxL7UmcuYDgfnsMUsGk9i1jnQyWtaUmT7vXdKE=";
+  vendorSha256 = "sha256-FmQJG6hv0YPyHVjZ/DvkQExrGLc1hjoiPS59MnqG2gU=";
 
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ olm ];
-
-  # Upstream issue: https://github.com/tulir/gomuks/issues/260
-  patches = lib.optional stdenv.isLinux (substituteAll {
-    src = ./hardcoded_path.patch;
-    soundTheme = sound-theme-freedesktop;
-  });
 
   postInstall = ''
     cp -r ${
@@ -49,7 +43,9 @@ buildGoModule rec {
     }/* $out/
     substituteAllInPlace $out/share/applications/*
     wrapProgram $out/bin/gomuks \
-      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.isLinux [ libnotify pulseaudio ])}"
+      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.isLinux [ libnotify pulseaudio ])}" \
+      --set-default GOMUKS_SOUND_NORMAL "${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/message-new-instant.oga" \
+      --set-default GOMUKS_SOUND_CRITICAL "${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/complete.oga"
   '';
 
   meta = with lib; {

@@ -37,11 +37,7 @@ buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  # Setting gobject-introspection on booth nativeBuildInputs and
-  # buildInputs because of #56943. This recognizes pango, avoiding
-  # a "ValueError: Namespace PangoCairo not available".
   buildInputs = [
-    gobject-introspection
     gtksourceview4
     pango
   ];

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -25,29 +24,23 @@
 
 stdenv.mkDerivation rec {
   pname = "fractal";
-  version = "4.4.0";
+  version = "4.4.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "fractal";
     rev = version;
-    sha256 = "DSNVd9YvI7Dd3s3+M0+wE594tmL1yPNMnD1W9wLhSuw=";
+    hash = "sha256-/vPadtyiYDX0PdneMxc0oSWb5OYnikevqajl3WgZiGA=";
   };
 
-  patches = [
-    # Fix build with meson 0.61
-    # fractal-gtk/res/meson.build:5:0: ERROR: Function does not take positional arguments.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/fractal/-/commit/6fa1a23596d65d94aa889efe725174e6cd2903f0.patch";
-      sha256 = "3OzU9XL2V1VNOkvL1j677K3HNoBqPMQudQDmiDxYfAc=";
-    })
-  ];
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-xim5sOzeXJjRXbTOg2Gk/LHU0LioiyMK5nSr1LwMPjc=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "either-1.5.99" = "sha256-Lmv9OPZKEb7tmkN+7Mua2nx0xmZwm3d1W623UKUlPeg=";
+      "gettext-rs-0.4.2" = "sha256-wyZ1bf0oFcQo8gEi2GEalRUoKMoJYHysu79qcfjd4Ng=";
+      "sourceview4-0.2.0" = "sha256-RuCg05/qjkPri1QUd5acsGVqJtGvM5OO8/R+Nibxoa4=";
+    };
   };
 
   nativeBuildInputs = [
@@ -89,10 +82,12 @@ stdenv.mkDerivation rec {
     patchShebangs scripts/meson_post_install.py scripts/test.sh
   '';
 
+  preConfigure = ''
+    export GETTEXT_DIR="${gettext}"
+  '';
+
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -100,5 +95,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/fractal";
     license = licenses.gpl3;
     maintainers = teams.gnome.members ++ (with maintainers; [ dtzWill ]);
+    platforms = platforms.unix;
   };
 }

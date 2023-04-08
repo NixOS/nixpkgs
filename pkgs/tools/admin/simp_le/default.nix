@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ acme setuptools-scm josepy idna ];
 
-  checkInputs = with python3Packages; [ mock ];
+  nativeCheckInputs = with python3Packages; [ mock ];
 
   meta = with lib; {
     homepage = "https://github.com/zenhack/simp_le";

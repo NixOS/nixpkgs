@@ -1,4 +1,4 @@
-{ lib, stdenv, gtest, fetchFromGitHub, cmake, boost, eigen, python3, vtk, zlib, tbb }:
+{ lib, stdenv, gtest, fetchFromGitHub, cmake, boost, eigen, python3, vtk_8, zlib, tbb }:
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake gtest ];
-  buildInputs = [ boost eigen python3 vtk zlib tbb ];
+  buildInputs = [ boost eigen python3 vtk_8 zlib tbb ];
 
   meta = with lib; {
     homepage = "https://github.com/BioMedIA/MIRTK";

@@ -25,7 +25,7 @@ in
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 22;
       description = lib.mdDoc ''
         Port on which SSH initrd service should listen.
@@ -47,31 +47,38 @@ in
         "/etc/secrets/initrd/ssh_host_rsa_key"
         "/etc/secrets/initrd/ssh_host_ed25519_key"
       ];
-      description = ''
+      description = lib.mdDoc ''
         Specify SSH host keys to import into the initrd.
 
         To generate keys, use
-        <citerefentry><refentrytitle>ssh-keygen</refentrytitle><manvolnum>1</manvolnum></citerefentry>:
+        {manpage}`ssh-keygen(1)`
+        as root:
 
-        <screen>
-        <prompt># </prompt>ssh-keygen -t rsa -N "" -f /etc/secrets/initrd/ssh_host_rsa_key
-        <prompt># </prompt>ssh-keygen -t ed25519 -N "" -f /etc/secrets/initrd/ssh_host_ed25519_key
-        </screen>
+        ```
+        ssh-keygen -t rsa -N "" -f /etc/secrets/initrd/ssh_host_rsa_key
+        ssh-keygen -t ed25519 -N "" -f /etc/secrets/initrd/ssh_host_ed25519_key
+        ```
 
-        <warning>
-          <para>
-            Unless your bootloader supports initrd secrets, these keys
-            are stored insecurely in the global Nix store. Do NOT use
-            your regular SSH host private keys for this purpose or
-            you'll expose them to regular users!
-          </para>
-          <para>
-            Additionally, even if your initrd supports secrets, if
-            you're using initrd SSH to unlock an encrypted disk then
-            using your regular host keys exposes the private keys on
-            your unencrypted boot partition.
-          </para>
-        </warning>
+        ::: {.warning}
+        Unless your bootloader supports initrd secrets, these keys
+        are stored insecurely in the global Nix store. Do NOT use
+        your regular SSH host private keys for this purpose or
+        you'll expose them to regular users!
+
+        Additionally, even if your initrd supports secrets, if
+        you're using initrd SSH to unlock an encrypted disk then
+        using your regular host keys exposes the private keys on
+        your unencrypted boot partition.
+        :::
+      '';
+    };
+
+    ignoreEmptyHostKeys = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Allow leaving {option}`config.boot.initrd.network.ssh` empty,
+        to deploy ssh host keys out of band.
       '';
     };
 
@@ -121,13 +128,13 @@ in
         HostKey ${initrdKeyPath path}
       '')}
 
-      KexAlgorithms ${concatStringsSep "," sshdCfg.kexAlgorithms}
-      Ciphers ${concatStringsSep "," sshdCfg.ciphers}
-      MACs ${concatStringsSep "," sshdCfg.macs}
+      KexAlgorithms ${concatStringsSep "," sshdCfg.settings.KexAlgorithms}
+      Ciphers ${concatStringsSep "," sshdCfg.settings.Ciphers}
+      MACs ${concatStringsSep "," sshdCfg.settings.Macs}
 
-      LogLevel ${sshdCfg.logLevel}
+      LogLevel ${sshdCfg.settings.LogLevel}
 
-      ${if sshdCfg.useDns then ''
+      ${if sshdCfg.settings.UseDns then ''
         UseDNS yes
       '' else ''
         UseDNS no
@@ -143,7 +150,7 @@ in
       }
 
       {
-        assertion = cfg.hostKeys != [];
+        assertion = (cfg.hostKeys != []) || cfg.ignoreEmptyHostKeys;
         message = ''
           You must now pre-generate the host keys for initrd SSH.
           See the boot.initrd.network.ssh.hostKeys documentation

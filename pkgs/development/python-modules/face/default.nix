@@ -1,30 +1,47 @@
-{ lib, buildPythonPackage, fetchPypi, boltons, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, boltons
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "face";
-  version = "20.1.1";
+  version = "22.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d59ca5ba341316e58cf72c6aff85cca2541cf5056c4af45cb63af9a814bed3e";
+    hash = "sha256-1daS+QvI9Zh7Y25H42OEubvaSZqvCneqCwu+g0x2kj0=";
   };
 
-  propagatedBuildInputs = [ boltons ];
+  propagatedBuildInputs = [
+    boltons
+  ];
 
-  checkInputs = [ pytest ];
-  checkPhase = "pytest face/test";
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  # ironically, test_parse doesn't parse, but fixed in git so no point
-  # reporting
-  doCheck = false;
+  pythonImportsCheck = [
+    "face"
+  ];
+
+  disabledTests = [
+    # Assertion error as we take the Python release into account
+    "test_search_prs_basic"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/mahmoud/face";
     description = "A command-line interface parser and framework";
     longDescription = ''
       A command-line interface parser and framework, friendly for
       users, full-featured for developers.
     '';
+    homepage = "https://github.com/mahmoud/face";
     license = licenses.bsd3;
     maintainers = with maintainers; [ twey ];
   };

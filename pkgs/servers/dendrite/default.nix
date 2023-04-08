@@ -3,18 +3,35 @@
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.9.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    sha256 = "Fg7yfP5cM/mNAsIZAI/WGNLuz8l3vxyY8bb1NjuZELc=";
+    hash = "sha256-syOLrw4ig8rmFDkxJ9KSAuzUVO8UokekV17mT1bJNNM=";
   };
 
-  vendorSha256 = "+9mjg8avOHPQTzBnfgim10Lfgpsu8nTQf1qYB0SLFys=";
+  vendorHash = "sha256-nvGhKCUiyHSD0VpE4OtT9YQSHxv0d7iwOChCJl2D3zk=";
 
-  checkInputs = [
+  subPackages = [
+    # The server
+    "cmd/dendrite"
+    # admin tools
+    "cmd/create-account"
+    "cmd/generate-config"
+    "cmd/generate-keys"
+    "cmd/resolve-state"
+    ## curl, but for federation requests, only useful for developers
+    # "cmd/furl"
+    ## an internal tool for upgrading ci tests, only relevant for developers
+    # "cmd/dendrite-upgrade-tests"
+    ## tech demos
+    # "cmd/dendrite-demo-pinecone"
+    # "cmd/dendrite-demo-yggdrasil"
+  ];
+
+  nativeCheckInputs = [
     postgresqlTestHook
     postgresql
   ];
@@ -34,6 +51,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://matrix-org.github.io/dendrite";
     description = "A second-generation Matrix homeserver written in Go";
+    changelog = "https://github.com/matrix-org/dendrite/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     platforms = platforms.unix;

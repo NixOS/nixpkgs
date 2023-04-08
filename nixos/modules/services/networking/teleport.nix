@@ -9,7 +9,15 @@ in
 {
   options = {
     services.teleport = with lib.types; {
-      enable = mkEnableOption "the Teleport service";
+      enable = mkEnableOption (lib.mdDoc "the Teleport service");
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.teleport;
+        defaultText = lib.literalMD "pkgs.teleport";
+        example = lib.literalMD "pkgs.teleport_11";
+        description = lib.mdDoc "The teleport package to use";
+      };
 
       settings = mkOption {
         type = settingsYaml.type;
@@ -41,7 +49,7 @@ in
         '';
       };
 
-      insecure.enable = mkEnableOption ''
+      insecure.enable = mkEnableOption (lib.mdDoc ''
         starting teleport in insecure mode.
 
         This is dangerous!
@@ -49,14 +57,14 @@ in
         Proceed with caution!
 
         Teleport starts with disabled certificate validation on Proxy Service, validation still occurs on Auth Service
-      '';
+      '');
 
       diag = {
-        enable = mkEnableOption ''
+        enable = mkEnableOption (lib.mdDoc ''
           endpoints for monitoring purposes.
 
-          See <link xlink:href="https://goteleport.com/docs/setup/admin/troubleshooting/#troubleshooting/"/>
-        '';
+          See <https://goteleport.com/docs/setup/admin/troubleshooting/#troubleshooting/>
+        '');
 
         addr = mkOption {
           type = str;
@@ -65,7 +73,7 @@ in
         };
 
         port = mkOption {
-          type = int;
+          type = port;
           default = 3000;
           description = lib.mdDoc "Metrics and diagnostics port.";
         };
@@ -74,14 +82,14 @@ in
   };
 
   config = mkIf config.services.teleport.enable {
-    environment.systemPackages = [ pkgs.teleport ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.teleport = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.teleport}/bin/teleport start \
+          ${cfg.package}/bin/teleport start \
             ${optionalString cfg.insecure.enable "--insecure"} \
             ${optionalString cfg.diag.enable "--diag-addr=${cfg.diag.addr}:${toString cfg.diag.port}"} \
             ${optionalString (cfg.settings != { }) "--config=${settingsYaml.generate "teleport.yaml" cfg.settings}"}

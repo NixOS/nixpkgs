@@ -5,6 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lzwolf";
+  # Fix-Me: Remember to remove SDL2_mixer pin (at top-level) on next lzwolf upgrade.
   version = "unstable-2022-01-04";
 
   src = fetchFromBitbucket {
@@ -13,6 +14,7 @@ stdenv.mkDerivation rec {
     rev = "6e470316382b87378966f441e233760ce0ff478c";
     sha256 = "sha256-IbZleY2FPyW3ORIGO2YFXQyAf1l9nDthpJjEKTTsilM=";
   };
+
   nativeBuildInputs = [ p7zip cmake ];
   buildInputs = [
     SDL2 bzip2 zlib libjpeg SDL2_mixer SDL2_net libsndfile mpg123

@@ -4,6 +4,10 @@
 , pythonOlder
 , fetchFromGitHub
 , fetchpatch
+
+# nativeBuildInputs
+, flit-core
+
 # propagatedBuildInputs
 , babel
 , alabaster
@@ -23,7 +27,9 @@
 , sphinxcontrib-qthelp
 , sphinxcontrib-serializinghtml
 , sphinxcontrib-websupport
+
 # check phase
+, cython
 , html5lib
 , pytestCheckHook
 , typed-ast
@@ -31,8 +37,8 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "5.0.2";
-  format = "setuptools";
+  version = "5.3.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -40,7 +46,7 @@ buildPythonPackage rec {
     owner = "sphinx-doc";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-kdwznYvs4szhC+qoL2Zsib9cU69fag1KhCXl8qIGkZU=";
+    hash = "sha256-80bVg1rfBebgSOKbWkzP84vpm39iLgM8lWlVD64nSsQ=";
     postFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \
@@ -49,25 +55,9 @@ buildPythonPackage rec {
     '';
   };
 
-  patches = [
-    # https://github.com/sphinx-doc/sphinx/pull/10624
-    (fetchpatch {
-      name = "avoid-deprecated-docutils-0.19-api.patch";
-      sha256 = "sha256-QIrLkxnexNcfuI00UOeCpAamMLqqt4wxoVY1VA72jIw=";
-      url = "https://github.com/sphinx-doc/sphinx/commit/8d99168794ab8be0de1e6281d1b76af8177acd3d.patch";
-    })
+  nativeBuildInputs = [
+    flit-core
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "docutils>=0.14,<0.19" "docutils>=0.14"
-
-    # remove impurity caused by date inclusion
-    # https://github.com/sphinx-doc/sphinx/blob/master/setup.cfg#L4-L6
-    substituteInPlace setup.cfg \
-      --replace "tag_build = .dev" "" \
-      --replace "tag_date = true" ""
-  '';
 
   propagatedBuildInputs = [
     babel
@@ -94,12 +84,17 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    cython
     html5lib
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.8") [
     typed-ast
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   disabledTests = [
     # requires network access
@@ -111,7 +106,22 @@ buildPythonPackage rec {
     # requires imagemagick (increases build closure size), doesn't
     # test anything substantial
     "test_ext_imgconverter"
-  ] ++ lib.optional stdenv.isDarwin [
+
+    # fails with pygments 2.14
+    # TODO remove for sphinx 6
+    "test_viewcode"
+    "test_additional_targets_should_be_translated"
+    "test_additional_targets_should_not_be_translated"
+
+    # sphinx.errors.VersionRequirementError: The alabaster extension
+    # used by this project needs at least Sphinx v1.6; it therefore
+    # cannot be built with this version.
+    "test_needs_sphinx"
+
+    # Likely due to pygments 2.14 update
+    #  AssertionError: assert '5:11:17\u202fAM' == '5:11:17 AM'
+    "test_format_date"
+  ] ++ lib.optionals stdenv.isDarwin [
     # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
     "test_inspect_main_url"
     "test_auth_header_uses_first_match"

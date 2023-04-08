@@ -1,19 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, curl, libxml2 }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, curl, libxml2 }:
 
 stdenv.mkDerivation {
   pname = "libs3";
-  version = "unstable-2018-12-03";
+  version = "unstable-2019-04-10";
 
   src = fetchFromGitHub {
     owner = "bji";
     repo = "libs3";
-    rev = "111dc30029f64bbf82031f3e160f253a0a63c119";
-    sha256 = "1ahf08hc7ql3fazfmlyj9vrhq7cvarsmgn2v8149y63zr1fl61hs";
+    rev = "287e4bee6fd430ffb52604049de80a27a77ff6b4";
+    hash = "sha256-xgiY8oJlRMiXB1fw5dhNidfaq18YVwaJ8aErKU11O6U=";
   };
+
+  patches = [
+    (fetchpatch { # Fix compilation with openssl 3.0
+      url = "https://github.com/bji/libs3/pull/112/commits/3c3a1cf915e62b730db854d8007ba835cb38677c.patch";
+      hash = "sha256-+rWRh8dOznHlamc/T9qbgN0E2Rww3Hn94UeErxNDccs=";
+    })
+  ];
 
   buildInputs = [ curl libxml2 ];
 
-  makeFlags = [ "DESTDIR=$(out)" ];
+  makeFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   meta = with lib; {
     homepage = "https://github.com/bji/libs3";

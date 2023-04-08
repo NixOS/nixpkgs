@@ -10,7 +10,7 @@ in {
 
   options = {
     services.orangefs.client = {
-      enable = mkEnableOption "OrangeFS client daemon";
+      enable = mkEnableOption (lib.mdDoc "OrangeFS client daemon");
 
       extraOptions = mkOption {
         type = with types; listOf str;
@@ -21,7 +21,7 @@ in {
       fileSystems = mkOption {
         description = lib.mdDoc ''
           The orangefs file systems to be mounted.
-          This option is prefered over using {option}`fileSystems` directly since
+          This option is preferred over using {option}`fileSystems` directly since
           the pvfs client service needs to be running for it to be mounted.
         '';
 

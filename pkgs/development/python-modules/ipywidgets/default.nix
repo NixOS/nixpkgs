@@ -6,18 +6,19 @@
 , lib
 , nbformat
 , pytestCheckHook
+, pytz
 , traitlets
 , widgetsnbextension
 }:
 
 buildPythonPackage rec {
   pname = "ipywidgets";
-  version = "7.7.1";
+  version = "8.0.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xy+ht6+uGvMsiAiMmCitl43pPd2jk9ftQU5VP+6T3Ks=";
+    hash = "sha256-wABad6R9d4icr+2JK1jjO0oqlnEhVEBMZUjsIicoEeo=";
   };
 
   propagatedBuildInputs = [
@@ -26,14 +27,20 @@ buildPythonPackage rec {
     jupyterlab-widgets
     traitlets
     nbformat
+    pytz
     widgetsnbextension
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # https://github.com/jupyter-widgets/ipywidgets/issues/3711
+    "test_append_display_data"
+  ];
 
   meta = {
     description = "IPython HTML widgets for Jupyter";
-    homepage = "http://ipython.org/";
+    homepage = "https://ipython.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

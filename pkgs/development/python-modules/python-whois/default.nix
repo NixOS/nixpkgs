@@ -13,12 +13,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3TNtNRfqzip2iUBtt7uWraPF50MnQjFRru4+ZCJfYiA=";
+    hash = "sha256-3TNtNRfqzip2iUBtt7uWraPF50MnQjFRru4+ZCJfYiA=";
   };
 
   propagatedBuildInputs = [ future ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytestCheckHook
     simplejson

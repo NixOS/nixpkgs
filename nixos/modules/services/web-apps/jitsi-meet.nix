@@ -28,7 +28,7 @@ let
     '');
 
   # Essential config - it's probably not good to have these as option default because
-  # types.attrs doesn't do merging. Let's merge explicitly, can still be overriden if
+  # types.attrs doesn't do merging. Let's merge explicitly, can still be overridden if
   # user desires.
   defaultCfg = {
     hosts = {
@@ -46,7 +46,7 @@ let
 in
 {
   options.services.jitsi-meet = with types; {
-    enable = mkEnableOption "Jitsi Meet - Secure, Simple and Scalable Video Conferences";
+    enable = mkEnableOption (lib.mdDoc "Jitsi Meet - Secure, Simple and Scalable Video Conferences");
 
     hostName = mkOption {
       type = str;
@@ -159,7 +159,7 @@ in
       '';
     };
 
-    caddy.enable = mkEnableOption "Whether to enable caddy reverse proxy to expose jitsi-meet";
+    caddy.enable = mkEnableOption (lib.mdDoc "Whether to enable caddy reverse proxy to expose jitsi-meet");
 
     prosody.enable = mkOption {
       type = bool;
@@ -267,6 +267,7 @@ in
         EnvironmentFile = [ "/var/lib/jitsi-meet/secrets-env" ];
         SupplementaryGroups = [ "jitsi-meet" ];
       };
+      reloadIfChanged = true;
     };
 
     users.groups.jitsi-meet = {};
@@ -410,11 +411,14 @@ in
       componentPasswordFile = "/var/lib/jitsi-meet/jicofo-component-secret";
       bridgeMuc = "jvbbrewery@internal.${cfg.hostName}";
       config = mkMerge [{
-        "org.jitsi.jicofo.ALWAYS_TRUST_MODE_ENABLED" = "true";
+        jicofo.xmpp.service.disable-certificate-verification = true;
+        jicofo.xmpp.client.disable-certificate-verification = true;
       #} (lib.mkIf cfg.jibri.enable {
        } (lib.mkIf (config.services.jibri.enable || cfg.jibri.enable) {
-        "org.jitsi.jicofo.jibri.BREWERY" = "JibriBrewery@internal.${cfg.hostName}";
-        "org.jitsi.jicofo.jibri.PENDING_TIMEOUT" = "90";
+         jicofo.jibri = {
+           brewery-jid = "JibriBrewery@internal.${cfg.hostName}";
+           pending-timeout = "90";
+         };
       })];
     };
 
@@ -450,6 +454,6 @@ in
     };
   };
 
-  meta.doc = ./jitsi-meet.xml;
+  meta.doc = ./jitsi-meet.md;
   meta.maintainers = lib.teams.jitsi.members;
 }

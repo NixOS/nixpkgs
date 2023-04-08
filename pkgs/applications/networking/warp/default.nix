@@ -9,7 +9,7 @@
 , pkg-config
 , python3
 , rustPlatform
-, wrapGAppsHook
+, wrapGAppsHook4
 , glib
 , gtk4
 , libadwaita
@@ -17,24 +17,25 @@
 
 stdenv.mkDerivation rec {
   pname = "warp";
-  version = "0.2.1";
+  version = "0.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = "warp";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-ajz450ix68TDkhyAZd1IgZA/jUnXULrYZOSdcoOL+S0=";
+    hash = "sha256-c8X0kedfM8DPTEQAbh8cXIfEvxG2cdUD3twVHs0/k7U";
   };
 
   postPatch = ''
     patchShebangs build-aux
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-08xbd2YmJw2NTrxBrnJZMV2VvX6V0eX+fxbEEWFoC9c=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tempfile-3.3.0" = "sha256-zVbGZOEYEmOJGtl5Ko8rYIW9NY16lq5+zMzJ/TSkfsc=";
+    };
   };
 
   nativeBuildInputs = [
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Fast and secure file transfer";
     homepage = "https://apps.gnome.org/app/app.drey.Warp";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda foo-dogsquared ];
     platforms = lib.platforms.linux;
   };
 }

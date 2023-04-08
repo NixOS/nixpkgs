@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.softether;
 
-  package = cfg.package.override { dataDir = cfg.dataDir; };
+  package = cfg.package.override { inherit (cfg) dataDir; };
 
 in
 {
@@ -16,7 +16,7 @@ in
 
     services.softether = {
 
-      enable = mkEnableOption "SoftEther VPN services";
+      enable = mkEnableOption (lib.mdDoc "SoftEther VPN services");
 
       package = mkOption {
         type = types.package;
@@ -27,12 +27,12 @@ in
         '';
       };
 
-      vpnserver.enable = mkEnableOption "SoftEther VPN Server";
+      vpnserver.enable = mkEnableOption (lib.mdDoc "SoftEther VPN Server");
 
-      vpnbridge.enable = mkEnableOption "SoftEther VPN Bridge";
+      vpnbridge.enable = mkEnableOption (lib.mdDoc "SoftEther VPN Bridge");
 
       vpnclient = {
-        enable = mkEnableOption "SoftEther VPN Client";
+        enable = mkEnableOption (lib.mdDoc "SoftEther VPN Client");
         up = mkOption {
           type = types.lines;
           default = "";
@@ -88,7 +88,7 @@ in
       };
     }
 
-    (mkIf (cfg.vpnserver.enable) {
+    (mkIf cfg.vpnserver.enable {
       systemd.services.vpnserver = {
         description = "SoftEther VPN Server";
         after = [ "softether-init.service" ];
@@ -109,7 +109,7 @@ in
       };
     })
 
-    (mkIf (cfg.vpnbridge.enable) {
+    (mkIf cfg.vpnbridge.enable {
       systemd.services.vpnbridge = {
         description = "SoftEther VPN Bridge";
         after = [ "softether-init.service" ];
@@ -130,7 +130,7 @@ in
       };
     })
 
-    (mkIf (cfg.vpnclient.enable) {
+    (mkIf cfg.vpnclient.enable {
       systemd.services.vpnclient = {
         description = "SoftEther VPN Client";
         after = [ "softether-init.service" ];

@@ -2,6 +2,7 @@
 , runCommand
 , monorepoSrc
 , cmake
+, ninja
 , zlib
 , ncurses
 , swig
@@ -21,6 +22,7 @@
 , lit
 , makeWrapper
 , enableManpages ? false
+, lua5_3
 }:
 
 stdenv.mkDerivation (rec {
@@ -48,7 +50,7 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [
-    cmake python3 which swig lit makeWrapper
+    cmake ninja python3 which swig lit makeWrapper lua5_3
   ] ++ lib.optionals enableManpages [
     python3.pkgs.sphinx python3.pkgs.recommonmark
   ];
@@ -119,9 +121,7 @@ stdenv.mkDerivation (rec {
 } // lib.optionalAttrs enableManpages {
   pname = "lldb-manpages";
 
-  buildPhase = ''
-    make docs-lldb-man
-  '';
+  ninjaFlags = [ "docs-lldb-man" ];
 
   propagatedBuildInputs = [];
 

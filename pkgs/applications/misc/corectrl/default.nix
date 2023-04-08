@@ -7,6 +7,7 @@
 , libdrm
 , hwdata
 , glxinfo
+, polkit
 , procps
 , util-linux
 , vulkan-tools
@@ -16,19 +17,23 @@
 , qtsvg
 , qttools
 , qtxmlpatterns
+, quazip
 , wrapQtAppsHook
 } :
 
 stdenv.mkDerivation rec{
   pname = "corectrl";
-  version = "1.2.4";
+  version = "1.3.3";
 
   src = fetchFromGitLab {
     owner = "corectrl";
     repo = "corectrl";
     rev = "v${version}";
-    sha256 = "sha256-3WOuPOJEY941JVoF5aQp5LvPeh3shalb6H9FMmmctN4=";
+    sha256 = "sha256-WgtLDAjywHd9++7DvPfpfEXGbBQWx8kQxseIadho1YE=";
   };
+  patches = [
+    ./polkit-dir.patch
+  ];
 
   nativeBuildInputs = [
     extra-cmake-modules
@@ -40,6 +45,7 @@ stdenv.mkDerivation rec{
     kauth
     libdrm
     glxinfo
+    polkit
     procps
     util-linux
     vulkan-tools
@@ -49,9 +55,14 @@ stdenv.mkDerivation rec{
     qtsvg
     qttools
     qtxmlpatterns
+    quazip
   ];
 
-  cmakeFlags = [ "-DWITH_PCI_IDS_PATH=${hwdata}/share/hwdata/pci.ids" ];
+  cmakeFlags = [
+    "-DWITH_PCI_IDS_PATH=${hwdata}/share/hwdata/pci.ids"
+    "-DINSTALL_DBUS_FILES_IN_PREFIX=true"
+    "-DPOLKIT_POLICY_INSTALL_DIR=${placeholder "out"}/share/polkit-1/actions"
+  ];
 
   runtimeDeps = [ hwdata glxinfo vulkan-tools util-linux procps ];
   binPath = lib.makeBinPath runtimeDeps;

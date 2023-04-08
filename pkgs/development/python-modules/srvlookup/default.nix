@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "gmr";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-iXbi25HsoNX0hnhwZoFik5ddlJ7i+xml3HGaezj3jgY=";
+    hash = "sha256-iXbi25HsoNX0hnhwZoFik5ddlJ7i+xml3HGaezj3jgY=";
   };
 
   propagatedBuildInputs = [
     dnspython
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

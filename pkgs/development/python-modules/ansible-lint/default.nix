@@ -4,7 +4,9 @@
 , setuptools-scm
 , ansible-compat
 , ansible-core
+, black
 , enrich
+, filelock
 , flaky
 , jsonschema
 , pythonOlder
@@ -20,13 +22,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "6.3.0";
+  version = "6.14.3";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9X9SCuXYEM4GIVfcfWM5kK0vvsgbu7NMzEzjoMIfzTg=";
+    hash = "sha256-c+xZkptiFPbSzlhYwixk46HaunuM3BJxgzu208cVVEk=";
   };
 
   postPatch = ''
@@ -42,7 +45,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     ansible-compat
     ansible-core
+    black
     enrich
+    filelock
     jsonschema
     pytest # yes, this is an actual runtime dependency
     pyyaml
@@ -55,7 +60,7 @@ buildPythonPackage rec {
   # tests can't be easily run without installing things from ansible-galaxy
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     pytest-xdist
     pytestCheckHook
@@ -87,16 +92,16 @@ buildPythonPackage rec {
     "test_run_inside_role_dir"
     "test_run_multiple_role_path_no_trailing_slash"
     "test_runner_exclude_globs"
-
     "test_discover_lintables_umlaut"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-core ]}" ];
 
   meta = with lib; {
-    homepage = "https://github.com/ansible/ansible-lint";
     description = "Best practices checker for Ansible";
+    homepage = "https://github.com/ansible/ansible-lint";
+    changelog = "https://github.com/ansible/ansible-lint/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ sengaya SuperSandro2000 ];
+    maintainers = with maintainers; [ sengaya ];
   };
 }

@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, libllvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, xcbuild, libllvm, libcxxabi, libxcrypt
+, doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
+}:
 
 let
 
@@ -15,9 +17,10 @@ stdenv.mkDerivation {
   inherit version;
   src = fetch "compiler-rt" "0x1j8ngf1zj63wlnns9vlibafq48qcm72p4jpaxkmkb4qw0grwfy";
 
-  nativeBuildInputs = [ cmake python3 libllvm.dev ];
+  nativeBuildInputs = [ cmake python3 libllvm.dev ]
+     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
   ];
 
@@ -25,10 +28,13 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
+  ] ++ lib.optionals (haveLibc && stdenv.hostPlatform.isGnu) [
+    "-DSANITIZER_COMMON_CFLAGS=-I${libxcrypt}/include"
   ] ++ lib.optionals (useLLVM || bareMetal || isMusl || isNewDarwinBootstrap) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
+  ] ++ lib.optionals (useLLVM || bareMetal) [
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
   ] ++ lib.optionals (!haveLibc || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
@@ -59,8 +65,13 @@ stdenv.mkDerivation {
     # extra `/`.
     ./normalize-var.patch
     ../../common/compiler-rt/libsanitizer-no-cyclades-11.patch
-  ] ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
-
+    ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
+    ./armv7l.patch
+    # Fix build on armv6l
+    ../../common/compiler-rt/armv6-mcr-dmb.patch
+    ../../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+    ../../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+  ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cmakeFlagsArray+=("-DCMAKE_LIPO=$(command -v ${stdenv.cc.targetPrefix}lipo)")
@@ -74,9 +85,9 @@ stdenv.mkDerivation {
   postPatch = lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
+    substituteInPlace cmake/config-ix.cmake \
+      --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/builtin-config-ix.cmake \
-      --replace 'foreach(arch ''${ARM64})' 'foreach(arch)'
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (useLLVM) ''
@@ -94,8 +105,18 @@ stdenv.mkDerivation {
   '' + lib.optionalString (useLLVM) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
+    ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbeginS.o
+    ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtendS.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
+  ''
+  # See https://reviews.llvm.org/D37278 for why android exception
+  + lib.optionalString (stdenv.hostPlatform.isx86_32 && !stdenv.hostPlatform.isAndroid) ''
+    for f in $out/lib/*/*builtins-i?86*; do
+      ln -s "$f" $(echo "$f" | sed -e 's/builtins-i.86/builtins-i386/')
+    done
+  '' + lib.optionalString doFakeLibgcc ''
+    ln -s $out/lib/freebsd/libclang_rt.builtins-*.a $out/lib/libgcc.a
   '';
 
   meta = llvm_meta // {

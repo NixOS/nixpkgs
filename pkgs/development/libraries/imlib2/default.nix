@@ -1,14 +1,16 @@
 { lib, stdenv, fetchurl
 # Image file formats
-, libjpeg, libtiff, giflib, libpng, libwebp
+, libjpeg, libtiff, giflib, libpng, libwebp, libjxl
+, libspectre
 # imlib2 can load images from ID3 tags.
 , libid3tag, librsvg, libheif
 , freetype , bzip2, pkg-config
-, x11Support ? true, xlibsWrapper ? null
-# Compilation error on Darwin with librsvg. For more information see:
-# https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
-, svgSupport ? !stdenv.isDarwin
-, heifSupport ? !stdenv.isDarwin
+, x11Support ? true
+, webpSupport ? true
+, svgSupport ? false
+, heifSupport ? false
+, jxlSupport ? false
+, psSupport ? false
 
 # for passthru.tests
 , libcaca
@@ -18,26 +20,31 @@
 , openbox
 , fluxbox
 , enlightenment
+, xorg
+, testers
 }:
 
 let
-  inherit (lib) optional;
+  inherit (lib) optional optionals;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imlib2";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/enlightenment/${pname}-${version}.tar.xz";
-    hash = "sha256-SiJAOL//vl1NJQxE4F9O5a4k3P74OVsWd8cVxY92TUM=";
+    url = "mirror://sourceforge/enlightenment/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    hash = "sha256-cnwak3yIXAgMNyF+R23Ii1o+YNc38b8ECzQ1ILeBy7o=";
   };
 
   buildInputs = [
-    libjpeg libtiff giflib libpng libwebp
+    libjpeg libtiff giflib libpng
     bzip2 freetype libid3tag
-  ] ++ optional x11Support xlibsWrapper
+  ] ++ optionals x11Support [ xorg.libXft xorg.libXext ]
     ++ optional heifSupport libheif
-    ++ optional svgSupport librsvg;
+    ++ optional svgSupport librsvg
+    ++ optional webpSupport libwebp
+    ++ optional jxlSupport libjxl
+    ++ optional psSupport libspectre;
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -63,6 +70,8 @@ stdenv.mkDerivation rec {
       enlightenment;
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Image manipulation library";
 
@@ -77,7 +86,8 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.enlightenment.org/api/imlib2/html";
     changelog = "https://git.enlightenment.org/legacy/imlib2.git/plain/ChangeLog?h=v${version}";
     license = licenses.imlib2;
+    pkgConfigModules = [ "imlib2" ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ spwhitt ];
   };
-}
+})

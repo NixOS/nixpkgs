@@ -1,13 +1,20 @@
-{ airspy
+{ lib
+, stdenv
+, airspy
+, airspyhf
+, aptdec
 , boost
 , cm256cc
 , cmake
 , codec2
+, dab_lib
+, dsdcc
+, faad2
 , fetchFromGitHub
 , fftwFloat
 , glew
 , hackrf
-, lib
+, hidapi
 , ffmpeg
 , libiio
 , libopus
@@ -15,68 +22,95 @@
 , libusb1
 , limesuite
 , libbladeRF
+, mbelib
 , mkDerivation
+, ninja
 , ocl-icd
 , opencv3
 , pkg-config
 , qtcharts
+, qtdeclarative
+, qtgraphicaleffects
 , qtlocation
 , qtmultimedia
+, qtquickcontrols
+, qtquickcontrols2
 , qtserialport
 , qtspeech
+, qttools
 , qtwebsockets
+, qtwebengine
 , rtl-sdr
 , serialdv
+, sgp4
 , soapysdr-with-plugins
 , uhd
+, zlib
 }:
 
 mkDerivation rec {
   pname = "sdrangel";
-  version = "6.18.1";
+  version = "7.11.0";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    sha256 = "sha256-gf+RUOcki0pi3UH4NHFsmbTV04HUG16UC4jcUjyeip4=";
-    fetchSubmodules = false;
+    hash = "sha256-zWux84a1MCK0XJXRXcaLHieJ47d4n/wO/xdwTYuuGJw=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
   buildInputs = [
     airspy
+    airspyhf
+    aptdec
     boost
     cm256cc
     codec2
+    dab_lib
+    dsdcc
+    faad2
     ffmpeg
     fftwFloat
     glew
     hackrf
+    hidapi
     libbladeRF
     libiio
     libopus
     libpulseaudio
     libusb1
     limesuite
+    mbelib
     opencv3
     qtcharts
+    qtdeclarative
+    qtgraphicaleffects
     qtlocation
     qtmultimedia
+    qtquickcontrols
+    qtquickcontrols2
     qtserialport
     qtspeech
+    qttools
     qtwebsockets
+    qtwebengine
     rtl-sdr
     serialdv
+    sgp4
     soapysdr-with-plugins
     uhd
+    zlib
   ];
 
   cmakeFlags = [
+    "-DAPT_DIR=${aptdec}"
+    "-DDAB_INCLUDE_DIR:PATH=${dab_lib}/include/dab_lib"
     "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
     "-DLIMESUITE_INCLUDE_DIR:PATH=${limesuite}/include"
-    "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite.so"
+    "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DSGP4_DIR=${sgp4}"
     "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
   ];
 
@@ -89,7 +123,7 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/f4exb/sdrangel";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ alkeryn ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ alkeryn Tungsten842 ];
+    platforms = platforms.unix;
   };
 }

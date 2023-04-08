@@ -41,7 +41,7 @@ in
   ###### interface
   options.services.kubernetes.pki = with lib.types; {
 
-    enable = mkEnableOption "easyCert issuer service";
+    enable = mkEnableOption (lib.mdDoc "easyCert issuer service");
 
     certs = mkOption {
       description = lib.mdDoc "List of certificate specs to feed to cert generator.";
@@ -114,9 +114,9 @@ in
     };
 
     etcClusterAdminKubeconfig = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Symlink a kubeconfig with cluster-admin privileges to environment path
-        (/etc/&lt;path&gt;).
+        (/etc/\<path\>).
       '';
       default = null;
       type = nullOr str;
@@ -266,11 +266,11 @@ in
           in
           ''
             export KUBECONFIG=${clusterAdminKubeconfig}
-            ${kubernetes}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
+            ${top.package}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
           '';
         })]);
 
-      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (!isNull cfg.etcClusterAdminKubeconfig)
+      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (cfg.etcClusterAdminKubeconfig != null)
         clusterAdminKubeconfig;
 
       environment.systemPackages = mkIf (top.kubelet.enable || top.proxy.enable) [
@@ -323,7 +323,7 @@ in
           systemctl restart flannel
         ''}
 
-        echo "Node joined succesfully"
+        echo "Node joined successfully"
       '')];
 
       # isolate etcd on loopback at the master node

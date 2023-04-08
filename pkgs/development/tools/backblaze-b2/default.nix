@@ -2,15 +2,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.5.0";
+  version = "3.7.0";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "b2";
-    sha256 = "sha256-vyqExulsV0wDijLotPO3RAOk9o4ne0Vq74KJKhSBrvo=";
+    sha256 = "sha256-sW6gaZWUh3WX+0+qHRlQ4gZzKU4bL8ePPNKWo9rdF84=";
   };
 
   postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace 'phx-class-registry==4.0.5' 'phx-class-registry'
     substituteInPlace requirements.txt \
       --replace 'tabulate==0.8.10' 'tabulate'
     substituteInPlace setup.py \
@@ -30,8 +32,9 @@ python3Packages.buildPythonApplication rec {
     tabulate
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     backoff
+    more-itertools
     pytestCheckHook
   ];
 

@@ -10,15 +10,15 @@ stdenv.mkDerivation rec {
   # base_version is of the form major.minor.patch
   # vc_version is of the form YYMMDDCC
   # version corresponds to the tag on GitHub
-  base_version = "8.0.0";
-  vc_version = "22062402";
+  base_version = "8.0.3";
+  vc_version = "22090809";
   version = "${base_version}.${vc_version}";
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
     rev = version;
-    sha256 = "sha256-37Hbs0i5eXMjVaETX7ImJCak0y8XtEHUaRFceA9J39A=";
+    sha256 = "sha256-0/wkUk7PMPbBSGzDuSd82yxRzvAYxkbEhM5LTVt4bMA=";
   };
 
   nativeBuildInputs = [
@@ -34,13 +34,14 @@ stdenv.mkDerivation rec {
   ]);
 
   RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (map (path: path) [
-    SDL2 SDL2.dev libpng ffmpeg.out freetype glew.dev libGLU libGL fribidi zlib
+    SDL2 SDL2.dev libpng ffmpeg.lib freetype glew.dev libGLU libGL fribidi zlib
   ]);
 
   enableParallelBuilding = true;
 
   patches = [
     ./renpy-system-fribidi.diff
+    ./shutup-erofs-errors.patch
   ];
 
   postPatch = ''
@@ -58,25 +59,25 @@ stdenv.mkDerivation rec {
 
   buildPhase = with python3.pkgs; ''
     runHook preBuild
-    ${python.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
+    ${python.pythonForBuild.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
     runHook postBuild
   '';
 
   installPhase = with python3.pkgs; ''
     runHook preInstall
 
-    ${python.interpreter} module/setup.py install --prefix=$out
+    ${python.pythonForBuild.interpreter} module/setup.py install --prefix=$out
     mkdir -p $out/share/renpy
     cp -vr sdk-fonts gui launcher renpy the_question tutorial renpy.py $out/share/renpy
 
     makeWrapper ${python.interpreter} $out/bin/renpy \
       --set PYTHONPATH "$PYTHONPATH:$out/${python.sitePackages}" \
-      --add-flags "-O $out/share/renpy/renpy.py"
+      --add-flags "$out/share/renpy/renpy.py"
 
     runHook postInstall
   '';
 
-  NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${pygame_sdl2}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${pygame_sdl2}/include/${python.libPrefix}";
 
   meta = with lib; {
     description = "Visual Novel Engine";

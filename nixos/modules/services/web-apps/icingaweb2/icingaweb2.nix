@@ -12,7 +12,7 @@ in {
   meta.maintainers = with maintainers; [ das_j ];
 
   options.services.icingaweb2 = with types; {
-    enable = mkEnableOption "the icingaweb2 web interface";
+    enable = mkEnableOption (lib.mdDoc "the icingaweb2 web interface");
 
     pool = mkOption {
       type = str;
@@ -49,11 +49,11 @@ in {
     };
 
     modules = {
-      doc.enable = mkEnableOption "the icingaweb2 doc module";
-      migrate.enable = mkEnableOption "the icingaweb2 migrate module";
-      setup.enable = mkEnableOption "the icingaweb2 setup module";
-      test.enable = mkEnableOption "the icingaweb2 test module";
-      translation.enable = mkEnableOption "the icingaweb2 translation module";
+      doc.enable = mkEnableOption (lib.mdDoc "the icingaweb2 doc module");
+      migrate.enable = mkEnableOption (lib.mdDoc "the icingaweb2 migrate module");
+      setup.enable = mkEnableOption (lib.mdDoc "the icingaweb2 setup module");
+      test.enable = mkEnableOption (lib.mdDoc "the icingaweb2 test module");
+      translation.enable = mkEnableOption (lib.mdDoc "the icingaweb2 translation module");
     };
 
     modulePackages = mkOption {

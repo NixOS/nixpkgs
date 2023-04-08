@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, boost,
-  qtbase, qtscript, qtquickcontrols, qtwebkit, qtxmlpatterns, grantlee,
+  qtbase, qtscript, qtquickcontrols, qtxmlpatterns, grantlee,
   kdoctools, karchive, kxmlgui, kcrash, kdeclarative, ktexteditor, kguiaddons
 }:
 
@@ -11,7 +11,7 @@ mkDerivation {
   meta = with lib; {
     homepage = "https://edu.kde.org/rocs/";
     description = "A graph theory IDE.";
-    license = with licenses; [ gpl2 lgpl21 fdl12 ];
+    license = with licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     platforms = lib.platforms.linux;
     maintainers = with maintainers; [ knairda ];
   };
@@ -19,7 +19,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     boost
-    qtbase qtscript qtquickcontrols qtwebkit qtxmlpatterns grantlee
+    qtbase qtscript qtquickcontrols qtxmlpatterns grantlee
     kxmlgui kcrash kdeclarative karchive ktexteditor kguiaddons
   ];
 }

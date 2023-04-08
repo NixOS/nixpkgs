@@ -1,24 +1,36 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, oras }:
 
 buildGoModule rec {
   pname = "oras";
-  version = "0.13.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras";
     rev = "v${version}";
-    sha256 = "sha256-QmyMDmZXOXD+6T+7Xl9kPFeOrkP1styzwwWi5tH9aO0=";
+    hash = "sha256-NGkpmObFY3Z8sKBbgIwFAnIyVEFE0sRxgrX+3oXEVo0=";
   };
-  vendorSha256 = "sha256-JoSo716o1RmMlAFSauzgzH6ypE/Kxo/PniJ2PGdfKZ8=";
+
+  vendorHash = "sha256-l2UuYrkFdZYaqQUW57y0OZyu1gPO22C+AwNdIYymV9k=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  excludedPackages = [ "./test/e2e" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/oras-project/oras/internal/version.Version=${version}"
-    "-X github.com/oras-project/oras/internal/version.BuildMetadata="
-    "-X github.com/oras-project/oras/internal/version.GitTreeState=clean"
+    "-X oras.land/oras/internal/version.Version=${version}"
+    "-X oras.land/oras/internal/version.BuildMetadata="
+    "-X oras.land/oras/internal/version.GitTreeState=clean"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd oras \
+      --bash <($out/bin/oras completion bash) \
+      --fish <($out/bin/oras completion fish) \
+      --zsh <($out/bin/oras completion zsh)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -29,6 +41,11 @@ buildGoModule rec {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = oras;
+    command = "oras version";
+  };
 
   meta = with lib; {
     homepage = "https://oras.land/";

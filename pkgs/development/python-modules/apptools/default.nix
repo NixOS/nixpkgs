@@ -30,7 +30,7 @@ buildPythonPackage rec {
     # https://github.com/enthought/apptools/issues/303
     (fetchpatch {
       url = "https://github.com/enthought/apptools/commit/10fb73916124f7ae7edf6c6688a05ad95678488f.patch";
-      sha256 = "sha256-izAcP5RWobLvnk2PQx31SX/TUGkw+prbYbjamYVmtjY=";
+      hash = "sha256-izAcP5RWobLvnk2PQx31SX/TUGkw+prbYbjamYVmtjY=";
       name = "fix_python310_tests.patch";
     })
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     tables
     pandas
     pytestCheckHook

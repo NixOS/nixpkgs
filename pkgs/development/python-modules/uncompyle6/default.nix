@@ -12,15 +12,15 @@
 
 buildPythonPackage rec {
   pname = "uncompyle6";
-  version = "3.8.0";
+  version = "3.9.0";
   disabled = pythonAtLeast "3.9"; # See: https://github.com/rocky/python-uncompyle6/issues/331
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YgYzYY9t/B8+eBh+Igk014/8Y5wOOdrsofxTWquBcBQ=";
+    hash = "sha256-HmqQLeYOpcP30q9+J0UAa05Lm97eiIoH+EQcmTjy7n0=";
   };
 
-  checkInputs = [ nose pytest hypothesis six ];
+  nativeCheckInputs = [ nose pytest hypothesis six ];
   propagatedBuildInputs = [ spark_parser xdis ];
 
   # six import errors (yet it is supplied...)

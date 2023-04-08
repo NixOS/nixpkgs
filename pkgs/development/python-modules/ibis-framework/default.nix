@@ -16,6 +16,7 @@
 , geoalchemy2
 , geopandas
 , graphviz-nox
+, hypothesis
 , lz4
 , multipledispatch
 , numpy
@@ -30,22 +31,23 @@
 , pymysql
 , pyspark
 , pytest-benchmark
-, pytest-randomly
 , pytest-mock
+, pytest-randomly
+, pytest-snapshot
 , pytest-xdist
 , python
 , pytz
 , regex
+, rich
 , rsync
 , shapely
 , sqlalchemy
+, sqlglot
 , sqlite
-, tabulate
 , toolz
 }:
 let
   testBackends = [
-    "dask"
     "datafusion"
     "duckdb"
     "pandas"
@@ -56,13 +58,13 @@ let
     owner = "ibis-project";
     repo = "testing-data";
     rev = "3c39abfdb4b284140ff481e8f9fbb128b35f157a";
-    sha256 = "sha256-BZWi4kEumZemQeYoAtlUSw922p+R6opSWp/bmX0DjAo=";
+    hash = "sha256-BZWi4kEumZemQeYoAtlUSw922p+R6opSWp/bmX0DjAo=";
   };
 in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "3.1.0";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -70,20 +72,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "ibis";
     owner = "ibis-project";
-    rev = version;
-    hash = "sha256-/mQWQLiJa1DRZiyiA6F0/lMyn3wSY1IUwJl2S0IFkvs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ipnMymf+BOpG9iGWO47no47m4nLIBbqLdbzlevuxeBw=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "xfail-datafusion-0.4.0";
-      url = "https://github.com/ibis-project/ibis/compare/c162abba4df24e0d531bd2e6a3be3109c16b43b9...6219d6caee19b6fd3171983c49cd8d6872e3564b.patch";
-      hash = "sha256-pCYPntj+TwzqCtYWRf6JF5/tJC4crSXHp0aepRocHck=";
-      excludes = ["poetry.lock"];
-    })
+  nativeBuildInputs = [
+    poetry-core
   ];
-
-  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     atpublic
@@ -96,42 +91,50 @@ buildPythonPackage rec {
     pydantic
     pytz
     regex
-    tabulate
+    rich
     toolz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     click
     filelock
+    hypothesis
     pytest-benchmark
     pytest-mock
     pytest-randomly
+    pytest-snapshot
     pytest-xdist
     rsync
   ] ++ lib.concatMap (name: passthru.optional-dependencies.${name}) testBackends;
-
-  preBuild = ''
-    # setup.py exists only for developer convenience and is automatically generated
-    # it gets in the way in nixpkgs so we remove it
-    rm setup.py
-  '';
 
   pytestFlagsArray = [
     "--dist=loadgroup"
     "-m"
     "'${lib.concatStringsSep " or " testBackends} or core'"
-    # this test fails on nixpkgs datafusion version (0.4.0), but works on
-    # datafusion 0.6.0
-    "-k"
-    "'not datafusion-no_op'"
+    # these will be fixed in ibis-framework 5.0.0
+    "--deselect=ibis/backends/tests/test_string.py::test_string"
+    "--deselect=ibis/backends/tests/test_register.py::test_csv_reregister_schema"
+    "--deselect=ibis/backends/tests/test_client.py::test_list_databases"
   ];
+
+  # remove when sqlalchemy backend no longer uses deprecated methods
+  SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
+  # patch out tests that check formatting with black
+  postPatch = ''
+    find ibis/tests -type f -name '*.py' -exec sed -i \
+      -e '/^ *assert_decompile_roundtrip/d' \
+      -e 's/^\( *\)code = ibis.decompile(expr, format=True)/\1code = ibis.decompile(expr)/g' {} +
+  '';
 
   preCheck = ''
     set -eo pipefail
 
     export IBIS_TEST_DATA_DIRECTORY
-    IBIS_TEST_DATA_DIRECTORY="$(mktemp -d)"
+    IBIS_TEST_DATA_DIRECTORY="ci/ibis-testing-data"
+
+    mkdir -p "$IBIS_TEST_DATA_DIRECTORY"
 
     # copy the test data to a directory
     rsync --chmod=Du+rwx,Fu+rw --archive "${ibisTestingData}/" "$IBIS_TEST_DATA_DIRECTORY"
@@ -147,16 +150,16 @@ buildPythonPackage rec {
 
   passthru = {
     optional-dependencies = {
-      clickhouse = [ clickhouse-cityhash clickhouse-driver lz4 ];
+      clickhouse = [ clickhouse-cityhash clickhouse-driver lz4 sqlglot ];
       dask = [ dask pyarrow ];
       datafusion = [ datafusion ];
-      duckdb = [ duckdb duckdb-engine sqlalchemy ];
+      duckdb = [ duckdb duckdb-engine pyarrow sqlalchemy sqlglot ];
       geospatial = [ geoalchemy2 geopandas shapely ];
-      mysql = [ pymysql sqlalchemy ];
+      mysql = [ sqlalchemy pymysql sqlglot ];
       pandas = [ ];
-      postgres = [ psycopg2 sqlalchemy ];
+      postgres = [ psycopg2 sqlalchemy sqlglot ];
       pyspark = [ pyarrow pyspark ];
-      sqlite = [ sqlalchemy sqlite ];
+      sqlite = [ sqlalchemy sqlite sqlglot ];
       visualization = [ graphviz-nox ];
     };
   };

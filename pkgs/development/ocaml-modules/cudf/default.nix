@@ -1,6 +1,6 @@
-{ lib, fetchurl, stdenv, ocaml, ocamlbuild, findlib, ocaml_extlib, glib, perl, pkg-config, stdlib-shims, ounit }:
+{ lib, fetchurl, stdenv, ocaml, ocamlbuild, findlib, extlib, glib, perl, pkg-config, stdlib-shims, ounit }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-cudf";
   version = "0.9";
 
@@ -13,19 +13,20 @@ stdenv.mkDerivation {
     "all"
     "opt"
   ];
+
   nativeBuildInputs = [
     findlib
     ocaml
     ocamlbuild
     pkg-config
+    perl
   ];
   buildInputs = [
     glib
-    perl
     stdlib-shims
   ];
   propagatedBuildInputs = [
-    ocaml_extlib
+    extlib
   ];
 
   checkTarget = [
@@ -38,7 +39,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   preInstall = "mkdir -p $OCAMLFIND_DESTDIR";
-  installFlags = "BINDIR=$(out)/bin";
+  installFlags = [ "BINDIR=$(out)/bin" ];
 
   meta = with lib; {
     description = "A library for CUDF format";

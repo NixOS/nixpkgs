@@ -81,7 +81,7 @@ let
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 1080;
         description = lib.mdDoc ''
           What port to listen for client requests, default is 1080.
@@ -139,7 +139,7 @@ in
 
     services.nylon = mkOption {
       default = {};
-      description = "Collection of named nylon instances";
+      description = lib.mdDoc "Collection of named nylon instances";
       type = with types; attrsOf (submodule nylonOpts);
       internal = true;
     };

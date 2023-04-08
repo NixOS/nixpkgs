@@ -17,7 +17,16 @@ let
 in
 {
   options.networking.wireless.iwd = {
-    enable = mkEnableOption "iwd";
+    enable = mkEnableOption (lib.mdDoc "iwd");
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.iwd;
+      defaultText = lib.literalExpression "pkgs.iwd";
+      description = lib.mdDoc ''
+        The iwd package to use.
+      '';
+    };
 
     settings = mkOption {
       type = ini.type;
@@ -50,11 +59,11 @@ in
     environment.etc."iwd/${configFile.name}".source = configFile;
 
     # for iwctl
-    environment.systemPackages = [ pkgs.iwd ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ pkgs.iwd ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.iwd ];
+    systemd.packages = [ cfg.package ];
 
     systemd.network.links."80-iwd" = {
       matchConfig.Type = "wlan";
@@ -67,5 +76,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ mic92 dtzWill ];
+  meta.maintainers = with lib.maintainers; [ dtzWill ];
 }

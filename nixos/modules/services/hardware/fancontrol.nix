@@ -9,7 +9,7 @@ let
 in
 {
   options.hardware.fancontrol = {
-    enable = mkEnableOption "software fan control (requires fancontrol.config)";
+    enable = mkEnableOption (lib.mdDoc "software fan control (requires fancontrol.config)");
 
     config = mkOption {
       type = types.lines;
@@ -42,6 +42,13 @@ in
         ExecStart = "${pkgs.lm_sensors}/sbin/fancontrol ${configFile}";
       };
     };
+
+    # On some systems, the fancontrol service does not resume properly after sleep because the pwm status of the fans
+    # is not reset properly. Restarting the service fixes this, in accordance with https://github.com/lm-sensors/lm-sensors/issues/172.
+    powerManagement.resumeCommands = ''
+      systemctl restart fancontrol.service
+    '';
+
   };
 
   meta.maintainers = [ maintainers.evils ];

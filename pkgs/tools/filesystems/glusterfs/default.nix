@@ -14,9 +14,9 @@ let
   #       can help with finding new Python scripts.
 
   buildInputs = [
-    fuse bison flex openssl ncurses readline
-    libtool pkg-config zlib libaio libxml2
-    acl sqlite liburcu attr makeWrapper util-linux libtirpc gperftools
+    fuse openssl ncurses readline
+    zlib libaio libxml2
+    acl sqlite liburcu attr util-linux libtirpc gperftools
     liburing
     (python3.withPackages (pkgs: [
       pkgs.flask
@@ -55,13 +55,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "glusterfs";
-  version = "10.1";
+  version = "10.3";
 
   src = fetchFromGitHub {
     owner = "gluster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vVFC2kQNneaOwrezPehOX32dpJb88ZhGHBApEXc9MOg=";
+    sha256 = "sha256-2+zdEbvXwfjAyeWpy0TAWRE0kvqSUqebmRyuhdfzYd0=";
   };
   inherit buildInputs propagatedBuildInputs;
 
@@ -106,7 +106,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  nativeBuildInputs = [ rpcsvc-proto autoconf automake ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config bison flex makeWrapper rpcsvc-proto ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

@@ -18,13 +18,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "eduke32";
-  version = "20210910";
-  rev = "9603";
-  revExtra = "6c289cce4";
+  version = "20221225";
+  rev = "10166";
+  revExtra = "122aee012";
 
   src = fetchurl {
     url = "https://dukeworld.com/eduke32/synthesis/${version}-${rev}-${revExtra}/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
-    sha256 = "sha256-/NQMsmT9z2N3KWBrP8hlGngQKJUgSP+vrNoFqJscRCk=";
+    sha256 = "sha256-3pBYZJqoH7XBkJ537wPwBSmNaZprvOlVtAKTo8EOT3Q=";
   };
 
   buildInputs = [
@@ -48,7 +48,12 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkg-config ]
     ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = ''
+    substituteInPlace source/imgui/src/imgui_impl_sdl.cpp \
+      --replace '#include <SDL.h>' '#include <SDL2/SDL.h>' \
+      --replace '#include <SDL_syswm.h>' '#include <SDL2/SDL_syswm.h>' \
+      --replace '#include <SDL_vulkan.h>' '#include <SDL2/SDL_vulkan.h>'
+  '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace source/build/src/glbuild.cpp \
       --replace libGLU.so ${libGLU}/lib/libGLU.so
 
@@ -57,8 +62,6 @@ in stdenv.mkDerivation rec {
         --replace libGL.so ${libGL}/lib/libGL.so
     done
   '';
-
-  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
 
   makeFlags = [
     "SDLCONFIG=${SDL2}/bin/sdl2-config"

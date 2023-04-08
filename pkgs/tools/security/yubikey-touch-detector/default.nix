@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "yubikey-touch-detector";
-  version = "1.9.3";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "yubikey-touch-detector";
     rev = version;
-    sha256 = "sha256-f6j+YNYASH0Adg3236QijApALd/yXJjNMYEdP0Pifw0=";
+    sha256 = "sha256-y/iDmxlhu2Q6Zas0jsv07HQPkNdMrOQaXWy/cuWvpMk=";
   };
-  vendorSha256 = "sha256-H05EJwYDdg4lq6+psXiwujQd5g294epdRPjqviHhLWs=";
+  vendorHash = "sha256-OitI9Yp4/mRMrNH4yrWSL785+3mykPkvzarrc6ipOeg=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -6,22 +6,28 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bandwidth";
-  version = "1.11.2";
+  version = "1.11.2d";
 
   src = fetchurl {
     url = "https://zsmith.co/archives/${pname}-${version}.tar.gz";
-    sha256 = "sha256-mjtvQAOH9rv12XszGdD5hIX197er7Uc74WfVaP32TpM=";
+    hash = "sha256-7IrNiCXKf1vyRGl73Ccu3aYMqPVc4PpEr6lnSqIa4Q8=";
   };
 
   postPatch = ''
     sed -i 's,ar ,$(AR) ,g' OOC/Makefile
     # Remove unnecessary -m32 for 32-bit targets
     sed -i 's,-m32,,g' OOC/Makefile
+    # Replace arm64 with aarch64
+    sed -i 's#,arm64#,aarch64#g' Makefile
     # Fix wrong comment character
     sed -i 's,# 32,; 32,g' routines-x86-32bit.asm
     # Fix missing symbol exports for macOS clang
     echo global _VectorToVector128 >> routines-x86-64bit.asm
     echo global _VectorToVector256 >> routines-x86-64bit.asm
+    # Fix unexpected token on macOS
+    sed -i '/.section .note.GNU-stack/d' *-64bit.asm
+    sed -i '/.section code/d' *-arm-64bit.asm
+    sed -i 's#-Wl,-z,noexecstack##g' Makefile-arm64
   '';
 
   nativeBuildInputs = [ nasm ];

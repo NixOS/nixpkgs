@@ -15,5 +15,5 @@ import ./generic.nix {
   # gcc-10. Otherwise build fails as:
   #   ld: libcamlrun.a(startup.o):(.bss+0x800): multiple definition of
   #     `caml_code_fragments_table'; libcamlrun.a(backtrace.o):(.bss+0x20): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 }

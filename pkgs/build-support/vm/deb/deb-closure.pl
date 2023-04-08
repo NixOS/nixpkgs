@@ -156,7 +156,7 @@ foreach my $pkgName (@order) {
     $cleanedName =~ s/~//g;
 
     print "    (fetchurl {\n";
-    print "      url = $urlPrefix/$cdata->{Filename};\n";
+    print "      url = \"$urlPrefix/$cdata->{Filename}\";\n";
     print "      sha256 = \"$cdata->{SHA256}\";\n";
     print "      name = \"$cleanedName\";\n" if $cleanedName ne $origName;
     print "    })\n";

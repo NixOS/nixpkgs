@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pylibmc";
-  version = "1.6.2";
+  version = "1.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QatJ05VAdnN0iRvvC+tSkcqXvrcEi3r3dSEGSVPATcA=";
+    hash = "sha256-7vpGEVU3q61l++LgMqzRs0Y9m/njNa9LCRbfTk0yBuA=";
   };
 
   buildInputs = [

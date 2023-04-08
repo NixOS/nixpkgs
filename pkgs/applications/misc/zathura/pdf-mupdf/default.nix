@@ -1,5 +1,4 @@
-{ stdenv, lib, meson, ninja, fetchurl, fetchpatch
-, cairo
+{ stdenv, lib, meson, ninja, fetchurl, cairo
 , girara
 , gtk-mac-integration
 , gumbo
@@ -9,15 +8,18 @@
 , openjpeg
 , pkg-config
 , zathura_core
+, tesseract
+, leptonica
+, mujs
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.7";
+  version = "0.4.0";
   pname = "zathura-pdf-mupdf";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "07d2ds9yqfrl20z3yfgc55vwg10mwmcg2yvpr4j66jjd5mlal01g";
+    sha256 = "0pcjxvlh4hls8mjhjghhhihyy2kza8l27wdx0yq4bkd1g1b5f74c";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
@@ -31,14 +33,10 @@ stdenv.mkDerivation rec {
     mupdf
     openjpeg
     zathura_core
+    tesseract
+    leptonica
+    mujs
   ] ++ lib.optional stdenv.isDarwin gtk-mac-integration;
-
-  mesonFlags = [
-    "-Dlink-external=true"
-  ];
-
-  # avoid: undefined symbol: gumbo_destroy_output
-  NIX_LDFLAGS = [ "-lgumbo" ];
 
   PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
 

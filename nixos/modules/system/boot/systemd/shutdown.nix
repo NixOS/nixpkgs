@@ -9,7 +9,7 @@
 
 in {
   options.systemd.shutdownRamfs = {
-    enable = lib.mkEnableOption "pivoting back to an initramfs for shutdown" // { default = true; };
+    enable = lib.mkEnableOption (lib.mdDoc "pivoting back to an initramfs for shutdown") // { default = true; };
     contents = lib.mkOption {
       description = lib.mdDoc "Set of files that have to be linked into the shutdown ramfs";
       example = lib.literalExpression ''
@@ -33,26 +33,30 @@ in {
     systemd.shutdownRamfs.contents."/shutdown".source = "${config.systemd.package}/lib/systemd/systemd-shutdown";
     systemd.shutdownRamfs.storePaths = [pkgs.runtimeShell "${pkgs.coreutils}/bin"];
 
+    systemd.mounts = [{
+      what = "tmpfs";
+      where = "/run/initramfs";
+      type = "tmpfs";
+    }];
+
     systemd.services.generate-shutdown-ramfs = {
       description = "Generate shutdown ramfs";
       wantedBy = [ "shutdown.target" ];
       before = [ "shutdown.target" ];
       unitConfig = {
         DefaultDependencies = false;
+        RequiresMountsFor = "/run/initramfs";
         ConditionFileIsExecutable = [
           "!/run/initramfs/shutdown"
         ];
       };
 
-      path = [pkgs.util-linux pkgs.makeInitrdNGTool];
-      serviceConfig.Type = "oneshot";
-      script = ''
-        mkdir -p /run/initramfs
-        if ! mountpoint -q /run/initramfs; then
-          mount -t tmpfs tmpfs /run/initramfs
-        fi
-        make-initrd-ng ${ramfsContents} /run/initramfs
-      '';
+      serviceConfig = {
+        Type = "oneshot";
+        ProtectSystem = "strict";
+        ReadWritePaths = "/run/initramfs";
+        ExecStart = "${pkgs.makeInitrdNGTool}/bin/make-initrd-ng ${ramfsContents} /run/initramfs";
+      };
     };
   };
 }

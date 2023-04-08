@@ -1,6 +1,6 @@
 { lib
 , babel
-, buildPythonApplication
+, buildPythonPackage
 , cliff
 , fetchPypi
 , iso8601
@@ -20,16 +20,16 @@
 , testscenarios
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-heatclient";
-  version = "3.0.0";
+  version = "3.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5OLysKbM2GbjMT8lshWDLMtqOrHq2DhhWvbw1oNBNZs=";
+    hash = "sha256-LYjRjDeZp7LQeQFXLogyGy4LEgawTQED+5qRu799tWM=";
   };
 
   propagatedBuildInputs = [
@@ -48,7 +48,7 @@ buildPythonApplication rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     testscenarios
     requests-mock

@@ -7,7 +7,7 @@
 , xfce4-panel
 , libxfce4ui
 , gtk2
-, xfce
+, gitUpdater
 }:
 
 let
@@ -33,7 +33,10 @@ in stdenv.mkDerivation rec {
     gtk2
   ];
 
-  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
+  };
 
   meta = with lib;{
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-embed-plugin";

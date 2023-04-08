@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , appstream-glib
 , clutter
 , gjs
@@ -9,6 +8,7 @@
 , gobject-introspection
 , gtk3
 , gtk4
+, gcr_4
 , libadwaita
 , meson
 , mutter
@@ -16,18 +16,19 @@
 , pango
 , pkg-config
 , vala
+, desktop-file-utils
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  version = "42.1";
+  version = "43.1";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "sha256-A5NZ4NiPVZUr7vPdDuNywLsLrejZ4SCg7+3//ZNRmLY=";
+    sha256 = "sha256-wOxhaYWX76jSur3uh75vDfAedbiLh2ikoMuobCZx3jE=";
   };
 
   patches = [
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+    desktop-file-utils
     wrapGAppsHook
   ];
 
@@ -61,20 +63,18 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     gtk4
+    gcr_4
     libadwaita
     mutter
     pango
   ];
 
   mesonFlags = [
+    "-Dgcr3=false" # Build with gcr4
     "-Dcontrol-center-keybindings-dir=${placeholder "out"}/share/gnome-control-center/keybindings"
     "-Ddbus-services-dir=${placeholder "out"}/share/dbus-1/services"
     "-Dsystemd-user-unit-dir=${placeholder "out"}/etc/systemd/user"
   ];
-
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/Keruspe/GPaste";

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.10.2";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "0x9anracaa19yqkc0x8wangrkdrx01kdy07c55lvlqrjyimfm4ih";
+    sha256 = "sha256-Eq9b49zEIb3wMHUw9/jpfYDaMXBY5JHZ2u5RTTtD5I8=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   postInstall = ''
     rm -r $out/etc/cron.*

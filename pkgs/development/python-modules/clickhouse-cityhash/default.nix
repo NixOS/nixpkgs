@@ -2,21 +2,30 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "clickhouse-cityhash";
-  version = "1.0.2.3";
+  version = "1.0.2.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0z8nl0ly2p1h6nygwxs6y40q8y424w40fkjv3jyf8vvcg4h7sdrg";
+    hash = "sha256-ezEl19CqE8LMTnWDqWWmv7CqlqEhMUdbRCVSustV9Pg=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  propagatedBuildInputs = [
+    setuptools
+  ];
 
   doCheck = false;
-  pythonImportsCheck = [ "clickhouse_cityhash" ];
+
+  pythonImportsCheck = [
+    "clickhouse_cityhash"
+  ];
 
   meta = with lib; {
     description = "Python-bindings for CityHash, a fast non-cryptographic hash algorithm";

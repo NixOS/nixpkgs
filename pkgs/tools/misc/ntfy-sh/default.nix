@@ -1,28 +1,58 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, pkgs, stdenv, buildGoModule, fetchFromGitHub, nixosTests
+, nodejs, debianutils, mkdocs, python3, python3Packages }:
 
+
+let
+  nodeDependencies = (import ./node-composition.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  }).nodeDependencies;
+in
 buildGoModule rec {
   pname = "ntfy-sh";
-  version = "1.27.2";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "binwiederhier";
     repo = "ntfy";
     rev = "v${version}";
-    sha256 = "sha256-0b4yC2kXh3c2SgKF11voWZh2qS3Y/4KJlt9WtjXswcE=";
+    sha256 = "sha256-A3kL/1Q7BFGfzVn4wFrQf9VS+2rOgS4u8o1uEQI2vcw=";
   };
 
-  vendorSha256 = "sha256-PXYSjhMNtDa0uCaLu0AyM1SMhZPr2wC+xMPDjeQIhDU=";
+  vendorSha256 = "sha256-0bmZmBYEHGIP9vd8O5rz0JyuKUu9VHeb8ErZ6VNsfxQ=";
 
   doCheck = false;
 
-  preBuild = ''
-    make cli-deps-static-sites
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  nativeBuildInputs = [
+    debianutils
+    mkdocs
+    nodejs
+    python3
+    python3Packages.mkdocs-material
+    python3Packages.mkdocs-minify
+    python3Packages.mkdocs-simple-hooks
+  ];
+
+  postPatch = ''
+    sed -i 's# /bin/echo# echo#' Makefile
   '';
+
+  preBuild = ''
+    ln -s ${nodeDependencies}/lib/node_modules web/node_modules
+    DISABLE_ESLINT_PLUGIN=true npm_config_offline=true make web-build docs-build
+  '';
+
+  passthru = {
+    updateScript = ./update.sh;
+    tests.ntfy-sh = nixosTests.ntfy-sh;
+  };
 
   meta = with lib; {
     description = "Send push notifications to your phone or desktop via PUT/POST";
     homepage = "https://ntfy.sh";
     license = licenses.asl20;
-    maintainers = with maintainers; [ arjan-s ];
+    maintainers = with maintainers; [ arjan-s fpletz ];
   };
 }

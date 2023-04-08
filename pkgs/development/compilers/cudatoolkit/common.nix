@@ -5,30 +5,47 @@ args@
 , name ? ""
 , developerProgram ? false
 , runPatches ? []
+, autoPatchelfHook
+, autoAddOpenGLRunpathHook
 , addOpenGLRunpath
 , alsa-lib
 , expat
 , fetchurl
 , fontconfig
 , freetype
-, gcc
 , gdk-pixbuf
 , glib
 , glibc
 , gtk2
 , lib
+, libxkbcommon
+, libkrb5
+, krb5
 , makeWrapper
 , ncurses5
+, numactl
+, nss
 , perl
-, python27
+, python3 # FIXME: CUDAToolkit 10 may still need python27
+, pulseaudio
 , requireFile
 , stdenv
+, backendStdenv # E.g. gcc11Stdenv, set in extension.nix
 , unixODBC
+, wayland
 , xorg
 , zlib
+, freeglut
+, libGLU
+, libsForQt5
+, libtiff
+, qt6Packages
+, rdma-core
+, ucx
+, rsync
 }:
 
-stdenv.mkDerivation rec {
+backendStdenv.mkDerivation rec {
   pname = "cudatoolkit";
   inherit version runPatches;
 
@@ -53,12 +70,92 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "doc" ];
 
-  nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
-  buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
+  nativeBuildInputs = [
+    perl
+    makeWrapper
+    rsync
+    addOpenGLRunpath
+    autoPatchelfHook
+    autoAddOpenGLRunpathHook
+  ] ++ lib.optionals (lib.versionOlder version "11") [
+    libsForQt5.wrapQtAppsHook
+  ] ++ lib.optionals (lib.versionAtLeast version "11.8") [
+    qt6Packages.wrapQtAppsHook
+  ];
+  buildInputs = lib.optionals (lib.versionOlder version "11") [
+    libsForQt5.qt5.qtwebengine
+    freeglut
+    libGLU
+  ] ++ [
+    # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
+    gdk-pixbuf
+
+    # For autoPatchelf
+    ncurses5
+    expat
+    python3
+    zlib
+    glibc
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXt
+    xorg.libXtst
+    xorg.libXi
+    xorg.libXext
+    xorg.libXdamage
+    xorg.libxcb
+    xorg.xcbutilimage
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
+    xorg.xcbutilkeysyms
+    pulseaudio
+    libxkbcommon
+    libkrb5
+    krb5
+    gtk2
+    glib
+    fontconfig
+    freetype
+    numactl
+    nss
+    unixODBC
+    alsa-lib
+    wayland
+  ] ++ lib.optionals (lib.versionAtLeast version "11.8") [
+    (lib.getLib libtiff)
+    qt6Packages.qtwayland
+    rdma-core
+    ucx
+    xorg.libxshmfence
+    xorg.libxkbfile
+  ];
+
+  # Prepended to runpaths by autoPatchelf.
+  # The order inherited from older rpath preFixup code
   runtimeDependencies = [
-    ncurses5 expat python27 zlib glibc
-    xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
-    gtk2 glib fontconfig freetype unixODBC alsa-lib
+    (placeholder "lib")
+    (placeholder "out")
+    "${placeholder "out"}/nvvm"
+    # NOTE: use the same libstdc++ as the rest of nixpkgs, not from backendStdenv
+    "${lib.getLib stdenv.cc.cc}/lib64"
+    "${placeholder "out"}/jre/lib/amd64/jli"
+    "${placeholder "out"}/lib64"
+    "${placeholder "out"}/nvvm/lib64"
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [
+    # This is the hardware-dependent userspace driver that comes from
+    # nvidia_x11 package. It must be deployed at runtime in
+    # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
+    # than pinned in runpath
+    "libcuda.so.1"
+
+    # The krb5 expression ships libcom_err.so.3 but cudatoolkit asks for the
+    # older
+    # This dependency is asked for by target-linux-x64/CollectX/RedHat/x86_64/libssl.so.10
+    # - do we even want to use nvidia-shipped libssl?
+    "libcom_err.so.2"
   ];
 
   unpackPhase = ''
@@ -123,6 +220,14 @@ stdenv.mkDerivation rec {
 
       mv pkg/builds/nsight_systems/target-linux-x64 $out/target-linux-x64
       mv pkg/builds/nsight_systems/host-linux-x64 $out/host-linux-x64
+      rm $out/host-linux-x64/libstdc++.so*
+    ''}
+      ${lib.optionalString (lib.versionAtLeast version "11.8")
+      # error: auto-patchelf could not satisfy dependency libtiff.so.5 wanted by /nix/store/.......-cudatoolkit-12.0.1/host-linux-x64/Plugins/imageformats/libqtiff.so
+      # we only ship libtiff.so.6, so let's use qt plugins built by Nix.
+      # TODO: don't copy, come up with a symlink-based "merge"
+    ''
+      rsync ${lib.getLib qt6Packages.qtimageformats}/lib/qt-6/plugins/ $out/host-linux-x64/Plugins/ -aP
     ''}
 
     rm -f $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
@@ -146,14 +251,27 @@ stdenv.mkDerivation rec {
 
     # Fix builds with newer glibc version
     sed -i "1 i#define _BITS_FLOATN_H" "$out/include/host_defines.h"
-
-    # Ensure that cmake can find CUDA.
+  '' +
+  # Point NVCC at a compatible compiler
+  # FIXME: redist cuda_nvcc copy-pastes this code
+  # Refer to comments in the overrides for cuda_nvcc for explanation
+  # CUDA_TOOLKIT_ROOT_DIR is legacy,
+  # Cf. https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
+  # NOTE: We unconditionally set -Xfatbin=-compress-all, which reduces the size of the compiled
+  #   binaries. If binaries grow over 2GB, they will fail to link. This is a problem for us, as
+  #   the default set of CUDA capabilities we build can regularly cause this to occur (for
+  #   example, with Magma).
+  ''
     mkdir -p $out/nix-support
-    echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
-
-    # Set the host compiler to be used by nvcc for CMake-based projects:
-    # https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
-    echo "cmakeFlags+=' -DCUDA_HOST_COMPILER=${gcc}/bin'" >> $out/nix-support/setup-hook
+    cat <<EOF >> $out/nix-support/setup-hook
+    cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'
+    cmakeFlags+=' -DCUDA_HOST_COMPILER=${backendStdenv.cc}/bin'
+    cmakeFlags+=' -DCMAKE_CUDA_HOST_COMPILER=${backendStdenv.cc}/bin'
+    if [ -z "\''${CUDAHOSTCXX-}" ]; then
+      export CUDAHOSTCXX=${backendStdenv.cc}/bin;
+    fi
+    export NVCC_PREPEND_FLAGS+=' --compiler-bindir=${backendStdenv.cc}/bin -Xfatbin=-compress-all'
+    EOF
 
     # Move some libraries to the lib output so that programs that
     # depend on them don't pull in this entire monstrosity.
@@ -166,10 +284,6 @@ stdenv.mkDerivation rec {
       mv $out/lib64 $out/lib
       mv $out/extras/CUPTI/lib64/libcupti* $out/lib
     ''}
-
-    # Set compiler for NVCC.
-    wrapProgram $out/bin/nvcc \
-      --prefix PATH : ${gcc}/bin
 
     # nvprof do not find any program to profile if LD_LIBRARY_PATH is not set
     wrapProgram $out/bin/nvprof \
@@ -188,48 +302,6 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  preFixup =
-    let rpath = lib.concatStringsSep ":" [
-      (lib.makeLibraryPath (runtimeDependencies ++ [ "$lib" "$out" "$out/nvvm" ]))
-      "${stdenv.cc.cc.lib}/lib64"
-      "$out/jre/lib/amd64/jli"
-      "$out/lib64"
-      "$out/nvvm/lib64"
-    ];
-    in
-    ''
-      while IFS= read -r -d $'\0' i; do
-        if ! isELF "$i"; then continue; fi
-        echo "patching $i..."
-        if [[ ! $i =~ \.so ]]; then
-          patchelf \
-            --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $i
-        fi
-        if [[ $i =~ libcudart ]]; then
-          patchelf --remove-rpath $i
-        else
-          patchelf --set-rpath "${rpath}" --force-rpath $i
-        fi
-      done < <(find $out $lib $doc -type f -print0)
-    '' + lib.optionalString (lib.versionAtLeast version "11") ''
-      for file in $out/target-linux-x64/*.so; do
-        echo "patching $file..."
-        patchelf --set-rpath "${rpath}:\$ORIGIN" $file
-      done
-    '';
-
-  # Set RPATH so that libcuda and other libraries in
-  # /run/opengl-driver(-32)/lib can be found. See the explanation in
-  # addOpenGLRunpath.  Don't try to figure out which libraries really need
-  # it, just patch all (but not the stubs libraries). Note that
-  # --force-rpath prevents changing RPATH (set above) to RUNPATH.
-  postFixup = ''
-    addOpenGLRunpath --force-rpath {$out,$lib}/lib/lib*.so
-  '' + lib.optionalString (lib.versionAtLeast version "11") ''
-    addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/*
-    addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/x86/*
-    addOpenGLRunpath $out/target-linux-x64/*
-  '';
 
   # cuda-gdb doesn't run correctly when not using sandboxing, so
   # temporarily disabling the install check.  This should be set to true
@@ -253,7 +325,7 @@ stdenv.mkDerivation rec {
     popd
   '';
   passthru = {
-    cc = gcc;
+    inherit (backendStdenv) cc;
     majorMinorVersion = lib.versions.majorMinor version;
     majorVersion = lib.versions.majorMinor version;
   };

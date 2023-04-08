@@ -9,13 +9,13 @@ let
     else throw "unsupported platform";
 in stdenv.mkDerivation rec {
   pname = "pixelorama";
-  version = "0.10.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${version}";
-    sha256 = "sha256-+Sfhv66skHawe6jzfzQyFxejN5TvTdmWunzl0/7yy4M=";
+    sha256 = "sha256-RFE7K8NMl0COzFEhUqWhhYd5MGBsCDJf0T5daPu/4DI=";
   };
 
   nativeBuildInputs = [

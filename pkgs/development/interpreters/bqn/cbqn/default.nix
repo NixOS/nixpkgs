@@ -1,32 +1,45 @@
-{ lib
+{ callPackage
+, lib
 , stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , genBytecode ? false
 , bqn-path ? null
 , mbqn-source ? null
+, enableReplxx ? false
+, enableSingeli ? stdenv.hostPlatform.avx2Support
+  # No support for macOS' .dylib on the CBQN side
+, enableLibcbqn ? stdenv.hostPlatform.isLinux
+, libffi
+, pkg-config
 }:
 
 let
-  cbqn-bytecode-files = fetchFromGitHub {
-    name = "cbqn-bytecode-files";
-    owner = "dzaima";
-    repo = "CBQN";
-    rev = "c39653c898531a2cdbf4cc5c764df6e37b1894a4";
-    hash = "sha256-JCEmkwh5Rv5+NQoxvefSrYnayU892/Wam+gjMgcQmO0=";
-  };
+  cbqn-bytecode-submodule =
+    callPackage ./cbqn-bytecode.nix { inherit lib fetchFromGitHub stdenvNoCC; };
+  replxx-submodule = callPackage ./replxx.nix { inherit lib fetchFromGitHub stdenvNoCC; };
+  singeli-submodule = callPackage ./singeli.nix { inherit lib fetchFromGitHub stdenvNoCC; };
 in
 assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.pre+date=2022-05-06";
+  version = "unstable-2023-02-01";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "3496a939b670f8c9ca2a04927378d6b7e9abd68e";
-    hash = "sha256-P+PoY4XF9oEw7VIpmybvPp+jxWHEo2zt1Lamayf1mHg=";
+    rev = "05c1270344908e98c9f2d06b3671c3646f8634c3";
+    hash = "sha256-wKeyYWMgTZPr+Ienz3xnsXeD67vwdK4sXbQlW+GpQho=";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    libffi
+  ];
 
   dontConfigure = true;
 
@@ -36,27 +49,54 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
+  ]
+  ++ lib.optional enableReplxx "REPLXX=1";
+
+  buildFlags = [
+    # interpreter binary
+    (lib.flatten (if enableSingeli then ["o3n-singeli" "f='-mavx2'"] else ["o3"]))
+  ] ++ lib.optionals enableLibcbqn [
+    # embeddable interpreter as a shared lib
+    "shared-o3"
   ];
 
   preBuild = ''
     # Purity: avoids git downloading bytecode files
-    touch src/gen/customRuntime
+    mkdir -p build/bytecodeLocal/gen
   '' + (if genBytecode then ''
-    ${bqn-path} genRuntime ${mbqn-source}
+    ${bqn-path} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
   '' else ''
-    cp ${cbqn-bytecode-files}/src/gen/{compiles,formatter,runtime0,runtime1,src} src/gen/
-  '');
+    cp -r ${cbqn-bytecode-submodule}/dev/* build/bytecodeLocal/gen/
+  '')
+  + lib.optionalString enableReplxx ''
+    cp -r ${replxx-submodule}/dev/* build/replxxLocal/
+  ''
+  + lib.optionalString enableSingeli ''
+    cp -r ${singeli-submodule}/dev/* build/singeliLocal/
+ '';
+
+  outputs = [
+    "out"
+  ] ++ lib.optionals enableLibcbqn [
+    "lib"
+    "dev"
+  ];
 
   installPhase = ''
-     runHook preInstall
+    runHook preInstall
 
-     mkdir -p $out/bin/
-     cp BQN -t $out/bin/
-     # note guard condition for case-insensitive filesystems
-     [ -e $out/bin/bqn ] || ln -s $out/bin/BQN $out/bin/bqn
-     [ -e $out/bin/cbqn ] || ln -s $out/bin/BQN $out/bin/cbqn
-
-     runHook postInstall
+    mkdir -p $out/bin/
+    cp BQN -t $out/bin/
+    # note guard condition for case-insensitive filesystems
+    [ -e $out/bin/bqn ] || ln -s $out/bin/BQN $out/bin/bqn
+    [ -e $out/bin/cbqn ] || ln -s $out/bin/BQN $out/bin/cbqn
+  ''
+  + lib.optionalString enableLibcbqn ''
+    install -Dm644 include/bqnffi.h -t "$dev/include"
+    install -Dm755 libcbqn${stdenv.hostPlatform.extensions.sharedLibrary} -t "$lib/lib"
+  ''
+  + ''
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -67,5 +107,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-# TODO: version cbqn-bytecode-files
 # TODO: test suite

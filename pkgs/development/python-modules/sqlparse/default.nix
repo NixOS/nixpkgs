@@ -8,18 +8,18 @@
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.4.2";
+  version = "0.4.3";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c00730c74263a94e5a9919ade150dfc3b19c574389985446148402998287dae";
+    hash = "sha256-acqASEa7EU0uw4DkNgqKNA24PwzPOvzusUBN8Cj1cmg=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postInstall = ''
     installManPage docs/sqlformat.1

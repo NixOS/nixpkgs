@@ -1,11 +1,11 @@
 { lib, stdenv
 , fetchurl
+, buildPackages
 , pkg-config
 , glib
 , gpm
 , file
 , e2fsprogs
-, libX11
 , libICE
 , perl
 , zip
@@ -15,8 +15,8 @@
 , libssh2
 , openssl
 , coreutils
-, autoreconfHook
 , autoSignDarwinBinariesHook
+, x11Support ? true, libX11
 
 # updater only
 , writeScript
@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mc";
-  version = "4.8.28";
+  version = "4.8.29";
 
   src = fetchurl {
     url = "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "sha256-6ZTZvppxcumsSkrWIQeSH2qjEuZosFbf5bi867r1OAM=";
+    sha256 = "sha256-AdijuU9YGAzKW/FyV7UHjR/W/SeptcDpcOx2dUlUCtQ=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook unzip ]
+  nativeBuildInputs = [ pkg-config unzip ]
     # The preFixup hook rewrites the binary, which invaliates the code
     # signature. Add the fixup hook to sign the output.
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
@@ -43,31 +43,32 @@ stdenv.mkDerivation rec {
     gettext
     glib
     libICE
-    libX11
     libssh2
     openssl
     slang
     zip
-  ] ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+  ] ++ lib.optionals x11Support [ libX11 ]
+    ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "PERL=${perl}/bin/perl" ];
+  configureFlags = [
+    # used for vfs helpers at run time:
+    "PERL=${perl}/bin/perl"
+    # used for .hlp generation at build time:
+    "PERL_FOR_BUILD=${buildPackages.perl}/bin/perl"
+
+    # configure arguments have a bunch of build-only dependencies.
+    # Avoid their retention in final closure.
+    "--disable-configure-args"
+  ];
 
   postPatch = ''
     substituteInPlace src/filemanager/ext.c \
       --replace /bin/rm ${coreutils}/bin/rm
-
-    substituteInPlace misc/ext.d/misc.sh.in \
-      --replace /bin/cat ${coreutils}/bin/cat
   '';
 
-  preFixup = ''
-    # remove unwanted build-dependency references
-    sed -i -e "s!PKG_CONFIG_PATH=''${PKG_CONFIG_PATH}!PKG_CONFIG_PATH=$(echo "$PKG_CONFIG_PATH" | sed -e 's/./0/g')!" $out/bin/mc
-  '';
-
-  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString ((!stdenv.isDarwin) && x11Support) ''
     # libX11.so is loaded dynamically so autopatch doesn't detect it
     patchelf \
       --add-needed ${libX11}/lib/libX11.so \
@@ -86,7 +87,7 @@ stdenv.mkDerivation rec {
  '';
 
   meta = with lib; {
-    description = "File Manager and User Shell for the GNU Project";
+    description = "File Manager and User Shell for the GNU Project, known as Midnight Commander";
     downloadPage = "https://www.midnight-commander.org/downloads/";
     homepage = "https://www.midnight-commander.org";
     license = licenses.gpl2Plus;

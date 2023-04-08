@@ -90,7 +90,7 @@ let
   # copy what we need.  Instead of using statically linked binaries,
   # we just copy what we need from Glibc and use patchelf to make it
   # work.
-  extraUtils = pkgs.runCommandCC "extra-utils"
+  extraUtils = pkgs.runCommand "extra-utils"
     { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
       allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
     }
@@ -150,26 +150,6 @@ let
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
-      # Dirty hack to make sure the kernel properly loads modules
-      # such as ext4 on demand (e.g. on a `mount(2)` syscall). This is necessary
-      # because `kmod` isn't linked against `libpthread.so.0` anymore (since
-      # it was merged into `libc.so.6` since version `2.34`), but still needs
-      # to access it for some reason. This is not an issue in stage-1 itself
-      # because of the `LD_LIBRARY_PATH`-variable and anytime later because the rpath of
-      # kmod/modprobe points to glibc's `$out/lib` where `libpthread.so.6` exists.
-      # However, this is a problem when the kernel calls `modprobe` inside
-      # the initial ramdisk because it doesn't know about the
-      # `LD_LIBRARY_PATH` and the rpath was nuked.
-      #
-      # Also, we can't use `makeWrapper` here because `kmod` only does
-      # `modprobe` functionality if `argv[0] == "modprobe"`.
-      cat >$out/bin/modprobe-kernel <<EOF
-      #!$out/bin/ash
-      export LD_LIBRARY_PATH=$out/lib
-      exec $out/bin/modprobe "\$@"
-      EOF
-      chmod +x $out/bin/modprobe-kernel
-
       # Copy resize2fs if any ext* filesystems are to be resized
       ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
         # We need mke2fs in the initrd.
@@ -205,8 +185,9 @@ let
       # Copy ld manually since it isn't detected correctly
       cp -pv ${pkgs.stdenv.cc.libc.out}/lib/ld*.so.? $out/lib
 
-      # Copy all of the needed libraries
-      find $out/bin $out/lib -type f | while read BIN; do
+      # Copy all of the needed libraries in a consistent order so
+      # duplicates are resolved the same way.
+      find $out/bin $out/lib -type f | sort | while read BIN; do
         echo "Copying libs for executable $BIN"
         for LIB in $(${findLibs}/bin/find-libs $BIN); do
           TGT="$out/lib/$(basename $LIB)"
@@ -340,6 +321,8 @@ let
     inherit linkUnits udevRules extraUtils modulesClosure;
 
     inherit (config.boot) resumeDevice;
+
+    inherit (config.system.nixos) distroName;
 
     inherit (config.system.build) earlyMountScript;
 
@@ -475,12 +458,12 @@ in
       type = types.str;
       default = "";
       example = "/dev/sda3";
-      description = ''
+      description = lib.mdDoc ''
         Device for manual resume attempt during boot. This should be used primarily
         if you want to resume from file. If left empty, the swap partitions are used.
         Specify here the device where the file resides.
-        You should also use <varname>boot.kernelParams</varname> to specify
-        <literal>«resume_offset»</literal>.
+        You should also use {var}`boot.kernelParams` to specify
+        `«resume_offset»`.
       '';
     };
 
@@ -575,7 +558,7 @@ in
       internal = true;
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed in the builder of the
         extra-utils derivation.  This can be used to provide
         additional utilities in the initial ramdisk.
@@ -586,7 +569,7 @@ in
       internal = true;
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed in the builder of the
         extra-utils derivation after patchelf has done its
         job.  This can be used to test additional utilities
@@ -598,7 +581,7 @@ in
       internal = true;
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed in the builder of the
         udev-rules derivation.  This can be used to add
         additional udev rules in the initial ramdisk.
@@ -611,16 +594,14 @@ in
         then "zstd"
         else "gzip"
       );
-      defaultText = literalDocBook "<literal>zstd</literal> if the kernel supports it (5.9+), <literal>gzip</literal> if not";
+      defaultText = literalMD "`zstd` if the kernel supports it (5.9+), `gzip` if not";
       type = types.either types.str (types.functionTo types.str);
-      description = ''
+      description = lib.mdDoc ''
         The compressor to use on the initrd image. May be any of:
 
-        <itemizedlist>
-         <listitem><para>The name of one of the predefined compressors, see <filename>pkgs/build-support/kernel/initrd-compressor-meta.nix</filename> for the definitions.</para></listitem>
-         <listitem><para>A function which, given the nixpkgs package set, returns the path to a compressor tool, e.g. <literal>pkgs: "''${pkgs.pigz}/bin/pigz"</literal></para></listitem>
-         <listitem><para>(not recommended, because it does not work when cross-compiling) the full path to a compressor tool, e.g. <literal>"''${pkgs.pigz}/bin/pigz"</literal></para></listitem>
-        </itemizedlist>
+        - The name of one of the predefined compressors, see {file}`pkgs/build-support/kernel/initrd-compressor-meta.nix` for the definitions.
+        - A function which, given the nixpkgs package set, returns the path to a compressor tool, e.g. `pkgs: "''${pkgs.pigz}/bin/pigz"`
+        - (not recommended, because it does not work when cross-compiling) the full path to a compressor tool, e.g. `"''${pkgs.pigz}/bin/pigz"`
 
         The given program should read data from stdin and write it to stdout compressed.
       '';
@@ -662,16 +643,14 @@ in
       default = true;
       type = types.bool;
       description =
-        ''
+        lib.mdDoc ''
           Verbosity of the initrd. Please note that disabling verbosity removes
           only the mandatory messages generated by the NixOS scripts. For a
           completely silent boot, you might also want to set the two following
           configuration options:
 
-          <itemizedlist>
-            <listitem><para><literal>boot.consoleLogLevel = 0;</literal></para></listitem>
-            <listitem><para><literal>boot.kernelParams = [ "quiet" "udev.log_level=3" ];</literal></para></listitem>
-          </itemizedlist>
+          - `boot.consoleLogLevel = 0;`
+          - `boot.kernelParams = [ "quiet" "udev.log_level=3" ];`
         '';
     };
 
@@ -680,7 +659,7 @@ in
         default = false;
         type = types.bool;
         description =
-          ''
+          lib.mdDoc ''
             Whether the bootloader setup runs append-initrd-secrets.
             If not, any needed secrets must be copied into the initrd
             and thus added to the store.

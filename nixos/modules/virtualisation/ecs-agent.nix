@@ -6,7 +6,7 @@ let
   cfg = config.services.ecs-agent;
 in {
   options.services.ecs-agent = {
-    enable = mkEnableOption "Amazon ECS agent";
+    enable = mkEnableOption (lib.mdDoc "Amazon ECS agent");
 
     package = mkOption {
       type = types.path;

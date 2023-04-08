@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.6pre1";
+  version = "0.6pre4-hotfix";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-7MrzSC8PYQ4X8fyX1hB8mOoSCtLpY+o1x42v9HLdoao=";
+    sha256 = "sha256-lJtV/0GnWN5mSjv2LaPEMnkuThaNeijBMjLGFPOJX4k=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +63,12 @@ stdenv.mkDerivation rec {
     "-DWARNINGS_ARE_ERRORS=ON"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but breaks on darwin (with clang) or aarch64 (old gcc)
+    "-Wno-error=mismatched-new-delete"
+    "-Wno-error=use-after-free"
+  ]);
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Normal CMake install phase on Darwin only installs the binary, the user is expected to use CPack to build a
     # bundle. That adds alot of overhead for not much benefit (CPack is currently abit broken, and needs impure access
@@ -81,7 +87,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gitUpdater {
-      inherit pname version;
       rev-prefix = "v";
     };
     tests.version = testers.testVersion {

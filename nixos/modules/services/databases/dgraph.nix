@@ -12,7 +12,7 @@ let
   ''
     mkdir -p $out/bin
     makeWrapper ${cfg.package}/bin/dgraph $out/bin/dgraph \
-      --set PATH '${lib.makeBinPath [ pkgs.nodejs ]}:$PATH' \
+      --prefix PATH : "${lib.makeBinPath [ pkgs.nodejs ]}" \
   '';
   securityOptions = {
       NoNewPrivileges = true;
@@ -53,9 +53,9 @@ in
 {
   options = {
     services.dgraph = {
-      enable = mkEnableOption "Dgraph native GraphQL database with a graph backend";
+      enable = mkEnableOption (lib.mdDoc "Dgraph native GraphQL database with a graph backend");
 
-      package = lib.mkPackageOption pkgs "dgraph" { };
+      package = lib.mkPackageOptionMD pkgs "dgraph" { };
 
       settings = mkOption {
         type = settingsFormat.type;

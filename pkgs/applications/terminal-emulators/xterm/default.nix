@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig
-, pkg-config, makeWrapper, nixosTests, writeScript, common-updater-scripts, git
+, pkg-config, makeWrapper, nixosTests, gitUpdater
 , nixfmt, nix, gnused, coreutils, enableDecLocator ? true }:
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "372";
+  version = "379";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    sha256 = "xtCBJ8skCcOgS8rlWbcCUZbtdwu3vyZjCry0XZX2CrE=";
+    hash = "sha256-p93ydO6EuX+xKDZ1AJ1Tyi0CoP/VzlpRGNr8NiPrsxA=";
   };
 
   strictDeps = true;
@@ -54,8 +54,13 @@ stdenv.mkDerivation rec {
     "--with-app-defaults=$(out)/lib/X11/app-defaults"
   ] ++ lib.optional enableDecLocator "--enable-dec-locator";
 
-  # Work around broken "plink.sh".
-  NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
+  env = {
+    # Work around broken "plink.sh".
+    NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
+  } // lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    # Various symbols missing without this define: TAB3, NLDLY, CRDLY, BSDLY, FFDLY, CBAUD
+    NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+  };
 
   # Hack to get xterm built with the feature of releasing a possible setgid of 'utmp',
   # decided by the sysadmin to allow the xterm reporting to /var/run/utmp
@@ -81,37 +86,13 @@ stdenv.mkDerivation rec {
       standardTest = nixosTests.terminal-emulators.xterm;
     };
 
-    updateScript = let
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://github.com/ThomasDickey/xterm-snapshots.git";
+      rev-prefix = "xterm-";
       # Tags that end in letters are unstable
-      suffixes = lib.concatStringsSep " "
-        (map (c: "-c versionsort.suffix='${c}'")
-          (lib.stringToCharacters "abcdefghijklmnopqrstuvwxyz"));
-    in writeScript "update.sh" ''
-      #!${stdenv.shell}
-      set -o errexit
-      PATH=${
-        lib.makeBinPath [
-          common-updater-scripts
-          git
-          nixfmt
-          nix
-          coreutils
-          gnused
-        ]
-      }
-
-      oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
-      latestTag="$(git ${suffixes} ls-remote --exit-code --refs --sort='version:refname' --tags git@github.com:ThomasDickey/xterm-snapshots.git 'xterm-*' | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^xterm-||g')"
-
-      if [ ! "$oldVersion" = "$latestTag" ]; then
-        update-source-version ${pname} "$latestTag" --version-key=version --print-changes
-        nixpkgs="$(git rev-parse --show-toplevel)"
-        default_nix="$nixpkgs/pkgs/applications/terminal-emulators/xterm/default.nix"
-        nixfmt "$default_nix"
-      else
-        echo "${pname} is already up-to-date"
-      fi
-    '';
+      ignoredVersions = "[a-z]$";
+    };
   };
 
   meta = {

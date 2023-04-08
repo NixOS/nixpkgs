@@ -4,11 +4,14 @@
 , makeWrapper
 
 , alsa-lib
+, curl
 , gtk3
 , lame
+, libxml2
 , ffmpeg
 , vlc
 , xdg-utils
+, xdotool
 , which
 
 , jackSupport ? true
@@ -17,15 +20,18 @@
 , libpulseaudio
 }:
 
+let
+  url_for_platform = version: arch: "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${arch}.tar.xz";
+in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "6.61";
+  version = "6.77";
 
   src = fetchurl {
-    url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${stdenv.hostPlatform.qemuArch}.tar.xz";
+    url = url_for_platform version stdenv.hostPlatform.qemuArch;
     hash = {
-      x86_64-linux = "sha256-Lp2EVky1+ruc86LdMmvhZIisoYl0OxdkVnN3h/u09IQ=";
-      aarch64-linux = "sha256-sPLCMA//xAdWXjY7++R6eLWS56Zi0u+9ju7JlICGvVc=";
+      x86_64-linux = "sha256-1HQtmhcLV/yhrANy1wLM1ju3t9o/lnU1OaYxqe20UFc=";
+      aarch64-linux = "sha256-17lBwadEDINoXd0yF/hCVFRGoWq6AuFUf4o+uPR6q60=";
     }.${stdenv.hostPlatform.system};
   };
 
@@ -65,8 +71,9 @@ stdenv.mkDerivation rec {
     # Setting the rpath of the plugin shared object files does not
     # seem to have an effect for some plugins.
     # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
+    # Note that libcurl and libxml2 are needed for ReaPack to run.
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ lame ffmpeg vlc ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ curl lame libxml2 ffmpeg vlc xdotool stdenv.cc.cc.lib ]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
@@ -74,6 +81,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     description = "Digital audio workstation";

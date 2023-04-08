@@ -10,11 +10,12 @@
 , gettext
 , polkit
 , glib
+, gitUpdater
 }:
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "warpinator";
-  version = "1.2.13";
+  version = "1.4.5";
 
   format = "other";
 
@@ -22,7 +23,7 @@ python3.pkgs.buildPythonApplication rec  {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-iLImyfUsfn+mWrgMv5NnbOvvOlJnwJG4Btx1wwlgTeM=";
+    hash = "sha256-5mMV4WinpFR9ihgoQsgIXre0VpBdg9S8GjSkx+7ocLg=";
   };
 
   nativeBuildInputs = [
@@ -67,10 +68,18 @@ python3.pkgs.buildPythonApplication rec  {
       {} +
   '';
 
+  dontWrapGApps = true; # Prevent double wrapping
+
   preFixup = ''
     # these get loaded via import from bin, so don't need wrapping
     chmod -x+X $out/libexec/warpinator/*.py
+
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "^master.*";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/warpinator";

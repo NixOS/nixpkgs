@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/rydesun/tree-sitter-dot",
-  "rev": "917230743aa10f45a408fea2ddb54bbbf5fbe7b7",
-  "date": "2022-03-11T21:17:49+08:00",
-  "path": "/nix/store/3xvainpyzwpbhbm30mmvvgxpgh4agljh-tree-sitter-dot",
-  "sha256": "1q2rbv16dihlmrbxlpn0x03na7xp8rdhf58vwm3lryn3nfcjckn2",
+  "rev": "9ab85550c896d8b294d9b9ca1e30698736f08cea",
+  "date": "2022-08-25T12:15:36+08:00",
+  "path": "/nix/store/p0lcm171skxdr4qbhqwl5slx76k9hap6-tree-sitter-dot",
+  "sha256": "013brrljrhgpnks1r0cdvj93l303kb68prm18gpl96pvhjfci063",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

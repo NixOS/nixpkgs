@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_topn";
-  version = "2.4.0";
+  version = "2.5.0";
 
   buildInputs = [ postgresql ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "citusdata";
     repo   = "postgresql-topn";
     rev    = "refs/tags/v${version}";
-    sha256 = "1appxriw7h29kyhv3h6b338g5m2nz70q3mxasy4mjimqhbz1zyqs";
+    sha256 = "sha256-BqOPnIReV6HnMQkqAGxB3PI10gh9ZEn4IN3A+g1h7/M=";
   };
 
   installPhase = ''

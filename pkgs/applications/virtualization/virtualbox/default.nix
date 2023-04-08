@@ -3,6 +3,7 @@
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
 , alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib
+, yasm, glslang
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin
@@ -23,19 +24,19 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.36";
+  version = "7.0.6";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "e47942e42892c13c621869865e2b7b320340154f0fa74ecbdaf18fdaf70ef047";
+    sha256 = "f146d9a86a35af0abb010e628636fd800cb476cc2ce82f95b0c0ca876e1756ff";
   };
 
   outputs = [ "out" "modsrc" ];
 
-  nativeBuildInputs = [ pkg-config which docbook_xsl docbook_xml_dtd_43 ]
+  nativeBuildInputs = [ pkg-config which docbook_xsl docbook_xml_dtd_43 yasm glslang ]
     ++ optional (!headless) wrapQtAppsHook;
 
   # Wrap manually because we wrap just a small number of executables.
@@ -94,7 +95,7 @@ in stdenv.mkDerivation {
       qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
     })
   ++ [
-    ./qtx11extras.patch
+    ./qt-dependency-paths.patch
     # https://github.com/NixOS/nixpkgs/issues/123851
     ./fix-audio-driver-loading.patch
   ];
@@ -130,14 +131,17 @@ in stdenv.mkDerivation {
     VBOX_JAVA_HOME                 := ${jdk}
     ''}
     ${optionalString (!headless) ''
+    VBOX_WITH_VBOXSDL              := 1
     PATH_QT5_X11_EXTRAS_LIB        := ${getLib qtx11extras}/lib
     PATH_QT5_X11_EXTRAS_INC        := ${getDev qtx11extras}/include
-    TOOL_QT5_LRC                   := ${getDev qttools}/bin/lrelease
+    PATH_QT5_TOOLS_LIB             := ${getLib qttools}/lib
+    PATH_QT5_TOOLS_INC             := ${getDev qttools}/include
     ''}
     ${optionalString enableWebService ''
     # fix gsoap missing zlib include and produce errors with --as-needed
     VBOX_GSOAP_CXX_LIBS := gsoapssl++ z
     ''}
+    TOOL_QT5_LRC                   := ${getDev qttools}/bin/lrelease
     LOCAL_CONFIG
 
     ./configure \
@@ -174,7 +178,7 @@ in stdenv.mkDerivation {
       -name src -o -exec cp -avt "$libexec" {} +
 
     mkdir -p $out/bin
-    for file in ${optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} ${optionalString enableWebService "vboxwebsrv"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
+    for file in ${optionalString (!headless) "VirtualBox VBoxSDL"} ${optionalString enableWebService "vboxwebsrv"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
         echo "Linking $file to /bin"
         test -x "$libexec/$file"
         ln -s "$libexec/$file" $out/bin/$file

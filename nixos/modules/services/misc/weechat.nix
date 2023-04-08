@@ -8,14 +8,14 @@ in
 
 {
   options.services.weechat = {
-    enable = mkEnableOption "weechat";
+    enable = mkEnableOption (lib.mdDoc "weechat");
     root = mkOption {
       description = lib.mdDoc "Weechat state directory.";
       type = types.str;
       default = "/var/lib/weechat";
     };
     sessionName = mkOption {
-      description = lib.mdDoc "Name of the `screen' session for weechat.";
+      description = lib.mdDoc "Name of the `screen` session for weechat.";
       default = "weechat-screen";
       type = types.str;
     };
@@ -59,5 +59,5 @@ in
       };
   };
 
-  meta.doc = ./weechat.xml;
+  meta.doc = ./weechat.md;
 }

@@ -12,21 +12,21 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2022.5.4";
+  version = "2023.2.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sDFHoVhit8HZDUdDUZfxSb73pSwlrWfPH5tGX6pxuNI=";
+    hash = "sha256-RY31rZpSF/Zo7dY23Bn7xzYGK/eKrII6uEzbrp3o6qY=";
   };
 
   propagatedBuildInputs = [
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dask
     fsspec
     lxml
@@ -40,6 +40,8 @@ buildPythonPackage rec {
     "test_write_ome"
     # Test file is missing
     "test_write_predictor"
+    "test_issue_imagej_hyperstack_arg"
+    "test_issue_description_overwrite"
     # AssertionError
     "test_write_bigtiff"
     "test_write_imagej_raw"
@@ -54,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Read and write image data from and to TIFF files";
     homepage = "https://github.com/cgohlke/tifffile/";
+    changelog = "https://github.com/cgohlke/tifffile/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lebastr ];
   };

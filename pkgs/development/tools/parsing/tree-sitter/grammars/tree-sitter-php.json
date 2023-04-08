@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-php",
-  "rev": "ece74b20942a5b23acaf3622512c6d0db1491a7e",
-  "date": "2022-06-24T15:38:28-07:00",
-  "path": "/nix/store/cqqyvb0vfp0q34lf3w5jds5dq4riac9z-tree-sitter-php",
-  "sha256": "0ggx747j3hpgwqw7cjh07n866mvdcyv3mvblffbrb8b1xn3bll84",
+  "rev": "ab2e72179ceb8bb0b249c8ac9162a148e911b3dc",
+  "date": "2022-09-24T09:03:15+02:00",
+  "path": "/nix/store/99jwdb92ng3xr6j881aja24dgwra4lvx-tree-sitter-php",
+  "sha256": "0gfjvpa5rfi1lgz30jhmdfr8f09vl34k3xjad8n8l2cv5q9203if",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

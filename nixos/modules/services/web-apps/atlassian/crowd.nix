@@ -34,7 +34,7 @@ in
 {
   options = {
     services.crowd = {
-      enable = mkEnableOption "Atlassian Crowd service";
+      enable = mkEnableOption (lib.mdDoc "Atlassian Crowd service");
 
       user = mkOption {
         type = types.str;
@@ -61,7 +61,7 @@ in
       };
 
       listenPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8092;
         description = lib.mdDoc "Port to listen on.";
       };
@@ -86,7 +86,7 @@ in
       };
 
       proxy = {
-        enable = mkEnableOption "reverse proxy support";
+        enable = mkEnableOption (lib.mdDoc "reverse proxy support");
 
         name = mkOption {
           type = types.str;
@@ -95,7 +95,7 @@ in
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 443;
           example = 80;
           description = lib.mdDoc "Port used at the proxy";

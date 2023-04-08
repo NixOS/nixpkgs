@@ -17,7 +17,7 @@ in
       type = str;
     };
 
-    enable = mkEnableOption "Kubernetes scheduler";
+    enable = mkEnableOption (lib.mdDoc "Kubernetes scheduler");
 
     extraOpts = mkOption {
       description = lib.mdDoc "Kubernetes scheduler extra command line options.";
@@ -43,7 +43,7 @@ in
     port = mkOption {
       description = lib.mdDoc "Kubernetes scheduler listening port.";
       default = 10251;
-      type = int;
+      type = port;
     };
 
     verbosity = mkOption {

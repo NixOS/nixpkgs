@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchgit
+, fetchzip
 , alsa-lib
 , aubio
 , boost
@@ -56,19 +58,38 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "6.9";
+  version = "7.3";
 
-  # don't fetch releases from the GitHub mirror, they are broken
+  # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
+  # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    sha256 = "0vlcbd70y0an881zv87kc3akmaiz4w7whsy3yaiiqqjww35jg1mm";
+    hash = "sha256-fDZGmKQ6qgENkq8NY/J67Jym+IXoOYs8DT4xyPXLcC4=";
+  };
+
+  bundledContent = fetchzip {
+    url = "https://web.archive.org/web/20221026200824/http://stuff.ardour.org/loops/ArdourBundledMedia.zip";
+    hash = "sha256-IbPQWFeyMuvCoghFl1ZwZNNcSvLNsH84rGArXnw+t7A=";
+    # archive does not contain a single folder at the root
+    stripRoot = false;
   };
 
   patches = [
     # AS=as in the environment causes build failure https://tracker.ardour.org/view.php?id=8096
     ./as-flags.patch
   ];
+
+  # Ardour's wscript requires git revision and date to be available.
+  # Since they are not, let's generate the file manually.
+  postPatch = ''
+    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = "${version}"; const char* date = ""; }\n' > libs/ardour/revision.cc
+    sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
+    patchShebangs ./tools/
+    substituteInPlace libs/ardour/video_tools_paths.cc \
+      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
+      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
+  '';
 
   nativeBuildInputs = [
     doxygen
@@ -141,31 +162,23 @@ stdenv.mkDerivation rec {
   # removed because it fixes https://tracker.ardour.org/view.php?id=8161 and https://tracker.ardour.org/view.php?id=8437
   # "--use-external-libs"
 
-  # Ardour's wscript requires git revision and date to be available.
-  # Since they are not, let's generate the file manually.
-  postPatch = ''
-    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = "${version}"; const char* date = ""; }\n' > libs/ardour/revision.cc
-    sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
-    patchShebangs ./tools/
-    substituteInPlace libs/ardour/video_tools_paths.cc \
-      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
-      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
-  '';
-
   postInstall = ''
     # wscript does not install these for some reason
     install -vDm 644 "build/gtk2_ardour/ardour.xml" \
       -t "$out/share/mime/packages"
-    install -vDm 644 "build/gtk2_ardour/ardour6.desktop" \
+    install -vDm 644 "build/gtk2_ardour/ardour${lib.versions.major version}.desktop" \
       -t "$out/share/applications"
     for size in 16 22 32 48 256 512; do
       install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
-        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour6.png"
+        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour${lib.versions.major version}.png"
     done
     install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
+
+    # install additional bundled beats, chords and progressions
+    cp -rp "${bundledContent}"/* "$out/share/ardour${lib.versions.major version}/media"
   '' + lib.optionalString videoSupport ''
     # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
-    wrapProgram "$out/bin/ardour6" \
+    wrapProgram "$out/bin/ardour${lib.versions.major version}" \
       --prefix PATH : "${lib.makeBinPath [ harvid xjadeo ]}"
   '';
 

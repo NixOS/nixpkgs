@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildPythonPackage
-, python, isPy3k }:
+, python, isPy3k, unittestCheckHook }:
 
 buildPythonPackage rec {
   pname = "emailthreads";
@@ -11,14 +11,12 @@ buildPythonPackage rec {
     owner = "emersion";
     repo = "python-emailthreads";
     rev = "v${version}";
-    sha256 = "sha256-7BhYS1DQCW9QpG31asPCq5qPyJy+WW2onZpvEHhwQCs=";
+    hash = "sha256-7BhYS1DQCW9QpG31asPCq5qPyJy+WW2onZpvEHhwQCs=";
   };
 
-  PKGVER = version;
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover test
-  '';
+  PKGVER = version;
 
   meta = with lib; {
     homepage = "https://github.com/emersion/python-emailthreads";

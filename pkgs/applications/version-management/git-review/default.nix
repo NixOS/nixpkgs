@@ -41,7 +41,7 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "git_review" ];
 
-  passthru.updateScript = gitUpdater { inherit pname version; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Tool to submit code to Gerrit";

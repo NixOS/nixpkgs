@@ -15,18 +15,18 @@
 }:
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "3.2.2";
+  version = "3.3.2";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "sha256-GM89AT9FsaqO1Z14vHB+nhJeJQ2PBhU5aum/4918PXw=";
+    sha256 = "sha256-miohnaAFoXMKOdGVmhx87GGbHvsAm2W+gP/CW60pkGg=";
   };
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
                 ++ lib.optional stdenv.isDarwin libiconv;
-  nativeBuildInputs = [ perl pkg-config ];
+  nativeBuildInputs = [ perl pkg-config ] ++ lib.optional postgresql.jitSupport postgresql.llvm;
   dontDisableStatic = true;
 
   # postgis config directory assumes /include /lib from the same root for json-c library

@@ -2,14 +2,16 @@
 
 buildGoModule rec {
   pname = "docker-buildx";
-  version = "0.8.2";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "buildx";
     rev = "v${version}";
-    sha256 = "sha256-AGRdmYKd76k5tmBTTqsSHj3yOU8QSd11G5ito0O/dWY=";
+    sha256 = "sha256-hYEFboZa6RGiy0wr7NEWaf5KCz/O7KGXTc6c9hMmoXk=";
   };
+
+  doCheck = false;
 
   vendorSha256 = null;
 
@@ -20,12 +22,18 @@ buildGoModule rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     install -D $GOPATH/bin/buildx $out/libexec/docker/cli-plugins/docker-buildx
+
+    mkdir -p $out/bin
+    ln -s $out/libexec/docker/cli-plugins/docker-buildx $out/bin/docker-buildx
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Docker CLI plugin for extended build capabilities with BuildKit";
+    homepage = "https://github.com/docker/buildx";
     license = licenses.asl20;
-    maintainers = [ maintainers.ivan-babrou ];
+    maintainers = with maintainers; [ ivan-babrou developer-guy ];
   };
 }

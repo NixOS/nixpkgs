@@ -5,18 +5,21 @@
 , future
 , cppy
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "atom";
-  version = "0.8.1";
+  version = "0.9.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-odthydKmgbOXYT8YAIn5MlFfH/BD8MMkuRYaiI8OZD4=";
+    hash = "sha256-zxFYsINlDyGQGGh+u7vwyzAitRXe3OM1//HvCtuZ/p8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -33,7 +36,7 @@ buildPythonPackage rec {
     rm -rf atom
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -43,8 +46,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Memory efficient Python objects";
-    maintainers = [ maintainers.bhipple ];
     homepage = "https://github.com/nucleic/atom";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ bhipple ];
   };
 }

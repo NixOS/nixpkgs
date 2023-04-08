@@ -14,6 +14,17 @@ python3Packages.buildPythonApplication rec {
     sha256 = "duZz2Kwjgek5pMJTDH8gMZAZ13uFwaIYT5E1brW7I7U=";
   };
 
+  # TODO: solve this properly.  Detection won't work anymore.
+  postPatch = ''
+    patch <<-EOF
+      --- a/setup.py
+      +++ b/setup.py
+      @@ -25,1 +25,1 @@
+      -    version=version,
+      +    version='${version}',
+    EOF
+  '';
+
   propagatedBuildInputs = with python3Packages; [
     # copy&pasted requirements.txt (almost exactly)
     beautifulsoup4   # upstream version detection
@@ -33,7 +44,7 @@ python3Packages.buildPythonApplication rec {
     "--prefix" "PATH" ":" (lib.makeBinPath [ gitMinimal rpm dpkg fakeroot ])
   ];
 
-  checkInputs = with python3Packages; [ pytest ];
+  nativeCheckInputs = with python3Packages; [ pytest ];
   checkPhase = ''
     runHook preCheck
     py.test # inspiration: .gitlab-ci.yml

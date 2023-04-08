@@ -1,7 +1,5 @@
 { stdenv, lib, fetchFromGitHub, wrapPython, fetchpatch }:
 
-with lib;
-
 stdenv.mkDerivation {
   pname = "droopy";
   version = "20160830";
@@ -32,7 +30,7 @@ stdenv.mkDerivation {
     wrapPythonPrograms
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Mini Web server that let others upload files to your computer";
     homepage = "http://stackp.online.fr/droopy";
     license = licenses.bsd3;

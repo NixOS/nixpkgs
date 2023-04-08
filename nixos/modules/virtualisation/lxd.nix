@@ -18,17 +18,17 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           This option enables lxd, a daemon that manages
           containers. Users in the "lxd" group can interact with
           the daemon (e.g. to start or stop containers) using the
-          <command>lxc</command> command line tool, among others.
+          {command}`lxc` command line tool, among others.
 
           Most of the time, you'll also want to start lxcfs, so
           that containers can "see" the limits:
-          <code>
-            virtualisation.lxc.lxcfs.enable = true;
-          </code>
+          ```
+          virtualisation.lxc.lxcfs.enable = true;
+          ```
         '';
       };
 
@@ -129,11 +129,19 @@ in {
       description = "LXD Container Management Daemon";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" "lxcfs.service" ];
-      requires = [ "network-online.target" "lxd.socket"  "lxcfs.service" ];
+      after = [
+        "network-online.target"
+        (mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+      ];
+      requires = [
+        "network-online.target"
+        "lxd.socket"
+        (mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+      ];
       documentation = [ "man:lxd(1)" ];
 
-      path = optional cfg.zfsSupport config.boot.zfs.package;
+      path = [ pkgs.util-linux ]
+        ++ optional cfg.zfsSupport config.boot.zfs.package;
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";

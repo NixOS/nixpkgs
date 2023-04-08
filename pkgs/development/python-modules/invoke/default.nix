@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "invoke";
-  version = "1.7.1";
+  version = "2.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e23q9YXu4KhIIF0LjAAUub9vKHqOt5iBimQt/x3xSxk=";
+    hash = "sha256-erXdnNdreH1WCnixqYENJSNnq1lZhcUGEnAr4h1nHdc=";
   };
 
   postPatch = ''

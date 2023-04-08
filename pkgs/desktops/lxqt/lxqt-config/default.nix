@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , glib
@@ -15,19 +16,30 @@
 , libqtxdg
 , xkeyboard_config
 , xorg
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-config";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "ncoJLpKzE1tqOV+KuUiGLDWiDvzJg0le4m4BMKFw6Mg=";
+    sha256 = "WgrcHM4iJLZsJO2obqSkjHHMB+/kcadQArkcXC5FB24=";
   };
+
+  patches = [
+    # FIXME: backport Plasma 5.27 build fix, remove for next release
+    (fetchpatch {
+      url = "https://github.com/lxqt/lxqt-config/commit/6add4e4f0040693e7c4242fbae48c9d32007686c.diff";
+      hash = "sha256-Tir4KeGhBnD9dYmB1FAjuf4R4V+rn12MOxsRwTdE0Sc=";
+    })
+  ];
+
+  # FIXME: required to build with Plasma 5.27, which uses std::optional
+  cmakeFlags = ["-DCMAKE_CXX_STANDARD=17"];
 
   nativeBuildInputs = [
     cmake
@@ -64,7 +76,7 @@ mkDerivation rec {
                 '${xkeyboard_config}/share/X11/xkb/rules/base.lst'
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-config";

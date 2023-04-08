@@ -2,9 +2,9 @@
 , lib
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 , installShellFiles
-, fetchpatch
 , tinycc
 , libiconv
 , libobjc
@@ -16,36 +16,24 @@
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
 
-let
-  libtcc = tinycc.overrideAttrs (oa: {
-    makeFlags = [ "libtcc.a" ];
-    # tests want tcc binary
-    doCheck = false;
-    outputs = [ "out" ];
-    installPhase = ''
-      mkdir -p $out/lib/
-      mv libtcc.a $out/lib/
-    '';
-  });
-in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.23.4";
+  version = "1.31.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nLQqfLRuh9mhZfjeiPaGpQbi5bXEg7HiGwrwDmaIRWM=";
+    hash = "sha256-0S5BSXWnv4DMcc8cijRQx6NyDReg5aJJT65TeNFlkkw=";
   };
-  cargoSha256 = "sha256-l5Ce/ypYXZKEi859OFskwC/Unpo842ZPxIHvp6lCjQc=";
+  cargoHash = "sha256-7Xfnc91yQiAwAF5fvtiwnELUDb7LJeye3GtXNzYkUo8=";
 
-  patches = [
-    # remove after https://github.com/denoland/deno/pull/15193 is in a release
+  cargoPatches = [
+    # resolved in 1.31.2
     (fetchpatch {
-      name = "byo-tcc.patch";
-      url = "https://github.com/denoland/deno/pull/15193/commits/c43698b2b58af1ef69b1558d55c8ebea0268dfea.patch";
-      sha256 = "sha256-YE5mGHyEm20FjFhr8yveBRlrOVL3+qQYxz2xp/IfmJs=";
+      name = "CVE-2023-28446.patch";
+      url = "https://github.com/denoland/deno/commit/78d430103a8f6931154ddbbe19d36f3b8630286d.patch";
+      hash = "sha256-kXwr9wWxk1OaaubCr8pfmSp3TrJMQkbAg72nIHp/seA=";
     })
   ];
 
@@ -68,7 +56,20 @@ rustPlatform.buildRustPackage rec {
   # The deno_ffi package currently needs libtcc.a on linux and macos and will try to compile it at build time
   # To avoid this we point it to our copy (dir)
   # In the future tinycc will be replaced with asm
-  DENO_FFI_LIBTCC = "${libtcc}/lib";
+  libtcc = tinycc.overrideAttrs (oa: {
+    makeFlags = [ "libtcc.a" ];
+    # tests want tcc binary
+    doCheck = false;
+    outputs = [ "out" ];
+    installPhase = ''
+      mkdir -p $out/lib/
+      mv libtcc.a $out/lib/
+    '';
+    # building the whole of tcc on darwin is broken in nixpkgs
+    # but just building libtcc.a works fine so mark this as unbroken
+    meta.broken = false;
+  });
+  TCC_PATH = "${libtcc}/lib";
 
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved
@@ -94,6 +95,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.updateScript = ./update/update.ts;
+  passthru.tests = callPackage ./tests { };
 
   meta = with lib; {
     homepage = "https://deno.land/";

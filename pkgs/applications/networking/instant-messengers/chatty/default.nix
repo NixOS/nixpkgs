@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "chatty";
-  version = "0.6.7";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     repo = "chatty";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-W4w/00mRgjfyQmLQ81/EAN+80qk7kDkBmMPJnOU+AIc=";
+    hash = "sha256-e3lYzQjQx1ndomq4mJ8TmwXoUG3Bjl9JrLuTmjXmRCs=";
   };
 
   postPatch = ''

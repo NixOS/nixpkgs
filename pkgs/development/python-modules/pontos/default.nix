@@ -1,28 +1,32 @@
 { lib
 , buildPythonPackage
+, colorful
 , fetchFromGitHub
+, git
+, httpx
+, packaging
 , poetry-core
 , pytestCheckHook
+, python-dateutil
 , pythonOlder
-, colorful
+, semver
+, rich
 , tomlkit
-, git
-, packaging
-, requests
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "22.7.2";
+  version = "23.4.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-JvmdxkgWIcXQ7ML1Sx6/YeH5WXyq/UCEZlTc9nJbcQQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nMuf8k7o7cCpvk9IUp7lz6jM7rqCxHq4uT51R1w8jtM=";
   };
 
   nativeBuildInputs = [
@@ -31,22 +35,24 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     colorful
-    tomlkit
+    httpx
     packaging
-    requests
-  ];
+    python-dateutil
+    semver
+    rich
+    typing-extensions
+    tomlkit
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ] ++ httpx.optional-dependencies.http2;
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'packaging = "^20.3"' 'packaging = "*"'
-  '';
-
   disabledTests = [
+    "PrepareTestCase"
     # Signing fails
     "test_find_no_signing_key"
     "test_find_signing_key"
@@ -66,6 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
+    changelog = "https://github.com/greenbone/pontos/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

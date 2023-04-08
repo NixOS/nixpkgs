@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder,
-  attrs, aiohttp, appdirs, click, keyring, Logbook, peewee, janus,
+  attrs, aiohttp, appdirs, click, keyring, logbook, peewee, janus,
   prompt-toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
   setuptools, installShellFiles, nixosTests,
 
@@ -10,7 +10,7 @@
 
 buildPythonApplication rec {
   pname = "pantalaimon";
-  version = "0.10.4";
+  version = "0.10.5";
 
   disabled = pythonOlder "3.6";
 
@@ -19,7 +19,7 @@ buildPythonApplication rec {
     owner = "matrix-org";
     repo = pname;
     rev = version;
-    sha256 = "sha256-X6DJHH+ZBPw7iWVMa43HvVFh+LDn6shzOU1A2uiAYL4=";
+    sha256 = "sha256-yMhE3wKRbFHoL0vdFR8gMkNU7Su4FHbAwKQYADaaWpk=";
   };
 
   propagatedBuildInputs = [
@@ -29,19 +29,21 @@ buildPythonApplication rec {
     click
     janus
     keyring
-    Logbook
+    logbook
     matrix-nio
     peewee
     prompt-toolkit
     setuptools
-  ] ++ lib.optional enableDbusUi [
+  ]
+  ++ matrix-nio.optional-dependencies.e2e
+  ++ lib.optionals enableDbusUi [
       dbus-python
       notify2
       pygobject3
       pydbus
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     faker
     pytest-aiohttp

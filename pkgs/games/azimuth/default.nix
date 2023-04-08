@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ];
   buildInputs = [ SDL ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=maybe-uninitialized" ];
 
   preConfigure = ''
     substituteInPlace data/azimuth.desktop \

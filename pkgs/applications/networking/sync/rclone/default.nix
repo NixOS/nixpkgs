@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.59.1";
+  version = "1.62.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eblCMe9ywJztjsWmngUkB/IE2ePI9Yin2jkxBW0tTbQ=";
+    sha256 = "sha256-nG3XW6OGzfbvkBmlmeOCnVRFun3EWIVLLvMXGhOAi+4=";
   };
 
-  vendorSha256 = "sha256-MZ5RtB4UGHPlMxyQ0VbX5iPpZw98oUuEhuMBDZcYiw8=";
+  vendorSha256 = "sha256-UA6PlhKxJ9wpg3mbiJ4Mqc4npwEBa93qi6WrQR8JQSk=";
 
   subPackages = [ "." ];
 
@@ -30,7 +30,7 @@ buildGoModule rec {
   postInstall =
     let
       rcloneBin =
-        if stdenv.buildPlatform == stdenv.hostPlatform
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform
         then "$out"
         else lib.getBin buildPackages.rclone;
     in
@@ -45,8 +45,8 @@ buildGoModule rec {
       # as the setuid wrapper is required as non-root on NixOS.
       ''
       wrapProgram $out/bin/rclone \
-                  --suffix PATH : "${lib.makeBinPath [ fuse ] }" \
-                  --prefix LD_LIBRARY_PATH : "${fuse}/lib"
+        --suffix PATH : "${lib.makeBinPath [ fuse ] }" \
+        --prefix LD_LIBRARY_PATH : "${fuse}/lib"
     '';
 
   meta = with lib; {

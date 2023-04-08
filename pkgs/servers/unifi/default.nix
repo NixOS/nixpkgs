@@ -38,7 +38,7 @@ let
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.unfree;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ erictapen globin patryk27 pennae ];
+      maintainers = with maintainers; [ globin patryk27 pennae ];
     };
   });
 
@@ -66,7 +66,7 @@ in rec {
   };
 
   unifi7 = generic {
-    version = "7.1.68";
-    sha256 = "sha256-N12/v1uUPBpU/lXOvj7AjSKo/CjWTjGr9SMIiE/ldF8=";
+    version = "7.3.83";
+    sha256 = "sha256-mDbF9vfoWjvABxcOIRngStji7xBllgZfUhVA9kF6ERU=";
   };
 }

@@ -18,12 +18,12 @@ let
       passwordHMAC = mkOption {
         type = types.uniq (types.strMatching "[0-9a-f]+\\$[0-9a-f]{64}");
         example = "f7efda5c189b999524f151318c0c86$d5b51b3beffbc02b724e5d095828e0bc8b2456e9ac8757ae3211a5d9b16a22ae";
-        description = ''
+        description = lib.mdDoc ''
           Password HMAC-SHA-256 for JSON-RPC connections. Must be a string of the
-          format &lt;SALT-HEX&gt;$&lt;HMAC-HEX&gt;.
+          format \<SALT-HEX\>$\<HMAC-HEX\>.
 
           Tool (Python script) for HMAC generation is available here:
-          <link xlink:href="https://github.com/bitcoin/bitcoin/blob/master/share/rpcauth/rpcauth.py"/>
+          <https://github.com/bitcoin/bitcoin/blob/master/share/rpcauth/rpcauth.py>
         '';
       };
     };
@@ -35,7 +35,7 @@ let
   bitcoindOpts = { config, lib, name, ...}: {
     options = {
 
-      enable = mkEnableOption "Bitcoin daemon";
+      enable = mkEnableOption (lib.mdDoc "Bitcoin daemon");
 
       package = mkOption {
         type = types.package;
@@ -95,7 +95,7 @@ let
             }
           '';
           type = types.attrsOf (types.submodule rpcUserOpts);
-          description = lib.mdDoc "RPC user information for JSON-RPC connnections.";
+          description = lib.mdDoc "RPC user information for JSON-RPC connections.";
         };
       };
 
@@ -204,7 +204,7 @@ in
         '';
       in {
         description = "Bitcoin daemon";
-        after = [ "network.target" ];
+        after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = cfg.user;

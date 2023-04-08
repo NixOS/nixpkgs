@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   #   ld: CMakeFiles/oonf_dlep_proxy.dir/router/dlep_router_session.c.o:(.bss+0x0):
   #     multiple definition of `LOG_DLEP_ROUTER'; CMakeFiles/oonf_dlep_proxy.dir/router/dlep_router.c.o:(.bss+0x0): first defined here
   # Can be removed once release with https://github.com/OLSR/OONF/pull/40 is out.
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   cmakeFlags = [
     "-DOONF_NO_WERROR=yes"

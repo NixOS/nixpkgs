@@ -29,7 +29,7 @@ let
 
 in {
   options.services.collectd = with types; {
-    enable = mkEnableOption "collectd agent";
+    enable = mkEnableOption (lib.mdDoc "collectd agent");
 
     validateConfig = mkOption {
       default = true;
@@ -52,7 +52,7 @@ in {
 
     buildMinimalPackage = mkOption {
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Build a minimal collectd package with only the configured `services.collectd.plugins`
       '';
       type = bool;

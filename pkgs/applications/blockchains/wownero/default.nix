@@ -1,8 +1,7 @@
-{ lib, stdenv, fetchFromGitea, cmake, boost, miniupnpc_2, openssl, unbound
+{ lib, stdenv, fetchFromGitea, cmake, boost, miniupnpc, openssl, unbound
 , readline, libsodium, rapidjson
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "wownero";
   version = "0.8.0.1";
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    boost miniupnpc_2 openssl unbound rapidjson readline libsodium
+    boost miniupnpc openssl unbound rapidjson readline libsodium
   ];
 
   postUnpack = ''
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
     "-DMANUAL_SUBMODULES=ON"
   ];
 
-  meta = {
+  meta = with lib; {
     description = ''
       A privacy-centric memecoin that was fairly launched on April 1, 2018 with
       no pre-mine, stealth-mine or ICO

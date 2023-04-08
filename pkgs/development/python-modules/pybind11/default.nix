@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , cmake
 , boost
@@ -9,34 +10,47 @@
 , catch
 , numpy
 , pytestCheckHook
+, libxcrypt
 }:
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.9.2";
+  version = "2.10.3";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-O3bkexUBa+gfiJEM6KSR8y/iVqHqlCFmz/9EghxdIpw=";
+    hash = "sha256-Rlr6Ec6BEujTxQkQ9UP+6u0cYeFsJlj7U346MtRM6QM=";
   };
 
+  postPatch = ''
+    sed -i "/^timeout/d" pyproject.toml
+  '';
+
   nativeBuildInputs = [ cmake ];
+  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   dontUseCmakeBuildDir = true;
+
+  # Don't build tests if not needed, read the doInstallCheck value at runtime
+  preConfigure = ''
+    if [ -n "$doInstallCheck" ]; then
+      cmakeFlagsArray+=("-DBUILD_TESTING=ON")
+    fi
+  '';
 
   cmakeFlags = [
     "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
     "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
-    "-DBUILD_TESTING=on"
+    "-DPYTHON_EXECUTABLE:FILEPATH=${python.pythonForBuild.interpreter}"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
     "-DPYBIND11_CXX_STANDARD=-std=c++17"
   ];
 
   postBuild = ''
     # build tests
-    make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES
+    make -j $NIX_BUILD_CORES
   '';
 
   postInstall = ''
@@ -46,7 +60,7 @@ buildPythonPackage rec {
     ln -sf $out/include/pybind11 $out/include/${python.libPrefix}/pybind11
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     catch
     numpy
     pytestCheckHook
@@ -62,6 +76,12 @@ buildPythonPackage rec {
     "tests/extra_python_package/test_files.py"
     # tests that try to parse setuptools stdout
     "tests/extra_setuptools/test_setuphelper.py"
+  ];
+
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # expects KeyError, gets RuntimeError
+    # https://github.com/pybind/pybind11/issues/4243
+    "test_cross_module_exception_translator"
   ];
 
   meta = with lib; {

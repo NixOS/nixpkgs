@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.18.0";
+  version = "6.2.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "W6PUZNUcjCg1UNUH/6w9EPeuxYe3xmsMy2lQZDZGOJ4=";
+    sha256 = "sha256-TXJzAgDsWyqrqhovIFU8Z0gpLwZdmhVMfV4iVZ35/WI=";
   };
 
   patches = [
@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
     (fetchpatch { # configure: restore backward compatibility
       url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/patch/?id=a3272b93725a406bc98b67373da67a4bdf6fcdb0";
       sha256 = "0hyagh2lf6rrfss4z7ca8q3ydya6gg7vfhh25slhpgcn6lnk0xbv";
+    })
+
+    # fix build on musl. applied anywhere to prevent patchrot.
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/main/iproute2/min.patch?id=4b78dbe29d18151402052c56af43cc12d04b1a69";
+      sha256 = "sha256-0ROZQAN3mUPPgggictr23jyA4JDG7m9vmBUhgRp4ExY=";
     })
   ];
 
@@ -33,6 +39,10 @@ stdenv.mkDerivation rec {
     "SBINDIR=$(out)/sbin"
     "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "SHARED_LIBS=n"
+    # all build .so plugins:
+    "TC_CONFIG_NO_XT=y"
   ];
 
   buildFlags = [
@@ -50,7 +60,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     # No nicer place to find latest release.
     url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git";
     rev-prefix = "v";

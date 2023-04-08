@@ -25,15 +25,13 @@ in
 
     boot.initrd.network.openvpn.configuration = mkOption {
       type = types.path; # Same type as boot.initrd.secrets
-      description = ''
+      description = lib.mdDoc ''
         The configuration file for OpenVPN.
 
-        <warning>
-          <para>
-            Unless your bootloader supports initrd secrets, this configuration
-            is stored insecurely in the global Nix store.
-          </para>
-        </warning>
+        ::: {.warning}
+        Unless your bootloader supports initrd secrets, this configuration
+        is stored insecurely in the global Nix store.
+        :::
       '';
       example = literalExpression "./configuration.ovpn";
     };
@@ -70,11 +68,8 @@ in
       $out/bin/openvpn --show-gateway
     '';
 
-    # Add `iproute /bin/ip` to the config, to ensure that openvpn
-    # is able to set the routes
     boot.initrd.network.postCommands = ''
-      (cat /etc/initrd.ovpn; echo -e '\niproute /bin/ip') | \
-        openvpn /dev/stdin &
+      openvpn /etc/initrd.ovpn &
     '';
   };
 

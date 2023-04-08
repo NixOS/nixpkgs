@@ -8,20 +8,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "memray";
-  version = "1.2.0";
+  version = "1.7.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-MZOKo0VaCJM/YyvCByM5Yg7H/8onDKNSufBzr+GsFlo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FM6DVBnYgvciTeF9bf2NDvHGsnccxKqcR5ATj6daQ4w=";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildInputs = [
     libunwind
     lz4
-    pkg-config
   ] ++ (with python3.pkgs; [
     cython
   ]);
@@ -31,8 +34,11 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
+    ipython
     pytestCheckHook
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    greenlet
   ];
 
   pythonImportsCheck = [
@@ -46,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # Import issue
     "test_header_allocator"
+    "test_hybrid_stack_of_allocations_inside_ceval"
   ];
 
   disabledTestPaths = [
@@ -59,5 +66,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
+    changelog = "https://github.com/bloomberg/memray/releases/tag/v${version}";
   };
 }

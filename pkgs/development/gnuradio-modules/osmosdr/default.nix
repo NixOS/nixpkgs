@@ -1,4 +1,6 @@
 { lib
+, stdenv
+, darwin
 , mkDerivation
 , fetchgit
 , gnuradio
@@ -58,6 +60,9 @@ in mkDerivation {
   ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
     thrift
     python.pkgs.thrift
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.IOKit
+    darwin.apple_sdk.frameworks.Security
   ];
   cmakeFlags = [
     (if (gnuradio.hasFeature "python-support") then
@@ -74,7 +79,7 @@ in mkDerivation {
       (if (gnuradio.versionAttr.major == "3.7") then
         python.pkgs.cheetah
       else
-        python.pkgs.Mako
+        python.pkgs.mako
       )
       python
     ]

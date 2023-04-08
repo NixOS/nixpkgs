@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "charm";
-  version = "0.12.3";
+  version = "0.12.5";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "charm";
     rev = "v${version}";
-    sha256 = "sha256-FQNOU75mZqeXAVFOxTXri6bfkJZx4A/YhXMf8bFAKxs=";
+    sha256 = "sha256-lTjpvh0bl4Fk+d3mcDvVQY3Ef6UYE23qoS60nltVcsU=";
   };
 
-  vendorSha256 = "sha256-6Grg6/q4idhWk6slxV2GBblmOA5dclFh/PcGtPXUTd4=";
+  vendorSha256 = "sha256-TNxAtx+fT6CEpa2g/tNl9sCwt3kAmNq7G870TPt2MQ4=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 

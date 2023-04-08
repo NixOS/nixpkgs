@@ -11,7 +11,7 @@ in
 {
   options = {
     services.lxd-image-server = {
-      enable = mkEnableOption "lxd-image-server";
+      enable = mkEnableOption (lib.mdDoc "lxd-image-server");
 
       group = mkOption {
         type = types.str;
@@ -31,7 +31,7 @@ in
       };
 
       nginx = {
-        enable = mkEnableOption "nginx";
+        enable = mkEnableOption (lib.mdDoc "nginx");
         domain = mkOption {
           type = types.str;
           description = lib.mdDoc "Domain to use for nginx virtual host.";
@@ -87,7 +87,7 @@ in
         };
       };
     })
-    # this is seperate so it can be enabled on mirrored hosts
+    # this is separate so it can be enabled on mirrored hosts
     (mkIf (cfg.nginx.enable) {
       # https://github.com/Avature/lxd-image-server/blob/master/resources/nginx/includes/lxd-image-server.pkg.conf
       services.nginx.virtualHosts = {

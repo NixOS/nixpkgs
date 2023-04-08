@@ -15,7 +15,7 @@ in
 
   options = {
     programs.zsh.syntaxHighlighting = {
-      enable = mkEnableOption "zsh-syntax-highlighting";
+      enable = mkEnableOption (lib.mdDoc "zsh-syntax-highlighting");
 
       highlighters = mkOption {
         default = [ "main" ];
@@ -26,6 +26,7 @@ in
           "brackets"
           "pattern"
           "cursor"
+          "regexp"
           "root"
           "line"
         ]));

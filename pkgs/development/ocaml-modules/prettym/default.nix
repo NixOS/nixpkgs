@@ -1,10 +1,9 @@
 { alcotest
 , base64
-, bigarray-compat
 , bigarray-overlap
 , bigstringaf
 , buildDunePackage
-, fetchzip
+, fetchurl
 , fmt
 , jsonm
 , ke
@@ -14,17 +13,17 @@
 
 buildDunePackage rec {
   pname = "prettym";
-  version = "0.0.2";
+  version = "0.0.3";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://github.com/dinosaure/prettym/releases/download/${version}/prettym-${version}.tbz";
-    sha256 = "03x7jh62mvzc6x2d8xsy456qa6iphw72zm7jmqrakpmsy6zcf2lb";
+    hash = "sha256-kXDxoRref02YpYSlvlK7a5FBX5ccbnWJQzG0axi5jwk=";
   };
 
-  useDune2 = true;
+  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
-    bigarray-compat
     bigarray-overlap
     bigstringaf
     fmt

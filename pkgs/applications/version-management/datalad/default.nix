@@ -8,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "datalad";
     repo = pname;
     rev = version;
-    hash = "sha256-6uWOKsYeNZJ64WqoGHL7AsoK4iZd24TQOJ1ECw+K28Y=";
+    hash = "sha256-F5UFW0/XqntrHclpj3TqoAwuHJbiiv5a7/4MnFoJ1dE=";
   };
 
   nativeBuildInputs = [ installShellFiles git ];
@@ -59,8 +59,8 @@ python3.pkgs.buildPythonApplication rec {
 
     # python>=3.8
     distro
-  ] ++ lib.optional stdenv.hostPlatform.isWindows [ colorama ]
-    ++ lib.optional (python3.pythonOlder "3.10") [ importlib-metadata ];
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
+    ++ lib.optionals (python3.pythonOlder "3.10") [ importlib-metadata ];
 
   postInstall = ''
     installShellCompletion --cmd datalad \

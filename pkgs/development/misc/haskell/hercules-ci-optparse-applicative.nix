@@ -7,8 +7,8 @@ mkDerivation {
   src = fetchFromGitHub {
     owner = "hercules-ci";
     repo = "optparse-applicative";
-    rev = "9e2968c09a7c5b29d04578dc68d81ce5aec0591e";
-    sha256 = "sha256-11MnpQjmR89gW5WY5BwsPhpk/LwSIxEEhIa4LLiCbBc=";
+    rev = "3d20deefbef2e66d3c075facc5d01c1aede34f3c";
+    sha256 = "sha256-FnFbPvy5iITT7rAjZBBUNQdo3UDP2z8iLg0MiIdXMdo=";
   };
   libraryHaskellDepends = [
     ansi-wl-pprint base process transformers transformers-compat

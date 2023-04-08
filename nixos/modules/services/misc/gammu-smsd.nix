@@ -45,15 +45,15 @@ let
   initDBDir = "share/doc/gammu/examples/sql";
 
   gammuPackage = with cfg.backend; (pkgs.gammu.override {
-    dbiSupport = (service == "sql" && sql.driver == "sqlite");
-    postgresSupport = (service == "sql" && sql.driver == "native_pgsql");
+    dbiSupport = service == "sql" && sql.driver == "sqlite";
+    postgresSupport = service == "sql" && sql.driver == "native_pgsql";
   });
 
 in {
   options = {
     services.gammu-smsd = {
 
-      enable = mkEnableOption "gammu-smsd daemon";
+      enable = mkEnableOption (lib.mdDoc "gammu-smsd daemon");
 
       user = mkOption {
         type = types.str;
@@ -192,7 +192,7 @@ in {
           password = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = lib.mdDoc "User password used for connetion to the database";
+            description = lib.mdDoc "User password used for connection to the database";
           };
         };
       };

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pico-sdk";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Yf3cVFdI8vR/qcxghcx8fsbYs1qD8r6O5aqZ0AkSLDc=";
+    sha256 = "sha256-p69go8KXQR21szPb+R1xuonyFj+ZJDunNeoU7M3zIsE=";
   };
 
   nativeBuildInputs = [ cmake ];

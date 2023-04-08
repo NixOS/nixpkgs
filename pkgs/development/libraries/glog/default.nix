@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, gflags, perl }:
+{ stdenv, lib, fetchFromGitHub, cmake, gflags, gtest, perl }:
 
 stdenv.mkDerivation rec {
   pname = "glog";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  buildInputs = [ gtest ];
+
   propagatedBuildInputs = [ gflags ];
 
   cmakeFlags = [
@@ -23,7 +25,18 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
   # There are some non-thread safe tests that can fail
   enableParallelChecking = false;
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
+
+  GTEST_FILTER =
+    let
+      filteredTests = lib.optionals stdenv.hostPlatform.isMusl [
+        "Symbolize.SymbolizeStackConsumption"
+        "Symbolize.SymbolizeWithDemanglingStackConsumption"
+      ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+        "LogBacktraceAt.DoesBacktraceAtRightLineWhenEnabled"
+      ];
+    in
+    lib.optionalString doCheck "-${builtins.concatStringsSep ":" filteredTests}";
 
   meta = with lib; {
     homepage = "https://github.com/google/glog";

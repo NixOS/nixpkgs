@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     urllib3
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 

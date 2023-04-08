@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config intltool ];
   buildInputs =
-    [ xorg.xlibsWrapper libxml2 GConf pango glib libgnome-keyring libglade libtool ];
+    [ xorg.libX11 xorg.libSM xorg.libICE libxml2 GConf pango glib libgnome-keyring libglade libtool ];
 
   propagatedBuildInputs = [ libgnome libbonoboui libgnomecanvas gnome_vfs ];
 }

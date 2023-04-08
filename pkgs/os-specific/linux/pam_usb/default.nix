@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # pam_usb dependencies
-    dbus libxml2 pam pmount pkg-config
+    dbus libxml2 pam pmount
     # pam_usb's tools dependencies
     python
     # cElementTree is included with python 2.5 and later.

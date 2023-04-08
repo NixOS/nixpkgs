@@ -3,7 +3,6 @@
 , bison, flex
 , makeWrapper }:
 
-with lib;
 stdenv.mkDerivation rec {
 
   pname = "intercal";
@@ -24,15 +23,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs =
-  [ pkg-config bison flex makeWrapper ];
+  nativeBuildInputs = [ pkg-config bison flex makeWrapper ];
 
   # Intercal invokes gcc, so we need an explicit PATH
   postInstall = ''
     wrapProgram $out/bin/ick --suffix PATH ':' ${stdenv.cc}/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "The original esoteric programming language";
     longDescription = ''
       INTERCAL, an abbreviation for "Compiler Language With No

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "checkip";
-  version = "0.40.1";
+  version = "0.45.1";
 
   src = fetchFromGitHub {
     owner = "jreisinger";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SPfr88ZEIFlbU4ofuxb2I42L7FR4EXbckCVylEQHfN4=";
+    sha256 = "sha256-GUVyeQtUNnW8yu/dhfip61jxQtgQmjBUDzsOW233laQ=";
   };
 
-  vendorSha256 = "sha256-bFhSMjm9rqUUbCV9keeXm+yhzQMKrYKs1DbCt53J8aM=";
+  vendorHash = "sha256-9/z1mtZGqrvcvq8cWBpYN7kaPHaPqtyMwMNxuRRP4Cs=";
 
   # Requires network
   doCheck = false;

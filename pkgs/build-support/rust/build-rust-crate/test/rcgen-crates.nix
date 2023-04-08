@@ -2931,7 +2931,7 @@ rec {
   /* Returns a crate which depends on successful test execution
     of crate given as the second argument.
 
-    testCrateFlags: list of flags to pass to the test exectuable
+    testCrateFlags: list of flags to pass to the test executable
     testInputs: list of packages that should be available during test execution
   */
   crateWithTest = { crate, testCrate, testCrateFlags, testInputs, testPreRun, testPostRun }:

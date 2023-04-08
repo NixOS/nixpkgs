@@ -38,20 +38,19 @@ let common = { version, hash, jdk ? jdk11_headless, tests }:
   };
 in
 {
-  hbase_1_7 = common {
-    version = "1.7.1";
-    hash = "sha256-DrH2G79QLT8L0YTTmAGC9pUWU8semSaTOsrsQRCI2rY=";
-    jdk = jdk8_headless;
-    tests.standalone = nixosTests.hbase1;
-  };
   hbase_2_4 = common {
-    version = "2.4.11";
-    hash = "sha256-m0vjUtPaj8czHHh+rQNJJgrFAM744cHd06KE0ut7QeU=";
+    version = "2.4.16";
+    hash = "sha256-vMuTqS2bXFRcCsZ7bOaNLVGyOG38HhL8WlCq2MFmAaE=";
+    tests.standalone = nixosTests.hbase_2_4;
+  };
+  hbase_2_5 = common {
+    version = "2.5.3";
+    hash = "sha256-h08jnDQaakpkYFHHn9qeg4JCSBtwRjv42qKLpyOVdsI=";
     tests.standalone = nixosTests.hbase2;
   };
   hbase_3_0 = common {
-    version = "3.0.0-alpha-2";
-    hash = "sha256-QPvgO1BeFWvMT5PdUm/SL92ZgvSvYIuJbzolbBTenz4=";
+    version = "3.0.0-alpha-3";
+    hash = "sha256-TxuiUHc2pTb9nBth1H2XrDRLla2vqM+e1uBU+yY2/EM=";
     tests.standalone = nixosTests.hbase3;
   };
 }

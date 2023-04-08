@@ -9,7 +9,7 @@ You have two options:
 - Combine them with (any of) your host config(s)
 
 System images, such as the live installer ones, know how to enforce configuration settings
-on wich they immediately depend in order to work correctly.
+on which they immediately depend in order to work correctly.
 
 However, if you are confident, you can opt to override those
 enforced values with `mkForce`.
@@ -75,6 +75,6 @@ configuration values upon which the correct functioning of the image depends.
 For example, the iso base image overrides those file systems which it needs at a minimum
 for correct functioning, while the installer base image overrides the entire file system
 layout because there can't be any other guarantees on a live medium than those given
-by the live medium itself. The latter is especially true befor formatting the target
+by the live medium itself. The latter is especially true before formatting the target
 block device(s). On the other hand, the netboot iso only overrides its minimum dependencies
 since netboot images are always made-to-target.

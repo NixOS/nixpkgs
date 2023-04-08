@@ -11,7 +11,7 @@ in {
 
   options = {
     services.prosody-filer = {
-      enable = mkEnableOption "Prosody Filer XMPP upload file server";
+      enable = mkEnableOption (lib.mdDoc "Prosody Filer XMPP upload file server");
 
       settings = mkOption {
         description = lib.mdDoc ''
@@ -79,7 +79,7 @@ in {
         LockPersonality = true;
         RemoveIPC = true;
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
       };
     };
   };

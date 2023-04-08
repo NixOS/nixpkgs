@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "4.4.0";
+  version = "4.5.0";
   pname = "intel-cmt-cat";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-cmt-cat";
     rev = "v${version}";
-    sha256 = "sha256-THP0ie9Ta0iNcAJYCRXMajqYBIFuT67kGMDakL4vIZc=";
+    sha256 = "sha256-gjJtwEDvPW0JDwlIUXSmv1wm4TknKsE/BLKHiqIgjho=";
   };
 
   enableParallelBuilding = true;

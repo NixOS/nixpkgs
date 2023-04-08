@@ -1,37 +1,38 @@
 { lib
-, buildGoModule
+, buildGo120Module
 , fetchFromGitHub
 , gitUpdater
 , makeWrapper
 , openssh
+, libxcrypt
 }:
 
-buildGoModule rec {
+buildGo120Module rec {
   pname = "shellhub-agent";
-  version = "0.9.5";
+  version = "0.11.7";
 
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
     rev = "v${version}";
-    sha256 = "EBtQOli8jh5Ful39tR4U/H3KH517LmoYfqVyydQQTpA=";
+    sha256 = "d5ESQQgBPUFe2tuCbeFIqiWPpr9wUczbXLc5QdXurXY=";
   };
 
   modRoot = "./agent";
 
-  vendorSha256 = "sha256-UDsgfsdq8DecyTAFrmWO09V3JIuTA5YLCEAei0tYRy4=";
+  vendorSha256 = "sha256-/85rIBfFBpXYrsCBDGVzXfAxO6xXQ8uTL2XeEPKQwDQ=";
 
   ldflags = [ "-s" "-w" "-X main.AgentVersion=v${version}" ];
 
   passthru = {
     updateScript = gitUpdater {
-      inherit pname version;
       rev-prefix = "v";
       ignoredVersions = ".(rc|beta).*";
     };
   };
 
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ libxcrypt ];
 
   postInstall = ''
     wrapProgram $out/bin/agent --prefix PATH : ${lib.makeBinPath [ openssh ]}

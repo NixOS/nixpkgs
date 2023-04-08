@@ -29,7 +29,7 @@ in
 {
   options = {
     services.jira = {
-      enable = mkEnableOption "Atlassian JIRA service";
+      enable = mkEnableOption (lib.mdDoc "Atlassian JIRA service");
 
       user = mkOption {
         type = types.str;
@@ -56,7 +56,7 @@ in
       };
 
       listenPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8091;
         description = lib.mdDoc "Port to listen on.";
       };
@@ -69,7 +69,7 @@ in
       };
 
       proxy = {
-        enable = mkEnableOption "reverse proxy support";
+        enable = mkEnableOption (lib.mdDoc "reverse proxy support");
 
         name = mkOption {
           type = types.str;
@@ -78,7 +78,7 @@ in
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 443;
           example = 80;
           description = lib.mdDoc "Port used at the proxy";
@@ -99,7 +99,7 @@ in
       };
 
       sso = {
-        enable = mkEnableOption "SSO with Atlassian Crowd";
+        enable = mkEnableOption (lib.mdDoc "SSO with Atlassian Crowd");
 
         crowd = mkOption {
           type = types.str;

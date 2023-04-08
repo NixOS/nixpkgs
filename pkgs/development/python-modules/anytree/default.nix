@@ -40,7 +40,7 @@ buildPythonPackage rec {
   # circular dependency anytree → graphviz → pango → glib → gtk-doc → anytree
   doCheck = withGraphviz;
 
-  checkInputs = [ pytestCheckHook nose ];
+  nativeCheckInputs = [ pytestCheckHook nose ];
 
   pytestFlagsArray = lib.optionals (pythonOlder "3.4") [
     # Use enums, which aren't available pre-python3.4

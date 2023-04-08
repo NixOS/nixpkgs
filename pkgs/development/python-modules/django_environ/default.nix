@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-v/U4FTMFYyjJrAL3F5C9W/HOqBsb7rZI8ouByeg+CiE=";
+    hash = "sha256-v/U4FTMFYyjJrAL3F5C9W/HOqBsb7rZI8ouByeg+CiE=";
   };
 
   # The testsuite fails to modify the base environment

@@ -30,7 +30,7 @@ in
 
   options = {
     services.ttyd = {
-      enable = mkEnableOption "ttyd daemon";
+      enable = mkEnableOption (lib.mdDoc "ttyd daemon");
 
       port = mkOption {
         type = types.port;
@@ -163,7 +163,7 @@ in
     assertions =
       [ { assertion = cfg.enableSSL
             -> cfg.certFile != null && cfg.keyFile != null && cfg.caFile != null;
-          message = "SSL is enabled for ttyd, but no certFile, keyFile or caFile has been specefied."; }
+          message = "SSL is enabled for ttyd, but no certFile, keyFile or caFile has been specified."; }
         { assertion = ! (cfg.interface != null && cfg.socket != null);
           message = "Cannot set both interface and socket for ttyd."; }
         { assertion = (cfg.username != null) == (cfg.passwordFile != null);

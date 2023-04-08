@@ -1,24 +1,26 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, shadow
 , capabilitiesSupport ? true
 , libcap_ng
+, libxcrypt
 , ncursesSupport ? true
 , ncurses
 , pamSupport ? true
 , pam
-, systemdSupport ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , nlsSupport ? true
 , translateManpages ? true
 , po4a
+, installShellFiles
 }:
 
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = "2.38";
+  version = "2.38.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-bREcvk1VszbbLx++/7xluJkIcEwBE2Nx0yqpvsNz62Q=";
+    hash = "sha256-YEkqGbRObPmj3f9oMlszO4tStsWc4+vWoOyqTFEX6E8=";
   };
 
   patches = [
@@ -65,10 +67,10 @@ stdenv.mkDerivation rec {
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
-  nativeBuildInputs = [ pkg-config ]
+  nativeBuildInputs = [ pkg-config installShellFiles ]
     ++ lib.optionals translateManpages [ po4a ];
 
-  buildInputs = [ zlib ]
+  buildInputs = [ zlib libxcrypt ]
     ++ lib.optionals pamSupport [ pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
     ++ lib.optionals ncursesSupport [ ncurses ]
@@ -77,6 +79,10 @@ stdenv.mkDerivation rec {
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    installShellCompletion --bash bash-completion/*
+  '';
 
   meta = with lib; {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";

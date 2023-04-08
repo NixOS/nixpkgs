@@ -2,7 +2,9 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, qt5
+, qtbase
+, qtsvg
+, qtwayland
 , gnuradio3_8Minimal
 , thrift
 , mpir
@@ -10,6 +12,7 @@
 , alsa-lib
 , libjack2
 , wrapGAppsHook
+, wrapQtAppsHook
 # drivers (optional):
 , rtl-sdr
 , hackrf
@@ -30,13 +33,13 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     owner = "gqrx-sdr";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "sha256-KQBtYVEfOXpzfxNMgTu6Hup7XpjubrpvZazcFlml4Kg=";
+    hash = "sha256-KQBtYVEfOXpzfxNMgTu6Hup7XpjubrpvZazcFlml4Kg=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt5.wrapQtAppsHook
+    wrapQtAppsHook
     wrapGAppsHook
   ];
   buildInputs = [
@@ -46,8 +49,9 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     alsa-lib
     libjack2
     gnuradio3_8Minimal.unwrapped.boost
-    qt5.qtbase
-    qt5.qtsvg
+    qtbase
+    qtsvg
+    qtwayland
     gnuradio3_8Minimal.pkgs.osmosdr
     rtl-sdr
     hackrf

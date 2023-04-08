@@ -17,7 +17,7 @@
 , appstream
 , glslang
 , makeWrapper
-, Mako
+, mako
 , meson
 , ninja
 , pkg-config
@@ -108,7 +108,7 @@ in stdenv.mkDerivation rec {
       libdbus = dbus.lib;
       inherit hwdata libX11;
     })
-  ] ++ lib.optional (stdenv.hostPlatform.system == "x86_64-linux") [
+  ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
     # Support 32bit OpenGL applications by appending the mangohud32
     # lib path to LD_LIBRARY_PATH.
     #
@@ -142,7 +142,7 @@ in stdenv.mkDerivation rec {
     appstream
     glslang
     makeWrapper
-    Mako
+    mako
     meson
     ninja
     pkg-config

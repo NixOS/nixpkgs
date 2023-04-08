@@ -10,7 +10,7 @@ in {
 
   options.services.molly-brown = {
 
-    enable = mkEnableOption "Molly-Brown Gemini server";
+    enable = mkEnableOption (lib.mdDoc "Molly-Brown Gemini server");
 
     port = mkOption {
       default = 1965;
@@ -34,16 +34,16 @@ in {
     certPath = mkOption {
       type = types.path;
       example = "/var/lib/acme/example.com/cert.pem";
-      description = ''
+      description = lib.mdDoc ''
         Path to TLS certificate. An ACME certificate and key may be
         shared with an HTTP server, but only if molly-brown has
         permissions allowing it to read such keys.
 
         As an example:
-        <programlisting>
+        ```
         systemd.services.molly-brown.serviceConfig.SupplementaryGroups =
           [ config.security.acme.certs."example.com".group ];
-        </programlisting>
+        ```
       '';
     };
 

@@ -3,11 +3,11 @@ let
   cfg = config.services.iperf3;
 
   api = {
-    enable = mkEnableOption "iperf3 network throughput testing server";
+    enable = mkEnableOption (lib.mdDoc "iperf3 network throughput testing server");
     port = mkOption {
       type        = types.ints.u16;
       default     = 5201;
-      description = lib.mdDoc "Server port to listen on for iperf3 client requsts.";
+      description = lib.mdDoc "Server port to listen on for iperf3 client requests.";
     };
     affinity = mkOption {
       type        = types.nullOr types.ints.unsigned;

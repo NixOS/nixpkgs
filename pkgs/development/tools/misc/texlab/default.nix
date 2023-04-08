@@ -12,23 +12,29 @@
 
 let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "4.2.1";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
-    repo = pname;
+    repo = "texlab";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-za3TauhNoxGDphpY615EnTt46HpMgS+sYpBln/twefw=";
+    sha256 = "sha256-rTYcYq8SL404A/ke5Rb9QcCtwHKhs+84TQGNqRn11HM=";
   };
 
-  cargoSha256 = "sha256-wppaa3IGOqkFu/1CAp8g+PlPtMWm/7qNpPu0k4/mL3A=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "salsa-2022-0.1.0" = "sha256-GupU78LkQGUQ+GzqAVZZlNKL1zZkmdqJz9+81ROXDqE=";
+    };
+  };
 
   outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 
   nativeBuildInputs = [ installShellFiles ]
-  ++ lib.optional (!isCross) help2man;
+    ++ lib.optional (!isCross) help2man;
 
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
@@ -36,26 +42,16 @@ in rustPlatform.buildRustPackage rec {
     CoreServices
   ];
 
-  postInstall = ''
-    # Remove generated dylib of human_name dependency. TexLab statically
-    # links to the generated rlib and doesn't reference the dylib. I
-    # couldn't find any way to prevent building this by passing cargo flags.
-    # See https://github.com/djudd/human-name/blob/master/Cargo.toml#L43
-    rm "$out/lib/libhuman_name${stdenv.hostPlatform.extensions.sharedLibrary}"
-    rmdir "$out/lib"
-  ''
   # When we cross compile we cannot run the output executable to
   # generate the man page
-  + lib.optionalString (!isCross) ''
+  postInstall = lib.optionalString (!isCross) ''
     # TexLab builds man page separately in CI:
-    # https://github.com/latex-lsp/texlab/blob/v4.2.1/.github/workflows/publish.yml#L131-L135
+    # https://github.com/latex-lsp/texlab/blob/v5.4.0/.github/workflows/publish.yml#L127-L131
     help2man --no-info "$out/bin/texlab" > texlab.1
     installManPage texlab.1
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";

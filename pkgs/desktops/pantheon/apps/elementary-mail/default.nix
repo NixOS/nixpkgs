@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -10,10 +11,8 @@
 , gtk3
 , libxml2
 , libhandy
-, webkitgtk
+, webkitgtk_4_1
 , folks
-, libgdata
-, sqlite
 , glib-networking
 , granite
 , evolution-data-server
@@ -23,14 +22,23 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "7.0.0";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
     rev = version;
-    sha256 = "sha256-DO3nybH7tb/ISrSQ3+Oj612m64Ov6X0GAWePMbKjCc4=";
+    sha256 = "sha256-IY+ml/ftLSk0A3Emi0ZL2wxIDIngNU6QKbHErRAaaMA=";
   };
+
+  patches = [
+    # MessageListItem: avoid crashing on empty Mime
+    # https://github.com/elementary/mail/pull/828
+    (fetchpatch {
+      url = "https://github.com/elementary/mail/commit/7cb412dee4cc8c0bfab55057c47d5ecce6918788.patch";
+      sha256 = "sha256-7rYvgFeVmV/rVYzC/xt/lioRlveM0d8ORqZdMYkm/d4=";
+    })
+  ];
 
   nativeBuildInputs = [
     libxml2
@@ -48,11 +56,9 @@ stdenv.mkDerivation rec {
     glib-networking
     granite
     gtk3
-    libgdata
     libgee
     libhandy
-    sqlite
-    webkitgtk
+    webkitgtk_4_1
   ];
 
   postPatch = ''
@@ -61,9 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

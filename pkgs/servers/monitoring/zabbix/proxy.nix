@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, libevent, libiconv, openssl, pcre, zlib
 , odbcSupport ? true, unixODBC
-, snmpSupport ? true, net-snmp
+, snmpSupport ? stdenv.buildPlatform == stdenv.hostPlatform, net-snmp
 , sshSupport ? true, libssh2
 , sqliteSupport ? false, sqlite
 , mysqlSupport ? false, libmysqlclient
@@ -15,7 +15,7 @@ assert sqliteSupport -> !mysqlSupport && !postgresqlSupport;
 let
   inherit (lib) optional optionalString;
 in
-  import ./versions.nix ({ version, sha256 }:
+  import ./versions.nix ({ version, sha256, ... }:
     stdenv.mkDerivation {
       pname = "zabbix-proxy";
       inherit version;
@@ -59,6 +59,11 @@ in
       prePatch = ''
         find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +
       '';
+
+      makeFlags = [
+        "AR:=$(AR)"
+        "RANLIB:=$(RANLIB)"
+      ];
 
       postInstall = ''
         mkdir -p $out/share/zabbix/database/

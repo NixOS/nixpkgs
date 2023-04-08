@@ -1,5 +1,5 @@
 diff --git a/data/meson.build b/data/meson.build
-index c189753..12c10cb 100644
+index a1fc61f..7c03882 100644
 --- a/data/meson.build
 +++ b/data/meson.build
 @@ -7,7 +7,7 @@ if get_option('enable-backend')
@@ -43,7 +43,7 @@ index 1427fbe..2623f16 100644
                               desktop_file.full_path(),
                               autostart_dir)
 diff --git a/meson.build b/meson.build
-index fde6fa3..39b7b0a 100644
+index 8aa5c31..b011879 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -12,7 +12,11 @@ gclue_api_version='2.0'
@@ -69,10 +69,10 @@ index fde6fa3..39b7b0a 100644
  conf.set10('GCLUE_USE_3G_SOURCE', get_option('3g-source'))
  conf.set10('GCLUE_USE_CDMA_SOURCE', get_option('cdma-source'))
 diff --git a/meson_options.txt b/meson_options.txt
-index 83bc60e..b726329 100644
+index 5b8c42d..945dfd5 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -34,6 +34,9 @@ option('systemd-system-unit-dir',
+@@ -40,6 +40,9 @@ option('systemd-system-unit-dir',
  option('dbus-srv-user',
         type: 'string', value: 'root',
         description: 'The user (existing) as which the service will run')

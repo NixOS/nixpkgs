@@ -89,7 +89,7 @@ let
 in
 {
   options.services.jibri = with types; {
-    enable = mkEnableOption "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running <option>services.jitsi-meet.enable</option>, so for most use cases it will be simpler to run <option>services.jitsi-meet.jibri.enable</option>";
+    enable = mkEnableOption (lib.mdDoc "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running {option}`services.jitsi-meet.enable`, so for most use cases it will be simpler to run {option}`services.jitsi-meet.jibri.enable`");
     config = mkOption {
       type = attrs;
       default = { };
@@ -378,7 +378,7 @@ in
         '')
         cfg.xmppEnvironments))
       + ''
-        ${pkgs.jre8_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
+        ${pkgs.jdk11_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
       '';
 
       environment.HOME = "/var/lib/jibri";

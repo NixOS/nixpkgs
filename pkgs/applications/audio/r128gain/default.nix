@@ -26,13 +26,13 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [ crcmod ffmpeg-python mutagen tqdm ];
-  checkInputs = with python3Packages; [ requests sox ];
+  nativeCheckInputs = with python3Packages; [ requests sox ];
 
   # Testing downloads media files for testing, which requires the
   # sandbox to be disabled.
   doCheck = false;
 
-  passthru.updateScript = gitUpdater { inherit pname version; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Fast audio loudness scanner & tagger (ReplayGain v2 / R128)";

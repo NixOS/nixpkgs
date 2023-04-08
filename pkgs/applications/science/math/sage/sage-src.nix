@@ -1,7 +1,6 @@
 { stdenv
 , fetchFromGitHub
 , fetchpatch
-, runtimeShell
 }:
 
 # This file is responsible for fetching the sage source and adding necessary patches.
@@ -58,14 +57,14 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.6";
+  version = "9.8";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-QY8Yga3hD1WhSCtA2/PVry8hHlMmC31J8jCBFtWgIU0=";
+    sha256 = "sha256-dDbrzJXsOBARYfJz0r7n3LbaoXHnx7Acz6HBa95NV9o=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -112,20 +111,49 @@ stdenv.mkDerivation rec {
     # adapted from https://trac.sagemath.org/ticket/23712#comment:22
     ./patches/tachyon-renamed-focallength.patch
 
+    # https://trac.sagemath.org/ticket/34391
     (fetchSageDiff {
-      name = "eclib-20220621-update.patch";
-      base = "9.7.beta4";
-      rev = "9b65d73399b33043777ba628a4d318638aec6e0e";
-      sha256 = "sha256-pcb9Q9a0ROCZTyfT7TRMtgEqCom8SgrtAaZ8ATgeqVI=";
+      name = "gap-4.12-upgrade.patch";
+      base = "9.8.beta7";
+      rev = "dd4a17281adcda74e11f998ef519b6bd0dafb043";
+      sha256 = "sha256-UQT9DO9xd5hh5RucvUkIm+rggPKu8bc1YaSI6LVYH98=";
     })
 
-    # https://trac.sagemath.org/ticket/34149
+    # https://trac.sagemath.org/ticket/34701
     (fetchSageDiff {
-      name = "sphinx-5-update.patch";
-      base = "9.7.beta6";
-      rev = "6f9ceb7883376a1cacda51d84ec7870121860482";
-      sha256 = "sha256-prTCwBfl/wNXIkdjKLiMSe/B64wCXOjOTr4AVNiFruw=";
+      name = "libgap-fix-gc-crashes-on-aarch64.patch";
+      base = "eb8cd42feb58963adba67599bf6e311e03424328"; # TODO: update when #34391 lands
+      rev = "90acc7f1c13a80b8aa673469a2668feb9cd4207f";
+      sha256 = "sha256-9BhQLFB3wUhiXRQsK9L+I62lSjvTfrqMNi7QUIQvH4U=";
     })
+
+    # https://github.com/sagemath/sage/pull/35235
+    (fetchpatch {
+      name = "ipython-8.11-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/23471e2d242c4de8789d7b1fc8b07a4b1d1e595a.diff";
+      sha256 = "sha256-wvH4BvDiaBv7jbOP8LvOE5Vs16Kcwz/C9jLpEMohzLQ=";
+    })
+
+    # positively reviewed
+    (fetchpatch {
+      name = "matplotlib-3.7.0-upgrade.patch";
+      url = "https://github.com/sagemath/sage/pull/35177.diff";
+      sha256 = "sha256-YdPnMsjXBm9ZRm6a8hH8rSynkrABjLoIzqwp3F/rKAw=";
+    })
+
+    # rebased from https://github.com/sagemath/sage/pull/34994, merged in sage 10.0.beta2
+    ./patches/numpy-1.24-upgrade.patch
+
+    # temporarily paper over https://github.com/jupyter-widgets/ipywidgets/issues/3669
+    ./patches/ipywidgets-on_submit-deprecationwarning.patch
+
+    # Sage uses mixed integer programs (MIPs) to find edge disjoint
+    # spanning trees. For some reason, aarch64 glpk takes much longer
+    # than x86_64 glpk to solve such MIPs. Since the MIP formulation
+    # has "numerous problems" and will be replaced by a polynomial
+    # algorithm soon, disable this test for now.
+    # https://trac.sagemath.org/ticket/34575
+    ./patches/disable-slow-glpk-test.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

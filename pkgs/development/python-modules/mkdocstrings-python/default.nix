@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , griffe
 , mkdocs-material
@@ -9,9 +9,9 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "0.7.1";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonApplication rec {
     owner = "mkdocstrings";
     repo = "python";
     rev = version;
-    hash = "sha256-cZk6Eu6Jp3tSPAb0HplR/I0pX2YIFhOaAsI3YRS0LVw=";
+    hash = "sha256-PM6J21yT5paukDB8uJkcIyy+miYwN4+gk8Ej1xI8Q1A=";
   };
 
   nativeBuildInputs = [
@@ -32,13 +32,14 @@ buildPythonApplication rec {
     mkdocstrings
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mkdocs-material
     pytestCheckHook
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'license = "ISC"' 'license = {text = "ISC"}' \
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
@@ -49,6 +50,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Python handler for mkdocstrings";
     homepage = "https://github.com/mkdocstrings/python";
+    changelog = "https://github.com/mkdocstrings/python/blob/${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
   };

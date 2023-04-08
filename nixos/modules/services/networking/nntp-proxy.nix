@@ -59,7 +59,7 @@ in
   options = {
 
     services.nntp-proxy = {
-      enable = mkEnableOption "NNTP-Proxy";
+      enable = mkEnableOption (lib.mdDoc "NNTP-Proxy");
 
       upstreamServer = mkOption {
         type = types.str;
@@ -71,7 +71,7 @@ in
       };
 
       upstreamPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 563;
         description = lib.mdDoc ''
           Upstream server port
@@ -112,7 +112,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5555;
         description = lib.mdDoc ''
           Proxy listen port

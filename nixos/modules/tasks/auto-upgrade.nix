@@ -46,11 +46,11 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "https://nixos.org/channels/nixos-14.12-small";
-        description = ''
+        description = lib.mdDoc ''
           The URI of the NixOS channel to use for automatic
           upgrades. By default, this is the channel set using
-          <command>nix-channel</command> (run <literal>nix-channel
-          --list</literal> to see the current value).
+          {command}`nix-channel` (run `nix-channel --list`
+          to see the current value).
         '';
       };
 

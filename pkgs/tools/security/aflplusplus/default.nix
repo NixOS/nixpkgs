@@ -51,6 +51,11 @@ let
         --replace '"clang++"' '"clang++-UNSUPPORTED"'
     '';
 
+    env.NIX_CFLAGS_COMPILE = toString [
+      # Needed with GCC 12
+      "-Wno-error=use-after-free"
+    ];
+
     makeFlags = [ "PREFIX=$(out)" ];
     buildPhase = ''
       common="$makeFlags -j$NIX_BUILD_CORES"
@@ -105,7 +110,7 @@ let
         wrapPythonProgramsIn $out/bin ${python.pkgs.pefile}
     '';
 
-    installCheckInputs = [ perl file ];
+    nativeInstallCheckInputs = [ perl file ];
     doInstallCheck = true;
     installCheckPhase = ''
       # replace references to tools in build directory with references to installed locations

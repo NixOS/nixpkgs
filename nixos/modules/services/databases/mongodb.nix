@@ -29,15 +29,15 @@ in
 
     services.mongodb = {
 
-      enable = mkEnableOption "the MongoDB server";
+      enable = mkEnableOption (lib.mdDoc "the MongoDB server");
 
       package = mkOption {
         default = pkgs.mongodb;
         defaultText = literalExpression "pkgs.mongodb";
         type = types.package;
-        description = "
+        description = lib.mdDoc ''
           Which MongoDB derivation to use.
-        ";
+        '';
       };
 
       user = mkOption {

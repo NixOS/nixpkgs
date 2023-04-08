@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mjpieters";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4wByVZoOLhrXFx9oK19GBmRcjGoJolQ3Gwx9vQV/n8s=";
+    hash = "sha256-4wByVZoOLhrXFx9oK19GBmRcjGoJolQ3Gwx9vQV/n8s=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     toml
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "switch-to-peotry-core.patch";
       url = "https://github.com/mjpieters/aiolimiter/commit/84a85eff42621b0daff8fcf6bb485db313faae0b.patch";
-      sha256 = "sha256-xUfJwLvMF2Xt/V1bKBFn/fjn1uyw7bGNo9RpWxtyr50=";
+      hash = "sha256-xUfJwLvMF2Xt/V1bKBFn/fjn1uyw7bGNo9RpWxtyr50=";
     })
   ];
 

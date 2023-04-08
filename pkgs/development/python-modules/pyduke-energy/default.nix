@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyduke-energy";
-  version = "1.0.1";
+  version = "1.0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mjmeli";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-qHVQ7ehvhVM2IL8DcoB6TU2Q4GBn4Ewmzs6Yp46r6xE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-g+s9YaVFOCKaBGR5o9cPk4kcIW4BffFHTtmDNE8f/zE=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for the Duke Energy API";
     homepage = "https://github.com/mjmeli/pyduke-energy";
+    changelog = "https://github.com/mjmeli/pyduke-energy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

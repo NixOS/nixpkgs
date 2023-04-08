@@ -8,7 +8,7 @@ let
   homeDir = "/var/lib/tox-node";
 
   configFile = let
-    src = "${pkg.src}/dpkg/config.yml";
+    src = "${pkg.src}/tox_node/dpkg/config.yml";
     confJSON = pkgs.writeText "config.json" (
       builtins.toJSON {
         log-type = cfg.logType;
@@ -28,7 +28,7 @@ let
 
 in {
   options.services.tox-node = {
-    enable = mkEnableOption "Tox Node service";
+    enable = mkEnableOption (lib.mdDoc "Tox Node service");
 
     logType = mkOption {
       type = types.enum [ "Stderr" "Stdout" "Syslog" "None" ];

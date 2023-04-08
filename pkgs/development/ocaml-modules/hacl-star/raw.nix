@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     ctypes
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cppo
   ];
 

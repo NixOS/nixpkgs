@@ -47,7 +47,7 @@ in
         $highlight_bin = "${pkgs.highlight}/bin/highlight";
         ${cfg.extraConfig}
       '';
-      defaultText = literalDocBook "generated config file";
+      defaultText = literalMD "generated config file";
       type = types.path;
       readOnly = true;
       internal = true;

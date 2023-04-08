@@ -18,7 +18,7 @@
 
 in {
   options.services.sogo = with types; {
-    enable = mkEnableOption "SOGo groupware";
+    enable = mkEnableOption (lib.mdDoc "SOGo groupware");
 
     vhostName = mkOption {
       description = lib.mdDoc "Name of the nginx vhost";
@@ -49,7 +49,7 @@ in {
         Replacement-filepath mapping for sogo.conf.
         Every key is replaced with the contents of the file specified as value.
 
-        In the example, every occurence of LDAP_BINDPW will be replaced with the text of the
+        In the example, every occurrence of LDAP_BINDPW will be replaced with the text of the
         specified file.
       '';
       type = attrsOf str;

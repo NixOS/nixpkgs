@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "rtl8189es-${kernel.version}-${version}";
-  version = "2021-10-01";
+  version = "2022-10-30";
 
   src = fetchFromGitHub {
     owner = "jwrdegoede";
     repo = "rtl8189ES_linux";
-    rev = "be378f47055da1bae42ff6ec1d62f1a5052ef097";
-    sha256 = "sha256-+19q1Xux2BjquavY+s0UDzTubEt6BEUZ9XVDVmj36us=";
+    rev = "e58bd86c9d9408c648b1246a0dd76b16856ec172";
+    sha256 = "sha256-KKly72N6ACBTB4CSBM6Q/S1wGMTg5NZA3QYslYPNUr8=";
   };
 
   nativeBuildInputs = [ bc nukeReferences ] ++ kernel.moduleBuildDependencies;
@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace ./Makefile --replace /lib/modules/ "${kernel.dev}/lib/modules/"
-    substituteInPlace ./Makefile --replace '$(shell uname -r)' "${kernel.modDirVersion}"
     substituteInPlace ./Makefile --replace /sbin/depmod \#
     substituteInPlace ./Makefile --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
@@ -42,6 +41,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ danielfullmer lheckemann ];
-    broken = kernel.kernelAtLeast "5.17";
   };
 }

@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     scdoc
   ];
 
+  preConfigure = ''
+    export HARECACHE=$(mktemp -d)
+  '';
+
   installFlags = [ "PREFIX=" "DESTDIR=$(out)" ];
 
   meta = with lib; {

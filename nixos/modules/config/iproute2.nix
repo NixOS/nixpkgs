@@ -7,7 +7,7 @@ let
 in
 {
   options.networking.iproute2 = {
-    enable = mkEnableOption "copy IP route configuration files";
+    enable = mkEnableOption (lib.mdDoc "copy IP route configuration files");
     rttablesExtraConfig = mkOption {
       type = types.lines;
       default = "";

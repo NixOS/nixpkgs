@@ -6,6 +6,7 @@
 , dbus-python
 , packaging
 , enlightenment
+, directoryListingUpdater
 }:
 
 # Should be bumped along with EFL!
@@ -30,14 +31,16 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    ${python.interpreter} setup.py build_ext
+    ${python.pythonForBuild.interpreter} setup.py build_ext
   '';
 
   installPhase = ''
-    ${python.interpreter} setup.py install --prefix=$out --single-version-externally-managed
+    ${python.pythonForBuild.interpreter} setup.py install --prefix=$out --single-version-externally-managed
   '';
 
   doCheck = false;
+
+  passthru.updateScript = directoryListingUpdater { };
 
   meta = with lib; {
     description = "Python bindings for Enlightenment Foundation Libraries";
@@ -45,5 +48,6 @@ buildPythonPackage rec {
     platforms = platforms.linux;
     license = with licenses; [ gpl3 lgpl3 ];
     maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
+    broken = true;
   };
 }

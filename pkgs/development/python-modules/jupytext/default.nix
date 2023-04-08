@@ -2,7 +2,8 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, GitPython
+, fetchpatch
+, gitpython
 , isort
 , jupyter-client
 , jupyter-packaging
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.14.0";
+  version = "1.14.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -28,8 +29,15 @@ buildPythonPackage rec {
     owner = "mwouts";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-a/dvY7MLCjYGOvsCC5tiIIJpApNriRtBN63VK+McEVw=";
+    hash = "sha256-DDF4aTLkhEl4xViYh/E0/y6swcwZ9KbeS0qKm+HdFz8=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mwouts/jupytext/commit/be9b65b03600227b737b5f10ea259a7cdb762b76.patch";
+      hash = "sha256-3klx8I+T560EVfsKe/FlrSjF6JzdKSCt6uhAW2cSwtc=";
+    })
+  ];
 
   buildInputs = [
     jupyter-packaging
@@ -44,8 +52,8 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
-    GitPython
+  nativeCheckInputs = [
+    gitpython
     isort
     jupyter-client
     notebook

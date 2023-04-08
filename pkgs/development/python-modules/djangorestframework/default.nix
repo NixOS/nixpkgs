@@ -14,23 +14,22 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework";
-  version = "3.13.1";
+  version = "3.14.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "django-rest-framework";
     rev = version;
-    sha256 = "sha256-XmX6DZBZYzVCe72GERplAWt5jIjV/cYercZGb0pYjoc=";
+    hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
   };
-
 
   propagatedBuildInputs = [
     django
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
 

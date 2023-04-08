@@ -1,19 +1,26 @@
-{ stdenv, lib, fetchgit, cmake, pkg-config, json_c }:
+{ stdenv, lib, fetchgit, cmake, pkg-config, json_c, with_lua ? false, lua5_1, with_ustream_ssl ? false, ustream-ssl }:
 
 stdenv.mkDerivation {
   pname = "libubox";
-  version = "unstable-2021-03-09";
+  version = "unstable-2023-01-03${lib.optionalString with_ustream_ssl "-${ustream-ssl.ssl_implementation.pname}"}";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/libubox.git";
-    rev = "551d75b5662cccd0466b990d58136bdf799a804d";
-    sha256 = "05cnjjqjv9nvrs1d8pg4xxxf27jryiv6xk8plmdpmm7r2wkvwn3r";
+    rev = "eac92a4d5d82eb31e712157e7eb425af728b2c43";
+    sha256 = "0w6mmwmd3ljhkqfk0qswq28dp63k30s3brlgf8lyi7vj7mrhvn3c";
   };
 
-  cmakeFlags = [ "-DBUILD_LUA=OFF" "-DBUILD_EXAMPLES=OFF" ];
+  cmakeFlags = [ "-DBUILD_EXAMPLES=OFF" (if with_lua then "-DLUAPATH=${placeholder "out"}/lib/lua" else "-DBUILD_LUA=OFF") ];
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ json_c ];
+  buildInputs = [ json_c ] ++ lib.optional with_lua lua5_1 ++ lib.optional with_ustream_ssl ustream-ssl;
+
+  postInstall = lib.optionalString with_ustream_ssl ''
+    for fin in $(find ${ustream-ssl} -type f); do
+      fout="''${fin/"${ustream-ssl}"/"''${out}"}"
+      ln -s "$fin" "$fout"
+    done
+  '';
 
   meta = with lib; {
     description = "C utility functions for OpenWrt";

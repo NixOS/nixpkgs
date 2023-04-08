@@ -5,6 +5,7 @@
 , libpng
 , libjpeg
 , zlib
+, llvmPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +16,10 @@ stdenv.mkDerivation rec {
     url = "http://log69.com/downloads/aaphoto_sources_${version}.tar.gz";
     sha256 = "sha256-06koJM7jNVFqVgqg6BmOZ74foqk6yjUIFnwULzPZ4go=";
   };
+
+  nativeBuildInputs = lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   buildInputs = [
     jasper
@@ -43,6 +48,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # aaphoto.c:237:10: fatal error: 'omp.h' file not found
   };
 }

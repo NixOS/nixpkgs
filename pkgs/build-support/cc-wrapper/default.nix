@@ -9,7 +9,6 @@
 , lib
 , stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
-, gccForLibs ? null
 , zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
@@ -18,6 +17,9 @@
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
+, gccForLibs ? if useCcForLibs then cc else null
+# same as `gccForLibs`, but generalized beyond clang
+, useCcForLibs ? isClang
 }:
 
 with lib;
@@ -42,9 +44,9 @@ let
   ccVersion = lib.getVersion cc;
   ccName = lib.removePrefix targetPrefix (lib.getName cc);
 
-  libc_bin = if libc == null then null else getBin libc;
-  libc_dev = if libc == null then null else getDev libc;
-  libc_lib = if libc == null then null else getLib libc;
+  libc_bin = if libc == null then "" else getBin libc;
+  libc_dev = if libc == null then "" else getDev libc;
+  libc_lib = if libc == null then "" else getLib libc;
   cc_solib = getLib cc
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
@@ -59,11 +61,9 @@ let
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   expand-response-params =
-    if (buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null"
-    then import ../expand-response-params { inherit (buildPackages) stdenv; }
-    else "";
+    lib.optionalString ((buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null") (import ../expand-response-params { inherit (buildPackages) stdenv; });
 
-  useGccForLibs = isClang
+  useGccForLibs = useCcForLibs
     && libcxx == null
     && !stdenv.targetPlatform.isDarwin
     && !(stdenv.targetPlatform.useLLVM or false)
@@ -73,6 +73,7 @@ let
 
   # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
   isGccArchSupported = arch:
+    if targetPlatform.isPower then false else # powerpc does not allow -march=
     if isGNU then
       { # Intel
         skylake        = versionAtLeast ccVersion "6.0";
@@ -131,22 +132,16 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit cc libc_bin libc_dev libc_lib bintools coreutils_bin;
-  shell = getBin shell + shell.shellPath or "";
-  gnugrep_bin = if nativeTools then "" else gnugrep;
-
-  inherit targetPrefix suffixSalt;
-  inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
-
   outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
   passthru = {
+    inherit targetPrefix suffixSalt;
     # "cc" is the generic name for a C compiler, but there is no one for package
     # providing the linker and related tools. The two we use now are GNU
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang;
+    inherit cc libc nativeTools nativeLibc nativePrefix isGNU isClang;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -156,6 +151,8 @@ stdenv.mkDerivation {
             (setenv "NIX_CFLAGS_COMPILE_${suffixSalt}" (concat (getenv "NIX_CFLAGS_COMPILE_${suffixSalt}") " -isystem " arg "/include"))))
         '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
+
+    inherit expand-response-params;
 
     inherit nixSupport;
   };
@@ -231,13 +228,22 @@ stdenv.mkDerivation {
 
       if [ -e $ccPath/cpp ]; then
         wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
+    '' + lib.optionalString (hostPlatform != targetPlatform) ''
+      elif [ -e $ccPath/${targetPrefix}cpp ]; then
+        wrap ${targetPrefix}cpp $wrapper $ccPath/${targetPrefix}cpp
+    '' + ''
       fi
     ''
 
+    # No need to wrap gnat, gnatkr, gnatname or gnatprep; we can just symlink them in
     + optionalString cc.langAda or false ''
-      wrap ${targetPrefix}gnatmake ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatmake
-      wrap ${targetPrefix}gnatbind ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatbind
-      wrap ${targetPrefix}gnatlink ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatlink
+      for cmd in gnatbind gnatchop gnatclean gnatlink gnatls gnatmake; do
+        wrap ${targetPrefix}$cmd ${./gnat-wrapper.sh} $ccPath/${targetPrefix}$cmd
+      done
+
+      for cmd in gnat gnatkr gnatname gnatprep; do
+        ln -s $ccPath/${targetPrefix}$cmd $out/bin/${targetPrefix}$cmd
+      done
 
       # this symlink points to the unwrapped gnat's output "out". It is used by
       # our custom gprconfig compiler description to find GNAT's ada runtime. See
@@ -249,19 +255,12 @@ stdenv.mkDerivation {
       wrap ${targetPrefix}gdc $wrapper $ccPath/${targetPrefix}gdc
     ''
 
-    + optionalString cc.langFortran or false (''
+    + optionalString cc.langFortran or false ''
       wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
       export named_fc=${targetPrefix}gfortran
     ''
-    # Darwin aarch64 fortran compilations seem to fail otherwise, see:
-    # https://github.com/NixOS/nixpkgs/issues/140041
-    + (if (stdenvNoCC.isDarwin && stdenvNoCC.isAarch64) then ''
-      export fortran_hardening="pic strictoverflow relro bindnow"
-    '' else ''
-      export fortran_hardening="pic strictoverflow relro bindnow stackprotector"
-    ''))
 
     + optionalString cc.langJava or false ''
       wrap ${targetPrefix}gcj $wrapper $ccPath/${targetPrefix}gcj
@@ -269,13 +268,12 @@ stdenv.mkDerivation {
 
     + optionalString cc.langGo or false ''
       wrap ${targetPrefix}gccgo $wrapper $ccPath/${targetPrefix}gccgo
+      wrap ${targetPrefix}go ${./go-wrapper.sh} $ccPath/${targetPrefix}go
     '';
 
   strictDeps = true;
   propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or false [ zlib ];
   depsTargetTargetPropagated = optional (libcxx != null) libcxx ++ extraPackages;
-
-  wrapperName = "CC_WRAPPER";
 
   setupHooks = [
     ../setup-hooks/role.bash
@@ -327,6 +325,11 @@ stdenv.mkDerivation {
                       && !(stdenv.targetPlatform.useLLVM or false)
                       && gccForLibs != null) ''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
+
+      # Pull in 'cc.out' target to get 'libstdc++fs.a'. It should be in
+      # 'cc.lib'. But it's a gcc package bug.
+      # TODO(trofi): remove once gcc is fixed to move libraries to .lib output.
+      echo "-L${gccForLibs}/${optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}"}/lib" >> $out/nix-support/cc-ldflags
     ''
 
     ##
@@ -371,18 +374,18 @@ stdenv.mkDerivation {
       touch "$out/nix-support/libcxx-ldflags"
     ''
     + optionalString (libcxx == null && (useGccForLibs && gccForLibs.langCC or false)) ''
-      for dir in ${gccForLibs}/include/c++/*; do
+      for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
-      for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
+      for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*/${targetPlatform.config}; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
     ''
-    + optionalString (libcxx.isLLVM or false) (''
+    + optionalString (libcxx.isLLVM or false) ''
       echo "-isystem ${lib.getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
-      echo "-lc++abi" >> $out/nix-support/libcxx-ldflags
-    '')
+      echo "-l${libcxx.cxxabi.libName}" >> $out/nix-support/libcxx-ldflags
+    ''
 
     ##
     ## Initial CFLAGS
@@ -446,8 +449,9 @@ stdenv.mkDerivation {
       echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
     ''
 
-    # -mcpu is not very useful. You should use mtune and march
-    # instead. It’s provided here for backwards compatibility.
+    # -mcpu is not very useful, except on PowerPC where it is used
+    # instead of march. On all other platforms you should use mtune
+    # and march instead.
     # TODO: aarch64-darwin has mcpu incompatible with gcc
     + optionalString ((targetPlatform ? gcc.cpu) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64))) ''
       echo "-mcpu=${targetPlatform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
@@ -494,6 +498,8 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" format"
     '' + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
+    '' + optionalString targetPlatform.isMicroBlaze ''
+      hardening_unsupported_flags+=" stackprotector"
     ''
 
     + optionalString (libc != null && targetPlatform.isAvr) ''
@@ -522,6 +528,10 @@ stdenv.mkDerivation {
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
     ''
 
+    + optionalString cc.langAda or false ''
+      substituteAll ${./add-gnat-extra-flags.sh} $out/nix-support/add-gnat-extra-flags.sh
+    ''
+
     ##
     ## General Clang support
     ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
@@ -540,10 +550,17 @@ stdenv.mkDerivation {
         (name: value: "echo ${toString value} >> $out/nix-support/${name}")
         nixSupport);
 
-  inherit expand-response-params;
 
-  # for substitution in utils.bash
-  expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+  env = {
+    # for substitution in utils.bash
+    expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+    shell = getBin shell + shell.shellPath or "";
+    gnugrep_bin = if nativeTools then "" else gnugrep;
+    wrapperName = "CC_WRAPPER";
+    inherit suffixSalt coreutils_bin bintools cc;
+    inherit libc_bin libc_dev libc_lib;
+    inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
+  };
 
   meta =
     let cc_ = if cc != null then cc else {}; in

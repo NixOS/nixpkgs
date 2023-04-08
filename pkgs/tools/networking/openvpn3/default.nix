@@ -4,7 +4,6 @@
 , asio
 , autoconf-archive
 , autoreconfHook
-, fetchpatch
 , glib
 , gtest
 , jsoncpp
@@ -24,30 +23,21 @@ let
   openvpn3-core = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3";
-    rev = "7765540e581c48721752bcad0b3d74b8397b1f73";
-    sha256 = "sha256-v/suF/tWfuukQO1wFiHRzC7ZW+3Gh1tav6qj0uYUP4E=";
+    rev = "7590cb109349809b948e8edaeecabdbfe24e4b17";
+    hash = "sha256-S9D/FQa7HYj0FJnyb5dCrtgTH9Nf2nvtyp/VHiebq7I=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "openvpn3";
   # also update openvpn3-core
-  version = "17_beta";
+  version = "19_beta";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
     rev = "v${version}";
-    sha256 = "sha256-ITSnC105YNYFW1M2bOASFemPZAh+HETIzX2ofABWTho=";
+    hash = "sha256-5dhxJBJMtNvxLZdcvJSOIDdLVBu3i9ak4A+hz5YsIds=";
   };
-
-  patches = [
-    # remove when v18_beta hits
-    (fetchpatch {
-      name = "dont-hardcode-gio.patch";
-      url = "https://github.com/OpenVPN/openvpn3-linux/commit/f7d6d3ae1d52b18b398d3d3b6e21c720c98d0e89.patch";
-      sha256 = "sha256-Bo5uaHadMTDROpwM7Y5aXhCoGUrsAAkSxeXLLhvOeEg=";
-    })
-  ];
 
   postPatch = ''
     rm -r ./vendor/googletest

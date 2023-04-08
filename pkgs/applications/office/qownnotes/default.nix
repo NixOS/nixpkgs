@@ -1,30 +1,66 @@
-{ mkDerivation, lib, stdenv, fetchurl
-, qmake, qttools, qtbase, qtsvg, qtdeclarative, qtxmlpatterns, qtwebsockets
-, qtx11extras, qtwayland
+{ lib
+, stdenv
+, fetchurl
+, qmake
+, qttools
+, qtbase
+, qtdeclarative
+, qtsvg
+, qtwayland
+, qtwebsockets
+, qtx11extras
+, qtxmlpatterns
+, makeWrapper
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+let
   pname = "qownnotes";
-  version = "22.8.0";
+  appname = "QOwnNotes";
+  version = "23.4.0";
+in
+stdenv.mkDerivation {
+  inherit pname appname version;
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
-    # Fetch the checksum of current version with curl:
-    # curl https://download.tuxfamily.org/qownnotes/src/qownnotes-<version>.tar.xz.sha256
-    sha256 = "37ae0952119341b7a07a80bb79e732d91edab3a684b6b9a626e5a9d13a97fad1";
+    sha256 = "sha256-8gSy7WL0wpLAXxVo3oOA9X12qd/R7P3MgmlwXxpJSUs=";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
 
-  buildInputs = [ qtbase qtsvg qtdeclarative qtxmlpatterns qtwebsockets qtx11extras ]
-    ++ lib.optionals stdenv.isLinux [ qtwayland ];
+  buildInputs = [
+    qtbase
+    qtdeclarative
+    qtsvg
+    qtwebsockets
+    qtx11extras
+    qtxmlpatterns
+  ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
+
+  postInstall =
+  # Create a lowercase symlink for Linux
+  lib.optionalString stdenv.isLinux ''
+    ln -s $out/bin/${appname} $out/bin/${pname}
+  ''
+  # Wrap application for macOS as lowercase binary
+  + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/${appname}.app $out/Applications
+    makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/${pname}
+  '';
 
   meta = with lib; {
-    description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration.";
-    longDescription = "QOwnNotes is a plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration.";
+    description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration";
     homepage = "https://www.qownnotes.org/";
+    changelog = "https://www.qownnotes.org/changelog.html";
+    downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${version}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ totoroot ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

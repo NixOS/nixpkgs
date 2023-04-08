@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   # Without it doesn't find all of the boost libraries.
   BOOST_LIB_DIR = "${boost}/lib";
   # uses the deprecated get_generic_category() in boost_system
-  NIX_CFLAGS_COMPILE = "-DBOOST_SYSTEM_ENABLE_DEPRECATED=1";
+  env.NIX_CFLAGS_COMPILE = "-DBOOST_SYSTEM_ENABLE_DEPRECATED=1";
 
   LC_ALL = "en_US.UTF-8";
 

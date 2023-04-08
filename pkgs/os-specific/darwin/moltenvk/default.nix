@@ -23,67 +23,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.1.10";
+  version = "1.2.2";
 
-  buildInputs = [ AppKit Foundation Metal QuartzCore cereal ]
-    ++ lib.attrValues finalAttrs.passthru;
+  buildInputs = [
+    AppKit
+    Foundation
+    Metal
+    QuartzCore
+    cereal
+    glslang
+    spirv-cross
+    spirv-headers
+    spirv-tools
+    vulkan-headers
+  ];
 
   nativeBuildInputs = [ cctools sigtool xcbuild ];
 
   outputs = [ "out" "bin" "dev" ];
 
-  # MoltenVK requires specific versions of its dependencies.
-  # Pin them here except for cereal, which is four years old and has several CVEs.
-  passthru = {
-    glslang = (glslang.overrideAttrs (old: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "glslang";
-        rev = "adbf0d3106b26daa237b10b9bf72b1af7c31092d";
-        hash = "sha256-sjidkiPtRADhyOEKDb2cHCBXnFjLwk2F5Lppv5/fwNQ=";
-      };
-    })).override { inherit (finalAttrs.passthru) spirv-headers spirv-tools; };
-    spirv-cross = spirv-cross.overrideAttrs (old: {
-      cmakeFlags = (old.cmakeFlags or [ ])
-        ++ [ "-DSPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross" ];
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "SPIRV-Cross";
-        rev = "50b4d5389b6a06f86fb63a2848e1a7da6d9755ca";
-        hash = "sha256-SsupPHJ3VHxJhEAUl3EeQwN4texYhdDjxTnGD+bkNAw=";
-      };
-    });
-    spirv-headers = spirv-headers.overrideAttrs (_: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "spirv-headers";
-        rev = "5a121866927a16ab9d49bed4788b532c7fcea766";
-        hash = "sha256-X4GuFesX015mrzutguhZLrIGlllCgAZ+DUBGSADt8xU=";
-      };
-    });
-    spirv-tools = (spirv-tools.overrideAttrs (old: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "spirv-tools";
-        rev = "b930e734ea198b7aabbbf04ee1562cf6f57962f0";
-        hash = "sha256-NWpFSRoxtYWi+hLUt9gpw0YScM3shcUwv9yUmbivRb0=";
-      };
-    })).override { inherit (finalAttrs.passthru) spirv-headers; };
-    vulkan-headers = vulkan-headers.overrideAttrs (old: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "Vulkan-Headers";
-        rev = "3ef4c97fd6ea001d75a8e9da408ee473c180e456";
-        hash = "sha256-jHzW3m9smuzEGbZrSyBI74K9rFozxiG3M5Xql/WOw7U=";
-      };
-    });
-  };
-
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LZvCCP2yelTaWcNt+WvG+RZnVLHRgMDTlNWwRIey7ZM=";
+    hash = "sha256-XowMXhGqPcxJ0DS3G41tpBO68va94a7SZHOOgguCxy0=";
   };
 
   patches = [
@@ -97,6 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Scripts/gen_moltenvk_rev_hdr.sh \
       --replace '$'''{BUILT_PRODUCTS_DIR}' "$NIX_BUILD_TOP/$sourceRoot/build/include" \
       --replace '$(git rev-parse HEAD)' ${finalAttrs.src.rev}
+    # Use the SPIRV-Cross packaged in nixpkgs instead of one built specifically for MoltenVK.
+    substituteInPlace MoltenVK/MoltenVK.xcodeproj/project.pbxproj \
+      --replace SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
+    substituteInPlace MoltenVKShaderConverter/MoltenVKShaderConverter.xcodeproj/project.pbxproj \
+      --replace SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
     # Adding all of `usr/include` from the SDK results in header conflicts with `libcxx.dev`.
     # Work around it by symlinking just the SIMD stuff needed by MoltenVK.
     mkdir -p build/include
@@ -105,10 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-isystem ${lib.getDev libcxx}/include/c++/v1"
-    "-I${finalAttrs.passthru.spirv-cross}/include/spirv_cross"
-    "-I${finalAttrs.passthru.spirv-headers}/include/spirv/unified1/"
+    "-I${lib.getDev spirv-cross}/include/spirv_cross"
+    "-I${lib.getDev spirv-headers}/include/spirv/unified1/"
   ];
 
   buildPhase = ''

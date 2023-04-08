@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonRelaxDepsHook
 
 # propagates
 , django
@@ -18,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-oauth-toolkit";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-c78QYlU/gB4Lt04TlQFjtsS6pyjDm/fURBMa9hXLpLI=";
+    hash = "sha256-mynchdvrfBGKMeFFb2oDaANhtSCxq85Nibx7GfSY2nQ=";
   };
 
   postPatch = ''
@@ -39,9 +40,14 @@ buildPythonPackage rec {
     requests
   ];
 
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRelaxDeps = [
+    "django"
+  ];
+
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  checkInputs = [
+  nativeCheckInputs = [
     djangorestframework
     pytest-django
     pytest-xdist

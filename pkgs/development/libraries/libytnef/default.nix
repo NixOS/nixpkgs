@@ -1,7 +1,5 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "libytnef";
   version = "2.0";
@@ -15,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Yeraze's TNEF Stream Reader - for winmail.dat files";
     license = licenses.gpl2Plus;

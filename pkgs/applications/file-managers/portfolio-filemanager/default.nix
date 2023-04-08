@@ -13,11 +13,12 @@
 , ninja
 , pkg-config
 , wrapGAppsHook
+, nix-update-script
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "portfolio";
-  version = "0.9.14";
+  version = "0.9.15";
 
   format = "other";
 
@@ -25,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "tchx84";
     repo = "Portfolio";
     rev = "v${version}";
-    hash = "sha256-mrb202ON0B6VlY+U+jN0jJmbT36jQ8krNnuODynaCUA=";
+    hash = "sha256-/OwHeeUjpjm35O7mySoAfKt7Rsp1EK2WE+tfiV3oiQg=";
   };
 
   postPatch = ''
@@ -47,6 +48,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
+    gtk3
     gobject-introspection
     libhandy
     librsvg
@@ -64,12 +66,18 @@ python3.pkgs.buildPythonApplication rec {
     ln -s dev.tchx84.Portfolio "$out/bin/portfolio"
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "portfolio-filemanager";
+    };
+  };
+
   meta = with lib; {
     description = "A minimalist file manager for those who want to use Linux mobile devices";
     homepage = "https://github.com/tchx84/Portfolio";
     changelog = "https://github.com/tchx84/Portfolio/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda chuangzhu ];
   };
 }

@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "libsass";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = "libsass-python";
-    rev = version;
-    sha256 = "sha256-4doz3kkRlyfVfeUarYw2tcybeDVeE2jpgmHxFJsPiVc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5O4Er3jNUFy83m/K0HzYR+fHcSDqF/3M+fXaFZY8zEg=";
   };
 
   buildInputs = [ libsass ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     export SYSTEM_SASS=true;
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     werkzeug
   ];

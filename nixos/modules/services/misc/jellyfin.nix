@@ -8,7 +8,7 @@ in
 {
   options = {
     services.jellyfin = {
-      enable = mkEnableOption "Jellyfin Media Server";
+      enable = mkEnableOption (lib.mdDoc "Jellyfin Media Server");
 
       user = mkOption {
         type = types.str;
@@ -81,7 +81,7 @@ in
         ProtectKernelTunables = !config.boot.isContainer;
         LockPersonality = true;
         PrivateTmp = !config.boot.isContainer;
-        # needed for hardware accelaration
+        # needed for hardware acceleration
         PrivateDevices = false;
         PrivateUsers = true;
         RemoveIPC = true;

@@ -172,13 +172,13 @@ let
         type = types.enum (lib.attrNames tempaddrValues);
         default = cfg.tempAddresses;
         defaultText = literalExpression ''config.networking.tempAddresses'';
-        description = ''
+        description = lib.mdDoc ''
           When IPv6 is enabled with SLAAC, this option controls the use of
           temporary address (aka privacy extensions) on this
           interface. This is used to reduce tracking.
 
           See also the global option
-          <xref linkend="opt-networking.tempAddresses"/>, which
+          [](#opt-networking.tempAddresses), which
           applies to all interfaces where this is not set.
 
           Possible values are:
@@ -227,15 +227,19 @@ let
           { address = "192.168.2.0"; prefixLength = 24; via = "192.168.1.1"; }
         ];
         type = with types; listOf (submodule (routeOpts 4));
-        description = ''
+        description = lib.mdDoc ''
           List of extra IPv4 static routes that will be assigned to the interface.
-          <warning><para>If the route type is the default <literal>unicast</literal>, then the scope
-          is set differently depending on the value of <option>networking.useNetworkd</option>:
-          the script-based backend sets it to <literal>link</literal>, while networkd sets
-          it to <literal>global</literal>.</para></warning>
+
+          ::: {.warning}
+          If the route type is the default `unicast`, then the scope
+          is set differently depending on the value of {option}`networking.useNetworkd`:
+          the script-based backend sets it to `link`, while networkd sets
+          it to `global`.
+          :::
+
           If you want consistency between the two implementations,
           set the scope of the route manually with
-          <literal>networking.interfaces.eth0.ipv4.routes = [{ options.scope = "global"; }]</literal>
+          `networking.interfaces.eth0.ipv4.routes = [{ options.scope = "global"; }]`
           for example.
         '';
       };
@@ -407,17 +411,10 @@ let
       description = "generate IPv6 temporary addresses and use these as source addresses in routing";
     };
   };
-  tempaddrDoc = ''
-    <itemizedlist>
-     ${concatStringsSep "\n" (mapAttrsToList (name: { description, ... }: ''
-       <listitem>
-         <para>
-           <literal>"${name}"</literal> to ${description};
-         </para>
-       </listitem>
-     '') tempaddrValues)}
-    </itemizedlist>
-  '';
+  tempaddrDoc = concatStringsSep "\n"
+    (mapAttrsToList
+      (name: { description, ... }: ''- `"${name}"` to ${description};'')
+      tempaddrValues);
 
   hostidFile = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
       hi="${cfg.hostId}"
@@ -437,7 +434,8 @@ in
   options = {
 
     networking.hostName = mkOption {
-      default = "nixos";
+      default = config.system.nixos.distroId;
+      defaultText = literalExpression "config.system.nixos.distroId";
       # Only allow hostnames without the domain name part (i.e. no FQDNs, see
       # e.g. "man 5 hostname") and require valid DNS labels (recommended
       # syntax). Note: We also allow underscores for compatibility/legacy
@@ -476,9 +474,29 @@ in
       defaultText = literalExpression ''"''${networking.hostName}.''${networking.domain}"'';
       description = lib.mdDoc ''
         The fully qualified domain name (FQDN) of this host. It is the result
-        of combining networking.hostName and networking.domain. Using this
+        of combining `networking.hostName` and `networking.domain.` Using this
         option will result in an evaluation error if the hostname is empty or
         no domain is specified.
+
+        Modules that accept a mere `networing.hostName` but prefer a fully qualified
+        domain name may use `networking.fqdnOrHostName` instead.
+      '';
+    };
+
+    networking.fqdnOrHostName = mkOption {
+      readOnly = true;
+      type = types.str;
+      default = if cfg.domain == null then cfg.hostName else cfg.fqdn;
+      defaultText = literalExpression ''
+        if cfg.domain == null then cfg.hostName else cfg.fqdn
+      '';
+      description = lib.mdDoc ''
+        Either the fully qualified domain name (FQDN), or just the host name if
+        it does not exists.
+
+        This is a convenience option for modules to read instead of `fqdn` when
+        a mere `hostName` is also an acceptable value; this option does not
+        throw an error when `domain` is unset.
       '';
     };
 
@@ -607,6 +625,10 @@ in
         The configuration for each network interface.  If
         {option}`networking.useDHCP` is true, then every
         interface not listed here will be configured using DHCP.
+
+        Please note that {option}`systemd.network.netdevs` has more features
+        and is better maintained. When building new things, it is advised to
+        use that instead.
       '';
       type = with types; attrsOf (submodule interfaceOpts);
     };
@@ -785,7 +807,7 @@ in
               default = null;
               example = "fast";
               type = types.nullOr types.str;
-              description = ''
+              description = lib.mdDoc ''
                 DEPRECATED, use `driverOptions`.
                 Option specifying the rate in which we'll ask our link partner
                 to transmit LACPDU packets in 802.3ad mode.
@@ -796,7 +818,7 @@ in
               default = null;
               example = 100;
               type = types.nullOr types.int;
-              description = ''
+              description = lib.mdDoc ''
                 DEPRECATED, use `driverOptions`.
                 Miimon is the number of millisecond in between each round of polling
                 by the device driver for failed links. By default polling is not
@@ -809,7 +831,7 @@ in
               default = null;
               example = "active-backup";
               type = types.nullOr types.str;
-              description = ''
+              description = lib.mdDoc ''
                 DEPRECATED, use `driverOptions`.
                 The mode which the bond will be running. The default mode for
                 the bonding driver is balance-rr, optimizing for throughput.
@@ -822,7 +844,7 @@ in
               default = null;
               example = "layer2+3";
               type = types.nullOr types.str;
-              description = ''
+              description = lib.mdDoc ''
                 DEPRECATED, use `driverOptions`.
                 Selects the transmit hash policy to use for slave selection in
                 balance-xor, 802.3ad, and tlb modes.
@@ -1241,17 +1263,15 @@ in
             type = types.nullOr types.str;
             default = null;
             example = "02:00:00:00:00:01";
-            description = ''
-              MAC address to use for the device. If <literal>null</literal>, then the MAC of the
+            description = lib.mdDoc ''
+              MAC address to use for the device. If `null`, then the MAC of the
               underlying hardware WLAN device is used.
 
               INFO: Locally administered MAC addresses are of the form:
-              <itemizedlist>
-              <listitem><para>x2:xx:xx:xx:xx:xx</para></listitem>
-              <listitem><para>x6:xx:xx:xx:xx:xx</para></listitem>
-              <listitem><para>xA:xx:xx:xx:xx:xx</para></listitem>
-              <listitem><para>xE:xx:xx:xx:xx:xx</para></listitem>
-              </itemizedlist>
+              - x2:xx:xx:xx:xx:xx
+              - x6:xx:xx:xx:xx:xx
+              - xA:xx:xx:xx:xx:xx
+              - xE:xx:xx:xx:xx:xx
             '';
           };
 
@@ -1287,10 +1307,10 @@ in
         if ''${config.${opt.enableIPv6}} then "default" else "disabled"
       '';
       type = types.enum (lib.attrNames tempaddrValues);
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable IPv6 Privacy Extensions for interfaces not
         configured explicitly in
-        <xref linkend="opt-networking.interfaces._name_.tempAddress"/>.
+        [](#opt-networking.interfaces._name_.tempAddress).
 
         This sets the ipv6.conf.*.use_tempaddr sysctl for all
         interfaces. Possible values are:
@@ -1357,13 +1377,13 @@ in
       "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
       # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
       "net.ipv6.conf.default.use_tempaddr" = tempaddrValues.${cfg.tempAddresses}.sysctl;
-    } // listToAttrs (flip concatMap (filter (i: i.proxyARP) interfaces)
-        (i: [(nameValuePair "net.ipv4.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" true)]))
+    } // listToAttrs (forEach interfaces
+        (i: nameValuePair "net.ipv4.conf.${replaceStrings ["."] ["/"] i.name}.proxy_arp" i.proxyARP))
       // listToAttrs (forEach interfaces
         (i: let
           opt = i.tempAddress;
           val = tempaddrValues.${opt}.sysctl;
-         in nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" val));
+         in nameValuePair "net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr" val));
 
     security.wrappers = {
       ping = {
@@ -1392,9 +1412,10 @@ in
     # Set the host and domain names in the activation script.  Don't
     # clear it if it's not configured in the NixOS configuration,
     # since it may have been set by dhcpcd in the meantime.
-    system.activationScripts.hostname =
-      optionalString (cfg.hostName != "") ''
-        hostname "${cfg.hostName}"
+    system.activationScripts.hostname = let
+        effectiveHostname = config.boot.kernel.sysctl."kernel.hostname" or cfg.hostName;
+      in optionalString (effectiveHostname != "") ''
+        hostname "${effectiveHostname}"
       '';
     system.activationScripts.domain =
       optionalString (cfg.domain != null) ''
@@ -1475,7 +1496,7 @@ in
           in
           ''
             # override to ${msg} for ${i.name}
-            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr=${val}"
+            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr=${val}"
           '') (filter (i: i.tempAddress != cfg.tempAddresses) interfaces);
       })
     ] ++ lib.optional (cfg.wlanInterfaces != {})

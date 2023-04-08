@@ -1,42 +1,48 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitLab
 , git
 , coq
+, ocamlPackages
 , cacert
+, ocaml-crunch
 }:
 
-coq.ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.36.0";
+  version = "0.60.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "0zx8ai79ha3npm3aybzgisil27v9i052cqdllfri0fsc67dig78b";
+    sha256 = "sha256-gyMSpy+F3pF2Kv1ygUs20mrspJ6GtJ6ySyZD7zfZj2w=";
     fetchSubmodules = true;
   };
 
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
 
-  useDune2 = true;
+  duneVersion = "3";
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    ocaml-crunch
     git
     coq
-    coq.ocamlPackages.menhir
-    coq.ocamlPackages.ocaml-recovery-parser
+    ocamlPackages.crunch
+    ocamlPackages.menhir
+    ocamlPackages.ocaml-recovery-parser
   ];
 
-  buildInputs = with coq.ocamlPackages; [
+  buildInputs = with ocamlPackages; [
     coq
     menhir
     menhirLib
     qcheck
     ocamlgraph
     bisect_ppx
+    decompress
     ppx_deriving
     ppx_deriving_yojson
     ppx_expect
@@ -49,6 +55,11 @@ coq.ocamlPackages.buildDunePackage rec {
     core_unix
     pprint
     linenoise
+    crunch
+    semver
+    lambda-term
+    tar-unix
+    parse-argv
 
     # Test helpers deps
     qcheck
@@ -56,13 +67,19 @@ coq.ocamlPackages.buildDunePackage rec {
     alcotest-lwt
 
     # vendored tezos' deps
+    tezos-plonk
+    tezos-bls12-381-polynomial
     ctypes
+    ctypes_stubs_js
+    class_group_vdf
+    dune-configurator
     hacl-star
     hacl-star-raw
     lwt-canceler
     ipaddr
-    bls12-381-unix
+    bls12-381
     bls12-381-legacy
+    bls12-381-signature
     ptime
     mtime
     lwt_log
@@ -75,23 +92,25 @@ coq.ocamlPackages.buildDunePackage rec {
     irmin-pack
     ezjsonm
     data-encoding
+    pure-splitmix
+    zarith_stubs_js
+    simple-diff
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cacert
-    coq.ocamlPackages.ca-certs
+    ocamlPackages.ca-certs
   ];
 
   doCheck = false; # Tests fail, but could not determine the reason
-
-  patches = [ ./ligo.patch ]; # fix for core >= 0.15.0
 
   meta = with lib; {
     homepage = "https://ligolang.org/";
     downloadPage = "https://ligolang.org/docs/intro/installation";
     description = "A friendly Smart Contract Language for Tezos";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = ocamlPackages.ocaml.meta.platforms;
+    broken = stdenv.isLinux && stdenv.isAarch64;
     maintainers = with maintainers; [ ulrikstrid ];
   };
 }

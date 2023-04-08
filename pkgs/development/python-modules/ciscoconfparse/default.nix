@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , dnspython
+, deprecat
 , fetchFromGitHub
 , loguru
 , passlib
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ciscoconfparse";
-  version = "1.6.40";
+  version = "1.7.18";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mpenning";
     repo = pname;
-    rev = version;
-    hash = "sha256-2j1AlCIwTxIjotZ0fSt1zhsgPfJTqJukZ6KQvh74NJ8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-jWInSqvMuwYJTPqHnrYWhMH/HvaQc2dFRqQu4RGFr28=";
   };
 
   postPatch = ''
@@ -34,12 +35,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     passlib
+    deprecat
     dnspython
     loguru
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -51,6 +53,8 @@ buildPythonPackage rec {
     # Tests require network access
     "test_dns_lookup"
     "test_reverse_dns_lookup"
+    # Path issues with configuration files
+    "testParse_valid_filepath"
   ];
 
   pythonImportsCheck = [
@@ -58,8 +62,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Parse, Audit, Query, Build, and Modify Cisco IOS-style configurations";
+    description = "Module to parse, audit, query, build, and modify Cisco IOS-style configurations";
     homepage = "https://github.com/mpenning/ciscoconfparse";
+    changelog = "https://github.com/mpenning/ciscoconfparse/blob/${version}/CHANGES.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ astro ];
   };

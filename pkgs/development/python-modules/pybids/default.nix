@@ -14,12 +14,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.15.1";
+  version = "0.15.5";
   pname = "pybids";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AlNQegTb/qQ+sfdaH3GqsEviEHa/6WwASIgAC4AuOPI=";
+    hash = "sha256-ryIiWpFoh0KSmyLI4LDn+EkXEYwDIr8/A7opoZJ+bo4=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "bids" ];
 
   meta = with lib; {

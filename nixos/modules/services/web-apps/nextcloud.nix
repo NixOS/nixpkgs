@@ -13,7 +13,12 @@ let
   phpPackage = cfg.phpPackage.buildEnv {
     extensions = { enabled, all }:
       (with all;
-        enabled
+        # disable default openssl extension
+        (lib.filter (e: e.pname != "php-openssl") enabled)
+        # use OpenSSL 1.1 for RC4 Nextcloud encryption if user
+        # has acknowledged the brokenness of the ciphers (RC4).
+        # TODO: remove when https://github.com/nextcloud/server/issues/32003 is fixed.
+        ++ (if cfg.enableBrokenCiphersForSSE then [ cfg.phpPackage.extensions.openssl-legacy ] else [ cfg.phpPackage.extensions.openssl ])
         ++ optional cfg.enableImagemagick imagick
         # Optionally enabled depending on caching settings
         ++ optional cfg.caching.apcu apcu
@@ -71,15 +76,49 @@ in {
         * setting `listen.owner` & `listen.group` in the phpfpm-pool to a different value
 
       Further details about this can be found in the `Nextcloud`-section of the NixOS-manual
-      (which can be openend e.g. by running `nixos-help`).
+      (which can be opened e.g. by running `nixos-help`).
     '')
     (mkRemovedOptionModule [ "services" "nextcloud" "disableImagemagick" ] ''
-      Use services.nextcloud.nginx.enableImagemagick instead.
+      Use services.nextcloud.enableImagemagick instead.
     '')
   ];
 
   options.services.nextcloud = {
-    enable = mkEnableOption "nextcloud";
+    enable = mkEnableOption (lib.mdDoc "nextcloud");
+
+    enableBrokenCiphersForSSE = mkOption {
+      type = types.bool;
+      default = versionOlder stateVersion "22.11";
+      defaultText = literalExpression "versionOlder system.stateVersion \"22.11\"";
+      description = lib.mdDoc ''
+        This option enables using the OpenSSL PHP extension linked against OpenSSL 1.1
+        rather than latest OpenSSL (≥ 3), this is not recommended unless you need
+        it for server-side encryption (SSE). SSE uses the legacy RC4 cipher which is
+        considered broken for several years now. See also [RFC7465](https://datatracker.ietf.org/doc/html/rfc7465).
+
+        This cipher has been disabled in OpenSSL ≥ 3 and requires
+        a specific legacy profile to re-enable it.
+
+        If you deploy Nextcloud using OpenSSL ≥ 3 for PHP and have
+        server-side encryption configured, you will not be able to access
+        your files anymore. Enabling this option can restore access to your files.
+        Upon testing we didn't encounter any data corruption when turning
+        this on and off again, but this cannot be guaranteed for
+        each Nextcloud installation.
+
+        It is `true` by default for systems with a [](#opt-system.stateVersion) below
+        `22.11` to make sure that existing installations won't break on update. On newer
+        NixOS systems you have to explicitly enable it on your own.
+
+        Please note that this only provides additional value when using
+        external storage such as S3 since it's not an end-to-end encryption.
+        If this is not the case,
+        it is advised to [disable server-side encryption](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#disabling-encryption) and set this to `false`.
+
+        In the future, Nextcloud may move to AES-256-GCM, by then,
+        this option will be removed.
+      '';
+    };
     hostName = mkOption {
       type = types.str;
       description = lib.mdDoc "FQDN for the nextcloud instance.";
@@ -148,6 +187,15 @@ in {
       default = 2;
       description = lib.mdDoc "Log level value between 0 (DEBUG) and 4 (FATAL).";
     };
+    logType = mkOption {
+      type = types.enum [ "errorlog" "file" "syslog" "systemd" ];
+      default = "syslog";
+      description = lib.mdDoc ''
+        Logging backend to use.
+        systemd requires the php-systemd package to be added to services.nextcloud.phpExtraExtensions.
+        See the [nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html) for details.
+      '';
+    };
     https = mkOption {
       type = types.bool;
       default = false;
@@ -156,7 +204,7 @@ in {
     package = mkOption {
       type = types.package;
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud23" "nextcloud24" ];
+      relatedPackages = [ "nextcloud24" "nextcloud25" "nextcloud26" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -254,6 +302,14 @@ in {
       '';
     };
 
+    fastcgiTimeout = mkOption {
+      type = types.int;
+      default = 120;
+      description = lib.mdDoc ''
+        FastCGI timeout for database connection in seconds.
+      '';
+    };
+
     database = {
 
       createLocally = mkOption {
@@ -332,7 +388,7 @@ in {
         default = [];
         description = lib.mdDoc ''
           Trusted domains, from which the nextcloud installation will be
-          acessible.  You don't need to add
+          accessible.  You don't need to add
           `services.nextcloud.hostname` here.
         '';
       };
@@ -363,31 +419,31 @@ in {
         default = null;
         type = types.nullOr types.str;
         example = "DE";
-        description = ''
-          <warning>
-           <para>This option exists since Nextcloud 21! If older versions are used,
-            this will throw an eval-error!</para>
-          </warning>
+        description = lib.mdDoc ''
+          ::: {.warning}
+          This option exists since Nextcloud 21! If older versions are used,
+          this will throw an eval-error!
+          :::
 
-          <link xlink:href="https://www.iso.org/iso-3166-country-codes.html">ISO 3611-1</link>
+          [ISO 3611-1](https://www.iso.org/iso-3166-country-codes.html)
           country codes for automatic phone-number detection without a country code.
 
-          With e.g. <literal>DE</literal> set, the <literal>+49</literal> can be omitted for
+          With e.g. `DE` set, the `+49` can be omitted for
           phone-numbers.
         '';
       };
 
       objectstore = {
         s3 = {
-          enable = mkEnableOption ''
+          enable = mkEnableOption (lib.mdDoc ''
             S3 object storage as primary storage.
 
             This mounts a bucket on an Amazon S3 object storage or compatible
             implementation into the virtual filesystem.
 
             Further details about this feature can be found in the
-            <link xlink:href="https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html">upstream documentation</link>.
-          '';
+            [upstream documentation](https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html).
+          '');
           bucket = mkOption {
             type = types.str;
             example = "nextcloud";
@@ -458,17 +514,38 @@ in {
               `http://hostname.domain/bucket` instead.
             '';
           };
+          sseCKeyFile = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            example = "/var/nextcloud-objectstore-s3-sse-c-key";
+            description = lib.mdDoc ''
+              If provided this is the full path to a file that contains the key
+              to enable [server-side encryption with customer-provided keys][1]
+              (SSE-C).
+
+              The file must contain a random 32-byte key encoded as a base64
+              string, e.g. generated with the command
+
+              ```
+              openssl rand 32 | base64
+              ```
+
+              Must be readable by user `nextcloud`.
+
+              [1]: https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html
+            '';
+          };
         };
       };
     };
 
-    enableImagemagick = mkEnableOption ''
+    enableImagemagick = mkEnableOption (lib.mdDoc ''
         the ImageMagick module for PHP.
         This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
         You may want to disable it for increased security. In that case, previews will still be available
         for some images (e.g. JPEG and PNG).
-        See <link xlink:href="https://github.com/nextcloud/server/issues/13099"/>.
-    '' // {
+        See <https://github.com/nextcloud/server/issues/13099>.
+    '') // {
       default = true;
     };
 
@@ -511,39 +588,37 @@ in {
         type = with types; either str (listOf str);
         default = "05:00:00";
         example = "Sun 14:00:00";
-        description = ''
-          When to run the update. See `systemd.services.&lt;name&gt;.startAt`.
+        description = lib.mdDoc ''
+          When to run the update. See `systemd.services.<name>.startAt`.
         '';
       };
     };
     occ = mkOption {
       type = types.package;
       default = occ;
-      defaultText = literalDocBook "generated script";
+      defaultText = literalMD "generated script";
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
       '';
     };
-    globalProfiles = mkEnableOption "global profiles" // {
-      description = ''
-        Makes user-profiles globally available under <literal>nextcloud.tld/u/user.name</literal>.
+    globalProfiles = mkEnableOption (lib.mdDoc "global profiles") // {
+      description = lib.mdDoc ''
+        Makes user-profiles globally available under `nextcloud.tld/u/user.name`.
         Even though it's enabled by default in Nextcloud, it must be explicitly enabled
         here because it has the side-effect that personal information is even accessible to
         unauthenticated users by default.
 
-        By default, the following properties are set to <quote>Show to everyone</quote>
+        By default, the following properties are set to “Show to everyone”
         if this flag is enabled:
-        <itemizedlist>
-        <listitem><para>About</para></listitem>
-        <listitem><para>Full name</para></listitem>
-        <listitem><para>Headline</para></listitem>
-        <listitem><para>Organisation</para></listitem>
-        <listitem><para>Profile picture</para></listitem>
-        <listitem><para>Role</para></listitem>
-        <listitem><para>Twitter</para></listitem>
-        <listitem><para>Website</para></listitem>
-        </itemizedlist>
+        - About
+        - Full name
+        - Headline
+        - Organisation
+        - Profile picture
+        - Role
+        - Twitter
+        - Website
 
         Only has an effect in Nextcloud 23 and later.
       '';
@@ -569,10 +644,10 @@ in {
     secretFile = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Secret options which will be appended to nextcloud's config.php file (written as JSON, in the same
-        form as the <xref linkend="opt-services.nextcloud.extraOptions"/> option), for example
-        <programlisting>{"redis":{"password":"secret"}}</programlisting>.
+        form as the [](#opt-services.nextcloud.extraOptions) option), for example
+        `{"redis":{"password":"secret"}}`.
       '';
     };
 
@@ -598,7 +673,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 24;
+        latest = 26;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -613,39 +688,31 @@ in {
             `services.nextcloud.package`.
           '';
 
-        # FIXME(@Ma27) remove as soon as nextcloud properly supports
-        # mariadb >=10.6.
-        isUnsupportedMariadb =
-          # All currently supported Nextcloud versions are affected (https://github.com/nextcloud/server/issues/25436).
-          (versionOlder cfg.package.version "24")
-          # This module uses mysql
-          && (cfg.config.dbtype == "mysql")
-          # MySQL is managed via NixOS
-          && config.services.mysql.enable
-          # We're using MariaDB
-          && (getName config.services.mysql.package) == "mariadb-server"
-          # MariaDB is at least 10.6 and thus not supported
-          && (versionAtLeast (getVersion config.services.mysql.package) "10.6");
-
       in (optional (cfg.poolConfig != null) ''
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
-        ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
-        ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"))
         ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
         ++ (optional (versionOlder cfg.package.version "24") (upgradeWarning 23 "22.05"))
-        ++ (optional isUnsupportedMariadb ''
-            You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
-            Please note that this isn't supported officially by Nextcloud. You can either
+        ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
+        ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
+        ++ (optional cfg.enableBrokenCiphersForSSE ''
+          You're using PHP's openssl extension built against OpenSSL 1.1 for Nextcloud.
+          This is only necessary if you're using Nextcloud's server-side encryption.
+          Please keep in mind that it's using the broken RC4 cipher.
 
-            * Switch to `pkgs.mysql`
-            * Downgrade MariaDB to at least 10.5
-            * Work around Nextcloud's problems by specifying `innodb_read_only_compressed=0`
+          If you don't use that feature, you can switch to OpenSSL 3 and get
+          rid of this warning by declaring
 
-            For further context, please read
-            https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/15
-          '');
+            services.nextcloud.enableBrokenCiphersForSSE = false;
+
+          If you need to use server-side encryption you can ignore this warning.
+          Otherwise you'd have to disable server-side encryption first in order
+          to be able to safely disable this option and get rid of this warning.
+          See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#disabling-encryption> on how to achieve this.
+
+          For more context, here is the implementing pull request: https://github.com/NixOS/nixpkgs/pull/198470
+        '');
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -655,19 +722,14 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "22.05" then nextcloud22
-          else nextcloud24
+          else if versionOlder stateVersion "22.11" then nextcloud24
+          else if versionOlder stateVersion "23.05" then nextcloud25
+          else nextcloud26
         );
 
       services.nextcloud.phpPackage =
-        if versionOlder cfg.package.version "24" then pkgs.php80
-        # FIXME: Use PHP 8.1 with Nextcloud 24 and higher, once issues like this one are fixed:
-        #
-        # https://github.com/nextcloud/twofactor_totp/issues/1192
-        #
-        # else if versionOlder cfg.package.version "24" then pkgs.php80
-        # else pkgs.php81;
-        else pkgs.php80;
+        if versionOlder cfg.package.version "26" then pkgs.php81
+        else pkgs.php82;
     }
 
     { assertions = [
@@ -694,7 +756,7 @@ in {
 
         nextcloud-setup = let
           c = cfg.config;
-          writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
+          writePhpArray = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
           requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
           objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable ''
             'objectstore' => [
@@ -709,6 +771,7 @@ in {
                 'use_ssl' => ${boolToString s3.useSsl},
                 ${optionalString (s3.region != null) "'region' => '${s3.region}',"}
                 'use_path_style' => ${boolToString s3.usePathStyle},
+                ${optionalString (s3.sseCKeyFile != null) "'sse_c_key' => nix_read_secret('${s3.sseCKeyFile}'),"}
               ],
             ]
           '';
@@ -759,7 +822,7 @@ in {
               'datadirectory' => '${datadir}/data',
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
-              'log_type' => 'syslog',
+              'log_type' => '${cfg.logType}',
               'loglevel' => '${builtins.toString cfg.logLevel}',
               ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
@@ -774,8 +837,8 @@ in {
                 ''
               }
               'dbtype' => '${c.dbtype}',
-              'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
-              'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
+              'trusted_domains' => ${writePhpArray ([ cfg.hostName ] ++ c.extraTrustedDomains)},
+              'trusted_proxies' => ${writePhpArray (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
               ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles},"}
               ${objectstoreConfig}
@@ -815,9 +878,9 @@ in {
               ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
               ${if c.dbport != null then "--database-port" else null} = ''"${toString c.dbport}"'';
               ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
-              "--database-pass" = "\$${dbpass.arg}";
+              "--database-pass" = "\"\$${dbpass.arg}\"";
               "--admin-user" = ''"${c.adminuser}"'';
-              "--admin-pass" = "\$${adminpass.arg}";
+              "--admin-pass" = "\"\$${adminpass.arg}\"";
               "--data-dir" = ''"${datadir}/data"'';
             });
           in ''
@@ -894,6 +957,9 @@ in {
           '';
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
+          # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
+          # an automatic creation of the database user.
+          environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
         };
         nextcloud-cron = {
           after = [ "nextcloud-setup.service" ];
@@ -945,14 +1011,6 @@ in {
           name = cfg.config.dbuser;
           ensurePermissions = { "${cfg.config.dbname}.*" = "ALL PRIVILEGES"; };
         }];
-        # FIXME(@Ma27) Nextcloud isn't compatible with mariadb 10.6,
-        # this is a workaround.
-        # See https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/22
-        settings = mkIf (versionOlder cfg.package.version "24") {
-          mysqld = {
-            innodb_read_only_compressed = 0;
-          };
-        };
         initialScript = pkgs.writeText "mysql-init" ''
           CREATE USER '${cfg.config.dbname}'@'localhost' IDENTIFIED BY '${builtins.readFile( cfg.config.dbpassFile )}';
           CREATE DATABASE IF NOT EXISTS ${cfg.config.dbname};
@@ -1032,7 +1090,7 @@ in {
               fastcgi_pass unix:${fpm.socket};
               fastcgi_intercept_errors on;
               fastcgi_request_buffering off;
-              fastcgi_read_timeout 120s;
+              fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
             '';
           };
           "~ \\.(?:css|js|woff2?|svg|gif|map)$".extraConfig = ''
@@ -1054,7 +1112,7 @@ in {
           ${optionalString (cfg.nginx.recommendedHttpHeaders) ''
             add_header X-Content-Type-Options nosniff;
             add_header X-XSS-Protection "1; mode=block";
-            add_header X-Robots-Tag none;
+            add_header X-Robots-Tag "noindex, nofollow";
             add_header X-Download-Options noopen;
             add_header X-Permitted-Cross-Domain-Policies none;
             add_header X-Frame-Options sameorigin;
@@ -1082,5 +1140,5 @@ in {
     }
   ]);
 
-  meta.doc = ./nextcloud.xml;
+  meta.doc = ./nextcloud.md;
 }

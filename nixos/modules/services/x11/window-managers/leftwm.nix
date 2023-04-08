@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.leftwm.enable = mkEnableOption "leftwm";
+    services.xserver.windowManager.leftwm.enable = mkEnableOption (lib.mdDoc "leftwm");
   };
 
   ###### implementation

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, qtbase, fetchpatch, wrapQtAppsHook
+{ lib, stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook
 , secp256k1 }:
 
 python3Packages.buildPythonApplication rec {
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
     cython
     trezor
     keepkey
-    btchip
+    btchip-python
     hidapi
     pyopenssl
     pyscard
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
       --replace "(share_dir" "(\"share\""
   '';
 
-  checkInputs = with python3Packages; [ pytest ];
+  nativeCheckInputs = with python3Packages; [ pytest ];
 
   checkPhase = ''
     unset HOME

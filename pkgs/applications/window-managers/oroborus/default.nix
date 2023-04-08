@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   # Workaround build failure on -fno-common toolchains:
   #   ld: workspaces.o:src/keyboard.h:93: multiple definition of
   #     `NumLockMask'; client.o:src/keyboard.h:93: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   meta = with lib; {
     homepage = "https://web.archive.org/web/20191129172107/https://www.oroborus.org/";

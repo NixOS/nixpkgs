@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ka2kscpjff7gflsargv3r9fdaxhkf3nym9mfaln3pnq6q7fwdki";
   };
 
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.cc.isGNU "-Wno-error=catch-value";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=catch-value";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, fmt
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, fmt, buildPackages
 # Darwin inputs
 , AudioToolbox, AudioUnit
 # Inputs
@@ -116,13 +116,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.23.8";
+      version = "0.23.12";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-yIzSEk4fgtNANKIxna0dP9HKIcGBVBkpqiyLCjvPDHE=";
+        sha256 = "sha256-BnEtSkZjUBK0flVttOrjkT4RCQh9F7+MDZGm2+MMrX8=";
       };
 
       buildInputs = [
@@ -145,6 +145,8 @@ let
       ]
         ++ concatAttrVals features_ nativeFeatureDependencies;
 
+      depsBuildBuild = [ buildPackages.stdenv.cc ];
+
       postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "12.0") ''
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
           --replace kAudioObjectPropertyElement{Main,Master} \
@@ -154,7 +156,7 @@ let
       # Otherwise, the meson log says:
       #
       #    Program zip found: NO
-      checkInputs = [ zip ];
+      nativeCheckInputs = [ zip ];
 
       doCheck = true;
 
@@ -162,6 +164,9 @@ let
 
       outputs = [ "out" "doc" ]
         ++ lib.optional (builtins.elem "documentation" features_) "man";
+
+      # FIXME: workaround for Pipewire 0.3.64 deprecated API change, remove when fixed upstream
+      env.NIX_CFLAGS_COMPILE = toString [ "-DPW_ENABLE_DEPRECATED" ];
 
       CXXFLAGS = lib.optionals stdenv.isDarwin [
         "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"

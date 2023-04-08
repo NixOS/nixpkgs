@@ -8,12 +8,12 @@ buildPythonPackage rec {
     owner = "django-polymorphic";
     repo = "django-polymorphic";
     rev = "v${version}";
-    sha256 = "sha256-JJY+FoMPSnWuSsNIas2JedGJpdm6RfPE3E1VIjGuXIc=";
+    hash = "sha256-JJY+FoMPSnWuSsNIas2JedGJpdm6RfPE3E1VIjGuXIc=";
   };
 
   propagatedBuildInputs = [ django ];
 
-  checkInputs = [ dj-database-url ];
+  nativeCheckInputs = [ dj-database-url ];
 
   checkPhase = ''
     ${python.interpreter} runtests.py

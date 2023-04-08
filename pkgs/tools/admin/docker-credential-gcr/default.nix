@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "docker-credential-gcr";
-  version = "2.1.5";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
     rev = "v${version}";
-    sha256 = "sha256-NUFSnegLVGNUc6f/WSyIk1U6UQorxRykqojhgE/maw8=";
+    sha256 = "sha256-6f84NRqMx0NX+3g+pCYgRYkGK4DaQmUEau3oMswUmSE=";
   };
 
   patches = [
@@ -23,7 +23,7 @@ buildGoModule rec {
     rm -rf ./test
   '';
 
-  vendorSha256 = "sha256-e7XNTizZYp/tS7KRvB9KxY3Yurphnm6Ehz4dHZNReK8=";
+  vendorHash = "sha256-e7XNTizZYp/tS7KRvB9KxY3Yurphnm6Ehz4dHZNReK8=";
 
   CGO_ENABLED = 0;
 

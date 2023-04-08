@@ -11,7 +11,7 @@ in {
   options = {
 
     services.icecream.scheduler = {
-      enable = mkEnableOption "Icecream Scheduler";
+      enable = mkEnableOption (lib.mdDoc "Icecream Scheduler");
 
       netName = mkOption {
         type = types.nullOr types.str;

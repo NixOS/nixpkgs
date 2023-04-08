@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3, python3Packages, zlib, pkg-config, glib, buildPackages
+{ lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
 , makeWrapper, runtimeShell, removeReferencesTo
-, attr, libcap, libcap_ng, socat
-, CoreServices, Cocoa, Hypervisor, rez, setfile
+, attr, libcap, libcap_ng, socat, libslirp
+, CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
 , guestAgentSupport ? with stdenv.hostPlatform; isLinux || isSunOS || isWindows
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
@@ -14,7 +14,7 @@
 , gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
 , vncSupport ? !nixosTestRunner, libjpeg, libpng
 , smartcardSupport ? !nixosTestRunner, libcacard
-, spiceSupport ? !stdenv.isDarwin && !nixosTestRunner, spice, spice-protocol
+, spiceSupport ? true && !nixosTestRunner, spice, spice-protocol
 , ncursesSupport ? !nixosTestRunner, ncurses
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
@@ -26,6 +26,7 @@
 , smbdSupport ? false, samba
 , tpmSupport ? true
 , uringSupport ? stdenv.isLinux, liburing
+, canokeySupport ? false, canokey-qemu
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
                     then (lib.optional stdenv.isx86_64 "i386-softmmu"
@@ -41,25 +42,31 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "7.0.0";
+  version = "7.2.0";
 
   src = fetchurl {
-    url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
+    url = "https://download.qemu.org/qemu-${version}.tar.xz";
+    sha256 = "sha256-W0nOJod0Ta1JSukKiYxSIEo0BuhNBySCoeG+hU7rIVc=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx-rtd-theme ]
+  nativeBuildInputs = [
+    makeWrapper removeReferencesTo
+    pkg-config flex bison meson ninja perl
+
+    # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
+    python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme
+  ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
   buildInputs = [ zlib glib perl pixman
     vde2 texinfo lzo snappy libtasn1
-    gnutls nettle curl
+    gnutls nettle curl libslirp
   ]
     ++ lib.optionals ncursesSupport [ ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile vmnet ]
     ++ lib.optionals seccompSupport [ libseccomp ]
     ++ lib.optionals numaSupport [ numactl ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
@@ -79,7 +86,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals virglSupport [ virglrenderer ]
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ]
-    ++ lib.optionals uringSupport [ liburing ];
+    ++ lib.optionals uringSupport [ liburing ]
+    ++ lib.optionals canokeySupport [ canokey-qemu ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
@@ -109,29 +117,12 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
-    # make nixos tests that boot from USB more stable
-    # https://lists.nongnu.org/archive/html/qemu-devel/2022-05/msg01484.html
-    (fetchpatch {
-      url = "https://gitlab.com/raboof/qemu/-/commit/3fb5e8fe4434130b1167a995b2a01c077cca2cd5.patch";
-      sha256 = "sha256-evzrN3i4ntc/AFG0C0rezQpQbWcnx74nXO+5DLErX8o=";
-    })
-    # fix 9p on macOS host, landed in master
-    (fetchpatch {
-      name = "fix-9p-on-macos.patch";
-      url = "https://gitlab.com/qemu/qemu/-/commit/f5643914a9e8f79c606a76e6a9d7ea82a3fc3e65.patch";
-      sha256 = "sha256-8i13wU135h+YxoXFtkXweBN3hMslpWoNoeQ7Ydmn3V4=";
-    })
-    (fetchpatch {
-      name = "CVE-2022-35414.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/418ade7849ce7641c0f7333718caf5091a02fd4c.patch";
-      sha256 = "sha256-zQHDXedIXZBnabv4+3TA4z5mY1+KZiPmqUbhaSkGLgA=";
-    })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
-    sed -i "/install_subdir('run', install_dir: get_option('localstatedir'))/d" \
+    sed -i "/install_emptydir(get_option('localstatedir') \/ 'run')/d" \
         qga/meson.build
   '';
 
@@ -158,7 +149,6 @@ stdenv.mkDerivation rec {
     # have our patches and will be subtly broken because of that.
     "--meson=meson"
     "--cross-prefix=${stdenv.cc.targetPrefix}"
-    "--cpu=${stdenv.hostPlatform.uname.processor}"
     (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
@@ -166,8 +156,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional spiceSupport "--enable-spice"
     ++ lib.optional usbredirSupport "--enable-usb-redir"
     ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
-    ++ lib.optional stdenv.isDarwin "--enable-cocoa"
-    ++ lib.optional stdenv.isDarwin "--enable-hvf"
+    ++ lib.optionals stdenv.isDarwin [ "--enable-cocoa" "--enable-hvf" ]
     ++ lib.optional stdenv.isLinux "--enable-linux-aio"
     ++ lib.optional gtkSupport "--enable-gtk"
     ++ lib.optional xenSupport "--enable-xen"
@@ -178,7 +167,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional tpmSupport "--enable-tpm"
     ++ lib.optional libiscsiSupport "--enable-libiscsi"
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
-    ++ lib.optional uringSupport "--enable-linux-io-uring";
+    ++ lib.optional uringSupport "--enable-linux-io-uring"
+    ++ lib.optional canokeySupport "--enable-canokey";
 
   dontWrapGApps = true;
 
@@ -207,7 +197,7 @@ stdenv.mkDerivation rec {
 
   # tests can still timeout on slower systems
   inherit doCheck;
-  checkInputs = [ socat ];
+  nativeCheckInputs = [ socat ];
   preCheck = ''
     # time limits are a little meagre for a build machine that's
     # potentially under load.
@@ -241,8 +231,9 @@ stdenv.mkDerivation rec {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
-    ln -s $out/libexec/virtiofsd $out/bin
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
+  '' + lib.optionalString stdenv.isLinux ''
+    ln -s $out/libexec/virtiofsd $out/bin
   '';
 
   passthru = {

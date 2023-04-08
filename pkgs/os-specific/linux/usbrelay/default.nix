@@ -1,13 +1,13 @@
 { stdenv, lib, fetchFromGitHub, hidapi, installShellFiles }:
 stdenv.mkDerivation rec {
   pname = "usbrelay";
-  version = "1.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "darrylb123";
     repo = "usbrelay";
     rev = version;
-    sha256 = "sha256-5zgpN4a+r0tmw0ISTJM+d9mo+L/qwUvpWPSsykuG0cg=";
+    sha256 = "sha256-2elDrO+WaaRYdTrG40Ez00qSsNVQjXE6GdOJbWPfugE=";
   };
 
   nativeBuildInputs = [

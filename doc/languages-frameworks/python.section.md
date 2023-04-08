@@ -58,7 +58,7 @@ with a nix-shell that has `numpy` and `toolz` in Python 3.9; then we will create
 a re-usable environment in a single-file Python script; then we will create a
 full Python environment for development with this same environment.
 
-Philosphically, this should be familiar to users who are used to a `venv` style
+Philosophically, this should be familiar to users who are used to a `venv` style
 of development: individual projects create their own Python environments without
 impacting the global environment or each other.
 
@@ -356,7 +356,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
+    hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
   doCheck = false;
@@ -401,7 +401,7 @@ with import <nixpkgs> {};
 
       src = python39.pkgs.fetchPypi {
         inherit pname version;
-        sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
+        hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
       };
 
       doCheck = false;
@@ -436,7 +436,7 @@ arguments `buildInputs` and `propagatedBuildInputs` to specify dependencies. If
 something is exclusively a build-time dependency, then the dependency should be
 included in `buildInputs`, but if it is (also) a runtime dependency, then it
 should be added to `propagatedBuildInputs`. Test dependencies are considered
-build-time dependencies and passed to `checkInputs`.
+build-time dependencies and passed to `nativeCheckInputs`.
 
 The following example shows which arguments are given to `buildPythonPackage` in
 order to build [`datashape`](https://github.com/blaze/datashape).
@@ -450,10 +450,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
+    hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   propagatedBuildInputs = [ numpy multipledispatch python-dateutil ];
 
   meta = with lib; {
@@ -466,7 +466,7 @@ buildPythonPackage rec {
 ```
 
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
-`python-dateutil`. Furthermore, we have one `checkInputs`, i.e. `pytest`. `pytest` is a
+`python-dateutil`. Furthermore, we have one `nativeCheckInputs`, i.e. `pytest`. `pytest` is a
 test runner and is only used during the `checkPhase` and is therefore not added
 to `propagatedBuildInputs`.
 
@@ -484,7 +484,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16a0fa97hym9ysdk3rmqz32xdjqmy4w34ld3rm3jf5viqjx65lxk";
+    hash = "sha256-s9NiusRxFydHzaNRMjjxFcvWxfi45jGb9ql6eJJyQJk=";
   };
 
   buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
@@ -517,7 +517,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f6bbb6afa93085409ab24885a1a3cdb8909f095a142f4d49e346f2bd1b789074";
+    hash = "sha256-9ru2r6kwhUCaskiFoaPNuJCfCVoUL01J40byvRt4kHQ=";
   };
 
   buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
@@ -569,8 +569,14 @@ Pytest is the most common test runner for python repositories. A trivial
 test run would be:
 
 ```
-  checkInputs = [ pytest ];
-  checkPhase = "pytest";
+  nativeCheckInputs = [ pytest ];
+  checkPhase = ''
+    runHook preCheck
+
+    pytest
+
+    runHook postCheck
+  '';
 ```
 
 However, many repositories' test suites do not translate well to nix's build
@@ -579,10 +585,14 @@ sandbox, and will generally need many tests to be disabled.
 To filter tests using pytest, one can do the following:
 
 ```
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   # avoid tests which need additional data or touch network
   checkPhase = ''
+    runHook preCheck
+
     pytest tests/ --ignore=tests/integration -k 'not download and not update'
+
+    runHook postCheck
   '';
 ```
 
@@ -605,10 +615,10 @@ been removed, in this case, it's recommended to use `pytestCheckHook`.
 `test` command for a `checkPhase` which runs `pytest`. This is also beneficial
 when a package may need many items disabled to run the test suite.
 
-Using the example above, the analagous `pytestCheckHook` usage would be:
+Using the example above, the analogous `pytestCheckHook` usage would be:
 
 ```
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # requires additional data
   pytestFlagsArray = [ "tests/" "--ignore=tests/integration" ];
@@ -624,7 +634,7 @@ Using the example above, the analagous `pytestCheckHook` usage would be:
   ];
 ```
 
-This is expecially useful when tests need to be conditionally disabled,
+This is especially useful when tests need to be conditionally disabled,
 for example:
 
 ```
@@ -734,6 +744,63 @@ work in any of the formats supported by `buildPythonPackage` currently,
 with the exception of `other` (see `format` in
 [`buildPythonPackage` parameters](#buildpythonpackage-parameters) for more details).
 
+#### Using unittestCheckHook {#using-unittestcheckhook}
+
+`unittestCheckHook` is a hook which will substitute the setuptools `test` command for a `checkPhase` which runs `python -m unittest discover`:
+
+```
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" "-v" ];
+```
+
+#### Using sphinxHook {#using-sphinxhook}
+
+The `sphinxHook` is a helpful tool to build documentation and manpages
+using the popular Sphinx documentation generator.
+It is setup to automatically find common documentation source paths and
+render them using the default `html` style.
+
+```
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  nativeBuildInputs = [
+    sphinxHook
+  ];
+```
+
+The hook will automatically build and install the artifact into the
+`doc` output, if it exists. It also provides an automatic diversion
+for the artifacts of the `man` builder into the `man` target.
+
+```
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  # Use multiple builders
+  sphinxBuilders = [
+    "singlehtml"
+    "man"
+  ];
+```
+
+Overwrite `sphinxRoot` when the hook is unable to find your
+documentation source root.
+
+```
+  # Configure sphinxRoot for uncommon paths
+  sphinxRoot = "weird/docs/path";
+```
+
+The hook is also available to packages outside the python ecosystem by
+referencing it using `sphinxHook` from top-level.
+
 ### Develop local package {#develop-local-package}
 
 As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode)
@@ -798,7 +865,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
+    hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
   meta = with lib; {
@@ -931,7 +998,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf8436dc59d8695346fcd3ab296de46425ecab00d64096cebe79fb51ecb2eb93";
+    hash = "sha256-z4Q23FnYaVNG/NOrKW3kZCXsqwDWQJbOvnn7Ueyy65M=";
   };
 
   postPatch = ''
@@ -939,7 +1006,7 @@ buildPythonPackage rec {
     rm testing/test_argcomplete.py
   '';
 
-  checkInputs = [ hypothesis ];
+  nativeCheckInputs = [ hypothesis ];
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy ];
 
@@ -952,7 +1019,7 @@ buildPythonPackage rec {
 
 The `buildPythonPackage` mainly does four things:
 
-* In the `buildPhase`, it calls `${python.interpreter} setup.py bdist_wheel` to
+* In the `buildPhase`, it calls `${python.pythonForBuild.interpreter} setup.py bdist_wheel` to
   build a wheel binary zipfile.
 * In the `installPhase`, it installs the wheel file using `pip install *.whl`.
 * In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to
@@ -961,7 +1028,7 @@ The `buildPythonPackage` mainly does four things:
 * In the `installCheck` phase, `${python.interpreter} setup.py test` is run.
 
 By default tests are run because `doCheck = true`. Test dependencies, like
-e.g. the test runner, should be added to `checkInputs`.
+e.g. the test runner, should be added to `nativeCheckInputs`.
 
 By default `meta.platforms` is set to the same value
 as the interpreter unless overridden otherwise.
@@ -1015,7 +1082,7 @@ because their behaviour is different:
 * `buildInputs ? []`: Build and/or run-time dependencies that need to be
   compiled for the host machine. Typically non-Python libraries which are being
   linked.
-* `checkInputs ? []`: Dependencies needed for running the `checkPhase`. These
+* `nativeCheckInputs ? []`: Dependencies needed for running the `checkPhase`. These
   are added to `nativeBuildInputs` when `doCheck = true`. Items listed in
   `tests_require` go here.
 * `propagatedBuildInputs ? []`: Aside from propagating dependencies,
@@ -1041,7 +1108,7 @@ with import <nixpkgs> {};
         src =  super.fetchPypi {
           pname = "pandas";
           inherit version;
-          sha256 = "08blshqj9zj1wyjhhw3kl2vas75vhhicvv72flvf1z3jvapgw295";
+          hash = "sha256-JQn+rtpy/OA2deLszSKEuxyttqBzcAil50H+JDHUdCE=";
         };
       });
     };
@@ -1050,7 +1117,7 @@ with import <nixpkgs> {};
 in python.withPackages(ps: [ps.blaze])).env
 ```
 
-#### Optional extra dependencies
+#### Optional extra dependencies {#python-optional-dependencies}
 
 Some packages define optional dependencies for additional features. With
 `setuptools` this is called `extras_require` and `flit` calls it
@@ -1101,7 +1168,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "035w8gqql36zlan0xjrzz9j4lh9hs0qrsgnbyw07qs7lnkvbdv9x";
+    hash  = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ tornado python-daemon ];
@@ -1260,16 +1327,18 @@ are used in `buildPythonPackage`.
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 - `pythonCatchConflictsHook` to check whether a Python package is not already existing.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.
+- `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
+  See [example usage](#using-pythonrelaxdepshook).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `setuptoolsCheckHook` to run tests with `python setup.py test`.
+- `sphinxHook` to build documentation and manpages using Sphinx.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
   to run commands only after venv is first created.
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
   with the `pipInstallHook`.
-- `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
-  See [example usage](#using-pythonrelaxdepshook).
+- `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
 
 ### Development mode {#development-mode}
 
@@ -1347,9 +1416,13 @@ example of such a situation is when `py.test` is used.
   buildPythonPackage {
     # ...
     # assumes the tests are located in tests
-    checkInputs = [ pytest ];
+    nativeCheckInputs = [ pytest ];
     checkPhase = ''
+      runHook preCheck
+
       py.test -k 'not function_name and not other_function' tests
+
+      runHook postCheck
     '';
   }
   ```
@@ -1473,7 +1546,7 @@ of such package using the feature is `pkgs/tools/X11/xpra/default.nix`.
 As workaround install it as an extra `preInstall` step:
 
 ```shell
-${python.interpreter} setup.py install_data --install-dir=$out --root=$out
+${python.pythonForBuild.interpreter} setup.py install_data --install-dir=$out --root=$out
 sed -i '/ = data\_files/d' setup.py
 ```
 
@@ -1611,13 +1684,13 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
 
 ```nix
   nixpkgs.config.packageOverrides = super: {
-    python = super.python.override {
+    python3 = super.python3.override {
       packageOverrides = python-self: python-super: {
-        twisted = python-super.twisted.overrideAttrs (oldAttrs: {
+        twisted = python-super.twisted.overridePythonAttrs (oldAttrs: {
           src = super.fetchPypi {
-            pname = "twisted";
+            pname = "Twisted";
             version = "19.10.0";
-            sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
+            hash = "sha256-c5S6fycq5yKnTz2Wnc9Zm8TvCTvDkgOHSKSQ8XJKUV0=";
             extension = "tar.bz2";
           };
         });
@@ -1653,9 +1726,9 @@ self: super: {
     packageOverrides = python-self: python-super: {
       twisted = python-super.twisted.overrideAttrs (oldAttrs: {
         src = super.fetchPypi {
-          pname = "twisted";
+          pname = "Twisted";
           version = "19.10.0";
-          sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
+          hash = "sha256-c5S6fycq5yKnTz2Wnc9Zm8TvCTvDkgOHSKSQ8XJKUV0=";
           extension = "tar.bz2";
         };
       });
@@ -1695,7 +1768,7 @@ In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 
 * `setup_requires` corresponds to `nativeBuildInputs`
 * `install_requires` corresponds to `propagatedBuildInputs`
-* `tests_require` corresponds to `checkInputs`
+* `tests_require` corresponds to `nativeCheckInputs`
 
 ## Contributing {#contributing}
 
@@ -1721,17 +1794,21 @@ The following rules are desired to be respected:
   that characters should be converted to lowercase and `.` and `_` should be
   replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz).
   If necessary, `pname` has to be given a different value within `fetchPypi`.
+* Packages from sources such as GitHub and GitLab that do not exist on PyPI
+  should not use a name that is already used on PyPI. When possible, they should
+  use the package repository name prefixed with the owner (e.g. organization) name
+  and using a `-` as delimiter.
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
 
-## Package set maintenance
+## Package set maintenance {#python-package-set-maintenance}
 
 The whole Python package set has a lot of packages that do not see regular
 updates, because they either are a very fragile component in the Python
 ecosystem, like for example the `hypothesis` package, or packages that have
 no maintainer, so maintenance falls back to the package set maintainers.
 
-### Updating packages in bulk
+### Updating packages in bulk {#python-package-bulk-updates}
 
 There is a tool to update alot of python libraries in bulk, it exists at
 `maintainers/scripts/update-python-libraries` with this repository.
@@ -1744,6 +1821,11 @@ hosted on GitHub, exporting a `GITHUB_API_TOKEN` is highly recommended.
 Updating packages in bulk leads to lots of breakages, which is why a
 stabilization period on the `python-unstable` branch is required.
 
+If a package is fragile and often breaks during these bulks updates, it
+may be reasonable to set `passthru.skipBulkUpdate = true` in the
+derivation. This decision should not be made on a whim and should
+always be supported by a qualifying comment.
+
 Once the branch is sufficiently stable it should normally be merged
 into the `staging` branch.
 
@@ -1754,7 +1836,7 @@ would be:
 $ maintainers/scripts/update-python-libraries --target minor --commit --use-pkgs-prefix pkgs/development/python-modules/**/default.nix
 ```
 
-## CPython Update Schedule
+## CPython Update Schedule {#python-cpython-update-schedule}
 
 With [PEP 602](https://www.python.org/dev/peps/pep-0602/), CPython now
 follows a yearly release cadence. In nixpkgs, all supported interpreters

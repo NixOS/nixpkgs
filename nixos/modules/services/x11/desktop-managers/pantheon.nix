@@ -17,7 +17,7 @@ in
 {
 
   meta = {
-    doc = ./pantheon.xml;
+    doc = ./pantheon.md;
     maintainers = teams.pantheon.members;
   };
 
@@ -26,10 +26,10 @@ in
     services.pantheon = {
 
       contractor = {
-         enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
+         enable = mkEnableOption (lib.mdDoc "contractor, a desktop-wide extension service used by Pantheon");
       };
 
-      apps.enable = mkEnableOption "Pantheon default applications";
+      apps.enable = mkEnableOption (lib.mdDoc "Pantheon default applications");
 
     };
 
@@ -76,7 +76,7 @@ in
         description = lib.mdDoc "List of packages for which gsettings are overridden.";
       };
 
-      debug = mkEnableOption "gnome-session debug messages";
+      debug = mkEnableOption (lib.mdDoc "gnome-session debug messages");
 
     };
 
@@ -134,7 +134,8 @@ in
       services.bamf.enable = true;
       services.colord.enable = mkDefault true;
       services.fwupd.enable = mkDefault true;
-      services.packagekit.enable = mkDefault true;
+      # TODO: Enable once #177946 is resolved
+      # services.packagekit.enable = mkDefault true;
       services.power-profiles-daemon.enable = mkDefault true;
       services.touchegg.enable = mkDefault true;
       services.touchegg.package = pkgs.pantheon.touchegg;
@@ -168,6 +169,9 @@ in
       };
       services.udev.packages = [
         pkgs.pantheon.gnome-settings-daemon
+        # Force enable KMS modifiers for devices that require them.
+        # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
+        pkgs.pantheon.mutter
       ];
       systemd.packages = [
         pkgs.pantheon.gnome-settings-daemon
@@ -249,10 +253,10 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt5 applications under Pantheon
-      qt5.enable = true;
-      qt5.platformTheme = "gnome";
-      qt5.style = "adwaita";
+      # Harmonize Qt applications under Pantheon
+      qt.enable = true;
+      qt.platformTheme = "gnome";
+      qt.style = "adwaita";
 
       # Default Fonts
       fonts.fonts = with pkgs; [
@@ -284,7 +288,7 @@ in
         elementary-music
         elementary-photos
         elementary-screenshot
-        elementary-tasks
+        # elementary-tasks
         elementary-terminal
         elementary-videos
         epiphany

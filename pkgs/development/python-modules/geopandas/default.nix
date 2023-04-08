@@ -8,13 +8,13 @@
 , pyproj
 , pytestCheckHook
 , pythonOlder
-, Rtree
+, rtree
 , shapely
 }:
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.11.0";
+  version = "0.12.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
-    rev = "v${version}";
-    hash = "sha256-w3F2Uqr/+DdG2Td5YmHdF/LII2y29rQkGK5ooMUcfRk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ntOZ2WCoMz5ZpqPeupqPC3cN8mbQmEAvJGaFblu0ibY=";
   };
 
   propagatedBuildInputs = [
@@ -34,9 +34,9 @@ buildPythonPackage rec {
     shapely
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    Rtree
+    rtree
   ];
 
   doCheck = !stdenv.isDarwin;
@@ -62,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
+    changelog = "https://github.com/geopandas/geopandas/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
   };

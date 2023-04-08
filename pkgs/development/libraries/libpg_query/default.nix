@@ -2,23 +2,27 @@
 
 stdenv.mkDerivation rec {
   pname = "libpg_query";
-  version = "13-2.1.2";
+  version = "15-4.2.0";
 
   src = fetchFromGitHub {
     owner = "pganalyze";
     repo = "libpg_query";
     rev = version;
-    sha256 = "sha256-Y0oIcpZ0CPbFvyTC6YrSjcs14jk/K5pIyJjTo5vV5sQ=";
+    hash = "sha256-2fPdvsfuXKaRwkPjsPsBBfP0+yUgYXEUzQNFZfhyvGk=";
   };
 
   nativeBuildInputs = [ which ];
 
-  makeFlags = [ "build" ];
+  makeFlags = [ "build" "build_shared" ];
 
   installPhase = ''
     install -Dm644 -t $out/lib libpg_query.a
     install -Dm644 -t $out/include pg_query.h
+    install -Dm644 -t $out/lib libpg_query${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
+
+  doCheck = true;
+  checkTarget = "test";
 
   meta = with lib; {
     homepage = "https://github.com/pganalyze/libpg_query";

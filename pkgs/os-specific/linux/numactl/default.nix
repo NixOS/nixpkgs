@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "numactl";
-  version = "2.0.14";
+  version = "2.0.16";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hahpdp5xqy9cbg251bdxqkml341djn2h856g435h4ngz63sr9fs";
+    sha256 = "sha256-aDKzkmvrPDzQl4n0KgeiU5LOLhQA0tmwzGiXvJDp7ZI=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

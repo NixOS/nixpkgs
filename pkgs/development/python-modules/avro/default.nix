@@ -15,14 +15,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8SNiPsxkjQ4gzhT47YUWIUDBPMSxCIZdGyUp+/oGwAg=";
+    hash = "sha256-8SNiPsxkjQ4gzhT47YUWIUDBPMSxCIZdGyUp+/oGwAg=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

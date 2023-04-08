@@ -2,7 +2,7 @@
 , mkDerivation
 , extra-cmake-modules
 , kdoctools
-, libkdegames, kconfig, kio, ktextwidgets
+, libkdegames, kio, ktextwidgets
 }:
 
 mkDerivation {

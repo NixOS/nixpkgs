@@ -1,27 +1,68 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, inform
-, pytestCheckHook
+{ lib
+, buildPythonPackage
 , docopt
-, natsort
+, fetchFromGitHub
+, flitBuildHook
+, hypothesis
+, inform
+, nestedtext
+, pytestCheckHook
+, pythonOlder
+, quantiphy
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "nestedtext";
-  version = "1.2";
+  version = "3.5";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "nestedtext";
-    rev = "v${version}";
-    fetchSubmodules = true;
-    sha256 = "1dwks5apghg29aj90nc4qm0chk195jh881297zr1wk7mqd2n159y";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RGCcrGsDkBhThuUZd2LuuyXG9r1S7iOA75HYRxkwUrU=";
   };
 
-  propagatedBuildInputs = [ inform ];
+  nativeBuildInputs = [
+    flitBuildHook
+  ];
 
-  checkInputs = [ pytestCheckHook docopt natsort voluptuous ];
-  pytestFlagsArray = [ "--ignore=build" ]; # Avoids an ImportMismatchError.
+  propagatedBuildInputs = [
+    inform
+  ];
+
+  nativeCheckInputs = [
+    docopt
+    hypothesis
+    quantiphy
+    pytestCheckHook
+    voluptuous
+  ];
+
+  # Tests depend on quantiphy. To avoid infinite recursion, tests are only
+  # enabled when building passthru.tests.
+  doCheck = false;
+
+  pytestFlagsArray = [
+    # Avoids an ImportMismatchError.
+    "--ignore=build"
+  ];
+
+  disabledTestPaths = [
+    # Examples are prefixed with test_
+    "examples/"
+  ];
+
+  passthru.tests = {
+    runTests = nestedtext.overrideAttrs (_: { doCheck = true; });
+  };
+
+  pythonImportsCheck = [
+    "nestedtext"
+  ];
 
   meta = with lib; {
     description = "A human friendly data format";
@@ -37,6 +78,7 @@ buildPythonPackage rec {
       non-programmers.
     '';
     homepage = "https://nestedtext.org";
+    changelog = "https://github.com/KenKundert/nestedtext/blob/v${version}/doc/releases.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ jeremyschlatter ];
   };

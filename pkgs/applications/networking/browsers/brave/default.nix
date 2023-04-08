@@ -73,7 +73,7 @@ let
     libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
     libXext libXfixes libXi libXrandr libXrender libxshmfence
     libXtst libuuid mesa nspr nss pango pipewire udev wayland
-    xdg-utils xorg.libxcb zlib snappy
+    xorg.libxcb zlib snappy
   ]
     ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva;
@@ -90,11 +90,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.42.88";
+  version = "1.49.128";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "sha256-Or3eTLwap6KFhO7ieLyAXS0NKga5eUbd3KyFq/YNg+c=";
+    sha256 = "sha256-TXAPzhNRupv8R2rKj/mFdubAVjOrnmbdBtmasTnqfyU=";
   };
 
   dontConfigure = true;
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
           --replace /opt/brave.com $out/opt/brave.com
 
       # Correct icons location
-      icon_sizes=("16" "22" "24" "32" "48" "64" "128" "256")
+      icon_sizes=("16" "24" "32" "48" "64" "128" "256")
 
       for icon in ''${icon_sizes[*]}
       do
@@ -170,17 +170,18 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${rpath}
       --prefix PATH : ${binpath}
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
       ${optionalString (enableFeatures != []) ''
       --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}"
       ''}
       ${optionalString (disableFeatures != []) ''
       --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
       ''}
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       ${optionalString vulkanSupport ''
       --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
-      --add-flags ${escapeShellArg commandLineArgs}
       ''}
+      --add-flags ${escapeShellArg commandLineArgs}
     )
   '';
 

@@ -1,9 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , ninja
 , pkg-config
+, rustPlatform
 , curl
 , freetype
 , libGLU
@@ -22,20 +24,42 @@
 , vulkan-loader
 , glslang
 , spirv-tools
+, gtest
+, Carbon
+, Cocoa
+, OpenGL
+, Security
 }:
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "16.2.2";
+  version = "16.9";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MrCPMtWdEsWUuvKaPWZK4Mh6nhPcKpsxkFKkWugdz8A=";
+    hash = "sha256-DOP2v82346YQtL55Ix0gn9cTpvbO1ooeCIGRpgEMFpA=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    name = "${pname}-${version}";
+    inherit src;
+    hash = "sha256-xTB8wg4PIdg7MB3545zN83/41fUsqFE2Sk5aTXrGhps=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    rustPlatform.rust.rustc
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+  ];
+
+  nativeCheckInputs = [
+    gtest
+  ];
 
   buildInputs = [
     curl
@@ -56,18 +80,19 @@ stdenv.mkDerivation rec {
     vulkan-headers
     glslang
     spirv-tools
-  ];
-
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DAUTOUPDATE=OFF"
-    "-GNinja"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa OpenGL Security ];
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
       --replace /usr/ $out/
   '';
+
+  cmakeFlags = [
+    "-DAUTOUPDATE=OFF"
+  ];
+
+  doCheck = true;
+  checkTarget = "run_tests";
 
   meta = with lib; {
     description = "A Teeworlds modification with a unique cooperative gameplay.";
@@ -78,9 +103,9 @@ stdenv.mkDerivation rec {
       compete against the best in international tournaments,
       design your own maps, or run your own server.
     '';
-    homepage = "https://ddnet.tw";
+    homepage = "https://ddnet.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ sirseruju lom ];
+    maintainers = with maintainers; [ sirseruju lom ncfavier ];
     mainProgram = "DDNet";
   };
 }

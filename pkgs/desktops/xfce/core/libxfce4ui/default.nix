@@ -4,16 +4,16 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4ui";
-  version = "4.16.1";
+  version = "4.18.3";
 
-  sha256 = "sha256-5mwyC3YA1LvdVSvaHN7CXDJh+IXjmdHGLKzhpjtUZkw=";
+  sha256 = "sha256-Wb1nq744HDO4erJ2nJdFD0OMHVh14810TngN3FLFWIA=";
 
   nativeBuildInputs = [ gobject-introspection vala ];
   buildInputs =  [ gtk3 libstartup_notification libgtop libepoxy xfconf ];
   propagatedBuildInputs = [ libxfce4util libICE libSM ];
 
   configureFlags = [
-    "--with-vendor-info='NixOS'"
+    "--with-vendor-info=NixOS"
   ];
 
   meta = with lib; {

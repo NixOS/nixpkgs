@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, substitute, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "libamplsolver";
@@ -10,20 +10,22 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Debian provides a patch to build a shared library
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/liba/libamplsolver/0~20190702-2/debian/patches/fix-makefile-shared-lib.patch";
-      sha256 = "sha256-96qwj3fLugzbsfxguKMce13cUo7XGC4VUE7xKcJs42Y=";
+    (substitute {
+      src = ./libamplsolver-sharedlib.patch;
+      replacements = [ "--replace" "@sharedlibext@" "${stdenv.hostPlatform.extensions.sharedLibrary}" ];
     })
   ];
 
   installPhase = ''
     runHook preInstall
-    pushd sys.`uname -m`.`uname -s`
+    pushd sys.$(uname -m).$(uname -s)
     install -D -m 0644 *.h -t $out/include
-    install -D -m 0644 *.so* -t $out/lib
+    install -D -m 0644 *${stdenv.hostPlatform.extensions.sharedLibrary}* -t $out/lib
     install -D -m 0644 *.a -t $out/lib
     popd
+  '' + lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libamplsolver.dylib $out/lib/libamplsolver.dylib
+  '' + ''
     runHook postInstall
   '';
 
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "A library of routines that help solvers work with AMPL";
     homepage = "https://ampl.com/netlib/ampl/";
     license = [ licenses.mit ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ aanderse ];
   };
 }

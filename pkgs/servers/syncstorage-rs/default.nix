@@ -21,13 +21,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "syncstorage-rs";
-  version = "0.12.0";
+  version = "0.13.6";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = pname;
-    rev = version;
-    hash = "sha256-VfIpjpBS7LXe32fxIFp7xmbm40VwxUdHIEm5PnMpd4s=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-LCMbhFoxi/fYaivW5gNyDhfytW/avhrrd29fXobSxJU=";
   };
 
   nativeBuildInputs = [
@@ -43,11 +43,16 @@ rustPlatform.buildRustPackage rec {
   ];
 
   preFixup = ''
-    wrapProgram $out/bin/syncstorage \
+    wrapProgram $out/bin/syncserver \
       --prefix PATH : ${lib.makeBinPath [ pyFxADeps ]}
   '';
 
-  cargoSha256 = "sha256-JXxArKA/2SIYJvjNA1yZHR9xDKt3N2U7HVMP/6M3BxE=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "deadpool-0.5.2" = "sha256-V3v03t8XWA6rA8RaNunq2kh2U+6Lc2C2moKdaF2bmEc=";
+    };
+  };
 
   buildFeatures = [ "grpcio/openssl" ];
 
@@ -57,7 +62,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Mozilla Sync Storage built with Rust";
     homepage = "https://github.com/mozilla-services/syncstorage-rs";
+    changelog = "https://github.com/mozilla-services/syncstorage-rs/releases/tag/${version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ pennae ];
+    platforms = lib.platforms.linux;
   };
 }

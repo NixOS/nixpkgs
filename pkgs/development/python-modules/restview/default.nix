@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "restview";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-K5iWEKrtL9Qtpk9s3FOc8+5wzjcLy6hy23JCGtUV3R4=";
+    hash = "sha256-jBoXHBWdRtFdVWn3cCGCiIOhIdb5uvdY1kH8HlSwWuU=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pygments
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -36,10 +36,16 @@ buildPythonPackage rec {
     "restview"
   ];
 
-  meta = {
+  disabledTests = [
+    # Tests are comparing output
+    "rest_to_html"
+  ];
+
+  meta = with lib; {
     description = "ReStructuredText viewer";
     homepage = "https://mg.pov.lt/restview/";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ koral ];
+    changelog = "https://github.com/mgedmin/restview/blob/${version}/CHANGES.rst";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ koral ];
   };
 }

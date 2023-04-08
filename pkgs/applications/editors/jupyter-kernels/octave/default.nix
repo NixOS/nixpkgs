@@ -1,5 +1,4 @@
-{ lib
-, stdenv
+{ stdenv
 , callPackage
 , runCommand
 , makeWrapper
@@ -21,8 +20,8 @@ in
 rec {
   launcher = runCommand "octave-kernel-launcher" {
     inherit octave;
-    python = python3.withPackages (ps: [ ps.traitlets ps.jupyter_core ps.ipykernel ps.metakernel kernel ]);
-    buildInputs = [ makeWrapper ];
+    python = python3.withPackages (ps: [ ps.traitlets ps.jupyter-core ps.ipykernel ps.metakernel kernel ]);
+    nativeBuildInputs = [ makeWrapper ];
   } ''
     mkdir -p $out/bin
 

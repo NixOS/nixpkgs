@@ -21,8 +21,8 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-P4CSu/ff6i48uWV5gXsJgayZ1S1s0RAqa5O5y3Y0g9Y=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    makeWrapper
     perlPackages.perl
     perlPackages.AnyEvent
     perlPackages.ArchiveZip
@@ -111,7 +111,7 @@ perlPackages.buildPerlPackage rec {
     # the firmware is not under a free license!
     # https://github.com/Logitech/slimserver/blob/public/7.9/License.txt
     license = licenses.unfree;
-    maintainers = [ maintainers.phile314 ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

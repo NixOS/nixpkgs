@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation rec {
   name = "kdiskmark";
-  version = "2.3.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "jonmagon";
     repo = "kdiskmark";
     rev = version;
-    sha256 = "sha256-9ufRxEbqwcRs+m/YW8D3+1USCJNZEaOUZRec7gvgmtA=";
+    sha256 = "sha256-fDimH0BX0zxGuOMNLhNbMGMr2pS+qbZhflSpoLFK+Ng=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];

@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "22.1.3";
+  version = "23.1.1";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-pxLre84yzZNN82gUtd0EaqZwiZwW/pjyr7ADV4+GocU=";
+    sha256 = "sha256-+5Rh9cuf6l4H6RiCMRsMiLQ+iEOwF+usBeta9pqjTBU=";
   };
 
   depsBuildBuild = [
@@ -95,11 +95,13 @@ stdenv.mkDerivation rec {
     zlib
   ];
   mesonFlags = [
-    "-Dxwayland_eglstream=true"
-    "-Ddefault_font_path=${defaultFontPath}"
-    "-Dxkb_bin_dir=${xkbcomp}/bin"
-    "-Dxkb_dir=${xkeyboard_config}/etc/X11/xkb"
-    "-Dxkb_output_dir=${placeholder "out"}/share/X11/xkb/compiled"
+    (lib.mesonBool "xwayland_eglstream" true)
+    (lib.mesonBool "xcsecurity" true)
+    (lib.mesonOption "default_font_path" defaultFontPath)
+    (lib.mesonOption "xkb_bin_dir" "${xkbcomp}/bin")
+    (lib.mesonOption "xkb_dir" "${xkeyboard_config}/etc/X11/xkb")
+    (lib.mesonOption "xkb_output_dir" "${placeholder "out"}/share/X11/xkb/compiled")
+    (lib.mesonBool "libunwind" (libunwind != null))
   ];
 
   meta = with lib; {

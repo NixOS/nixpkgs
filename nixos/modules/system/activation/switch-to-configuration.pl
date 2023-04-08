@@ -84,7 +84,7 @@ EOF
 
 # This is a NixOS installation if it has /etc/NIXOS or a proper
 # /etc/os-release.
-if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => "quiet") // "") !~ /^ID="?nixos"?/msx) {
+if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => "quiet") // "") !~ /^ID="?@distroId@"?/msx) {
     die("This is not a NixOS installation!\n");
 }
 
@@ -167,7 +167,7 @@ sub get_active_units {
 # Takes the name of the unit as an argument and returns a bool whether the unit is active or not.
 sub unit_is_active {
     my ($unit_name) = @_;
-    my $units = busctl_call_systemd1_mgr("ListUnitsByNames", "as", 1, $unit_name)->{data}->[0];
+    my $units = busctl_call_systemd1_mgr("ListUnitsByNames", "as", 1, , "--", $unit_name)->{data}->[0];
     if (scalar(@{$units}) == 0) {
         return 0;
     }

@@ -50,7 +50,7 @@ in
 
     services.monero = {
 
-      enable = mkEnableOption "Monero node daemon";
+      enable = mkEnableOption (lib.mdDoc "Monero node daemon");
 
       dataDir = mkOption {
         type = types.str;
@@ -181,7 +181,7 @@ in
       exclusiveNodes = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           List of peer IP addresses to connect to *only*.
           If given the other peer options will be ignored.
         '';

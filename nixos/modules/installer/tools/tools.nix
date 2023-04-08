@@ -159,10 +159,7 @@ in
       $desktopConfiguration
         # Configure keymap in X11
         # services.xserver.layout = "us";
-        # services.xserver.xkbOptions = {
-        #   "eurosign:e";
-        #   "caps:escape" # map caps to escape.
-        # };
+        # services.xserver.xkbOptions = "eurosign:e,caps:escape";
 
         # Enable CUPS to print documents.
         # services.printing.enable = true;
@@ -180,7 +177,7 @@ in
         #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
         #   packages = with pkgs; [
         #     firefox
-        #     thunderbird
+        #     tree
         #   ];
         # };
 
@@ -217,7 +214,7 @@ in
 
         # This value determines the NixOS release from which the default
         # settings for stateful data, like file locations and database versions
-        # on your system were taken. It‘s perfectly fine and recommended to leave
+        # on your system were taken. It’s perfectly fine and recommended to leave
         # this value at the release version of the first install of this system.
         # Before changing this value read the documentation for this option
         # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
@@ -234,6 +231,8 @@ in
         nixos-version
         nixos-enter
       ] ++ lib.optional (nixos-option != null) nixos-option;
+
+    documentation.man.man-db.skipPackages = [ nixos-version ];
 
     system.build = {
       inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "finalfrontier";
-  version = "0.9.4";
+  version = "unstable-2022-01-06";
 
   src = fetchFromGitHub {
     owner = "finalfusion";
     repo = pname;
-    rev = version;
-    sha256 = "1lvwv238p8hrl4sc5pmnvaargl2dd25p44gxl3kibq5ng03afd0n";
+    rev = "2461fb1dde13b73039926aa66606e470907a1b59";
+    sha256 = "sha256-bnRzXIYairlBjv2JxU16UXYc5BB3VeKZNiJ4+XDzub4=";
   };
 
-  cargoSha256 = "0lhcazcih48gc23q484h344bzz7p3lh189ljhswdyph2i11caarp";
+  cargoSha256 = "sha256-C/D9EPfifyajrCyXE8w/qRuzWEoyJJIcj4xii94/9l4=";
 
   nativeBuildInputs = [
     installShellFiles

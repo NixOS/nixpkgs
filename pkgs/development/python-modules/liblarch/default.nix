@@ -18,10 +18,10 @@ buildPythonPackage rec {
     owner = "getting-things-gnome";
     repo = "liblarch";
     rev = "v${version}";
-    sha256 = "sha256-A2qChe2z6rAhjRVX5VoHQitebf/nMATdVZQgtlquuYg=";
+    hash = "sha256-A2qChe2z6rAhjRVX5VoHQitebf/nMATdVZQgtlquuYg=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     gobject-introspection # for setup hook
     gtk3
   ];

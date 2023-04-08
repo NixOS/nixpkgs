@@ -1,22 +1,15 @@
 { lib
-, aiohttp
-, aresponses
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, python-engineio
-, python-socketio
 , pythonOlder
+, requests
 , websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "zwave-me-ws";
-  version = "0.2.4";
+  version = "0.3.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Z-Wave-Me";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-x7P6fOYTe/u0GKUsO62cNVz2i/hVjUb8t8Bigijxgk0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-d/Y2rZArBywTQE1vsE/B5bEPb48kcEqhDP/xfxJBzJs=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +26,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    requests
     websocket-client
   ];
 
@@ -46,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to connect to a ZWave-Me instance";
     homepage = "https://github.com/Z-Wave-Me/zwave-me-ws";
+    changelog = "https://github.com/Z-Wave-Me/zwave-me-ws/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

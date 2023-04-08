@@ -1,13 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django
+}:
 
 buildPythonPackage rec {
   pname = "dj-database-url";
-  version = "0.5.0";
+  version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4aeaeb1f573c74835b0686a2b46b85990571159ffc21aa57ecd4d1e1cb334163";
+    hash = "sha256-sjsVBGyzgYDgyVIHvMkP5enb3o7vFgZZB92Fz0ynA2w=";
   };
+
+  propagatedBuildInputs = [
+    django
+  ];
 
   # Tests access a DB via network
   doCheck = false;

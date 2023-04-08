@@ -16,16 +16,22 @@ let
   cmakeBool = b: if b then "ON" else "OFF";
 in
 stdenv.mkDerivation rec {
-  version = "1.5.3";
+  version = "1.5.6";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
     rev = version;
-    sha256 = "sha256-LbWtZtgvZQdgwAGHVsouH6cAIVXP+9Q5n8KjzaBRrBQ=";
+    hash = "sha256-2YQMav0JJMbJ2bvnN/Xv90tjE/OWLbrZDO4WlaOvcfI=";
     fetchSubmodules = true;
   };
+
+  # ld: unknown option: --start-group
+  postPatch = ''
+    substituteInPlace cmake/draco_targets.cmake \
+      --replace "^Clang" "^AppleClang"
+  '';
 
   buildInputs = [ gtest ]
     ++ lib.optionals withTranscoder [ eigen ghc_filesystem tinygltf ];
@@ -43,13 +49,12 @@ stdenv.mkDerivation rec {
     "-DDRACO_TINYGLTF_PATH=${tinygltf}"
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Library for compressing and decompressing 3D geometric meshes and point clouds";
     homepage = "https://google.github.io/draco/";
+    changelog = "https://github.com/google/draco/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jansol ];
     platforms = platforms.all;

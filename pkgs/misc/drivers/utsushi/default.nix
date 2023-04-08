@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
     libusb1.dev
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=deprecated-declarations"
     "-Wno-error=parentheses"
     "-Wno-error=unused-variable"
@@ -69,6 +69,7 @@ in stdenv.mkDerivation rec {
     touch $out/etc/sane.d/dll.conf
 
     # absolute paths to convert & tesseract
+    sed -i '/\[AC_DEFINE(\[HAVE_IMAGE_MAGICK\], \[1\])/a \ MAGICK_CONVERT="${imagemagick}/bin/convert"' configure.ac
     substituteInPlace filters/magick.cpp \
       --replace 'convert ' '${imagemagick}/bin/convert '
     substituteInPlace filters/reorient.cpp \

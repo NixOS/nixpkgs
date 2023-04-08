@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, dpkg
 , alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, pango, nspr, nss, gtk3, mesa
-, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
+, libGL, wayland, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
 , makeWrapper
 }:
 
@@ -43,11 +43,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2022.2";
+  version = "2023.2";
 
   src = fetchurl {
     url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
-    sha256 = "sha256-h/c4aPH6E2TzbXGROpLJgF9uHYcjvKiW5upIobpJM9o=";
+    sha256 = "sha256-3evIB8IW0bioRqtpAdCRQhDywu8xPMN1oxhqQGIBANY=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "dpkg-deb -x $src .";
 
-  runtimeDependencies = [ (lib.getLib systemd) libnotify libappindicator ];
+  runtimeDependencies = [ (lib.getLib systemd) libGL libnotify libappindicator wayland ];
 
   installPhase = ''
     runHook preInstall
@@ -75,10 +75,12 @@ stdenv.mkDerivation rec {
     mv opt/Mullvad\ VPN/* $out/share/mullvad
 
     ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
-    ln -s $out/share/mullvad/resources/mullvad-daemon $out/bin/mullvad-daemon
     ln -sf $out/share/mullvad/resources/mullvad-problem-report $out/bin/mullvad-problem-report
 
     wrapProgram $out/bin/mullvad-vpn --set MULLVAD_DISABLE_UPDATE_NOTIFICATION 1
+
+    wrapProgram $out/bin/mullvad-daemon \
+        --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad/resources"
 
     sed -i "s|Exec.*$|Exec=$out/bin/mullvad-vpn $U|" $out/share/applications/mullvad-vpn.desktop
 
@@ -92,7 +94,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ Br1ght0ne ymarkus flexagoon ];
+    maintainers = with maintainers; [ Br1ght0ne ymarkus ataraxiasjel ];
   };
 
 }

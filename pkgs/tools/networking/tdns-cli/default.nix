@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tdns-cli";
-  version = "0.0.5";
+  version = "unstable-2021-02-19";
 
   src = fetchFromGitHub {
     owner = "rotty";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0nn036in5j1h0vxkwif0lf7fn900zy4f4kxlzy6qdx3jakgmxvwh";
+    rev = "9a5455fe8a52f3f14dc55ef81511b479c8cd70ea";
+    hash = "sha256-BGxkqlKg81izq4eOBEZFJ/MPb3UCSOo8ZTYTjtjierk=";
   };
 
-  cargoSha256 = "sha256-O4n38dla2WgZ4949Ata6AYbZF9LMnXDyuFNoXRrTN7I=";
+  cargoHash = "sha256-uRny+l/LaQPjF5AnbxgKFLdjuAxcez1BqsL4g54KAwU=";
 
   meta = with lib; {
     description = "DNS tool that aims to replace dig and nsupdate";

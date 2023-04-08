@@ -9,18 +9,18 @@
 
 buildPythonPackage rec {
   pname = "kajiki";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "jackrosenthal";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-bdQBVFHRB408/7X9y+3+fpllhymFRsdv/MEPTVjJh2E=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-EbXe4Jh2IKAYw9GE0kFgKVv9c9uAOiFFYaMF8CGaOfg=";
   };
 
   propagatedBuildInputs = [ babel pytz nine ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Kajiki provides fast well-formed XML templates";

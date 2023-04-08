@@ -3,18 +3,22 @@
 , fetchPypi
 , nose
 , coverage
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "isbnlib";
-  version = "3.10.10";
+  version = "3.10.13";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c9e6c1dcaa9dff195429373cf2beb3117f30b3fca43d7db5aec5a2d1f6f59784";
+    hash = "sha256-Rnk0H1ag35HGNeg4oiLOfxB1XLW8yVSOP3qK/1Z009Q=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     coverage
   ];

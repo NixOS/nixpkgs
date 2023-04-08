@@ -35,24 +35,29 @@ let
   ;
 
   /**
-   * Given a `config`, builds the default options.
+   * Builds the default options.
    */
-  buildMenuGrub2 = config:
-    buildMenuAdditionalParamsGrub2 config ""
-  ;
+  buildMenuGrub2 = buildMenuAdditionalParamsGrub2 "";
+
+  targetArch =
+    if config.boot.loader.grub.forcei686 then
+      "ia32"
+    else
+      pkgs.stdenv.hostPlatform.efiArch;
 
   /**
-   * Given a `config` and params to add to `params`, build a set of default options.
+   * Given params to add to `params`, build a set of default options.
    * Use this one when creating a variant (e.g. hidpi)
    */
-  buildMenuAdditionalParamsGrub2 = config: additional:
+  buildMenuAdditionalParamsGrub2 = additional:
   let
     finalCfg = {
-      name = "NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}";
+      name = "${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}";
       params = "init=${config.system.build.toplevel}/init ${additional} ${toString config.boot.kernelParams}";
       image = "/boot/${config.system.boot.loader.kernelFile}";
       initrd = "/boot/initrd";
     };
+
   in
     menuBuilderGrub2
     finalCfg
@@ -65,18 +70,24 @@ let
   ;
 
   # Timeout in syslinux is in units of 1/10 of a second.
-  # 0 is used to disable timeouts.
+  # null means max timeout (35996, just under 1h in 1/10 seconds)
+  # 0 means disable timeout
   syslinuxTimeout = if config.boot.loader.timeout == null then
-      0
+      35996
     else
-      max (config.boot.loader.timeout * 10) 1;
+      config.boot.loader.timeout * 10;
 
-
-  max = x: y: if x > y then x else y;
+  # Timeout in grub is in seconds.
+  # null means max timeout (infinity)
+  # 0 means disable timeout
+  grubEfiTimeout = if config.boot.loader.timeout == null then
+      -1
+    else
+      config.boot.loader.timeout;
 
   # The configuration file for syslinux.
 
-  # Notes on syslinux configuration and UNetbootin compatiblity:
+  # Notes on syslinux configuration and UNetbootin compatibility:
   #   * Do not use '/syslinux/syslinux.cfg' as the path for this
   #     configuration. UNetbootin will not parse the file and use it as-is.
   #     This results in a broken configuration if the partition label does
@@ -98,35 +109,35 @@ let
     DEFAULT boot
 
     LABEL boot
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with 'nomodeset'
     LABEL boot-nomodeset
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (nomodeset)
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (nomodeset)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with 'copytoram'
     LABEL boot-copytoram
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (copytoram)
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (copytoram)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with verbose logging to the console
     LABEL boot-debug
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with a serial console enabled
     LABEL boot-serial
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0,115200n8
     INITRD /boot/${config.system.boot.loader.initrdFile}
@@ -281,7 +292,7 @@ let
     if serial; then set with_serial=yes ;fi
     export with_serial
     clear
-    set timeout=10
+    set timeout=${toString grubEfiTimeout}
 
     # This message will only be viewable when "gfxterm" is not used.
     echo ""
@@ -314,16 +325,16 @@ let
     # Menu entries
     #
 
-    ${buildMenuGrub2 config}
+    ${buildMenuGrub2}
     submenu "HiDPI, Quirks and Accessibility" --class hidpi --class submenu {
       ${grubMenuCfg}
       submenu "Suggests resolution @720p" --class hidpi-720p {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "video=1280x720@60"}
+        ${buildMenuAdditionalParamsGrub2 "video=1280x720@60"}
       }
       submenu "Suggests resolution @1080p" --class hidpi-1080p {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "video=1920x1080@60"}
+        ${buildMenuAdditionalParamsGrub2 "video=1920x1080@60"}
       }
 
       # If we boot into a graphical environment where X is autoran
@@ -331,7 +342,7 @@ let
       # to disable this.
       submenu "Disable display-manager" --class quirk-disable-displaymanager {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "systemd.mask=display-manager.service"}
+        ${buildMenuAdditionalParamsGrub2 "systemd.mask=display-manager.service"}
       }
 
       # Some laptop and convertibles have the panel installed in an
@@ -340,29 +351,29 @@ let
       submenu "" {return}
       submenu "Rotate framebuffer Clockwise" --class rotate-90cw {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "fbcon=rotate:1"}
+        ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:1"}
       }
       submenu "Rotate framebuffer Upside-Down" --class rotate-180 {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "fbcon=rotate:2"}
+        ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:2"}
       }
       submenu "Rotate framebuffer Counter-Clockwise" --class rotate-90ccw {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "fbcon=rotate:3"}
+        ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:3"}
       }
 
       # As a proof of concept, mainly. (Not sure it has accessibility merits.)
       submenu "" {return}
       submenu "Use black on white" --class accessibility-blakconwhite {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "vt.default_red=0xFF,0xBC,0x4F,0xB4,0x56,0xBC,0x4F,0x00,0xA1,0xCF,0x84,0xCA,0x8D,0xB4,0x84,0x68 vt.default_grn=0xFF,0x55,0xBA,0xBA,0x4D,0x4D,0xB3,0x00,0xA0,0x8F,0xB3,0xCA,0x88,0x93,0xA4,0x68 vt.default_blu=0xFF,0x58,0x5F,0x58,0xC5,0xBD,0xC5,0x00,0xA8,0xBB,0xAB,0x97,0xBD,0xC7,0xC5,0x68"}
+        ${buildMenuAdditionalParamsGrub2 "vt.default_red=0xFF,0xBC,0x4F,0xB4,0x56,0xBC,0x4F,0x00,0xA1,0xCF,0x84,0xCA,0x8D,0xB4,0x84,0x68 vt.default_grn=0xFF,0x55,0xBA,0xBA,0x4D,0x4D,0xB3,0x00,0xA0,0x8F,0xB3,0xCA,0x88,0x93,0xA4,0x68 vt.default_blu=0xFF,0x58,0x5F,0x58,0xC5,0xBD,0xC5,0x00,0xA8,0xBB,0xAB,0x97,0xBD,0xC7,0xC5,0x68"}
       }
 
       # Serial access is a must!
       submenu "" {return}
       submenu "Serial console=ttyS0,115200n8" --class serial {
         ${grubMenuCfg}
-        ${buildMenuAdditionalParamsGrub2 config "console=ttyS0,115200n8"}
+        ${buildMenuAdditionalParamsGrub2 "console=ttyS0,115200n8"}
       }
     }
 
@@ -416,7 +427,7 @@ let
       echo "Usage size: $usage_size"
       echo "Image size: $image_size"
       truncate --size=$image_size "$out"
-      faketime "2000-01-01 00:00:00" mkfs.vfat -i 12345678 -n EFIBOOT "$out"
+      mkfs.vfat --invariant -i 12345678 -n EFIBOOT "$out"
 
       # Force a fixed order in mcopy for better determinism, and avoid file globbing
       for d in $(find EFI -type d | sort); do
@@ -430,19 +441,6 @@ let
       # Verify the FAT partition.
       fsck.vfat -vn "$out"
     ''; # */
-
-  # Name used by UEFI for architectures.
-  targetArch =
-    if pkgs.stdenv.isi686 || config.boot.loader.grub.forcei686 then
-      "ia32"
-    else if pkgs.stdenv.isx86_64 then
-      "x64"
-    else if pkgs.stdenv.isAarch32 then
-      "arm"
-    else if pkgs.stdenv.isAarch64 then
-      "aa64"
-    else
-      throw "Unsupported architecture";
 
   # Syslinux (and isolinux) only supports x86-based architectures.
   canx86BiosBoot = pkgs.stdenv.hostPlatform.isx86;
@@ -460,7 +458,7 @@ in
     };
 
     isoImage.isoBaseName = mkOption {
-      default = "nixos";
+      default = config.system.nixos.distroId;
       description = lib.mdDoc ''
         Prefix of the name of the generated ISO image file.
       '';
@@ -537,10 +535,17 @@ in
       '';
     };
 
+    isoImage.makeBiosBootable = mkOption {
+      default = false;
+      description = lib.mdDoc ''
+        Whether the ISO image should be a BIOS-bootable disk.
+      '';
+    };
+
     isoImage.makeEfiBootable = mkOption {
       default = false;
       description = lib.mdDoc ''
-        Whether the ISO image should be an efi-bootable volume.
+        Whether the ISO image should be an EFI-bootable volume.
       '';
     };
 
@@ -581,7 +586,7 @@ in
 
     isoImage.syslinuxTheme = mkOption {
       default = ''
-        MENU TITLE NixOS
+        MENU TITLE ${config.system.nixos.distroName}
         MENU RESOLUTION 800 600
         MENU CLEAR
         MENU ROWS 6
@@ -695,7 +700,7 @@ in
     boot.loader.grub.enable = false;
 
     environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
-      ++ optional canx86BiosBoot pkgs.syslinux
+      ++ optional (config.isoImage.makeBiosBootable && canx86BiosBoot) pkgs.syslinux
     ;
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
@@ -746,7 +751,7 @@ in
         { source = pkgs.writeText "version" config.system.nixos.label;
           target = "/version.txt";
         }
-      ] ++ optionals canx86BiosBoot [
+      ] ++ optionals (config.isoImage.makeBiosBootable && canx86BiosBoot) [
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
@@ -773,7 +778,7 @@ in
         { source = config.isoImage.efiSplashImage;
           target = "/EFI/boot/efi-background.png";
         }
-      ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
+      ] ++ optionals (config.boot.loader.grub.memtest86.enable && config.isoImage.makeBiosBootable && canx86BiosBoot) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
           target = "/boot/memtest.bin";
         }
@@ -788,10 +793,10 @@ in
     # Create the ISO image.
     system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({
       inherit (config.isoImage) isoName compressImage volumeID contents;
-      bootable = canx86BiosBoot;
+      bootable = config.isoImage.makeBiosBootable && canx86BiosBoot;
       bootImage = "/isolinux/isolinux.bin";
-      syslinux = if canx86BiosBoot then pkgs.syslinux else null;
-    } // optionalAttrs (config.isoImage.makeUsbBootable && canx86BiosBoot) {
+      syslinux = if config.isoImage.makeBiosBootable && canx86BiosBoot then pkgs.syslinux else null;
+    } // optionalAttrs (config.isoImage.makeUsbBootable && config.isoImage.makeBiosBootable && canx86BiosBoot) {
       usbBootable = true;
       isohybridMbrImage = "${pkgs.syslinux}/share/syslinux/isohdpfx.bin";
     } // optionalAttrs config.isoImage.makeEfiBootable {

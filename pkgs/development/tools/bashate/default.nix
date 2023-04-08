@@ -12,12 +12,12 @@
 
 buildPythonApplication rec {
   pname = "bashate";
-  version = "2.1.0";
+  version = "2.1.1";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0df143639715dc2fb6cf9aa6907e4a372d6f0a43afeffc55c5fb3ecfe3523c8";
+    sha256 = "sha256-S6tul3+DBacgU1+Pk/H7QsUh/LxKbCs9PXZx9C8iH0w=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonApplication rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fixtures
     mock
     pytestCheckHook

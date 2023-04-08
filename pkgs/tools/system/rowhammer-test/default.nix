@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1fbfcnm5gjish47wdvikcsgzlb5vnlfqlzzm6mwiw2j5qkq0914i";
   };
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-Wno-error=format";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-Wno-error=format";
 
   buildPhase = "sh -e make.sh";
 

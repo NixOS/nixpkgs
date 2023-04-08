@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "protoc-gen-validate";
-  version = "0.6.7";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
-    owner = "envoyproxy";
+    owner = "bufbuild";
     repo = "protoc-gen-validate";
     rev = "v${version}";
-    sha256 = "sha256-ouo6raNbvQyuY4IY1JEN45Ss7zb3EoR/WIRzL7hXLNI=";
+    sha256 = "sha256-yo0/RhUs9KUdY0l0qqRs3eGWr4y183ZNSCsWihFK++4=";
   };
 
-  vendorSha256 = "sha256-HbUEhoB6PPHwN/xym6dTkS54+EqVU1n8EIym8W2wt3I=";
+  vendorHash = "sha256-yGQO5vTdkAr6bKnpaQz//n7r07NGyQg+vQ2BqPGe8Nk=";
 
   excludedPackages = [ "tests" ];
 

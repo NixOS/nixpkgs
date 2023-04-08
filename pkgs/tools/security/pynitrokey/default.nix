@@ -1,32 +1,53 @@
-{ python3Packages, lib }:
+{ python3Packages, lib, nrfutil, libnitrokey }:
 
 with python3Packages;
 
 buildPythonApplication rec {
   pname = "pynitrokey";
-  version = "0.4.9";
+  version = "0.4.34";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mhH6mVgLRX87PSGTFkj1TE75jU1lwcaRZWbC67T+vWo=";
+    hash = "sha256-lMXoDkNiAmGb6e4u/vZMcmXUclwW402YUGihLjWIr+U=";
   };
 
   propagatedBuildInputs = [
+    certifi
+    cffi
     click
     cryptography
     ecdsa
+    frozendict
     fido2
     intelhex
-    pyserial
+    nkdfu
+    nrfutil
+    python-dateutil
     pyusb
     requests
-    pygments
-    python-dateutil
+    spsdk
+    tqdm
     urllib3
-    cffi
-    cbor
-    nkdfu
+    tlv8
+    typing-extensions
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "cryptography"
+    "python-dateutil"
+    "spsdk"
+    "typing_extensions"
+  ];
+
+  # libnitrokey is not propagated to users of pynitrokey
+  # It is only usable from the wrapped bin/nitropy
+  makeWrapperArgs = [
+    "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}"
   ];
 
   # no tests

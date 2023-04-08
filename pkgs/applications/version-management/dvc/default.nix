@@ -17,13 +17,14 @@ python3.pkgs.buildPythonApplication rec {
     owner = "iterative";
     repo = pname;
     rev = version;
-    hash = "sha256-2h+fy4KMxFrVtKJBtA1RmJDZv0OVm1BxO1akZzAw95Y=";
+    hash = "sha256-P0J+3TNHGqMw3krfs1uLnf8nEiIBK6UrrB37mY+fBA0=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "grandalf==0.6" "grandalf" \
-      --replace "scmrepo==0.0.25" "scmrepo"
+      --replace "scmrepo==0.0.25" "scmrepo" \
+      --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
@@ -71,17 +72,17 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
     voluptuous
     zc_lockfile
-  ] ++ lib.optional enableGoogle [
+  ] ++ lib.optionals enableGoogle [
     gcsfs
     google-cloud-storage
-  ] ++ lib.optional enableAWS [
+  ] ++ lib.optionals enableAWS [
     aiobotocore
     boto3
     s3fs
-  ] ++ lib.optional enableAzure [
+  ] ++ lib.optionals enableAzure [
     azure-identity
     knack
-  ] ++ lib.optional enableSSH [
+  ] ++ lib.optionals enableSSH [
     bcrypt
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
@@ -96,6 +97,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai fab anthonyroussel ];
+    maintainers = with maintainers; [ cmcdragonkai fab ];
+    broken = true; # requires new python package: dvc-studio-client
   };
 }

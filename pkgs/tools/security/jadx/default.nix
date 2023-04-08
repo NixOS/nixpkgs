@@ -2,13 +2,13 @@
 
 let
   pname = "jadx";
-  version = "1.4.3";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5Cx5rwXUNnVSbLjkpB6qeudRHI4RVzl6T4zo7Dg9geo=";
+    hash = "sha256-nxEK2K6id1Rnqo85ls6YEHXrhc9ykJU17+olGqg+aGA=";
   };
 
   deps = stdenv.mkDerivation {
@@ -37,15 +37,22 @@ let
       find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
+
+      # Work around okio-2.10.0 bug, fixed in 3.0. Remove "-jvm" from filename.
+      # https://github.com/square/okio/issues/954
+      mv $out/com/squareup/okio/okio/2.10.0/okio{-jvm,}-2.10.0.jar
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-Q7eGZQJZObLyZlp8JyodA3gEAgfh7ub+BNQh/LEm2Nk=";
+    outputHash = "sha256-QebPRmfLtXy4ZlyKeGC5XNzhMTsYI0X36My+nTFvQpM=";
   };
 in stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [ gradle jdk makeWrapper ];
+
+  # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
+  __darwinAllowLocalNetworking = true;
 
   buildPhase = ''
     # The installDist Gradle build phase tries to copy some dependency .jar

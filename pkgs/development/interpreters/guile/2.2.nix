@@ -38,7 +38,7 @@ builder rec {
     buildPackages.stdenv.cc
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    pkgsBuildBuild.guile;
+    pkgsBuildBuild.guile_2_2;
   nativeBuildInputs = [
     makeWrapper
     pkg-config
@@ -111,7 +111,7 @@ builder rec {
   + ''
     sed -i "$out/lib/pkgconfig/guile"-*.pc    \
         -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
-            s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
+            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
             s|includedir=$out|includedir=$dev|g
             "

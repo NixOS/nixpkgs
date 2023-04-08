@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , nose
 , numpy
 , pythonOlder
@@ -18,16 +19,25 @@ buildPythonPackage rec {
     owner = "embotech";
     repo = "ecos-python";
     rev = "v${version}";
-    sha256 = "sha256-TPxrTyVZ1KXgPoDbZZqXT5+NEIEndg9qepujqFQwK+Q=";
+    hash = "sha256-TPxrTyVZ1KXgPoDbZZqXT5+NEIEndg9qepujqFQwK+Q=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix for test_interface_bb.py tests
+    (fetchpatch {
+      name = "test_interface_bb_use_nparray.patch";
+      url = "https://github.com/embotech/ecos-python/commit/4440dcb7ddbd92217bc83d8916b72b61537dffbf.patch";
+      hash = "sha256-pcTPviK916jzCLllRhopbC9wDHv+aS6GmV/92sUwzHc=";
+    })
+  ];
 
   propagatedBuildInputs = [
     numpy
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 

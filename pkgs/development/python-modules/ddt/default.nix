@@ -9,18 +9,18 @@
 
 buildPythonPackage rec {
   pname = "ddt";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2q1rxfx2GeWqfu1sOU4Fv4KUYWChPl3y4m3hdsuvNH4=";
+    hash = "sha256-9xs0hzG4x4wxAL/72VGnafvUOQiNH9uzhB7uAZr4Cs0=";
   };
 
   propagatedBuildInputs = lib.optionals (!isPy3k) [
     enum34
   ];
 
-  checkInputs = [ six pyyaml mock pytestCheckHook ];
+  nativeCheckInputs = [ six pyyaml mock pytestCheckHook ];
 
   preCheck = ''
     # pytest can't import one file even with PYTHONPATH set

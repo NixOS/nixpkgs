@@ -1,0 +1,25 @@
+diff --git a/src/src/mainwindow.cpp b/src/src/mainwindow.cpp
+index d3c6f5c..4817446 100644
+--- a/src/src/mainwindow.cpp
++++ b/src/src/mainwindow.cpp
+@@ -781,19 +781,7 @@ void CMainWindow::slotPopupSettingsDialog()
+ 
+ QString CMainWindow::libPath(const QString &strlib)
+ {
+-    QDir  dir;
+-    QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+-    dir.setPath(path);
+-    QStringList list = dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files); //filter name with strlib
+-
+-    if (list.contains(strlib))
+-        return strlib;
+-
+-    list.sort();
+-    if (list.size() > 0)
+-        return list.last();
+-
+-    return "";
++    return strlib;
+ }
+ 
+ void CMainWindow::reflushSnapshotLabel()

@@ -10,21 +10,26 @@
 , libzip
 , libpng
 , libcotp
+, protobuf
+, protobufc
+, qrencode
+, libsecret
+, libuuid
 , zbar
 }:
 
 stdenv.mkDerivation rec {
   pname = "otpclient";
-  version = "2.5.1";
+  version = "3.1.6";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VUrLbGaDfPE+Ak20ZCJDmO/sgBzdf4S+SqvyQ7F6SQU=";
+    sha256 = "sha256-v7TvdS0IlfB4oKdaEh7Z3AFJDV1bOMiX5vVD7VhIMCE=";
   };
 
-  buildInputs = [ gtk3 jansson libgcrypt libzip libpng libcotp zbar ];
+  buildInputs = [ gtk3 jansson libgcrypt libzip libpng libcotp zbar protobuf protobufc libsecret qrencode libuuid ];
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
 
   meta = with lib; {
@@ -32,5 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/paolostivanin/OTPClient";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ alexbakker ];
+    platforms = platforms.linux;
   };
 }

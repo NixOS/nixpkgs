@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "pugixml";
-  version = "1.12.1";
+  version = "1.13";
 
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "pugixml";
     rev = "v${version}";
-    sha256 = "sha256-Udjx84mhLPJ1bU5WYDo73PAeeufS+vBLXZP0YbBvqLE=";
+    sha256 = "sha256-MAXm/9ANj6TjO1Skpg20RYt88bf6w1uPwRwOHXiXsWw=";
   };
 
-  outputs = if shared then [ "out" "dev" ] else [ "out" ];
+  outputs = [ "out" ] ++ lib.optionals shared [ "dev" ];
 
   nativeBuildInputs = [ cmake validatePkgConfig ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"}"
   ];
 
-  checkInputs = [ check ];
+  nativeCheckInputs = [ check ];
 
   preConfigure = ''
     # Enable long long support (required for filezilla)

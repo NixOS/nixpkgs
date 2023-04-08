@@ -16,7 +16,6 @@
 , requests
 , setuptools
 , six
-, typing
 , watchdog
 , websocket-client
 , wheel
@@ -24,14 +23,22 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.26.6";
+  version = "1.27.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-6Y5pJg6N/F97zvkyo4r6MoThi79kI53AvlHNOmOCpFA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-izzoYxzkaQqcEM5e8BhZeZIxtAGRDNH/qvqwvrx250s=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "attrs>=19.3.0,<21.5.0" "attrs" \
+      --replace "inquirer>=2.7.0,<3.0.0" "inquirer" \
+      --replace "pip>=9,<22.3" "pip" \
+  '';
 
   propagatedBuildInputs = [
     attrs
@@ -46,24 +53,15 @@ buildPythonPackage rec {
     six
     wheel
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mock
     pytestCheckHook
     requests
     websocket-client
   ];
-
-  postPatch = ''
-    sed -i setup.py -e "/pip>=/c\'pip',"
-    substituteInPlace setup.py \
-      --replace "typing==3.6.4" "typing" \
-      --replace "jmespath>=0.9.3,<1.0.0" "jmespath>=0.9.3,<2.0.0"
-  '';
 
   disabledTestPaths = [
     # Don't check the templates and the sample app

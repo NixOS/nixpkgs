@@ -20,12 +20,15 @@ in
   ###### interface
 
   options = {
+    boot.kernel.enable = mkEnableOption (lib.mdDoc "the Linux kernel. This is useful for systemd-like containers which do not require a kernel") // {
+      default = true;
+    };
 
     boot.kernel.features = mkOption {
       default = {};
       example = literalExpression "{ debug = true; }";
       internal = true;
-      description = ''
+      description = lib.mdDoc ''
         This option allows to enable or disable certain kernel features.
         It's not API, because it's about kernel feature sets, that
         make sense for specific use cases. Mostly along with programs,
@@ -48,34 +51,77 @@ in
       # - some of it might not even evaluate correctly.
       defaultText = literalExpression "pkgs.linuxPackages";
       example = literalExpression "pkgs.linuxKernel.packages.linux_5_10";
-      description = ''
+      description = lib.mdDoc ''
         This option allows you to override the Linux kernel used by
         NixOS.  Since things like external kernel module packages are
         tied to the kernel you're using, it also overrides those.
         This option is a function that takes Nixpkgs as an argument
         (as a convenience), and returns an attribute set containing at
-        the very least an attribute <varname>kernel</varname>.
+        the very least an attribute {var}`kernel`.
         Additional attributes may be needed depending on your
         configuration.  For instance, if you use the NVIDIA X driver,
         then it also needs to contain an attribute
-        <varname>nvidia_x11</varname>.
+        {var}`nvidia_x11`.
+
+        Please note that we strictly support kernel versions that are
+        maintained by the Linux developers only. More information on the
+        availability of kernel versions is documented
+        [in the Linux section of the manual](https://nixos.org/manual/nixos/unstable/index.html#sec-kernel-config).
       '';
     };
 
     boot.kernelPatches = mkOption {
       type = types.listOf types.attrs;
       default = [];
-      example = literalExpression "[ pkgs.kernelPatches.ubuntu_fan_4_4 ]";
-      description = lib.mdDoc "A list of additional patches to apply to the kernel.";
+      example = literalExpression ''
+        [
+          {
+            name = "foo";
+            patch = ./foo.patch;
+            extraStructuredConfig.FOO = lib.kernel.yes;
+            features.foo = true;
+          }
+        ]
+      '';
+      description = lib.mdDoc ''
+        A list of additional patches to apply to the kernel.
+
+        Every item should be an attribute set with the following attributes:
+
+        ```nix
+        {
+          name = "foo";                 # descriptive name, required
+
+          patch = ./foo.patch;          # path or derivation that contains the patch source
+                                        # (required, but can be null if only config changes
+                                        # are needed)
+
+          extraStructuredConfig = {     # attrset of extra configuration parameters
+            FOO = lib.kernel.yes;       # (without the CONFIG_ prefix, optional)
+          };                            # values should generally be lib.kernel.yes,
+                                        # lib.kernel.no or lib.kernel.module
+
+          features = {                  # attrset of extra "features" the kernel is considered to have
+            foo = true;                 # (may be checked by other NixOS modules, optional)
+          };
+
+          extraConfig = "CONFIG_FOO y"; # extra configuration options in string form
+                                        # (deprecated, use extraStructuredConfig instead, optional)
+        }
+        ```
+
+        There's a small set of existing kernel patches in Nixpkgs, available as `pkgs.kernelPatches`,
+        that follow this format and can be used directly.
+      '';
     };
 
     boot.kernel.randstructSeed = mkOption {
       type = types.str;
       default = "";
       example = "my secret seed";
-      description = ''
-        Provides a custom seed for the <varname>RANDSTRUCT</varname> security
-        option of the Linux kernel. Note that <varname>RANDSTRUCT</varname> is
+      description = lib.mdDoc ''
+        Provides a custom seed for the {var}`RANDSTRUCT` security
+        option of the Linux kernel. Note that {var}`RANDSTRUCT` is
         only enabled in NixOS hardened kernels. Using a custom seed requires
         building the kernel and dependent packages locally, since this
         customization happens at build time.
@@ -173,7 +219,7 @@ in
       type = types.listOf types.path;
       internal = true;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Tree of kernel modules.  This includes the kernel, plus modules
         built outside of the kernel.  Combine these into a single tree of
         symlinks because modprobe only supports one directory.
@@ -193,7 +239,7 @@ in
       '';
       internal = true;
       type = types.listOf types.attrs;
-      description = ''
+      description = lib.mdDoc ''
         This option allows modules to specify the kernel config options that
         must be set (or unset) for the module to work. Please use the
         lib.kernelConfig functions to build list elements.
@@ -258,7 +304,7 @@ in
           ];
       })
 
-      (mkIf (!config.boot.isContainer) {
+      (mkIf config.boot.kernel.enable {
         system.build = { inherit kernel; };
 
         system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;

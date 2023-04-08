@@ -40,10 +40,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "werror=true" "werror=false"
+  '';
+
   meta = with lib; {
     description = "Mirrors an output of a wlroots compositor to a window";
+    homepage = "https://github.com/progandy/wdomirror";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ jpas ];
   };
 }

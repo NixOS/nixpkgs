@@ -18,7 +18,7 @@ let
     sed -i $out/bin/apachectl -e 's|$HTTPD -t|$HTTPD -t -f /etc/httpd/httpd.conf|'
   '';
 
-  php = cfg.phpPackage.override { apacheHttpd = pkg; };
+  php = cfg.phpPackage.override { apxs2Support = true; apacheHttpd = pkg; };
 
   phpModuleName = let
     majorVersion = lib.versions.major (lib.getVersion php);
@@ -168,7 +168,7 @@ let
         <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listen}>
             ServerName ${hostOpts.hostName}
             ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
-            ServerAdmin ${adminAddr}
+            ${optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
             <IfModule mod_ssl.c>
                 SSLEngine off
             </IfModule>
@@ -187,7 +187,7 @@ let
         <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listenSSL}>
             ServerName ${hostOpts.hostName}
             ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
-            ServerAdmin ${adminAddr}
+            ${optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
             SSLEngine on
             SSLCertificateFile ${sslServerCert}
             SSLCertificateKeyFile ${sslServerKey}
@@ -404,7 +404,7 @@ in
 
     services.httpd = {
 
-      enable = mkEnableOption "the Apache HTTP Server";
+      enable = mkEnableOption (lib.mdDoc "the Apache HTTP Server");
 
       package = mkOption {
         type = types.package;
@@ -445,18 +445,19 @@ in
             { name = "jk"; path = "''${pkgs.tomcat_connectors}/modules/mod_jk.so"; }
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Additional Apache modules to be used. These can be
           specified as a string in the case of modules distributed
           with Apache, or as an attribute set specifying the
-          <varname>name</varname> and <varname>path</varname> of the
+          {var}`name` and {var}`path` of the
           module.
         '';
       };
 
       adminAddr = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         example = "admin@example.org";
+        default = null;
         description = lib.mdDoc "E-mail address of the server administrator.";
       };
 
@@ -484,14 +485,14 @@ in
       user = mkOption {
         type = types.str;
         default = "wwwrun";
-        description = ''
+        description = lib.mdDoc ''
           User account under which httpd children processes run.
 
           If you require the main httpd process to run as
-          <literal>root</literal> add the following configuration:
-          <programlisting>
+          `root` add the following configuration:
+          ```
           systemd.services.httpd.serviceConfig.User = lib.mkForce "root";
-          </programlisting>
+          ```
         '';
       };
 
@@ -657,6 +658,13 @@ in
         message = ''
           Options `services.httpd.virtualHosts.<name>.enableACME` and
           `services.httpd.virtualHosts.<name>.useACMEHost` are mutually exclusive.
+        '';
+      }
+      {
+        assertion = cfg.enablePHP -> php.ztsSupport;
+        message = ''
+          The php package provided by `services.httpd.phpPackage` is not built with zts support. Please
+          ensure the php has zts support by settings `services.httpd.phpPackage = php.override { ztsSupport = true; }`
         '';
       }
     ] ++ map (name: mkCertOwnershipAssertion {

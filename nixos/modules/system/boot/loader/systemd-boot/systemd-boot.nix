@@ -7,12 +7,14 @@ let
 
   efi = config.boot.loader.efi;
 
+  python3 = pkgs.python3.withPackages (ps: [ ps.packaging ]);
+
   systemdBootBuilder = pkgs.substituteAll {
     src = ./systemd-boot-builder.py;
 
     isExecutable = true;
 
-    inherit (pkgs) python3;
+    inherit python3;
 
     systemd = config.systemd.package;
 
@@ -27,6 +29,8 @@ let
     inherit (cfg) consoleMode graceful;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
+
+    inherit (config.system.nixos) distroName;
 
     memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
 
@@ -48,7 +52,7 @@ let
   };
 
   checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
-    nativeBuildInputs = [ pkgs.mypy ];
+    nativeBuildInputs = [ pkgs.mypy python3 ];
   } ''
     install -m755 ${systemdBootBuilder} $out
     mypy \
@@ -56,6 +60,12 @@ let
       --disallow-untyped-calls \
       --disallow-untyped-defs \
       $out
+  '';
+
+  finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
+    #!${pkgs.runtimeShell}
+    ${checkedSystemdBootBuilder} "$@"
+    ${cfg.extraInstallCommands}
   '';
 in {
 
@@ -99,34 +109,36 @@ in {
       '';
     };
 
+    extraInstallCommands = mkOption {
+      default = "";
+      example = ''
+        default_cfg=$(cat /boot/loader/loader.conf | grep default | awk '{print $2}')
+        init_value=$(cat /boot/loader/entries/$default_cfg | grep init= | awk '{print $2}')
+        sed -i "s|@INIT@|$init_value|g" /boot/custom/config_with_placeholder.conf
+      '';
+      type = types.lines;
+      description = lib.mdDoc ''
+        Additional shell commands inserted in the bootloader installer
+        script after generating menu entries. It can be used to expand
+        on extra boot entries that cannot incorporate certain pieces of
+        information (such as the resulting `init=` kernel parameter).
+      '';
+    };
+
     consoleMode = mkOption {
       default = "keep";
 
       type = types.enum [ "0" "1" "2" "auto" "max" "keep" ];
 
-      description = ''
+      description = lib.mdDoc ''
         The resolution of the console. The following values are valid:
 
-        <itemizedlist>
-          <listitem><para>
-            <literal>"0"</literal>: Standard UEFI 80x25 mode
-          </para></listitem>
-          <listitem><para>
-            <literal>"1"</literal>: 80x50 mode, not supported by all devices
-          </para></listitem>
-          <listitem><para>
-            <literal>"2"</literal>: The first non-standard mode provided by the device firmware, if any
-          </para></listitem>
-          <listitem><para>
-            <literal>"auto"</literal>: Pick a suitable mode automatically using heuristics
-          </para></listitem>
-          <listitem><para>
-            <literal>"max"</literal>: Pick the highest-numbered available mode
-          </para></listitem>
-          <listitem><para>
-            <literal>"keep"</literal>: Keep the mode selected by firmware (the default)
-          </para></listitem>
-        </itemizedlist>
+        - `"0"`: Standard UEFI 80x25 mode
+        - `"1"`: 80x50 mode, not supported by all devices
+        - `"2"`: The first non-standard mode provided by the device firmware, if any
+        - `"auto"`: Pick a suitable mode automatically using heuristics
+        - `"max"`: Pick the highest-numbered available mode
+        - `"keep"`: Keep the mode selected by firmware (the default)
       '';
     };
 
@@ -291,7 +303,7 @@ in {
     ];
 
     system = {
-      build.installBootLoader = checkedSystemdBootBuilder;
+      build.installBootLoader = finalSystemdBootBuilder;
 
       boot.loader.id = "systemd-boot";
 

@@ -1,20 +1,20 @@
-{ stdenv
-, fetchFromGitHub
+{ stdenvNoCC
 , lib
+, fetchFromGitHub
 , gnome-themes-extra
 , gtk-engine-murrine
 , gtk_engines
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "rose-pine-gtk-theme";
-  version = "unstable-2021-02-22";
+  version = "unstable-2022-09-01";
 
   src = fetchFromGitHub {
     owner = "rose-pine";
     repo = "gtk";
-    rev = "9cd2dd449f911973ec549231a57a070d256da9fd";
-    sha256 = "0lqx8dmv754ix3xbg7h440x964n0bg4lb06vbzvsydnbx79h7lvy";
+    rev = "7a4c40989fd42fd8d4a797f460c79fc4a085c304";
+    sha256 = "0q74wjyrsjyym770i3sqs071bvanwmm727xzv50wk6kzvpyqgi67";
   };
 
   buildInputs = [
@@ -26,11 +26,18 @@ stdenv.mkDerivation rec {
     gtk-engine-murrine # murrine engine for Gtk2
   ];
 
+  # avoid the makefile which is only for theme maintainers
+  dontBuild = true;
+
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/share/themes
-    cp -a Rose-Pine $out/share/themes
-    rm $out/share/themes/*/LICENSE
+    mv gtk3/rose-pine-gtk $out/share/themes/rose-pine
+    mv gtk3/rose-pine-moon-gtk $out/share/themes/rose-pine-moon
+    mv gtk3/rose-pine-dawn-gtk $out/share/themes/rose-pine-dawn
+    mv gnome_shell/moon/gnome-shell $out/share/themes/rose-pine-moon
+
     runHook postInstall
   '';
 
@@ -39,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rose-pine/gtk";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [romildo the-argus];
   };
 }

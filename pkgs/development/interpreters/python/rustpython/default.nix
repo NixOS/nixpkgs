@@ -4,41 +4,46 @@
 , fetchFromGitHub
 , SystemConfiguration
 , python3
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustpython";
-  version = "unstable-2021-12-09";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "RustPython";
     repo = "RustPython";
-    rev = "db3b3127df34ff5dd569301aa36ed71ae5624e4e";
-    sha256 = "sha256-YwGfXs3A5L/18mHnnWubPU3Y8EI9uU3keJ2HJnnTwv0=";
+    rev = "v${version}";
+    hash = "sha256-RNUOBBbq4ca9yEKNj5TZTOQW0hruWOIm/G+YCHoJ19U=";
   };
 
-  cargoHash = "sha256-T85kiPG80oZ4mwpb8Ag40wDHKx2Aens+gM7NGXan5lM=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rustpython-doc-0.1.0" = "sha256-4xBiV1FcYA05cWs9fQV+OklZEU1VZunhCo9deOSWPe8=";
+    };
+  };
+
+  patches = [
+    # Fix aarch64 compatibility for sqlite. Remove with the next release. https://github.com/RustPython/RustPython/pull/4499
+    (fetchpatch {
+      url = "https://github.com/RustPython/RustPython/commit/9cac89347e2276fcb309f108561e99f4be5baff2.patch";
+      hash = "sha256-vUPQI/5ec6/36Vdtt7/B2unPDsVrGh5iEiSMBRatxWU=";
+    })
+  ];
 
   # freeze the stdlib into the rustpython binary
-  cargoBuildFlags = "--features=freeze-stdlib";
+  cargoBuildFlags = [ "--features=freeze-stdlib" ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   meta = with lib; {
     description = "Python 3 interpreter in written Rust";
     homepage = "https://rustpython.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
-
-    # TODO: Remove once nixpkgs uses newer SDKs that supports '*at' functions.
-    # Probably macOS SDK 10.13 or later. Check the current version in
-    # .../os-specific/darwin/apple-sdk/default.nix
-    #
-    # From the build logs:
-    #
-    # > Undefined symbols for architecture x86_64: "_utimensat"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

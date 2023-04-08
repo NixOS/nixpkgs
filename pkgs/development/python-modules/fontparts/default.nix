@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "fontParts";
-  version = "0.10.7";
+  version = "0.11.0";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-u0hKI2LLWAUGIVRECk6b5y7UKgJHUx2I8R5Q+qkKxcg=";
+    hash = "sha256-He3BAIWxwDIM80ixmYjyAHlwDK9bBe/qS8P4+TVEkEg=";
     extension = "zip";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     ${python.interpreter} Lib/fontParts/fontshell/test.py
     runHook postCheck
   '';
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "An API for interacting with the parts of fonts during the font development process.";

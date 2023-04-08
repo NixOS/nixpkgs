@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, perl, makeWrapper
-, makeDesktopItem, which, perlPackages, boost
+, makeDesktopItem, which, perlPackages, boost, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cf0QTOzhLyTcbJryCQoTVzU8kfrPV6SLpqi4s36X5N0=";
   };
 
+  nativeBuildInputs = [ makeWrapper which wrapGAppsHook ];
   buildInputs =
   [boost] ++
-  (with perlPackages; [ perl makeWrapper which
+  (with perlPackages; [ perl
     EncodeLocale MathClipper ExtUtilsXSpp
     MathConvexHullMonotoneChain MathGeometryVoronoi MathPlanePath Moo
     IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus ImportInto XMLSAX

@@ -7,41 +7,56 @@
 , freezegun
 , humanize
 , lark
+, lxml
 , parse-type
 , pysingleton
+, pytest-mock
 , pytestCheckHook
+, pythonOlder
 , pyyaml
 , tag-expressions
-, lxml
-, pytest-mock
 }:
 
 buildPythonPackage rec {
   pname = "radish-bdd";
-  version = "0.13.4";
+  version = "0.15.0";
+  format = "setuptools";
 
-  # Pypi package does not have necessary test fixtures.
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = pname;
     repo = "radish";
-    rev = "v${version}";
-    sha256 = "1slfgh61648i009qj8156qipy21a6zm8qzjk00kbm5kk5z9jfryi";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SEW10ka0aQAXtW2UNCVJHMVhhZ9JTTj4IbskL87/Dn4=";
   };
 
   propagatedBuildInputs = [
-    lark
     click
     colorful
-    tag-expressions
-    parse-type
-    humanize
-    pyyaml
     docopt
+    humanize
+    lark
+    lxml
+    parse-type
     pysingleton
+    tag-expressions
   ];
 
-  checkInputs = [ freezegun lxml pytestCheckHook pytest-mock ];
-  disabledTests = [ "test_main_cli_calls" ];
+  nativeCheckInputs = [
+    freezegun
+    pytest-mock
+    pytestCheckHook
+    pyyaml
+  ];
+
+  pythonImportsCheck = [
+    "radish"
+  ];
+
+  disabledTests = [
+    "test_main_cli_calls"
+  ];
 
   meta = with lib; {
     description = "Behaviour-Driven-Development tool for python";

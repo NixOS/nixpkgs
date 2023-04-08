@@ -21,7 +21,11 @@ with python3.pkgs; buildPythonApplication rec {
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
 
     substituteInPlace setup.py \
-      --replace 'uvicorn==%s" % ("0.17.*"' 'uvicorn==%s" % ("0.18.*"'
+      --replace 'aiofiles==%s" % ("0.8.0" if PY36 else "22.1.*")' 'aiofiles"' \
+      --replace 'starlette==%s" % ("0.19.1" if PY36 else "0.23.*")' 'starlette"' \
+      --replace 'uvicorn==%s" % ("0.16.0" if PY36 else "0.20.*")' 'uvicorn"' \
+      --replace 'tabulate==%s" % ("0.8.10" if PY36 else "0.9.*")' 'tabulate>=0.8.10,<=0.9"' \
+      --replace 'wsproto==%s" % ("1.0.0" if PY36 else "1.2.*")' 'wsproto"'
   '';
 
   propagatedBuildInputs = [
@@ -51,7 +55,7 @@ with python3.pkgs; buildPythonApplication rec {
     export PATH=$PATH:$out/bin
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsondiff
     pytestCheckHook
   ];
@@ -146,6 +150,5 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = "https://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
-    broken = stdenv.isAarch64;
   };
 }

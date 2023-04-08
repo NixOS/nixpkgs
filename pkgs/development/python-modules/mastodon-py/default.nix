@@ -18,13 +18,15 @@
 
 buildPythonPackage rec {
   pname = "mastodon-py";
-  version = "1.5.1";
+  version = "1.8.0";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "Mastodon.py";
-    rev = version;
-    sha256 = "044iqydw69a6xpz2hdjv1fc6a9b7bqdpnh3b33xqbks9d2415ddm";
+    rev = "refs/tags/${version}";
+    hash = "sha256-T/yG9LLdttBQ+9vCSit+pyQX/BPqqDXbrTcPfTAUu1U=";
   };
 
   postPatch = ''
@@ -43,7 +45,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     pytest-vcr
@@ -53,6 +55,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mastodon" ];
 
   meta = with lib; {
+    changelog = "https://github.com/halcy/Mastodon.py/blob/${src.rev}/CHANGELOG.rst";
     description = "Python wrapper for the Mastodon API";
     homepage = "https://github.com/halcy/Mastodon.py";
     license = licenses.mit;

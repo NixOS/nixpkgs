@@ -121,7 +121,7 @@ let
 
     services.tt-rss = {
 
-      enable = mkEnableOption "tt-rss";
+      enable = mkEnableOption (lib.mdDoc "tt-rss");
 
       root = mkOption {
         type = types.path;
@@ -208,7 +208,7 @@ let
         };
 
         port = mkOption {
-          type = types.nullOr types.int;
+          type = types.nullOr types.port;
           default = null;
           description = lib.mdDoc ''
             The database's port. If not set, the default ports will be provided (5432

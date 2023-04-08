@@ -13,22 +13,23 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.23.1";
+  version = "4.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sXEWg6zrwMs8pCSloJtLL3o7ZAXTTiMXEgI7sDaogr4=";
+    hash = "sha256-gza5HYtxgmTfC+u+WlBiuOinBNXYIfVBa5IX8lr0Hj8=";
   };
 
   propagatedBuildInputs = [
     requests
     pyjwt
-  ];
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     aioresponses
     callee

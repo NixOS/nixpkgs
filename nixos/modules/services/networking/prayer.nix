@@ -41,7 +41,7 @@ in
 
     services.prayer = {
 
-      enable = mkEnableOption "the prayer webmail http server";
+      enable = mkEnableOption (lib.mdDoc "the prayer webmail http server");
 
       port = mkOption {
         default = 2080;

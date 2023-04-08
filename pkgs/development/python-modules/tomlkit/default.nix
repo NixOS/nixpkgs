@@ -10,18 +10,18 @@
 
 buildPythonPackage rec {
   pname = "tomlkit";
-  version = "0.11.1";
+  version = "0.11.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YZAfgf9AF5URGc0NHtm3rzHIIdaEXIxHdYe73NXlhU4=";
+    hash = "sha256-cblS5XIWiJN/sCz501TbzweFBmFJ0oVeRFMevdK2XXM=";
   };
 
   propagatedBuildInputs =
     lib.optionals isPy27 [ enum34 functools32 ]
     ++ lib.optional isPy27 typing;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyaml
     pytestCheckHook
   ];
@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/sdispater/tomlkit";
+    changelog = "https://github.com/sdispater/tomlkit/blob/${version}/CHANGELOG.md";
     description = "Style-preserving TOML library for Python";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

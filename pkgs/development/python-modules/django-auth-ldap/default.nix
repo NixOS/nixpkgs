@@ -7,8 +7,8 @@
 , setuptools-scm
 
 # runtime
-, ldap
 , django
+, python-ldap
 
 # tests
 , python
@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
-  version = "4.1.0";
+  version = "4.2.0";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d/dJ07F4B86OtWqcnI5XRv8xZWf4HVumE0ldnHSVqUk=";
+    hash = "sha256-qsceZbCovc/FzQi3CZfuPNw3eG/9XZdbfiz6R1ldQn8=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     django
-    ldap
+    python-ldap
   ];
 
   # ValueError: SCHEMADIR is None, ldap schemas are missing.

@@ -49,13 +49,13 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.20.1";
+  version = "1.20.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1al4f35mx41cy2h6agvmsqkjfchsyfs0iyxzpv6pnl0xh9pqfriw";
+    sha256 = "sha256-+PPCBr9c2rwAlTkgtHs1da8O8V6fhxwLaWb20KpYaLc=";
   };
 
   strictDeps = true;
@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
   doCheck = false;
 
-  # must be explicitely set since 5590e365
+  # must be explicitly set since 5590e365
   dontWrapQtApps = true;
 
   meta = with lib; {

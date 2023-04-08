@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://angband.github.io/angband";
     description = "A single-player roguelike dungeon exploration game";
-    maintainers = [ ];
+    maintainers = [ maintainers.kenran ];
     license = licenses.gpl2;
   };
 }

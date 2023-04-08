@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl
 , buildPackages, pkgsHostHost
 , pkg-config, which, makeWrapper
-, zlib, bzip2, libpng, gnumake, glib
+, zlib, bzip2, brotli, libpng, gnumake, glib
 
 , # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
   # LCD filtering is also known as ClearType and covered by several Microsoft patents.
@@ -22,19 +22,20 @@
 , qt5
 , texmacs
 , ttfautohint
+, testers
 }:
 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freetype";
-  version = "2.12.1";
+  version = "2.13.0";
 
-  src = fetchurl {
+  src = let inherit (finalAttrs) pname version; in fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-R2byAVfMTPDNKS+Av5F/ktHEObJDrDAY3r9rkUDEGn8=";
+    sha256 = "sha256-XuI6vQR2NsJLLUPGYl3K/GZmHRrKZN7J4NBd8pWSYkw=";
   };
 
-  propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
+  propagatedBuildInputs = [ zlib bzip2 brotli libpng ]; # needed when linking against freetype
 
   # dependence on harfbuzz is looser than the reverse dependence
   nativeBuildInputs = [ pkg-config which makeWrapper ]
@@ -82,6 +83,7 @@ stdenv.mkDerivation rec {
       ttfautohint;
     inherit (python3.pkgs) freetype-py;
     inherit (qt5) qtbase;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
@@ -96,6 +98,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freetype.org/";
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     platforms = platforms.all;
+    pkgConfigModules = [ "freetype2" ];
     maintainers = with maintainers; [ ttuegel ];
   };
-}
+})

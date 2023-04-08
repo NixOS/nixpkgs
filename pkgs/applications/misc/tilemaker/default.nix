@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, buildPackages, cmake, installShellFiles
-, boost, lua, protobuf, rapidjson, shapelib, sqlite, zlib }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, buildPackages, cmake, installShellFiles
+, boost, lua, protobuf, rapidjson, shapelib, sqlite, zlib, testers }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tilemaker";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "systemed";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-st6WDCk1RZ2lbfrudtcD+zenntyTMRHrIXw3nX5FHOU=";
+    repo = "tilemaker";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xpOF/0qFuvTUWQ1I8x/gy5qSLKzSgcQahS47PG+bTRA=";
   };
 
   postPatch = ''
@@ -25,16 +25,24 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     "-DPROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc";
 
+  env.NIX_CFLAGS_COMPILE = toString [ "-DTM_VERSION=${finalAttrs.version}" ];
+
   postInstall = ''
     installManPage ../docs/man/tilemaker.1
     install -Dm644 ../resources/* -t $out/share/tilemaker
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "tilemaker --help";
+  };
+
   meta = with lib; {
     description = "Make OpenStreetMap vector tiles without the stack";
     homepage = "https://tilemaker.org/";
+    changelog = "https://github.com/systemed/tilemaker/blob/v${version}/CHANGELOG.md";
     license = licenses.free; # FTWPL
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };
-}
+})

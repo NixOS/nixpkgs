@@ -7,7 +7,6 @@
 , libjpeg
 , libGL
 , libX11
-, libXxf86vm
 , withTouchSupport ? false
 , libXi
 , libXext
@@ -16,13 +15,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "irrlichtmt";
-  version = "1.9.0mt7";
+  version = "1.9.0mt8";
 
   src = fetchFromGitHub {
     owner = "minetest";
     repo = "irrlicht";
     rev = version;
-    sha256 = "sha256-Eu7zW3mXl7GPRmLnKjt/dPoZ64HPYulI7MO1dJfj+10=";
+    sha256 = "sha256-bwpALhBk16KugYqKuN57M3t5Ba7rdyrYWn/iBoi8hpg=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
     libjpeg
     libGL
     libX11
-    libXxf86vm
   ] ++ lib.optionals withTouchSupport [
     libXi
     libXext

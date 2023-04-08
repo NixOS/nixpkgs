@@ -21,7 +21,7 @@ in
 {
   options.services.youtrack = {
 
-    enable = mkEnableOption "YouTrack service";
+    enable = mkEnableOption (lib.mdDoc "YouTrack service");
 
     address = mkOption {
       description = lib.mdDoc ''
@@ -68,7 +68,7 @@ in
         The port youtrack will listen on.
       '';
       default = 8080;
-      type = types.int;
+      type = types.port;
     };
 
     statePath = mkOption {

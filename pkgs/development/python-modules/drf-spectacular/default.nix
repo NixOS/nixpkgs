@@ -28,13 +28,13 @@
 
 buildPythonPackage rec {
   pname = "drf-spectacular";
-  version = "0.22.1";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular";
     rev = version;
-    sha256 = "sha256-SgzyIzgFBXsNHfY2OfCq0LhJyi/ZCOSA8QveKNduIBc=";
+    hash = "sha256-yq+aTkoHI3zSsrYjokbn5UoPm/43LCnyTqdFtkrU92M=";
   };
 
   propagatedBuildInputs = [
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     uritemplate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dj-rest-auth
     django-allauth
     django-filter
@@ -66,11 +66,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # requires django with gdal
+    "test_rest_framework_gis"
+  ];
+
   pythonImportsCheck = [ "drf_spectacular" ];
 
   meta = with lib; {
     description = "Sane and flexible OpenAPI 3 schema generation for Django REST framework";
     homepage = "https://github.com/tfranzel/drf-spectacular";
+    changelog = "https://github.com/tfranzel/drf-spectacular/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "mbtileserver";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "consbio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aa0YsP+SYYDtaSstTfluEe0/+yDl82KHUSss8LZ2gOc=";
+    sha256 = "sha256-HGzgqUH9OxwjfYR9I9JzcP11+SB8A3hC/3Uk1dOCq+k=";
   };
 
-  vendorSha256 = "sha256-eVnL+28eOgbR0bjWv7XotcHDl5309EO0wV8AGMslvZw=";
+  vendorSha256 = "sha256-vuNOOPVGUkmKJ477N20DvhJTcMIW1lNmrgJLeMpNImM=";
 
   meta = with lib; {
     description = "A simple Go-based server for map tiles stored in mbtiles format";

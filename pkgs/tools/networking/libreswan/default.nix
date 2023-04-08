@@ -11,6 +11,7 @@
 , pam
 , libevent
 , libcap_ng
+, libxcrypt
 , curl
 , nspr
 , bash
@@ -30,6 +31,7 @@
 , docbook_xml_dtd_412
 , docbook_xsl
 , findXMLCatalogs
+, dns-root-data
 }:
 
 let
@@ -43,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "4.7";
+  version = "4.10";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    sha256 = "0i7wyfgkaq6kcfhh1yshb1v7q42n3zvdkhq10f3ks1h075xk7mnx";
+    sha256 = "sha256-WpQAwlqO26B0IEJvtV3Lqv2qNwLlsPLBkgWmxWckins=";
   };
 
   strictDeps = true;
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     systemd coreutils
     gnused gawk gmp unbound pam libevent
-    libcap_ng curl nspr nss ldns
+    libcap_ng libxcrypt curl nspr nss ldns
     # needed to patch shebangs
     python3 bash
   ] ++ lib.optional stdenv.isLinux libselinux;
@@ -77,9 +79,9 @@ stdenv.mkDerivation rec {
         -e 's|/bin/bash|${runtimeShell}|g' \
         -i initsystems/systemd/ipsec.service.in \
            programs/barf/barf.in \
-           programs/verify/verify.in
+           programs/verify.linux/verify.in
     sed -e 's|\([[:blank:]]\)\(ip6\?tables\(-save\)\? -\)|\1${iptables}/bin/\2|' \
-        -i programs/verify/verify.in
+        -i programs/verify.linux/verify.in
 
     # Prevent the makefile from trying to
     # reload the systemd daemon or create tmpfiles
@@ -87,12 +89,17 @@ stdenv.mkDerivation rec {
         -e 's|systemd-tmpfiles|true|g' \
         -i initsystems/systemd/Makefile
 
+    # Fix systemd detection on NixOS
+    sed -e 's|\(-a ! -x /bin/journalctl\)|\1 -a ! -x /run/current-system/sw/bin/journalctl|g' \
+        -e 's|\(-o ! -x /bin/journalctl\)|\1 -o ! -x /run/current-system/sw/bin/journalctl|g' \
+        -i programs/barf/barf.in
+
     # Fix the ipsec program from crushing the PATH
     sed -e 's|\(PATH=".*"\):.*$|\1:$PATH|' -i programs/ipsec/ipsec.in
 
     # Fix python script to use the correct python
     sed -e 's/^\(\W*\)installstartcheck()/\1sscmd = "ss"\n\0/' \
-        -i programs/verify/verify.in
+        -i programs/verify.linux/verify.in
 
     # Replace wget with curl to save a dependency
     curlArgs='-s --remote-name-all --output-dir'
@@ -113,6 +120,7 @@ stdenv.mkDerivation rec {
     "UNITDIR=$(out)/etc/systemd/system/"
     "TMPFILESDIR=$(out)/lib/tmpfiles.d/"
     "LINUX_VARIANT=nixos"
+    "DEFAULT_DNSSEC_ROOTKEY_FILE=${dns-root-data}/root.key"
   ];
 
   # Hack to make install work

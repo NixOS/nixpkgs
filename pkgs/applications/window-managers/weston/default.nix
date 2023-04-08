@@ -1,50 +1,45 @@
-{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, pkg-config, wayland-scanner, python3
-, wayland, libGL, mesa, libxkbcommon, cairo, libxcb
-, libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
-, colord, lcms2, pipewire ? null
-, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
-, libwebp ? null, xwayland ? null, wayland-protocols
+{ lib, stdenv, fetchurl
+, meson, ninja, pkg-config, python3, wayland-scanner
+, cairo, colord, dbus, lcms2, libGL, libXcursor, libdrm, libevdev, libinput
+, libjpeg, seatd, libxcb, libxkbcommon, mesa, mtdev, pam, udev, wayland
+, wayland-protocols
+, pipewire ? null, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null
+, libva ? null, libwebp ? null, xwayland ? null
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
+, buildDemo ? true
+, buildRemoting ? true, gst_all_1
 }:
 
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "10.0.1";
+  version = "11.0.1";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
-    sha256 = "05a10gfbadyxkwgsncc5vc343f493csgh10vk0878nl6d98557la";
+    url = "https://gitlab.freedesktop.org/wayland/weston/uploads/f5648c818fba5432edc3ea63c4db4813/weston-${version}.tar.xz";
+    sha256 = "sha256-pBP2jCUpV/wxkcNlCCPsNWrowSTMwMtEDaXNxOLLnlc=";
   };
 
-  patches = [
-    # Fix race condition in build system
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/wayland/weston/-/commit/0d3e438d080433ed5d203c876e7de6c7f8a14f98.patch";
-      sha256 = "sha256-d9NG1vUIuL4jpXqCo0myz/97JuFYesH+8kJnegQXeMU=";
-    })
-  ];
-
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner python3 ];
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
-    wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
-    mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
-    libwebp wayland-protocols
-    colord lcms2 pipewire
+    cairo colord dbus freerdp lcms2 libGL libXcursor libdrm libevdev libinput
+    libjpeg seatd libunwind libva libwebp libxcb libxkbcommon mesa mtdev pam
+    pango pipewire udev vaapi wayland wayland-protocols
+  ] ++ lib.optionals buildRemoting [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
   ];
 
   mesonFlags= [
     "-Dbackend-drm-screencast-vaapi=${lib.boolToString (vaapi != null)}"
     "-Dbackend-rdp=${lib.boolToString (freerdp != null)}"
     "-Dxwayland=${lib.boolToString (xwayland != null)}" # Default is true!
-    "-Dremoting=false" # TODO
+    (lib.mesonBool "remoting" buildRemoting)
     "-Dpipewire=${lib.boolToString (pipewire != null)}"
     "-Dimage-webp=${lib.boolToString (libwebp != null)}"
-    "-Ddemo-clients=false"
+    (lib.mesonBool "demo-clients" buildDemo)
     "-Dsimple-clients="
     "-Dtest-junit-xml=false"
-    # TODO:
-    #"--enable-clients"
-    #"--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
   ] ++ lib.optionals (xwayland != null) [
     "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
   ];

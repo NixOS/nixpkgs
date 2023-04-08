@@ -14,7 +14,7 @@ let
   };
 in {
   options.services.flannel = {
-    enable = mkEnableOption "flannel";
+    enable = mkEnableOption (lib.mdDoc "flannel");
 
     package = mkOption {
       description = lib.mdDoc "Package to use for flannel";
@@ -83,7 +83,7 @@ in {
     };
 
     network = mkOption {
-      description = " IPv4 network in CIDR format to use for the entire flannel network.";
+      description = lib.mdDoc " IPv4 network in CIDR format to use for the entire flannel network.";
       type = types.str;
     };
 
@@ -92,10 +92,8 @@ in {
         Needed when running with Kubernetes as backend as this cannot be auto-detected";
       '';
       type = types.nullOr types.str;
-      default = with config.networking; (hostName + optionalString (domain != null) ".${domain}");
-      defaultText = literalExpression ''
-        with config.networking; (hostName + optionalString (domain != null) ".''${domain}")
-      '';
+      default = config.networking.fqdnOrHostName;
+      defaultText = literalExpression "config.networking.fqdnOrHostName";
       example = "node1.example.com";
     };
 

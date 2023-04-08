@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "Strictly validating, near WYSIWYG, XML editor with DocBook support";
     homepage = "https://www.xmlmind.com/xmleditor/";
     license = licenses.unfree;
-    maintainers = [ maintainers.jtojnar ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

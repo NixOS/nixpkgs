@@ -6,18 +6,18 @@
 
 buildPythonPackage rec {
   pname = "pi1wire";
-  version = "0.2.0";
+  version = "0.3.0";
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ushiboy";
     repo = "pi1wire";
-    rev = "v${version}";
-    hash = "sha256-70w71heHWR5yArl+HuNAlzL2Yq/CL0iMNMiQw5qovls=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-l/5w71QsAW4BvILOaLdUVvQ8xxUm1ZTzUESRFzUgtic=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

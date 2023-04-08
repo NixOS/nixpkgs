@@ -5,7 +5,7 @@ with lib;
 {
   options = {
     services.pptpd = {
-      enable = mkEnableOption "pptpd, the Point-to-Point Tunneling Protocol daemon";
+      enable = mkEnableOption (lib.mdDoc "pptpd, the Point-to-Point Tunneling Protocol daemon");
 
       serverIp = mkOption {
         type        = types.str;
@@ -82,7 +82,7 @@ with lib;
       ppp-pptpd-wrapped = pkgs.stdenv.mkDerivation {
         name         = "ppp-pptpd-wrapped";
         phases       = [ "installPhase" ];
-        buildInputs  = with pkgs; [ makeWrapper ];
+        nativeBuildInputs  = with pkgs; [ makeWrapper ];
         installPhase = ''
           mkdir -p $out/bin
           makeWrapper ${pkgs.ppp}/bin/pppd $out/bin/pppd \

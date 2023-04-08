@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , hackrf, soapysdr
+, libobjc, IOKit, Security
 } :
 
 let
@@ -17,7 +18,8 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ hackrf soapysdr ];
+  buildInputs = [ hackrf soapysdr ]
+    ++ lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
@@ -26,6 +28,6 @@ in stdenv.mkDerivation {
     description = "SoapySDR plugin for HackRF devices";
     license = licenses.mit;
     maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

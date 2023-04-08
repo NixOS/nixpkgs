@@ -1,16 +1,16 @@
 { lib, stdenv, fetchurl, desktop-file-utils
 , gtk3, libX11, cmake, imagemagick
-, pkg-config, perl, wrapGAppsHook
+, pkg-config, perl, wrapGAppsHook, nixosTests
 , isMobile ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "sgt-puzzles";
-  version = "20220802.8399cff";
+  version = "20220913.27dd36e";
 
   src = fetchurl {
     url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
-    hash = "sha256-f68Nj8P8oIJj1LWyq8Iamv32ex+boPH/lsV5t+YhM9o=";
+    hash = "sha256-fj1XWuXcW01uuC5dK2wDIrweyruSRdfEZBfmEj99zZE=";
   };
 
   sgt-puzzles-menu = fetchurl {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  NIX_CFLAGS_COMPILE = if isMobile then "-DSTYLUS_BASED" else "";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString isMobile "-DSTYLUS_BASED";
 
   buildInputs = [ gtk3 libX11 ];
 
@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
 
     install -Dm644 ${sgt-puzzles-menu} -t $out/etc/xdg/menus/applications-merged/
   '';
+
+  passthru.tests.sgtpuzzles = nixosTests.sgtpuzzles;
 
   meta = with lib; {
     description = "Simon Tatham's portable puzzle collection";

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-bp/YyRFP0rrBHPyhiqnn6o1iC5l61oedShZ2phGeqaw=";
+    hash = "sha256-bp/YyRFP0rrBHPyhiqnn6o1iC5l61oedShZ2phGeqaw=";
   };
 
   # not an explicit dependency, but it's imported by an entrypoint
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     lz4
   ];
 
-  checkInputs = [ pytestCheckHook numpy arrow ruamel-yaml cloudpickle ];
+  nativeCheckInputs = [ pytestCheckHook numpy arrow ruamel-yaml cloudpickle ];
 
   disabledTests = [ "test_benchmarks" ] ++ lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 

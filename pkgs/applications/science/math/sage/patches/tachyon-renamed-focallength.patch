@@ -1,25 +1,26 @@
 diff --git a/src/sage/interfaces/tachyon.py b/src/sage/interfaces/tachyon.py
-index 3f1dcdb538..b6fa8d1fbd 100644
+index 23671e5089..a5604a643c 100644
 --- a/src/sage/interfaces/tachyon.py
 +++ b/src/sage/interfaces/tachyon.py
-@@ -261,13 +261,13 @@ written in the sequence they are listed in the examples in this section.
-   The {\bf PROJECTION} keyword must be followed by one of the supported
- camera projection mode identifiers {\bf PERSPECTIVE}, {\bf PERSPECTIVE_DOF},
- {\bf ORTHOGRAPHIC}, or {\bf FISHEYE}.  The {\bf FISHEYE} projection mode
--requires two extra parameters {\bf FOCALLENGTH} and {\bf APERTURE}
-+requires two extra parameters {\bf FOCALDIST} and {\bf APERTURE}
- which precede the regular camera options.
+@@ -74,14 +74,14 @@ Camera projection modes
+ The ``PROJECTION`` keyword must be followed by one of the supported
+ camera projection mode identifiers ``PERSPECTIVE``, ``PERSPECTIVE_DOF``,
+ ``ORTHOGRAPHIC``, or ``FISHEYE``. The ``FISHEYE`` projection mode
+-requires two extra parameters ``FOCALLENGTH`` and ``APERTURE`` which
++requires two extra parameters ``FOCALDIST`` and ``APERTURE`` which
+ precede the regular camera options.
  
- \begin{verbatim}
- Camera
-   projection perspective_dof
--  focallength 0.75
-+  focaldist 0.75
-   aperture 0.02
-   Zoom 0.666667
-   Aspectratio 1.000000
+ ::
+ 
+    Camera
+      projection perspective_dof
+-     focallength 0.75
++     focaldist 0.75
+      aperture 0.02
+      Zoom 0.666667
+      Aspectratio 1.000000
 diff --git a/src/sage/plot/plot3d/tachyon.py b/src/sage/plot/plot3d/tachyon.py
-index 08caf38d67..3e827411ce 100644
+index 88c8eba2d5..c4427dd484 100644
 --- a/src/sage/plot/plot3d/tachyon.py
 +++ b/src/sage/plot/plot3d/tachyon.py
 @@ -92,7 +92,7 @@ angle, right angle)::

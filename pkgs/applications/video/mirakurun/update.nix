@@ -17,8 +17,8 @@ let
     # exclude prerelease versions
     ignoredVersions = "-";
   };
-  updateScript = builtins.elemAt updater 0;
-  updateArgs = map (lib.escapeShellArg) (builtins.tail updater);
+  updateScript = builtins.elemAt updater.command 0;
+  updateArgs = map (lib.escapeShellArg) (builtins.tail updater.command);
 in writers.writeBash "update-mirakurun" ''
   set -euxo pipefail
 

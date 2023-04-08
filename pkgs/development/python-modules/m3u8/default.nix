@@ -8,20 +8,20 @@ buildPythonPackage rec {
     owner = "globocom";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EfHhmV2otEgEy2OVohS+DF7dk97GFdWZ4cFCERZBmlA=";
+    hash = "sha256-EfHhmV2otEgEy2OVohS+DF7dk97GFdWZ4cFCERZBmlA=";
   };
 
   patches = [
     # Fix hardcoded /tmp dir (fix build on Hydra)
     (fetchpatch {
       url = "https://github.com/globocom/m3u8/commit/cf7ae5fda4681efcea796cd7c51c02f152c36009.patch";
-      sha256 = "sha256-SEETpIJQddid8D//6DVrSGs/BqDeMOzufE0bBrm+/xY=";
+      hash = "sha256-SEETpIJQddid8D//6DVrSGs/BqDeMOzufE0bBrm+/xY=";
     })
   ];
 
   propagatedBuildInputs = [ requests iso8601 ];
 
-  checkInputs = [ bottle pytestCheckHook ];
+  nativeCheckInputs = [ bottle pytestCheckHook ];
 
   pytestFlagsArray = [
     "tests/test_parser.py"

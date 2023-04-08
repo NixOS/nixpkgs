@@ -5,7 +5,7 @@
 , sha512
 , type ? "jar"
 , suffix ? ""
-, sourceProvenance ? (if type == "jar" then [ lib.sourceTypes.binaryBytecode ] else [])
+, sourceProvenance ? (lib.optionals (type == "jar") [ lib.sourceTypes.binaryBytecode ])
 }:
 
 let

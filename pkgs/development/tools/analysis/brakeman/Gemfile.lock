@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    brakeman (5.3.1)
+    brakeman (5.4.1)
 
 PLATFORMS
   ruby
@@ -10,4 +10,4 @@ DEPENDENCIES
   brakeman
 
 BUNDLED WITH
-   2.3.20
+   2.4.6

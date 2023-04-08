@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, fetchzip, ocaml, findlib, tcl, tk }:
+{ stdenv, lib, makeWrapper, fetchzip, Cocoa, ocaml, findlib, tcl, tk }:
 
 let
  params =
@@ -46,6 +46,10 @@ let
     version = "8.06.12";
     sha256 = "sha256:17fmb13l18isgwr38hg9r5a0nayf2hhw6acj5153cy1sygsdg3b5";
   };
+  "5.0" = mkNewParam {
+    version = "8.06.13";
+    sha256 = "sha256-Vpf13g3DEWlUI5aypiowGp2fkQPK0cOGv2XiRUY/Ip4=";
+  };
  };
  param = params . ${lib.versions.majorMinor ocaml.version}
    or (throw "labltk is not available for OCaml ${ocaml.version}");
@@ -55,8 +59,10 @@ stdenv.mkDerivation rec {
   inherit (param) version src;
   pname = "ocaml${ocaml.version}-labltk";
 
+  strictDeps = true;
+
   nativeBuildInputs = [ ocaml findlib makeWrapper ];
-  buildInputs = [ tcl tk ];
+  buildInputs = [ tcl tk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   configureFlags = [ "--use-findlib" "--installbindir" "$(out)/bin" ];
   dontAddPrefix = true;

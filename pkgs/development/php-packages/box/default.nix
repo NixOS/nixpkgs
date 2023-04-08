@@ -1,14 +1,15 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
+
 let
   pname = "box";
-  version = "3.16.0";
+  version = "4.2.0";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/box-project/box/releases/download/${version}/box.phar";
-    sha256 = "sha256-9QjijzCdfpWjGb3NXxPc+7GOuRy3psrJtpvHeZ14vfk=";
+    sha256 = "sha256-9pPhqFq9t3MKI/y6/7iCYB8ddWFrafGVcV/k+Exb+KQ=";
   };
 
   dontUnpack = true;
@@ -25,6 +26,7 @@ mkDerivation {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/box-project/box/releases/tag/${version}";
     description = "An application for building and managing Phars";
     license = licenses.mit;
     homepage = "https://github.com/box-project/box";

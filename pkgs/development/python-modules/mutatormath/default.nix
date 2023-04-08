@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ fontmath unicodedata2 defcon ];
-  checkInputs = [ unicodedata2 fs ];
+  nativeCheckInputs = [ unicodedata2 fs ];
 
   meta = with lib; {
     description = "Piecewise linear interpolation in multiple dimensions with multiple, arbitrarily placed, masters";

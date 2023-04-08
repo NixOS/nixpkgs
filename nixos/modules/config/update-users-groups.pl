@@ -186,7 +186,7 @@ foreach my $name (keys %groupsCur) {
 # Rewrite /etc/group. FIXME: acquire lock.
 my @lines = map { join(":", $_->{name}, $_->{password}, $_->{gid}, $_->{members}) . "\n" }
     (sort { $a->{gid} <=> $b->{gid} } values(%groupsOut));
-updateFile($gidMapFile, to_json($gidMap));
+updateFile($gidMapFile, to_json($gidMap, {canonical => 1}));
 updateFile("/etc/group", \@lines);
 nscdInvalidate("group");
 
@@ -215,10 +215,12 @@ foreach my $u (@{$spec->{users}}) {
     } else {
         $u->{uid} = allocUid($name, $u->{isSystemUser}) if !defined $u->{uid};
 
-        if (defined $u->{initialPassword}) {
-            $u->{hashedPassword} = hashPassword($u->{initialPassword});
-        } elsif (defined $u->{initialHashedPassword}) {
-            $u->{hashedPassword} = $u->{initialHashedPassword};
+        if (!defined $u->{hashedPassword}) {
+            if (defined $u->{initialPassword}) {
+                $u->{hashedPassword} = hashPassword($u->{initialPassword});
+            } elsif (defined $u->{initialHashedPassword}) {
+                $u->{hashedPassword} = $u->{initialHashedPassword};
+            }
         }
     }
 
@@ -272,7 +274,7 @@ foreach my $name (keys %usersCur) {
 # Rewrite /etc/passwd. FIXME: acquire lock.
 @lines = map { join(":", $_->{name}, $_->{fakePassword}, $_->{uid}, $_->{gid}, $_->{description}, $_->{home}, $_->{shell}) . "\n" }
     (sort { $a->{uid} <=> $b->{uid} } (values %usersOut));
-updateFile($uidMapFile, to_json($uidMap));
+updateFile($uidMapFile, to_json($uidMap, {canonical => 1}));
 updateFile("/etc/passwd", \@lines);
 nscdInvalidate("passwd");
 

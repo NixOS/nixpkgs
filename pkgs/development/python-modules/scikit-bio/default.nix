@@ -20,17 +20,17 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5.7";
+  version = "0.5.8";
   pname = "scikit-bio";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Y0PKDGIeL8xdHAQsi+MgBmTFMllWqDvqdRzxvMddHak=";
+    hash = "sha256-1VqDw+XyyhEydE4UCSM/th2a8MWpXet7KR5uNAcSuGs=";
   };
 
   nativeBuildInputs = [ cython ];
-  checkInputs = [ coverage ];
+  nativeCheckInputs = [ coverage ];
   propagatedBuildInputs = [ lockfile cachecontrol decorator ipython matplotlib natsort numpy pandas scipy h5py hdmedians scikit-learn ];
 
   # cython package not included for tests

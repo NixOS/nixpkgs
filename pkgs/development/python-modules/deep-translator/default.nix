@@ -1,12 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi, beautifulsoup4, requests, click }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, beautifulsoup4
+, requests
+, click
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "deep-translator";
-  version = "1.8.3";
+  version = "1.10.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-9YTDvrm5Q8k5G7qDF05651IxMV1BeTcgIAMSxU/bwM0=";
+    pname = "deep_translator";
+    inherit version;
+    hash = "sha256-6ZQ42rcOO+vNqTLj9ehv09MrQ/h9Zu2fi2gW2xRvHZ8=";
   };
 
   propagatedBuildInputs = [
@@ -25,9 +36,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Flexible, free and unlimited Python tool to translate between different languages in a simple way using multiple translators";
+    description = "Python tool to translate between different languages by using multiple translators";
     homepage = "https://deep-translator.readthedocs.io";
-    license = licenses.mit;
+    changelog = "https://github.com/nidhaloff/deep-translator/releases/tag/v1.10.0";
+    license = licenses.asl20;
     maintainers = with maintainers; [ wolfangaukang ];
   };
 }

@@ -7,19 +7,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cwltool";
-  version = "3.1.20220224085855";
+  version = "3.1.20230213100550";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-7+1xOV5Lodqtku0wX1urAEHsCcYKM3Vcd5RDg4DdVow=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BtHkIVadcccnYYX8lRqiCzO+/qFeBaZfdUuu6qrjysk=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "ruamel.yaml >= 0.15, < 0.17.18" "ruamel.yaml" \
+      --replace "ruamel.yaml >= 0.15, < 0.17.22" "ruamel.yaml" \
       --replace "prov == 1.5.1" "prov" \
       --replace "setup_requires=PYTEST_RUNNER," ""
   '';
@@ -32,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     argcomplete
     bagit
     coloredlogs
+    cwl-utils
     mypy-extensions
     prov
     psutil
@@ -44,10 +45,11 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     mock
     nodejs
     pytest-mock
+    pytest-httpserver
     pytest-xdist
     pytestCheckHook
   ];
@@ -56,6 +58,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_content_types"
     "test_env_filtering"
     "test_http_path_mapping"
+    "test_modification_date"
   ];
 
   disabledTestPaths = [
@@ -70,6 +73,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Common Workflow Language reference implementation";
     homepage = "https://www.commonwl.org";
+    changelog = "https://github.com/common-workflow-language/cwltool/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
   };

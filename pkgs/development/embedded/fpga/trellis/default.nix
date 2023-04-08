@@ -1,30 +1,27 @@
 { lib, stdenv, fetchFromGitHub, python3, boost, cmake }:
 
 let
-  rev = "2f06397673bbca3da11928d538b8ab7d01c944c6";
+  rev = "488f4e71073062de314c55a037ede7cf03a3324c";
   # git describe --tags
-  realVersion = "1.0-534-g${builtins.substring 0 7 rev}";
+  realVersion = "1.2.1-14-g${builtins.substring 0 7 rev}";
 in stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "2021-12-14";
+  version = "unstable-2022-09-14";
 
   srcs = [
     (fetchFromGitHub {
        owner  = "YosysHQ";
        repo   = "prjtrellis";
        inherit rev;
-       hash   = "sha256-m5CalAIbzY2bhOvpBbPBeLZeDp+itk1HlRsSmtiddaA=";
+       hash   = "sha256-Blbu+0rlM/3izbF0XCvkNpSAND0IclWEwK7anzyrpvw=";
        name   = "trellis";
      })
 
     (fetchFromGitHub {
       owner  = "YosysHQ";
       repo   = "prjtrellis-db";
-      # note: the upstream submodule points to revision 0ee729d20eaf,
-      # but that's just the tip of the branch that was merged into master.
-      # fdf4bf275a is the merge commit itself
-      rev    = "fdf4bf275a7402654bc643db537173e2fbc86103";
-      sha256 = "eDq2wU2pnfK9bOkEVZ07NQPv02Dc6iB+p5GTtVBiyQA=";
+      rev    = "35d900a94ff0db152679a67bf6e4fbf40ebc34aa";
+      hash   = "sha256-r6viR8y9ZjURGNbsa0/YY8lzy9kGzjuu408ntxwpqm0=";
       name   = "trellis-database";
     })
   ];

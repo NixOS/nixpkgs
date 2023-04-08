@@ -134,6 +134,12 @@ let
       export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
       export GOCACHE=$TMPDIR/go-cache
 
+      # currently pie is only enabled by default in pkgsMusl
+      # this will respect the `hardening{Disable,Enable}` flags if set
+      if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
+        export GOFLAGS="-buildmode=pie $GOFLAGS"
+      fi
+
       runHook postConfigure
     '';
 
@@ -168,9 +174,10 @@ let
         flags+=($buildFlags "''${buildFlagsArray[@]}")
         flags+=(''${tags:+-tags=${lib.concatStringsSep "," tags}})
         flags+=(''${ldflags:+-ldflags="$ldflags"})
-        flags+=("-v" "-p" "$NIX_BUILD_CORES")
+        flags+=("-p" "$NIX_BUILD_CORES")
 
         if [ "$cmd" = "test" ]; then
+          flags+=(-vet=off)
           flags+=($checkFlags)
         fi
 

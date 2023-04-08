@@ -22,15 +22,13 @@
 , ...
 }@attrs:
 
-with lib;
-
 let
   shell = drv: stdenv.mkDerivation {
     name = "interactive-shell-${drv.pname}";
     buildInputs = [ drv ];
   };
 
-  customPhases = filterAttrs
+  customPhases = lib.filterAttrs
     (_: v: v != null)
     { inherit setupHook configurePhase buildPhase installPhase; };
 
@@ -105,4 +103,4 @@ let
       } // (if attrs ? passthru then attrs.passthru else { }));
     } // customPhases);
 in
-fix pkg
+lib.fix pkg

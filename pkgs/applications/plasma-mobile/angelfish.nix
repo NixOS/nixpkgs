@@ -1,14 +1,14 @@
 { lib
 , mkDerivation
-, fetchurl
 , cmake
 , corrosion
 , extra-cmake-modules
-, gcc11
+, gcc12
 , kconfig
 , kcoreaddons
 , kdbusaddons
 , ki18n
+, kirigami-addons
 , kirigami2
 , knotifications
 , kpurpose
@@ -20,8 +20,8 @@
 , srcs
 
 # These must be updated in tandem with package updates.
-, cargoShaForVersion ? "22.06"
-, cargoSha256 ? "ckxShWgqGaApYoGQdrRQKCKOsbwUH5QP82x3BNM4Jx8="
+, cargoShaForVersion ? "23.01.0"
+, cargoSha256 ? "sha256-dIXA875HsG56baHrTWw9L560n4s0wRv6Ag/2oj1x0gk="
 }:
 
 # Guard against incomplete updates.
@@ -46,22 +46,19 @@ mkDerivation rec {
     cmake
     corrosion
     extra-cmake-modules
-    gcc11 # doesn't build with GCC 9 from stdenv on aarch64
+    gcc12 # doesn't build with GCC 9 from stdenv on aarch64
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo
     rust.rustc
   ]);
 
-  cmakeFlags = [
-    "-DRust_CARGO=${rustPlatform.rust.cargo}/bin/cargo"
-  ];
-
   buildInputs = [
     kconfig
     kcoreaddons
     kdbusaddons
     ki18n
+    kirigami-addons
     kirigami2
     knotifications
     kpurpose

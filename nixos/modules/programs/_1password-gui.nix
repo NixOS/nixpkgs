@@ -16,7 +16,7 @@ in
 
   options = {
     programs._1password-gui = {
-      enable = mkEnableOption "the 1Password GUI application";
+      enable = mkEnableOption (lib.mdDoc "the 1Password GUI application");
 
       polkitPolicyOwners = mkOption {
         type = types.listOf types.str;
@@ -27,7 +27,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "1Password GUI" {
+      package = mkPackageOptionMD pkgs "1Password GUI" {
         default = [ "_1password-gui" ];
       };
     };

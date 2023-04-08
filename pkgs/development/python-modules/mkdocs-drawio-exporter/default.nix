@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9cvA186FS6bHmpOrv4OfPZ5kRfgfafBfaWxgWJIlwwA=";
+    hash = "sha256-9cvA186FS6bHmpOrv4OfPZ5kRfgfafBfaWxgWJIlwwA=";
   };
 
   propagatedBuildInputs = [ mkdocs drawio-headless ];

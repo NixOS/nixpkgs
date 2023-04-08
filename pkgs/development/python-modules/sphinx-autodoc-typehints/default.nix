@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, hatch-vcs
+, hatchling
 , pythonOlder
 , sphinx
 , pytestCheckHook
@@ -8,7 +10,7 @@
 
 let
   pname = "sphinx-autodoc-typehints";
-  version = "1.19.1";
+  version = "1.23.4";
 in
 
 buildPythonPackage {
@@ -20,14 +22,19 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "sphinx_autodoc_typehints";
     inherit version;
-    hash = "sha256-bIQdtV4Om+BIP/OWKiFStg55MG9CiNjE5+hqyESGpeo=";
+    hash = "sha256-tHw6aQ0QGiWdmqkgzFfH6nn7cF15bA1Xyxfpm9HYCjQ=";
   };
+
+  nativeBuildInputs = [
+    hatch-vcs
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     sphinx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -39,6 +46,7 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/tox-dev/sphinx-autodoc-typehints/releases/tag/${version}";
     description = "Type hints (PEP 484) support for the Sphinx autodoc extension";
     homepage = "https://github.com/tox-dev/sphinx-autodoc-typehints";
     license = licenses.mit;

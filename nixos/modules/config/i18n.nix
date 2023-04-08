@@ -10,12 +10,12 @@ with lib;
     i18n = {
       glibcLocales = mkOption {
         type = types.path;
-        default = pkgs.buildPackages.glibcLocales.override {
+        default = pkgs.glibcLocales.override {
           allLocales = any (x: x == "all") config.i18n.supportedLocales;
           locales = config.i18n.supportedLocales;
         };
         defaultText = literalExpression ''
-          pkgs.buildPackages.glibcLocales.override {
+          pkgs.glibcLocales.override {
             allLocales = any (x: x == "all") config.i18n.supportedLocales;
             locales = config.i18n.supportedLocales;
           }

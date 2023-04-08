@@ -41,10 +41,10 @@ gnuradio.pkgs.mkDerivation rec {
     cmake
     pkg-config
     gnuradio.unwrapped.python
-    gnuradio.unwrapped.python.pkgs.Mako
+    gnuradio.unwrapped.python.pkgs.mako
     gnuradio.unwrapped.python.pkgs.six
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 

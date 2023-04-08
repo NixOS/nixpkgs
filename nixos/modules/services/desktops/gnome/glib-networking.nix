@@ -24,7 +24,7 @@ with lib;
 
     services.gnome.glib-networking = {
 
-      enable = mkEnableOption "network extensions for GLib";
+      enable = mkEnableOption (lib.mdDoc "network extensions for GLib");
 
     };
 

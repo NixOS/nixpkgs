@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nexus";
-  version = "3.37.3-02";
+  version = "3.45.0-01";
 
   src = fetchurl {
     url = "https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-${version}-unix.tar.gz";
-    sha256 = "sha256-wdtDGQjFp2tEAVxVXW70UXq/CoaET6/+4PXWxiNZMS0=";
+    hash = "sha256-ISTORslFPgFt0kEKK17fpBXi3yAMwgm6qDnk33V2wa0=";
   };
 
   preferLocalBuild = true;

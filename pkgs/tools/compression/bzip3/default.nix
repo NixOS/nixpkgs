@@ -3,24 +3,28 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bzip3";
-  version = "1.1.4";
+  version = "1.3.0";
 
   outputs = [ "bin" "dev" "out" ];
 
   src = fetchFromGitHub {
     owner = "kspalaiologos";
     repo = "bzip3";
-    rev = version;
-    hash = "sha256-rbJUvFm8WYgQLNpbX6kcXb5qAGAJfylTo4HgOvZVCu8=";
+    rev = finalAttrs.version;
+    hash = "sha256-g6+NdgbmbumNs6xt+D9F/yNclrUqOk6CJLCcjjSrzk4=";
   };
 
   postPatch = ''
-    echo -n "${version}" > .tarball-version
+    echo -n "${finalAttrs.version}" > .tarball-version
     patchShebangs build-aux
+
+    # build-aux/ax_subst_man_date.m4 calls git if the file exists
+    rm .gitignore
   '';
 
   nativeBuildInputs = [
@@ -32,12 +36,15 @@ stdenv.mkDerivation rec {
     "--disable-arch-native"
   ] ++ lib.optionals stdenv.isDarwin [ "--disable-link-time-optimization" ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     description = "A better and stronger spiritual successor to BZip2";
     homepage = "https://github.com/kspalaiologos/bzip3";
-    changelog = "https://github.com/kspalaiologos/bzip3/blob/${src.rev}/NEWS";
+    changelog = "https://github.com/kspalaiologos/bzip3/blob/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
+    pkgConfigModules = [ "bzip3" ];
     platforms = lib.platforms.unix;
   };
-}
+})

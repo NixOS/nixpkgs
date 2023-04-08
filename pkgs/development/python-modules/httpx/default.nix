@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , brotli
 , brotlicffi
 , buildPythonPackage
@@ -7,8 +8,11 @@
 , click
 , fetchFromGitHub
 , h2
+, hatch-fancy-pypi-readme
+, hatchling
 , httpcore
 , isPyPy
+, multipart
 , pygments
 , python
 , pythonOlder
@@ -25,17 +29,22 @@
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.23.0";
-  format = "setuptools";
+  version = "0.23.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
-    hash = "sha256-s11Yeizm3y3w5D6ACQ2wp/KJ0+1ALY/R71IlTP2pMC4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ZLRzkyoFbAY2Xs1ORWBqvc2gpKovg9wRs/RtAryOcVg=";
   };
+
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     certifi
@@ -63,8 +72,12 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  # trustme uses pyopenssl
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+
+  nativeCheckInputs = [
     chardet
+    multipart
     pytestCheckHook
     pytest-asyncio
     pytest-trio
@@ -75,7 +88,7 @@ buildPythonPackage rec {
     ++ passthru.optional-dependencies.socks;
 
   postPatch = ''
-    substituteInPlace setup.py \
+    substituteInPlace pyproject.toml \
       --replace "rfc3986[idna2008]>=1.3,<2" "rfc3986>=1.3"
   '';
 
@@ -85,8 +98,8 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+    "-W" "ignore::DeprecationWarning"
+    "-W" "ignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [
@@ -108,6 +121,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
+    changelog = "https://github.com/encode/httpx/blob/${src.rev}/CHANGELOG.md";
     description = "The next generation HTTP client";
     homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;

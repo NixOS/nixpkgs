@@ -26,6 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-zOxlC4NdSBkhOMhTKa4Dc15s7VjpstnCFG1shMBvpT4=";
   };
 
+  # conditional so that overrides are easier for web applications
   patches = lib.optionals (lib.versionAtLeast werkzeug.version "2.1.0") [
     ./werkzeug-2.1.0-compat.patch
   ];
@@ -37,11 +38,16 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     blinker
     mock
     nose
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Broke in flask 2.2 upgrade
+    "test_exception_header_forwarded"
   ];
 
   pythonImportsCheck = [

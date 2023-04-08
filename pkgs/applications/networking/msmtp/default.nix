@@ -16,21 +16,21 @@
 , which
 , Security
 , withKeyring ? true
-, libsecret ? null
-, withSystemd ? stdenv.isLinux
-, systemd ? null
+, libsecret
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
 }:
 
 let
   inherit (lib) getBin getExe optionals;
 
-  version = "1.8.20";
+  version = "1.8.22";
 
   src = fetchFromGitHub {
     owner = "marlam";
     repo = "msmtp-mirror";
     rev = "msmtp-${version}";
-    hash = "sha256-RcQZ7Vm8UjJJoogkmUmZ+/2fz7C4AcVYY/kTOlfz7+I=";
+    hash = "sha256-Jt/uvGBrYYr6ua6LVPiP0nuRiIkxBJASdgHBNHivzxQ=";
   };
 
   meta = with lib; {
@@ -41,7 +41,7 @@ let
     platforms = platforms.unix;
   };
 
-  binaries = stdenv.mkDerivation rec {
+  binaries = stdenv.mkDerivation {
     pname = "msmtp-binaries";
     inherit version src meta;
 
@@ -62,7 +62,7 @@ let
     '';
   };
 
-  scripts = resholve.mkDerivation rec {
+  scripts = resholve.mkDerivation {
     pname = "msmtp-scripts";
     inherit version src meta;
 
@@ -128,4 +128,5 @@ symlinkJoin {
   name = "msmtp-${version}";
   inherit version meta;
   paths = [ binaries scripts ];
+  passthru = { inherit binaries scripts; };
 }

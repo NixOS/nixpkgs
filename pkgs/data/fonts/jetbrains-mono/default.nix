@@ -1,18 +1,26 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "2.242";
-in
-fetchzip {
-  name = "JetBrainsMono-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "jetbrains-mono";
+  version = "2.304";
 
-  url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrainsMono-${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrainsMono-${version}.zip";
+    sha256 = "sha256-rv5A3F1zdcUJkmw09st1YxmEIkIoYJaMYGyZjic8jfc=";
+    stripRoot = false;
+  };
 
-  sha256 = "sha256-flaUqpHmgebUzwPq0d+I3p9yqPmsV0kap04eApOQxdI=";
+  dontPatch = true;
+  dontConfigure = true;
+  dontBuild = true;
+  doCheck = false;
+  dontFixup = true;
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+  installPhase = ''
+    runHook preInstall
+    install -Dm644 -t $out/share/fonts/truetype/ fonts/ttf/*.ttf
+    install -Dm644 -t $out/share/fonts/truetype/ fonts/variable/*.ttf
+    runHook postInstall
   '';
 
   meta = with lib; {

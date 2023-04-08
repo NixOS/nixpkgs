@@ -9,13 +9,22 @@ let
 
 in {
   options.services.rtorrent = {
-    enable = mkEnableOption "rtorrent";
+    enable = mkEnableOption (lib.mdDoc "rtorrent");
 
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/rtorrent";
       description = lib.mdDoc ''
         The directory where rtorrent stores its data files.
+      '';
+    };
+
+    dataPermissions = mkOption {
+      type = types.str;
+      default = "0750";
+      example = "0755";
+      description = lib.mdDoc ''
+        Unix Permissions in octal on the rtorrent directory.
       '';
     };
 
@@ -82,7 +91,7 @@ in {
       type = types.lines;
       default = "";
       description = lib.mdDoc ''
-        The content of {file}`rtorrent.rc`. The [modernized configuration template](https://rtorrent-docs.readthedocs.io/en/latest/cookbook.html#modernized-configuration-template) with the values specified in this module will be prepended using mkBefore. You can use mkForce to overwrite the config completly.
+        The content of {file}`rtorrent.rc`. The [modernized configuration template](https://rtorrent-docs.readthedocs.io/en/latest/cookbook.html#modernized-configuration-template) with the values specified in this module will be prepended using mkBefore. You can use mkForce to overwrite the config completely.
       '';
     };
   };
@@ -205,7 +214,7 @@ in {
         };
       };
 
-      tmpfiles.rules = [ "d '${cfg.dataDir}' 0750 ${cfg.user} ${cfg.group} -" ];
+      tmpfiles.rules = [ "d '${cfg.dataDir}' ${cfg.dataPermissions} ${cfg.user} ${cfg.group} -" ];
     };
   };
 }

@@ -4,15 +4,19 @@
 , pyhcl
 , requests
 , six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "hvac";
-  version = "0.11.2";
+  version = "1.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f905c59d32d88d3f67571fe5a8a78de4659e04798ad809de439f667247d13626";
+    hash = "sha256-B53KWIVt7mZG7VovIoOAnBbS3u3eHp6WFbKRAySkuWk=";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HashiCorp Vault API client";
     homepage = "https://github.com/ianunruh/hvac";
+    changelog = "https://github.com/hvac/hvac/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

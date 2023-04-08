@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     rev = "eb5efb1f304c2b7bc2e0389ba06c9bf2ac4b932c";
     sha256 = "17v1gcmg5q661b047zxjar735i4d3508dimw1x3z1pk4d1zjhp3x";
   };
+  patches = [
+    # Drop unused pthread library. pthread_yield()
+    # fails the configure.
+    ./no-pthread.patch
+  ];
 
   nativeBuildInputs = [ pkg-config makeWrapper autoconf automake ];
   buildInputs = [ fuse ];

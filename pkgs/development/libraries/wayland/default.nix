@@ -9,7 +9,9 @@
 , expat
 , libxml2
 , withLibraries ? stdenv.isLinux
+, withTests ? stdenv.isLinux
 , libffi
+, epoll-shim
 , withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
 , graphviz-nox
 , doxygen
@@ -24,6 +26,9 @@
 # Documentation is only built when building libraries.
 assert withDocumentation -> withLibraries;
 
+# Tests are only built when building libraries.
+assert withTests -> withLibraries;
+
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
@@ -35,13 +40,6 @@ stdenv.mkDerivation rec {
     url = "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
     sha256 = "1b0ixya9bfw5c9jx8mzlr7yqnlyvd3jv5z8wln9scdv8q5zlvikd";
   };
-
-  patches = [
-    (substituteAll {
-      src = ./add-placeholder-for-nm.patch;
-      nm = "${stdenv.cc.targetPrefix}nm";
-    })
-  ];
 
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py
@@ -55,8 +53,9 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   mesonFlags = [
-    "-Dlibraries=${lib.boolToString withLibraries}"
     "-Ddocumentation=${lib.boolToString withDocumentation}"
+    "-Dlibraries=${lib.boolToString withLibraries}"
+    "-Dtests=${lib.boolToString withTests}"
   ];
 
   depsBuildBuild = [
@@ -84,6 +83,8 @@ stdenv.mkDerivation rec {
     libxml2
   ] ++ lib.optionals withLibraries [
     libffi
+  ] ++ lib.optionals (withLibraries && !stdenv.hostPlatform.isLinux) [
+    epoll-shim
   ] ++ lib.optionals withDocumentation [
     docbook_xsl
     docbook_xml_dtd_45
@@ -102,6 +103,8 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+  passthru = { inherit withLibraries; };
+
   meta = with lib; {
     description = "Core Wayland window system code and protocol";
     longDescription = ''
@@ -116,8 +119,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit; # Expat version
     platforms = if withLibraries then platforms.linux else platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
-    # big sur doesn't support gcc stdenv and wayland doesn't build with clang
-    broken = stdenv.isDarwin;
   };
 
   passthru.version = version;

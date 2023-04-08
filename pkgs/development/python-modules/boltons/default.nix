@@ -1,15 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "21.0.0";
+  version = "23.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,29 +15,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
-    rev = version;
-    hash = "sha256-8HO7X2PQEbQIQsCa2cMHQI3rlofVT22GYrWNXY34MLk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NqlCu0W/BQkLiaLYs9DB1RrEya6KGPfNtpAzKXxoRD0=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  patches = lib.optionals (pythonAtLeast "3.10") [
-    # pprint has no attribute _safe_repr, https://github.com/mahmoud/boltons/issues/294
-    (fetchpatch {
-      name = "fix-pprint-attribute.patch";
-      url = "https://github.com/mahmoud/boltons/commit/270e974975984f662f998c8f6eb0ebebd964de82.patch";
-      sha256 = "sha256-pZLfr6SRCw2aLwZeYaX7bzfJeZC4cFUILEmnVsKR6zc=";
-    })
-  ];
+  # Tests bind to localhost
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
     "boltons"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/mahmoud/boltons";
     description = "Constructs, recipes, and snippets extending the Python standard library";
     longDescription = ''
       Boltons is a set of over 200 BSD-licensed, pure-Python utilities
@@ -56,6 +47,8 @@ buildPythonPackage rec {
       - A full-featured TracebackInfo type, for representing stack
       traces, in tbutils
     '';
+    homepage = "https://github.com/mahmoud/boltons";
+    changelog = "https://github.com/mahmoud/boltons/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ twey ];
   };

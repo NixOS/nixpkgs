@@ -12,8 +12,6 @@ let
   phpExecutionUnit = "phpfpm-${pool}";
   databaseService = "mysql.service";
 
-  fqdn = if config.networking.domain != null then config.networking.fqdn else config.networking.hostName;
-
 in {
   imports = [
     (mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
@@ -53,8 +51,8 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "lighttpd";
-        description = ''
-          Name of the web server user that forwards requests to <option>services.phpfpm.pools.&lt;name&gt;.socket</option> the fastcgi socket for Matomo if the nginx
+        description = lib.mdDoc ''
+          Name of the web server user that forwards requests to {option}`services.phpfpm.pools.<name>.socket` the fastcgi socket for Matomo if the nginx
           option is not used. Either this option or the nginx option is mandatory.
           If you want to use another webserver than nginx, you need to set this to that server's user
           and pass fastcgi requests to `index.php`, `matomo.php` and `piwik.php` (legacy name) to this socket.
@@ -77,11 +75,9 @@ in {
 
       hostname = mkOption {
         type = types.str;
-        default = "${user}.${fqdn}";
+        default = "${user}.${config.networking.fqdnOrHostName}";
         defaultText = literalExpression ''
-          if config.${options.networking.domain} != null
-          then "${user}.''${config.${options.networking.fqdn}}"
-          else "${user}.''${config.${options.networking.hostName}}"
+          "${user}.''${config.${options.networking.fqdnOrHostName}}"
         '';
         example = "matomo.yourdomain.org";
         description = lib.mdDoc ''
@@ -178,7 +174,7 @@ in {
           CURRENT_PACKAGE=$(readlink ${dataDir}/current-package)
           NEW_PACKAGE=${cfg.package}
           if [ "$CURRENT_PACKAGE" != "$NEW_PACKAGE" ]; then
-            # keeping tmp arround between upgrades seems to bork stuff, so delete it
+            # keeping tmp around between upgrades seems to bork stuff, so delete it
             rm -rf ${dataDir}/tmp
           fi
         elif [ -e ${dataDir}/tmp ]; then
@@ -329,7 +325,7 @@ in {
   };
 
   meta = {
-    doc = ./matomo-doc.xml;
+    doc = ./matomo.md;
     maintainers = with lib.maintainers; [ florianjacob ];
   };
 }

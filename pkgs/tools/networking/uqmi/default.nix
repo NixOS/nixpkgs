@@ -18,6 +18,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ libubox json_c ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
+    "-Wno-error=dangling-pointer"
+  ]);
+
   meta = with lib; {
     description = "Tiny QMI command line utility";
     homepage = "https://git.openwrt.org/?p=project/uqmi.git;a=summary";

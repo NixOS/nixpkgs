@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, APScheduler
+, apscheduler
 , bitstring
 , cffi
 , ecdsa
@@ -31,12 +31,14 @@ buildPythonPackage rec {
     owner = "CypherpunkPay";
     repo = "CypherpunkPay";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-X0DB0PVwR0gRnt3jixFzglWAOPKBMvqTOG6pK6OJ03w=";
+    hash = "sha256-X0DB0PVwR0gRnt3jixFzglWAOPKBMvqTOG6pK6OJ03w=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'monero = "^0.99"' 'monero = ">=0.99"' \
+      --replace "bitstring = '^3.1.9'" "bitstring = '>=3.1.9'" \
+      --replace 'cffi = "1.15.0"' 'cffi = ">=1.15.0"' \
+      --replace 'ecdsa = "^0.17.0"' 'ecdsa = ">=0.17.0"' \
       --replace 'pypng = "^0.0.20"' 'pypng = ">=0.0.20"' \
       --replace 'tzlocal = "2.1"' 'tzlocal = ">=2.1"'
   '';
@@ -46,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    APScheduler
+    apscheduler
     bitstring
     cffi
     ecdsa
@@ -62,7 +64,7 @@ buildPythonPackage rec {
     yoyo-migrations
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
     webtest
@@ -70,22 +72,26 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # performance test
-    "test/unit/tools/pbkdf2_test.py"
+    "tests/unit/tools/pbkdf2_test.py"
     # tests require network connection
-    "test/network/explorers/bitcoin"
-    "test/network/net/http_client"
-    "test/network/prices"
+    "tests/network/explorers/bitcoin"
+    "tests/network/monero/monero_address_transactions_db_test.py"
+    "tests/network/net/http_client"
+    "tests/network/prices"
     # tests require bitcoind running
-    "test/network/full_node_clients"
+    "tests/network/full_node_clients"
     # tests require lnd running
-    "test/network/ln"
+    "tests/network/ln"
     # tests require tor running
-    "test/network/net/tor_client"
+    "tests/network/monero/monero_test.py"
+    "tests/network/net/tor_client"
+    "tests/network/usecases/calc_monero_address_credits_uc_test.py"
+    "tests/network/usecases/fetch_monero_txs_from_open_node_uc_test.py"
     # tests require the full environment running
-    "test/acceptance/views"
-    "test/acceptance/views_admin"
-    "test/acceptance/views_donations"
-    "test/acceptance/views_dummystore"
+    "tests/acceptance/views"
+    "tests/acceptance/views_admin"
+    "tests/acceptance/views_donations"
+    "tests/acceptance/views_dummystore"
   ];
 
   meta = with lib; {

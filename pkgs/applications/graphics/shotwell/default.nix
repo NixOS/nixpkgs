@@ -1,16 +1,18 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
+, fetchpatch2
 , meson
 , ninja
 , gtk3
 , libexif
 , libgphoto2
 , libwebp
-, libsoup
+, libsoup_3
 , libxml2
 , vala
 , sqlite
-, webkitgtk
+, webkitgtk_4_1
 , pkg-config
 , gnome
 , gst_all_1
@@ -30,9 +32,8 @@
 , wrapGAppsHook
 , gobject-introspection
 , itstool
-, libgdata
-, libchamplain
 , libsecret
+, libportal-gtk3
 , gsettings-desktop-schemas
 , python3
 }:
@@ -41,12 +42,21 @@
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.30.16";
+  version = "0.31.7";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-yYgs+9rTA8uBYbFJrLtMYX++fKn2q24i0XTiRH51GPo=";
+    sha256 = "sha256-gPCj2HVS+L3vpeNig77XZ9AFdtqMyWpEo9NKQjXEmeA=";
   };
+
+  patches = [
+    # Fix build with vala 0.56.4, can be removed on next update
+    # https://gitlab.gnome.org/GNOME/shotwell/-/merge_requests/69
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/shotwell/-/commit/cd82759231e5ece2fa0dea40397c9051d15fd5c2.patch";
+      hash = "sha256-Vy2kvUlmPdEEuPB1RTcI5pGYNveeiQ+lId0YVlWo4wU=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -66,10 +76,10 @@ stdenv.mkDerivation rec {
     libexif
     libgphoto2
     libwebp
-    libsoup
+    libsoup_3
     libxml2
     sqlite
-    webkitgtk
+    webkitgtk_4_1
     gst_all_1.gstreamer
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
@@ -87,9 +97,8 @@ stdenv.mkDerivation rec {
     librest
     gcr
     gnome.adwaita-icon-theme
-    libgdata
-    libchamplain
     libsecret
+    libportal-gtk3
   ];
 
   postPatch = ''

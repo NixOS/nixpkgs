@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IQzwu0gwfPNPOLQLCO99KL5Hu2094Y+acQBFXVGzHhU=";
+    hash = "sha256-IQzwu0gwfPNPOLQLCO99KL5Hu2094Y+acQBFXVGzHhU=";
   };
 
   propagatedBuildInputs = [
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     nose
     yanc

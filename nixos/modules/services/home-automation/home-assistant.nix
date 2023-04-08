@@ -35,7 +35,10 @@ let
   #   ...
   # } ];
   usedPlatforms = config:
-    if isAttrs config then
+    # don't recurse into derivations possibly creating an infinite recursion
+    if isDerivation config then
+      [ ]
+    else if isAttrs config then
       optional (config ? platform) config.platform
       ++ concatMap usedPlatforms (attrValues config)
     else if isList config then
@@ -77,7 +80,7 @@ in {
   options.services.home-assistant = {
     # Running home-assistant on NixOS is considered an installation method that is unsupported by the upstream project.
     # https://github.com/home-assistant/architecture/blob/master/adr/0012-define-supported-installation-method.md#decision
-    enable = mkEnableOption "Home Assistant. Please note that this installation method is unsupported upstream";
+    enable = mkEnableOption (lib.mdDoc "Home Assistant. Please note that this installation method is unsupported upstream");
 
     configDir = mkOption {
       default = "/var/lib/hass";
@@ -126,10 +129,10 @@ in {
           psycopg2
         ];
       '';
-      description = ''
+      description = lib.mdDoc ''
         List of packages to add to propagatedBuildInputs.
 
-        A popular example is <package>python3Packages.psycopg2</package>
+        A popular example is `python3Packages.psycopg2`
         for PostgreSQL support in the recorder component.
       '';
     };
@@ -362,7 +365,7 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.openFirewall -> !isNull cfg.config;
+        assertion = cfg.openFirewall -> cfg.config != null;
         message = "openFirewall can only be used with a declarative config";
       }
     ];
@@ -409,13 +412,14 @@ in {
         (optionalString (cfg.config != null) copyConfig) +
         (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig)
       ;
+      environment.PYTHONPATH = package.pythonPath;
       serviceConfig = let
         # List of capabilities to equip home-assistant with, depending on configured components
         capabilities = lib.unique ([
           # Empty string first, so we will never accidentally have an empty capability bounding set
           # https://github.com/NixOS/nixpkgs/issues/120617#issuecomment-830685115
           ""
-        ] ++ lib.optionals (builtins.any useComponent [ "bluetooth" "bluetooth_le_tracker" "bluetooth_tracker" "eq3btsmart" "fjaraskupan" "govee_ble" "homekit_controller" "inkbird" "moat" "sensorpush" "switchbot" "xiaomi_ble" ]) [
+        ] ++ lib.optionals (builtins.any useComponent componentsUsingBluetooth) [
           # Required for interaction with hci devices and bluetooth sockets, identified by bluetooth-adapters dependency
           # https://www.home-assistant.io/integrations/bluetooth_le_tracker/#rootless-setup-on-core-installs
           "CAP_NET_ADMIN"
@@ -432,8 +436,44 @@ in {
         ]);
         componentsUsingBluetooth = [
           # Components that require the AF_BLUETOOTH address family
-          "bluetooth_tracker"
+          "august"
+          "august_ble"
+          "airthings_ble"
+          "aranet"
+          "bluemaestro"
+          "bluetooth"
+          "bluetooth_adapters"
           "bluetooth_le_tracker"
+          "bluetooth_tracker"
+          "bthome"
+          "default_config"
+          "eq3btsmart"
+          "eufylife_ble"
+          "esphome"
+          "fjaraskupan"
+          "govee_ble"
+          "homekit_controller"
+          "inkbird"
+          "keymitt_ble"
+          "led_ble"
+          "melnor"
+          "moat"
+          "mopeka"
+          "oralb"
+          "qingping"
+          "ruuvi_gateway"
+          "ruuvitag_ble"
+          "sensirion_ble"
+          "sensorpro"
+          "sensorpush"
+          "shelly"
+          "snooz"
+          "switchbot"
+          "thermobeacon"
+          "thermopro"
+          "tilt_ble"
+          "xiaomi_ble"
+          "yalexs_ble"
         ];
         componentsUsingPing = [
           # Components that require the capset syscall for the ping wrapper
@@ -450,7 +490,6 @@ in {
           # mostly the ones using config flows already.
           "acer_projector"
           "alarmdecoder"
-          "arduino"
           "blackbird"
           "deconz"
           "dsmr"
@@ -464,12 +503,12 @@ in {
           "insteon"
           "kwb"
           "lacrosse"
-          "mhz19"
           "modbus"
           "modem_callerid"
           "mysensors"
           "nad"
           "numato"
+          "otbr"
           "rflink"
           "rfxtrx"
           "scsgate"
@@ -480,7 +519,6 @@ in {
           "usb"
           "velbus"
           "w800rf32"
-          "xbee"
           "zha"
           "zwave"
           "zwave_js"

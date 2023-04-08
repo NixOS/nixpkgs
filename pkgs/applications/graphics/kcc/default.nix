@@ -23,7 +23,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     raven
   ];
 
-  qtWrapperArgs = lib.optional archiveSupport [ "--prefix" "PATH" ":" "${ lib.makeBinPath [ p7zip ] }" ];
+  qtWrapperArgs = lib.optionals archiveSupport [ "--prefix" "PATH" ":" "${ lib.makeBinPath [ p7zip ] }" ];
 
   postFixup =  ''
     wrapProgram $out/bin/kcc "''${qtWrapperArgs[@]}"

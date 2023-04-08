@@ -16,6 +16,7 @@
 , requests
 , markdown
 , matplotlib
+, mock
 , pytest
 , glibcLocales
 , nose
@@ -74,6 +75,7 @@ in
 buildPythonApplication rec {
   pname = "anki";
   inherit version;
+  format = "other";
 
   src = fetchurl {
     urls = [
@@ -100,10 +102,10 @@ buildPythonApplication rec {
     setuptools
   ]
   ++ lib.optional plotsSupport matplotlib
-  ++ lib.optional stdenv.isDarwin [ CoreAudio ]
+  ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
   ;
 
-  checkInputs = [ pytest glibcLocales nose ];
+  nativeCheckInputs = [ pytest glibcLocales mock nose ];
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
   buildInputs = [ lame mpv-unwrapped libpulseaudio ];

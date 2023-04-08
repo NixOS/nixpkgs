@@ -3,7 +3,7 @@
 with lib;
 
 let
-  version = "1.7.1";
+  version = "1.10.1";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
@@ -12,7 +12,7 @@ let
   };
 in {
   options.services.kubernetes.addons.dns = {
-    enable = mkEnableOption "kubernetes dns addon";
+    enable = mkEnableOption (lib.mdDoc "kubernetes dns addon");
 
     clusterIp = mkOption {
       description = lib.mdDoc "Dns addon clusterIP";
@@ -23,9 +23,9 @@ in {
           take 3 (splitString "." config.services.kubernetes.apiserver.serviceClusterIpRange
         ))
       ) + ".254";
-      defaultText = literalDocBook ''
-        The <literal>x.y.z.254</literal> IP of
-        <literal>config.${options.services.kubernetes.apiserver.serviceClusterIpRange}</literal>.
+      defaultText = literalMD ''
+        The `x.y.z.254` IP of
+        `config.${options.services.kubernetes.apiserver.serviceClusterIpRange}`.
       '';
       type = types.str;
     };
@@ -59,9 +59,9 @@ in {
       type = types.attrs;
       default = {
         imageName = "coredns/coredns";
-        imageDigest = "sha256:4a6e0769130686518325b21b0c1d0688b54e7c79244d48e1b15634e98e40c6ef";
+        imageDigest = "sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e";
         finalImageTag = version;
-        sha256 = "02r440xcdsgi137k5lmmvp0z5w5fmk8g9mysq5pnysq1wl8sj6mw";
+        sha256 = "0wg696920smmal7552a2zdhfncndn5kfammfa8bk8l7dz9bhk0y1";
       };
     };
 
@@ -135,6 +135,11 @@ in {
             apiGroups = [ "" ];
             resources = [ "nodes" ];
             verbs = [ "get" ];
+          }
+          {
+            apiGroups = [ "discovery.k8s.io" ];
+            resources = [ "endpointslices" ];
+            verbs = [ "list" "watch" ];
           }
         ];
       };

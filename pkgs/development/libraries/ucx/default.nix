@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
-, numactl, rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen, numactl
+, rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin, pkg-config
 , enableCuda ? false
 , cudatoolkit
+, enableRocm ? false
+, rocm-core, rocm-runtime, rocm-device-libs, hip
 }:
 
 let
@@ -10,19 +12,24 @@ let
     inherit (cudatoolkit) name meta;
     paths = [ cudatoolkit cudatoolkit.lib ];
   };
+  rocm = symlinkJoin {
+    name = "rocm";
+    paths = [ rocm-core rocm-runtime rocm-device-libs hip ];
+  };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ucx";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "sha256-DWiOmqxBAAH8DE7H0teoKyp+m3wYEo652ac7ey43Erg=";
+    sha256 = "sha256-OSYeJfMi57KABt8l3Yj0glqx54C5cwM2FqlijszJIk4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook doxygen ];
+  nativeBuildInputs = [ autoreconfHook doxygen pkg-config ];
 
   buildInputs = [
     libbfd
@@ -31,7 +38,8 @@ in stdenv.mkDerivation rec {
     perl
     rdma-core
     zlib
-  ] ++ lib.optional enableCuda cudatoolkit;
+  ] ++ lib.optional enableCuda cudatoolkit
+  ++ lib.optional enableRocm [ rocm-core rocm-runtime rocm-device-libs hip ];
 
   configureFlags = [
     "--with-rdmacm=${rdma-core}"
@@ -39,13 +47,14 @@ in stdenv.mkDerivation rec {
     "--with-rc"
     "--with-dm"
     "--with-verbs=${rdma-core}"
-  ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}";
+  ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}"
+  ++ lib.optional enableRocm "--with-rocm=${rocm}";
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Unified Communication X library";
-    homepage = "http://www.openucx.org";
+    homepage = "https://www.openucx.org";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];

@@ -3,7 +3,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "netdata";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ cransom ];
+    maintainers = [ cransom raitobezarius ];
   };
 
   nodes = {

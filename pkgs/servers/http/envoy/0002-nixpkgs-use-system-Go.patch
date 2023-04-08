@@ -1,0 +1,94 @@
+From 31d864a3b6a1a3455191e87ff680eb812f77dc3c Mon Sep 17 00:00:00 2001
+From: Luke Granger-Brown <git@lukegb.com>
+Date: Sun, 19 Feb 2023 17:43:03 +0000
+Subject: [PATCH 2/2] nixpkgs: use system Go
+
+---
+ bazel/dependency_imports.bzl   | 29 +----------------------------
+ bazel/repositories.bzl         |  3 ---
+ bazel/repository_locations.bzl |  4 ++--
+ 3 files changed, 3 insertions(+), 33 deletions(-)
+
+diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
+index 7dbdb0174e..e73662ed79 100644
+--- a/bazel/dependency_imports.bzl
++++ b/bazel/dependency_imports.bzl
+@@ -15,7 +15,7 @@ load("@aspect_bazel_lib//lib:repositories.bzl", "register_jq_toolchains", "regis
+ load("@com_google_cel_cpp//bazel:deps.bzl", "parser_deps")
+ 
+ # go version for rules_go
+-GO_VERSION = "1.18"
++GO_VERSION = "host"
+ 
+ JQ_VERSION = "1.6"
+ YQ_VERSION = "4.24.4"
+@@ -25,7 +25,6 @@ def envoy_dependency_imports(go_version = GO_VERSION, jq_version = JQ_VERSION, y
+     rules_foreign_cc_dependencies(register_default_tools = False, register_built_tools = False)
+     go_rules_dependencies()
+     go_register_toolchains(go_version)
+-    envoy_download_go_sdks(go_version)
+     gazelle_dependencies(go_sdk = "go_sdk")
+     apple_rules_dependencies()
+     pip_dependencies()
+@@ -134,29 +133,3 @@ def envoy_dependency_imports(go_version = GO_VERSION, jq_version = JQ_VERSION, y
+         # use_category = ["api"],
+         # source = "https://github.com/bufbuild/protoc-gen-validate/blob/v0.6.1/dependencies.bzl#L23-L28"
+     )
+-
+-def envoy_download_go_sdks(go_version):
+-    go_download_sdk(
+-        name = "go_linux_amd64",
+-        goos = "linux",
+-        goarch = "amd64",
+-        version = go_version,
+-    )
+-    go_download_sdk(
+-        name = "go_linux_arm64",
+-        goos = "linux",
+-        goarch = "arm64",
+-        version = go_version,
+-    )
+-    go_download_sdk(
+-        name = "go_darwin_amd64",
+-        goos = "darwin",
+-        goarch = "amd64",
+-        version = go_version,
+-    )
+-    go_download_sdk(
+-        name = "go_darwin_arm64",
+-        goos = "darwin",
+-        goarch = "arm64",
+-        version = go_version,
+-    )
+diff --git a/bazel/repositories.bzl b/bazel/repositories.bzl
+index fca05b6062..a2f60014cb 100644
+--- a/bazel/repositories.bzl
++++ b/bazel/repositories.bzl
+@@ -115,9 +115,6 @@ def _go_deps(skip_targets):
+     if "io_bazel_rules_go" not in skip_targets:
+         external_http_archive(
+             name = "io_bazel_rules_go",
+-            # TODO(wrowe, sunjayBhatia): remove when Windows RBE supports batch file invocation
+-            patch_args = ["-p1"],
+-            patches = ["@envoy//bazel:rules_go.patch"],
+         )
+         external_http_archive("bazel_gazelle")
+ 
+diff --git a/bazel/repository_locations.bzl b/bazel/repository_locations.bzl
+index e4e89d281a..fb62c4f8f3 100644
+--- a/bazel/repository_locations.bzl
++++ b/bazel/repository_locations.bzl
+@@ -878,8 +878,8 @@ REPOSITORY_LOCATIONS_SPEC = dict(
+         project_name = "Go rules for Bazel",
+         project_desc = "Bazel rules for the Go language",
+         project_url = "https://github.com/bazelbuild/rules_go",
+-        version = "0.36.0",
+-        sha256 = "ae013bf35bd23234d1dea46b079f1e05ba74ac0321423830119d3e787ec73483",
++        version = "0.38.1",
++        sha256 = "dd926a88a564a9246713a9c00b35315f54cbd46b31a26d5d8fb264c07045f05d",
+         urls = ["https://github.com/bazelbuild/rules_go/releases/download/v{version}/rules_go-v{version}.zip"],
+         use_category = ["build", "api"],
+         release_date = "2022-11-23",
+-- 
+2.39.1
+

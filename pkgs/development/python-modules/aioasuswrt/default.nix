@@ -22,7 +22,7 @@ buildPythonPackage rec {
     asyncssh
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
     pytestCheckHook

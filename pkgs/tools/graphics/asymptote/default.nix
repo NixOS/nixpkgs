@@ -9,23 +9,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.67";
+  version = "2.85";
   pname = "asymptote";
 
   src = fetchFromGitHub {
     owner = "vectorgraphics";
     repo = pname;
     rev = version;
-    hash = "sha256-dMgsKBg6YQ3mdx3jFqjX4vZeizaier8+ZQUl4J6QXNE=";
+    hash = "sha256-GyW9OEolV97WtrSdIxp4MCP3JIyA1c/DQSqg8jLC0WQ=";
   };
-
-  patches =
-    (lib.optional (lib.versionOlder version "2.68")
-      (fetchpatch {
-        url = "https://github.com/vectorgraphics/asymptote/commit/3361214340d58235f4dbb8f24017d0cd5d94da72.patch";
-        hash = "sha256-1RYMZcwbjBAM7aAXFBbwst0eozWYFtJ8HcicjXogS/w=";
-      }))
-  ;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -62,7 +54,7 @@ stdenv.mkDerivation rec {
     "--with-context=$out/share/texmf/tex/context/third"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
+  env.NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
 
   postInstall = ''
     mv $out/share/info/asymptote/*.info $out/share/info/
@@ -75,12 +67,15 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  # Missing install depends:
+  #   ...-coreutils-9.1/bin/install: cannot stat 'asy-keywords.el': No such file or directory
+  #   make: *** [Makefile:272: install-asy] Error 1
+  enableParallelInstalling = false;
 
   meta = with lib; {
     description =  "A tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin ];
-    broken = stdenv.isDarwin;  # https://github.com/vectorgraphics/asymptote/issues/69
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

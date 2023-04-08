@@ -8,11 +8,7 @@ in
 
 {
   options.services.gollum = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc "Enable the Gollum service.";
-    };
+    enable = mkEnableOption (lib.mdDoc "Gollum service");
 
     address = mkOption {
       type = types.str;
@@ -21,7 +17,7 @@ in
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 4567;
       description = lib.mdDoc "Port on which the web server will run.";
     };
@@ -87,6 +83,14 @@ in
       description = lib.mdDoc "Specifies the path of the repository directory. If it does not exist, Gollum will create it on startup.";
     };
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.gollum;
+      defaultText = literalExpression "pkgs.gollum";
+      description = lib.mdDoc ''
+        The package used in the service
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -120,7 +124,7 @@ in
         Group = config.users.groups.gollum.name;
         WorkingDirectory = cfg.stateDir;
         ExecStart = ''
-          ${pkgs.gollum}/bin/gollum \
+          ${cfg.package}/bin/gollum \
             --port ${toString cfg.port} \
             --host ${cfg.address} \
             --config ${pkgs.writeText "gollum-config.rb" cfg.extraConfig} \

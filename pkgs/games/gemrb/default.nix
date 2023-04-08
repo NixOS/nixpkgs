@@ -11,7 +11,7 @@
 , libvlc
 , libvorbis
 , openal
-, python2 # 0.9.0 crashes after character generation with py3, so stick to py2 for now
+, python3
 , zlib
 }:
 
@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gemrb";
-  version = "0.9.0";
+  version = "0.9.1.1";
 
   src = fetchFromGitHub {
     owner = "gemrb";
     repo = "gemrb";
     rev = "v${version}";
-    sha256 = "sha256-h/dNPY0QZ2m7aYgRla3r1E8APJqO99ePa2ABhhh3Aoc=";
+    hash = "sha256-pC83LgAy1aQxUhS2qa57hm03B37bj6dcRVRn7SI5I+k=";
   };
 
   buildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libpng
     libvorbis
     openal
-    python2
+    python3
     zlib
   ]
   ++ optional withVLC libvlc;

@@ -11,12 +11,12 @@ in
   };
 
   options.services.grafana-agent = {
-    enable = mkEnableOption "grafana-agent";
+    enable = mkEnableOption (lib.mdDoc "grafana-agent");
 
     package = mkOption {
       type = types.package;
       default = pkgs.grafana-agent;
-      defaultText = "pkgs.grafana-agent";
+      defaultText = lib.literalExpression "pkgs.grafana-agent";
       description = lib.mdDoc "The grafana-agent package to use.";
     };
 
@@ -38,8 +38,8 @@ in
     };
 
     settings = mkOption {
-      description = ''
-        Configuration for <package>grafana-agent</package>.
+      description = lib.mdDoc ''
+        Configuration for `grafana-agent`.
 
         See https://grafana.com/docs/agent/latest/configuration/
       '';
@@ -49,17 +49,19 @@ in
       };
 
       default = { };
-      defaultText = ''
-        metrics = {
-          wal_directory = "\''${STATE_DIRECTORY}";
-          global.scrape_interval = "5s";
-        };
-        integrations = {
-          agent.enabled = true;
-          agent.scrape_integration = true;
-          node_exporter.enabled = true;
-          replace_instance_label = true;
-        };
+      defaultText = lib.literalExpression ''
+        {
+          metrics = {
+            wal_directory = "\''${STATE_DIRECTORY}";
+            global.scrape_interval = "5s";
+          };
+          integrations = {
+            agent.enabled = true;
+            agent.scrape_integration = true;
+            node_exporter.enabled = true;
+            replace_instance_label = true;
+          };
+        }
       '';
       example = {
         metrics.global.remote_write = [{

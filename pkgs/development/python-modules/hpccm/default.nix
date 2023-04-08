@@ -9,17 +9,17 @@
 
 buildPythonPackage rec {
   pname = "hpccm";
-  version = "22.8.0";
+  version = "22.10.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "hpc-container-maker";
     rev = "v${version}";
-    sha256 = "sha256-nq1zixIu/Kv2CtkQX1Sw7Q3BsOZKcCJjV0+uroXPEBs=";
+    hash = "sha256-dLMbwtvn7HTVVlWHAzXU19ERdJxytf9NlnqMXW6ShKI=";
   };
 
   propagatedBuildInputs = [ six archspec ];
-  checkInputs = [ pytestCheckHook pytest-xdist ];
+  nativeCheckInputs = [ pytestCheckHook pytest-xdist ];
 
   disabledTests = [
     # tests require git

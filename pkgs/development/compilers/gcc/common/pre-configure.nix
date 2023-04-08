@@ -1,10 +1,11 @@
-{ lib, version, hostPlatform, targetPlatform
+{ lib, version, buildPlatform, hostPlatform, targetPlatform
 , gnatboot ? null
 , langAda ? false
 , langJava ? false
 , langJit ? false
 , langGo
 , crossStageStatic
+, enableMultilib
 }:
 
 assert langJava -> lib.versionOlder version "7";
@@ -21,6 +22,31 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export lib=$out;
 '' + lib.optionalString langAda ''
   export PATH=${gnatboot}/bin:$PATH
+''
+
+# On x86_64-darwin, the gnatboot bootstrap compiler that we need to build a
+# native GCC with Ada support emits assembly that is accepted by the Clang
+# integrated assembler, but not by the GNU assembler in cctools-port that Nix
+# usually in the x86_64-darwin stdenv.  In particular, x86_64-darwin gnatboot
+# emits MOVQ as the mnemonic for quadword interunit moves, such as between XMM
+# and general registers (e.g "movq %xmm0, %rbp"); the cctools-port assembler,
+# however, only recognises MOVD for such moves.
+#
+# Therefore, for native x86_64-darwin builds that support Ada, we have to use
+# the Clang integrated assembler to build (at least stage 1 of) GCC, but have to
+# target GCC at the cctools-port GNU assembler.  In the wrapped x86_64-darwin
+# gnatboot, the former is provided as `as`, while the latter is provided as
+# `gas`.
+#
++ lib.optionalString (
+    langAda
+    && buildPlatform == hostPlatform
+    && hostPlatform == targetPlatform
+    && targetPlatform.isx86_64
+    && targetPlatform.isDarwin
+  ) ''
+  export AS_FOR_BUILD=${gnatboot}/bin/as
+  export AS_FOR_TARGET=${gnatboot}/bin/gas
 ''
 
 # NOTE 2020/3/18: This environment variable prevents configure scripts from
@@ -77,4 +103,18 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # We explicitly inhibit libc headers use in this case as well.
 + lib.optionalString (targetPlatform != hostPlatform && crossStageStatic) ''
   export inhibit_libc=true
+''
+
++ lib.optionalString (!enableMultilib && hostPlatform.is64bit && !hostPlatform.isMips64n32) ''
+  export linkLib64toLib=1
+''
+
+# On mips platforms, gcc follows the IRIX naming convention:
+#
+#  $PREFIX/lib   = mips32
+#  $PREFIX/lib32 = mips64n32
+#  $PREFIX/lib64 = mips64
+#
++ lib.optionalString (!enableMultilib && targetPlatform.isMips64n32) ''
+  export linkLib32toLib=1
 ''

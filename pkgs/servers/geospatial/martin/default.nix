@@ -1,27 +1,56 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "martin";
-  version = "0.5.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
-    owner = "urbica";
-    repo = pname;
+    owner = "maplibre";
+    repo = "martin";
     rev = "v${version}";
-    sha256 = "1i9zhmjkgid4s90n52wqmrl3lwswcaxd6d47ssycgjl1nv0jla4k";
+    hash = "sha256-gMIdUqX872TMAS8tyLoKJVWBBAphikhz/s6P+vbZSCw=";
   };
 
-  cargoSha256 = "1jgl8s6h4pqhn189swrhn896kw1rkmqpf7dq52ry2rdci80g02nq";
+  cargoHash = "sha256-Jt5e4ULLIEta0QwvAkHRx891tMUhbj4eAvnPOXAb9CM=";
 
-  buildInputs = with stdenv; lib.optional isDarwin Security;
+  nativeBuildInputs = [ pkg-config ];
 
-  doCheck = false;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+
+  checkFlags = [
+    "--skip function_source_schemas"
+    "--skip function_source_tile"
+    "--skip function_source_tilejson"
+    "--skip pg_get_function_tiles"
+    "--skip pg_get_function_source_ok_rewrite"
+    "--skip pg_get_function_source_ok"
+    "--skip pg_get_composite_source_tile_minmax_zoom_ok"
+    "--skip pg_get_function_source_query_params_ok"
+    "--skip pg_get_composite_source_tile_ok"
+    "--skip pg_get_catalog"
+    "--skip pg_get_composite_source_ok"
+    "--skip pg_get_health_returns_ok"
+    "--skip pg_get_table_source_ok"
+    "--skip pg_get_table_source_rewrite"
+    "--skip pg_null_functions"
+    "--skip utils::test_utils::tests::test_bad_os_str"
+    "--skip utils::test_utils::tests::test_get_env_str"
+    "--skip pg_get_table_source_multiple_geom_tile_ok"
+    "--skip pg_get_table_source_tile_minmax_zoom_ok"
+    "--skip pg_tables_feature_id"
+    "--skip pg_get_table_source_tile_ok"
+    "--skip table_source_schemas"
+    "--skip tables_srid_ok"
+    "--skip tables_tile_ok"
+    "--skip table_source"
+    "--skip tables_tilejson"
+    "--skip tables_multiple_geom_ok"
+  ];
 
   meta = with lib; {
     description = "Blazing fast and lightweight PostGIS vector tiles server";
-    homepage = "https://martin.urbica.co/";
-    license = licenses.mit;
+    homepage = "https://martin.maplibre.org/";
+    license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ sikmir ];
-    platforms = with platforms; linux ++ darwin;
   };
 }

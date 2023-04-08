@@ -14,11 +14,11 @@
 , glib-networking
 , libadwaita
 , appstream
+, blueprint-compiler
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "giara";
-  version = "1.0";
+  version = "1.0.1";
 
   format = "other";
 
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "World";
     repo = pname;
     rev = version;
-    hash = "sha256-xDIzgr8zYal0r0sASWqiSZANCMC52LrVmLjlnGAd2Mg=";
+    hash = "sha256-hKaniW+bbuKUrETMQGWwvC2kyudK9tCE/R69dOFzdQM=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     pkg-config
     ninja
     wrapGAppsHook4
+    blueprint-compiler
   ];
 
   buildInputs = [
@@ -58,23 +59,10 @@ python3.pkgs.buildPythonApplication rec {
     beautifulsoup4
   ];
 
-  patches = [
-    # Proper support for gtk4 and libadwaita
-    # @TODO: Remove when bumping the version.
-    (fetchpatch {
-      name = "giara-gtk4-libadwaita.patch";
-      url = "https://gitlab.gnome.org/World/giara/-/commit/6204427f8b8e3d8c72b669717a3f129ffae401d9.patch";
-      sha256 = "sha256-E8kbVsACPD2gkfNrzYUy0+1U7+/pIkUu4rCkX+xY0us=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace meson_post_install.py \
       --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
-
-  # Fix setup-hooks https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   meta = with lib; {
     description = "A Reddit app, built with Python, GTK and Handy; Created with mobile Linux in mind";

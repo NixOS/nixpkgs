@@ -4,36 +4,39 @@
 , fetchFromGitHub
 , installShellFiles
 , btrfs-progs
-, glibc
 , testers
 , werf
 }:
 
 buildGoModule rec {
   pname = "werf";
-  version = "1.2.154";
+  version = "1.2.217";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
-    sha256 = "sha256-5tiJRxE8W2nvkQdJ3jL8P0+7LXEfNOdL15LdDjlDWpc=";
+    hash = "sha256-89r1M9yqvaSZiecNVAMnU02C8elT02GOYwfd8rZvdQM=";
   };
 
-  vendorSha256 = "sha256-XpSAFiweD2oUKleD6ztDp1+3PpfUWXfGaaE/9mzRrUQ=";
+  vendorHash = "sha256-x4FuGAyQmvlI2ZltuCyvo1UFAFDh8P5wnXVeYEoUCyY=";
 
   proxyVendor = true;
 
   subPackages = [ "cmd/werf" ];
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isLinux [ btrfs-progs glibc.static ];
+
+  buildInputs = lib.optionals stdenv.isLinux [ btrfs-progs ]
+    ++ lib.optionals stdenv.hostPlatform.isGnu [ stdenv.cc.libc.static ];
+
+  CGO_ENABLED = if stdenv.isLinux then 1 else 0;
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/werf/werf/pkg/werf.Version=${src.rev}"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (CGO_ENABLED == 1) [
     "-extldflags=-static"
     "-linkmode external"
   ];
@@ -41,8 +44,10 @@ buildGoModule rec {
   tags = [
     "containers_image_openpgp"
     "dfrunmount"
+    "dfrunnetwork"
+    "dfrunsecurity"
     "dfssh"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (CGO_ENABLED == 1) [
     "exclude_graphdriver_devicemapper"
     "netgo"
     "no_devmapper"
@@ -50,8 +55,23 @@ buildGoModule rec {
     "static_build"
   ];
 
-  # There are no tests for cmd/werf.
-  doCheck = false;
+  preCheck = ''
+    # Test all targets.
+    unset subPackages
+
+    # Remove tests that require external services.
+    rm -rf \
+      integration/suites \
+      pkg/true_git/*test.go \
+      test/e2e
+
+    # Remove failing tests.
+    rm -rf \
+      cmd/werf/docs/replacers/kubectl/kubectl_test.go
+  '' + lib.optionalString (CGO_ENABLED == 0) ''
+    # A workaround for osusergo.
+    export USER=nixbld
+  '';
 
   postInstall = ''
     installShellCompletion --cmd werf \
@@ -62,7 +82,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = werf;
     command = "werf version";
-    version = "v${version}";
+    version = src.rev;
   };
 
   meta = with lib; {

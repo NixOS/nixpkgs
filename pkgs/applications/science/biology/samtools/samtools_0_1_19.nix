@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tools for manipulating SAM/BAM/CRAM format";
     license = licenses.mit;
-    homepage = "http://samtools.sourceforge.net/";
+    homepage = "https://samtools.sourceforge.net/";
     platforms = platforms.unix;
     maintainers = [ maintainers.unode ];
   };

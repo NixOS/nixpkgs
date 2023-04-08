@@ -12,7 +12,7 @@ in {
   options = {
 
     services.domoticz = {
-      enable = mkEnableOption pkgDesc;
+      enable = mkEnableOption (lib.mdDoc pkgDesc);
 
       bind = mkOption {
         type = types.str;
@@ -21,7 +21,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8080;
         description = lib.mdDoc "Port to bind to for HTTP, set to 0 to disable HTTP.";
       };

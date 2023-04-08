@@ -1,18 +1,19 @@
-{lib, stdenv, fetchurl, ncurses, tcl, openssl, pam, libkrb5
-, openldap
+{ lib, stdenv, fetchgit, ncurses, tcl, openssl, pam, libkrb5
+, openldap, libxcrypt, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "alpine";
-  version = "2.25";
+  version = "2.26";
 
-  src = fetchurl {
-    url = "http://alpine.x10host.com/alpine/release/src/${pname}-${version}.tar.xz";
-    sha256 = "0xppxhcbafq9qa1rns5zl0n238gai08xhvcf2as0nx7nh84ib2k5";
+  src = fetchgit {
+    url = "https://repo.or.cz/alpine.git";
+    rev = "v${version}";
+    hash = "sha256-cJyUBatQBjD6RG+jesJ0JRhWghPRBACc/HQl+2aCTd0=";
   };
 
   buildInputs = [
-    ncurses tcl openssl pam libkrb5 openldap
+    ncurses tcl openssl pam libkrb5 openldap libxcrypt
   ];
 
   hardeningDisable = [ "format" ];
@@ -23,11 +24,13 @@ stdenv.mkDerivation rec {
     "--with-c-client-target=slx"
   ];
 
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
   meta = with lib; {
     description = "Console mail reader";
     license = licenses.asl20;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin rhendric ];
     platforms = platforms.linux;
-    homepage = "http://alpine.x10host.com/";
+    homepage = "https://alpineapp.email/";
   };
 }

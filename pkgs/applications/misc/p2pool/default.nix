@@ -1,5 +1,6 @@
 { stdenv
 , cmake
+, curl
 , fetchFromGitHub
 , gss
 , hwloc
@@ -10,22 +11,29 @@
 , openssl
 , pkg-config
 , zeromq
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Foundation;
+in
 stdenv.mkDerivation rec {
   pname = "p2pool";
-  version = "2.1";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
     rev = "v${version}";
-    sha256 = "sha256-cpBMzYLcU93GXYkBhUdoRovjQ2hd1+pAt6d9aAOaZT8=";
+    sha256 = "sha256-yHxg/9QhaDNlUFzylftsJEk+pJoSoTfA0rJfcolBdTs=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libuv zeromq libsodium gss hwloc openssl ];
+  buildInputs = [ libuv zeromq libsodium gss hwloc openssl curl ]
+    ++ lib.optionals stdenv.isDarwin [ Foundation ];
+
+  cmakeFlags = ["-DWITH_LTO=OFF"];
 
   installPhase = ''
     runHook preInstall
@@ -36,9 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

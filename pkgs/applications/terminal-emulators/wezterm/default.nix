@@ -7,6 +7,7 @@
 , pkg-config
 , python3
 , fontconfig
+, installShellFiles
 , openssl
 , libGL
 , libX11
@@ -25,18 +26,19 @@
 , UserNotifications
 , nixosTests
 , runCommand
+, vulkan-loader
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20220807-113146-c2fee766";
+  version = "20230326-111934-3666303c";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-2krngcANqcwq8wNQZSz01srJ6yEOkk03QnO2sL7SuJA=";
+    sha256 = "sha256-tgJUnQKVdLJKohda9oy9dwz53OiK4O0A9YlsI0o+meY=";
   };
 
   postPatch = ''
@@ -46,12 +48,20 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-ZkDGCR86VSCuvVlo4Pf9Ifax2BZuBicZpB/K/7bIMls=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "image-0.24.5" = "sha256-fTajVwm88OInqCPZerWcSAm1ga46ansQ3EzAmbT58Js=";
+      "libssh-rs-0.1.7" = "sha256-pLaWKk/iGy7FfoVafpPYzErnKudxeIWzssWv2Zlm58s=";
+      "xcb-imdkit-0.2.0" = "sha256-QOT9HLlA26DVPUF4ViKH2ckexUsu45KZMdJwoUhW+hA=";
+    };
+  };
 
   nativeBuildInputs = [
+    installShellFiles
+    ncurses # tic for terminfo
     pkg-config
     python3
-    ncurses # tic for terminfo
   ] ++ lib.optional stdenv.isDarwin perl;
 
   buildInputs = [
@@ -75,21 +85,30 @@ rustPlatform.buildRustPackage rec {
     UserNotifications
   ];
 
+  buildFeatures = [ "distro-defaults" ];
+
   postInstall = ''
     mkdir -p $out/nix-support
     echo "${passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
 
-    # desktop icon
     install -Dm644 assets/icon/terminal.png $out/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
     install -Dm644 assets/wezterm.desktop $out/share/applications/org.wezfurlong.wezterm.desktop
     install -Dm644 assets/wezterm.appdata.xml $out/share/metainfo/org.wezfurlong.wezterm.appdata.xml
 
-    # helper scripts
     install -Dm644 assets/shell-integration/wezterm.sh -t $out/etc/profile.d
+    installShellCompletion --cmd wezterm \
+      --bash assets/shell-completion/bash \
+      --fish assets/shell-completion/fish \
+      --zsh assets/shell-completion/zsh
+
+    install -Dm644 assets/wezterm-nautilus.py -t $out/share/nautilus-python/extensions
   '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --add-needed "${libGL}/lib/libEGL.so.1" $out/bin/wezterm-gui
+    patchelf \
+      --add-needed "${libGL}/lib/libEGL.so.1" \
+      --add-needed "${vulkan-loader}/lib/libvulkan.so.1" \
+      $out/bin/wezterm-gui
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
     OUT_APP="$out/Applications/WezTerm.app"
@@ -106,9 +125,7 @@ rustPlatform.buildRustPackage rec {
     };
     terminfo = runCommand "wezterm-terminfo"
       {
-        nativeBuildInputs = [
-          ncurses
-        ];
+        nativeBuildInputs = [ ncurses ];
       } ''
       mkdir -p $out/share/terminfo $out/nix-support
       tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
@@ -116,10 +133,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
+    description = "GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.unix;
   };
 }

@@ -9,7 +9,7 @@ in
 
 {
   options.services.lldpd = {
-    enable = mkEnableOption "Link Layer Discovery Protocol Daemon";
+    enable = mkEnableOption (lib.mdDoc "Link Layer Discovery Protocol Daemon");
 
     extraArgs = mkOption {
       type = types.listOf types.str;

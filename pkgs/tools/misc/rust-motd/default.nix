@@ -9,26 +9,33 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-motd";
-  version = "0.2.1";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "rust-motd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iuADR7m+wdmsQ897o4CQHqDv9PmYu/vJgO5C6Dluao4=";
+    hash = "sha256-x3dx4PdYSYd7wA/GGj9QYC8rK33FWATs2SnaOagGE80=";
   };
 
-  cargoSha256 = "sha256-kdSMcADoTpMU4w2XSv0pPQZC155rrQACQ4XTVyj7eeA=";
+  cargoHash = "sha256-7YvzVG3c10EJET+659F1fwgZ0SmBKMdAWD6LeWnGrNI=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+  ];
 
   OPENSSL_NO_VENDOR = 1;
 
   meta = with lib; {
     description = "Beautiful, useful MOTD generation with zero runtime dependencies";
     homepage = "https://github.com/rust-motd/rust-motd";
+    changelog = "https://github.com/rust-motd/rust-motd/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

@@ -7,11 +7,6 @@
 
 buildPythonPackage (rec {
   pname = "elasticsearch";
-  # In 7.14.0, the package was intentionally made incompatible with
-  # the OSS version of elasticsearch - don't update past 7.13.x until
-  # there's a clear path forward. See
-  # https://github.com/elastic/elasticsearch-py/issues/1639 for more
-  # info.
   version = "7.16.3";
 
   src = fetchPypi {

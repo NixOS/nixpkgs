@@ -8,17 +8,17 @@
 
 buildPythonPackage rec {
   pname = "cloudpickle";
-  version = "2.1.0";
+  version = "2.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uyM+h2pYSR2VkKZ2+Tx6VHOgj3R9Wrnff5zlZLPnk44=";
+    hash = "sha256-2JaEuN6eNKKkOzRg+8oH0J1uJc6FjfTVpEJAQDthePU=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     psutil
     pytestCheckHook
   ];

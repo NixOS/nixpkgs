@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyslurm";
-  version = "21.08.4";
+  version = "22.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "pyslurm";
     owner = "PySlurm";
-    rev = "v${version}";
-    hash = "sha256-9ZYTBO8g+5B9D8Ll5JjkJYFyh0RQNIjxg958UZoCNmA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sPZELCxe2e7/gUmRxvP2aOwqsbaR/x+0grHwuDdx0Dg=";
   };
 
   buildInputs = [ cython slurm ];

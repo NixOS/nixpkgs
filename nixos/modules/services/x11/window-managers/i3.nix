@@ -8,7 +8,7 @@ in
 
 {
   options.services.xserver.windowManager.i3 = {
-    enable = mkEnableOption "i3 window manager";
+    enable = mkEnableOption (lib.mdDoc "i3 window manager");
 
     configFile = mkOption {
       default     = null;
@@ -31,7 +31,6 @@ in
       type        = types.package;
       default     = pkgs.i3;
       defaultText = literalExpression "pkgs.i3";
-      example     = literalExpression "pkgs.i3-gaps";
       description = lib.mdDoc ''
         i3 package to use.
       '';
@@ -73,6 +72,6 @@ in
 
   imports = [
     (mkRemovedOptionModule [ "services" "xserver" "windowManager" "i3-gaps" "enable" ]
-      "Use services.xserver.windowManager.i3.enable and set services.xserver.windowManager.i3.package to pkgs.i3-gaps to use i3-gaps.")
+      "i3-gaps was merged into i3. Use services.xserver.windowManager.i3.enable instead.")
   ];
 }

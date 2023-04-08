@@ -43,7 +43,7 @@ in
 
   options = {
     services.sslh = {
-      enable = mkEnableOption "sslh";
+      enable = mkEnableOption (lib.mdDoc "sslh");
 
       verbose = mkOption {
         type = types.bool;
@@ -70,7 +70,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 443;
         description = lib.mdDoc "Listening port.";
       };

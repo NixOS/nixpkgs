@@ -1,8 +1,11 @@
 { lib
+, async-timeout
 , bluez
 , buildPythonPackage
-, dbus-next
-, fetchPypi
+, dbus-fast
+, fetchFromGitHub
+, poetry-core
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
@@ -10,22 +13,30 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.15.1";
-  format = "setuptools";
+  version = "0.20.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2MjYjeDyKhW9E1ugVsTlsvufFRGSg97yGx7X1DwA1ZA=";
+  src = fetchFromGitHub {
+    owner = "hbldh";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8QFcoWKF2Hc49xJ+224lYaPpTVF1QsMu6Lu66J5ok0Y=";
   };
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
   propagatedBuildInputs = [
-    dbus-next
+    async-timeout
+    dbus-fast
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 
@@ -42,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bluetooth Low Energy platform agnostic client";
     homepage = "https://github.com/hbldh/bleak";
+    changelog = "https://github.com/hbldh/bleak/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ oxzi ];

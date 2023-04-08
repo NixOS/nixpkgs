@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , aws-c-auth
 , aws-c-cal
 , aws-c-common
@@ -13,11 +12,12 @@
 , aws-checksums
 , cmake
 , s2n-tls
+, nix
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-crt-cpp";
-  version = "0.17.28";
+  version = "0.18.9";
 
   outputs = [ "out" "dev" ];
 
@@ -25,22 +25,13 @@ stdenv.mkDerivation rec {
     owner = "awslabs";
     repo = "aws-crt-cpp";
     rev = "v${version}";
-    sha256 = "sha256-4/BgwX8Pa5D2lEn0Dh3JlUiYUtA9u0rWpBixqmv1X/A=";
+    sha256 = "sha256-NEsEKUKmADevb8SSc8EFuXLc12fuOf6fXI76yVeDQno=";
   };
 
   patches = [
     # Correct include path for split outputs.
     # https://github.com/awslabs/aws-crt-cpp/pull/325
     ./0001-build-Make-includedir-properly-overrideable.patch
-
-    # Fix build with new input stream api
-    # https://github.com/awslabs/aws-crt-cpp/pull/341
-    # Remove with next release
-    (fetchpatch {
-      url = "https://github.com/awslabs/aws-crt-cpp/commit/8adb8490fd4f1d1fe65aad01b0a7dda0e52ac596.patch";
-      excludes = [ "crt/*" ];
-      sha256 = "190v8rlj6z0qllih6w3kqmdvqjifj66hc4bchsgr3gpfv18vpzid";
-    })
   ];
 
   postPatch = ''
@@ -74,6 +65,10 @@ stdenv.mkDerivation rec {
     # Prevent dependency cycle.
     moveToOutput lib/aws-crt-cpp/cmake "$dev"
   '';
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "C++ wrapper around the aws-c-* libraries";

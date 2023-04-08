@@ -23,13 +23,13 @@
 in
 stdenv.mkDerivation rec {
   pname = "fx_cast_bridge";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = pkgs.fetchFromGitHub {
     owner = "hensm";
     repo = "fx_cast";
     rev = "v${version}";
-    hash = "sha256-bgoItAOIHxGow7TjlRzaMqtIefcSym1h5n6v/9fFZfc=";
+    hash = "sha256-hB4NVJW2exHoKsMp0CKzHerYgj8aR77rV+ZsCoWA1Dg=";
   };
 
   buildInputs = with pkgs; [

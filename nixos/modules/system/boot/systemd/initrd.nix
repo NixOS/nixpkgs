@@ -56,6 +56,7 @@ let
     "systemd-ask-password-console.path"
     "systemd-ask-password-console.service"
     "systemd-fsck@.service"
+    "systemd-growfs@.service"
     "systemd-halt.service"
     "systemd-hibernate-resume@.service"
     "systemd-journald-audit.socket"
@@ -100,12 +101,6 @@ let
 
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
-  fstab = pkgs.writeText "initrd-fstab" (lib.concatMapStringsSep "\n"
-    ({ fsType, mountPoint, device, options, autoFormat, autoResize, ... }@fs: let
-        opts = options ++ optional autoFormat "x-systemd.makefs" ++ optional autoResize "x-systemd.growfs";
-        finalDevice = if (lib.elem "bind" options) then "/sysroot${device}" else device;
-      in "${finalDevice} /sysroot${mountPoint} ${fsType} ${lib.concatStringsSep "," opts}") fileSystems);
-
   needMakefs = lib.any (fs: fs.autoFormat) fileSystems;
   needGrowfs = lib.any (fs: fs.autoResize) fileSystems;
 
@@ -124,7 +119,7 @@ let
     name = "initrd-bin-env";
     paths = map getBin cfg.initrdBin;
     pathsToLink = ["/bin" "/sbin"];
-    postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -s '${v}' $out/bin/'${n}'") cfg.extraBin);
+    postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -sf '${v}' $out/bin/'${n}'") cfg.extraBin);
   };
 
   initialRamdisk = pkgs.makeInitrdNG {
@@ -138,17 +133,40 @@ let
 
 in {
   options.boot.initrd.systemd = {
-    enable = mkEnableOption ''systemd in initrd.
+    enable = mkEnableOption (lib.mdDoc "systemd in initrd") // {
+      description = lib.mdDoc ''
+        Whether to enable systemd in initrd.
 
-      Note: This is in very early development and is highly
-      experimental. Most of the features NixOS supports in initrd are
-      not yet supported by the intrd generated with this option.
-    '';
+        Note: This is in very early development and is highly
+        experimental. Most of the features NixOS supports in initrd are
+        not yet supported by the intrd generated with this option.
+      '';
+    };
 
-    package = (mkPackageOption pkgs "systemd" {
+    package = (mkPackageOptionMD pkgs "systemd" {
       default = "systemdStage1";
     }) // {
       visible = false;
+    };
+
+    extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "DefaultLimitCORE=infinity";
+      description = lib.mdDoc ''
+        Extra config options for systemd. See systemd-system.conf(5) man page
+        for available options.
+      '';
+    };
+
+    managerEnvironment = mkOption {
+      type = with types; attrsOf (nullOr (oneOf [ str path package ]));
+      default = {};
+      example = { SYSTEMD_LOG_LEVEL = "debug"; };
+      description = lib.mdDoc ''
+        Environment variables of PID 1. These variables are
+        *not* passed to started units.
+      '';
     };
 
     contents = mkOption {
@@ -335,7 +353,12 @@ in {
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
     system.build = { inherit initialRamdisk; };
 
-    boot.initrd.availableKernelModules = [ "autofs4" ]; # systemd needs this for some features
+    boot.initrd.availableKernelModules = [
+      # systemd needs this for some features
+      "autofs4"
+      # systemd-cryptenroll
+      "tpm-tis"
+    ] ++ lib.optional (pkgs.stdenv.hostPlatform.system != "riscv64-linux") "tpm-crb";
 
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
@@ -343,18 +366,22 @@ in {
         less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";
         umount = "${cfg.package.util-linux}/bin/umount";
+        fsck = "${cfg.package.util-linux}/bin/fsck";
       };
 
+      managerEnvironment.PATH = "/bin:/sbin";
+
       contents = {
+        "/tmp/.keep".text = "systemd requires the /tmp mount point in the initrd cpio archive";
         "/init".source = "${cfg.package}/lib/systemd/systemd";
         "/etc/systemd/system".source = stage1Units;
 
         "/etc/systemd/system.conf".text = ''
           [Manager]
           DefaultEnvironment=PATH=/bin:/sbin ${optionalString (isBool cfg.emergencyAccess && cfg.emergencyAccess) "SYSTEMD_SULOGIN_FORCE=1"}
+          ${cfg.extraConfig}
+          ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
-
-        "/etc/fstab".source = fstab;
 
         "/lib/modules".source = "${modulesClosure}/lib/modules";
         "/lib/firmware".source = "${modulesClosure}/lib/firmware";
@@ -377,6 +404,8 @@ in {
         "/etc/os-release".source = config.boot.initrd.osRelease;
         "/etc/initrd-release".source = config.boot.initrd.osRelease;
 
+      } // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
+        "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source;
       };
 
       storePaths = [
@@ -406,6 +435,14 @@ in {
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so.2"
+      ] ++ optionals cfg.package.withCryptsetup [
+        # tpm2 support
+        "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
+        pkgs.tpm2-tss
+
+        # fido2 support
+        "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
+        "${pkgs.libfido2}/lib/libfido2.so.1"
       ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];
@@ -422,21 +459,6 @@ in {
         // listToAttrs (map
                      (v: let n = escapeSystemdPath v.where;
                          in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
-
-      # The unit in /run/systemd/generator shadows the unit in
-      # /etc/systemd/system, but will still apply drop-ins from
-      # /etc/systemd/system/foo.service.d/
-      #
-      # We need IgnoreOnIsolate, otherwise the Requires dependency of
-      # a mount unit on its makefs unit causes it to be unmounted when
-      # we isolate for switch-root. Use a dummy package so that
-      # generateUnits will generate drop-ins instead of unit files.
-      packages = [(pkgs.runCommand "dummy" {} ''
-        mkdir -p $out/etc/systemd/system
-        touch $out/etc/systemd/system/systemd-{makefs,growfs}@.service
-      '')];
-      services."systemd-makefs@" = lib.mkIf needMakefs { unitConfig.IgnoreOnIsolate = true; };
-      services."systemd-growfs@" = lib.mkIf needGrowfs { unitConfig.IgnoreOnIsolate = true; };
 
       # make sure all the /dev nodes are set up
       services.systemd-tmpfiles-setup-dev.wantedBy = ["sysinit.target"];
@@ -471,7 +493,7 @@ in {
 
           # If we are not booting a NixOS closure (e.g. init=/bin/sh),
           # we don't know what root to prepare so we don't do anything
-          if ! [ -x "/sysroot$closure/prepare-root" ]; then
+          if ! [ -x "/sysroot$(readlink "/sysroot$closure/prepare-root" || echo "$closure/prepare-root")" ]; then
             echo "NEW_INIT=''${initParam[1]}" > /etc/switch-root.conf
             echo "$closure does not look like a NixOS installation - not activating"
             exit 0

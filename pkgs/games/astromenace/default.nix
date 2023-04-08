@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, cmake, xlibsWrapper, libGLU, libGL, SDL, openal, freealut, libogg, libvorbis, runtimeShell }:
+{ fetchurl, lib, stdenv, cmake, xorg, libGLU, libGL, SDL, openal, fontconfig, freealut, freetype, libogg, libvorbis, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "astromenace";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ xlibsWrapper libGLU libGL SDL openal freealut libogg libvorbis ];
+  buildInputs = [ xorg.libICE xorg.libX11 xorg.libXinerama libGLU libGL SDL openal fontconfig freealut freetype libogg libvorbis ];
 
   postBuild = ''
     ./AstroMenace --pack --rawdata=../RAW_VFS_DATA

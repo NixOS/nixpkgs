@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mpop";
-  version = "1.4.17";
+  version = "1.4.18";
 
   src = fetchurl {
     url = "https://marlam.de/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Qq5JS60pQdn2R8SMPtmMOLqapc8/5I+w/gblttrfi9U=";
+    sha256 = "sha256-YJmVAYT30JSngtHnq5gzc28SMI00pUSlm0aoRx2fhbc=";
   };
 
   nativeBuildInputs = [
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     gnutls
     gsasl
     libidn
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     Security
   ];
 
-  configureFlags = lib.optional stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.isDarwin [
     "--with-macosx-keyring"
   ];
 

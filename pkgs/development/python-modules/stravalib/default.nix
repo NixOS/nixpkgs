@@ -2,23 +2,27 @@
 , buildPythonPackage
 , fetchPypi
 , nose
+, setuptools
 , arrow
 , requests
 , units
+, pint
+, pydantic
 , pytz
 , six
 }:
 
 buildPythonPackage rec {
   pname = "stravalib";
-  version = "0.10.4";
+  version = "1.2.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "451817c68a11e0c77db9cb628e3c4df0f4806c5a481536598ab3baa1d1c21215";
+    hash = "sha256-P00oxUz0oVQB969c/N2wpKLe09wtvQWPH4DH4EZUaxc=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 
@@ -26,7 +30,10 @@ buildPythonPackage rec {
     arrow
     requests
     units
+    pint
+    pydantic
     pytz
+    setuptools
     six
   ];
 
@@ -36,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for interacting with Strava v3 REST API";
-    homepage = "https://github.com/hozn/stravalib";
+    homepage = "https://github.com/stravalib/stravalib";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

@@ -2,11 +2,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "zecwallet-lite";
-  version = "1.7.13";
+  version = "1.8.8";
 
   src = fetchurl {
     url = "https://github.com/adityapk00/zecwallet-lite/releases/download/v${version}/Zecwallet.Lite-${version}.AppImage";
-    hash = "sha256-uBiLGHBgm0vurfvOJjJ+RqVoGnVccEHTFO2T7LDqUzU=";
+    hash = "sha256-6jppP3V7R8tCR5Wv5UWfbWKkAdsgrCjSiO/bbpLNcw4=";
   };
 
   extraInstallCommands =
@@ -14,9 +14,9 @@ appimageTools.wrapType2 rec {
     in ''
       mv $out/bin/${pname}-${version} $out/bin/${pname}
 
-      install -m 444 -D ${contents}/${pname}.desktop -t $out/share/applications
-      substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
+      install -m 444 -D ${contents}/zecwallet-lite.desktop -t $out/share/applications
+      substituteInPlace $out/share/applications/zecwallet-lite.desktop \
+        --replace 'Exec=AppRun' "Exec=$out/bin/zecwallet-lite"
       cp -r ${contents}/usr/share/icons $out/share
     '';
 

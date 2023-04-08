@@ -30,14 +30,14 @@ in
         type = types.str;
         default = "stderr";
         description =
-          ''
+          lib.mdDoc ''
             Where to send logs.
 
             Possible values are:
               - stderr
               - file:/path/to/file
               - syslog:FACILITY where FACILITY is any of "daemon", "local0",
-              etc.
+                etc.
           '';
       };
 
@@ -81,7 +81,7 @@ in
           };
 
           port = mkOption {
-            type = types.int;
+            type = types.port;
             default = 12345;
             description = lib.mdDoc "Port on which redsocks should listen.";
           };
@@ -122,9 +122,10 @@ in
                                 "Forwarded_ipport" ];
             default = "false";
             description =
-              ''
+              lib.mdDoc ''
                 Way to disclose client IP to the proxy.
                   - "false": do not disclose
+
                 http-connect supports the following ways:
                   - "X-Forwarded-For": add header "X-Forwarded-For: IP"
                   - "Forwarded_ip": add header "Forwarded: for=IP" (see RFC7239)

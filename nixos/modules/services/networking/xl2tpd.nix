@@ -5,7 +5,7 @@ with lib;
 {
   options = {
     services.xl2tpd = {
-      enable = mkEnableOption "xl2tpd, the Layer 2 Tunnelling Protocol Daemon";
+      enable = mkEnableOption (lib.mdDoc "xl2tpd, the Layer 2 Tunnelling Protocol Daemon");
 
       serverIp = mkOption {
         type        = types.str;
@@ -84,7 +84,7 @@ with lib;
       xl2tpd-ppp-wrapped = pkgs.stdenv.mkDerivation {
         name         = "xl2tpd-ppp-wrapped";
         phases       = [ "installPhase" ];
-        buildInputs  = with pkgs; [ makeWrapper ];
+        nativeBuildInputs  = with pkgs; [ makeWrapper ];
         installPhase = ''
           mkdir -p $out/bin
 

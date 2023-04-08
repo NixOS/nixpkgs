@@ -1,7 +1,6 @@
 { type
 , version
 , srcs
-, icu # passing icu as an argument, because dotnet 3.1 has troubles with icu71
 , packages ? null
 }:
 
@@ -15,11 +14,16 @@ assert if type == "sdk" then packages != null else true;
 , autoPatchelfHook
 , makeWrapper
 , libunwind
-, openssl
+, icu
 , libuuid
 , zlib
+, libkrb5
 , curl
 , lttng-ust_2_12
+, testers
+, runCommand
+, writeShellScript
+, mkNugetDeps
 }:
 
 let
@@ -36,28 +40,28 @@ let
     runtime = ".NET Runtime ${version}";
     sdk = ".NET SDK ${version}";
   };
+
+  packageDeps = if type == "sdk" then mkNugetDeps {
+    name = "${pname}-${version}-deps";
+    nugetDeps = packages;
+  } else null;
+
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   inherit pname version;
 
   # Some of these dependencies are `dlopen()`ed.
-  rpath = lib.makeLibraryPath ([
-    stdenv.cc.cc
-    zlib
-    curl
-    icu
-    libunwind
-    libuuid
-    openssl
-  ] ++ lib.optional stdenv.isLinux lttng-ust_2_12);
-
   nativeBuildInputs = [
     makeWrapper
   ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
   buildInputs = [
     stdenv.cc.cc
-  ];
+    zlib
+    icu
+    libkrb5
+    curl
+  ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
 
   src = fetchurl (
     srcs."${stdenv.hostPlatform.system}" or (throw
@@ -71,28 +75,41 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin
     cp -r ./ $out
+
+    mkdir -p $out/share/doc/$pname/$version
+    mv $out/LICENSE.txt $out/share/doc/$pname/$version/
+    mv $out/ThirdPartyNotices.txt $out/share/doc/$pname/$version/
+
     ln -s $out/dotnet $out/bin/dotnet
+
     runHook postInstall
-  '';
-
-  postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/dotnet
-    patchelf --set-rpath "${rpath}" $out/dotnet
-    find $out -type f -name "*.so" -exec patchelf --set-rpath '$ORIGIN:${rpath}' {} \;
-    find $out -type f \( -name "apphost" -or -name "createdump" \) -exec patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath '$ORIGIN:${rpath}' {} \;
-
-    wrapProgram $out/bin/dotnet \
-      --prefix LD_LIBRARY_PATH : ${icu}/lib
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
-    # Fixes cross
-    export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-
     $out/bin/dotnet --info
+  '';
+
+  # Tell autoPatchelf about runtime dependencies.
+  # (postFixup phase is run before autoPatchelfHook.)
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf \
+      --add-needed libicui18n.so \
+      --add-needed libicuuc.so \
+      $out/shared/Microsoft.NETCore.App/*/libcoreclr.so \
+      $out/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
+      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+    patchelf \
+      --add-needed libgssapi_krb5.so \
+      $out/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
+      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+    patchelf \
+      --add-needed libssl.so \
+      $out/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
+      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
   '';
 
   setupHook = writeText "dotnet-setup-hook" ''
@@ -105,8 +122,38 @@ stdenv.mkDerivation rec {
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
   '';
 
-  passthru = {
-    inherit icu packages;
+  passthru = rec {
+    inherit icu;
+    packages = packageDeps;
+
+    updateScript =
+      if type == "sdk" then
+      let
+        majorVersion =
+          with lib;
+          concatStringsSep "." (take 2 (splitVersion version));
+      in
+      writeShellScript "update-dotnet-${majorVersion}" ''
+        pushd pkgs/development/compilers/dotnet
+        exec ${./update.sh} "${majorVersion}"
+      '' else null;
+
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
+
+      smoke-test = runCommand "dotnet-sdk-smoke-test" {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      } ''
+        HOME=$(pwd)/fake-home
+        dotnet new console
+        dotnet build
+        output="$(dotnet run)"
+        # yes, older SDKs omit the comma
+        [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
+      '';
+    };
   };
 
   meta = with lib; {
@@ -115,6 +162,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ kuznero mdarocha ];
     mainProgram = "dotnet";
-    platforms = builtins.attrNames srcs;
+    platforms = attrNames srcs;
   };
-}
+})

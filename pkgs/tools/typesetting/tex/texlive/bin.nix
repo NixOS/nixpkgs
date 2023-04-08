@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch, buildPackages
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
@@ -14,31 +14,30 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2021";
+  year = "2022";
   version = year; # keep names simple for now
 
   common = {
     src = fetchurl {
       urls = [
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0325-source.tar.xz"
-              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0325-source.tar.xz"
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0321-source.tar.xz"
+              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0321-source.tar.xz"
       ];
-      sha256 = "0jsq1p66l46k2qq0gbqmx25flj2nprsz4wrd1ybn286p11kdkvvs";
+      hash = "sha256-X/o0heUessRJBJZFD8abnXvXy55TNX2S20vNT9YXm1Y=";
     };
-    patches = [
-      # Pull upstream fix for -fno-common toolchains.
-      (fetchpatch {
-        name = "fno-common.patch";
-        url = "https://github.com/TeX-Live/texlive-source/commit/7748582aeda70ffa02105f6e3e2fc2476e76aac6.patch";
-        sha256 = "1y59cwa41kbg0i071g488jhi9qg0h8l7hqd69brhx2yj95za8c40";
-        excludes = [ "texk/xdvik/ChangeLog" ];
-      })
-    ];
 
     prePatch = ''
       for i in texk/kpathsea/mktex*; do
         sed -i '/^mydir=/d' "$i"
       done
+
+      # ST_NLINK_TRICK causes kpathsea to treat folders with no real subfolders
+      # as leaves, even if they contain symlinks to other folders; must be
+      # disabled to work correctly with the nix store", see section 5.3.6
+      # “Subdirectory expansion” of the kpathsea manual
+      # http://mirrors.ctan.org/systems/doc/kpathsea/kpathsea.pdf for more
+      # details
+      sed -i '/^#define ST_NLINK_TRICK/d' texk/kpathsea/config.h
     '';
 
     configureFlags = [
@@ -62,7 +61,8 @@ let
     '';
   };
 
-  withLuaJIT = !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit);
+  # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
+  withLuaJIT = !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV;
 in rec { # un-indented
 
 inherit (common) cleanBrokenLinks;
@@ -77,7 +77,13 @@ core = stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # configure: error: tangle was not found but is required when cross-compiling.
+    texlive.bin.core
+  ];
+
   buildInputs = [
     /*teckit*/ zziplib mpfr gmp
     pixman gd freetype libpng libpaper zlib
@@ -94,7 +100,10 @@ core = stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   configureFlags = common.configureFlags
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc" ]
     ++ [ "--without-x" ] # disable xdvik and xpdfopen
     ++ map (what: "--disable-${what}") [
       "chktex"
@@ -113,7 +122,7 @@ core = stdenv.mkDerivation rec {
 
   # TODO: perhaps improve texmf.cnf search locations
   postInstall = /* links format -> engine will be regenerated in texlive.combine */ ''
-    PATH="$out/bin:$PATH" ${texlinks}/bin/texlinks --cnffile "$out/share/texmf-dist/web2c/fmtutil.cnf" --unlink "$out/bin"
+    PATH="$out/bin:$PATH" ${buildPackages.texlive.bin.texlinks}/bin/texlinks --cnffile "$out/share/texmf-dist/web2c/fmtutil.cnf" --unlink "$out/bin"
   '' + /* a few texmf-dist files are useful; take the rest from pkgs */ ''
     mv "$out/share/texmf-dist/web2c/texmf.cnf" .
     rm -r "$out/share/texmf-dist"
@@ -169,6 +178,18 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
   inherit (common) src prePatch;
 
+  patches = [
+    # improves reproducibility of fmt files. This patch has been proposed upstream,
+    # but they are considering some other approaches as well. This is fairly
+    # conservative so we can safely apply it until they make a decision
+    # https://mailman.ntg.nl/pipermail/dev-luatex/2022-April/006650.html
+    (fetchpatch {
+      name = "reproducible_exception_strings.patch";
+      url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=reproducible_exception_strings.patch;msg=5";
+      sha256 = "sha256-RNZoEeTcWnrLaltcYrhNIORh42fFdwMzBfxMRWVurbk=";
+    })
+  ];
+
   hardeningDisable = [ "format" ];
 
   inherit (core) nativeBuildInputs;
@@ -199,10 +220,10 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
         mkdir -p "$path" && cd "$path"
         "../../../$path/configure" $configureFlags $extraConfig
 
-        if [[ "$path" =~ "libs/pplib" ]]; then
-          # TODO: revert for texlive 2022
+        if [[ "$path" =~ "libs/luajit" ]] || [[ "$path" =~ "libs/pplib" ]]; then
+          # ../../../texk/web2c/mfluadir/luapeg/lpeg.h:29:10: fatal error: 'lua.h' file not found
           # ../../../texk/web2c/luatexdir/luamd5/md5lib.c:197:10: fatal error: 'utilsha.h' file not found
-          make ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
+          make ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
         fi
       )
     done
@@ -226,7 +247,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     "xetex"
   ];
   postInstall = ''
-    for output in $outputs; do
+    for output in $(getAllOutputNames); do
       mkdir -p "''${!output}/bin"
     done
 
@@ -336,6 +357,7 @@ latexindent = perlPackages.buildPerlPackage rec {
 pygmentex = python3Packages.buildPythonApplication rec {
   pname = "pygmentex";
   inherit (src) version;
+  format = "other";
 
   src = lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs);
 
@@ -415,7 +437,7 @@ xdvi = stdenv.mkDerivation {
   pname = "texlive-xdvi.bin";
   inherit version;
 
-  inherit (common) src patches;
+  inherit (common) src;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ core/*kpathsea*/ freetype ghostscript ]

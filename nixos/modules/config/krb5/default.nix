@@ -78,12 +78,12 @@ in {
 
   options = {
     krb5 = {
-      enable = mkEnableOption "building krb5.conf, configuration file for Kerberos V";
+      enable = mkEnableOption (lib.mdDoc "building krb5.conf, configuration file for Kerberos V");
 
       kerberos = mkOption {
         type = types.package;
-        default = pkgs.krb5Full;
-        defaultText = literalExpression "pkgs.krb5Full";
+        default = pkgs.krb5;
+        defaultText = literalExpression "pkgs.krb5";
         example = literalExpression "pkgs.heimdal";
         description = lib.mdDoc ''
           The Kerberos implementation that will be present in
@@ -204,11 +204,11 @@ in {
             admin_server = SYSLOG:NOTICE
             default      = SYSLOG:NOTICE
         '';
-        description = ''
-          These lines go to the end of <literal>krb5.conf</literal> verbatim.
-          <literal>krb5.conf</literal> may include any of the relations that are
-          valid for <literal>kdc.conf</literal> (see <literal>man
-          kdc.conf</literal>), but it is not a recommended practice.
+        description = lib.mdDoc ''
+          These lines go to the end of `krb5.conf` verbatim.
+          `krb5.conf` may include any of the relations that are
+          valid for `kdc.conf` (see `man kdc.conf`),
+          but it is not a recommended practice.
         '';
       };
 

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, cmake, pkg-config, gettext
 , dbus, dbus-glib, libgaminggear, libgudev, lua
-, harfbuzz
+, harfbuzz, runtimeShell, coreutils, kmod
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
       /return/c \
         return g_build_path("/", g_get_user_data_dir(), "roccat", NULL);
     }' libroccat/roccat_helper.c
+
+    substituteInPlace udev/90-roccat-kone.rules \
+      --replace "/bin/sh" "${runtimeShell}" \
+      --replace "/sbin/modprobe" "${kmod}/bin/modprobe" \
+      --replace "/bin/echo" "${coreutils}/bin/echo"
   '';
 
   nativeBuildInputs = [ cmake pkg-config gettext ];
@@ -31,7 +36,7 @@ stdenv.mkDerivation rec {
     "-DLIBDIR=lib"
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${harfbuzz.dev}/include/harfbuzz"
 
     # Workaround build failure on -fno-common toolchains:
@@ -42,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tools to configure ROCCAT devices";
-    homepage = "http://roccat.sourceforge.net/";
+    homepage = "https://roccat.sourceforge.net/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };

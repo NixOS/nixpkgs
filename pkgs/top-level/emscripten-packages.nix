@@ -8,7 +8,7 @@ with pkgs;
 rec {
   json_c = (pkgs.json_c.override {
     stdenv = pkgs.emscriptenStdenv;
-  }).overrideDerivation
+  }).overrideAttrs
     (old: {
       nativeBuildInputs = [ pkg-config cmake ];
       propagatedBuildInputs = [ zlib ];
@@ -47,10 +47,10 @@ rec {
   libxml2 = (pkgs.libxml2.override {
     stdenv = emscriptenStdenv;
     pythonSupport = false;
-  }).overrideDerivation
+  }).overrideAttrs
     (old: {
       propagatedBuildInputs = [ zlib ];
-      buildInputs = old.buildInputs ++ [ pkg-config ];
+      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkg-config ];
 
       # just override it with nothing so it does not fail
       autoreconfPhase = "echo autoreconfPhase not used...";
@@ -87,7 +87,7 @@ rec {
     pname = "xmlmirror";
     version = "unstable-2016-06-05";
 
-    buildInputs = [ pkg-config libtool gnumake libxml2 nodejs openjdk json_c ];
+    buildInputs = [ libtool gnumake libxml2 nodejs openjdk json_c ];
     nativeBuildInputs = [ pkg-config zlib autoconf automake ];
 
     src = pkgs.fetchgit {
@@ -138,11 +138,11 @@ rec {
 
   zlib = (pkgs.zlib.override {
     stdenv = pkgs.emscriptenStdenv;
-  }).overrideDerivation
+  }).overrideAttrs
     (old: {
-      buildInputs = old.buildInputs ++ [ pkg-config ];
+      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pkg-config ];
       # we need to reset this setting!
-      NIX_CFLAGS_COMPILE="";
+      env = (old.env or { }) // { NIX_CFLAGS_COMPILE = ""; };
       dontStrip = true;
       outputs = [ "out" ];
       buildPhase = ''

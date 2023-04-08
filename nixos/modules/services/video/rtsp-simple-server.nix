@@ -10,7 +10,7 @@ in
 {
   options = {
     services.rtsp-simple-server = {
-      enable = mkEnableOption "RTSP Simple Server";
+      enable = mkEnableOption (lib.mdDoc "RTSP Simple Server");
 
       settings = mkOption {
         description = lib.mdDoc ''

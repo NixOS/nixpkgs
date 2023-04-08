@@ -1,0 +1,38 @@
+diff --git a/Makefile.gnu b/Makefile.gnu
+index b4bcaef..981721c 100644
+--- a/Makefile.gnu
++++ b/Makefile.gnu
+@@ -27,7 +27,7 @@ SYMBOL_LIST=	${CURDIR}/Symbols.list
+ includes:
+ 	@cd ${CURDIR}; for i in ${HDRS}; do \
+ 	    j="cmp -s $$i ${DESTDIR}${LOCALBASE}/include/$$i || \
+-	    ${INSTALL} -D -o ${BINOWN} -g ${BINGRP} -m 444 $$i\
++	    ${INSTALL} -D -m 444 $$i\
+ 		${DESTDIR}${LOCALBASE}/include/$$i"; \
+ 	    echo $$j; \
+ 	    eval "$$j"; \
+@@ -52,11 +52,7 @@ MANFORMAT?=		mangz
+ INSTALL?=	install
+ LINK?=		ln
+ 
+-BINOWN?=	root
+-BINGRP?=	root
+ LIBPERM?=	755
+-MANOWN?=	root
+-MANGRP?=	root
+ MANPERM?=	644
+ 
+ include ${CURDIR}/shlib_version
+@@ -138,10 +134,10 @@ all: ${TARGET_LIB} ${TARGET_MAN}
+ 
+ .PHONY: install
+ install: includes ${TARGET_LIB} ${TARGET_MAN}
+-	${INSTALL} -D -o ${BINOWN} -g ${BINGRP} -m ${LIBPERM} ${TARGET_LIB} ${DESTDIR}${LIBDIR}/${TARGET_LIB}
++	${INSTALL} -D -m ${LIBPERM} ${TARGET_LIB} ${DESTDIR}${LIBDIR}/${TARGET_LIB}
+ 	${LINK} -s ${TARGET_LIB} ${DESTDIR}${LIBDIR}/${SONAME_LIB}
+ 	${LINK} -s ${TARGET_LIB} ${DESTDIR}${LIBDIR}/${BASE_LIB}
+-	${INSTALL} -D -o ${MANOWN} -g ${MANGRP} -m ${MANPERM} ${TARGET_MAN} ${DESTDIR}${MANDIR}/${TARGET_MAN}
++	${INSTALL} -D -m ${MANPERM} ${TARGET_MAN} ${DESTDIR}${MANDIR}/${TARGET_MAN}
+ 
+ CLEANFILES+=	*.o ${TARGET_LIB}
+ 

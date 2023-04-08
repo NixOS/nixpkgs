@@ -1,6 +1,9 @@
-{lib, stdenv, fetchFromGitHub, cmake}:
-
-with lib;
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+}:
 
 stdenv.mkDerivation rec {
   pname = "unittest-cpp";
@@ -13,6 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "0sxb3835nly1jxn071f59fwbdzmqi74j040r81fanxyw3s1azw0i";
   };
 
+  patches = [
+    # GCC12 Patch
+    (fetchpatch {
+      url = "https://github.com/unittest-cpp/unittest-cpp/pull/185/commits/f361c2a1034c02ba8059648f9a04662d6e2b5553.patch";
+      hash = "sha256-xyhV2VBelw/uktUXSZ3JBxgG+8/Mout/JiXEZVV2+2Y=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   doCheck = false;
@@ -20,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/unittest-cpp/unittest-cpp";
     description = "Lightweight unit testing framework for C++";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [];
     platforms = lib.platforms.unix;
   };

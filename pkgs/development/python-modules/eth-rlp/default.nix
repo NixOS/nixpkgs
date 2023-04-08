@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "eth-rlp";
     rev = "v${version}";
-    sha256 = "sha256-wfmRjHFu6H3J6hNin8ZA2454xXrLgcUdeR8iGXFomRE=";
+    hash = "sha256-wfmRjHFu6H3J6hNin8ZA2454xXrLgcUdeR8iGXFomRE=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     rlp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ eth-hash.optional-dependencies.pycryptodome;
 

@@ -1,6 +1,5 @@
 { lib, stdenv
 
-, fetchurl
 , coreutils
 , makeWrapper
 , sway-unwrapped

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpx";
-  version = "0.21.0";
+  version = "0.21.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Colin-b";
     repo = "pytest_httpx";
-    rev = "v${version}";
-    hash = "sha256-mUzmtZCguaab4fAE7VcUhv+NQVYiPpxxHpiVVlzwrIo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+jOPbEul/mkZbaR6ZqwLTgVtemi18vOYgqJcgv6JSII=";
   };
 
   buildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     httpx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Send responses to httpx";
     homepage = "https://github.com/Colin-b/pytest_httpx";
+    changelog = "https://github.com/Colin-b/pytest_httpx/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

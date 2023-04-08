@@ -13,25 +13,30 @@
 , tllist
 , fcft
 , enableCairo ? true
-, withPNGBackend ? "libpng"
-, withSVGBackend ? "librsvg"
-  # Optional dependencies
+, svgSupport ? true
+, pngSupport ? true
+# Optional dependencies
 , cairo
-, librsvg
 , libpng
 }:
 
+assert svgSupport -> enableCairo;
+
 stdenv.mkDerivation rec {
   pname = "fuzzel";
-  version = "1.7.0";
+  version = "1.9.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
-    repo = "fuzzel";
+    repo = pname;
     rev = version;
-    sha256 = "1261gwxiky37pvzmmbrpml1psa22kkglb141ybj1fbnwg6j7jvlf";
+    hash = "sha256-Va/Rm35jqxDlIfQdrpZ41qrW8YzWmm1LWra76AW1xUw=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -49,24 +54,21 @@ stdenv.mkDerivation rec {
     tllist
     fcft
   ] ++ lib.optional enableCairo cairo
-  ++ lib.optional (withPNGBackend == "libpng") libpng
-  ++ lib.optional (withSVGBackend == "librsvg") librsvg;
+    ++ lib.optional pngSupport libpng;
 
   mesonBuildType = "release";
 
   mesonFlags = [
     "-Denable-cairo=${if enableCairo then "enabled" else "disabled"}"
-    "-Dpng-backend=${withPNGBackend}"
-    "-Dsvg-backend=${withSVGBackend}"
+    "-Dpng-backend=${if pngSupport then "libpng" else "none"}"
+    "-Dsvg-backend=${if svgSupport then "nanosvg" else "none"}"
   ];
-
-  CFLAGS = "-Wno-error=comment"; # https://gitlab.gnome.org/GNOME/librsvg/-/issues/856
 
   meta = with lib; {
     description = "Wayland-native application launcher, similar to rofi’s drun mode";
     homepage = "https://codeberg.org/dnkl/fuzzel";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fionera polykernel ];
+    license = with licenses; [ mit zlib ];
+    maintainers = with maintainers; [ fionera polykernel rodrgz ];
     platforms = with platforms; linux;
     changelog = "https://codeberg.org/dnkl/fuzzel/releases/tag/${version}";
   };

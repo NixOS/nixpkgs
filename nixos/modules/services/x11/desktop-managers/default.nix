@@ -21,7 +21,7 @@ in
     ./none.nix ./xterm.nix ./phosh.nix ./xfce.nix ./plasma5.nix ./lumina.nix
     ./lxqt.nix ./enlightenment.nix ./gnome.nix ./retroarch.nix ./kodi.nix
     ./mate.nix ./pantheon.nix ./surf-display.nix ./cde.nix
-    ./cinnamon.nix
+    ./cinnamon.nix ./budgie.nix
   ];
 
   options = {
@@ -64,10 +64,10 @@ in
             bgSupport = true;
             start = "...";
           };
-        description = ''
+        description = lib.mdDoc ''
           Internal option used to add some common line to desktop manager
           scripts before forwarding the value to the
-          <varname>displayManager</varname>.
+          `displayManager`.
         '';
         apply = map (d: d // {
           manage = "desktop";
@@ -86,8 +86,8 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "none";
-        description = ''
-          <emphasis role="strong">Deprecated</emphasis>, please use <xref linkend="opt-services.xserver.displayManager.defaultSession"/> instead.
+        description = lib.mdDoc ''
+          **Deprecated**, please use [](#opt-services.xserver.displayManager.defaultSession) instead.
 
           Default desktop manager loaded if none have been chosen.
         '';

@@ -40,7 +40,7 @@ in
 
   options.services = {
     zabbixWeb = {
-      enable = mkEnableOption "the Zabbix web interface";
+      enable = mkEnableOption (lib.mdDoc "the Zabbix web interface");
 
       package = mkOption {
         type = types.package;
@@ -51,7 +51,7 @@ in
 
       server = {
         port = mkOption {
-          type = types.int;
+          type = types.port;
           description = lib.mdDoc "The port of the Zabbix server to connect to.";
           default = 10051;
         };
@@ -78,7 +78,7 @@ in
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default =
             if cfg.database.type == "mysql" then config.services.mysql.port
             else if cfg.database.type == "pgsql" then config.services.postgresql.port

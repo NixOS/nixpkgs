@@ -116,7 +116,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Wheter to open ports in the firewall";
+        description = lib.mdDoc "Whether to open ports in the firewall";
       };
 
       dataDir = mkOption {
@@ -131,6 +131,7 @@ in
   config = mkIf cfg.enable {
     users.users.terraria = {
       description = "Terraria server service user";
+      group       = "terraria";
       home        = cfg.dataDir;
       createHome  = true;
       uid         = config.ids.uids.terraria;
@@ -138,7 +139,6 @@ in
 
     users.groups.terraria = {
       gid = config.ids.gids.terraria;
-      members = [ "terraria" ];
     };
 
     systemd.services.terraria = {

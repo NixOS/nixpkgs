@@ -4,35 +4,41 @@
 , wrapQtAppsHook
 , cmake
 , qtbase
+, qtsvg
 , qttools
-, nix-update-script
+, testers
+, zint
 }:
 
 stdenv.mkDerivation rec {
   pname = "zint";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
-    owner = "woo-j";
+    owner = "zint";
     repo = "zint";
     rev = version;
-    sha256 = "sha256-DtfyXBBEDcltGUAutHl/ksRTTYmS7Ll9kjfgD7NmBbA=";
+    hash = "sha256-Ay6smir6zUpadmw1WpU+F7e9t7Gk3JNVtf2VVu92bDk=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
 
-  buildInputs = [ qtbase qttools ];
+  buildInputs = [ qtbase qtsvg qttools ];
+
+  cmakeFlags = [ "-DZINT_QT6:BOOL=ON" ];
 
   postInstall = ''
-    install -Dm644 $src/zint-qt.desktop $out/share/applications/zint-qt.desktop
-    install -Dm644 $src/zint-qt.png $out/share/pixmaps/zint-qt.png
-    install -Dm644 $src/frontend_qt/images/scalable/zint-qt.svg $out/share/icons/hicolor/scalable/apps/zint-qt.svg
+    install -Dm644 -t $out/share/applications $src/zint-qt.desktop
+    install -Dm644 -t $out/share/pixmaps $src/zint-qt.png
+    install -Dm644 -t $out/share/icons/hicolor/scalable/apps $src/frontend_qt/images/scalable/zint-qt.svg
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
+  passthru.tests.version = testers.testVersion {
+    package = zint;
+    command = "zint --version";
+    inherit version;
   };
 
   meta = with lib; {
@@ -43,8 +49,8 @@ stdenv.mkDerivation rec {
       GUI, a CLI command line executable and a library with an API to allow
       developers access to the capabilities of Zint.
     '';
-    homepage = "http://www.zint.org.uk";
-    changelog = "https://github.com/woo-j/zint/blob/${version}/ChangeLog";
+    homepage = "https://www.zint.org.uk";
+    changelog = "https://github.com/zint/zint/blob/${version}/ChangeLog";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ azahi ];
   };

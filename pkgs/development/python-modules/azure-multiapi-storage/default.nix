@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.9.0";
+  version = "1.0.0";
   pname = "azure-multiapi-storage";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7uq8uRZ3MXI1Gy+DmMkRVNV7uZPw6j8r9KfhS8d+tCY=";
+    hash = "sha256-x5v3e3/poSm+JMt0SWI1lcM6YAUcP+o2Sn8TluXOyIg=";
   };
 
   propagatedBuildInputs = [

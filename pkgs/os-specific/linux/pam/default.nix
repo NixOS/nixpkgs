@@ -1,6 +1,5 @@
-{ lib, stdenv, buildPackages, fetchurl, flex, cracklib, db4, gettext, audit
+{ lib, stdenv, buildPackages, fetchurl, flex, cracklib, db4, gettext, audit, libxcrypt
 , nixosTests
-, withLibxcrypt ? false, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -20,9 +19,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex ]
     ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
-  buildInputs = [ cracklib db4 ]
-    ++ lib.optional stdenv.buildPlatform.isLinux audit
-    ++ lib.optional withLibxcrypt libxcrypt;
+  buildInputs = [ cracklib db4 libxcrypt ]
+    ++ lib.optional stdenv.buildPlatform.isLinux audit;
 
   enableParallelBuilding = true;
 

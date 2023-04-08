@@ -7,14 +7,14 @@ with lib;
     privileged = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable privileged mounts
       '';
     };
     manageNetwork = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to manage network interfaces through nix options
         When false, systemd-networkd is enabled to accept network
         configuration from proxmox.
@@ -23,7 +23,7 @@ with lib;
     manageHostName = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to manage hostname through nix options
         When false, the hostname is picked up from /etc/hostname
         populated by proxmox.

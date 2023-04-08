@@ -73,6 +73,9 @@
 , # Shell code executed after the VM has finished.
   postVM ? ""
 
+, # Guest memory size
+  memSize ? 1024
+
 , name ? "nixos-disk-image"
 
 , # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
@@ -142,13 +145,6 @@ let
       )
       properties
   );
-
-  featuresToProperties = features:
-    lib.listToAttrs
-      (builtins.map (feature: {
-        name = "feature@${feature}";
-        value = "enabled";
-      }) features);
 
   createDatasets =
     let
@@ -249,6 +245,7 @@ let
       {
         QEMU_OPTS = "-drive file=$bootDiskImage,if=virtio,cache=unsafe,werror=report"
          + " -drive file=$rootDiskImage,if=virtio,cache=unsafe,werror=report";
+         inherit memSize;
         preVM = ''
           PATH=$PATH:${pkgs.qemu_kvm}/bin
           mkdir $out

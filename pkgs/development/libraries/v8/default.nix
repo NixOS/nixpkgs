@@ -2,6 +2,8 @@
 , gn, ninja, python3, glib, pkg-config, icu
 , xcbuild, darwin
 , fetchpatch
+, llvmPackages
+, symlinkJoin
 }:
 
 # Use update.sh to update all checksums.
@@ -103,8 +105,15 @@ stdenv.mkDerivation rec {
         --replace 'current_toolchain == host_toolchain || !use_xcode_clang' \
                   'false'
     ''}
+    ${lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+      substituteInPlace build/config/compiler/BUILD.gn \
+        --replace "-Wl,-fatal_warnings" ""
+    ''}
     touch build/config/gclient_args.gni
+    sed '1i#include <utility>' -i src/heap/cppgc/prefinalizer-handler.h # gcc12
   '';
+
+  llvmCcAndBintools = symlinkJoin { name = "llvmCcAndBintools"; paths = [ stdenv.cc llvmPackages.llvm ]; };
 
   gnFlags = [
     "use_custom_libcxx=false"
@@ -123,9 +132,10 @@ stdenv.mkDerivation rec {
     # ''custom_toolchain="//build/toolchain/linux/unbundle:default"''
     ''host_toolchain="//build/toolchain/linux/unbundle:default"''
     ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:default"''
-  ] ++ lib.optional stdenv.cc.isClang ''clang_base_path="${stdenv.cc}"'';
+  ] ++ lib.optional stdenv.cc.isClang ''clang_base_path="${llvmCcAndBintools}"''
+  ++ lib.optional stdenv.isDarwin ''use_lld=false'';
 
-  NIX_CFLAGS_COMPILE = "-O2";
+  env.NIX_CFLAGS_COMPILE = "-O2";
   FORCE_MAC_SDK_MIN = stdenv.targetPlatform.sdkVer or "10.12";
 
   nativeBuildInputs = [
@@ -135,7 +145,7 @@ stdenv.mkDerivation rec {
     python3
   ] ++ lib.optionals stdenv.isDarwin [
     xcbuild
-    darwin.DarwinTools
+    llvmPackages.llvm
     python3.pkgs.setuptools
   ];
   buildInputs = [ glib icu ];
@@ -162,11 +172,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    homepage = "https://v8.dev/";
     description = "Google's open source JavaScript engine";
     maintainers = with maintainers; [ cstrahan proglodyte matthewbauer ];
     platforms = platforms.unix;
     license = licenses.bsd3;
-    # Fails to build on Darwin, see https://github.com/NixOS/nixpkgs/issues/158076
-    broken = stdenv.isDarwin;
   };
 }

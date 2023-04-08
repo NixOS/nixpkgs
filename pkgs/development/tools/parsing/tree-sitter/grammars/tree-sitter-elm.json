@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/elm-tooling/tree-sitter-elm",
-  "rev": "a9a8efad446f78db3989d7ed8517987daf510c83",
-  "date": "2022-06-07T23:23:33+02:00",
-  "path": "/nix/store/rqmldb72cml0qm7p8kpjlj064f5miprc-tree-sitter-elm",
-  "sha256": "11d9lrybhqi85lxr7gf8s4zxgbclnjiwn0w1mga3lsh9nnf50a4a",
+  "rev": "cce0e5938e7779f86cf8bf445eadf7df4b88229d",
+  "date": "2022-09-03T13:02:26+02:00",
+  "path": "/nix/store/scick955z3qrbxmk1jr8cchwsnx4l814-tree-sitter-elm",
+  "sha256": "0b5jpj8bnil1ylisyc4w48j8a30dyf3zylhidj73mlrb8rf7xm2s",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

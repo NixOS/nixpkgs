@@ -1,5 +1,7 @@
 { lib
+, stdenv
 , buildPythonPackage
+, setuptools
 , isPy27
 , fetchPypi
 , pkg-config
@@ -19,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "PyQt5";
-  version = "5.15.7";
+  version = "5.15.9";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dVEhpSs6CMsHJ1wQ67lldtNuMg5XJZHbFs/bxVgQFZQ=";
+    hash = "sha256-3EHoQBqQ3D4raStBG9VJKrVZrieidCTu1L05FVZOxMA=";
   };
 
   patches = [
@@ -37,11 +39,19 @@ buildPythonPackage rec {
     ./pyqt5-confirm-license.patch
   ];
 
+  postPatch =
   # be more verbose
-  postPatch = ''
+  ''
     cat >> pyproject.toml <<EOF
     [tool.sip.project]
     verbose = true
+  ''
+  # Due to bug in SIP .whl name generation we have to bump minimal macos sdk upto 11.0 for
+  # aarch64-darwin. This patch can be removed once SIP will fix it in upstream,
+  # see https://github.com/NixOS/nixpkgs/pull/186612#issuecomment-1214635456.
+  + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    minimum-macos-version = "11.0"
+  '' + ''
     EOF
   '';
 
@@ -52,6 +62,7 @@ buildPythonPackage rec {
   nativeBuildInputs = with libsForQt5; [
     pkg-config
     qmake
+    setuptools
     lndir
     sip
     qtbase

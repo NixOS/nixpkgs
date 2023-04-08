@@ -1,27 +1,35 @@
-{stdenv, lib, fetchurl, dub, ncurses, ldc, zlib, removeReferencesTo }:
+{ lib
+, stdenv
+, fetchurl
+, dub
+, ncurses
+, ldc
+, zlib
+, removeReferencesTo
+}:
 
 let
-    _d_ae_ver              = "0.0.3184";
-    _d_btrfs_ver           = "0.0.12";
+    _d_ae_ver              = "0.0.3228";
+    _d_btrfs_ver           = "0.0.13";
     _d_ncurses_ver         = "0.0.149";
     _d_emsi_containers_ver = "0.9.0";
 in
 stdenv.mkDerivation rec {
     pname = "btdu";
-    version = "0.4.1";
+    version = "0.5.0";
 
     srcs = [
       (fetchurl {
         url = "https://github.com/CyberShadow/${pname}/archive/v${version}.tar.gz";
-        sha256 = "265c63ee82067f6b5dc44b47c9ec58be5e13c654f31035c60a7e375ffa4082c9";
+        sha256 = "90ba4d8997575993e9d39a503779fb32b37bb62b8d9386776e95743bfc859606";
       })
       (fetchurl {
         url = "https://github.com/CyberShadow/ae/archive/v${_d_ae_ver}.tar.gz";
-        sha256 = "74c17146ecde7ec4ba159eae4f88c74a5ef40cc200eabf97a0648f5abb5fde5e";
+        sha256 = "6b3da61d9f7f1a7343dbe5691a16482cabcd78532b7c09ed9d63eb1934f1b9d8";
       })
       (fetchurl {
         url = "https://github.com/CyberShadow/d-btrfs/archive/v${_d_btrfs_ver}.tar.gz";
-        sha256 = "cf2b1fa3e94a0aa239d465adbac239514838835283521d632f571948aa517f92";
+        sha256 = "05a59cd64000ce2af9bd0578ef5118ab4d10de0ec50410ba0d4e463f01cfaa4e";
       })
       (fetchurl {
         url = "https://github.com/D-Programming-Deimos/ncurses/archive/v${_d_ncurses_ver}.tar.gz";
@@ -76,6 +84,7 @@ stdenv.mkDerivation rec {
     meta = with lib; {
       description = "Sampling disk usage profiler for btrfs";
       homepage = "https://github.com/CyberShadow/btdu";
+      changelog = "https://github.com/CyberShadow/btdu/releases/tag/v${version}";
       license = licenses.gpl2Only;
       platforms = platforms.linux;
       maintainers = with maintainers; [ atila ];

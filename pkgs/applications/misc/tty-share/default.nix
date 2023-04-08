@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tty-share";
-  version = "2.2.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "elisescu";
     repo = "tty-share";
     rev = "v${version}";
-    sha256 = "sha256-aAqKfi0ZX0UB07yGY6x0HcMspvq4rcJXKHSONxAwMlc=";
+    sha256 = "sha256-7rNSBpiZslUGWw0P/Q1zRtNxo9MN8Vq6hG8pD6bJIsA=";
   };
 
   # Upstream has a `./vendor` directory with all deps which we rely upon.
@@ -19,7 +19,6 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://tty-share.com";
     description = "Share terminal via browser for remote work or shared sessions";
-    platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ andys8 ];
   };

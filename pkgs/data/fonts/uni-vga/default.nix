@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, perl, kbd, bdftopcf
-, libfaketime, fonttosfnt, mkfontscale
+, libfaketime, xorg
 }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs =
     [ bdftopcf libfaketime
-      fonttosfnt mkfontscale
+      xorg.fonttosfnt xorg.mkfontscale
     ] ++ lib.optionals stdenv.isLinux [ perl kbd ];
 
   postPatch = "patchShebangs .";

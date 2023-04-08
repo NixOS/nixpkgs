@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "7.0.0";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "icons";
     rev = version;
-    sha256 = "sha256-tyhKhZPoZ8xVy1KVUWd8BK2meTT3Z6qM787spjE+NL8=";
+    sha256 = "sha256-Hh7RiD85N48IpO2sfWSybhS7kJYXH4VOhQ6PVIP9IS8=";
   };
 
   nativeBuildInputs = [
@@ -50,9 +50,7 @@ stdenvNoCC.mkDerivation rec {
   postFixup = "gtk-update-icon-cache $out/share/icons/elementary";
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

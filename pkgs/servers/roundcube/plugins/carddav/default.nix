@@ -2,10 +2,10 @@
 
 roundcubePlugin rec {
   pname = "carddav";
-  version = "4.3.0";
+  version = "4.4.6";
 
   src = fetchzip {
     url = "https://github.com/mstilkerich/rcmcarddav/releases/download/v${version}/carddav-v${version}.tar.gz";
-    sha256 = "1jk1whx155svfalf1kq8vavn7jsswmzx4ax5zbj01783rqyxkkd5";
+    sha256 = "10s4idf5kmkap47fn3i4jkr3mbipibdjcqds8p6p906nr45ngs57";
   };
 }

@@ -1,73 +1,57 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, rustc
-, cargo
 , rustPlatform
-, pkg-config
-, dbus
 , glib
-, cairo
-, pango
-, atk
-, lib
+, pkg-config
 , gdk-pixbuf
 , gtk3
+, wrapGAppsHook
 }:
 
-rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
+stdenv.mkDerivation rec {
   pname = "popsicle";
-  version = "unstable-2021-12-20";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "b02ebf5f2e6c18777453ca9a144d69689a6fa901";
-    sha256 = "03ilhvnr4mwy7b8bipp616h16m2ilxzxz2zjpkzy3afwvh9bz1mx";
+    rev = version;
+    sha256 = "sha256-NqzuZmVabQ5WHOlBEsJhL/5Yet3TMSuo/gofSabCjTY=";
   };
 
-  cargoSha256 = "1c54wxyrfxk5chnjhxw6vaznm7ff9dkx1rxlgp417jfygiwijjs4";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "dbus-udisks2-0.3.0" = "sha256-VtwUUXVPyqvcOtphBH42CkRmW5jI+br9oDJ9wY40hsE=";
+      "iso9660-0.1.0" = "sha256-A2C7DbtyJhOW+rjtAcO9YufQ5VjMfdypJAAmBlHpwn4=";
+    };
+  };
 
-  nativeBuildInputs = [ gtk3 pkg-config ];
+  nativeBuildInputs = [
+    glib
+    pkg-config
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.cargo
+    rustPlatform.rust.rustc
+    wrapGAppsHook
+  ];
 
   buildInputs = [
-    gtk3
-    dbus
-    glib
-    cairo
-    pango
-    atk
     gdk-pixbuf
+    gtk3
   ];
-
-  # Use the stdenv default phases (./configure; make) instead of the
-  # ones from buildRustPackage.
-  configurePhase = "configurePhase";
-  buildPhase = "buildPhase";
-  checkPhase = "checkPhase";
-  installPhase = "installPhase";
-
-  postPatch = ''
-    # Have to do this here instead of in preConfigure because
-    # cargoDepsCopy gets unset after postPatch.
-    configureFlagsArray+=("RUST_VENDORED_SOURCES=$NIX_BUILD_TOP/$cargoDepsCopy")
-  '';
 
   makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "DESTDIR=${placeholder "out"}"
+    "prefix=$(out)"
   ];
-
-  postInstall = ''
-    # install man page, icon, etc...
-    mv $out/usr/local/* $out
-    rm -rf $out/usr
-  '';
 
   meta = with lib; {
     description = "Multiple USB File Flasher";
     homepage = "https://github.com/pop-os/popsicle";
-    maintainers = with maintainers; [ _13r0ck ];
+    changelog = "https://github.com/pop-os/popsicle/releases/tag/${version}";
+    maintainers = with maintainers; [ _13r0ck figsoda ];
     license = licenses.mit;
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

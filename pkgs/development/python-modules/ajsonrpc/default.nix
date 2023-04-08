@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "791bac18f0bf0dee109194644f151cf8b7ff529c4b8d6239ac48104a3251a19f";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ajsonrpc" ];
 

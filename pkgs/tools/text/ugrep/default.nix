@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ugrep";
-  version = "3.9.1";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "Genivia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KDAuGFoUJxaa0noW739+gxeHKZeouu14EDla0lWwaIQ=";
+    hash = "sha256-nqnuEahOsnGX38526cIe8Vj7YoEJxO1ydbgfPwlpK+o=";
   };
 
   buildInputs = [
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Ultra fast grep with interactive query UI";
     homepage = "https://github.com/Genivia/ugrep";
+    changelog = "https://github.com/Genivia/ugrep/releases/tag/v${version}";
     maintainers = with maintainers; [ numkem ];
     license = licenses.bsd3;
     platforms = platforms.all;

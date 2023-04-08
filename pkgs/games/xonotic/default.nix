@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommand, makeDesktopItem
 , xonotic-data, copyDesktopItems
 , # required for both
-  unzip, libjpeg, zlib, libvorbis, curl
+  unzip, libjpeg, zlib, libvorbis, curl, freetype, libpng, libtheora
 , # glx
   libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsa-lib
 , # sdl
@@ -66,8 +66,8 @@ let
 
     nativeBuildInputs = [ unzip ];
     buildInputs = [ libjpeg zlib libvorbis curl gmp ]
-      ++ lib.optional withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsa-lib.dev ]
-      ++ lib.optional withSDL [ SDL2.dev ];
+      ++ lib.optionals withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsa-lib.dev ]
+      ++ lib.optionals withSDL [ SDL2.dev ];
 
     sourceRoot = "Xonotic/source/darkplaces";
 
@@ -83,14 +83,14 @@ let
     '';
 
     buildPhase = (lib.optionalString withDedicated ''
-      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES sv-${target}
+      make -j $NIX_BUILD_CORES sv-${target}
     '' + lib.optionalString withGLX ''
-      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES cl-${target}
+      make -j $NIX_BUILD_CORES cl-${target}
     '' + lib.optionalString withSDL ''
-      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES sdl-${target}
+      make -j $NIX_BUILD_CORES sdl-${target}
     '') + ''
       pushd ../d0_blind_id
-      make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES
+      make -j $NIX_BUILD_CORES
       popd
     '';
 
@@ -121,14 +121,22 @@ let
       patchelf \
           --add-needed ${curl.out}/lib/libcurl.so \
           --add-needed ${libvorbis}/lib/libvorbisfile.so \
+          --add-needed ${libvorbis}/lib/libvorbisenc.so \
           --add-needed ${libvorbis}/lib/libvorbis.so \
           --add-needed ${libGL.out}/lib/libGL.so \
+          --add-needed ${freetype}/lib/libfreetype.so \
+          --add-needed ${libpng}/lib/libpng.so \
+          --add-needed ${libtheora}/lib/libtheora.so \
           $out/bin/xonotic-glx
     '' + lib.optionalString withSDL ''
       patchelf \
           --add-needed ${curl.out}/lib/libcurl.so \
           --add-needed ${libvorbis}/lib/libvorbisfile.so \
+          --add-needed ${libvorbis}/lib/libvorbisenc.so \
           --add-needed ${libvorbis}/lib/libvorbis.so \
+          --add-needed ${freetype}/lib/libfreetype.so \
+          --add-needed ${libpng}/lib/libpng.so \
+          --add-needed ${libtheora}/lib/libtheora.so \
           $out/bin/xonotic-sdl
     '';
   };

@@ -5,8 +5,7 @@
 , bintools-unwrapped
 , libffi
 , libusb1
-, wxGTK
-, python2
+, wxGTK32
 , python3
 , gcc-arm-embedded
 , klipper
@@ -20,7 +19,6 @@
   src = klipper.src;
 
   nativeBuildInputs = [
-    python2
     python3
     pkgsCross.avr.stdenv.cc
     gcc-arm-embedded
@@ -30,7 +28,7 @@
     avrdude
     stm32flash
     pkg-config
-    wxGTK # Required for bossac
+    wxGTK32 # Required for bossac
   ];
 
   preBuild = "cp ${firmwareConfig} ./.config";
@@ -42,6 +40,7 @@
   makeFlags = [
     "V=1"
     "KCONFIG_CONFIG=${firmwareConfig}"
+    "WXVERSION=3.2"
   ];
 
   installPhase = ''

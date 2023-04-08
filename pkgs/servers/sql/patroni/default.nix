@@ -1,6 +1,7 @@
 { lib
 , pythonPackages
 , fetchFromGitHub
+, nixosTests
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -40,7 +41,7 @@ pythonPackages.buildPythonApplication rec {
     ydiff
   ];
 
-  checkInputs = with pythonPackages; [
+  nativeCheckInputs = with pythonPackages; [
     flake8
     mock
     pytestCheckHook
@@ -52,6 +53,10 @@ pythonPackages.buildPythonApplication rec {
   preCheck = "export HOME=$(mktemp -d)";
 
   pythonImportsCheck = [ "patroni" ];
+
+  passthru.tests = {
+    patroni = nixosTests.patroni;
+  };
 
   meta = with lib; {
     homepage = "https://patroni.readthedocs.io/en/latest/";

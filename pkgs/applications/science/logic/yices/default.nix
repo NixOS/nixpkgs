@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # musl las no ldconfig, create symlinks explicitly
+    # musl has no ldconfig, create symlinks explicitly
     ./linux-no-ldconfig.patch
   ];
   postPatch = "patchShebangs tests/regress/check.sh";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";
-    homepage    = "http://yices.csl.sri.com";
+    homepage    = "https://yices.csl.sri.com";
     license     = licenses.gpl3;
     platforms   = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ thoughtpolice ];

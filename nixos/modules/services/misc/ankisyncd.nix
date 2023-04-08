@@ -28,7 +28,7 @@ let
 in
   {
     options.services.ankisyncd = {
-      enable = mkEnableOption "ankisyncd";
+      enable = mkEnableOption (lib.mdDoc "ankisyncd");
 
       package = mkOption {
         type = types.package;
@@ -44,7 +44,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 27701;
         description = lib.mdDoc "ankisyncd port";
       };

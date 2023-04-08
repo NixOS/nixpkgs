@@ -14,7 +14,7 @@ let
 in {
 
   options.services.hoogle = {
-    enable = mkEnableOption "Haskell documentation server";
+    enable = mkEnableOption (lib.mdDoc "Haskell documentation server");
 
     port = mkOption {
       type = types.port;
@@ -29,11 +29,11 @@ in {
       default = hp: [];
       defaultText = literalExpression "hp: []";
       example = literalExpression "hp: with hp; [ text lens ]";
-      description = ''
+      description = lib.mdDoc ''
         The Haskell packages to generate documentation for.
 
         The option value is a function that takes the package set specified in
-        the <varname>haskellPackages</varname> option as its sole parameter and
+        the {var}`haskellPackages` option as its sole parameter and
         returns a list of packages.
       '';
     };

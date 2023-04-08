@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eggnog-mapper";
-  version = "2.1.7";
+  version = "2.1.10";
 
   src = fetchFromGitHub {
     owner = "eggnogdb";
     repo = pname;
-    rev = version;
-    hash = "sha256-auVD/r8m3TAB1KYMQ7Sae23eDg6LRx/daae0505cjwU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6R2gl2l2Cl/eva0g+kxDLBI2+5T9cFTgaGMsEfeDVU0=";
   };
 
   postPatch = ''
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
   ] ++ (with python3Packages; [
     biopython
     psutil
-    XlsxWriter
+    xlsxwriter
   ]);
 
   # Tests rely on some of the databases being available, which is not bundled

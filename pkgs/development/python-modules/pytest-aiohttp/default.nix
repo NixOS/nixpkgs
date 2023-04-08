@@ -14,6 +14,8 @@ buildPythonPackage rec {
 
   format = "setuptools";
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "39ff3a0d15484c01d1436cbedad575c6eafbf0f57cdf76fb94994c97b5b8c5a4";
@@ -34,8 +36,14 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # pytest 7.2.0 incompatibilities
+    # https://github.com/aio-libs/pytest-aiohttp/issues/50
+    "tests/test_fixtures.py"
   ];
 
   meta = with lib; {

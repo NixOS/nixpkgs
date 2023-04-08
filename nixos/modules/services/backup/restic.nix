@@ -126,13 +126,28 @@ in
           ];
         };
 
+        exclude = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = lib.mdDoc ''
+            Patterns to exclude when backing up. See
+            https://restic.readthedocs.io/en/latest/040_backup.html#excluding-files for
+            details on syntax.
+          '';
+          example = [
+            "/var/cache"
+            "/home/*/.cache"
+            ".git"
+          ];
+        };
+
         timerConfig = mkOption {
           type = types.attrsOf unitOption;
           default = {
             OnCalendar = "daily";
           };
           description = lib.mdDoc ''
-            When to run the backup. See man systemd.timer for details.
+            When to run the backup. See {manpage}`systemd.timer(5)` for details.
           '';
           example = {
             OnCalendar = "00:05";
@@ -182,17 +197,29 @@ in
         pruneOpts = mkOption {
           type = types.listOf types.str;
           default = [ ];
-          description = ''
-            A list of options (--keep-* et al.) for 'restic forget
+          description = lib.mdDoc ''
+            A list of options (--keep-\* et al.) for 'restic forget
             --prune', to automatically prune old snapshots.  The
             'forget' command is run *after* the 'backup' command, so
-            keep that in mind when constructing the --keep-* options.
+            keep that in mind when constructing the --keep-\* options.
           '';
           example = [
             "--keep-daily 7"
             "--keep-weekly 5"
             "--keep-monthly 12"
             "--keep-yearly 75"
+          ];
+        };
+
+        checkOpts = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = lib.mdDoc ''
+            A list of options for 'restic check', which is run after
+            pruning.
+          '';
+          example = [
+            "--with-cache"
           ];
         };
 
@@ -237,6 +264,7 @@ in
     example = {
       localbackup = {
         paths = [ "/home" ];
+        exclude = [ "/home/*/.cache" ];
         repository = "/mnt/backup-hdd";
         passwordFile = "/etc/nixos/secrets/restic-password";
         initialize = true;
@@ -258,12 +286,17 @@ in
 
   config = {
     warnings = mapAttrsToList (n: v: "services.restic.backups.${n}.s3CredentialsFile is deprecated, please use services.restic.backups.${n}.environmentFile instead.") (filterAttrs (n: v: v.s3CredentialsFile != null) config.services.restic.backups);
+    assertions = mapAttrsToList (n: v: {
+      assertion = (v.repository == null) != (v.repositoryFile == null);
+      message = "services.restic.backups.${n}: exactly one of repository or repositoryFile should be set";
+    }) config.services.restic.backups;
     systemd.services =
       mapAttrs'
         (name: backup:
           let
             extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
             resticCmd = "${backup.package}/bin/restic${extraOptions}";
+            excludeFlags = if (backup.exclude != []) then ["--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}"] else [];
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
             backupPaths =
               if (backup.dynamicFilesFrom == null)
@@ -271,7 +304,7 @@ in
               else "--files-from ${filesFromTmpFile}";
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
               (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
-              (resticCmd + " check")
+              (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
             ];
             # Helper functions for rclone remotes
             rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
@@ -281,6 +314,7 @@ in
           in
           nameValuePair "restic-backups-${name}" ({
             environment = {
+              RESTIC_CACHE_DIR = "%C/restic-backups-${name}";
               RESTIC_PASSWORD_FILE = backup.passwordFile;
               RESTIC_REPOSITORY = backup.repository;
               RESTIC_REPOSITORY_FILE = backup.repositoryFile;
@@ -299,7 +333,7 @@ in
             restartIfChanged = false;
             serviceConfig = {
               Type = "oneshot";
-              ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup --cache-dir=%C/restic-backups-${name} ${concatStringsSep " " backup.extraBackupArgs} ${backupPaths}" ])
+              ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} ${backupPaths}" ])
                 ++ pruneCmd;
               User = backup.user;
               RuntimeDirectory = "restic-backups-${name}";

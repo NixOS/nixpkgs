@@ -17,7 +17,7 @@ with lib;
 {
   options = {
     services.hitch = {
-      enable = mkEnableOption "Hitch Server";
+      enable = mkEnableOption (lib.mdDoc "Hitch Server");
 
       backend = mkOption {
         type = types.str;
@@ -36,9 +36,9 @@ with lib;
       frontend = mkOption {
         type = types.either types.str (types.listOf types.str);
         default = "[127.0.0.1]:443";
-        description = ''
+        description = lib.mdDoc ''
           The port and interface of the listen endpoint in the
-+         form [HOST]:PORT[+CERT].
+          form [HOST]:PORT[+CERT].
         '';
         apply = toList;
       };

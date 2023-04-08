@@ -18,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "6.5.1";
+  version = "7.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    hash = "sha256-jDuxOBLpZnvIP4x2BkAlEenC/nnWeG8SlSLnlpPuCWs=";
+    hash = "sha256-pLMCSoMeTzjCLoCZRfCdCmp7pmLcjjDSjxprIaPt6/w=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     tomli
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pycodestyle
     pyflakes
     pylint
@@ -50,20 +50,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests check for flake8
     "file_does_not_exist"
-    # AssertionError: assert '.c { color:...
-    "test_style_defs"
-    # uses pytest.approx in a boolean context, which is unsupported since pytest7
-    "test_percent_covered"
-    # assert '<!DOCTYPE ht...ody>\n</html>' == '<!DOCTYPE ht...ody>\n</html>'
-    "test_html_with_external_css"
-    # assert '<table class...</tr></table>' == '<div class=".../table></div>'
-    "test_format"
-    "test_format_with_invalid_violation_lines"
-    "test_no_filename_ext"
-    "test_unicode"
-    "test_load_snippets_html"
-    "test_load_utf8_snippets"
-    "test_load_declared_arabic"
+    # Comparing console output doesn't work reliable
+    "console"
   ];
 
   pythonImportsCheck = [
@@ -73,6 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Automatically find diff lines that need test coverage";
     homepage = "https://github.com/Bachmann1234/diff-cover";
+    changelog = "https://github.com/Bachmann1234/diff_cover/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dzabraev ];
   };

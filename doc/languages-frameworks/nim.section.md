@@ -25,7 +25,7 @@ nimPackages.buildNimPackage rec {
 
   src = fetchurl {
     url = "https://git.sr.ht/~ehmry/hottext/archive/v${version}.tar.gz";
-    sha256 = "sha256-hIUofi81zowSMbt1lUsxCnVzfJGN3FEiTtN8CEFpwzY=";
+    hash = "sha256-hIUofi81zowSMbt1lUsxCnVzfJGN3FEiTtN8CEFpwzY=";
   };
 
   buildInputs = with nimPackages; [
@@ -65,7 +65,7 @@ buildNimPackage rec {
   version = "2.0.4";
   src = fetchNimble {
     inherit pname version;
-    hash = "sha256-Vtcj8goI4zZPQs2TbFoBFlcR5UqDtOldaXSH/+/xULk=";
+    hash = "sha256-qDtVSnf+7rTq36WAxgsUZ8XoUk4sKwHyt8EJcY5WP+o=";
   };
   propagatedBuildInputs = [ SDL2 ];
 }

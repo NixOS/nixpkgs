@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://detox.sourceforge.net/";
+    homepage = "https://detox.sourceforge.net/";
     description = "Utility designed to clean up filenames";
     longDescription = ''
       Detox is a utility designed to clean up filenames. It replaces

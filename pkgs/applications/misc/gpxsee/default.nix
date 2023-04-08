@@ -1,14 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qttools, qttranslations, qtlocation, qtpbfimageplugin, wrapQtAppsHook, substituteAll }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, nix-update-script
+, substituteAll
+, qtbase
+, qttools
+, qttranslations
+, qtlocation ? null # qt5 only
+, qtpositioning ? null # qt6 only
+, qtpbfimageplugin
+, qtserialport
+, qtsvg
+, qt5compat ? null # qt6 only
+, wrapQtAppsHook
+}:
 
+let
+  isQt6 = lib.versions.major qtbase.version == "6";
+
+in
 stdenv.mkDerivation rec {
   pname = "gpxsee";
-  version = "11.3";
+  version = "12.2";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "sha256-n8busir6IYyWyGOv9AzYjm8erR0fjMAduIzITH+EvVI=";
+    hash = "sha256-d+hQNI+eCSMRFMzq09wL+GN9TgOIt245Z8GlPe7nY8E=";
   };
 
   patches = (substituteAll {
@@ -17,7 +37,15 @@ stdenv.mkDerivation rec {
     inherit qttranslations;
   });
 
-  buildInputs = [ qtlocation qtpbfimageplugin ];
+  buildInputs = [ qtpbfimageplugin qtserialport ]
+    ++ (if isQt6 then [
+    qtbase
+    qtpositioning
+    qtsvg
+    qt5compat
+  ] else [
+    qtlocation
+  ]);
 
   nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
 
@@ -28,7 +56,13 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv GPXSee.app $out/Applications
+    mkdir -p $out/bin
+    ln -s $out/Applications/GPXSee.app/Contents/MacOS/GPXSee $out/bin/gpxsee
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "GPS log file viewer and analyzer";
@@ -41,5 +75,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ womfoo sikmir ];
     platforms = platforms.unix;
+    broken = isQt6 && stdenv.isDarwin;
   };
 }

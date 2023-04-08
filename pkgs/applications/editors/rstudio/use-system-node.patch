@@ -1,11 +1,12 @@
 --- a/src/gwt/build.xml
 +++ b/src/gwt/build.xml
-@@ -84,23 +84,7 @@
+@@ -83,24 +83,7 @@
+       <echo>Concatenated acesupport files to 'acesupport.js'</echo>
     </target>
-
-    <!-- panmirror typescript library -->
+ 
+-   <!-- panmirror typescript library -->
 -   <!-- ensure version matches RSTUDIO_NODE_VERSION -->
--   <property name="node.version" value="14.17.5"/>
+-   <property name="node.version" value="16.14.0"/>
 -   <property name="node.dir" value="../../dependencies/common/node/${node.version}"/>
 -   <condition property="node.bin" value="../../../${node.dir}/bin/node">
 -     <not>
@@ -21,8 +22,8 @@
 -      property="node.bin"
 -      value="/opt/rstudio-tools/dependencies/common/node/${node.version}/bin/node"
 -      file="/opt/rstudio-tools/dependencies/common/node/${node.version}/bin/node"/>
-+   <property name="node.bin" value="@node@/bin/node"/>
-
++    <property name="node.bin" value="@node@/bin/node"/>
+ 
     <property name="panmirror.dir" value="./panmirror/src/editor"/>
     <property name="panmirror.build.dir" value="./www/js/panmirror"/>
 

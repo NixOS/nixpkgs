@@ -18,23 +18,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mcomix";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcomix/${pname}-${version}.tar.gz";
-    sha256 = "sha256-7zjQcT5WoHxy+YzCDJ6s2ngOOfO4L9exuqBqacecClg=";
+    hash = "sha256-Nok4oqTezO84q9IDZvgi33ZeKfRL+tpg7QEDmp2ZZpU=";
   };
 
-  buildInputs = [ gobject-introspection gtk3 gdk-pixbuf ];
-  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [ gtk3 gdk-pixbuf ];
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
   propagatedBuildInputs = (with python3.pkgs; [ pillow pygobject3 pycairo ]);
 
   # Tests are broken
   doCheck = false;
-
-  # Correct wrapper behavior, see https://github.com/NixOS/nixpkgs/issues/56943
-  # until https://github.com/NixOS/nixpkgs/pull/102613
-  strictDeps = false;
 
   # prevent double wrapping
   dontWrapGApps = true;

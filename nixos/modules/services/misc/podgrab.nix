@@ -4,7 +4,7 @@ let
 in
 {
   options.services.podgrab = with lib; {
-    enable = mkEnableOption "Podgrab, a self-hosted podcast manager";
+    enable = mkEnableOption (lib.mdDoc "Podgrab, a self-hosted podcast manager");
 
     passwordFile = mkOption {
       type = with types; nullOr str;
@@ -12,7 +12,7 @@ in
       example = "/run/secrets/password.env";
       description = lib.mdDoc ''
         The path to a file containing the PASSWORD environment variable
-        definition for Podgrab's authentification.
+        definition for Podgrab's authentication.
       '';
     };
 
@@ -36,7 +36,7 @@ in
       };
       serviceConfig = {
         DynamicUser = true;
-        EnvironmentFile = lib.optional (cfg.passwordFile != null) [
+        EnvironmentFile = lib.optionals (cfg.passwordFile != null) [
           cfg.passwordFile
         ];
         ExecStart = "${pkgs.podgrab}/bin/podgrab";

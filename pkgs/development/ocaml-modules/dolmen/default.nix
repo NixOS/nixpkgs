@@ -7,16 +7,12 @@ buildDunePackage rec {
   pname = "dolmen";
   version = "0.6";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/Gbury/dolmen/releases/download/v${version}/dolmen-v${version}.tbz";
     sha256 = "133l23mwxa9xy340izvk4zp5jqjz2cwsm2innsgs2kg85pd39c41";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [ menhirLib fmt ];

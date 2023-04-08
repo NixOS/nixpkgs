@@ -1,22 +1,22 @@
 { lib
 , fetchPypi
-, buildPythonApplication
+, buildPythonPackage
 , editorconfig
 , pytestCheckHook
 , pythonOlder
 , six
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "jsbeautifier";
-  version = "1.14.5";
+  version = "1.14.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ziqW7PYmkvpPor1WIH9+qKs3p0qx1QJSVLgPtTFpqYs=";
+    hash = "sha256-d5kyVNsf9vhOtuHXXjtrcsui7yCBOlhbLYHo5ePHE8Y=";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +24,7 @@ buildPythonApplication rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

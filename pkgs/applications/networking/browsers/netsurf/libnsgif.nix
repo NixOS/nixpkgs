@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config
+{ lib, stdenv, fetchurl, pkg-config, buildPackages
 , buildsystem
 }:
 
@@ -12,12 +12,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nq6lNM1wtTxar0UxeulXcBaFprSojb407Sb0+q6Hmks=";
   };
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
+    "BUILD_CC=$(CC_FOR_BUILD)"
   ];
 
   meta = with lib; {

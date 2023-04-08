@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , mkDerivation
-, fetchurl
 , fetchFromGitHub
 , chromaprint
 , cmake
@@ -53,13 +52,13 @@
 
 mkDerivation rec {
   pname = "mixxx";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    sha256 = "sha256-NRtrEobdJMFgDXrEeb2t1zeVN8pQP7+pda2DSU/yNX8=";
+    sha256 = "sha256-1hOMU/Mdk1vT0GQipn/WX2fm9ddN0mPIq7kf2i2w3xQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -117,7 +116,7 @@ mkDerivation rec {
 
   # mixxx installs udev rules to DATADIR instead of SYSCONFDIR
   # let's disable this and install udev rules manually via postInstall
-  # see https://github.com/mixxxdj/mixxx/blob/2.3.3/CMakeLists.txt#L1381-L1392
+  # see https://github.com/mixxxdj/mixxx/blob/2.3.4/CMakeLists.txt#L1381-L1392
   cmakeFlags = [
     "-DINSTALL_USER_UDEV_RULES=OFF"
   ];

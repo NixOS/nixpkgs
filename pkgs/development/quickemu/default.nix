@@ -4,6 +4,7 @@
 , makeWrapper
 , qemu
 , gnugrep
+, gnused
 , lsb-release
 , jq
 , procps
@@ -11,13 +12,16 @@
 , cdrtools
 , usbutils
 , util-linux
+, socat
 , spice-gtk
 , swtpm
+, unzip
 , wget
 , xdg-user-dirs
 , xrandr
 , zsync
 , OVMF
+, OVMFFull
 , quickemu
 , testers
 }:
@@ -25,6 +29,7 @@ let
   runtimePaths = [
     qemu
     gnugrep
+    gnused
     jq
     lsb-release
     procps
@@ -32,7 +37,8 @@ let
     cdrtools
     usbutils
     util-linux
-    spice-gtk
+    unzip
+    socat
     swtpm
     wget
     xdg-user-dirs
@@ -43,31 +49,37 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
-  version = "4.0";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = version;
-    sha256 = "sha256-CiCQg1UsSAwlEnZEmzU2ynn2RZ+wXPv9FV1b9GVkc00=";
+    hash = "sha256-C/3zyHnxAxCu8rrR4Znka47pVPp0vvaVGyd4TVQG3qg=";
   };
 
-  patches = [
-    ./input_overrides.patch
-  ];
+  postPatch = ''
+    sed -i \
+      -e '/OVMF_CODE_4M.secboot.fd/s|ovmfs=(|ovmfs=("${OVMFFull.fd}/FV/OVMF_CODE.fd","${OVMFFull.fd}/FV/OVMF_VARS.fd" |' \
+      -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${OVMF.fd}/FV/OVMF_CODE.fd","${OVMF.fd}/FV/OVMF_VARS.fd" |' \
+      -e '/cp "''${VARS_IN}" "''${VARS_OUT}"/a chmod +w "''${VARS_OUT}"' \
+      -e 's/Icon=.*qemu.svg/Icon=qemu/' \
+      quickemu
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t "$out/bin" quickemu quickget macrecovery
+    install -Dm755 -t "$out/bin" macrecovery quickemu quickget windowskey
 
-    for f in quickget macrecovery quickemu; do
+    # spice-gtk needs to be put in suffix so that when virtualisation.spiceUSBRedirection
+    # is enabled, the wrapped spice-client-glib-usb-acl-helper is used
+    for f in macrecovery quickget quickemu windowskey; do
       wrapProgram $out/bin/$f \
         --prefix PATH : "${lib.makeBinPath runtimePaths}" \
-        --set ENV_EFI_CODE "${OVMF.fd}/FV/OVMF_CODE.fd" \
-        --set ENV_EFI_VARS "${OVMF.fd}/FV/OVMF_VARS.fd"
+        --suffix PATH : "${lib.makeBinPath [ spice-gtk ]}"
     done
 
     runHook postInstall

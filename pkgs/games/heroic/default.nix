@@ -1,39 +1,76 @@
-{ lib, fetchurl, appimageTools }:
+{ lib
+, mkYarnPackage
+, fetchFromGitHub
+, gitUpdater
+, makeWrapper
+, electron
+, gogdl
+, legendary-gl
+}:
 
-let
-  pname = "heroic";
-  version = "2.2.6";
-  name = "${pname}-${version}";
-  src = fetchurl {
-    url = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${version}/Heroic-${version}.AppImage";
-    sha256 = "sha256-kL30/G4DpDPwGN7PvbWest7TcgL4Rd1c2OM4nRCT3bg=";
+mkYarnPackage rec {
+  pname = "heroic-unwrapped";
+  version = "2.6.2";
+
+  src = fetchFromGitHub {
+    owner = "Heroic-Games-Launcher";
+    repo = "HeroicGamesLauncher";
+    rev = "v${version}";
+    sha256 = "sha256-QXciJkY5l5Oqzgnj9vV5IwOSUtVeLMH29r2EIQVt2LI=";
   };
-  appimageContents = appimageTools.extractType2 { inherit name src; };
 
-in
-appimageTools.wrapType2 {
-  inherit name src;
+  packageJSON = ./package.json;
+  yarnLock = ./yarn.lock;
+  yarnNix = ./yarn.nix;
 
-  extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
-    mkdir -p $out/share/${pname}
-    cp -a ${appimageContents}/locales $out/share/${pname}
-    cp -a ${appimageContents}/resources $out/share/${pname}
+  DISABLE_ESLINT_PLUGIN = "true";
 
-    install -m 444 -D ${appimageContents}/heroic.desktop -t $out/share/applications
-
-    cp -a ${appimageContents}/usr/share/icons $out/share/
-
-    substituteInPlace $out/share/applications/heroic.desktop \
-      --replace 'Exec=AppRun' 'Exec=heroic'
+  postBuild = let
+    yarnCmd = "yarn --offline --frozen-lockfile --ignore-engines --ignore-scripts --lockfile ${yarnLock}";
+  in ''
+    rm deps/heroic/node_modules
+    ln -s ../../node_modules deps/heroic/
+    ${yarnCmd} vite build
   '';
 
+  # Disable bundling into a tar archive.
+  doDist = false;
+
+  # --disable-gpu-compositing is to work around upstream bug
+  # https://github.com/electron/electron/issues/32317
+  postInstall = let
+    deps = "$out/libexec/heroic/deps/heroic";
+  in ''
+    rm -rf "${deps}/public/bin" "${deps}/build/bin"
+    mkdir -p "${deps}/build/bin/linux"
+    ln -s "${gogdl}/bin/gogdl" "${legendary-gl}/bin/legendary" "${deps}/build/bin/linux"
+
+    makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
+      --inherit-argv0 \
+      --add-flags --disable-gpu-compositing \
+      --add-flags "${deps}"
+
+    substituteInPlace "${deps}/flatpak/com.heroicgameslauncher.hgl.desktop" \
+      --replace "Exec=heroic-run" "Exec=heroic"
+    mkdir -p "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
+    ln -s "${deps}/flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications"
+    ln -s "${deps}/flatpak/com.heroicgameslauncher.hgl.png" "$out/share/icons/hicolor/512x512/apps"
+  '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
   meta = with lib; {
-    description = "A Native GUI Epic Games Launcher for Linux, Windows and Mac";
+    description = "A Native GOG and Epic Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [ aidalgol ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "heroic";
   };
 }

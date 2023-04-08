@@ -4,8 +4,9 @@
 , patchelf
 , fetchFromGitHub
 , rustPlatform
-, makeWrapper
+, makeBinaryWrapper
 , pkg-config
+, openssl
 , curl
 , zlib
 , Security
@@ -22,21 +23,26 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.25.1";
+  version = "1.25.2";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "sha256-zCr8xu0j/pBsdJEAYTCGrEouA8QumBnyhM4YLFZJqZI=";
+    sha256 = "sha256-zFdw6P4yrLDshtF9A5MbkxFcUE8KvlZGx5qkW4LSPzw=";
   };
 
-  cargoSha256 = "sha256-FDVZn2PjqxovQmmandJICkidurhoXCAxo3bibuxQSMY=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "home-0.5.3" = "sha256-lb+FGJmGnBm64pddhQWclErwFLFnd7scFcuA+auw1Rk=";
+    };
+  };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [ makeBinaryWrapper pkg-config ];
 
   buildInputs = [
-    curl
+    (curl.override { inherit openssl; })
     zlib
   ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
 

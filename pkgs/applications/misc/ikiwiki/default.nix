@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "0skrc8r4wh4mjfgw1c94awr5sacfb9nfsbm4frikanc9xsy16ksr";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ which highlight ]
     ++ (with perlPackages; [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
-      TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
+      TimeDate gettext DBFile CGISession CGIFormBuilder LocaleGettext
       RpcXML XMLSimple ImageMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
       NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ])
     ++ lib.optionals docutilsSupport [
@@ -56,6 +57,11 @@ stdenv.mkDerivation rec {
     # Without patched plugin shebangs, some tests like t/rst.t fail
     # (with docutilsSupport enabled)
     patchShebangs plugins/*
+
+    # Creating shared git repo fails when running tests in Nix sandbox.
+    # The error is: "fatal: Could not make /tmp/ikiwiki-test-git.2043/repo/branches/ writable by group".
+    # Hopefully, not many people use `ikiwiki-makerepo` to create locally shared repositories these days.
+    substituteInPlace ikiwiki-makerepo --replace "git --bare init --shared" "git --bare init"
   '';
 
   configurePhase = "perl Makefile.PL PREFIX=$out";

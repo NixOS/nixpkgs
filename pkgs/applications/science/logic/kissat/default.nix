@@ -4,19 +4,18 @@
 
 stdenv.mkDerivation rec {
   pname = "kissat";
-  version = "2.0.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "kissat";
-    # https://github.com/arminbiere/kissat/issues/18
-    rev = "abfa45fb782fa3b7c6e2eb6b939febe74d7270b7";
-    sha256 = "06pbmkjxgf2idhsrd1yzvbxr2wf8l06pjb38bzbygm6n9ami89b8";
+    rev = "rel-${version}";
+    sha256 = "sha256-C1lvkyYgFNhV7jGVLlrpJ5zZ8SFHg8g+iW1lDczhpBM=";
   };
 
   outputs = [ "out" "dev" "lib" ];
 
-  checkInputs = [ drat-trim p7zip ];
+  nativeCheckInputs = [ drat-trim p7zip ];
   doCheck = true;
 
   # 'make test' assumes that /etc/passwd is not writable.

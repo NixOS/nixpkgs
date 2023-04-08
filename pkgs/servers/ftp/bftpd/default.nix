@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "bftpd";
@@ -8,6 +8,15 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/project/${pname}/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-lyHQYU4aXQ/muAyaigStqO/ULL393SOelagFmuKDqm8=";
   };
+
+  # utmp.h is deprecated on aarch64-darwin
+  postPatch = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) ''
+    for file in login.*; do
+      substituteInPlace $file --replace "#ifdef HAVE_UTMP_H" "#if 0"
+    done
+  '';
+
+  buildInputs = [ libxcrypt ];
 
   preConfigure = ''
     sed -re 's/-[og] 0//g' -i Makefile*

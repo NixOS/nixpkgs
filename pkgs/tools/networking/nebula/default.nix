@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "nebula";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JUFMcqu24YK1FjaNPkQLOtkyEhvqZPXZyFV+HBAKn5w=";
+    sha256 = "sha256-IsLSlQsrfw3obkz4jHL23BRQY2fviGbPEvs5j0zkdX0=";
   };
 
   vendorSha256 = "sha256-GvMiOEC3Y/pGG++Z+XCgLVADKymUR9shDxjx3xIz8u0=";
@@ -16,6 +16,10 @@ buildGoModule rec {
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 
   ldflags = [ "-X main.Build=${version}" ];
+
+  passthru.tests = {
+    inherit (nixosTests) nebula;
+  };
 
   meta = with lib; {
     description = "A scalable overlay networking tool with a focus on performance, simplicity and security";

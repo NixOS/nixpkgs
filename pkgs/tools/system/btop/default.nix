@@ -8,17 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.2.8";
-  hash = "sha256-X+JJXv+8EIh0hjYnKkeQ3+XQ6CerHrEvPCok5DYxcwc=";
+  version = "1.2.13";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    sha256 = hash;
+    hash = "sha256-F/muCjhcnM+VqAn6FlD4lv23OLITrmtnHkFc5zv97yk=";
   };
-
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   ADDFLAGS = with darwin.apple_sdk.frameworks;
     lib.optional stdenv.isDarwin

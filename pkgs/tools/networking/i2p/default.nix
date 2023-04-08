@@ -1,12 +1,23 @@
-{ lib, stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which, java-service-wrapper }:
+{ lib
+, stdenv
+, ps
+, coreutils
+, fetchurl
+, jdk
+, jre
+, ant
+, gettext
+, which
+, java-service-wrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "i2p";
-  version = "1.6.1";
+  version = "2.1.0";
 
   src = fetchurl {
-    url = "https://download.i2p2.de/releases/${version}/i2psource_${version}.tar.bz2";
-    sha256 = "sha256-cZYGxMtRDeT+dPJLv6U5EacFMYIfwe55op49luqhZzM=";
+    url = "https://files.i2p-projekt.de/${version}/i2psource_${version}.tar.bz2";
+    sha256 = "sha256-gwmMEncgTFVpKEsys37xN2VrJ7/hXvkD7KLafCaSiNE=";
   };
 
   buildInputs = [ jdk ant gettext which ];
@@ -47,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = "https://geti2p.net";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # source bundles dependencies as jars
+      binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];

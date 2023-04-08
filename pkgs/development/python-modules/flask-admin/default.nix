@@ -1,21 +1,23 @@
 { lib
 , arrow
+, azure-storage-blob
+, boto
 , buildPythonPackage
 , colour
 , email-validator
 , enum34
 , fetchPypi
 , flask
-, flask-sqlalchemy
 , flask-babelex
 , flask-mongoengine
+, flask-sqlalchemy
 , geoalchemy2
-, isPy27
 , mongoengine
 , pillow
 , psycopg2
 , pymongo
 , pytestCheckHook
+, pythonOlder
 , shapely
 , sqlalchemy
 , sqlalchemy-citext
@@ -26,29 +28,38 @@
 
 buildPythonPackage rec {
   pname = "flask-admin";
-  version = "1.6.0";
+  version = "1.6.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "Flask-Admin";
     inherit version;
-    sha256 = "1209qhm51d4z66mbw55cmkzqvr465shnws2m2l2zzpxhnxwzqks2";
+    hash = "sha256-JMrir4MramEaAdfcNfQtJmwdbHWkJrhp2MskG3gjM2k=";
   };
 
   propagatedBuildInputs = [
     flask
     wtforms
-  ] ++ lib.optionals isPy27 [
-    enum34
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    aws = [
+      boto
+    ];
+    azure = [
+      azure-storage-blob
+    ];
+  };
+
+  nativeCheckInputs = [
     arrow
     colour
     email-validator
-    flask-sqlalchemy
     flask-babelex
     flask-mongoengine
+    flask-sqlalchemy
     geoalchemy2
     mongoengine
     pillow
@@ -65,6 +76,13 @@ buildPythonPackage rec {
   disabledTests = [
     # Incompatible with werkzeug 2.1
     "test_mockview"
+    # Tests are outdated and don't work with peewee
+    "test_nested_flask_views"
+    "test_export_csv"
+    "test_list_row_actions"
+    "test_column_editable_list"
+    "test_column_filters"
+    "test_export_csv"
   ];
 
   disabledTestPaths = [
@@ -77,6 +95,8 @@ buildPythonPackage rec {
     "flask_admin/tests/sqla/test_inlineform.py"
     "flask_admin/tests/sqla/test_postgres.py"
     "flask_admin/tests/sqla/test_translation.py"
+    # RuntimeError: Working outside of application context.
+    "flask_admin/tests/sqla/test_multi_pk.py"
   ];
 
   pythonImportsCheck = [
@@ -84,8 +104,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Simple and extensible admin interface framework for Flask";
+    description = "Admin interface framework for Flask";
     homepage = "https://github.com/flask-admin/flask-admin/";
+    changelog = "https://github.com/flask-admin/flask-admin/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
   };

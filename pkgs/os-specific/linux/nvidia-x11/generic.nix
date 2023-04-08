@@ -11,14 +11,17 @@
 , useProfiles ? true
 , preferGtk2 ? false
 , settings32Bit ? false
+, ibtSupport ? false
 
 , prePatch ? ""
+, postPatch ? null
 , patches ? []
 , broken ? false
+, brokenOpen ? broken
 }@args:
 
 { lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
-, kernel ? null, perl, nukeReferences, which
+, kernel ? null, perl, nukeReferences, which, libarchive
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -67,7 +70,7 @@ let
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
     patches = if libsOnly then null else patches;
-    inherit prePatch;
+    inherit prePatch postPatch;
     inherit version useGLVND useProfiles;
     inherit (stdenv.hostPlatform) system;
     inherit i686bundled;
@@ -96,20 +99,25 @@ let
     libPath = libPathFor pkgs;
     libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
 
-    buildInputs = [ which ];
-    nativeBuildInputs = [ perl nukeReferences ]
+    nativeBuildInputs = [ perl nukeReferences which libarchive ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
-    disallowedReferences = optional (!libsOnly) [ kernel.dev ];
+    disallowedReferences = optionals (!libsOnly) [ kernel.dev ];
 
     passthru = {
-      open = mapNullable (hash: callPackage (import ./open.nix self hash) { }) openSha256;
+      open = mapNullable (hash: callPackage ./open.nix {
+        inherit hash;
+        nvidia_x11 = self;
+        broken = brokenOpen;
+      }) openSha256;
       settings = (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256) {
         withGtk2 = preferGtk2;
         withGtk3 = !preferGtk2;
       };
       persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
       inherit persistencedVersion settingsVersion;
+      compressFirmware = false;
+      ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
     } // optionalAttrs (!i686bundled) {
       inherit lib32;
     };

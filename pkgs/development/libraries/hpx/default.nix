@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hpx";
-  version = "1.7.1";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "STEllAR-GROUP";
     repo = "hpx";
     rev = version;
-    sha256 = "1knx7kr8iw4b7nh116ygd00y68y84jjb4fj58jkay7n5qlrxh604";
+    sha256 = "sha256-YJ4wHaPE5E6ngUAYrQB1SkW4IoHW71tUDKKNANVA9Xw=";
   };
 
   buildInputs = [ asio boost hwloc gperftools ];

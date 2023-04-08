@@ -1,4 +1,4 @@
-{ stdenv }:
+{ lib, stdenv, langJit }:
 
 {
   # Note [Cross-compiler stripping]
@@ -8,7 +8,9 @@
   # Example ARM breakage by x86_64 strip: https://bugs.gentoo.org/697428
   #
   # Let's recap the file layout for directories with object files for a
-  # cross-compiler (host != target):
+  # cross-compiler:
+  #
+  # $out (host != target)
   # `- bin: HOST
   #    lib/*.{a,o}: HOST
   #      `- gcc/<TARGET>/<VERSION>/*.{a,o}: TARGET
@@ -17,10 +19,16 @@
   #  `- libexec/: HOST
   #  `- <TARGET>/: TARGET
   #
-  # (host == target) has identical directory layout.
+  # $out (host == target) has identical directory layout.
+  #
+  # $lib (host != target):
+  # `- <TARGET>/lib/*.{la,so}: TARGET
+  #
+  # $lib (host == target):
+  # `- lib/*.{la,so}: HOST
 
   # The rest of stripDebugList{Host,Target} will be populated in
-  # postInstall.
+  # postInstall to disambiguate lib/ object files.
   stripDebugList = [ "bin" "libexec" ];
   stripDebugListTarget = [ stdenv.targetPlatform.config ];
 
@@ -32,21 +40,30 @@
       shopt -s nullglob
 
       pushd $out
-
-      local -ar hostFiles=(
-        lib{,32,64}/*.{a.o}
+      local -ar outHostFiles=(
+        lib{,32,64}/*.{a,o,so*}
         lib{,32,64}/gcc/${stdenv.targetPlatform.config}/*/plugin
       )
-      local -ar targetFiles=(
-        lib{,32,64}/gcc/${stdenv.targetPlatform.config}/*/*.{a.o}
+      local -ar outTargetFiles=(
+        lib{,32,64}/gcc/${stdenv.targetPlatform.config}/*/*.{a,o,so*}
       )
-
-      stripDebugList="$stripDebugList ''${hostFiles[*]}"
-      stripDebugListTarget="$stripDebugListTarget ''${targetFiles[*]}"
-
+      popd
+  '' + lib.optionalString (!langJit) ''
+    ${/*keep indentation*/ ""}
+      pushd $lib
+      local -ar libHostFiles=(
+        lib{,32,64}/*.{a,o,so*}
+      )
+      local -ar libTargetFiles=(
+        lib{,32,64}/${stdenv.targetPlatform.config}/*.{a,o,so*}
+      )
       popd
 
+  '' + ''
       eval "$oldOpts"
+
+      stripDebugList="$stripDebugList ''${outHostFiles[*]} ''${libHostFiles[*]}"
+      stripDebugListTarget="$stripDebugListTarget ''${outTargetFiles[*]} ''${libTargetFiles[*]}"
     }
     updateDebugListPaths
   '';

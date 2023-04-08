@@ -1,0 +1,94 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -720,9 +720,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "crates-index"
+-version = "0.18.7"
++version = "0.18.10"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "0044896374c388ccbf1497dad6384bf6111dbcad9d7069506df7450ce9b62ea3"
++checksum = "3447ec855b0c44cad8eedb3d32b53837f233894d5f4584a2648a7ebc5d3feef4"
+ dependencies = [
+  "git2",
+  "hex",
+@@ -1387,9 +1387,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "git2"
+-version = "0.14.3"
++version = "0.15.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5e77a14ffc6ba4ad5188d6cf428894c4fcfda725326b37558f35bb677e712cec"
++checksum = "2994bee4a3a6a51eb90c218523be382fd7ea09b16380b9312e9dbe955ff7c7d1"
+ dependencies = [
+  "bitflags",
+  "libc",
+@@ -1884,9 +1884,9 @@ checksum = "5916d2ae698f6de9bfb891ad7a8d65c09d232dc58cc4ac433c7da3b2fd84bc2b"
+ 
+ [[package]]
+ name = "libgit2-sys"
+-version = "0.13.3+1.4.2"
++version = "0.14.0+1.5.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c24d36c3ac9b9996a2418d6bf428cc0bc5d1a814a84303fc60986088c5ed60de"
++checksum = "47a00859c70c8a4f7218e6d1cc32875c4b55f6799445b842b0d8ed5e4c3d959b"
+ dependencies = [
+  "cc",
+  "libc",
+@@ -2712,9 +2712,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "rayon"
+-version = "1.5.2"
++version = "1.5.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "fd249e82c21598a9a426a4e00dd7adc1d640b22445ec8545feef801d1a74c221"
++checksum = "bd99e5772ead8baa5215278c9b15bf92087709e9c1b2d1f97cdb5a183c933a7d"
+ dependencies = [
+  "autocfg",
+  "crossbeam-deque",
+diff --git a/Cargo.toml b/Cargo.toml
+index ca5269d..6fa4ec2 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -33,7 +33,7 @@ version = "1.0.53"
+ version = "0.14"
+ 
+ [dependencies.crates-index]
+-version = "0.18.0"
++version = "0.18.10"
+ 
+ [dependencies.dunce]
+ version = "1.0.2"
+@@ -42,7 +42,7 @@ version = "1.0.2"
+ version = "0.3"
+ 
+ [dependencies.git2]
+-version = "0.14.3"
++version = "0.15.0"
+ 
+ [dependencies.itertools]
+ version = "0.10"
+diff --git a/Cargo.toml.orig b/Cargo.toml.orig
+index 52eadbd..ef8aa7c 100644
+--- a/Cargo.toml.orig
++++ b/Cargo.toml.orig
+@@ -22,7 +22,7 @@ default = ["slint-backend-qt", "slint-backend-gl-all"]
+ [dependencies]
+ anyhow = "1.0.53"
+ cargo_metadata = "0.14"
+-crates-index = { version = "0.18.0" }
++crates-index = { version = "0.18.10" }
+ dunce = "1.0.2"
+ futures = "0.3"
+ itertools = "0.10"
+@@ -34,7 +34,7 @@ shlex = "1.1"
+ slint = { version = "0.2.4", default-features = false, features = [ "compat-0-2-0" ] }
+ tokio = { version = "1.16.1", features= ["full"] }
+ toml_edit = "0.14.3"
+-git2 = "0.14.3"
++git2 = "0.15.0"
+ 
+ [build-dependencies]
+ slint-build = { version = "0.2.4" }

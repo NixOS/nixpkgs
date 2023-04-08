@@ -23,13 +23,12 @@ let
 in
 {
   options.services.heisenbridge = {
-    enable = mkEnableOption "the Matrix to IRC bridge";
+    enable = mkEnableOption (lib.mdDoc "the Matrix to IRC bridge");
 
     package = mkOption {
       type = types.package;
       default = pkgs.heisenbridge;
-      defaultText = "pkgs.heisenbridge";
-      example = "pkgs.heisenbridge.override { … = …; }";
+      defaultText = lib.literalExpression "pkgs.heisenbridge";
       description = lib.mdDoc ''
         Package of the application to run, exposed for overriding purposes.
       '';
@@ -99,7 +98,7 @@ in
       };
     };
 
-    identd.enable = mkEnableOption "identd service support";
+    identd.enable = mkEnableOption (lib.mdDoc "identd service support");
     identd.port = mkOption {
       type = types.port;
       description = lib.mdDoc "identd listen port";

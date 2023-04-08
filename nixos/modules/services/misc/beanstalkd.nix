@@ -12,11 +12,11 @@ in
 
   options = {
     services.beanstalkd = {
-      enable = mkEnableOption "the Beanstalk work queue";
+      enable = mkEnableOption (lib.mdDoc "the Beanstalk work queue");
 
       listen = {
         port = mkOption {
-          type = types.int;
+          type = types.port;
           description = lib.mdDoc "TCP port that will be used to accept client connections.";
           default = 11300;
         };

@@ -12,7 +12,7 @@ in {
 
     services.ympd = {
 
-      enable = mkEnableOption "ympd, the MPD Web GUI";
+      enable = mkEnableOption (lib.mdDoc "ympd, the MPD Web GUI");
 
       webPort = mkOption {
         type = types.either types.str types.port; # string for backwards compat
@@ -29,7 +29,7 @@ in {
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = config.services.mpd.network.port;
           defaultText = literalExpression "config.services.mpd.network.port";
           description = lib.mdDoc "The port where MPD is listening.";
@@ -48,8 +48,46 @@ in {
 
     systemd.services.ympd = {
       description = "Standalone MPD Web GUI written in C";
+
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.ympd}/bin/ympd --host ${cfg.mpd.host} --port ${toString cfg.mpd.port} --webport ${toString cfg.webPort} --user nobody";
+      after = [ "network-online.target" ];
+
+      serviceConfig = {
+        ExecStart = ''
+          ${pkgs.ympd}/bin/ympd \
+            --host ${cfg.mpd.host} \
+            --port ${toString cfg.mpd.port} \
+            --webport ${toString cfg.webPort}
+        '';
+
+        DynamicUser = true;
+        NoNewPrivileges = true;
+
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ProtectHome = "tmpfs";
+
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateIPC = true;
+
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+
+        SystemCallFilter = [
+          "@system-service"
+          "~@process"
+          "~@setuid"
+        ];
+      };
     };
 
   };

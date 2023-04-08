@@ -1,10 +1,9 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , desktop-file-utils
 , appstream-glib
 , python3Packages
@@ -30,16 +29,15 @@ python3Packages.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     desktop-file-utils
-    appstream-glib
+    gobject-introspection
   ];
 
   buildInputs = [
     glib
     gtk4
     libadwaita
-    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -50,13 +48,12 @@ python3Packages.buildPythonApplication rec {
     pygobject3
   ];
 
-  # Broken with gobject-introspection setup hook
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
   format = "other";
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
+    substituteInPlace build-aux/meson/postinstall.py \
+      --replace gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
   meta = with lib; {

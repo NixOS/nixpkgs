@@ -12,8 +12,6 @@
 , R
 }:
 
-with lib;
-
 let
   spark = { pname, version, sha256, extraMeta ? {} }:
     stdenv.mkDerivation rec {
@@ -26,7 +24,7 @@ let
       nativeBuildInputs = [ makeWrapper ];
       buildInputs = [ jdk python3Packages.python ]
         ++ extraPythonPackages
-        ++ optional RSupport R;
+        ++ lib.optional RSupport R;
 
       untarDir = "${pname}-${version}";
       installPhase = ''
@@ -38,12 +36,12 @@ let
         cat > $out/lib/${untarDir}/conf/spark-env.sh <<- EOF
         export JAVA_HOME="${jdk}"
         export SPARK_HOME="$out/lib/${untarDir}"
-      '' + optionalString hadoopSupport ''
+      '' + lib.optionalString hadoopSupport ''
         export SPARK_DIST_CLASSPATH=$(${hadoop}/bin/hadoop classpath)
       '' + ''
         export PYSPARK_PYTHON="${python3Packages.python}/bin/${python3Packages.python.executable}"
         export PYTHONPATH="\$PYTHONPATH:$PYTHONPATH"
-        ${optionalString RSupport ''
+        ${lib.optionalString RSupport ''
           export SPARKR_R_SHELL="${R}/bin/R"
           export PATH="\$PATH:${R}/bin"''}
         EOF
@@ -64,18 +62,18 @@ let
       meta = {
         description = "Apache Spark is a fast and general engine for large-scale data processing";
         homepage = "https://spark.apache.org/";
-        sourceProvenance = with sourceTypes; [ binaryBytecode ];
+        sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
         license = lib.licenses.asl20;
         platforms = lib.platforms.all;
-        maintainers = with maintainers; [ thoughtpolice offline kamilchm illustris ];
+        maintainers = with lib.maintainers; [ thoughtpolice offline kamilchm illustris ];
       } // extraMeta;
     };
 in
 {
   spark_3_2 = spark rec {
     pname = "spark";
-    version = "3.2.1";
-    sha256 = "0kxdqczwmj6pray0h8h1qhygni9m82jzznw5fbv9hrxrkq1v182d";
+    version = "3.2.2";
+    sha256 = "sha256-yKoTyD/IqvsJQs0jB67h1zqwYaLuikdoa5fYIXtvhz0=";
   };
   spark_3_1 = spark rec {
     pname = "spark";

@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "boppreh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-U4GWhPp28azBE3Jn9xpLxudOKx0PjnYO77EM2HsJ9lM=";
+    hash = "sha256-U4GWhPp28azBE3Jn9xpLxudOKx0PjnYO77EM2HsJ9lM=";
   };
 
   pythonImportsCheck = [ "keyboard" ];

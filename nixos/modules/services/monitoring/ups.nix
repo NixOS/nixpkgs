@@ -12,7 +12,7 @@ let
   upsOptions = {name, config, ...}:
   {
     options = {
-      # This can be infered from the UPS model by looking at
+      # This can be inferred from the UPS model by looking at
       # /nix/store/nut/share/driver.list
       driver = mkOption {
         type = types.str;
@@ -116,7 +116,7 @@ in
       mode = mkOption {
         default = "standalone";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The MODE determines which part of the NUT is to be started, and
           which configuration files must be modified.
 
@@ -228,7 +228,7 @@ in
           "}
         '';
       "nut/upssched.conf".source = cfg.schedulerRules;
-      # These file are containing private informations and thus should not
+      # These file are containing private information and thus should not
       # be stored inside the Nix store.
       /*
       "nut/upsd.conf".source = "";

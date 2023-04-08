@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: getlistdelim.o:/build/mlmmj-1.3.0/src/../include/mlmmj.h:84: multiple definition of
   #     `subtype_strs'; mlmmj-send.o:/build/mlmmj-1.3.0/src/../include/mlmmj.h:84: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   postInstall = ''
     # grab all documentation files

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , substituteAll
 , pkgsi686Linux
-, libnotify
+, dbus
 , meson
 , ninja
 , pkg-config
@@ -17,7 +17,7 @@ let
   asio = fetchFromGitHub {
     owner = "chriskohlhoff";
     repo = "asio";
-    rev = "asio-1-22-1";
+    rev = "refs/tags/asio-1-22-1";
     sha256 = "sha256-UDLhx2yI6Txg0wP5H4oNIhgKIB2eMxUGCyT2x/7GgVg=";
   };
 
@@ -25,15 +25,23 @@ let
   bitsery = fetchFromGitHub {
     owner = "fraillt";
     repo = "bitsery";
-    rev = "v5.2.2";
+    rev = "refs/tags/v5.2.2";
     sha256 = "sha256-VwzVtxt+E/SVcxqIJw8BKPO2q7bu/hkhY+nB7FHrZpY=";
+  };
+
+  # Derived from subprojects/clap.wrap
+  clap = fetchFromGitHub {
+    owner = "free-audio";
+    repo = "clap";
+    rev = "refs/tags/1.1.7";
+    sha256 = "sha256-WcMTxE+QCzlp4lhFdghZI8UI/5mdVeRvrl24Xynd0qk=";
   };
 
   # Derived from subprojects/function2.wrap
   function2 = fetchFromGitHub {
     owner = "Naios";
     repo = "function2";
-    rev = "4.2.0";
+    rev = "refs/tags/4.2.0";
     sha256 = "sha256-wrt+fCcM6YD4ZRZYvqqB+fNakCNmltdPZKlNkPLtgMs=";
   };
 
@@ -41,7 +49,7 @@ let
   ghc_filesystem = fetchFromGitHub {
     owner = "gulrak";
     repo = "filesystem";
-    rev = "v1.5.12";
+    rev = "refs/tags/v1.5.12";
     sha256 = "sha256-j4RE5Ach7C7Kef4+H9AHSXa2L8OVyJljDwBduKcC4eE=";
   };
 
@@ -49,28 +57,29 @@ let
   tomlplusplus = fetchFromGitHub {
     owner = "marzer";
     repo = "tomlplusplus";
-    rev = "v3.0.1";
-    sha256 = "sha256-l8ckbCqjz3GUfwStcl3H2C+un5dZfT2uLtayvdu93D4=";
+    rev = "refs/tags/v3.3.0";
+    sha256 = "sha256-INX8TOEumz4B5coSxhiV7opc3rYJuQXT2k1BJ3Aje1M=";
   };
 
   # Derived from vst3.wrap
   vst3 = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = "vst3sdk";
-    rev = "v3.7.5_build_44-patched";
+    rev = "refs/tags/v3.7.7_build_19-patched";
     fetchSubmodules = true;
-    sha256 = "sha256-6cuEUa+BXa6MnAYIBq873n0NRLadcPfMX+kpf4ysE6M=";
+    sha256 = "sha256-LsPHPoAL21XOKmF1Wl/tvLJGzjaCLjaDAcUtDvXdXSU=";
   };
-in multiStdenv.mkDerivation rec {
+in
+multiStdenv.mkDerivation (finalAttrs: {
   pname = "yabridge";
-  version = "4.0.2";
+  version = "5.0.4";
 
   # NOTE: Also update yabridgectl's cargoHash when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-rce6gxnB+RpG84Xakw0h4vZ8lyEQ41swWQGuwpomV2I=";
+    repo = "yabridge";
+    rev = "refs/tags/${finalAttrs.version}";
+    sha256 = "sha256-15WTCXMvghoU5TkE8yuQJrxj9cwVjczDKGKWjoUS6SI=";
   };
 
   # Unpack subproject sources
@@ -78,6 +87,7 @@ in multiStdenv.mkDerivation rec {
     cd "$sourceRoot/subprojects"
     cp -R --no-preserve=mode,ownership ${asio} asio
     cp -R --no-preserve=mode,ownership ${bitsery} bitsery
+    cp -R --no-preserve=mode,ownership ${clap} clap
     cp -R --no-preserve=mode,ownership ${function2} function2
     cp -R --no-preserve=mode,ownership ${ghc_filesystem} ghc_filesystem
     cp -R --no-preserve=mode,ownership ${tomlplusplus} tomlplusplus
@@ -89,7 +99,7 @@ in multiStdenv.mkDerivation rec {
     (substituteAll {
       src = ./hardcode-dependencies.patch;
       libxcb32 = pkgsi686Linux.xorg.libxcb;
-      inherit libnotify wine;
+      inherit wine;
     })
 
     # Patch the chainloader to search for libyabridge through NIX_PROFILES
@@ -102,6 +112,7 @@ in multiStdenv.mkDerivation rec {
       cd subprojects
       cp packagefiles/asio/* asio
       cp packagefiles/bitsery/* bitsery
+      cp packagefiles/clap/* clap
       cp packagefiles/function2/* function2
       cp packagefiles/ghc_filesystem/* ghc_filesystem
     )
@@ -116,6 +127,7 @@ in multiStdenv.mkDerivation rec {
 
   buildInputs = [
     libxcb
+    dbus
   ];
 
   mesonFlags = [
@@ -130,7 +142,7 @@ in multiStdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p "$out/bin" "$out/lib"
     cp yabridge-host{,-32}.exe{,.so} "$out/bin"
-    cp libyabridge{,-chainloader}-{vst2,vst3}.so "$out/lib"
+    cp libyabridge{,-chainloader}-{vst2,vst3,clap}.so "$out/lib"
     runHook postInstall
   '';
 
@@ -142,15 +154,13 @@ in multiStdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A modern and transparent way to use Windows VST2 and VST3 plugins on Linux";
-    homepage = src.meta.homepage;
+    homepage = "https://github.com/robbert-vdh/yabridge";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

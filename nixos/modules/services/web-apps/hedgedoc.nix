@@ -32,7 +32,7 @@ in
   ];
 
   options.services.hedgedoc = {
-    enable = mkEnableOption "the HedgeDoc Markdown Editor";
+    enable = mkEnableOption (lib.mdDoc "the HedgeDoc Markdown Editor");
 
     groups = mkOption {
       type = types.listOf types.str;
@@ -51,7 +51,7 @@ in
     };
 
     settings = let options = {
-      debug = mkEnableOption "debug mode";
+      debug = mkEnableOption (lib.mdDoc "debug mode");
       domain = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -76,7 +76,7 @@ in
         '';
       };
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         example = 80;
         description = lib.mdDoc ''
@@ -189,9 +189,9 @@ in
       allowAnonymousEdits = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether to allow guests to edit existing notes with the `freely' permission,
-          when <option>allowAnonymous</option> is enabled.
+        description = lib.mdDoc ''
+          Whether to allow guests to edit existing notes with the `freely` permission,
+          when {option}`allowAnonymous` is enabled.
         '';
       };
       allowFreeURL = mkOption {
@@ -291,7 +291,8 @@ in
       };
       defaultNotePath = mkOption {
         type = types.nullOr types.str;
-        default = "./public/default.md";
+        default = "${cfg.package}/public/default.md";
+        defaultText = literalExpression "\"\${cfg.package}/public/default.md\"";
         description = lib.mdDoc ''
           Path to the default Note file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
@@ -299,7 +300,8 @@ in
       };
       docsPath = mkOption {
         type = types.nullOr types.str;
-        default = "./public/docs";
+        default = "${cfg.package}/public/docs";
+        defaultText = literalExpression "\"\${cfg.package}/public/docs\"";
         description = lib.mdDoc ''
           Path to the docs directory.
           (Non-canonical paths are relative to HedgeDoc's base directory)
@@ -307,7 +309,8 @@ in
       };
       indexPath = mkOption {
         type = types.nullOr types.str;
-        default = "./public/views/index.ejs";
+        default = "${cfg.package}/public/views/index.ejs";
+        defaultText = literalExpression "\"\${cfg.package}/public/views/index.ejs\"";
         description = lib.mdDoc ''
           Path to the index template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
@@ -315,7 +318,8 @@ in
       };
       hackmdPath = mkOption {
         type = types.nullOr types.str;
-        default = "./public/views/hackmd.ejs";
+        default = "${cfg.package}/public/views/hackmd.ejs";
+        defaultText = literalExpression "\"\${cfg.package}/public/views/hackmd.ejs\"";
         description = lib.mdDoc ''
           Path to the hackmd template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
@@ -323,8 +327,8 @@ in
       };
       errorPath = mkOption {
         type = types.nullOr types.str;
-        default = null;
-        defaultText = literalExpression "./public/views/error.ejs";
+        default = "${cfg.package}/public/views/error.ejs";
+        defaultText = literalExpression "\"\${cfg.package}/public/views/error.ejs\"";
         description = lib.mdDoc ''
           Path to the error template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
@@ -332,8 +336,8 @@ in
       };
       prettyPath = mkOption {
         type = types.nullOr types.str;
-        default = null;
-        defaultText = literalExpression "./public/views/pretty.ejs";
+        default = "${cfg.package}/public/views/pretty.ejs";
+        defaultText = literalExpression "\"\${cfg.package}/public/views/pretty.ejs\"";
         description = lib.mdDoc ''
           Path to the pretty template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
@@ -341,8 +345,8 @@ in
       };
       slidePath = mkOption {
         type = types.nullOr types.str;
-        default = null;
-        defaultText = literalExpression "./public/views/slide.hbs";
+        default = "${cfg.package}/public/views/slide.hbs";
+        defaultText = literalExpression "\"\${cfg.package}/public/views/slide.hbs\"";
         description = lib.mdDoc ''
           Path to the slide template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
@@ -351,7 +355,7 @@ in
       uploadsPath = mkOption {
         type = types.str;
         default = "${cfg.workDir}/uploads";
-        defaultText = literalExpression "/var/lib/${name}/uploads";
+        defaultText = literalExpression "\"\${cfg.workDir}/uploads\"";
         description = lib.mdDoc ''
           Path under which uploaded files are saved.
         '';
@@ -449,7 +453,7 @@ in
               '';
             };
             port = mkOption {
-              type = types.int;
+              type = types.port;
               default = 9000;
               description = lib.mdDoc ''
                 Minio listen port.
@@ -933,30 +937,38 @@ in
                 Required group names.
               '';
             };
+            providerName = mkOption {
+              type = types.str;
+              default = "";
+              example = "My institution";
+              description = lib.mdDoc ''
+                Optional name to be displayed at login form indicating the SAML provider.
+              '';
+            };
             attribute = {
               id = mkOption {
                 type = types.str;
                 default = "";
-                description = ''
-                  Attribute map for `id'.
-                  Defaults to `NameID' of SAML response.
+                description = lib.mdDoc ''
+                  Attribute map for `id`.
+                  Defaults to `NameID` of SAML response.
                 '';
               };
               username = mkOption {
                 type = types.str;
                 default = "";
-                description = ''
-                  Attribute map for `username'.
-                  Defaults to `NameID' of SAML response.
+                description = lib.mdDoc ''
+                  Attribute map for `username`.
+                  Defaults to `NameID` of SAML response.
                 '';
               };
               email = mkOption {
                 type = types.str;
                 default = "";
-                description = ''
-                  Attribute map for `email'.
-                  Defaults to `NameID' of SAML response if
-                  <option>identifierFormat</option> has
+                description = lib.mdDoc ''
+                  Attribute map for `email`.
+                  Defaults to `NameID` of SAML response if
+                  {option}`identifierFormat` has
                   the default value.
                 '';
               };
@@ -982,27 +994,27 @@ in
       type = with types; nullOr path;
       default = null;
       example = "/var/lib/hedgedoc/hedgedoc.env";
-      description = ''
-        Environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+      description = lib.mdDoc ''
+        Environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets may be passed to the service without adding them to the world-readable
         Nix store, by specifying placeholder variables as the option value in Nix and
         setting these variables accordingly in the environment file.
 
-        <programlisting>
+        ```
           # snippet of HedgeDoc-related config
-          services.hedgedoc.configuration.dbURL = "postgres://hedgedoc:\''${DB_PASSWORD}@db-host:5432/hedgedocdb";
-          services.hedgedoc.configuration.minio.secretKey = "$MINIO_SECRET_KEY";
-        </programlisting>
+          services.hedgedoc.settings.dbURL = "postgres://hedgedoc:\''${DB_PASSWORD}@db-host:5432/hedgedocdb";
+          services.hedgedoc.settings.minio.secretKey = "$MINIO_SECRET_KEY";
+        ```
 
-        <programlisting>
+        ```
           # content of the environment file
           DB_PASSWORD=verysecretdbpassword
           MINIO_SECRET_KEY=verysecretminiokey
-        </programlisting>
+        ```
 
         Note that this file needs to be available on the host on which
-        <literal>HedgeDoc</literal> is running.
+        `HedgeDoc` is running.
       '';
     };
 

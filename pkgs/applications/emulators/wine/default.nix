@@ -18,7 +18,6 @@
   gstreamerSupport ? false,
   cupsSupport ? false,
   dbusSupport ? false,
-  openalSupport ? false,
   openclSupport ? false,
   cairoSupport ? false,
   odbcSupport ? false,
@@ -30,13 +29,11 @@
   saneSupport ? false,
   gphoto2Support ? false,
   krb5Support ? false,
-  ldapSupport ? false,
   pulseaudioSupport ? false,
   udevSupport ? false,
   xineramaSupport ? false,
   vulkanSupport ? false,
   sdlSupport ? false,
-  vkd3dSupport ? false,
   usbSupport ? false,
   mingwSupport ? wineRelease != "stable",
   waylandSupport ? wineRelease == "wayland",
@@ -49,12 +46,12 @@ let wine-build = build: release:
         wineRelease = release;
         supportFlags = {
           inherit
-            cupsSupport gettextSupport dbusSupport openalSupport cairoSupport
+            cupsSupport gettextSupport dbusSupport cairoSupport
             odbcSupport netapiSupport cursesSupport vaSupport pcapSupport
-            v4lSupport saneSupport gphoto2Support krb5Support ldapSupport fontconfigSupport
+            v4lSupport saneSupport gphoto2Support krb5Support fontconfigSupport
             alsaSupport pulseaudioSupport xineramaSupport gtkSupport openclSupport
             tlsSupport openglSupport gstreamerSupport udevSupport vulkanSupport
-            sdlSupport usbSupport vkd3dSupport mingwSupport waylandSupport embedInstallers;
+            sdlSupport usbSupport mingwSupport waylandSupport embedInstallers;
         };
         inherit moltenvk;
       });

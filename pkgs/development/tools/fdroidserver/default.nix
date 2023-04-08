@@ -1,39 +1,43 @@
-{ fetchFromGitLab
+{ lib
+, fetchFromGitLab
 , python
-, lib
 , apksigner
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "2.1";
   pname = "fdroidserver";
+  version = "2.1.1";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
     rev = version;
-    sha256 = "0xmmjj7f05p4q8xbbkxqns2vvk2rsvb9n43vjdv0wbydmgpa34k7";
+    sha256 = "0qg4vxjcgm05dqk3kyj8lry9wh5bxy0qwz70fiyxb5bi1kwai9ss";
   };
 
   postPatch = ''
-    substituteInPlace fdroidserver/common.py --replace "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
+    substituteInPlace fdroidserver/common.py \
+      --replace "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
   '';
 
   preConfigure = ''
-    ${python.interpreter} setup.py compile_catalog
+    ${python.pythonForBuild.interpreter} setup.py compile_catalog
   '';
+
   postInstall = ''
     patchShebangs gradlew-fdroid
     install -m 0755 gradlew-fdroid $out/bin
   '';
 
-  buildInputs = [ python.pkgs.babel ];
+  buildInputs = with python.pkgs; [
+    babel
+  ];
 
   propagatedBuildInputs = with python.pkgs; [
     androguard
     clint
     defusedxml
-    GitPython
+    gitpython
     libcloud
     mwclient
     paramiko
@@ -59,7 +63,7 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://f-droid.org";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3;
-    maintainers = [ lib.maintainers.obfusk ];
+    maintainers = with maintainers; [ obfusk ];
   };
 
 }

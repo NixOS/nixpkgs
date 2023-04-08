@@ -1,4 +1,5 @@
 { alsa-lib
+, cmake
 , copyDesktopItems
 , curl
 , fetchFromBitbucket
@@ -23,9 +24,8 @@
 , makeDesktopItem
 , makeWrapper
 , pkg-config
-, rtaudio
 , rtmidi
-, speex
+, speexdsp
 , stdenv
 , wrapGAppsHook
 , zstd
@@ -45,8 +45,8 @@ let
   fuzzysearchdatabase-source = fetchFromBitbucket {
     owner = "j_norberg";
     repo = "fuzzysearchdatabase";
-    rev = "fe62479811e503ef3c091f5a859d27bfcf0a44da";
-    sha256 = "zgeUzuuInHPeveBIjlivRGIz+NSb7cW/9hMndxm6qOA=";
+    rev = "a3a1bf557b8e6ee58b55fa82ff77ff7a3d141949";
+    sha256 = "13ib72acbxn1cnf66im0v4nlr1464v7j08ra2bprznjmy127xckm";
   };
   nanovg-source = fetchFromGitHub {
     owner = "VCVRack";
@@ -72,16 +72,50 @@ let
     rev = "2fc6405883f8451944ed080547d073c8f9f31898";
     sha256 = "/QZFZuI5kSsEvSfMJlcqB1HiZ9Vcf3vqLqWIMEgxQK8=";
   };
+  simde-source = fetchFromGitHub {
+    owner = "simd-everywhere";
+    repo = "simde";
+    rev = "dd0b662fd8cf4b1617dbbb4d08aa053e512b08e4";
+    sha256 = "1kxwzdlh21scak7wsbb60vwfvndppidj5fgbi26mmh73zsj02mnv";
+  };
+  tinyexpr-source = fetchFromGitHub {
+    owner = "codeplea";
+    repo = "tinyexpr";
+    rev = "4e8cc0067a1e2378faae23eb2dfdd21e9e9907c2";
+    sha256 = "1yxkxsw3bc81cjm2knvyr1z9rlzwmjvq5zd125n34xwq568v904d";
+  };
   fundamental-source = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Fundamental";
-    rev = "533397cdcad5c6401ebd3937d6c1663de2473627"; # tip of branch v2
-    sha256 = "QnwOgrYxiCa/7t/u6F63Ks8C9E8k6T+hia4JZFhp1LI=";
+    rev = "f80e1a0e78dc043a0ff0b777ef98a36b91063622"; # tip of branch v2
+    sha256 = "0hnwrr1xhf7dpkw1v63f633x5dlrvijgbah4aj5h5xr2jchip9nx";
+  };
+  vcv-rtaudio = stdenv.mkDerivation rec {
+    pname = "vcv-rtaudio";
+    version = "unstable-2020-01-30";
+
+    src = fetchFromGitHub {
+      owner = "VCVRack";
+      repo = "rtaudio";
+      rev = "ece277bd839603648c80c8a5f145678e13bc23f3"; # tip of master branch
+      sha256 = "11gpl0ak757ilrq4fi0brj0chmlcr1hihc32yd7qza4fxjw2yx2v";
+    };
+
+    nativeBuildInputs = [ cmake pkg-config ];
+
+    buildInputs = [ alsa-lib libjack2 libpulseaudio ];
+
+    cmakeFlags = [
+      "-DRTAUDIO_API_ALSA=ON"
+      "-DRTAUDIO_API_PULSE=ON"
+      "-DRTAUDIO_API_JACK=ON"
+      "-DRTAUDIO_API_CORE=OFF"
+    ];
   };
 in
 stdenv.mkDerivation rec {
   pname = "VCV-Rack";
-  version = "2.0.6";
+  version = "2.2.1";
 
   desktopItems = [
     (makeDesktopItem {
@@ -101,7 +135,7 @@ stdenv.mkDerivation rec {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "vvGx8tnE7gMiboVUTywIzBB1q/IfiJ8TPnSHvmfHUQg=";
+    sha256 = "079alr6y0101k92v5lrnycljcbifh0hsvklbf4w5ax2zrxnyplq8";
   };
 
   patches = [
@@ -119,6 +153,8 @@ stdenv.mkDerivation rec {
     cp -r ${nanosvg-source}/* dep/nanosvg
     cp -r ${osdialog-source}/* dep/osdialog
     cp -r ${oui-blendish-source}/* dep/oui-blendish
+    cp -r ${simde-source}/* dep/simde
+    cp -r ${tinyexpr-source}/* dep/tinyexpr
 
     cp dep/pffft/*.h dep/include
     cp dep/fuzzysearchdatabase/src/*.hpp dep/include
@@ -126,6 +162,8 @@ stdenv.mkDerivation rec {
     cp dep/nanovg/src/*.h dep/include
     cp dep/osdialog/*.h dep/include
     cp dep/oui-blendish/*.h dep/include
+    cp -r dep/simde/simde dep/include
+    cp dep/tinyexpr/tinyexpr.h dep/include
 
     # Build and dist the Fundamental plugins
     cp -r ${fundamental-source} plugins/Fundamental/
@@ -136,8 +174,6 @@ stdenv.mkDerivation rec {
     substituteInPlace dep/osdialog/osdialog_zenity.c \
       --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${gnome.zenity}/bin/zenity"'
   '';
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -161,13 +197,18 @@ stdenv.mkDerivation rec {
     libjack2
     libpulseaudio
     libsamplerate
-    rtaudio
     rtmidi
-    speex
+    speexdsp
+    vcv-rtaudio
     zstd
   ];
 
-  makeFlags = [ "all" "plugins" ];
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ] ++ [
+    "all"
+    "plugins"
+  ];
 
   installPhase = ''
     runHook preInstall

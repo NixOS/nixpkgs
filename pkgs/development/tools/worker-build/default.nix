@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "worker-build";
-  version = "0.0.10";
+  version = "0.0.15";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-rs";
     rev = "v${version}";
-    sha256 = "sha256-p19Q/XAOvDKXRvDWeMRo4C1TnvxYg88CAyldN7AhJDM=";
+    sha256 = "sha256-EJU6WgoGnhquHSJ1hLVK8eild7jcegeC+VxOeoD9+20=";
   };
 
-  cargoSha256 = "sha256-8fnsiWZjxCxhv4NWcRIpKbT8vQyhe27es80ttKX/oPs=";
+  cargoHash = "sha256-6QzZtaqnhZ1V5UU9pppLK+LKn9EdvMJ8YOyxFYt7oos=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   buildAndTestSubdir = "worker-build";
 

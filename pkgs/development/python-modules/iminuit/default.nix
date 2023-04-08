@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "iminuit";
-  version = "2.15.2";
+  version = "2.21.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YKx9L+lAXJIGZ1IpJz9AFhHT9d+iKUJUFkbEYltZ8eo=";
+    hash = "sha256-ivRsweaIvkiBceTfAI457wN+tbntJ3t4HTynWf29vAI=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

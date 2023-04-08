@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pydeps";
-  version = "1.10.22";
+  version = "1.11.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thebjorn";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-PA+TpPAuzyAQSlD08ZgmZAKgVEGoIUw/zq4QdTmU8HE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6eiSzuxspWutEKL1pKBeZ0/ZQjS07BpTwgd8dyrePcM=";
   };
 
   buildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     stdlib-list
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pyyaml
   ];
@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module dependency visualization";
     homepage = "https://github.com/thebjorn/pydeps";
+    changelog = "https://github.com/thebjorn/pydeps/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
   };

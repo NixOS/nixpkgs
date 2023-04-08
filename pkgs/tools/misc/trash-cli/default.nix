@@ -2,21 +2,25 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
-  version = "0.22.4.16";
+  version = "0.23.2.13.2";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
     rev = version;
-    sha256 = "0j8iwr6cdc24gp5raxrq5483d7sfsyi8sy947w4hr2sc4j738dg5";
+    hash = "sha256-TJEi7HKIrfOdb+LLRt2DN5gWdFzUeo6isb59lFLK4bQ=";
   };
 
-  propagatedBuildInputs = [ python3Packages.psutil ];
+  propagatedBuildInputs = with python3Packages; [ psutil six ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     mock
     pytestCheckHook
   ];
+
+  postPatch = ''
+    sed -i '/typing/d' setup.cfg
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -42,10 +46,10 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/andreafrancia/trash-cli";
-    description = "Command line tool for the desktop trash can";
+    description = "Command line interface to the freedesktop.org trashcan";
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     mainProgram = "trash";
   };
 }

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pytrafikverket";
-  version = "0.2.0.1";
+  version = "0.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RsB8b96aCIBM3aABOuuexB5fIo7H1Kq/XsGvV8b7/sA=";
+    hash = "sha256-bbg1FzzJ3cJIbV+u3Ih70hkgu23Joxc1xeLELiRYt8g=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to get data from the Swedish Transport Administration (Trafikverket) API";
     homepage = "https://github.com/endor-force/pytrafikverket";
+    changelog = "https://github.com/endor-force/pytrafikverket/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

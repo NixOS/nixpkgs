@@ -84,11 +84,11 @@ let
         makeFlags = [ "all" "fdb_java" "fdb_python" ]
           # Don't compile FDBLibTLS if we don't need it in 6.0 or later;
           # it gets statically linked in
-          ++ lib.optional (lib.versionOlder version "6.0") [ "fdb_c" ]
+          ++ lib.optionals (lib.versionOlder version "6.0") [ "fdb_c" ]
           # Needed environment overrides
           ++ [ "KVRELEASE=1"
                "NOSTRIP=1"
-             ] ++ lib.optional officialRelease [ "RELEASE=true" ];
+             ] ++ lib.optionals officialRelease [ "RELEASE=true" ];
 
         # on 6.0 and later, we can specify all this information manually
         configurePhase = lib.optionalString (lib.versionAtLeast version "6.0") ''

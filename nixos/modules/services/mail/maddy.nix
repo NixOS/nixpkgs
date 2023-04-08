@@ -139,33 +139,33 @@ in {
   options = {
     services.maddy = {
 
-      enable = mkEnableOption "Maddy, a free an open source mail server";
+      enable = mkEnableOption (lib.mdDoc "Maddy, a free an open source mail server");
 
       user = mkOption {
         default = "maddy";
         type = with types; uniq string;
-        description = ''
+        description = lib.mdDoc ''
           User account under which maddy runs.
 
-          <note><para>
+          ::: {.note}
           If left as the default value this user will automatically be created
           on system activation, otherwise the sysadmin is responsible for
           ensuring the user exists before the maddy service starts.
-          </para></note>
+          :::
         '';
       };
 
       group = mkOption {
         default = "maddy";
         type = with types; uniq string;
-        description = ''
+        description = lib.mdDoc ''
           Group account under which maddy runs.
 
-          <note><para>
+          ::: {.note}
           If left as the default value this group will automatically be created
           on system activation, otherwise the sysadmin is responsible for
           ensuring the group exists before the maddy service starts.
-          </para></note>
+          :::
         '';
       };
 
@@ -203,14 +203,15 @@ in {
       config = mkOption {
         type = with types; nullOr lines;
         default = defaultConfig;
-        description = ''
+        description = lib.mdDoc ''
           Server configuration, see
-          <link xlink:href="https://maddy.email">https://maddy.email</link> for
+          [https://maddy.email](https://maddy.email) for
           more information. The default configuration of this module will setup
           minimal maddy instance for mail transfer without TLS encryption.
-          <note><para>
+
+          ::: {.note}
           This should not be used in a production environment.
-          </para></note>
+          :::
         '';
       };
 
@@ -222,22 +223,59 @@ in {
         '';
       };
 
+      ensureAccounts = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = lib.mdDoc ''
+          List of IMAP accounts which get automatically created. Note that for
+          a complete setup, user credentials for these accounts are required too
+          and can be created using the command `maddyctl creds`.
+          This option does not delete accounts which are not (anymore) listed.
+        '';
+        example = [
+          "user1@localhost"
+          "user2@localhost"
+        ];
+      };
+
     };
   };
 
   config = mkIf cfg.enable {
 
     systemd = {
+
       packages = [ pkgs.maddy ];
-      services.maddy = {
-        serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
-          StateDirectory = [ "maddy" ];
+      services = {
+        maddy = {
+          serviceConfig = {
+            User = cfg.user;
+            Group = cfg.group;
+            StateDirectory = [ "maddy" ];
+          };
+          restartTriggers = [ config.environment.etc."maddy/maddy.conf".source ];
+          wantedBy = [ "multi-user.target" ];
         };
-        restartTriggers = [ config.environment.etc."maddy/maddy.conf".source ];
-        wantedBy = [ "multi-user.target" ];
+        maddy-ensure-accounts = {
+          script = ''
+            ${optionalString (cfg.ensureAccounts != []) ''
+              ${concatMapStrings (account: ''
+                if ! ${pkgs.maddy}/bin/maddyctl imap-acct list | grep "${account}"; then
+                  ${pkgs.maddy}/bin/maddyctl imap-acct create ${account}
+                fi
+              '') cfg.ensureAccounts}
+            ''}
+          '';
+          serviceConfig = {
+            Type = "oneshot";
+            User= "maddy";
+          };
+          after = [ "maddy.service" ];
+          wantedBy = [ "multi-user.target" ];
+        };
+
       };
+
     };
 
     environment.etc."maddy/maddy.conf" = {

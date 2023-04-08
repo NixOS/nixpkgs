@@ -1,9 +1,11 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
 , cachelib
 , flask
+, asgiref
 , pytest-asyncio
 , pytest-xprocess
 , pytestCheckHook
@@ -11,18 +13,18 @@
 
 buildPythonPackage rec {
   pname = "Flask-Caching";
-  version = "2.0.1";
+  version = "2.0.2";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EN8gCgPwMq9gB3vv5Bd53ZSJi2fIIEDTTochC3G6Jjg=";
+    hash = "sha256-JLYMVS1ZqWBcwbakLFbNs5qCoo2rRTK77bkiKuVOy04=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "Flask <= 2.1.2" "Flask <= 2.2"
+      --replace "cachelib >= 0.9.0, < 0.10.0" "cachelib"
   '';
 
   propagatedBuildInputs = [
@@ -30,7 +32,8 @@ buildPythonPackage rec {
     flask
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    asgiref
     pytest-asyncio
     pytest-xprocess
     pytestCheckHook
@@ -42,11 +45,16 @@ buildPythonPackage rec {
     # optional backends
     "Redis"
     "Memcache"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # ignore flaky test
+    "test_cached_view_class"
   ];
 
   meta = with lib; {
-    description = "Adds caching support to your Flask application";
-    homepage = "https://github.com/sh4nks/flask-caching";
+    description = "A caching extension for Flask";
+    homepage = "https://github.com/pallets-eco/flask-caching";
+    changelog = "https://github.com/pallets-eco/flask-caching/blob/v${version}/CHANGES.rst";
+    maintainers = with maintainers; [ ];
     license = licenses.bsd3;
   };
 }

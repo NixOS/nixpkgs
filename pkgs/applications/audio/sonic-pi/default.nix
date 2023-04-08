@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sonic-pi";
-  version = "4.0.3";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "sonic-pi-net";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kTuW+i/kdPhyG3L6SkgQTE9UvADY49KahJcw3+5Uz4k=";
+    hash = "sha256-R+nmjIIDLoGOoCkDvJqejE1DaweHSAV8M2RvdwN5qAQ=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
@@ -61,10 +61,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     wrapQtAppsHook
     copyDesktopItems
-
     cmake
     pkg-config
-
+    ruby
     erlang
     elixir
     beamPackages.hex
@@ -94,9 +93,8 @@ stdenv.mkDerivation rec {
     fmt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     parallel
-    ruby
     supercollider-with-sc3-plugins
     jack2
   ];
@@ -217,6 +215,8 @@ stdenv.mkDerivation rec {
       categories = [ "Audio" "AudioVideo" "Education" ];
     })
   ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://sonic-pi.net/";

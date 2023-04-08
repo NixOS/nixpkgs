@@ -11,7 +11,7 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip editorconfig]')"
+    if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
     - name: Get list of changed files from PR
       env:
@@ -28,16 +28,14 @@ jobs:
       with:
         # pull_request_target checks out the base branch by default
         ref: refs/pull/${{ github.event.pull_request.number }}/merge
-    - uses: cachix/install-nix-action@v17
+    - uses: cachix/install-nix-action@v20
       with:
         # nixpkgs commit is pinned so that it doesn't break
         # editorconfig-checker 2.4.0
         nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/c473cc8714710179df205b153f4e9fa007107ff9.tar.gz
-    - name: install editorconfig-checker
-      run: nix-env -iA editorconfig-checker -f '<nixpkgs>'
     - name: Checking EditorConfig
       run: |
-        cat "$HOME/changed_files" | xargs -r editorconfig-checker -disable-indent-size
+        cat "$HOME/changed_files" | nix-shell -p editorconfig-checker --run 'xargs -r editorconfig-checker -disable-indent-size'
     - if: ${{ failure() }}
       run: |
         echo "::error :: Hey! It looks like your changes don't follow our editorconfig settings. Read https://editorconfig.org/#download to configure your editor so you never see this error again."

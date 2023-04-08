@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-reservations";
-  version = "2.0.0";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-5vXdXiRubnzPk4uTFeNHR6rwiHSGbeUREX9eW1pqC3E=";
+    hash = "sha256-P6GLB5+2p9sS9XSwSykQXHXw5YrJNNSgs5d7sy5jHTk=";
   };
 
   propagatedBuildInputs = [

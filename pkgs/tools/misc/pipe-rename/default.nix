@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pipe-rename";
-  version = "1.5.0";
+  version = "1.6.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-NTAZy2ERxznRVld1WzYBchJakOIfs5uJr3yRNt81rMg=";
+    sha256 = "sha256-eMTqKKcFeEICref35/RHWNzpnjLDrG7rjcXjOSAnwIo=";
   };
 
-  cargoSha256 = "sha256-6Rv3rVQEvxdrEp5plhf9NAxpXOD4szwFGU5M6tvakzk=";
+  cargoSha256 = "sha256-X4wmhyWpjq4EyAVsfdeP76NSC9tcZjZ6woCsRvw0Gzo=";
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   preCheck = ''
     patchShebangs tests/editors/env-editor.py

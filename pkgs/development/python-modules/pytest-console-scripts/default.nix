@@ -1,11 +1,12 @@
 { lib
 , buildPythonPackage
+, mock
 , fetchPypi
 , pytestCheckHook
 , python
-, mock
-, setuptools-scm
 , pythonOlder
+, setuptools-scm
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,11 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

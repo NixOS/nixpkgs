@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, xlibsWrapper
 , makeWrapper
 , imagemagick
 , libXpm
@@ -25,7 +24,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ imagemagick makeWrapper ];
 
   buildInputs = [
-    xlibsWrapper
     libXpm
     libXmu
     libXi

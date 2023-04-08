@@ -1,28 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, icu, catch2, pandoc }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, icu, catch2 }:
 
 stdenv.mkDerivation rec {
   pname = "nuspell";
-  version = "5.0.1";
+  version = "5.1.2";
 
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
     rev = "v${version}";
-    sha256 = "sha256-ogA7ycqdMUTN/KHV2oZzytnhZ7XVuhx+ArXZqLlmwjk=";
+    sha256 = "sha256-nGC8Um9GutJZXlUcUCK0IiHxMaZmeoe4febw/jC2dRU=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config pandoc ];
-  buildInputs = [ icu ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  propagatedBuildInputs = [ icu ];
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [ "out" "lib" "dev" ];
 
   postPatch = ''
     rm -rf external/Catch2
     ln -sf ${catch2.src} external/Catch2
-  '';
-
-  postInstall = ''
-    rm -rf $out/share/doc
   '';
 
   meta = with lib; {
@@ -31,5 +27,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
     license = licenses.lgpl3Plus;
+    changelog = "https://github.com/nuspell/nuspell/blob/v${version}/CHANGELOG.md";
   };
 }

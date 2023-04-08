@@ -2,44 +2,51 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
-, enableCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
 , installShellFiles
+, installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
+, installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
 , pkg-config
 , Security
 , libiconv
 , openssl
+, notmuch
+, withImapBackend ? true
+, withNotmuchBackend ? false
+, withSmtpSender ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.5.10";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CXchZbXX7NH2ZXeAoPph3qxxdcAdDVZLBmOMwxFu+Yo=";
+    sha256 = "sha256-yAfNH9LSXlS/Hzi5kAuur5BX2vITMucprDzxhlV8RiY=";
   };
 
-  cargoSha256 = "sha256-sSQX7DHDgh1eO1Dwn1f0m51Bl2ZG1daRtrnYvsvPOkg=";
+  cargoSha256 = "sha256-FXfh6T8dNsnD/V/wYSMDWs+ll0d1jg1Dc3cQT39b0ws=";
 
-  nativeBuildInputs = lib.optionals enableCompletions [ installShellFiles ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
+  nativeBuildInputs = [ ]
+    ++ lib.optional (installManPages || installShellCompletions) installShellFiles
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) pkg-config;
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then [
-      Security
-      libiconv
-    ] else [
-      openssl
-    ];
+  buildInputs = [ ]
+    ++ (if stdenv.hostPlatform.isDarwin then [ Security libiconv ] else [ openssl ])
+    ++ lib.optional withNotmuchBackend notmuch;
 
-  # flag added because without end-to-end testing is ran which requires
-  # additional tooling and servers to test
-  cargoTestFlags = [ "--lib" ];
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ ]
+    ++ lib.optional withImapBackend "imap-backend"
+    ++ lib.optional withNotmuchBackend "notmuch-backend"
+    ++ lib.optional withSmtpSender "smtp-sender";
 
-  postInstall = lib.optionalString enableCompletions ''
-    # Install shell function
+  postInstall = lib.optionalString installManPages ''
+    mkdir -p $out/man
+    $out/bin/himalaya man $out/man
+    installManPage $out/man/*
+  '' + lib.optionalString installShellCompletions ''
     installShellCompletion --cmd himalaya \
       --bash <($out/bin/himalaya completion bash) \
       --fish <($out/bin/himalaya completion fish) \
@@ -50,7 +57,7 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line interface for email management";
     homepage = "https://github.com/soywod/himalaya";
     changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ toastal yanganto ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ soywod toastal yanganto ];
   };
 }

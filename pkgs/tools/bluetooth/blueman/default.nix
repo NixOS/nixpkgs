@@ -1,25 +1,23 @@
 { config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
 , obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute2
-, gnome, librsvg, wrapGAppsHook, gobject-introspection, autoreconfHook
-, networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio, fetchpatch }:
+, gnome, librsvg, wrapGAppsHook, gobject-introspection
+, networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 
 let
   pythonPackages = python3Packages;
-  binPath = lib.makeBinPath [ xdg-utils dnsmasq dhcp iproute2 ];
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-hM99f9Fzh1HHfgYF9y5M3UtyMHindo/j81MJmToDUK4=";
+    sha256 = "sha256-wgYzghQ38yydPRkOzXDR4vclXXSn1pefInEb3C5WAVI=";
   };
 
   nativeBuildInputs = [
     gobject-introspection intltool pkg-config pythonPackages.cython
     pythonPackages.wrapPython wrapGAppsHook
-    autoreconfHook # drop when below patch is removed
   ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg
@@ -41,8 +39,12 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature withPulseAudio "pulseaudio")
   ];
 
+  makeWrapperArgs = [
+    "--prefix PATH ':' ${lib.makeBinPath [ dnsmasq dhcp iproute2 ]}"
+    "--suffix PATH ':' ${lib.makeBinPath [ xdg-utils ]}"
+  ];
+
   postFixup = ''
-    makeWrapperArgs="--prefix PATH ':' ${binPath}"
     # This mimics ../../../development/interpreters/python/wrap.sh
     wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
     wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"

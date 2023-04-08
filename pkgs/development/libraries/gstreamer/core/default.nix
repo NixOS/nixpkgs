@@ -17,11 +17,12 @@
 , lib
 , CoreServices
 , gobject-introspection
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.20.1";
+  version = "1.20.3";
 
   outputs = [
     "bin"
@@ -32,9 +33,11 @@ stdenv.mkDerivation rec {
     # - https://github.com/NixOS/nixpkgs/issues/98769#issuecomment-702296551
   ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0cghi6n4nhdbajz3wqcgbh5xm94myvnqgsi9g2bz9n1s9904l2fy";
+    sha256 = "sha256-YH2vZLu9X7GK+dF+IcDSLE1wL//oOyPLItGxryyiOio=";
   };
 
   depsBuildBuild = [
@@ -108,11 +111,16 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib ;{
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = with lib; {
     description = "Open source multimedia framework";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
+    pkgConfigModules = [
+      "gstreamer-controller-1.0"
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ ttuegel matthewbauer ];
   };
-}
+})

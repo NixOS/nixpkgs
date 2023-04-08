@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnuastro";
-  version = "0.18";
+  version = "0.19";
 
   src = fetchurl {
     url = "mirror://gnu/gnuastro/gnuastro-${version}.tar.gz";
-    sha256 = "sha256-bKfiLhQFERdMbwL9+UitCL8/dB/k6YKNjBzfKnCtWec=";
+    sha256 = "sha256-4bPNW0sSb/J34vSOit8BA9Z/wK0Hz5o9OqfgVSlDDjU=";
   };
 
   nativeBuildInputs = [ libtool ];

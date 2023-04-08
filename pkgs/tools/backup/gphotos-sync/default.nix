@@ -59,7 +59,7 @@ py.pkgs.buildPythonApplication rec {
     ffmpeg
   ];
 
-  checkInputs = with py.pkgs; [
+  nativeCheckInputs = with py.pkgs; [
     mock
     pytestCheckHook
     setuptools-scm

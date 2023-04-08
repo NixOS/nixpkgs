@@ -74,7 +74,7 @@ in {
 
   options = {
     services.orangefs.server = {
-      enable = mkEnableOption "OrangeFS server";
+      enable = mkEnableOption (lib.mdDoc "OrangeFS server");
 
       logType = mkOption {
         type = with types; enum [ "file" "syslog" ];
@@ -209,7 +209,7 @@ in {
       after = [ "network-online.target" ];
 
       serviceConfig = {
-        # Run as "simple" in forground mode.
+        # Run as "simple" in foreground mode.
         # This is more reliable
         ExecStart = ''
           ${pkgs.orangefs}/bin/pvfs2-server -d \

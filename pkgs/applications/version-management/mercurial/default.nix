@@ -21,11 +21,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.2.1";
+    version = "6.4";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-isXXog0cKtVNTCY9E0FkZG3DSo46a+1pz76rr404gto=";
+      sha256 = "sha256-6Iv7y5kR52kEoxuXLlf4bajmzliSuYw53VHTuVmcE0c=";
     };
 
     format = "other";
@@ -35,7 +35,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-shmeTQSCpQLrRUbL5bu9nAiPideZUe31YNCrClLM1eI=";
+      sha256 = "sha256-jgB9UMuZ9v+euGN2LPzg0vNK0KeEa8GpQxLJYgQzzbw=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -110,6 +110,22 @@ let
       gnupg
     ];
 
+    patches = [
+      # remove dependency over packaging for test runner
+      # https://bz.mercurial-scm.org/show_bug.cgi?id=6805
+      (fetchpatch {
+        url = "https://foss.heptapod.net/mercurial/mercurial-devel/-/commit/5e5e3733082a25856038f0fde66d4e08d8881539.patch";
+        hash = "sha256-JNxESWpWZW3AENz57tNJTV/ALnJjkmG1ZnTWSvTr4qY=";
+      })
+
+      # sligthly different test output matching
+      # https://bz.mercurial-scm.org/show_bug.cgi?id=6807
+      (fetchpatch {
+        url = "https://foss.heptapod.net/mercurial/mercurial-devel/-/commit/2231f7d8a60266bb6907b1708400c970ed799017.patch";
+        hash = "sha256-Lm5qXvM9nbmTpuMuvDoWhY4cQQQN7PFZtmu5e7mQVw4=";
+      })
+    ];
+
     postPatch = ''
       patchShebangs .
 
@@ -148,6 +164,14 @@ let
 
     # doesn't like the extra setlocale warnings emitted by our bash wrappers
     test-locale.t
+
+    # Python 3.10-3.12 deprecation warning: asyncore
+    # https://bz.mercurial-scm.org/show_bug.cgi?id=6727
+    test-patchbomb-tls.t
+
+    # Test wanting TLS 1.0 and 1.1, not available with OpenSSL v3.
+    # https://bz.mercurial-scm.org/show_bug.cgi?id=6760
+    test-https.t
     EOF
 
     export HGTEST_REAL_HG="${mercurial}/bin/hg"

@@ -1,6 +1,6 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake
+{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
 , gccForLibs, preLibcCrossHeaders
-, libxml2, python3, isl, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 # This is the default binutils, but with *this* version of LLD rather
@@ -18,11 +18,11 @@
 }:
 
 let
-  release_version = "14.0.0";
+  release_version = "15.0.0";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  rev = "fb1582f6c54422995c6fb61ba4c55126b357f64e"; # When using a Git commit
-  rev-version = "unstable-2022-01-07"; # When using a Git commit
+  rev = "a5640968f2f7485b2aa4919f5fa68fd8f23e2d1f"; # When using a Git commit
+  rev-version = "unstable-2022-26-07"; # When using a Git commit
   version = if rev != "" then rev-version else "${release_version}${dash-candidate}";
   targetConfig = stdenv.targetPlatform.config;
 
@@ -30,17 +30,28 @@ let
     owner = "llvm";
     repo = "llvm-project";
     rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "1pkgdsscvf59i22ix763lp2z3sg0v2z2ywh0n07k3ki7q1qpqbhk";
+    sha256 = "1sh5xihdfdn2hp7ds3lkaq1bfrl4alj36gl1aidmhlw65p5rdvl7";
   };
 
   llvm_meta = {
     license     = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill primeos ];
-    platforms   = lib.platforms.all;
+    maintainers = lib.teams.llvm.members;
+
+    # See llvm/cmake/config-ix.cmake.
+    platforms   =
+      lib.platforms.aarch64 ++
+      lib.platforms.arm ++
+      lib.platforms.m68k ++
+      lib.platforms.mips ++
+      lib.platforms.power ++
+      lib.platforms.riscv ++
+      lib.platforms.s390x ++
+      lib.platforms.wasi ++
+      lib.platforms.x86;
   };
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version monorepoSrc buildLlvmTools; });
+    callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
     mkExtraBuildCommands0 = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
@@ -69,13 +80,13 @@ let
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputSpecified = false; };
+    llvm = tools.libllvm;
 
     libclang = callPackage ./clang {
       inherit llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
+    clang-unwrapped = tools.libclang;
 
     llvm-manpages = lowPrio (tools.libllvm.override {
       enableManpages = true;
@@ -113,7 +124,7 @@ let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -153,21 +164,22 @@ let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
       ];
-      extraBuildCommands = ''
-        echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
-        echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
-      '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
-        echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
-      '' + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
-        echo "-lunwind" >> $out/nix-support/cc-ldflags
-      '' + lib.optionalString stdenv.targetPlatform.isWasm ''
-        echo "-fno-exceptions" >> $out/nix-support/cc-cflags
-      '' + mkExtraBuildCommands cc;
+      extraBuildCommands = mkExtraBuildCommands cc;
+      nixSupport.cc-cflags =
+        [ "-rtlib=compiler-rt"
+          "-Wno-unused-command-line-argument"
+          "-B${targetLlvmLibraries.compiler-rt}/lib"
+        ]
+        ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
+        ++ lib.optional
+          (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
+          "-lunwind"
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
     clangNoLibcxx = wrapCCWith rec {
@@ -177,11 +189,12 @@ let
       extraPackages = [
         targetLlvmLibraries.compiler-rt
       ];
-      extraBuildCommands = ''
-        echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
-        echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
-        echo "-nostdlib++" >> $out/nix-support/cc-cflags
-      '' + mkExtraBuildCommands cc;
+      extraBuildCommands = mkExtraBuildCommands cc;
+      nixSupport.cc-cflags = [
+        "-rtlib=compiler-rt"
+        "-B${targetLlvmLibraries.compiler-rt}/lib"
+        "-nostdlib++"
+      ];
     };
 
     clangNoLibc = wrapCCWith rec {
@@ -191,10 +204,11 @@ let
       extraPackages = [
         targetLlvmLibraries.compiler-rt
       ];
-      extraBuildCommands = ''
-        echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
-        echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
-      '' + mkExtraBuildCommands cc;
+      extraBuildCommands = mkExtraBuildCommands cc;
+      nixSupport.cc-cflags = [
+        "-rtlib=compiler-rt"
+        "-B${targetLlvmLibraries.compiler-rt}/lib"
+      ];
     };
 
     clangNoCompilerRt = wrapCCWith rec {
@@ -202,9 +216,8 @@ let
       libcxx = null;
       bintools = bintoolsNoLibc';
       extraPackages = [ ];
-      extraBuildCommands = ''
-        echo "-nostartfiles" >> $out/nix-support/cc-cflags
-      '' + mkExtraBuildCommands0 cc;
+      extraBuildCommands = mkExtraBuildCommands0 cc;
+      nixSupport.cc-cflags = [ "-nostartfiles" ];
     };
 
     clangNoCompilerRtWithLibc = wrapCCWith rec {
@@ -218,7 +231,7 @@ let
   });
 
   libraries = lib.makeExtensible (libraries: let
-    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version monorepoSrc; });
+    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc; });
   in {
 
     compiler-rt-libc = callPackage ./compiler-rt {
@@ -244,25 +257,37 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libcxx {
-      inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
-    };
-
     libcxxabi = let
-      stdenv_ = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
+      # CMake will "require" a compiler capable of compiling C++ programs
+      # cxx-header's build does not actually use one so it doesn't really matter
+      # what stdenv we use here, as long as CMake is happy.
       cxx-headers = callPackage ./libcxx {
         inherit llvm_meta;
-        stdenv = stdenv_;
         headersOnly = true;
       };
+
+      # `libcxxabi` *doesn't* need a compiler with a working C++ stdlib but it
+      # *does* need a relatively modern C++ compiler (see:
+      # https://releases.llvm.org/15.0.0/projects/libcxx/docs/index.html#platform-and-compiler-support).
+      #
+      # So, we use the clang from this LLVM package set, like libc++
+      # "boostrapping builds" do:
+      # https://releases.llvm.org/15.0.0/projects/libcxx/docs/BuildingLibcxx.html#bootstrapping-build
+      #
+      # We cannot use `clangNoLibcxx` because that contains `compiler-rt` which,
+      # on macOS, depends on `libcxxabi`, thus forming a cycle.
+      stdenv_ = overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc;
     in callPackage ./libcxxabi {
       stdenv = stdenv_;
       inherit llvm_meta cxx-headers;
+    };
+
+    # Like `libcxxabi` above, `libcxx` requires a fairly modern C++ compiler,
+    # so: we use the clang from this LLVM package set instead of the regular
+    # stdenv's compiler.
+    libcxx = callPackage ./libcxx {
+      inherit llvm_meta;
+      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
     libunwind = callPackage ./libunwind {

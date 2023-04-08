@@ -5,8 +5,21 @@
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withP11-kit ? !stdenv.hostPlatform.isStatic, p11-kit
-, withSecurity ? true, Security  # darwin Security.framework
+, Security  # darwin Security.framework
 # certificate compression - only zlib now, more possible: zstd, brotli
+
+# for passthru.tests
+, curlWithGnuTls
+, emacs
+, ffmpeg
+, haskellPackages
+, knot-resolver
+, ngtcp2-gnutls
+, ocamlPackages
+, python3Packages
+, qemu
+, rsyslog
+, samba
 }:
 
 assert guileBindings -> guile != null;
@@ -22,11 +35,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.7.6";
+  version = "3.8.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    sha256 = "1zv2097v9f6f4c66q7yn3c6gggjk9jz38095ma7v3gs5lccmf1kp";
+    sha256 = "sha256-DqDRGhZgoeY/lg8Vexl6vm0MjLMlW+JOH7OBWTC5vcU=";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -34,11 +47,7 @@ stdenv.mkDerivation rec {
   outputInfo = "devdoc";
   outputDoc  = "devdoc";
 
-  patches = [ ./nix-ssl-cert-file.patch ]
-    # Disable native add_system_trust.
-    # FIXME: apparently it's not enough to drop the framework anymore; maybe related to
-    # https://gitlab.com/gnutls/gnutls/-/commit/c19cb93d492e45141bfef9b926dfeba36003261c
-    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
+  patches = [ ./nix-ssl-cert-file.patch ];
 
   # Skip some tests:
   #  - pkg-config: building against the result won't work before installing (3.5.11)
@@ -65,7 +74,7 @@ stdenv.mkDerivation rec {
     "--with-unbound-root-key-file=${dns-root-data}/root.key"
     (lib.withFeature withP11-kit "p11-kit")
     (lib.enableFeature cxxBindings "cxx")
-  ] ++ lib.optional guileBindings [
+  ] ++ lib.optionals guileBindings [
     "--enable-guile"
     "--with-guile-site-dir=\${out}/share/guile/site"
     "--with-guile-site-ccache-dir=\${out}/share/guile/site"
@@ -80,12 +89,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional guileBindings guile;
 
   nativeBuildInputs = [ perl pkg-config ]
-    ++ lib.optionals (isDarwin && !withSecurity) [ autoconf automake ]
     ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ]
     # Builds dynamically linking against gnutls seem to need the framework now.
-    ++ lib.optional (isDarwin && withSecurity) Security;
+    ++ lib.optional isDarwin Security;
 
   inherit doCheck;
   # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` breaks tests.
@@ -104,6 +112,14 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out/lib/libgnutls.la" \
       --replace "-lunistring" ""
   '';
+
+  passthru.tests = {
+    inherit ngtcp2-gnutls curlWithGnuTls ffmpeg emacs qemu knot-resolver;
+    inherit (ocamlPackages) ocamlnet;
+    haskell-gnutls = haskellPackages.gnutls;
+    python3-gnutls = python3Packages.python3-gnutls;
+    rsyslog = rsyslog.override { withGnutls = true; };
+  };
 
   meta = with lib; {
     description = "The GNU Transport Layer Security Library";

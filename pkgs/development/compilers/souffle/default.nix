@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , bash-completion, perl, ncurses, zlib, sqlite, libffi
 , mcpp, cmake, bison, flex, doxygen, graphviz
 , makeWrapper
@@ -10,14 +10,25 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "sha256-whvC+DL9XbQLc4wf2kFxUKXSyJnGkYq0/0uLCLbliJU=";
+    sha256 = "sha256-wdTBSmyA2I+gaSV577NNKA2oY2fdVTGmvV7h15NY1tU=";
   };
+
+  patches = [
+    ./threads.patch
+    (fetchpatch {
+      name = "missing-override.patch";
+      url = "https://github.com/souffle-lang/souffle/commit/da2d778f0cca94f206686546fa56b9ffc738ad75.patch";
+      sha256 = "Oefm3vRRwOyom94oGSOK2w9m23gkbJ++9gcWrdLlkyk=";
+    })
+  ];
+
+  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
 
   nativeBuildInputs = [ bison cmake flex mcpp doxygen graphviz makeWrapper perl ];
   buildInputs = [ bash-completion ncurses zlib sqlite libffi ];
@@ -35,7 +46,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A translator of declarative Datalog programs into the C++ language";
     homepage    = "https://souffle-lang.github.io/";
     platforms   = platforms.unix;

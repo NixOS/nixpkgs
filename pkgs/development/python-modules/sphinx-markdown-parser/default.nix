@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , sphinx
 , markdown
-, CommonMark
+, commonmark
 , recommonmark
 , pydash
 , pyyaml
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     sha256 = "0i0hhapmdmh83yx61lxi2h4bsmhnzddamz95844g2ghm132kw5mv";
   };
 
-  propagatedBuildInputs = [ sphinx markdown CommonMark pydash pyyaml unify yapf recommonmark ];
+  propagatedBuildInputs = [ sphinx markdown commonmark pydash pyyaml unify yapf recommonmark ];
 
   # Avoids running broken tests in test_markdown.py
   checkPhase = ''
