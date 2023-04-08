@@ -9776,6 +9776,12 @@
     github = "Mephistophiles";
     githubId = 4850908;
   };
+  mertzenich = {
+    email = "adam+nix@mertzeni.ch";
+    name = "Adam Mertzenich";
+    github = "Mertzenich";
+    githubId = 62816361;
+  };
   mfossen = {
     email = "msfossen@gmail.com";
     github = "mfossen";
