@@ -8574,6 +8574,8 @@ with pkgs;
 
   inferno = callPackage ../development/tools/inferno { };
 
+  infisical = callPackage ../development/tools/infisical { };
+
   inform6 = callPackage ../development/compilers/inform6 { };
 
   inform7 = callPackage ../development/compilers/inform7 { };
