@@ -5387,6 +5387,8 @@ with pkgs;
 
   mpris-scrobbler = callPackage ../tools/audio/mpris-scrobbler { };
 
+  mpd-touch-screen-gui = callPackage ../applications/audio/mpd-touch-screen-gui { };
+
   mq-cli = callPackage ../tools/system/mq-cli { };
 
   mrkd = with python3Packages; toPythonApplication mrkd;
@@ -18368,6 +18370,8 @@ with pkgs;
   libtool_2 = callPackage ../development/tools/misc/libtool/libtool2.nix { };
 
   libwhich = callPackage ../development/tools/misc/libwhich { };
+
+  libwtk-sdl2 = callPackage ../development/libraries/libwtk-sdl2 { };
 
   linuxkit = callPackage ../development/tools/misc/linuxkit {
     inherit (darwin.apple_sdk_11_0.frameworks) Virtualization;
