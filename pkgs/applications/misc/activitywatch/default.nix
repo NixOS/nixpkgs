@@ -6,8 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.12.1";
 
   src = fetchzip {
-    url =
-      "https://github.com/ActivityWatch/activitywatch/releases/download/v${version}/activitywatch-v${version}-linux-x86_64.zip";
+    url = "https://github.com/ActivityWatch/activitywatch/releases/download/v${version}/activitywatch-v${version}-linux-x86_64.zip";
     hash = "sha256-VdnAKcLQBWBVZqRyD1xoYuAfvTeCtcFJp3/slkQ6ynk=";
   };
 
@@ -36,8 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "ActivityWatch is an app that automatically tracks how you spend time on your devices.";
+    description = "ActivityWatch is an app that automatically tracks how you spend time on your devices.";
     longDescription = ''
       ActivityWatch is an app that automatically tracks how you spend time on your devices.
       It is open source, privacy-first, cross-platform, and a great alternative to services like RescueTime, ManicTime, and WakaTime.
