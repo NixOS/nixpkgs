@@ -5673,6 +5673,18 @@ final: prev:
     meta.homepage = "https://github.com/rouge8/neotest-rust/";
   };
 
+  neotest-scala = buildVimPluginFrom2Nix {
+    pname = "neotest-scala";
+    version = "2022-10-15";
+    src = fetchFromGitHub {
+      owner = "stevanmilic";
+      repo = "neotest-scala";
+      rev = "685f0fac6196862b47025c6b91513af6a406501a";
+      sha256 = "0ii8brm5maffqrhji6d4g2kd45mhydj3gby22sv81g9jz6ah0y3s";
+    };
+    meta.homepage = "https://github.com/stevanmilic/neotest-scala/";
+  };
+
   neotest-testthat = buildVimPluginFrom2Nix {
     pname = "neotest-testthat";
     version = "2022-07-04";
