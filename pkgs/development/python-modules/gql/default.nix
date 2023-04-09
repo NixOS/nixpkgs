@@ -34,6 +34,12 @@ buildPythonPackage rec {
     hash = "sha256-yr8IyAwZ6y2MPTe6bHRW+CIp19R3ZJWHuqdN5qultnQ=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace \
+      "websockets>=10,<11;python_version>'3.6'" \
+      "websockets>=10,<12;python_version>'3.6'"
+  '';
+
   propagatedBuildInputs = [
     backoff
     graphql-core
