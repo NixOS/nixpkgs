@@ -84,7 +84,6 @@ stdenv.mkDerivation rec {
   version = "4.7.1";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
-  # Telegram-Desktop with submodules
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";

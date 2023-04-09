@@ -1,8 +1,8 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
 , espeak-ng
+, tts
 }:
 
 let
@@ -115,6 +115,10 @@ python.pkgs.buildPythonApplication rec {
     )
   '';
 
+  # tests get stuck when run in nixpkgs-review, tested in passthru
+  doCheck = false;
+  passthru.tests.pytest = tts.overridePythonAttrs (_: { doCheck = true; });
+
   nativeCheckInputs = with python.pkgs; [
     espeak-ng
     pytestCheckHook
@@ -184,6 +188,8 @@ python.pkgs.buildPythonApplication rec {
     "tests/vocoder_tests/test_multiband_melgan_train.py"
     "tests/vocoder_tests/test_melgan_train.py"
     "tests/vocoder_tests/test_wavernn_train.py"
+    # only a feed forward test, but still takes too long
+    "tests/tts_tests/test_overflow.py"
   ];
 
   passthru = {

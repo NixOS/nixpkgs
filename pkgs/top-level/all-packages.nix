@@ -5387,6 +5387,8 @@ with pkgs;
 
   mpris-scrobbler = callPackage ../tools/audio/mpris-scrobbler { };
 
+  mpd-touch-screen-gui = callPackage ../applications/audio/mpd-touch-screen-gui { };
+
   mq-cli = callPackage ../tools/system/mq-cli { };
 
   mrkd = with python3Packages; toPythonApplication mrkd;
@@ -16754,6 +16756,7 @@ with pkgs;
   php80Extensions = recurseIntoAttrs php80.extensions;
   php80Packages = recurseIntoAttrs php80.packages;
 
+  phpactor = callPackage ../development/tools/phpactor { };
 
   picoc = callPackage ../development/interpreters/picoc { };
 
@@ -18368,6 +18371,8 @@ with pkgs;
 
   libwhich = callPackage ../development/tools/misc/libwhich { };
 
+  libwtk-sdl2 = callPackage ../development/libraries/libwtk-sdl2 { };
+
   linuxkit = callPackage ../development/tools/misc/linuxkit {
     inherit (darwin.apple_sdk_11_0.frameworks) Virtualization;
   };
@@ -19013,7 +19018,7 @@ with pkgs;
   travis = callPackage ../development/tools/misc/travis { };
 
   tree-sitter = makeOverridable (callPackage ../development/tools/parsing/tree-sitter) {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
   tree-sitter-grammars = recurseIntoAttrs tree-sitter.builtGrammars;
@@ -31395,7 +31400,7 @@ with pkgs;
       then darwin.apple_sdk_11_0.stdenv
       else stdenv;
 
-    # tdesktop has random crashes when jemalloc is built with gcc.
+    # telegram-desktop has random crashes when jemalloc is built with gcc.
     # Apparently, it triggers some bug due to usage of gcc's builtin
     # functions like __builtin_ffsl by jemalloc when it's built with gcc.
     jemalloc = (jemalloc.override { stdenv = clangStdenv; }).overrideAttrs(_: {
@@ -33936,7 +33941,7 @@ with pkgs;
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
-  tdesktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
+  telegram-desktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
     abseil-cpp = abseil-cpp_202206;
   };
 
@@ -39516,6 +39521,8 @@ with pkgs;
     inherit (pkgs) callPackage fetchurl;
     branch = "stable";
   };
+
+  discordo = callPackage ../applications/networking/discordo/default.nix { };
 
   discord-ptb = import ../applications/networking/instant-messengers/discord {
     inherit lib stdenv;

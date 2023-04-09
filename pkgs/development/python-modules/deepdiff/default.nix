@@ -8,6 +8,7 @@
 , jsonpickle
 , numpy
 , pytestCheckHook
+, python-dateutil
 , pyyaml
 , toml
 , pythonOlder
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     jsonpickle
     numpy
     pytestCheckHook
+    python-dateutil
   ] ++ passthru.optional-dependencies.cli;
 
   pythonImportsCheck = [

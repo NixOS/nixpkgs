@@ -2382,6 +2382,8 @@ self: super: with self; {
 
   deepdish = callPackage ../development/python-modules/deepdish { };
 
+  deepl = callPackage ../development/python-modules/deepl { };
+
   deepmerge = callPackage ../development/python-modules/deepmerge { };
 
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
@@ -2684,6 +2686,8 @@ self: super: with self; {
   django-paintstore = callPackage ../development/python-modules/django-paintstore { };
 
   django-pattern-library = callPackage ../development/python-modules/django-pattern-library { };
+
+  django-payments = callPackage ../development/python-modules/django-payments { };
 
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
@@ -5967,6 +5971,8 @@ self: super: with self; {
 
   meraki = callPackage ../development/python-modules/meraki { };
 
+  mercadopago = callPackage ../development/python-modules/mercadopago { };
+
   mercantile = callPackage ../development/python-modules/mercantile { };
 
   mercurial = toPythonModule (pkgs.mercurial.override {
@@ -6800,6 +6806,8 @@ self: super: with self; {
   open-garage = callPackage ../development/python-modules/open-garage { };
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
+
+  openai-triton = callPackage ../development/python-modules/openai-triton { llvmPackages = pkgs.llvmPackages_rocm; };
 
   openai-whisper = callPackage ../development/python-modules/openai-whisper { };
 
@@ -11856,6 +11864,7 @@ self: super: with self; {
   torchWithCuda = self.torch.override {
     magma = pkgs.magma-cuda;
     cudaSupport = true;
+    rocmSupport = false;
   };
 
   torchWithoutCuda = self.torch.override {
@@ -11865,6 +11874,7 @@ self: super: with self; {
   torchWithRocm = self.torch.override {
     magma = pkgs.magma-hip;
     rocmSupport = true;
+    cudaSupport = false;
   };
 
   torchWithoutRocm = self.torch.override {
@@ -12850,7 +12860,7 @@ self: super: with self; {
 
   yarl = callPackage ../development/python-modules/yarl { };
 
-  yasi = toPythonModule (callPackage ../development/python-modules/yasi { });
+  yasi = callPackage ../development/python-modules/yasi { };
 
   yaspin = callPackage ../development/python-modules/yaspin { };
 

@@ -27,14 +27,13 @@ stdenv.mkDerivation rec {
   # The version must match that in vulkan-headers
   version = "1.3.239.0";
 
-  src = (assert version == vulkan-headers.version;
-    fetchFromGitHub {
-      owner = "LunarG";
-      repo = "VulkanTools";
-      rev = "sdk-${version}";
-      hash = "sha256-zgkuTy9ccg8D/riA1CM/PnbXW1R0jWEINtcEVilETwk=";
-      fetchSubmodules = true;
-    });
+  src = fetchFromGitHub {
+   owner = "LunarG";
+   repo = "VulkanTools";
+   rev = "sdk-${version}";
+   hash = "sha256-zgkuTy9ccg8D/riA1CM/PnbXW1R0jWEINtcEVilETwk=";
+   fetchSubmodules = true;
+ };
 
   nativeBuildInputs = [ cmake python3 jq which pkg-config ];
 
@@ -103,5 +102,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = [ maintainers.expipiplus1 ];
+    broken = (version != vulkan-headers.version);
   };
 }

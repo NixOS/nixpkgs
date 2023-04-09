@@ -1,9 +1,11 @@
 { lib
-, python3
+, buildPythonApplication
+, colorama
 , fetchFromGitHub
+, pytestCheckHook
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "yasi";
   version = "2.1.2";
   format = "setuptools";
@@ -15,8 +17,12 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-xKhVTmh/vrtBkatxtk8R4yqbGroH0I+xTKNYUpuikt4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     colorama
+  ];
+
+  nativeBuildInputs = [
+    pytestCheckHook
   ];
 
   postPatch = ''

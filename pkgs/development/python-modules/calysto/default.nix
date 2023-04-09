@@ -1,9 +1,14 @@
 { lib
-, python3
+, buildPythonPackage
 , fetchFromGitHub
+, metakernel
+, svgwrite
+, ipywidgets
+, cairosvg
+, numpy
 }:
 
-python3.pkgs.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "calysto";
   version = "1.0.6";
   format = "setuptools";
@@ -15,7 +20,7 @@ python3.pkgs.buildPythonPackage rec {
     hash = "sha256-lr/cHFshpFs/PGMCsa3FKMRPTP+eE9ziH5XCpV+KzO8=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     metakernel
     svgwrite
     ipywidgets
@@ -23,7 +28,7 @@ python3.pkgs.buildPythonPackage rec {
     numpy
   ];
 
-  # Tests are failing not because of Nix.
+  # there are no tests
   doCheck = false;
 
   pythonImportsCheck = [ "calysto" ];
