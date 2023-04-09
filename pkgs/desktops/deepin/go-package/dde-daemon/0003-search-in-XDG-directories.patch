@@ -1,0 +1,257 @@
+From 528f590c0c81728c324444fd76e0f7113a2e3dc4 Mon Sep 17 00:00:00 2001
+From: rewine <lhongxu@outlook.com>
+Date: Wed, 5 Apr 2023 23:41:25 +0800
+Subject: [PATCH 3/4] search-in-XDG-directories
+
+---
+ accounts/manager.go                     |  5 ++++-
+ accounts/user.go                        |  8 +++++++-
+ appearance/fsnotify.go                  | 21 +++++++++++++++++----
+ apps/utils.go                           |  3 ++-
+ dock/desktop_file_path.go               |  6 ++++++
+ gesture/config.go                       |  4 ++--
+ keybinding/shortcuts/system_shortcut.go |  4 +++-
+ mime/app_info.go                        |  7 ++++++-
+ system/gesture/config.go                |  4 +++-
+ 9 files changed, 50 insertions(+), 12 deletions(-)
+
+diff --git a/accounts/manager.go b/accounts/manager.go
+index a5abb157..3fd7c153 100644
+--- a/accounts/manager.go
++++ b/accounts/manager.go
+@@ -15,6 +15,7 @@ import (
+ 	"sync"
+ 	"syscall"
+ 
++	"github.com/adrg/xdg"
+ 	dbus "github.com/godbus/dbus"
+ 	"github.com/linuxdeepin/dde-daemon/accounts/users"
+ 	"github.com/linuxdeepin/dde-daemon/common/sessionmsg"
+@@ -35,8 +36,10 @@ const (
+ 	actConfigFile       = actConfigDir + "/accounts.ini"
+ 	actConfigGroupGroup = "Accounts"
+ 	actConfigKeyGuest   = "AllowGuest"
++)
+ 
+-	interfacesFile = "/usr/share/dde-daemon/accounts/dbus-udcp.json"
++var (
++	interfacesFile, _ = xdg.SearchDataFile("dde-daemon/accounts/dbus-udcp.json")
+ )
+ 
+ type InterfaceConfig struct {
+diff --git a/accounts/user.go b/accounts/user.go
+index 99138941..56a7731a 100644
+--- a/accounts/user.go
++++ b/accounts/user.go
+@@ -15,6 +15,7 @@ import (
+ 	"strings"
+ 	"sync"
+ 
++	"github.com/adrg/xdg"
+ 	dbus "github.com/godbus/dbus"
+ 	"github.com/linuxdeepin/dde-daemon/accounts/users"
+ 	authenticate "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.authenticate"
+@@ -645,7 +646,12 @@ func getUserSession(homeDir string) string {
+ }
+ 
+ func getSessionList() []string {
+-	fileInfoList, err := ioutil.ReadDir("/usr/share/xsessions")
++	xsessionPath, err := xdg.SearchDataFile("xsessions")
++	if err != nil {
++		return nil;
++	}
++
++	fileInfoList, err := ioutil.ReadDir(xsessionPath)
+ 	if err != nil {
+ 		return nil
+ 	}
+diff --git a/appearance/fsnotify.go b/appearance/fsnotify.go
+index a409d0ba..ff674600 100644
+--- a/appearance/fsnotify.go
++++ b/appearance/fsnotify.go
+@@ -5,12 +5,15 @@
+ package appearance
+ 
+ import (
++	"errors"
++	"io/fs"
+ 	"os"
+ 	"path"
+ 	"path/filepath"
+ 	"strings"
+ 	"time"
+ 
++	"github.com/adrg/xdg"
+ 	"github.com/fsnotify/fsnotify"
+ 	"github.com/linuxdeepin/dde-daemon/appearance/background"
+ 	"github.com/linuxdeepin/dde-daemon/appearance/subthemes"
+@@ -100,9 +103,14 @@ func (m *Manager) watchGtkDirs() {
+ 	gtkDirs = []string{
+ 		path.Join(home, ".local/share/themes"),
+ 		path.Join(home, ".themes"),
+-		"/usr/local/share/themes",
+-		"/usr/share/themes",
+ 	}
++	for _, dataPath := range xdg.DataDirs {
++                gtkPath := filepath.Join(dataPath, "themes");
++                if _, err := os.Stat(gtkPath); err != nil && errors.Is(err, fs.ErrNotExist) {
++                        continue
++                }
++                gtkDirs = append(gtkDirs, gtkPath);
++        }
+ 
+ 	m.watchDirs(gtkDirs)
+ }
+@@ -112,9 +120,14 @@ func (m *Manager) watchIconDirs() {
+ 	iconDirs = []string{
+ 		path.Join(home, ".local/share/icons"),
+ 		path.Join(home, ".icons"),
+-		"/usr/local/share/icons",
+-		"/usr/share/icons",
+ 	}
++	for _, dataPath := range xdg.DataDirs {
++                iconPath := filepath.Join(dataPath, "icons");
++                if _, err := os.Stat(iconPath); err != nil && errors.Is(err, fs.ErrNotExist) {
++                        continue
++                }
++                iconDirs = append(iconDirs, iconPath);
++        }
+ 
+ 	m.watchDirs(iconDirs)
+ }
+diff --git a/apps/utils.go b/apps/utils.go
+index 8863d6c2..dd6f8e16 100644
+--- a/apps/utils.go
++++ b/apps/utils.go
+@@ -11,6 +11,7 @@ import (
+ 	"strconv"
+ 	"strings"
+ 	"syscall"
++	"github.com/adrg/xdg"
+ )
+ 
+ func intSliceContains(slice []int, a int) bool {
+@@ -96,7 +97,7 @@ func removeDesktopExt(name string) string {
+ }
+ 
+ func getSystemDataDirs() []string {
+-	return []string{"/usr/share", "/usr/local/share"}
++	return xdg.DataDirs
+ }
+ 
+ // get user home
+diff --git a/dock/desktop_file_path.go b/dock/desktop_file_path.go
+index 7adc9f55..e1a97679 100644
+--- a/dock/desktop_file_path.go
++++ b/dock/desktop_file_path.go
+@@ -7,6 +7,8 @@ package dock
+ import (
+ 	"path/filepath"
+ 	"strings"
++
++	"github.com/adrg/xdg"
+ )
+ 
+ var pathDirCodeMap map[string]string
+@@ -20,6 +22,10 @@ func initPathDirCodeMap() {
+ 		"/usr/local/share/applications/": "/L@",
+ 	}
+ 
++	for _, dataPath := range xdg.DataDirs {
++		pathDirCodeMap[dataPath] = "/S@"
++	}
++
+ 	dir := filepath.Join(homeDir, ".local/share/applications")
+ 	dir = addDirTrailingSlash(dir)
+ 	pathDirCodeMap[dir] = "/H@"
+diff --git a/gesture/config.go b/gesture/config.go
+index bfbd4db7..4ce9d641 100644
+--- a/gesture/config.go
++++ b/gesture/config.go
+@@ -10,6 +10,7 @@ import (
+ 	"io/ioutil"
+ 	"path/filepath"
+ 
++	"github.com/adrg/xdg"
+ 	"github.com/linuxdeepin/go-lib/xdg/basedir"
+ )
+ 
+@@ -21,11 +22,10 @@ const (
+ 
+ var (
+ 	configUserPath = filepath.Join(basedir.GetUserConfigDir(), "deepin/dde-daemon/gesture.json")
++	configSystemPath, _ = xdg.SearchDataFile("dde-daemon/gesture.json")
+ )
+ 
+ const (
+-	configSystemPath = "/usr/share/dde-daemon/gesture.json"
+-
+ 	gestureSchemaId         = "com.deepin.dde.gesture"
+ 	gsKeyTouchPadEnabled    = "touch-pad-enabled"
+ 	gsKeyTouchScreenEnabled = "touch-screen-enabled"
+diff --git a/keybinding/shortcuts/system_shortcut.go b/keybinding/shortcuts/system_shortcut.go
+index d33a69f6..c3138099 100644
+--- a/keybinding/shortcuts/system_shortcut.go
++++ b/keybinding/shortcuts/system_shortcut.go
+@@ -10,6 +10,7 @@ import (
+ 	"path"
+ 	"sync"
+ 
++	"github.com/adrg/xdg"
+ 	dutils "github.com/linuxdeepin/go-lib/utils"
+ )
+ 
+@@ -152,5 +153,6 @@ func getSystemActionsFile() string {
+ 		return file
+ 	}
+ 
+-	return ""
++	filepath, _ := xdg.SearchDataFile(systemActionsFile)
++	return filepath;
+ }
+diff --git a/mime/app_info.go b/mime/app_info.go
+index 63fcdcc0..18436164 100644
+--- a/mime/app_info.go
++++ b/mime/app_info.go
+@@ -9,6 +9,7 @@ import (
+ 	"os"
+ 	"path"
+ 
++	"github.com/adrg/xdg"
+ 	"github.com/linuxdeepin/go-lib/appinfo/desktopappinfo"
+ 	"github.com/linuxdeepin/go-lib/mime"
+ 	dutils "github.com/linuxdeepin/go-lib/utils"
+@@ -162,5 +163,9 @@ func findFilePath(file string) string {
+ 		return data
+ 	}
+ 
+-	return path.Join("/usr/share", file)
++	filepath, err := xdg.SearchDataFile(file)
++	if err != nil {
++		return path.Join("/usr/share", file)
++	}
++	return filepath;
+ }
+diff --git a/system/gesture/config.go b/system/gesture/config.go
+index d4aebaac..f3fc92c3 100644
+--- a/system/gesture/config.go
++++ b/system/gesture/config.go
+@@ -8,6 +8,7 @@ import (
+ 	"encoding/json"
+ 	"io/ioutil"
+ 
++	"github.com/adrg/xdg"
+ 	"github.com/linuxdeepin/go-lib/utils"
+ )
+ 
+@@ -35,5 +36,6 @@ func getConfigPath() string {
+ 	if utils.IsFileExist(filename) {
+ 		return filename
+ 	}
+-	return "/usr/share/" + suffix
++	filepath, _ := xdg.SearchDataFile(suffix)
++	return filepath;
+ }
+-- 
+2.39.2
+
