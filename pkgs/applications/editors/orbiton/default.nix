@@ -3,12 +3,12 @@
 }:
 
 buildGoModule rec {
-  pname = "o";
+  pname = "orbiton";
   version = "2.60.5";
 
   src = fetchFromGitHub {
     owner = "xyproto";
-    repo = "o";
+    repo = "orbiton";
     rev = "v${version}";
     hash = "sha256-gCE4mrZXLFteZKUPDsAc1hS1I/WTns9I9oZE5bAF7fU=";
   };
@@ -33,6 +33,7 @@ buildGoModule rec {
   postInstall = ''
     cd ..
     installManPage o.1
+    mv $out/bin/{orbiton,o}
   '' + lib.optionalString withGui ''
     make install-gui PREFIX=$out
     wrapProgram $out/bin/og --prefix PATH : $out/bin
@@ -40,8 +41,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Config-free text editor and IDE limited to VT100";
-    homepage = "https://github.com/xyproto/o";
+    homepage = "https://github.com/xyproto/orbiton";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sikmir ];
+    mainProgram = "o";
   };
 }
