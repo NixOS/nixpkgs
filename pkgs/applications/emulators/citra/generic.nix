@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_BOOST=ON"
     "-DCITRA_USE_BUNDLED_FFMPEG=OFF"
     "-DCITRA_USE_BUNDLED_QT=OFF"
-    "-DCITRA_USE_BUNDLED_SDL2=OFF"
+    "-DUSE_SYSTEM_SDL2=ON"
 
     # We dont want to bother upstream with potentially outdated compat reports
     "-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON"
@@ -65,6 +65,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFdk "-DENABLE_FDK=ON";
 
   postPatch = ''
+    # Fix file not found when looking in var/empty instead of opt
+    mkdir externals/dynarmic/src/dynarmic/ir/var
+    ln -s ../opt externals/dynarmic/src/dynarmic/ir/var/empty
+
     # Prep compatibilitylist
     ln -s ${compat-list} ./dist/compatibility_list/compatibility_list.json
 

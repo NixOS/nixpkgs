@@ -256,6 +256,7 @@ assert withTreeSitter -> tree-sitter != null;
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 jwiegley adisbladis matthewbauer atemu ];
     platforms   = if withMacport then platforms.darwin else platforms.all;
+    broken      = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
 
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more.  At its

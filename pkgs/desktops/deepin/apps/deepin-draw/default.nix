@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qtbase
+    qt5integration
     qtsvg
     dtkwidget
     qt5platform-plugins
@@ -54,11 +55,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DVERSION=${version}" ];
 
   strictDeps = true;
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
 
   meta = with lib; {
     description = "Lightweight drawing tool for users to freely draw and simply edit images";

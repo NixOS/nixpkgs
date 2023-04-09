@@ -57,6 +57,8 @@
 (defvar *nix-attrs-depth* 0)
 
 (defun nix-attrs (keyvals)
+  (when (null keyvals)
+    (return-from nix-attrs "{}"))
   (let ((*nix-attrs-depth* (1+ *nix-attrs-depth*)))
     (format
      nil

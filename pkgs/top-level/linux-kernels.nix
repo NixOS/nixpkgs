@@ -633,7 +633,7 @@ in {
     linux_default = packages.linux_6_1;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_2;
-    linux_mptcp = packages.linux_mptcp_95;
+    linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_1;
     linux_hardkernel_latest = packages.hardkernel_4_14;

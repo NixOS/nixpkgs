@@ -288,11 +288,13 @@ with lib.maintainers; {
 
   golang = {
     members = [
-      c00w
       kalbasit
       mic92
       zowoq
       qbit
+    ];
+    githubTeams = [
+      "golang"
     ];
     scope = "Maintain Golang compilers.";
     shortName = "Go";
@@ -421,6 +423,21 @@ with lib.maintainers; {
     ];
     scope = "Maintain the Linux kernel.";
     shortName = "Linux Kernel";
+  };
+
+  lisp = {
+    members = [
+      raskin
+      lukego
+      nagy
+      uthar
+    ];
+    githubTeams = [
+      "lisp"
+    ];
+    scope = "Maintain the Lisp ecosystem.";
+    shortName = "lisp";
+    enableFeatureFreezePing = true;
   };
 
   llvm = {
@@ -722,6 +739,9 @@ with lib.maintainers; {
       tjni
       winter
       zowoq
+    ];
+    githubTeams = [
+      "rust"
     ];
     scope = "Maintain the Rust compiler toolchain and nixpkgs integration.";
     shortName = "Rust";

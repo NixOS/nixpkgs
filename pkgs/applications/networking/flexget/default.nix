@@ -14,12 +14,24 @@ let
           hash = "sha256-lfwC9/wfMZmqpHqKdXQ3E0z2GOnZlMhO/9U/Uww4WG8=";
         };
       });
+
+      # Flexget's transmission plugin is not currently compatible with the 4.x
+      # branch for transmission-rpc.
+      transmission-rpc = super.transmission-rpc.overridePythonAttrs (old: rec {
+        version = "3.4.2";
+        src = fetchFromGitHub {
+          owner = "Trim21";
+          repo = "transmission-rpc";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-7XbL6plIPZHQ/0Z+7bvtj8hqkh4klFyIV73DnrUAkps=";
+        };
+      });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.5.33";
+  version = "3.5.36";
   format = "pyproject";
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -27,7 +39,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LzDXNl2IQ3+j9uP+nE6JS8E+pO0n9zwmA7wrMeKR6Ms=";
+    hash = "sha256-Aj3dOdZTpqBocBFySPZjvjeOZs7eAJeKqm7ykh0Y1CE=";
   };
 
   postPatch = ''

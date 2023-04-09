@@ -10,11 +10,17 @@ final: prev: let
   finalVersion = cudatoolkitVersions.${final.cudaVersion};
 
   # Exposed as cudaPackages.backendStdenv.
-  # We don't call it just "stdenv" to avoid confusion: e.g. this toolchain doesn't contain nvcc.
-  # Instead, it's the back-end toolchain for nvcc to use.
-  # We also use this to link a compatible libstdc++ (backendStdenv.cc.cc.lib)
+  # This is what nvcc uses as a backend,
+  # and it has to be an officially supported one (e.g. gcc11 for cuda11).
+  #
+  # It, however, propagates current stdenv's libstdc++ to avoid "GLIBCXX_* not found errors"
+  # when linked with other C++ libraries.
+  # E.g. for cudaPackages_11_8 we use gcc11 with gcc12's libstdc++
   # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
-  backendStdenv = prev.pkgs."${finalVersion.gcc}Stdenv";
+  backendStdenv = final.callPackage ./stdenv.nix {
+    nixpkgsStdenv = prev.pkgs.stdenv;
+    nvccCompatibleStdenv = prev.pkgs.buildPackages."${finalVersion.gcc}Stdenv";
+  };
 
   ### Add classic cudatoolkit package
   cudatoolkit =

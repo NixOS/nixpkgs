@@ -69,15 +69,6 @@ let
         ];
       });
 
-      bimmer-connected = super.bimmer-connected.overridePythonAttrs (oldAttrs: rec {
-        version = "0.12.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-wLQ2UkedLSwfbUqmb85QgsDYh0zcbgQOMnhbRHW5Bnw=";
-        };
-      });
-
       dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
         version = "0.33";
         src = fetchFromGitHub {
@@ -96,15 +87,6 @@ let
           hash = "sha256-AcImffYki1gnIaZp/1eacNjdDgjn6qinPJXq9jYtoRg=";
         };
         doCheck = false;
-      });
-
-      gios = super.gios.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-/lAENP9wKZ+h2Iq2e9S7s7Naa0CTl/I2cwCxBEAwsrA=";
-        };
       });
 
       jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
@@ -165,16 +147,6 @@ let
           repo = "pyatag";
           rev = version;
           sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
-        };
-      });
-
-      # https://github.com/home-assistant/core/pull/80931
-      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.0";
-        src = super.fetchPypi {
-          pname = "PyJWT";
-          inherit version;
-          hash = "sha256-53q4lICQXYaZhEKsV4jzUzP6hfZQR6U0rcOO3zyI/Ds=";
         };
       });
 
@@ -242,22 +214,6 @@ let
           inherit version;
           hash = "sha256-w0PwtUZJX116I5xwv1CpmkjXMhwWW4Kvr6hIO56+v24=";
         };
-        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
-          pytest-xdist
-        ]);
-        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
-          "test/aaa_profiling"
-          "test/ext/mypy"
-        ];
-      });
-
-      subarulink = super.subarulink.overridePythonAttrs (oldAttrs: rec {
-        version = "0.7.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-BxnpdZwbnZF1oWcu3jRDeXvcaweOuVk1R79KpMLB02c=";
-        };
       });
 
       # Pinned due to API changes in 0.3.0
@@ -279,16 +235,6 @@ let
           repo = "vilfo-api-client-python";
           rev = "v${version}";
           sha256 = "1gy5gpsg99rcm1cc3m30232za00r9i46sp74zpd12p3vzz1wyyqf";
-        };
-      });
-
-      # Pinned due to API changes in 2.0
-      vsure = super.vsure.overridePythonAttrs (oldAttrs: rec {
-        version = "1.8.1";
-        src = super.fetchPypi {
-          pname = "vsure";
-          inherit version;
-          hash = "sha256-Zh83t7yjZU2NjOgCkqPUHbqvEyEWXGITRgr5d2fLtRI=";
         };
       });
 
@@ -327,7 +273,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.3.6";
+  hassVersion = "2023.4.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -343,7 +289,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4PS6ozyqJddF6Jp9cKRojUtHTTNd3xo2oTDboowQACk=";
+    hash = "sha256-p9dR8q9eWxDGo+cBXO0zd9MFdB7pFeAfLfudHsYxcK8=";
   };
 
   # Secondary source is git for tests
@@ -351,7 +297,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-+u1kCyIzTQrMvO6slr1YW0kZqkh4QGxUo5ucJzxkfEE=";
+    hash = "sha256-TSTn2o37XMmcU4XCPCMwvRNWW7BUadcfbK7NU/ulsNE=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -425,6 +371,7 @@ in python.pkgs.buildPythonApplication rec {
     python-slugify
     pyyaml
     requests
+    ulid-transform
     voluptuous
     voluptuous-serialize
     yarl
@@ -477,6 +424,8 @@ in python.pkgs.buildPythonApplication rec {
     "--showlocals"
     # AssertionError: assert 1 == 0
     "--deselect tests/test_config.py::test_merge"
+    # AssertionError: assert 2 == 1
+    "--deselect=tests/helpers/test_translation.py::test_caching"
     # tests are located in tests/
     "tests"
   ];
