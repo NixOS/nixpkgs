@@ -1,26 +1,20 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{ fetchFromGitHub, lib, php }:
 
-mkDerivation (finalAttrs: {
+php.buildComposerProject (finalAttrs: {
   pname = "grumphp";
-  version = "1.15.0";
+  version = "1.16.0";
 
-  src = fetchurl {
-    url = "https://github.com/phpro/grumphp/releases/download/v${finalAttrs.version}/grumphp.phar";
-    sha256 = "sha256-EqzJb7DYZb7PnebErLVI/EZLxj0m26cniZlsu1feif0=";
+  src = fetchFromGitHub {
+    owner = "phpro";
+    repo = "grumphp";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-h4vdLdL7gnaHbAIebMPxAg80XwWu+Mxbh4rgBoc52eY=";
   };
 
-  dontUnpack = true;
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/grumphp/grumphp.phar
-    makeWrapper ${php}/bin/php $out/bin/grumphp \
-      --add-flags "$out/libexec/grumphp/grumphp.phar"
-    runHook postInstall
-  '';
+  # TODO: Open a PR against https://github.com/phpro/grumphp
+  # Missing `composer.lock` from the repository.
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-VQ+H54yrpR/giJkpW00ZaR5wzaTG2dJnCzSIi0pA3+0=";
 
   meta = with lib; {
     changelog = "https://github.com/phpro/grumphp/releases/tag/v${finalAttrs.version}";
