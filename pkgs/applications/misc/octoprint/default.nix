@@ -1,5 +1,6 @@
 { pkgs
 , stdenv
+, callPackage
 , lib
 , fetchFromGitHub
 , python3
@@ -258,7 +259,7 @@ let
             };
           }
         )
-        (import ./plugins.nix { inherit pkgs; })
+        (callPackage ./plugins.nix { })
         packageOverrides
       ]
     );
