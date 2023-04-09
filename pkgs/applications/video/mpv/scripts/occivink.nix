@@ -37,4 +37,9 @@ in
   # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
   seekTo = script { name = "seek-to"; meta.description = "Mpv script for seeking to a specific position"; };
 
+  blacklistExtensions = script {
+    name = "blacklist-extensions";
+    meta.description = "Automatically remove playlist entries based on their extension.";
+  };
+
 }
