@@ -5529,6 +5529,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-neotest/neotest/";
   };
 
+  neotest-dart = buildVimPluginFrom2Nix {
+    pname = "neotest-dart";
+    version = "2023-03-13";
+    src = fetchFromGitHub {
+      owner = "sidlatau";
+      repo = "neotest-dart";
+      rev = "43a61b8aab7908799d58369ba15dc4cd381d46ff";
+      sha256 = "1kzb08sb38l2dzz9rs4qj6cfbgr0klplxrlb271q0i7xpaflif42";
+    };
+    meta.homepage = "https://github.com/sidlatau/neotest-dart/";
+  };
+
   neotest-go = buildVimPluginFrom2Nix {
     pname = "neotest-go";
     version = "2023-03-28";
