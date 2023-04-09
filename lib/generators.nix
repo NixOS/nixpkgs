@@ -426,4 +426,59 @@ ${expr "" v}
       abort "generators.toDhall: cannot convert a null to Dhall"
     else
       builtins.toJSON v;
+
+  /*
+   * Translate a simple Nix expression to Lua representation with occasional
+   * Lua-inlines that can be construted by mkLuaInline function.
+   *
+   * generators.toLua {} {
+   *   cmd = [ "typescript-language-server" "--stdio" ];
+   *   settings.workspace.library = mkLuaInline ''vim.api.nvim_get_runtime_file("", true)'';
+   * }
+   *
+   *> {
+   *>   ["cmd"] = {
+   *>     "typescript-language-server",
+   *>     "--stdio"
+   *>   },
+   *>   ["settings"] = {
+   *>     ["workspace"] = {
+   *>       ["library"] = (vim.api.nvim_get_runtime_file("", true))
+   *>     }
+   *>   }
+   *> }
+   */
+  toLua = { indent ? "" }@args: v:
+    with builtins;
+    let
+      indent' = "${indent}  ";
+      args' = args // { indent = indent'; };
+      concatItems = concatStringsSep ",\n";
+      isLuaInline = { _type ? null, ... }: _type == "lua-inline";
+    in
+    if v == null then
+      "nil"
+    else if isInt v || isFloat v || isString v || isBool v then
+      builtins.toJSON v
+    else if isList v then
+      (if v == [ ] then "{}" else
+      "{\n${concatItems (map (value: "${indent'}${toLua args' value}") v)}\n${indent}}")
+    else if isAttrs v then
+      (
+        if isLuaInline v then
+          "(${v.expr})"
+        else if v == { } then
+          "{}"
+        else
+          "{\n${concatItems (
+            lib.attrsets.mapAttrsToList (key: value: "${indent'}[${builtins.toJSON key}] = ${toLua args' value}") v
+            )}\n${indent}}"
+      )
+    else
+      abort "generators.toLua: type ${typeOf v} is unsupported";
+
+  /*
+   * Mark string as Lua expression to be inlined when processed by toLua.
+   */
+  mkLuaInline = expr: { _type = "lua-inline"; inherit expr; };
 }
