@@ -27,15 +27,18 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.auto-cpufreq ];
-    environment.etc.${cfgFilename}.source = cfgFile;
 
     systemd = {
       packages = [ pkgs.auto-cpufreq ];
       services.auto-cpufreq = {
         # Workaround for https://github.com/NixOS/nixpkgs/issues/81138
         wantedBy = [ "multi-user.target" ];
-        restartTriggers = [ cfgFile ];
         path = with pkgs; [ bash coreutils ];
+
+        serviceConfig.ExecStart = [
+          ""
+          "${lib.getExe pkgs.auto-cpufreq} --config ${cfgFile}"
+        ];
       };
     };
   };
