@@ -1,29 +1,23 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{ fetchFromGitHub, lib, php }:
 
-let
+php.buildComposerProject (finalAttrs: {
   pname = "box";
-  version = "4.2.0";
-in
-mkDerivation {
-  inherit pname version;
+  version = "4.3.8";
 
-  src = fetchurl {
-    url = "https://github.com/box-project/box/releases/download/${version}/box.phar";
-    sha256 = "sha256-9pPhqFq9t3MKI/y6/7iCYB8ddWFrafGVcV/k+Exb+KQ=";
+  src = fetchFromGitHub {
+    owner = "box-project";
+    repo = "box";
+    rev = finalAttrs.version;
+    hash = "sha256-v1J84nqaX36DrLLH5kld+8NIymqtt5/5nJWJNCBVFRE=";
   };
 
-  dontUnpack = true;
+  php = php.buildEnv {
+    extraConfig = ''
+      phar.readonly=0
+    '';
+  };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/box/box.phar
-    makeWrapper ${php}/bin/php $out/bin/box \
-      --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
-    runHook postInstall
-  '';
+  vendorHash = "sha256-IxI/bWbtahD/UCvvR47n3zwb16sya0hgoVyS+OpWZcg=";
 
   meta = with lib; {
     changelog = "https://github.com/box-project/box/releases/tag/${version}";
@@ -32,4 +26,4 @@ mkDerivation {
     homepage = "https://github.com/box-project/box";
     maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
   };
-}
+})
