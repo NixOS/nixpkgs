@@ -1620,6 +1620,12 @@
       fingerprint = "2688 0377 C31D 9E81 9BDF  83A8 C8C6 BDDB 3847 F72B";
     }];
   };
+  azd325 = {
+    email = "tim.kleinschmidt@gmail.com";
+    github = "Azd325";
+    githubId = 426541;
+    name = "Tim Kleinschmidt";
+  };
   azuwis = {
     email = "azuwis@gmail.com";
     github = "azuwis";

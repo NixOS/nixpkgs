@@ -598,6 +598,23 @@ let
         };
       };
 
+      charliermarsh.ruff = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "ruff";
+          publisher = "charliermarsh";
+          version = "2023.16.0";
+          sha256 = "sha256-MCRfG2CmGXLX15Qv/cxuH8VE1lJLPs4tXlCNnFqm5lc=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+          changelog = "https://github.com/charliermarsh/ruff-vscode/releases";
+          description = "Ruff extension for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff";
+          homepage = "https://github.com/charliermarsh/ruff-vscode/";
+          maintainers = [ lib.maintainers.azd325 ];
+        };
+      };
+
       chenglou92.rescript-vscode = callPackage ./chenglou92.rescript-vscode { };
 
       chris-hayes.chatgpt-reborn = buildVscodeMarketplaceExtension {
