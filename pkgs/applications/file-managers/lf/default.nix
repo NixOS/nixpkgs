@@ -43,7 +43,6 @@ buildGoModule rec {
     homepage = "https://godoc.org/github.com/gokcehan/lf";
     changelog = "https://github.com/gokcehan/lf/releases/tag/r${version}";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/emersion/hydroxide";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne ];
-    platforms = platforms.unix;
   };
 }

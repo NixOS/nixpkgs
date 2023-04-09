@@ -39,6 +39,5 @@ buildGoModule rec {
     homepage    = "https://github.com/kubernetes-sigs/kind";
     maintainers = with maintainers; [ offline rawkode ];
     license     = licenses.asl20;
-    platforms   = platforms.unix;
   };
 }

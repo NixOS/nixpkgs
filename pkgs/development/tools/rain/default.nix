@@ -33,6 +33,5 @@ buildGoModule rec {
     homepage = "https://github.com/aws-cloudformation/rain";
     license = licenses.asl20;
     maintainers = with maintainers; [ jiegec ];
-    platforms = platforms.unix;
   };
 }
