@@ -15271,6 +15271,12 @@
     githubId = 1618946;
     name = "Tiago Castro";
   };
+  tie = {
+    name = "Ivan Trubach";
+    email = "mr.trubach@icloud.com";
+    github = "tie";
+    githubId = 14792994;
+  };
   tilcreator = {
     name = "TilCreator";
     email = "contact.nixos@tc-j.de";
