@@ -32,8 +32,15 @@ let
     util-dfm = callPackage ./library/util-dfm { };
 
     #### CORE
+    dde-app-services = callPackage ./core/dde-app-services { };
     dde-control-center = callPackage ./core/dde-control-center { };
     dde-calendar = callPackage ./core/dde-calendar { };
+    dde-clipboard = callPackage ./core/dde-clipboard { };
+    dde-dock = callPackage ./core/dde-dock { };
+    dde-launcher = callPackage ./core/dde-launcher { };
+    dde-network-core = callPackage ./core/dde-network-core { };
+    dde-session-shell = callPackage ./core/dde-session-shell { };
+    dde-session-ui = callPackage ./core/dde-session-ui { };
     dde-polkit-agent = callPackage ./core/dde-polkit-agent { };
     dpa-ext-gnomekeyring = callPackage ./core/dpa-ext-gnomekeyring { };
 
