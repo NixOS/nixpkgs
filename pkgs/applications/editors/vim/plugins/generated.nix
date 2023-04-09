@@ -5541,6 +5541,18 @@ final: prev:
     meta.homepage = "https://github.com/sidlatau/neotest-dart/";
   };
 
+  neotest-deno = buildVimPluginFrom2Nix {
+    pname = "neotest-deno";
+    version = "2022-12-09";
+    src = fetchFromGitHub {
+      owner = "MarkEmmons";
+      repo = "neotest-deno";
+      rev = "7136b9342aeecb675c7c16a0bde327d7fcb00a1c";
+      sha256 = "1qryyk6x47ffdsb258gxsk5aj3qc0jn6g7ljy8idn361rs12qjcc";
+    };
+    meta.homepage = "https://github.com/MarkEmmons/neotest-deno/";
+  };
+
   neotest-dotnet = buildVimPluginFrom2Nix {
     pname = "neotest-dotnet";
     version = "2023-02-05";
