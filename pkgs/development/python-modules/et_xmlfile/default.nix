@@ -41,7 +41,7 @@ buildPythonPackage rec {
       The code was written by Elias Rabel as part of the Python
       Düsseldorf openpyxl sprint in September 2014.
     '';
-    homepage = "https://pypi.python.org/pypi/et_xmlfile";
+    homepage = "https://foss.heptapod.net/openpyxl/et_xmlfile";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
