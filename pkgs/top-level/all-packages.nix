@@ -32213,7 +32213,7 @@ with pkgs;
 
   mpvpaper = callPackage ../tools/wayland/mpvpaper { };
 
-  mpvScripts = recurseIntoAttrs {
+  mpvScripts = recurseIntoAttrs ({
     acompressor = callPackage ../applications/video/mpv/scripts/acompressor.nix {};
     autoload = callPackage ../applications/video/mpv/scripts/autoload.nix { };
     convert = callPackage ../applications/video/mpv/scripts/convert.nix { };
@@ -32221,7 +32221,6 @@ with pkgs;
     mpris = callPackage ../applications/video/mpv/scripts/mpris.nix { };
     mpv-playlistmanager = callPackage ../applications/video/mpv/scripts/mpv-playlistmanager.nix { };
     mpvacious = callPackage ../applications/video/mpv/scripts/mpvacious.nix { };
-    seekTo = callPackage ../applications/video/mpv/scripts/seek-to.nix {};
     simple-mpv-webui = callPackage ../applications/video/mpv/scripts/simple-mpv-webui.nix { };
     sponsorblock = callPackage ../applications/video/mpv/scripts/sponsorblock.nix { };
     thumbnail = callPackage ../applications/video/mpv/scripts/thumbnail.nix { };
@@ -32230,7 +32229,7 @@ with pkgs;
     webtorrent-mpv-hook = callPackage ../applications/video/mpv/scripts/webtorrent-mpv-hook.nix { };
     youtube-quality = callPackage ../applications/video/mpv/scripts/youtube-quality.nix { };
     cutter = callPackage ../applications/video/mpv/scripts/cutter.nix { };
-  };
+  } // (callPackage ../applications/video/mpv/scripts/occivink.nix {}));
 
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
 
