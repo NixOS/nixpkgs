@@ -56,7 +56,7 @@ nimPackages.buildNimPackage rec {
     homepage = "https://github.com/zedeus/nitter";
     description = "Alternative Twitter front-end";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ erdnaxe ];
+    maintainers = with maintainers; [ erdnaxe infinidoge ];
     mainProgram = "nitter";
   };
 
