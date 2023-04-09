@@ -5541,6 +5541,18 @@ final: prev:
     meta.homepage = "https://github.com/sidlatau/neotest-dart/";
   };
 
+  neotest-dotnet = buildVimPluginFrom2Nix {
+    pname = "neotest-dotnet";
+    version = "2023-02-05";
+    src = fetchFromGitHub {
+      owner = "Issafalcon";
+      repo = "neotest-dotnet";
+      rev = "b7d3b848454180760a3ef8c98c6b0f01b7ad3466";
+      sha256 = "1r5advhhj64ck6brxngwq57b65h9q6fzf2yiffznz6xnyqgilimh";
+    };
+    meta.homepage = "https://github.com/Issafalcon/neotest-dotnet/";
+  };
+
   neotest-elixir = buildVimPluginFrom2Nix {
     pname = "neotest-elixir";
     version = "2023-02-03";
