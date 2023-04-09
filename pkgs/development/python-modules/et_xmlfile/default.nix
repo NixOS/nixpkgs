@@ -3,11 +3,15 @@
 , fetchPypi
 , lxml
 , pytest
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "et-xmlfile";
   version = "1.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "et_xmlfile";
