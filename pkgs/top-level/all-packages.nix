@@ -8017,6 +8017,8 @@ with pkgs;
 
   grafterm = callPackage ../tools/misc/grafterm { };
 
+  gradience = callPackage ../applications/misc/gradience { };
+
   grafx2 = callPackage ../applications/graphics/grafx2 { };
 
   grails = callPackage ../development/web/grails { jdk = null; };
@@ -32592,6 +32594,8 @@ with pkgs;
   ncdc = callPackage ../applications/networking/p2p/ncdc { };
 
   ncspot = callPackage ../applications/audio/ncspot {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+
     withALSA = stdenv.isLinux;
     withPulseAudio = config.pulseaudio or stdenv.isLinux;
     withPortAudio = stdenv.isDarwin;
@@ -37923,6 +37927,10 @@ with pkgs;
   pagsuite = callPackage ../applications/science/math/pagsuite { };
 
   pspp = callPackage ../applications/science/math/pspp { };
+
+  raspa = callPackage ../applications/science/molecular-dynamics/raspa { };
+
+  raspa-data = callPackage ../applications/science/molecular-dynamics/raspa/data.nix { };
 
   ssw = callPackage ../applications/misc/ssw { };
 
