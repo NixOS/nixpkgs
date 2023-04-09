@@ -201,7 +201,9 @@ let
         moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
       ''}
 
-      moveToOutput "bin/pipewire-pulse" "$pulse"
+      rm $out/bin/pipewire-pulse
+      mkdir -p $pulse/bin
+      ln -sf $out/bin/pipewire $pulse/bin/pipewire-pulse
 
       moveToOutput "bin/pw-jack" "$jack"
     '';
