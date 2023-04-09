@@ -81,15 +81,15 @@ stdenv.mkDerivation rec {
     "--enable-ind" #indic scripts
     "--enable-fribidi" #bidi scripts
     "--with-tools=mlclient,mlconfig,mlcc,mlterm-menu,mlimgloader,registobmp,mlfc"
-     #mlterm-menu and mlconfig depend on enabling gnome.at-spi2-core
-     #and configuring ~/.mlterm/key correctly.
- ] ++ lib.optionals (!stdenv.isDarwin) [
-   "--with-x=yes"
-   "--with-gui=xlib,fb"
+    #mlterm-menu and mlconfig depend on enabling gnome.at-spi2-core
+    #and configuring ~/.mlterm/key correctly.
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "--with-x=yes"
+    "--with-gui=xlib,fb"
     "--enable-m17nlib" #character encodings
- ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "--with-gui=quartz"
- ] ++ lib.optionals (libssh2 == null) [ " --disable-ssh2" ];
+  ] ++ lib.optionals (libssh2 == null) [ " --disable-ssh2" ];
 
   postInstall = ''
     install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
