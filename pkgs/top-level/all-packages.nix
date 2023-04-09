@@ -36261,6 +36261,8 @@ with pkgs;
 
   papermc = callPackage ../games/papermc { };
 
+  path-of-building = qt6Packages.callPackage ../games/path-of-building {};
+
   pentobi = libsForQt5.callPackage ../games/pentobi { };
 
   performous = callPackage ../games/performous { };
