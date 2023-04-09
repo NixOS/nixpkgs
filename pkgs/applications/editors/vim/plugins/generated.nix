@@ -5637,6 +5637,18 @@ final: prev:
     meta.homepage = "https://github.com/olimorris/neotest-rspec/";
   };
 
+  neotest-rust = buildVimPluginFrom2Nix {
+    pname = "neotest-rust";
+    version = "2023-04-03";
+    src = fetchFromGitHub {
+      owner = "rouge8";
+      repo = "neotest-rust";
+      rev = "5bb78ad3c1c11a28a2c48af59056455841e6546f";
+      sha256 = "0wrb7nqqr9glsycqrfak6xi2l5pvb0ax48vr1jlcpg83ya2ljj3g";
+    };
+    meta.homepage = "https://github.com/rouge8/neotest-rust/";
+  };
+
   neotest-testthat = buildVimPluginFrom2Nix {
     pname = "neotest-testthat";
     version = "2022-07-04";
