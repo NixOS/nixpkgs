@@ -10,12 +10,12 @@
 stdenv.mkDerivation rec {
   pname = "authy";
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/authy?channel=stable' | jq '.download_url,.version'
-  version = "2.2.2";
-  rev = "12";
+  version = "2.2.3";
+  rev = "18";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/H8ZpNgIoPyvmkgxOWw5MSzsXK1wRZiHn_${rev}.snap";
-    sha256 = "sha256-vSbqT2s5lLEU1SSDaC+sS6qt446iSKYUgKudO5WMOu4=";
+    sha256 = "b4f7dcb26e51c9551ed88b88a066eedd906848465288eedd6369983dfd1139bc";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper squashfsTools ];
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "Twilio Authy two factor authentication desktop application";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ iammrinal0 ];
+    maintainers = with maintainers; [ iammrinal0 mrtuxa ];
     platforms = [ "x86_64-linux" ];
   };
 }
