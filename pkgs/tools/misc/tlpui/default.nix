@@ -1,42 +1,52 @@
 {
   lib,
-  pkgs,
   wrapGAppsHook,
-  fetchFromGitHub,
   buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  substituteAll,
+  tlp,
+  pytestCheckHook,
+  pycairo,
+  pygobject3,
+  pciutils,
+  usbutils,
+  gtk3,
+  cairo,
+  gobject-introspection,
 }:
+# FIX not working subprocess.CalledProcessError: Command '['pkexec', 'tlp-stat']'
 with lib;
   buildPythonPackage rec {
     pname = "tlpui";
-    version = "1.5.0-5";
-
-    # src = fetchFromGitHub {
-    #   owner = "d4nj1";
-    #   repo = "TLPUI";
-    #   rev = "tlpui-${version}";
-    #   sha256 = "sha256-Xzp+UrgPQ6OHEgnQ1aRvaZ+NWCSjeLdXG88zlgsaTw0=";
-    # };
+    version = "1.5.0-7";
+    # only python3 support
+    disabled = !isPy3k;
 
     src = fetchFromGitHub {
-      owner = "GeorgesAlkhouri";
+      owner = "d4nj1";
       repo = "TLPUI";
-      rev = "4c8b381f74cc7a21c0c16f86fc0626a17f984eea";
-      sha256 = "sha256-URdYZJh9dcWhdtTQee7KUUaQngTNHppL/rb2NSPrSSE=";
+      rev = "tlpui-${version}";
+      sha256 = "sha256-fhQgiMy829jdkQXtXgTayWXHtFwnHl8hgGVJzE0E8R0=";
     };
 
-    doCheck = false;
-    # TODO enable tests
-    # checkInputs = with pkgs.python3Packages; [tox pycodestyle];
-    # checkPhase = "tox";
-    nativeBuildInputs = [wrapGAppsHook];
+    patches = [
+      (substituteAll {
+        src = ./path.patch;
+        inherit tlp;
+      })
+    ];
 
-    buildInputs = with pkgs; [
-      gtk3
-      cairo
-      gobject-introspection
+    # Fix test/test_tlp_settings.py
+    pytestFlagsArray = ["test/" "--ignore=test/test_tlp_settings.py"];
+    nativeCheckInputs = [pytestCheckHook gobject-introspection];
+
+    nativeBuildInputs = [wrapGAppsHook];
+    buildInputs = [
+      tlp
     ];
     # sandbox = true;
-    propagatedBuildInputs = with pkgs; with pkgs.python3Packages; [pycairo pygobject3 tlp pciutils usbutils];
+    propagatedBuildInputs = [pycairo pygobject3 gtk3 pciutils usbutils gobject-introspection];
 
     meta = {
       homepage = "https://github.com/d4nj1/TLPUI";
@@ -47,9 +57,6 @@ with lib;
       '';
       license = licenses.gpl2Only;
       platforms = platforms.linux;
-      maintainers = with maintainers; [];
+      maintainers = with maintainers; [georgesalkhouri];
     };
   }
-# nix-build -E '((import <nixpkgs> {}).pkgs.python3Packages.callPackage (import ./default.nix) { })'
-# nix-build -E '((import ../../../../default.nix {}).pkgs.python3Packages.callPackage (import ./default.nix) { })'
-
