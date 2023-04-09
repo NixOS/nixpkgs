@@ -42,6 +42,5 @@ buildGoModule rec {
     homepage = "https://github.com/grafana/mimir";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ happysalada bryanhonof ];
-    platforms = platforms.unix;
   };
 }

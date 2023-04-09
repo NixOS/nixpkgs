@@ -20,7 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/CrunchyData/pg_featureserv";
     license = licenses.asl20;
     maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
     broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

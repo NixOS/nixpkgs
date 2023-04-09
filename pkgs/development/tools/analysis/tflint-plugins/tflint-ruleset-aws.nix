@@ -31,7 +31,6 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/terraform-linters/tflint-ruleset-aws";
     description = "TFLint ruleset plugin for Terraform AWS Provider";
-    platforms = platforms.unix;
     maintainers = with maintainers; [ flokli ];
     license = with licenses; [ mpl20 ];
   };
