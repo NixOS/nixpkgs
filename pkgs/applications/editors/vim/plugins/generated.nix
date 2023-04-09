@@ -5529,6 +5529,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-neotest/neotest/";
   };
 
+  neotest-go = buildVimPluginFrom2Nix {
+    pname = "neotest-go";
+    version = "2023-03-28";
+    src = fetchFromGitHub {
+      owner = "nvim-neotest";
+      repo = "neotest-go";
+      rev = "756edf3dddcb3b430110f9582e10b7e730428341";
+      sha256 = "03ldff1cf1j4skj2swhqphna08xkpm33xzmlm87ln5jg7h5izjii";
+    };
+    meta.homepage = "https://github.com/nvim-neotest/neotest-go/";
+  };
+
   neotest-haskell = buildVimPluginFrom2Nix {
     pname = "neotest-haskell";
     version = "2023-03-31";
