@@ -1259,8 +1259,6 @@ let
 
     paf-cohttp = callPackage ../development/ocaml-modules/paf/cohttp.nix { };
 
-    paf-le = callPackage ../development/ocaml-modules/paf/le.nix { };
-
     parany = callPackage ../development/ocaml-modules/parany { };
 
     parmap = callPackage ../development/ocaml-modules/parmap { };
