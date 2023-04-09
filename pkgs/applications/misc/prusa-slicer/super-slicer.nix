@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, makeDesktopItem, wxGTK31, prusa-slicer }:
+{ lib, fetchFromGitHub, fetchpatch, makeDesktopItem, wxGTK31, prusa-slicer, libspnav }:
 let
   appname = "SuperSlicer";
   pname = "super-slicer";
@@ -11,8 +11,8 @@ let
       patches = null;
     };
     latest = {
-      version = "2.4.58.3";
-      sha256 = "sha256-pEZcBEvK4Mq8nytiXLJvta7Bk6qZRJfTNrYz7N/aUAE=";
+      version = "2.4.58.5";
+      sha256 = "sha256-UywxEGedXaBUTKojEkbkuejI6SdPSkPxTJMwUDNW6W0=";
       patches = [
         # Fix detection of TBB, see https://github.com/prusa3d/PrusaSlicer/issues/6355
         (fetchpatch {
@@ -58,6 +58,10 @@ let
     # See https://github.com/supermerill/SuperSlicer/issues/432
     cmakeFlags = super.cmakeFlags ++ [
       "-DSLIC3R_BUILD_TESTS=0"
+    ];
+
+    buildInputs = super.buildInputs ++ [
+      libspnav
     ];
 
     desktopItems = [
