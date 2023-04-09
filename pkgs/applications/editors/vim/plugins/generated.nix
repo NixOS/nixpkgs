@@ -5577,6 +5577,18 @@ final: prev:
     meta.homepage = "https://github.com/haydenmeade/neotest-jest/";
   };
 
+  neotest-pest = buildVimPluginFrom2Nix {
+    pname = "neotest-pest";
+    version = "2022-11-24";
+    src = fetchFromGitHub {
+      owner = "theutz";
+      repo = "neotest-pest";
+      rev = "a50582719267a847c84e1564e97c698d994f883c";
+      sha256 = "00scdxkqkfsdq6sn1a7cdcrqpdi8bzi5z2qjqlysp6njilbd1jws";
+    };
+    meta.homepage = "https://github.com/theutz/neotest-pest/";
+  };
+
   neotest-phpunit = buildVimPluginFrom2Nix {
     pname = "neotest-phpunit";
     version = "2022-10-09";
