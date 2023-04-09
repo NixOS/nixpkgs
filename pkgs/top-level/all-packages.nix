@@ -36249,6 +36249,8 @@ with pkgs;
 
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
+  principia = callPackage ../games/principia { };
+
   prismlauncher-qt5 = libsForQt5.callPackage ../games/prismlauncher { };
 
   prismlauncher = qt6Packages.callPackage ../games/prismlauncher { };
