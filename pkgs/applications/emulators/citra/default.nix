@@ -15,13 +15,13 @@ let
 in {
   nightly = libsForQt5.callPackage ./generic.nix rec {
     pname = "citra-nightly";
-    version = "1765";
+    version = "1873";
 
     src = fetchFromGitHub {
       owner = "citra-emu";
       repo = "citra-nightly";
       rev = "nightly-${version}";
-      sha256 = "0d3dfh63cmsy5idbypdz3ibydmb4a35sfv7qmxxlcpc390pp9cvq";
+      sha256 = "1csn9n1s2mvxwk2mahwm8mc4zgn40im374hcsqgz8gaxjkmnx288";
       fetchSubmodules = true;
     };
 
@@ -30,13 +30,13 @@ in {
 
   canary = libsForQt5.callPackage ./generic.nix rec {
     pname = "citra-canary";
-    version = "2146";
+    version = "2440";
 
     src = fetchFromGitHub {
       owner = "citra-emu";
       repo = "citra-canary";
       rev = "canary-${version}";
-      sha256 = "1wnym0nklngimf5gaaa2703nz4g5iy572wlgp88h67rrh9b4f04r";
+      sha256 = "06f2qnvywyaf8jc43jrzjhfshj3k21ggk8wdrvd9wjsmrryvqgbz";
       fetchSubmodules = true;
     };
 

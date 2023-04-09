@@ -26,6 +26,6 @@ buildGoModule rec {
     description = "An open-source, cloud-native, distributed, MySQL-Compatible database for elastic scale and real-time analytics";
     homepage = "https://pingcap.com";
     license = licenses.asl20;
-    maintainers = with maintainers; [ candyc1oud ];
+    maintainers = [];
   };
 }

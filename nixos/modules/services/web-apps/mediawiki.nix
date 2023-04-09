@@ -46,6 +46,15 @@ let
     done
   '';
 
+  dbAddr = if cfg.database.socket == null then
+    "${cfg.database.host}:${toString cfg.database.port}"
+  else if cfg.database.type == "mysql" then
+    "${cfg.database.host}:${cfg.database.socket}"
+  else if cfg.database.type == "postgres" then
+    "${cfg.database.socket}"
+  else
+    throw "Unsupported database type: ${cfg.database.type} for socket: ${cfg.database.socket}";
+
   mediawikiConfig = pkgs.writeText "LocalSettings.php" ''
     <?php
       # Protect against web entry
@@ -87,7 +96,8 @@ let
 
       ## Database settings
       $wgDBtype = "${cfg.database.type}";
-      $wgDBserver = "${cfg.database.host}:${if cfg.database.socket != null then cfg.database.socket else toString cfg.database.port}";
+      $wgDBserver = "${dbAddr}";
+      $wgDBport = "${toString cfg.database.port}";
       $wgDBname = "${cfg.database.name}";
       $wgDBuser = "${cfg.database.user}";
       ${optionalString (cfg.database.passwordFile != null) "$wgDBpassword = file_get_contents(\"${cfg.database.passwordFile}\");"}
@@ -246,7 +256,8 @@ in
 
         port = mkOption {
           type = types.port;
-          default = 3306;
+          default = if cfg.database.type == "mysql" then 3306 else 5432;
+          defaultText = literalExpression "3306";
           description = lib.mdDoc "Database host port.";
         };
 
@@ -286,14 +297,19 @@ in
 
         socket = mkOption {
           type = types.nullOr types.path;
-          default = if cfg.database.createLocally then "/run/mysqld/mysqld.sock" else null;
+          default = if (cfg.database.type == "mysql" && cfg.database.createLocally) then
+              "/run/mysqld/mysqld.sock"
+            else if (cfg.database.type == "postgres" && cfg.database.createLocally) then
+              "/run/postgresql"
+            else
+              null;
           defaultText = literalExpression "/run/mysqld/mysqld.sock";
           description = lib.mdDoc "Path to the unix socket file to use for authentication.";
         };
 
         createLocally = mkOption {
           type = types.bool;
-          default = cfg.database.type == "mysql";
+          default = cfg.database.type == "mysql" || cfg.database.type == "postgres";
           defaultText = literalExpression "true";
           description = lib.mdDoc ''
             Create the database and database user locally.
@@ -354,8 +370,8 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.type == "mysql";
-        message = "services.mediawiki.createLocally is currently only supported for database type 'mysql'";
+      { assertion = cfg.database.createLocally -> (cfg.database.type == "mysql" || cfg.database.type == "postgres");
+        message = "services.mediawiki.createLocally is currently only supported for database type 'mysql' and 'postgres'";
       }
       { assertion = cfg.database.createLocally -> cfg.database.user == user;
         message = "services.mediawiki.database.user must be set to ${user} if services.mediawiki.database.createLocally is set true";
@@ -374,15 +390,23 @@ in
       Vector = "${cfg.package}/share/mediawiki/skins/Vector";
     };
 
-    services.mysql = mkIf cfg.database.createLocally {
+    services.mysql = mkIf (cfg.database.type == "mysql" && cfg.database.createLocally) {
       enable = true;
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-        }
-      ];
+      ensureUsers = [{
+        name = cfg.database.user;
+        ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
+      }];
+    };
+
+    services.postgresql = mkIf (cfg.database.type == "postgres" && cfg.database.createLocally) {
+      enable = true;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [{
+        name = cfg.database.user;
+        ensurePermissions = { "DATABASE \"${cfg.database.name}\"" = "ALL PRIVILEGES"; };
+      }];
     };
 
     services.phpfpm.pools.mediawiki = {
@@ -431,7 +455,8 @@ in
     systemd.services.mediawiki-init = {
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-mediawiki.service" ];
-      after = optional cfg.database.createLocally "mysql.service";
+      after = optional (cfg.database.type == "mysql" && cfg.database.createLocally) "mysql.service"
+              ++ optional (cfg.database.type == "postgres" && cfg.database.createLocally) "postgresql.service";
       script = ''
         if ! test -e "${stateDir}/secret.key"; then
           tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c 64 > ${stateDir}/secret.key
@@ -442,7 +467,7 @@ in
         ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
-          --dbserver ${cfg.database.host}${optionalString (cfg.database.socket != null) ":${cfg.database.socket}"} \
+          --dbserver "${dbAddr}" \
           --dbport ${toString cfg.database.port} \
           --dbname ${cfg.database.name} \
           ${optionalString (cfg.database.tablePrefix != null) "--dbprefix ${cfg.database.tablePrefix}"} \
@@ -464,7 +489,8 @@ in
       };
     };
 
-    systemd.services.httpd.after = optional (cfg.database.createLocally && cfg.database.type == "mysql") "mysql.service";
+    systemd.services.httpd.after = optional (cfg.database.createLocally && cfg.database.type == "mysql") "mysql.service"
+      ++ optional (cfg.database.createLocally && cfg.database.type == "postgres") "postgresql.service";
 
     users.users.${user} = {
       group = group;

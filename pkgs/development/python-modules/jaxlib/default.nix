@@ -138,7 +138,7 @@ let
       rm -f .bazelversion
     '';
 
-    bazelTarget = "//build:build_wheel";
+    bazelTargets = [ "//build:build_wheel" ];
 
     removeRulesCC = false;
 
@@ -239,7 +239,7 @@ let
           x86_64-linux = "sha256-A0A18kxgGNGHNQ67ZPUzh3Yq2LEcRV7CqR9EfP80NQk=";
           aarch64-linux = "sha256-mU2jzuDu89jVmaG/M5bA3jSd7n7lDi+h8sdhs1z8p1A=";
           x86_64-darwin = "sha256-9nNTpetvjyipD/l8vKlregl1j/OnZKAcOCoZQeRBvts=";
-          aarch64-darwin = "sha256-dOGUsdFImeOLcZ3VtgrNnd8A/HgIs/LYuH9GQV7A+78=";
+          aarch64-darwin = "sha256-FqYwI1YC5eqSv+DYj09DC5IaBfFDUCO97y+TFhGiWAA=";
         }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     };
 

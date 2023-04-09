@@ -900,6 +900,7 @@ dont-distribute-packages:
  - call
  - camfort
  - campfire
+ - canadian-income-tax
  - canteven-http
  - cao
  - cap
@@ -1193,6 +1194,7 @@ dont-distribute-packages:
  - debug
  - decidable
  - decimal-arithmetic
+ - declarative
  - dedukti
  - deeplearning-hs
  - deepzoom
@@ -1478,6 +1480,7 @@ dont-distribute-packages:
  - finite-table
  - firestore
  - firstify
+ - fishfood
  - fix-parser-simple
  - fixed-point-vector
  - fixed-point-vector-space
@@ -1505,6 +1508,7 @@ dont-distribute-packages:
  - format-status
  - formlets
  - formlets-hsp
+ - forms-data-format
  - forsyde-deep
  - forth-hll
  - fortran-vars
@@ -1515,7 +1519,7 @@ dont-distribute-packages:
  - fpnla-examples
  - frame-markdown
  - freckle-app
- - freckle-app_1_8_1_0
+ - freckle-app_1_9_0_0
  - free-functors
  - free-game
  - free-theorems-counterexamples
@@ -1614,7 +1618,7 @@ dont-distribute-packages:
  - gi-gsk
  - gi-gstpbutils
  - gi-gtk-declarative-app-simple
- - gi-gtk_4_0_6
+ - gi-gtk_4_0_8
  - git-config
  - git-fmt
  - git-gpush
@@ -2211,6 +2215,7 @@ dont-distribute-packages:
  - hpaco-lib
  - hpage
  - hpaste
+ - hpath-io
  - hpc-tracer
  - hplayground
  - hpqtypes-effectful
@@ -2260,6 +2265,11 @@ dont-distribute-packages:
  - hsfacter
  - hsinspect-lsp
  - hslogstash
+ - hslua-cli
+ - hslua-module-zip
+ - hslua-objectorientation_2_3_0
+ - hslua-packaging_2_3_0
+ - hslua_2_3_0
  - hsndfile-storablevector
  - hspec-expectations-pretty
  - hspec-pg-transact
@@ -2335,6 +2345,7 @@ dont-distribute-packages:
  - hyper-extra
  - hyper-haskell-server
  - hyperpublic
+ - i
  - iException
  - ice40-prim
  - ide-backend
@@ -2505,6 +2516,7 @@ dont-distribute-packages:
  - keyword-args
  - kicad-data
  - kif-parser
+ - kind-rational
  - kit
  - kmeans-par
  - kmeans-vector
@@ -3007,7 +3019,7 @@ dont-distribute-packages:
  - padKONTROL
  - pairing
  - panda
- - pandoc-crossref_0_3_15_1
+ - pandoc-crossref_0_3_15_2
  - pandoc-highlighting-extensions
  - pandoc-japanese-filters
  - pandora-io
@@ -3336,6 +3348,7 @@ dont-distribute-packages:
  - reflex-localize
  - reflex-localize-dom
  - reflex-monad-auth
+ - reflex-potatoes
  - reflex-process
  - refractor
  - reg-alloc-graph-color
@@ -3724,6 +3737,7 @@ dont-distribute-packages:
  - squeal-postgresql
  - squeal-postgresql-ltree
  - squeal-postgresql-uuid-ossp
+ - squeeze
  - sr-extra
  - sscgi
  - sshd-lint
@@ -3912,6 +3926,7 @@ dont-distribute-packages:
  - timezone-unix
  - tinkoff-invest-sdk
  - tintin
+ - tinytools
  - tip-haskell-frontend
  - tip-lib
  - titan
@@ -4024,7 +4039,11 @@ dont-distribute-packages:
  - uni-reactor
  - uni-uDrawGraph
  - unicode-normalization
+ - uniform-http
  - uniform-io
+ - uniform-latex2pdf
+ - uniform-pandoc
+ - uniform-shake
  - uniqueness-periods
  - uniqueness-periods-vector-examples
  - uniqueness-periods-vector-filters
@@ -4133,6 +4152,7 @@ dont-distribute-packages:
  - wai-transformers
  - waldo
  - warp-grpc
+ - warp-quic
  - warped
  - wavesurfer
  - wavy

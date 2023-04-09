@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , fetchurl
 , pythonOlder
 , substituteAll
@@ -47,6 +48,11 @@ let
       src = ./ctypes.patch;
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
+    })
+    (fetchpatch {
+      name = "cython-3.0.0b1-compat.patch";
+      url = "https://github.com/psycopg/psycopg/commit/573446a14312f36257ed9dcfb8eb2756b69d5d9b.patch";
+      hash = "sha256-NWItarNb/Yyfj1avb/SXTkinVGxvWUGH8y6tR/zhVmE=";
     })
   ];
 
@@ -148,7 +154,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     psycopg-c
-  ] ++ lib.optionals (pythonOlder "3.11") [
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo

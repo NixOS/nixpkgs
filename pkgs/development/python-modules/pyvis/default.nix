@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/WestHealth/pyvis";
     description = "Python package for creating and visualizing interactive network graphs";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with maintainers; [ ];
   };
 }
