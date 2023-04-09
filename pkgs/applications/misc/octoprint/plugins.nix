@@ -356,7 +356,7 @@ in
       owner = "Birkbjo";
       repo = "Octoprint-${pname}";
       rev = "v${version}";
-      sha256 = "0j1qs6kyh947npdy7pqda25fjkqinpas3sy0qyscqlxi558lhvx2";
+      sha256 = "sha256-om9IUSmxU8y0x8DrodW1EU/pilAN3+PbtYck6KfROEg=";
     };
 
     meta = with lib; {
