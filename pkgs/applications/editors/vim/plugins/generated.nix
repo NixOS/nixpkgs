@@ -5541,6 +5541,18 @@ final: prev:
     meta.homepage = "https://github.com/sidlatau/neotest-dart/";
   };
 
+  neotest-elixir = buildVimPluginFrom2Nix {
+    pname = "neotest-elixir";
+    version = "2023-02-03";
+    src = fetchFromGitHub {
+      owner = "jfpedroza";
+      repo = "neotest-elixir";
+      rev = "72ead0e41aa88582631ff7a14c13095b87c7ff75";
+      sha256 = "1ys33qrgs5iw2f00k8d3da2dy49bxfp1yanzk9l6970q8mq9xfd3";
+    };
+    meta.homepage = "https://github.com/jfpedroza/neotest-elixir/";
+  };
+
   neotest-go = buildVimPluginFrom2Nix {
     pname = "neotest-go";
     version = "2023-03-28";
