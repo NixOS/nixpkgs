@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "markdown-it-py";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-6UATJho3SuIbLktZtFcDrCTWIAh52E+n5adcgl49un0=";
+    hash = "sha256-qdRU1BxczFDGoIEtl0ZMkKNn4p5tec8YuPt5ZwX5fYM=";
   };
 
   nativeBuildInputs = [
