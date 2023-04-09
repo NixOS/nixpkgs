@@ -91,6 +91,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Python client driver for Apache Cassandra";
     homepage = "http://datastax.github.io/python-driver";
+    changelog = "https://github.com/datastax/python-driver/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ turion ris ];
   };
