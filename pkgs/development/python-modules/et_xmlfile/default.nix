@@ -6,15 +6,20 @@
 }:
 
 buildPythonPackage rec {
+  pname = "et-xmlfile";
   version = "1.0.1";
-  pname = "et_xmlfile";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "et_xmlfile";
+    inherit version;
     sha256="0nrkhcb6jdrlb6pwkvd4rycw34y3s931hjf409ij9xkjsli9fkb1";
   };
 
-  nativeCheckInputs = [ lxml pytest ];
+  nativeCheckInputs = [
+    lxml
+    pytest
+  ];
+
   checkPhase = ''
     py.test $out
   '';
@@ -36,5 +41,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
-
 }
