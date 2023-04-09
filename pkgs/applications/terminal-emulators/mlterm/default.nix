@@ -91,6 +91,8 @@ stdenv.mkDerivation rec {
     "--with-gui=quartz"
   ] ++ lib.optionals (libssh2 == null) [ " --disable-ssh2" ];
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
     install -D contrib/icon/mlterm-icon-gnome2.png "$out/share/icons/hicolor/48x48/apps/mlterm.png"
