@@ -40,8 +40,10 @@ in
     pname = "ABL_Expert";
     version = "0.6";
 
-    src = fetchgit {
-      url = "https://framagit.org/razer/Octoprint_ABL_Expert/";
+    src = fetchFromGitLab {
+      domain = "framagit.org";
+      owner = "razer";
+      repo = "Octoprint_ABL_Expert";
       rev = version;
       sha256 = "0ij3rvdwya1sbymwm5swlh2j4jagb6fal945g88zrzh5xf26hzjh";
     };
