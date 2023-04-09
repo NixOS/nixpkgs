@@ -4095,12 +4095,6 @@
       fingerprint = "85F3 72DF 4AF3 EF13 ED34  72A3 0AAF 2901 E804 0715";
     }];
   };
-  drzoidberg = {
-    email = "jakob@mast3rsoft.com";
-    github = "jakobneufeld";
-    githubId = 24791219;
-    name = "Jakob Neufeld";
-  };
   dsalaza4 = {
     email = "podany270895@gmail.com";
     github = "dsalaza4";

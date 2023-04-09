@@ -3,6 +3,21 @@
 version = 3
 
 [[package]]
+name = "addr2line"
+version = "0.19.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a76fd60b23679b7d19bd066031410fb7e458ccc5e958eb5c325888ce4baedc97"
+dependencies = [
+ "gimli",
+]
+
+[[package]]
+name = "adler"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe"
+
+[[package]]
 name = "aho-corasick"
 version = "0.7.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -13,7 +28,7 @@ dependencies = [
 
 [[package]]
 name = "analysis"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "config",
  "diagnostic",
@@ -47,6 +62,31 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
+name = "backtrace"
+version = "0.3.67"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "233d376d6d185f2a3093e58f283f60f880315b6c60075b01f36b3b85154564ca"
+dependencies = [
+ "addr2line",
+ "cc",
+ "cfg-if",
+ "libc",
+ "miniz_oxide",
+ "object",
+ "rustc-demangle",
+]
+
+[[package]]
+name = "better-panic"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6fa9e1d11a268684cbd90ed36370d7577afb6c62d912ddff5c15fc34343e5036"
+dependencies = [
+ "backtrace",
+ "console",
+]
+
+[[package]]
 name = "bitflags"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -71,7 +111,7 @@ source = "git+https://github.com/azdavis/language-util.git#14721e8e4c56b2eaffb25
 
 [[package]]
 name = "cm-syntax"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "lex-util",
  "paths",
@@ -90,7 +130,7 @@ dependencies = [
 
 [[package]]
 name = "config"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "fast-hash",
  "serde",
@@ -99,10 +139,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "console"
+version = "0.15.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3d79fbe8970a77e3e34151cc13d3b3e248aa0faaecb9f6091fa07ebefe5ad60"
+dependencies = [
+ "encode_unicode",
+ "lazy_static",
+ "libc",
+ "windows-sys 0.42.0",
+]
+
+[[package]]
 name = "countme"
 version = "3.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7704b5fdd17b18ae31c4c1da5a2e0305a2bf17b5249300a9ee9ed7b72114c636"
+
+[[package]]
+name = "crc32fast"
+version = "1.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b540bd8bc810d3885c6ea91e2018302f68baba2129ab3e88f32389ee9370880d"
+dependencies = [
+ "cfg-if",
+]
 
 [[package]]
 name = "crossbeam-channel"
@@ -159,6 +220,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "encode_unicode"
+version = "0.3.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a357d28ed41a50f9c765dbfe56cbc04a64e53e5fc58ba79fbc34c10ef3df831f"
+
+[[package]]
 name = "env_logger"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -179,7 +246,7 @@ checksum = "50d6a0976c999d473fe89ad888d5a284e55366d9dc9038b1ba2aa15128c4afa0"
 dependencies = [
  "errno-dragonfly",
  "libc",
- "windows-sys",
+ "windows-sys 0.45.0",
 ]
 
 [[package]]
@@ -211,6 +278,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "flate2"
+version = "1.0.25"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a8a2db397cb1c8772f31494cb8917e48cd1e64f0fa7efac59fbd741a0a8ce841"
+dependencies = [
+ "crc32fast",
+ "miniz_oxide",
+]
+
+[[package]]
 name = "fmt-util"
 version = "0.1.0"
 source = "git+https://github.com/azdavis/language-util.git#14721e8e4c56b2eaffb259a8845653b898bf4caa"
@@ -232,6 +309,12 @@ checksum = "14dbbfd5c71d70241ecf9e6f13737f7b5ce823821063188d7e46c41d371eebd5"
 dependencies = [
  "unicode-width",
 ]
+
+[[package]]
+name = "gimli"
+version = "0.27.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ad0a93d233ebf96623465aad4046a8d3aa4da22d4f4beba5388838c8a434bbb4"
 
 [[package]]
 name = "glob"
@@ -289,7 +372,7 @@ dependencies = [
 
 [[package]]
 name = "input"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "cm-syntax",
  "config",
@@ -319,7 +402,7 @@ checksum = "09270fd4fa1111bc614ed2246c7ef56239a3063d5be0d1ec3b589c505d400aeb"
 dependencies = [
  "hermit-abi",
  "libc",
- "windows-sys",
+ "windows-sys 0.45.0",
 ]
 
 [[package]]
@@ -331,7 +414,7 @@ dependencies = [
  "hermit-abi",
  "io-lifetimes",
  "rustix",
- "windows-sys",
+ "windows-sys 0.45.0",
 ]
 
 [[package]]
@@ -348,7 +431,7 @@ checksum = "1dabfe0d01e15fde0eba33b9de62475c59e681a47ce4ffe0534af2577a3f8524"
 
 [[package]]
 name = "lang-srv"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "analysis",
  "anyhow",
@@ -369,8 +452,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "lazy_static"
+version = "1.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
+
+[[package]]
 name = "lex-util"
-version = "0.1.0"
+version = "0.8.8"
 
 [[package]]
 name = "libc"
@@ -435,30 +524,41 @@ dependencies = [
 
 [[package]]
 name = "millet-cli"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "analysis",
  "config",
  "diagnostic",
  "env_logger",
  "input",
+ "panic-hook",
  "paths",
  "pico-args",
 ]
 
 [[package]]
 name = "millet-ls"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "anyhow",
  "env_logger",
  "lang-srv",
  "log",
+ "panic-hook",
+]
+
+[[package]]
+name = "miniz_oxide"
+version = "0.6.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b275950c28b37e794e8c55d88aeb5e139d0ce23fdbbeda68f8d7174abdf9e8fa"
+dependencies = [
+ "adler",
 ]
 
 [[package]]
 name = "mlb-hir"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "fast-hash",
  "paths",
@@ -469,7 +569,7 @@ dependencies = [
 
 [[package]]
 name = "mlb-statics"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "config",
  "diagnostic",
@@ -493,7 +593,7 @@ dependencies = [
 
 [[package]]
 name = "mlb-syntax"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "lex-util",
  "paths",
@@ -534,6 +634,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "object"
+version = "0.30.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ea86265d3d3dcb6a27fc51bd29a4bf387fae9d2986b823079d4986af253eb439"
+dependencies = [
+ "memchr",
+]
+
+[[package]]
 name = "once_cell"
 version = "1.17.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -546,6 +655,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "628223faebab4e3e40667ee0b2336d34a5b960ff60ea743ddfdbcf7770bcfb66"
 dependencies = [
  "winapi",
+]
+
+[[package]]
+name = "panic-hook"
+version = "0.8.8"
+dependencies = [
+ "better-panic",
 ]
 
 [[package]]
@@ -651,6 +767,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "rustc-demangle"
+version = "0.1.22"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d4a36c42d1873f9a77c53bde094f9664d9891bc604a45b4798fd2c389ed12e5b"
+
+[[package]]
 name = "rustc-hash"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -667,7 +789,7 @@ dependencies = [
  "io-lifetimes",
  "libc",
  "linux-raw-sys",
- "windows-sys",
+ "windows-sys 0.45.0",
 ]
 
 [[package]]
@@ -729,7 +851,7 @@ dependencies = [
 
 [[package]]
 name = "slash-var-path"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "fast-hash",
  "str-util",
@@ -737,14 +859,14 @@ dependencies = [
 
 [[package]]
 name = "sml-comment"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "sml-syntax",
 ]
 
 [[package]]
 name = "sml-file-syntax"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "config",
  "elapsed",
@@ -758,7 +880,7 @@ dependencies = [
 
 [[package]]
 name = "sml-fixity"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "fast-hash",
  "once_cell",
@@ -767,7 +889,7 @@ dependencies = [
 
 [[package]]
 name = "sml-hir"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "la-arena",
  "num-bigint",
@@ -777,7 +899,7 @@ dependencies = [
 
 [[package]]
 name = "sml-lex"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "diagnostic",
  "lex-util",
@@ -791,7 +913,7 @@ source = "git+https://github.com/azdavis/sml-libs.git#07a772374caa2b0e3acda920f7
 
 [[package]]
 name = "sml-lower"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "config",
  "diagnostic",
@@ -806,7 +928,7 @@ dependencies = [
 
 [[package]]
 name = "sml-naive-fmt"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "fast-hash",
  "sml-comment",
@@ -815,11 +937,11 @@ dependencies = [
 
 [[package]]
 name = "sml-namespace"
-version = "0.1.0"
+version = "0.8.8"
 
 [[package]]
 name = "sml-parse"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "diagnostic",
  "event-parse",
@@ -831,14 +953,14 @@ dependencies = [
 
 [[package]]
 name = "sml-path"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "str-util",
 ]
 
 [[package]]
 name = "sml-statics"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "code-h2-md-map",
  "config",
@@ -862,7 +984,7 @@ dependencies = [
 
 [[package]]
 name = "sml-syntax"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "char-name",
  "code-h2-md-map",
@@ -875,7 +997,7 @@ dependencies = [
 
 [[package]]
 name = "sml-ty-var-scope"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "fast-hash",
  "sml-hir",
@@ -892,7 +1014,7 @@ dependencies = [
 
 [[package]]
 name = "stack-map"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "fast-hash",
  "str-util",
@@ -951,7 +1073,7 @@ dependencies = [
 
 [[package]]
 name = "tests"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "analysis",
  "cm-syntax",
@@ -1154,6 +1276,21 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "windows-sys"
+version = "0.42.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5a3e1820f08b8513f676f7ab6c1f99ff312fb97b553d30ff4dd86f9f15728aa7"
+dependencies = [
+ "windows_aarch64_gnullvm",
+ "windows_aarch64_msvc",
+ "windows_i686_gnu",
+ "windows_i686_msvc",
+ "windows_x86_64_gnu",
+ "windows_x86_64_gnullvm",
+ "windows_x86_64_msvc",
+]
+
+[[package]]
+name = "windows-sys"
 version = "0.45.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "75283be5efb2831d37ea142365f009c02ec203cd29a3ebecbc093d52315b66d0"
@@ -1244,11 +1381,11 @@ checksum = "1dbabb1cbd15a1d6d12d9ed6b35cc6777d4af87ab3ba155ea37215f20beab80c"
 
 [[package]]
 name = "xtask"
-version = "0.1.0"
+version = "0.8.8"
 dependencies = [
  "anyhow",
+ "flate2",
  "pico-args",
- "xshell",
 ]
 
 [[package]]

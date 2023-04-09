@@ -6515,6 +6515,8 @@ self: super: with self; {
 
   niaarm = callPackage ../development/python-modules/niaarm { };
 
+  niaclass = callPackage ../development/python-modules/niaclass { };
+
   niapy = callPackage ../development/python-modules/niapy { };
 
   nibabel = callPackage ../development/python-modules/nibabel { };

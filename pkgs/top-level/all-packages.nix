@@ -4555,7 +4555,7 @@ with pkgs;
 
   dtools = callPackage ../development/tools/dtools { };
 
-  dt-shell-color-scripts = callPackage ../tools/misc/dt-shell-color-scripts { };
+  dwt1-shell-color-scripts = callPackage ../tools/misc/dwt1-shell-color-scripts { };
 
   dtrx = callPackage ../tools/compression/dtrx { };
 
@@ -27435,12 +27435,7 @@ with pkgs;
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
-  v4l2-relayd-ipu6 = callPackage ../os-specific/linux/v4l2-relayd {
-    icamerasrc = gst_all_1.icamerasrc-ipu6;
-  };
-  v4l2-relayd-ipu6ep = callPackage ../os-specific/linux/v4l2-relayd {
-    icamerasrc = gst_all_1.icamerasrc-ipu6ep;
-  };
+  v4l2-relayd = callPackage ../os-specific/linux/v4l2-relayd { };
 
   vendir = callPackage ../development/tools/vendir { };
 
@@ -27590,6 +27585,8 @@ with pkgs;
   breath-theme = libsForQt5.callPackage ../data/themes/breath-theme { };
 
   brise = callPackage ../data/misc/brise { };
+
+  apl386 = callPackage ../data/fonts/apl386 { };
 
   bqn386 = callPackage ../data/fonts/bqn386 { };
 
@@ -35450,6 +35447,8 @@ with pkgs;
   cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
   cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { };
 
+  conceal = callPackage ../applications/misc/conceal { };
+
   confd = callPackage ../tools/system/confd { };
 
   conmon = callPackage ../applications/virtualization/conmon { };
@@ -36264,6 +36263,8 @@ with pkgs;
   pioneers = callPackage ../games/pioneers { };
 
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
+
+  principia = callPackage ../games/principia { };
 
   prismlauncher-qt5 = libsForQt5.callPackage ../games/prismlauncher { };
 
