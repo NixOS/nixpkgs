@@ -6230,6 +6230,12 @@
     githubId = 53281855;
     name = "hqurve";
   };
+  hraban = {
+    email = "hraban@0brg.net";
+    github = "hraban";
+    githubId = 137852;
+    name = "Hraban Luyat";
+  };
   hrdinka = {
     email = "c.nix@hrdinka.at";
     github = "hrdinka";
