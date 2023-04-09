@@ -3,7 +3,7 @@
 , cryptography
 , fetchFromGitHub
 , gssapi
-, krb5
+, pykrb5
 , ruamel-yaml
 , pytest-mock
 , pytestCheckHook
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cryptography
     gssapi
-    krb5
+    pykrb5
     ruamel-yaml
   ];
 
