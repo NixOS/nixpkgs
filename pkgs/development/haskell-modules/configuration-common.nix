@@ -1359,7 +1359,7 @@ self: super: {
   # 2022-08-31: Jailbreak is done to allow aeson 2.0.*:
   # https://github.com/haskell-CI/haskell-ci/commit/6ad0d5d701cbe101013335d597acaf5feadd3ab9#r82681900
   cabal-install-parsers = doJailbreak (dontCheck (super.cabal-install-parsers.override {
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_10_1_0;
   }));
   cabal-install-parsers_0_4_5 = doDistribute (
     dontCheck (
