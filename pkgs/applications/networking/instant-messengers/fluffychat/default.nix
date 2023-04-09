@@ -8,18 +8,19 @@
 , jsoncpp
 , wrapGAppsHook
 , makeDesktopItem
+, openssl
+, olm
 }:
 
 let
-  version = "1.10.0";
   # map of nix platform -> expected url platform
   platformMap = {
     x86_64-linux = "linux-x86";
     aarch64-linux = "linux-arm64";
   };
 in
-stdenv.mkDerivation {
-  inherit version;
+stdenv.mkDerivation rec {
+  version = "1.10.0";
   name = "fluffychat";
 
   src = fetchzip {
@@ -36,7 +37,6 @@ stdenv.mkDerivation {
     genericName = "Chat with your friends (matrix client)";
     categories = [ "Chat" "Network" "InstantMessaging" ];
   };
-
   buildInputs = [ gtk3 libsecret jsoncpp ];
   nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook imagemagick ];
 
@@ -45,7 +45,8 @@ stdenv.mkDerivation {
     mkdir -p $out/share
     mv * $out/share
 
-    ln -s $out/share/fluffychat $out/bin/fluffychat
+    makeWrapper "$out/share/fluffychat" "$out/bin/fluffychat" \
+      --prefix "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ openssl olm ]}"
 
     FAV=$out/share/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons
