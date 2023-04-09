@@ -9,13 +9,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.28.0";
+  version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    hash = "sha256-ML5eblQUk4xMYbBeLxk9tNxi7N4ltrCjMG0oM9zL6JI=";
+    hash = "sha256-YIR8if6lFJ+534qBN9k1ltFp5M7KBU5qYaI1KppTYwI=";
   };
 
   cargoLock = {
