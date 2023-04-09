@@ -33488,11 +33488,11 @@ with pkgs;
   sfxr = callPackage ../applications/audio/sfxr { };
 
   sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
-  
+
   shadowfox = callPackage ../tools/networking/shadowfox { };
- 
+
   shavee = callPackage ../applications/misc/shavee { };
-  
+
   shell_gpt = callPackage ../tools/misc/shell_gpt { };
 
   shfmt = callPackage ../tools/text/shfmt { };
