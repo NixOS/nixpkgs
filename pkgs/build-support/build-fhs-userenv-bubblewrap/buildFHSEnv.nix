@@ -89,8 +89,7 @@ let
   '';
 
   # Compose /etc for the chroot environment
-  etcPkg = runCommandLocal "${name}-chrootenv-etc" {
-  } ''
+  etcPkg = runCommandLocal "${name}-chrootenv-etc" { } ''
     mkdir -p $out/etc
     cd $out/etc
 
