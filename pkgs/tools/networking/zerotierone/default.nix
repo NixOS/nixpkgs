@@ -87,6 +87,8 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "man" ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = "https://www.zerotier.com";
