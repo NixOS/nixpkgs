@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , lxml
-, pytest
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -21,12 +21,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     lxml
-    pytest
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    py.test $out
-  '';
 
   pythonImportsCheck = [
     "et_xmlfile"
