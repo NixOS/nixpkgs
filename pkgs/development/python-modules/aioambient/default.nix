@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "2022.10.0";
+  version = "2023.04.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,13 +24,12 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Oppi4J0TuLbqwVn1Hpa4xcU9c/I+YDP3E0VXwiP8a/w=";
+    hash = "sha256-ar2UGSlVukMD5EZsEn7TFfIOovaI+B3Ym+UeGo95oks=";
   };
 
   postPatch = ''
-    # https://github.com/bachya/aioambient/pull/97
     substituteInPlace pyproject.toml \
-      --replace 'websockets = ">=9.1,<11.0"' 'websockets = "*"'
+      --replace 'websockets = ">=11.0.1"' 'websockets = "*"'
   '';
 
   nativeBuildInputs = [
