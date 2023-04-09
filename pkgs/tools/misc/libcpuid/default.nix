@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcpuid";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "anrieff";
     repo = "libcpuid";
     rev = "v${version}";
-    sha256 = "sha256-nniSn6HjEWJsn1y7EwmI8Ln6CvfSryXjVfMEfGwuSkQ=";
+    sha256 = "sha256-lhoHqdS5tke462guORg+PURjVmjAgviT5KJHp6PyvUA=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
