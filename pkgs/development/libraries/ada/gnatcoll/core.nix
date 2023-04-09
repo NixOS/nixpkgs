@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/AdaCore/gnatcoll-core";
     description = "GNAT Components Collection - Core packages";
     license = licenses.gpl3Plus;
+    # https://github.com/NixOS/nixpkgs/pull/211526
+    broken = stdenv.isDarwin;
     maintainers = [ maintainers.sternenseemann ];
     platforms = platforms.all;
   };

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildDunePackage
 , fetchurl
 , cstruct
@@ -62,6 +63,7 @@ buildDunePackage rec {
   meta = with lib; {
     description = "Address Resolution Protocol purely in OCaml";
     homepage = "https://github.com/mirage/arp";
+    broken = stdenv.isDarwin;
     license = licenses.isc;
     maintainers = with maintainers; [ sternenseemann ];
   };
