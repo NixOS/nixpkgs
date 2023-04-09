@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlterm";
-  version = "3.9.2";
+  version = "3.9.3";
 
   src = fetchFromGitHub {
     owner = "arakiken";
     repo = pname;
     rev = version;
-    sha256 = "sha256-DvGR3rDegInpnLp3H+rXNXktCGhpjsBBPTRMwodeTro=";
+    sha256 = "sha256-gfs5cdwUUwSBWwJJSaxrQGWJvLkI27RMlk5QvDALEDg=";
   };
 
   nativeBuildInputs = [ pkg-config autoconf wrapGAppsHook ];
