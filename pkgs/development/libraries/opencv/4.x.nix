@@ -79,6 +79,7 @@
 , VideoDecodeAcceleration
 , CoreMedia
 , MediaToolbox
+, Accelerate
 , bzip2
 , callPackage
 }:
@@ -326,7 +327,9 @@ stdenv.mkDerivation {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
-    ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox ]
+    ++ lib.optionals stdenv.isDarwin [
+      bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate
+    ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ]
     ++ lib.optionals enableCuda [ cuda-redist ];
 
