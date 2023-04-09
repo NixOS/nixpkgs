@@ -32583,6 +32583,8 @@ with pkgs;
   ncdc = callPackage ../applications/networking/p2p/ncdc { };
 
   ncspot = callPackage ../applications/audio/ncspot {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+
     withALSA = stdenv.isLinux;
     withPulseAudio = config.pulseaudio or stdenv.isLinux;
     withPortAudio = stdenv.isDarwin;
