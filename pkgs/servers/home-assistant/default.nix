@@ -114,6 +114,28 @@ let
         doCheck = false;
       });
 
+      notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
+        version = "0.1.5";
+        format = "setuptools";
+
+        src = fetchFromGitHub {
+          owner = "engrbm87";
+          repo = "notifications_android_tv";
+          rev = "refs/tags/${version}";
+          hash = "sha256-adkcUuPl0jdJjkBINCTW4Kmc16C/HzL+jaRZB/Qr09A=";
+        };
+
+        nativeBuildInputs = with super; [
+          setuptools
+        ];
+
+        propagatedBuildInputs = with super; [
+          requests
+        ];
+
+        doCheck = false; # no tests
+      });
+
       # Pinned due to API changes in 1.3.0
       ovoenergy = super.ovoenergy.overridePythonAttrs (oldAttrs: rec {
         version = "1.2.0";
