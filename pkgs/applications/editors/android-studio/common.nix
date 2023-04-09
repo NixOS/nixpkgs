@@ -227,6 +227,7 @@ in runCommand
         canary = [ alapshin ];
         dev = canary;
       }."${channel}";
+      mainProgram = pname;
     };
   }
   ''

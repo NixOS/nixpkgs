@@ -1,17 +1,17 @@
-{ pkgs, lib, fetchFromGitHub, buildNpmPackage, python3, nodejs, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, buildNpmPackage, python3, nodejs, nixosTests }:
 
 buildNpmPackage rec {
   pname = "uptime-kuma";
-  version = "1.20.0";
+  version = "1.21.2";
 
   src = fetchFromGitHub {
     owner = "louislam";
     repo = "uptime-kuma";
     rev = version;
-    sha256 = "sha256-dMjhCsTjXOwxhvJeL25KNkFhRCbCuxG7Ccz8mP7P38A=";
+    sha256 = "sha256-Xu5mTerhLjOMnLXhjCdnw4yaznfta3h3D9VGk12JziE=";
   };
 
-  npmDepsHash = "sha256-Ks6KYHP6+ym9PGJ1a5nMxT7JXZyknHeaCmAkjJuCTXU=";
+  npmDepsHash = "sha256-J00sLDfUOIy/ZJTqKrMY1dAyE3HY9Cqm9vTEm2lmLoY=";
 
   patches = [
     # Fixes the permissions of the database being not set correctly
@@ -38,7 +38,10 @@ buildNpmPackage rec {
   meta = with lib; {
     description = "A fancy self-hosted monitoring tool";
     homepage = "https://github.com/louislam/uptime-kuma";
+    changelog = "https://github.com/louislam/uptime-kuma/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ julienmalka ];
+    # FileNotFoundError: [Errno 2] No such file or directory: 'xcrun'
+    broken = stdenv.isDarwin;
   };
 }

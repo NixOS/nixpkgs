@@ -50,7 +50,7 @@ let
 
     bazel = bazel_6;
 
-    bazelTarget = ":pip_pkg";
+    bazelTargets = [ ":pip_pkg" ];
     LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {

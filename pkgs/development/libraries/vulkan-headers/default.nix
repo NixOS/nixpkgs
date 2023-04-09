@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-mzxT6s4ZHShB9tGyyf8jDtVWVEclHPYW+9oKy7v0bC4=";
   };
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Vulkan Header files and API registry";
     homepage    = "https://www.lunarg.com";

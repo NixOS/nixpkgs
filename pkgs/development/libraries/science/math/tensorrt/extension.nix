@@ -27,7 +27,9 @@ final: prev: let
     defaultBuild = { "tensorrt" = if allBuilds ? ${computeName tensorRTDefaultVersion}
       then allBuilds.${computeName tensorRTDefaultVersion}
       else throw "tensorrt-${tensorRTDefaultVersion} does not support your cuda version ${cudaVersion}"; };
-  in allBuilds // defaultBuild;
+  in {
+    inherit buildTensorRTPackage;
+  } // allBuilds // defaultBuild;
 
   tensorRTVersions = {
     "8.4.0" = [

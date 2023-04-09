@@ -13,13 +13,13 @@
 }:
 buildGoModule rec {
   pname = "cosign";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-919oxYi4e56EhSBN0FdcEZBA430owaDnKHkgTneScXw=";
+    hash = "sha256-x03I86WJT+dLToeGzIaPrLJK0G7siVZuJHjE1WjZao0=";
   };
 
   buildInputs =
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorSha256 = "sha256-DtFywktiGHlsdOFVpKUtKLYXJYwQYy1VISfUYVXlOG8=";
+  vendorHash = "sha256-eTyFIuq9G9/0t5ePZNsBpKJ/lcUU0ryqzg6i+nqbHc4=";
 
   subPackages = [
     "cmd/cosign"

@@ -2,7 +2,6 @@
 , stdenv
 , variant ? "standalone"
 , fetchzip
-, fetchpatch
 , cmake
 , pkg-config
 , ninja
@@ -47,20 +46,12 @@ assert lib.assertMsg (builtins.all (d: d != null) variants.${variant}.extraDeps 
 
 stdenv.mkDerivation rec {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchzip {
     url = "https://gmic.eu/files/source/gmic_${version}.tar.gz";
-    hash = "sha256-Z6FU0BRTiOIoM6ViYgcwOifat4/IISFJXvyC8PwR5mA=";
+    hash = "sha256-OTdf9BtaRak/jv1GknidDAkdxf99saBqj6EMoRJDIuo=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "gmic-3.2.2-cmake-fixes.patch";
-      url = "https://github.com/c-koi/gmic-qt/compare/5379307f9e484ad171b8d09e3572b93d120a9159..420e85e005401d942a3ca5f5c39ee3c867fe8bdd.diff";
-      hash = "sha256-l2y9EFtE3nv8NBSSn6Wo0pLRoYO2hoyb5HZk0QmlSpk=";
-    })
-  ];
 
   sourceRoot = "source/gmic-qt";
 

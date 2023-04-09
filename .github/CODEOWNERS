@@ -45,6 +45,7 @@
 /pkgs/build-support/setup-hooks                  @Ericson2314
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
+/pkgs/pkgs-lib                                   @infinisil
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
@@ -132,7 +133,7 @@
 /pkgs/development/ruby-modules      @marsam
 
 # Rust
-/pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq @winterqt @figsoda
+/pkgs/development/compilers/rust @Mic92 @zowoq @winterqt @figsoda
 /pkgs/build-support/rust @zowoq @winterqt @figsoda
 /doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
 

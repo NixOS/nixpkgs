@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "13.0.1";
+  version = "14.0.0";
 
   src = fetchFromGitHub {
     owner = "ellie";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-yNn67lceg1XA72LDRRjCgSsKfEN/P5VUAnKO//ru0nc=";
+    hash = "sha256-P8PTEbTWI+vwWiPvjr4yTwO/JfPzfpUPO0ATi1ILhfk=";
   };
 
-  cargoHash = "sha256-oIK2upvAapYU6WkoWjiwcmq57TDbDBTc+2OjsMdv23E=";
+  cargoHash = if stdenv.isLinux then "sha256-T3Y6WiU6UdLmZiXYekL5cIonqFisU94PpiVlB1sNr9U=" else "sha256-a81gKajbifhDqlKlpnA4FzVX+NktqOCRqlajuuYopCg=";
 
   nativeBuildInputs = [ installShellFiles ];
 

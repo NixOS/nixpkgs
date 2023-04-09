@@ -23,13 +23,13 @@ lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "dracula" "rimless" "nor
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-07-18";
+  version = "2022.11.11";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-dWYRTwfQRMBdg+htxpWatF325rToaovF/43LxX6I1GI=";
+    hash = "sha256-3uiQYiseNEKDahjurjnDj9pakx1p94BfsR3LBO2dd/s=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs install.sh clean-old-theme.sh
+    patchShebangs install.sh
   '';
 
   installPhase = ''
@@ -59,7 +59,7 @@ stdenvNoCC.mkDerivation rec {
       ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
       --dest $out/share/themes
 
-    jdupes --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';

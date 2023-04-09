@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "VictoriaMetrics";
-  version = "1.84.0";
+  version = "1.89.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-94QhjsCow1Ate/Bbia7KpWY3WgHk3oOarAY95Fq75hU=";
+    hash = "sha256-s5Fo0Bsy9cAoNLRMAYjNrSLJ0vX4HdbQ+T3cj6ebNPE=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   postPatch = ''
     # main module (github.com/VictoriaMetrics/VictoriaMetrics) does not contain package
@@ -23,10 +23,16 @@ buildGoModule rec {
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \
       --replace "time.After(10 " "time.After(120 " \
-      --replace "time.After(30 " "time.After(120 "
+      --replace "time.NewTimer(30 " "time.NewTimer(120 " \
+      --replace "time.NewTimer(time.Second * 10)" "time.NewTimer(time.Second * 120)" \
   '';
 
   ldflags = [ "-s" "-w" "-X github.com/VictoriaMetrics/VictoriaMetrics/lib/buildinfo.Version=${version}" ];
+
+  preCheck = ''
+    # `lib/querytracer/tracer_test.go` expects `buildinfo.Version` to be unset
+    export ldflags=''${ldflags//=${version}/=}
+  '';
 
   passthru.tests = { inherit (nixosTests) victoriametrics; };
 
@@ -36,5 +42,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ yorickvp ivan ];
     changelog = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v${version}";
+    mainProgram = "victoria-metrics";
   };
 }

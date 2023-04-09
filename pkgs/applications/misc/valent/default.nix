@@ -5,9 +5,11 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, vala
+, wrapGAppsHook4
 , evolution-data-server-gtk4
 , glib
+, glib-networking
 , gnutls
 , gst_all_1
 , json-glib
@@ -20,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "valent";
-  version = "unstable-2023-03-02";
+  version = "unstable-2023-03-31";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "4b60f28f46bc948c5f3b30189bb9b5fbe29d2745";
+    rev = "bb9fc25a58eeb81abea2bb651accc9538a3a82fd";
     fetchSubmodules = true;
-    sha256 = "sha256-ltf/srQLqtqE71sxEh7VTQqXy2wOpTSdGDsjITOt3f8=";
+    sha256 = "sha256-3pEPE96gFjDGesFs/EZswuv6D3JQEpnAnlCw0IWYkR0=";
   };
 
   nativeBuildInputs = [
@@ -35,12 +37,14 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    vala
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     evolution-data-server-gtk4
     glib
+    glib-networking
     gnutls
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base

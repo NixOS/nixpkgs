@@ -13,6 +13,8 @@
 , gorilla
 , gunicorn
 , importlib-metadata
+, markdown
+, matplotlib
 , numpy
 , packaging
 , pandas
@@ -20,27 +22,36 @@
 , protobuf
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
+, pyarrow
 , pyyaml
 , querystring_parser
 , requests
+, scikit-learn
 , scipy
+, shap
 , simplejson
-, six
 , sqlalchemy
 , sqlparse
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.1.1";
+  version = "2.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oRazzUW7+1CaFyO/1DiL21ZqPlBF483lOQ5mf1kUmKY=";
+    hash = "sha256-PvLC7iDJp63t/zTnVsbtrGLPTZBXZa0OgHS8naoMWAw";
   };
+
+  # Remove currently broken dependency `shap`, a model explainability package.
+  # This seems quite unprincipled especially with tests not being enabled,
+  # but not mlflow has a 'skinny' install option which does not require `shap`.
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRemoveDeps = [ "shap" ];
 
   propagatedBuildInputs = [
     alembic
@@ -54,18 +65,22 @@ buildPythonPackage rec {
     gorilla
     gunicorn
     importlib-metadata
+    markdown
+    matplotlib
     numpy
     packaging
     pandas
     prometheus-flask-exporter
     protobuf
     python-dateutil
+    pyarrow
     pyyaml
     querystring_parser
     requests
+    scikit-learn
     scipy
+    #shap
     simplejson
-    six
     sqlalchemy
     sqlparse
   ];
@@ -74,6 +89,7 @@ buildPythonPackage rec {
     "mlflow"
   ];
 
+  # no tests in PyPI dist
   # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
   # also, tests use conda so can't run on NixOS without buildFHSUserEnv
   doCheck = false;
@@ -84,9 +100,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/mlflow/mlflow/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
-    knownVulnerabilities = [
-      "CVE-2023-1176"
-      "CVE-2023-1177"
-    ];
   };
 }
