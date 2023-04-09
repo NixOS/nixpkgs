@@ -24,6 +24,10 @@ buildPythonPackage rec {
     py.test $out
   '';
 
+  pythonImportsCheck = [
+    "et_xmlfile"
+  ];
+
   meta = with lib; {
     description = "An implementation of lxml.xmlfile for the standard library";
     longDescription = ''
