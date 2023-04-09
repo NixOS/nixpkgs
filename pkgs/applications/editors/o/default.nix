@@ -4,16 +4,16 @@
 
 buildGoModule rec {
   pname = "o";
-  version = "2.58.0";
+  version = "2.60.5";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "o";
     rev = "v${version}";
-    hash = "sha256-oYWlciTQ/4mm/gTSQEkD/xPeLfDjIAMksjj1DVodZW4=";
+    hash = "sha256-gCE4mrZXLFteZKUPDsAc1hS1I/WTns9I9oZE5bAF7fU=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
