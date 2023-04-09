@@ -5589,6 +5589,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-neotest/neotest-python/";
   };
 
+  neotest-vitest = buildVimPluginFrom2Nix {
+    pname = "neotest-vitest";
+    version = "2023-02-27";
+    src = fetchFromGitHub {
+      owner = "marilari88";
+      repo = "neotest-vitest";
+      rev = "643d1fb7a3e874b82f51693bf6d37c427ab54c75";
+      sha256 = "0lshr7w1j2rnaw74kvm72pz9fi6xx2s88s3by56wg82n8hzlnb7h";
+    };
+    meta.homepage = "https://github.com/marilari88/neotest-vitest/";
+  };
+
   neovim-ayu = buildVimPluginFrom2Nix {
     pname = "neovim-ayu";
     version = "2023-02-10";
