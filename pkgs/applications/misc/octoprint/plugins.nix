@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , fetchFromGitLab
+, fetchpatch
 , marlin-calc
 }:
 
@@ -426,25 +427,36 @@ in
 
   octolapse = buildPlugin rec {
     pname = "Octolapse";
-    version = "0.4.1";
+    version = "0.4.2";
 
     src = fetchFromGitHub {
       owner = "FormerLurker";
       repo = pname;
       rev = "v${version}";
-      sha256 = "13q20g7brabplc198jh67lk65rn140r8217iak9b2jy3in8fggv4";
+      sha256 = "sha256-QP6PkKWKUv4uIaYdqTAsZmK7DVes94Q9K/DrBYrWxzY=";
     };
+
+    patches = [
+      # fix version constraint
+      # https://github.com/FormerLurker/Octolapse/pull/894
+      (fetchpatch {
+        url = "https://github.com/FormerLurker/Octolapse/commit/0bd7db2430aef370f2665c6c7011fc3bb559122e.patch";
+        hash = "sha256-z2aEq5sJGarGtIDbTRCvXdSj+kq8HIVvLRWpKutmJNY=";
+      })
+    ];
 
     # Test fails due to code executed on import, see #136513
     #pythonImportsCheck = [ "octoprint_octolapse" ];
 
-    propagatedBuildInputs = with super; [ awesome-slugify setuptools pillow sarge six psutil file-read-backwards ];
+    propagatedBuildInputs = with super; [ awesome-slugify setuptools pillow sarge six pillow psutil file-read-backwards ];
 
     meta = with lib; {
       description = "Stabilized timelapses for Octoprint";
       homepage = "https://github.com/FormerLurker/OctoLapse";
       license = licenses.agpl3Plus;
       maintainers = with maintainers; [ illustris j0hax ];
+      # requires pillow >=6.2.0,<7.0.0
+      broken = true;
     };
   };
 
