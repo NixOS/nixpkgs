@@ -7123,6 +7123,8 @@ with pkgs;
 
   zeek = callPackage ../applications/networking/ids/zeek { };
 
+  zeekscript = callPackage ../tools/security/zeekscript { };
+
   zoekt = callPackage ../tools/text/zoekt { };
 
   zonemaster-cli = perlPackages.ZonemasterCLI;
