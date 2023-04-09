@@ -5553,6 +5553,18 @@ final: prev:
     meta.homepage = "https://github.com/MrcJkb/neotest-haskell/";
   };
 
+  neotest-jest = buildVimPluginFrom2Nix {
+    pname = "neotest-jest";
+    version = "2023-01-26";
+    src = fetchFromGitHub {
+      owner = "haydenmeade";
+      repo = "neotest-jest";
+      rev = "821bb227e31259307db30c88671a1c3724f78637";
+      sha256 = "0zhia9flpzac17rc9l1ybv1x7zfvhmws65i8sq53dp1mlfvimzkp";
+    };
+    meta.homepage = "https://github.com/haydenmeade/neotest-jest/";
+  };
+
   neotest-plenary = buildVimPluginFrom2Nix {
     pname = "neotest-plenary";
     version = "2022-12-30";

@@ -466,6 +466,7 @@ https://github.com/kassio/neoterm/,,
 https://github.com/nvim-neotest/neotest/,HEAD,
 https://github.com/nvim-neotest/neotest-go/,HEAD,
 https://github.com/MrcJkb/neotest-haskell/,HEAD,
+https://github.com/haydenmeade/neotest-jest/,HEAD,
 https://github.com/nvim-neotest/neotest-plenary/,HEAD,
 https://github.com/nvim-neotest/neotest-python/,HEAD,
 https://github.com/rose-pine/neovim/,main,rose-pine
