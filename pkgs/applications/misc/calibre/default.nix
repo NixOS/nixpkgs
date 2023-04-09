@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "calibre";
-  version = "6.11.0";
+  version = "6.15.1";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ylOZ5ljA5uBb2bX/qFhsmPQW6dJVEH9jxQaR2u8C4Wc=";
+    hash = "sha256-t9fG1hBlQmDh0i5ezBoqk9C9oliNNF0peKDz1YH7RBo=";
   };
 
   # https://sources.debian.org/patches/calibre/${version}+dfsg-1
@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
     #  allow for plugin update check, but no calibre version check
     (fetchpatch {
       name = "0001-only-plugin-update.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}-1/debian/patches/0001-only-plugin-update.patch";
       hash = "sha256-uL1mSjgCl5ZRLbSuKxJM6XTfvVwog70F7vgKtQzQNEQ=";
     })
     (fetchpatch {
-      name = "0007-Hardening-Qt-code.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0007-Hardening-Qt-code.patch";
-      hash = "sha256-CutVTb7K4tjewq1xAjHEGUHFcuuP/Z4FFtj4xQb4zKQ=";
+      name = "0006-Hardening-Qt-code.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}-1/debian/patches/0006-Hardening-Qt-code.patch";
+      hash = "sha256-9P1kGrQbWAWDzu5EUiQr7TiCPHRWUA8hxPpEvFpK20k=";
     })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
