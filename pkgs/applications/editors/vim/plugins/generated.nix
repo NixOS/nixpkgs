@@ -5613,6 +5613,18 @@ final: prev:
     meta.homepage = "https://github.com/olimorris/neotest-rspec/";
   };
 
+  neotest-testthat = buildVimPluginFrom2Nix {
+    pname = "neotest-testthat";
+    version = "2022-07-04";
+    src = fetchFromGitHub {
+      owner = "shunsambongi";
+      repo = "neotest-testthat";
+      rev = "63be77b75a2ad33df39e3c4e4de10e163a21cfef";
+      sha256 = "1ljk81sfi900pidmlgxavjcjrffq1dnqfhilqqccnzj5rb1gjnj9";
+    };
+    meta.homepage = "https://github.com/shunsambongi/neotest-testthat/";
+  };
+
   neotest-vitest = buildVimPluginFrom2Nix {
     pname = "neotest-vitest";
     version = "2023-02-27";
