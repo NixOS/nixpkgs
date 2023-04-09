@@ -1,38 +1,77 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, autoreconfHook
-, zeromq, ndpi, json_c, openssl, libpcap, libcap, curl, libmaxminddb
-, rrdtool, sqlite, libmysqlclient, expat, net-snmp
+{ lib
+, stdenv
+, autoreconfHook
+, curl
+, expat
+, fetchFromGitHub
+, git
+, json_c
+, libcap
+, libmaxminddb
+, libmysqlclient
+, libpcap
+, libsodium
+, ndpi
+, net-snmp
+, openssl
+, pkg-config
+, rdkafka
+, gtest
+, rrdtool
+, hiredis
+, sqlite
+, which
+, zeromq
 }:
 
 stdenv.mkDerivation rec {
   pname = "ntopng";
-  version = "5.2.1";
+  version = "5.6";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "ntopng";
-    rev = version;
-    sha256 = "sha256-FeRERSq8F3HEelUCkA6pgNNcP94xrWy6EbJgk+cEdqc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-iGqrS0AneKYwGMEpbKy9if8bnaEu6aEV+QaH+JrF9xs=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ntop/ntopng/commit/0aa580e1a45f248fffe6d11729ce40571f08e187.patch";
-      sha256 = "sha256-xqEVwfGgkNS+akbJnLZsVvEQdp9GxxUen8VkFomtcPI=";
-    })
+  preConfigure = ''
+    substituteInPlace Makefile.in \
+      --replace "/bin/rm" "rm"
+  '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    git
+    pkg-config
+    which
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-
   buildInputs = [
-    zeromq ndpi json_c openssl libpcap curl libmaxminddb rrdtool sqlite
-    libmysqlclient expat net-snmp libcap
+    curl
+    expat
+    json_c
+    libcap
+    libmaxminddb
+    libmysqlclient
+    libpcap
+    gtest
+    hiredis
+    libsodium
+    net-snmp
+    openssl
+    rdkafka
+    rrdtool
+    sqlite
+    zeromq
   ];
 
   autoreconfPhase = "bash autogen.sh";
 
-  preConfigure = ''
-    substituteInPlace Makefile.in --replace "/bin/rm" "rm"
-  '';
+  configureFlags = [
+    "--with-ndpi-includes=${ndpi}/include/ndpi"
+    "--with-ndpi-static-lib=${ndpi}/lib/"
+  ];
 
   preBuild = ''
     sed -e "s|\(#define CONST_BIN_DIR \).*|\1\"$out/bin\"|g" \
@@ -44,9 +83,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High-speed web-based traffic analysis and flow collection tool";
-    homepage = "http://www.ntop.org/products/ntop/";
+    homepage = "https://www.ntop.org/products/traffic-analysis/ntop/";
+    changelog = "https://github.com/ntop/ntopng/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }
