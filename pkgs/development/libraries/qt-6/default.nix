@@ -15,11 +15,7 @@
 , cmake
 , ninja
 , writeText
-, gstreamer
-, gst-plugins-base
-, gst-plugins-good
-, gst-libav
-, gst-vaapi
+, gst_all_1
 , gtk3
 , dconf
 , libglvnd
@@ -111,7 +107,7 @@ let
       qtlanguageserver = callPackage ./modules/qtlanguageserver.nix { };
       qtlottie = callPackage ./modules/qtlottie.nix { };
       qtmultimedia = callPackage ./modules/qtmultimedia.nix {
-        inherit gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
+        inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
         inherit (darwin.apple_sdk_11_0.frameworks) VideoToolbox;
       };
       qtnetworkauth = callPackage ./modules/qtnetworkauth.nix { };
