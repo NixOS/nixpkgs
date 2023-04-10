@@ -22871,7 +22871,7 @@ with pkgs;
   openct = callPackage ../development/libraries/openct { };
 
   opencv2 = callPackage ../development/libraries/opencv {
-    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit;
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit Accelerate;
     ffmpeg = ffmpeg_4;
   };
 
@@ -31561,6 +31561,10 @@ with pkgs;
   kup = libsForQt5.callPackage ../applications/misc/kup { };
 
   kupfer = callPackage ../applications/misc/kupfer { };
+
+  kuro = callPackage ../applications/misc/kuro {
+    electron = electron_22;
+  };
 
   kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
