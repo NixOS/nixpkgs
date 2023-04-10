@@ -118,14 +118,11 @@ in
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       boot.loader.systemd-boot.memtest86.enable = true;
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-        "memtest86-efi"
-      ];
     };
 
     testScript = ''
       machine.succeed("test -e /boot/loader/entries/memtest86.conf")
-      machine.succeed("test -e /boot/efi/memtest86/BOOTX64.efi")
+      machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
     '';
   };
 
@@ -152,15 +149,12 @@ in
       imports = [ common ];
       boot.loader.systemd-boot.memtest86.enable = true;
       boot.loader.systemd-boot.memtest86.entryFilename = "apple.conf";
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-        "memtest86-efi"
-      ];
     };
 
     testScript = ''
       machine.fail("test -e /boot/loader/entries/memtest86.conf")
       machine.succeed("test -e /boot/loader/entries/apple.conf")
-      machine.succeed("test -e /boot/efi/memtest86/BOOTX64.efi")
+      machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
     '';
   };
 
