@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-jellyfin";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "Mopidy-Jellyfin";
-    sha256 = "0j7v5xx3c401r5dw1sqm1n2263chjga1d3ml85rg79hjhhhacy75";
+    sha256 = "";
   };
 
   propagatedBuildInputs = [ mopidy python3Packages.unidecode python3Packages.websocket-client ];
@@ -23,3 +23,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ maintainers.pstn ];
   };
 }
+
