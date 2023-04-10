@@ -895,72 +895,82 @@ in {
                 ${toString i} --value="${toString v}"
             '') ([ cfg.hostName ] ++ cfg.config.extraTrustedDomains));
 
-        in {
-          wantedBy = [ "multi-user.target" ];
-          before = [ "phpfpm-nextcloud.service" ];
-          path = [ occ ];
-          script = ''
-            ${optionalString (c.dbpassFile != null) ''
-              if [ ! -r "${c.dbpassFile}" ]; then
-                echo "dbpassFile ${c.dbpassFile} is not readable by nextcloud:nextcloud! Aborting..."
+        in lib.mkMerge [
+          {
+            wantedBy = [ "multi-user.target" ];
+            before = [ "phpfpm-nextcloud.service" ];
+            path = [ occ ];
+            script = ''
+              ${optionalString (c.dbpassFile != null) ''
+                if [ ! -r "${c.dbpassFile}" ]; then
+                  echo "dbpassFile ${c.dbpassFile} is not readable by nextcloud:nextcloud! Aborting..."
+                  exit 1
+                fi
+                if [ -z "$(<${c.dbpassFile})" ]; then
+                  echo "dbpassFile ${c.dbpassFile} is empty!"
+                  exit 1
+                fi
+              ''}
+              if [ ! -r "${c.adminpassFile}" ]; then
+                echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
                 exit 1
               fi
-              if [ -z "$(<${c.dbpassFile})" ]; then
-                echo "dbpassFile ${c.dbpassFile} is empty!"
+              if [ -z "$(<${c.adminpassFile})" ]; then
+                echo "adminpassFile ${c.adminpassFile} is empty!"
                 exit 1
               fi
-            ''}
-            if [ ! -r "${c.adminpassFile}" ]; then
-              echo "adminpassFile ${c.adminpassFile} is not readable by nextcloud:nextcloud! Aborting..."
-              exit 1
-            fi
-            if [ -z "$(<${c.adminpassFile})" ]; then
-              echo "adminpassFile ${c.adminpassFile} is empty!"
-              exit 1
-            fi
 
-            ln -sf ${cfg.package}/apps ${cfg.home}/
+              ln -sf ${cfg.package}/apps ${cfg.home}/
 
-            # Install extra apps
-            ln -sfT \
-              ${pkgs.linkFarm "nix-apps"
-                (mapAttrsToList (name: path: { inherit name path; }) cfg.extraApps)} \
-              ${cfg.home}/nix-apps
+              # Install extra apps
+              ln -sfT \
+                ${pkgs.linkFarm "nix-apps"
+                  (mapAttrsToList (name: path: { inherit name path; }) cfg.extraApps)} \
+                ${cfg.home}/nix-apps
 
-            # create nextcloud directories.
-            # if the directories exist already with wrong permissions, we fix that
-            for dir in ${datadir}/config ${datadir}/data ${cfg.home}/store-apps ${cfg.home}/nix-apps; do
-              if [ ! -e $dir ]; then
-                install -o nextcloud -g nextcloud -d $dir
-              elif [ $(stat -c "%G" $dir) != "nextcloud" ]; then
-                chgrp -R nextcloud $dir
+              # create nextcloud directories.
+              # if the directories exist already with wrong permissions, we fix that
+              for dir in ${datadir}/config ${datadir}/data ${cfg.home}/store-apps ${cfg.home}/nix-apps; do
+                if [ ! -e $dir ]; then
+                  install -o nextcloud -g nextcloud -d $dir
+                elif [ $(stat -c "%G" $dir) != "nextcloud" ]; then
+                  chgrp -R nextcloud $dir
+                fi
+              done
+
+              ln -sf ${overrideConfig} ${datadir}/config/override.config.php
+
+              # Do not install if already installed
+              if [[ ! -e ${datadir}/config/config.php ]]; then
+                ${occInstallCmd}
               fi
-            done
 
-            ln -sf ${overrideConfig} ${datadir}/config/override.config.php
+              ${occ}/bin/nextcloud-occ upgrade
 
-            # Do not install if already installed
-            if [[ ! -e ${datadir}/config/config.php ]]; then
-              ${occInstallCmd}
-            fi
+              ${occ}/bin/nextcloud-occ config:system:delete trusted_domains
 
-            ${occ}/bin/nextcloud-occ upgrade
+              ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
+                  # Try to enable apps
+                  ${occ}/bin/nextcloud-occ app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
+              ''}
 
-            ${occ}/bin/nextcloud-occ config:system:delete trusted_domains
-
-            ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
-                # Try to enable apps
-                ${occ}/bin/nextcloud-occ app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
-            ''}
-
-            ${occSetTrustedDomainsCmd}
-          '';
-          serviceConfig.Type = "oneshot";
-          serviceConfig.User = "nextcloud";
-          # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
-          # an automatic creation of the database user.
-          environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
-        };
+              ${occSetTrustedDomainsCmd}
+            '';
+            serviceConfig.Type = "oneshot";
+            serviceConfig.User = "nextcloud";
+            # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
+            # an automatic creation of the database user.
+            environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
+          }
+          (lib.mkIf (cfg.database.createLocally && cfg.config.dbtype == "pgsql") {
+            requires = [ "postgresql.service" ];
+            after = [ "postgresql.service" ];
+          })
+          (lib.mkIf (cfg.database.createLocally && cfg.config.dbtype == "mysql") {
+            requires = [ "mysql.service" ];
+            after = [ "mysql.service" ];
+          })
+        ];
         nextcloud-cron = {
           after = [ "nextcloud-setup.service" ];
           environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
