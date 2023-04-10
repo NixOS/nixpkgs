@@ -1063,6 +1063,7 @@ with self;
   };
 
   vcaml = janePackage {
+    duneVersion = "3";
     pname = "vcaml";
     hash = "12fd29x9dgf4f14xrx7z4y1bm1wbfynrs3jismjbiqnckfpbqrib";
     meta.description = "OCaml bindings for the Neovim API";
