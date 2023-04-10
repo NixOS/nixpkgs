@@ -3,7 +3,6 @@
 python3Packages.buildPythonPackage rec {
   pname = "cc2538-bsl";
   version = "unstable-2022-08-03";
-  setuptoolsVersion = "0.1.dev0+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub rec {
     owner = "JelmerT";
@@ -20,9 +19,7 @@ python3Packages.buildPythonPackage rec {
     python-magic
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${setuptoolsVersion}"
-  '';
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.1.dev0+g${lib.substring 0 7 src.rev}";
 
   postInstall = ''
     # Remove .py from binary
