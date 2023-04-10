@@ -32817,9 +32817,7 @@ with pkgs;
     boost = boost175;
   };
 
-  openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio {
-    fmt = fmt_8;
-  };
+  openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio { };
 
   openjump = callPackage ../applications/misc/openjump { };
 
