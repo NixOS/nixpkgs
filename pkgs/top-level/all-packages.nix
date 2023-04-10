@@ -7114,6 +7114,8 @@ with pkgs;
 
   zeek = callPackage ../applications/networking/ids/zeek { };
 
+  zeekscript = callPackage ../tools/security/zeekscript { };
+
   zoekt = callPackage ../tools/text/zoekt { };
 
   zonemaster-cli = perlPackages.ZonemasterCLI;
@@ -29686,9 +29688,7 @@ with pkgs;
 
   edlin = callPackage ../applications/editors/edlin { };
 
-  o = callPackage ../applications/editors/o {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  orbiton = callPackage ../applications/editors/orbiton { };
 
   oed = callPackage ../applications/editors/oed { };
 
@@ -32205,6 +32205,7 @@ with pkgs;
   mpvpaper = callPackage ../tools/wayland/mpvpaper { };
 
   mpvScripts = recurseIntoAttrs {
+    acompressor = callPackage ../applications/video/mpv/scripts/acompressor.nix {};
     autoload = callPackage ../applications/video/mpv/scripts/autoload.nix { };
     convert = callPackage ../applications/video/mpv/scripts/convert.nix { };
     inhibit-gnome = callPackage ../applications/video/mpv/scripts/inhibit-gnome.nix { };
