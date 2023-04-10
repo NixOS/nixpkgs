@@ -12,7 +12,11 @@
   <xi:include href="using/configuration.chapter.xml" />
   <xi:include href="using/overlays.chapter.xml" />
   <xi:include href="using/overrides.chapter.xml" />
+ </part>
+ <part>
+  <title>Nixpkgs <code>lib</code></title>
   <xi:include href="functions.xml" />
+  <xi:include href="module-system/module-system.chapter.xml" />
  </part>
  <part xml:id="part-stdenv">
   <title>Standard environment</title>
