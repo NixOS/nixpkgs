@@ -134,6 +134,7 @@ mkDerivation rec {
   qtWrapperArgs = [
     "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
     "--prefix PATH : ${libredwg}/bin"
+    "--set QT_QPA_PLATFORM xcb"
   ];
 
   postFixup = ''
