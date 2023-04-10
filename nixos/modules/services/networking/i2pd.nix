@@ -14,7 +14,7 @@ let
   *     * User calls `mkSecret` for every credential he want to be substituted at runtime
   *     * Credential placeholder (after `credential.finalize`) is propagated in config to `/nix/store`
   *   # Runtime
-  *     * Systemd ensures that given path is presented (`RequiresMountsFor` and `AssertPathExists`)
+  *     * Systemd ensures that given path exists (`RequiresMountsFor` and `AssertPathExists`)
   *     * Systemd reads credential to `$CREDENTIALS_DIRECTORY/<id>`
   *     * Script copies config files from `/nix/store` to `/tmp` and tries to substitute credentials from `$CREDENTIALS_DIRECTORY`
   */
@@ -28,7 +28,7 @@ let
         };
       };
     };
-    # Escaped credential format: `start + runtimePath + stop`
+    # Escaped credential format: `start + id + stop`
     start = "@";
     stop = "@";
     # Substitute all credentials with placeholder
@@ -63,7 +63,6 @@ in
             default = null;
             description = mdDoc description;
           };
-        # Common for all tunnels except exploratory
         # https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#i2cp-parameters
         i2cp = {
           leaseSetType = attrEnum'
@@ -113,7 +112,7 @@ in
       };
       gracefulShutdown = mkEnableOption "" // {
         description = mdDoc ''
-          If true, i2pd will be wait for closing transit connections.
+          If true, i2pd will wait for transit connections to close.
           Enabling this option **may delay system shutdown/reboot/rebuild-switch up to 10 minutes!**
         '';
       };
@@ -124,9 +123,8 @@ in
       config =
         mkOption {
           description = mdDoc ''
-            Free-form main i2pd configuration. Options are directly propogated to `i2pd.conf`.
+            Free-form main i2pd configuration. Options are passed to `i2pd.conf`.
             See `https://i2pd.readthedocs.io/en/latest/user-guide/configuration/`
-            Note: Free option values are unchecked.
           '';
           type = types.submodule {
             freeformType = format.type;
@@ -136,12 +134,19 @@ in
                 default = "error";
                 description = mdDoc "The log level";
               };
-              bandwidth = templates.attrEnum'
-                ((a: a // listToAttrs (forEach (attrValues a) (k: nameValuePair k k)))
-                  { "32KBps" = "L"; "256KBps" = "O"; "2048KBps" = "P"; "UNLIMITED" = "X"; })
-                ''Set a router bandwidth limit: integer in KBps or word.
-                Note that integer bandwith will be rounded.
-                If not set, {command}`i2pd` defaults to 32KBps.'';
+              bandwidth = mkOption {
+                type = with types; nullOr (oneOf [
+                  int
+                  (enum [ "L" "O" "P" "X" ])
+                  (attrEnum { "32KBps" = "L"; "256KBps" = "O"; "2048KBps" = "P"; "UNLIMITED" = "X"; })
+                ]);
+                default = null;
+                description = mdDoc ''
+                  Set a router bandwidth limit: integer in KBps or alias.
+                  Note that integer bandwith will be rounded.
+                  If not set, {command}`i2pd` defaults to `32KBps`.
+                '';
+              };
             };
             config = mapAttrsRecursive (_: mkDefault) {
               http.enabled = true;
@@ -163,11 +168,11 @@ in
         };
 
       # Server/generic tunnels
-      inTunnels = mkOption {
+      serverTunnels = mkOption {
         description = mdDoc ''
-          Free-form "server" tunnels. Options are directly propogated to `tunnels.conf`.
+          Free-form "server" tunnels. Options are passed to `tunnels.conf`.
+          Mnemonic: we serving some service to others.
           See `https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#servergeneric-tunnels`
-          Note: Free options are unchecked.
         '';
         type = types.attrsOf (types.submodule {
           freeformType = format.type;
@@ -187,11 +192,11 @@ in
       };
 
       # Client tunnels
-      outTunnels = mkOption {
+      clientTunnels = mkOption {
         description = mdDoc ''
-          Free-form "client" tunnels. Options are directly propogated to `tunnels.conf`.
+          Free-form "client" tunnels. Options are passed to `tunnels.conf`.
+          Mnemonic: we connect to someone as a client.
           See `https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#client-tunnels`
-          Note: Free options are unchecked.
         '';
         type = types.attrsOf (types.submodule {
           freeformType = format.type;
@@ -210,23 +215,22 @@ in
         default = { };
       };
 
-      # Auxilary function
+      # Interface function
       mkSecret = mkOption {
-        type = types.anything // { description = "Function that takes absolute path to runtime credential"; };
+        type = types.anything // { description = "Function that takes absolute path to runtime credential file"; };
         readOnly = true;
         default = path:
           if types.path.check path
           then { "${credential.attributeName}" = path; }
           else throw "Argument is not of type `lib.types.path`";
         description = mdDoc ''
-          Pass content of file at runtime to any free-formed option.
-          Files are being read by `systemd` daemon so no explicit file permissions configuration necessary.
-          Uses `systemd.system-credentials(7)` logic.
+          Pass content of a file to any free-formed option at runtime.
+          Files are read before service starts by `systemd` daemon (with root privileges, so file permissions are ignored).
         '';
         example =
           ''
             {
-              outTunnels."example".destination = with config.services.i2pd; mkSecret "/run/secrets/example-tunnel-destination";
+              clientTunnels."example".destination = with config.services.i2pd; mkSecret "/run/secrets/example-tunnel-destination";
             }
           '';
       };
@@ -245,7 +249,7 @@ in
           })
         ];
     in
-    deprecate "This option is defined by the module implementation."
+    deprecate "This option is defined by the `i2pd` module implementation."
       (map (v: "services.i2pd.config.${v}")
         [ "conf" "tunconf" "pidfile" "log" "logfile" "datadir" "daemon" "service" ]);
 
@@ -257,7 +261,7 @@ in
 
       /* Configuration generator
       *  Simular to `pkgs.formats.ini`, but with few distinctions:
-      *   * Out-of-section options are allowed and printed on top.
+      *   * Out-of-section options are allowed and printed on top of a file.
       *   * Nested sub-values (`a.b.c = ...`) coerced to (`"a.b.c" = ...`).
       */
       format =
@@ -316,7 +320,7 @@ in
             [ -z "$(cat /build/check-output)" ] && (cp ${configPath} $out; exit 0) || exit 1
           '';
 
-      # List of all provided credentials: `[ { id = ...; path = ...; } ... ]`
+      # List of all passed credentials: `[ { id = ...; path = ...; } ... ]`
       credentials =
         let
           scan = attrs:
@@ -324,7 +328,7 @@ in
               (collect (credential.type.check) attrs)
               (getAttr credential.attributeName);
         in
-        concatMap scan [ cfg.config cfg.inTunnels cfg.outTunnels ];
+        concatMap scan [ cfg.config cfg.clientTunnels cfg.serverTunnels ];
 
     in
     mkIf cfg.enable {
@@ -332,10 +336,10 @@ in
         description = "Minimal I2P router";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        # Ensure all credential files are presented
-        unitConfig = {
+        # Ensure all credentials exist
+        unitConfig = rec {
           AssertPathExists = map (getAttr "path") credentials;
-          RequiresMountsFor = map (getAttr "path") credentials;
+          RequiresMountsFor = AssertPathExists;
         };
 
         serviceConfig = {
@@ -370,11 +374,11 @@ in
                 ("%T/tunconf=" +
                   format.tunnels.generate "i2pd-tunnels.conf"
                     (mapAttrs'
-                      (k: v: nameValuePair "out-${k}" (v // { "type" = "client"; }))
-                      (credential.finalize cfg.outTunnels)
+                      (k: v: nameValuePair "client-${k}" (v // { "type" = "client"; }))
+                      (credential.finalize cfg.clientTunnels)
                     // mapAttrs'
-                      (k: v: nameValuePair "in-${k}" (v // { "type" = "server"; }))
-                      (credential.finalize cfg.inTunnels)))
+                      (k: v: nameValuePair "server-${k}" (v // { "type" = "server"; }))
+                      (credential.finalize cfg.serverTunnels)))
               ]
             }";
 
@@ -384,13 +388,13 @@ in
               "conf"    = "%T/conf";
               "tunconf" = "%T/tunconf";
             }}";
-          ## Auto restart
+          # Auto restart
           Restart = if cfg.autoRestart then "on-failure" else "no";
-          ## Graceful shutdown
+          # Graceful shutdown
           KillSignal = if cfg.gracefulShutdown then "SIGINT" else "SIGTERM";
           TimeoutStopSec = if cfg.gracefulShutdown then "10m" else "30s";
           SendSIGKILL = true;
-          ## Hardening
+          # Hardening
           # Taken from https://github.com/archlinux/svntogit-community/blob/packages/i2pd/trunk/030-i2pd-systemd-service-hardening.patch
           PrivateTmp = true;
           ProtectSystem = "strict";
