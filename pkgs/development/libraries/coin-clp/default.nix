@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     repo = "clp";
     rev = "4da587acebc65343faafea8a134c9f251efab5b9";
     deepClone = true;
-    sha256 = "txkbKGVJCH4kJR8sESPZihch8gyyzWUeYfuTANgZjHY=";
+    sha256 = "BWAb73afq+OJsMDCerzulkPaR37Gf1wSOP5N3DGUGtI=";
   };
   nativeBuildInputs = [
     cmake

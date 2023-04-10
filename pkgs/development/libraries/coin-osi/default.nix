@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     repo = "osi";
     rev = "52bafbabf8d29bcfd57818f0dd50ee226e01db7f";
     deepClone = true;
-    sha256 = "V29t8oPk0u7UFyMu76U4B8YhxLh85PdHj4QDOHXFlm0=";
+    sha256 = "r0CJghpokKR9X7Y+2pQ+JZcgDhL78QGlJ3zw+8zV3q0=";
   };
   nativeBuildInputs = [
     cmake

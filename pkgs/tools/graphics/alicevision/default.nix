@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     rev = "672fb43cea53bbf07b262f0e3ee618c62aec2f9b";
     deepClone = true;
     fetchSubmodules = true;
-    sha256 = "DDvHpqSIt6fbH1tufP21iVxtJl6CNE1ppZ2KMDn4t8c=";
+    sha256 = "cuCyK07gSbDF3ZfThMF2Fp6CNgGkgRXsF8ZZJvZyO1c=";
   };
   nativeBuildInputs = [
     cmake
