@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , kdoctools
 , kcmutils
@@ -12,7 +11,6 @@
 , libXcursor
 , pam
 , plasma-framework
-, qtbase
 , qtdeclarative
 , qtx11extras
 , wayland
