@@ -21,8 +21,8 @@ import ./make-test-python.nix {
         appendConfig = ''
           protocols:
           (
-            { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; probe: "builtin"; },
-            { name: "http"; host: "localhost"; port: "80"; probe: "builtin"; },
+            { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; },
+            { name: "http"; host: "localhost"; port: "80"; },
           );
         '';
       };
