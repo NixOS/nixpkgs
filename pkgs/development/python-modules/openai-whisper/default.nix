@@ -92,6 +92,6 @@ buildPythonPackage rec {
     description = "General-purpose speech recognition model";
     homepage = "https://github.com/openai/whisper";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ hexa MayNiklas ];
   };
 }
