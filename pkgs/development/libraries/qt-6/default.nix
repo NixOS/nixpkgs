@@ -38,7 +38,7 @@ let
 
       inherit callPackage srcs;
 
-      qtModule = callPackage ./qtModule.nix { inherit self; };
+      qtModule = callPackage ./qtModule.nix { };
 
       qtbase = callPackage ./modules/qtbase.nix {
         withGtk3 = true;
