@@ -40,8 +40,6 @@ stdenv.mkDerivation rec {
     fcitx5
     fcitx5-gtk
     ibus
-  ] ++ lib.optionals (stdenv.system != "aarch64-linux") [
-    # FIXME Currently broken on aarch64-linux
     uim
   ];
 
@@ -123,6 +121,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ vrthra ramkromberg atemu ];
     platforms = with platforms; linux ++ darwin;
-    broken = stdenv.system == "aarch64-darwin"; # https://github.com/arakiken/mlterm/issues/51
   };
 }
