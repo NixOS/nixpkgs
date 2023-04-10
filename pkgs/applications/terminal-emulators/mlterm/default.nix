@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
     gtk3
     harfbuzz
     fribidi
+    vte
   ] ++ lib.optionals (!stdenv.isDarwin) [
     # need linker magic, not adapted for Darwin yet
     openssl
     libssh2
 
     # Not supported on Darwin
-    vte
     m17n_lib
 
     fcitx5
