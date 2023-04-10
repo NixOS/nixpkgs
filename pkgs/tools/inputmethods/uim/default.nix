@@ -152,7 +152,6 @@ stdenv.mkDerivation rec {
     description = "A multilingual input method framework";
     license     = licenses.bsd3;
     platforms   = platforms.unix;
-    broken      = stdenv.hostPlatform.isAarch64; # fails to build libgcroots (not supported on aarch64)
     maintainers = with maintainers; [ ericsagnes oxij ];
   };
 }
