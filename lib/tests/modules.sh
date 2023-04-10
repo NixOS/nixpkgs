@@ -255,6 +255,8 @@ checkConfigError 'A definition for option .* is not of type .*' \
 ## Freeform modules
 # Assigning without a declared option should work
 checkConfigOutput '^"24"$' config.value ./freeform-attrsOf.nix ./define-value-string.nix
+# Shorthand modules interpret `meta` and `class` as config items
+checkConfigOutput '^true$' options._module.args.value.result ./freeform-attrsOf.nix ./define-freeform-keywords-shorthand.nix
 # No freeform assignments shouldn't make it error
 checkConfigOutput '^{ }$' config ./freeform-attrsOf.nix
 # but only if the type matches
