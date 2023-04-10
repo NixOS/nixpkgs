@@ -184,6 +184,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qjson = callPackage ../development/libraries/qjson { };
 
+  qmlalembic = callPackage ../development/libraries/qmlalembic { };
+  
   qmltermwidget = callPackage ../development/libraries/qmltermwidget {
     inherit (pkgs.darwin.apple_sdk.libs) utmp;
   };
@@ -196,6 +198,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qt5ct = callPackage ../tools/misc/qt5ct { };
 
+  qtalicevision = callPackage ../development/libraries/qtalicevision { };
+  
   qtdbusextended = callPackage ../development/libraries/qtdbusextended { };
 
   qtfeedback = callPackage ../development/libraries/qtfeedback { };
@@ -212,6 +216,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qtmpris = callPackage ../development/libraries/qtmpris { };
 
+  qtoiio = callPackage ../development/libraries/qtoiio { };
+  
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
   qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
