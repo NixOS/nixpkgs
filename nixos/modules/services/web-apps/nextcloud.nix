@@ -352,12 +352,15 @@ in {
       };
       dbhost = mkOption {
         type = types.nullOr types.str;
-        default = "localhost";
+        default = if cfg.database.createLocally then (if cfg.config.dbtype == "pgsql" then "/run/postgresql" else "localhost") else null;
+        defaultText = ''if config.services.nextcloud.database.createLocally
+          then (if config.services.nextcloud.config.dbtype == "pgsql" then "/run/postgresql"
+          else "localhost") else null'';
         description = lib.mdDoc ''
           Database host.
 
-          Note: for using Unix authentication with PostgreSQL, this should be
-          set to `/run/postgresql`.
+          Note: When using Unix authentication with PostgreSQL, this defaults to `/run/postgresql`.
+          When using MySQL, this defaults to `localhost`.
         '';
       };
       dbport = mkOption {
