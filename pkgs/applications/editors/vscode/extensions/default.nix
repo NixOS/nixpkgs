@@ -1056,6 +1056,23 @@ let
         };
       };
 
+      equinusocio.vsc-material-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vsc-material-theme";
+          publisher = "Equinusocio";
+          version = "33.8.0";
+          sha256 = "sha256-+I4AUwsrElT62XNvmuAC2iBfHfjNYY0bmAqzQvfwUYM=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/Equinusocio.vsc-material-theme/changelog";
+          description = "The most epic theme now for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Equinusocio.vsc-material-theme";
+          homepage = "https://github.com/material-theme/vsc-material-theme";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.stunkymonkey ];
+        };
+      };
+
       esbenp.prettier-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "prettier-vscode";
@@ -2191,6 +2208,23 @@ let
           homepage = "https://github.com/NilsJPWerner/autoDocstring";
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.kamadorueda ];
+        };
+      };
+
+      nonylene.dark-molokai-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "dark-molokai-theme";
+          publisher = "nonylene";
+          version = "1.0.5";
+          sha256 = "sha256-2qjV6iSz8DDU1yP1II9sxGSgiETmEtotFvfNjm+cTuI=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/nonylene.dark-molokai-theme/changelog";
+          description = "Theme inspired by VSCode default dark theme, monokai theme and Vim Molokai theme";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=nonylene.dark-molokai-theme";
+          homepage = "https://github.com/nonylene/vscode-dark-molokai-theme";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.amz-x ];
         };
       };
 
