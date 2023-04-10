@@ -217,7 +217,6 @@ python3.pkgs.buildPythonApplication {
     touch .git/HEAD
 
     ln -vsf ${pyEnv} ./out/pyenv
-    ln -vsf ${pyEnv} ./out/pyenv-qt5
     rsync --chmod +w -avP ${anki-nodemodules}/ out/node_modules/
     ln -vsf out/node_modules node_modules
 
