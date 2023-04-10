@@ -1,6 +1,4 @@
-{ stdenv, lib, perl, cmake, ninja, writeText }:
-
-{ self, srcs, patches ? [ ] }:
+{ stdenv, lib, perl, cmake, ninja, writeText, self, srcs, patches ? [ ] }:
 
 args:
 

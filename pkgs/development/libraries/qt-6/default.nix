@@ -33,18 +33,15 @@ let
     mirror = "mirror://qt";
   };
 
-  qtModule =
-    import ./qtModule.nix
-      { inherit stdenv lib perl cmake ninja writeText; }
-      { inherit self srcs; };
-
   addPackages = self: with self;
     let
-      callPackage = self.newScope ({ inherit qtModule stdenv srcs; });
+      callPackage = self.newScope ({ inherit qtModule stdenv srcs cmake; });
     in
     {
 
-      inherit callPackage qtModule srcs;
+      inherit callPackage srcs;
+
+      qtModule = callPackage ./qtModule.nix { inherit self; };
 
       qtbase = callPackage ./modules/qtbase.nix {
         withGtk3 = true;
