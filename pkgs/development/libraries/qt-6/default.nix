@@ -58,7 +58,7 @@ let
           })
         ];
       };
-      env = callPackage ./qt-env.nix {};
+      env = callPackage ./qt-env.nix { };
       full = env "qt-full-${qtbase.version}" ([
         qt3d
         qt5compat
@@ -130,19 +130,21 @@ let
         inherit (darwin.apple_sdk_11_0.frameworks) WebKit;
       };
 
-      wrapQtAppsHook = makeSetupHook {
-        name = "wrap-qt6-apps-hook";
-        propagatedBuildInputs = [ buildPackages.makeWrapper ];
+      wrapQtAppsHook = makeSetupHook
+        {
+          name = "wrap-qt6-apps-hook";
+          propagatedBuildInputs = [ buildPackages.makeWrapper ];
         } ./hooks/wrap-qt-apps-hook.sh;
 
-      qmake = makeSetupHook {
-        name = "qmake6-hook";
-        propagatedBuildInputs = [ self.qtbase.dev ];
-        substitutions = {
-          inherit debug;
-          fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
-        };
-      } ./hooks/qmake-hook.sh;
+      qmake = makeSetupHook
+        {
+          name = "qmake6-hook";
+          propagatedBuildInputs = [ self.qtbase.dev ];
+          substitutions = {
+            inherit debug;
+            fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
+          };
+        } ./hooks/qmake-hook.sh;
     };
 
   # TODO(@Artturin): convert to makeScopeWithSplicing
