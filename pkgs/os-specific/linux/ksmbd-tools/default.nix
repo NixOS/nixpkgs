@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  configureFlags = lib.optional withKerberos "--enable-krb5";
+  configureFlags = [ "--with-rundir=/run" ] ++ lib.optional withKerberos "--enable-krb5";
 
   meta = with lib; {
     description = "Userspace utilities for the ksmbd kernel SMB server";
