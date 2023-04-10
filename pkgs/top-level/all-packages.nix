@@ -25334,6 +25334,8 @@ with pkgs;
 
   olaris-server = callPackage ../servers/olaris { };
 
+  onagre = callPackage ../applications/misc/onagre { };
+
   onlyoffice-documentserver = callPackage ../servers/onlyoffice-documentserver { };
 
   outline = callPackage ../servers/web-apps/outline (lib.fix (super: {
