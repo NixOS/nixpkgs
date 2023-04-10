@@ -4,7 +4,9 @@
 , wrapLisp
 # Broken on newer versions:
 # https://gitlab.common-lisp.net/clpm/clpm/-/issues/51
-, sbcl_2_0_8
+# Once that bug is fixed, replace this with regular ‘sbcl’ and remove all
+# references to sbcl 2.1.9 from nixpkgs, including from sbcl/2.x.nix.
+, _sbcl_2_1_9
 , openssl
 }:
 
@@ -18,10 +20,6 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     sha256 = "sha256-UhaLmbdsIPj6O+s262HUMxuz/5t43JR+TlOjq8Y2CDs=";
   };
-
-  buildInputs = [
-    sbcl_2_0_8
-  ];
 
   propagatedBuildInputs = [
     openssl
@@ -42,7 +40,7 @@ stdenv.mkDerivation rec {
     # ld to complaing about `impure path used in link`.
     export HOME=$TMP
 
-    sbcl --script scripts/build-release.lisp
+    ${_sbcl_2_1_9}/bin/sbcl --script scripts/build-release.lisp
 
     runHook postBuild
   '';
