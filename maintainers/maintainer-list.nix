@@ -5052,6 +5052,12 @@
     githubId = 10353047;
     name = "Tobias Happ";
   };
+  getchoo = {
+    email = "getchoo@tuta.io";
+    github = "getchoo";
+    githubId = 48872998;
+    name = "Seth";
+  };
   gfrascadorio = {
     email = "gfrascadorio@tutanota.com";
     github = "gfrascadorio";
