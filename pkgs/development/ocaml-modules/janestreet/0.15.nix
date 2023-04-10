@@ -898,6 +898,7 @@ with self;
 
   sexp = janePackage {
     pname = "sexp";
+    duneVersion = "3";
     hash = "00xlsymm1mpgs8cqkb6c36vh5hfw0saghvwiqh7jry65qc5nvv9z";
     propagatedBuildInputs = [
       async
