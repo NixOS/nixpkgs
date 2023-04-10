@@ -2,22 +2,11 @@
 , lib
 , stdenv
 , fetchurl
-, fetchgit
 , fetchpatch
-, fetchFromGitHub
 , makeSetupHook
 , makeWrapper
-, bison
-, cups
-, harfbuzz
-, libGL
-, perl
 , cmake
-, ninja
-, writeText
 , gst_all_1
-, gtk3
-, dconf
 , libglvnd
 , darwin
 , buildPackages
@@ -54,7 +43,7 @@ let
       qtbase = callPackage ./modules/qtbase.nix {
         withGtk3 = true;
         inherit (srcs.qtbase) src version;
-        inherit bison cups harfbuzz libGL dconf gtk3 developerBuild;
+        inherit developerBuild;
         inherit (darwin.apple_sdk_11_0.frameworks) AGL AVFoundation AppKit GSS MetalKit;
         patches = [
           ./patches/qtbase-qmake-mkspecs-mac.patch
