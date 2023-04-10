@@ -48,32 +48,32 @@
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.24.10+k3s1";     # k3s git tag
-  k3sCommit = "546a94e9ae1c3be6f9c0dcde32a6e6672b035bc8"; # k3s git commit at the above version
-  k3sRepoSha256 = "sha256-HfkGb3GtR2wQkVIze26aFh6A6W0fegr8ovpSel7oujQ=";
-  k3sVendorSha256 = "sha256-YAerisDr/knlKPaO2fVMZA4FUpwshFmkpi3mJAmLqKM=";
+  k3sVersion = "1.24.12+k3s1";     # k3s git tag
+  k3sCommit = "57e8adb524611d79c4e17c27f15c5066e54b0421"; # k3s git commit at the above version
+  k3sRepoSha256 = "sha256-V3I8swgdN6AWp4kt3TDnc+Xr3bH7JNHL6QnjfCKYVwA=";
+  k3sVendorSha256 = "sha256-dfj5uv9BUXbPZ4MJHv0KCKlUL4GdiYk44v/JnMAbPOk=";
 
-  # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/v1.24.10%2Bk3s1/scripts/download#L29-L32
-  # see also https://github.com/k3s-io/k3s/blob/v1.24.10%2Bk3s1/manifests/traefik.yaml#L8-L16
+  # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/v1.24.12%2Bk3s1/scripts/download#L29-L32
+  # see also https://github.com/k3s-io/k3s/blob/v1.24.12%2Bk3s1/manifests/traefik.yaml#L8-L16
   # At the time of writing, there are two traefik charts, and that's it
   charts = import ./chart-versions.nix;
 
-  # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.24.10%2Bk3s1/scripts/version.sh#L56
+  # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.24.12%2Bk3s1/scripts/version.sh#L61
   k3sRootVersion = "0.12.1";
   k3sRootSha256 = "sha256-xCXbarWztnvW2xn3cGa84hie3OevVZeGEDWh+Uf3RBw=";
 
-  # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.24.10%2Bk3s1/scripts/version.sh#L49
+  # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.24.12%2Bk3s1/scripts/version.sh#L54
   k3sCNIVersion = "1.1.1-k3s1";
   k3sCNISha256 = "14mb3zsqibj1sn338gjmsyksbm0mxv9p016dij7zidccx2rzn6nl";
 
   # taken from go.mod, the 'github.com/containerd/containerd' line
   # run `grep github.com/containerd/containerd go.mod | head -n1 | awk '{print $4}'`
-  # https://github.com/k3s-io/k3s/blob/v1.24.10%2Bk3s1/go.mod#L10
-  containerdVersion = "1.5.16-k3s1";
-  containerdSha256 = "sha256-dxC44qE1A20Hd2j77Ir9Sla8xncttswWIuGGM/5FWi8=";
+  # https://github.com/k3s-io/k3s/blob/v1.24.12%2Bk3s1/go.mod#L10
+  containerdVersion = "1.5.18-k3s1";
+  containerdSha256 = "sha256-zx+HZWqouXLCFNk6qNHFp6uDDwfvdlrIReGvRanfn/E=";
 
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
-  # https://github.com/k3s-io/k3s/blob/v1.24.10%2Bk3s1/go.mod#L18
+  # https://github.com/k3s-io/k3s/blob/v1.24.12%2Bk3s1/go.mod#L18
   criCtlVersion = "1.24.0-k3s1";
 
   baseMeta = k3s.meta;
@@ -184,7 +184,7 @@ let
     postInstall = ''
       mv $out/bin/server $out/bin/k3s
       pushd $out
-      # taken verbatim from https://github.com/k3s-io/k3s/blob/v1.24.10%2Bk3s1/scripts/build#L123-L131
+      # taken verbatim from https://github.com/k3s-io/k3s/blob/v1.24.12%2Bk3s1/scripts/build#L123-L131
       ln -s k3s ./bin/k3s-agent
       ln -s k3s ./bin/k3s-server
       ln -s k3s ./bin/k3s-etcd-snapshot
