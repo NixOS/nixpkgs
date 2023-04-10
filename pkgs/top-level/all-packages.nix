@@ -17739,6 +17739,11 @@ with pkgs;
     isBootstrap = true;
   };
 
+  cmakeMinimalGcc = callPackage ../development/tools/build-managers/cmake {
+    isBootstrap = true;
+    stdenv = gccStdenv;
+  };
+
   cmakeCurses = cmake.override {
     uiToolkits = [ "ncurses" ];
   };
