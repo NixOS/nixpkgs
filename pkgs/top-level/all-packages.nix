@@ -10718,6 +10718,8 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
+  nordvpn = callPackage ../tools/networking/nordvpn { };
+
   oq = callPackage ../development/tools/oq { };
 
   out-of-tree = callPackage ../development/tools/out-of-tree { };
