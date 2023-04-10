@@ -35,7 +35,15 @@ let
 
   addPackages = self: with self;
     let
-      callPackage = self.newScope ({ inherit qtModule stdenv srcs cmake; });
+      callPackage = self.newScope ({
+        inherit qtModule srcs;
+        stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+        cmake = cmake.overrideAttrs (attrs: {
+          patches = attrs.patches ++ [
+            ./patches/cmake.patch
+          ];
+        });
+      });
     in
     {
 
@@ -46,7 +54,7 @@ let
       qtbase = callPackage ./modules/qtbase.nix {
         withGtk3 = true;
         inherit (srcs.qtbase) src version;
-        inherit bison cups harfbuzz libGL dconf gtk3 developerBuild cmake;
+        inherit bison cups harfbuzz libGL dconf gtk3 developerBuild;
         inherit (darwin.apple_sdk_11_0.frameworks) AGL AVFoundation AppKit GSS MetalKit;
         patches = [
           ./patches/qtbase-qmake-mkspecs-mac.patch
