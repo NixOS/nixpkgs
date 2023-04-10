@@ -17,6 +17,7 @@
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
+, grossHackForStagingNext ? false
 
 # Whether or not to add `-B` and `-L` to `nix-support/cc-{c,ld}flags`
 , useCcForLibs ?
@@ -407,7 +408,11 @@ stdenv.mkDerivation {
       touch "$out/nix-support/libcxx-cxxflags"
       touch "$out/nix-support/libcxx-ldflags"
     ''
-    + optionalString (libcxx == null && (useGccForLibs && gccForLibs.langCC or false)) ''
+    # Adding -isystem flags should be done only for clang; gcc
+    # already knows how to find its own libstdc++, and adding
+    # additional -isystem flags will confuse gfortran (see
+    # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
+    + optionalString (libcxx == null && (if grossHackForStagingNext then isClang else true) && (useGccForLibs && gccForLibs.langCC or false)) ''
       for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
