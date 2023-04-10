@@ -4,9 +4,9 @@ buildDunePackage rec {
   pname = "pecu";
   version = "0.6";
 
-  useDune2 = true;
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/mirage/pecu/releases/download/v${version}/pecu-v${version}.tbz";
