@@ -33,6 +33,11 @@ buildPythonPackage rec {
     # https://github.com/FreeOpcUa/opcua-asyncio/issues/1263
     substituteInPlace setup.py \
       --replace ", 'asynctest'" ""
+
+    # Workaround hardcoded paths in test
+    # "test_cli_tools_which_require_sigint"
+    substituteInPlace tests/test_tools.py \
+      --replace "tools/" "$out/bin/"
   '';
 
   propagatedBuildInputs = [
@@ -53,11 +58,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "asyncua"
-  ];
-
-  disabledTests = [
-    # Hard coded path only works from root of src
-    "test_cli_tools_which_require_sigint"
   ];
 
   meta = with lib; {
