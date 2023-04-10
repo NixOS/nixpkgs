@@ -2211,6 +2211,23 @@ let
         };
       };
 
+      nonylene.dark-molokai-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "dark-molokai-theme";
+          publisher = "nonylene";
+          version = "1.0.5";
+          sha256 = "sha256-2qjV6iSz8DDU1yP1II9sxGSgiETmEtotFvfNjm+cTuI=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/nonylene.dark-molokai-theme/changelog";
+          description = "Theme inspired by VSCode default dark theme, monokai theme and Vim Molokai theme";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=nonylene.dark-molokai-theme";
+          homepage = "https://github.com/nonylene/vscode-dark-molokai-theme";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.amz-x ];
+        };
+      };
+
       nvarner.typst-lsp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "typst-lsp";
