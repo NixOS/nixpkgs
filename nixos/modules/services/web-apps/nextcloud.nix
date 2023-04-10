@@ -733,8 +733,8 @@ in {
     }
 
     { assertions = [
-      { assertion = cfg.database.createLocally -> cfg.config.dbtype == "mysql";
-        message = ''services.nextcloud.config.dbtype must be set to mysql if services.nextcloud.database.createLocally is set to true.'';
+      { assertion = cfg.database.createLocally -> lib.elem cfg.config.dbtype [ "pgsql" "mysql" ];
+        message = "services.nextcloud.config.dbtype must be `pgsql` or `mysql` if services.nextcloud.database.createLocally is enabled";
       }
     ]; }
 
@@ -1003,7 +1003,7 @@ in {
 
       environment.systemPackages = [ occ ];
 
-      services.mysql = lib.mkIf cfg.database.createLocally {
+      services.mysql = lib.mkIf (cfg.database.createLocally && cfg.config.dbtype == "mysql") {
         enable = true;
         package = lib.mkDefault pkgs.mariadb;
         ensureDatabases = [ cfg.config.dbname ];
@@ -1019,6 +1019,15 @@ in {
             IDENTIFIED BY '${builtins.readFile( cfg.config.dbpassFile )}';
           FLUSH privileges;
         '';
+      };
+
+      services.postgresql = lib.mkIf (cfg.database.createLocally && cfg.config.dbtype == "pgsql") {
+        enable = true;
+        ensureDatabases = [ cfg.config.dbname ];
+        ensureUsers = [{
+          name = cfg.config.dbuser;
+          ensurePermissions = { "DATABASE ${cfg.config.dbname}" = "ALL PRIVILEGES"; };
+        }];
       };
 
       services.nginx.enable = mkDefault true;
