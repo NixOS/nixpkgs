@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  # fixupPhase results in fatal error in SBCL, `Can't find sbcl.core`
-  dontFixup = true;
+  # Stripping binaries results in fatal error in SBCL, `Can't find sbcl.core`
+  dontStrip = true;
 
   meta = with lib; {
     description = "Common Lisp Package Manager";
