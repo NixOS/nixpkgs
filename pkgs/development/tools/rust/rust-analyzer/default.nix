@@ -13,14 +13,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2023-04-04";
-  cargoSha256 = "sha256-TeoSMRISS1ztxCqU+TZp7t5odQ9xhaO7LdUJfwpVbxU=";
+  version = "2023-04-10";
+  cargoSha256 = "sha256-rusQ8hB3SjztLJW3fFO0AUz50J+H5Y3K3bM7GhGRrSU=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-IPBtZCOh3BdrR+V77cL7r6WQnclWcZ/85BDYnmq/GnQ=";
+    sha256 = "sha256-efcZC+/FH3ZXMgDL3K5RIzKeD0Ow1ci096cXkTsP8SQ=";
   };
 
   auditable = true; # TODO: remove when this is the default
