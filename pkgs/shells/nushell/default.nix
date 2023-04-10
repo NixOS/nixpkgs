@@ -16,6 +16,7 @@
 , libgit2
 , doCheck ? true
 , withDefaultFeatures ? true
+, withDataframes ? true
 , additionalFeatures ? (p: p)
 , testers
 , nushell
@@ -47,7 +48,10 @@ rustPlatform.buildRustPackage (
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ xorg.libX11 ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
-  buildFeatures = additionalFeatures [ (lib.optional withDefaultFeatures "default") ];
+  buildFeatures = additionalFeatures [
+    (lib.optional withDefaultFeatures "default")
+    (lib.optional withDataframes "dataframe")
+  ];
 
   # TODO investigate why tests are broken on darwin
   # failures show that tests try to write to paths
