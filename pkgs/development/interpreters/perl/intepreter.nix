@@ -72,7 +72,7 @@ stdenv.mkDerivation (rec {
 
     ++ lib.optional stdenv.isSunOS ./ld-shared.patch
     ++ lib.optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-    ++ lib.optional crossCompiling ./MakeMaker-cross.patch;
+    ++ lib.optional crossCompiling ./cross.patch;
 
   # This is not done for native builds because pwd may need to come from
   # bootstrap tools when building bootstrap perl.
