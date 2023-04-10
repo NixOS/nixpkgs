@@ -20128,8 +20128,6 @@ with pkgs;
 
   geographiclib = callPackage ../development/libraries/geographiclib { };
 
-  geogram = callPackage ../development/libraries/geogram { };
-  
   geoip = callPackage ../development/libraries/geoip { };
 
   geoipjava = callPackage ../development/libraries/java/geoipjava { };
@@ -37253,8 +37251,6 @@ with pkgs;
   };
 
   cliquer = callPackage ../development/libraries/science/math/cliquer { };
-
-  coin-utils = callPackage ../development/libraries/science/math/coin-utils { };
 
   ecos = callPackage ../development/libraries/science/math/ecos { };
 
