@@ -19,11 +19,8 @@ in
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Make Memtest86+ (or MemTest86 if EFI support is enabled),
-          a memory testing program, available from the
-          GRUB boot menu. MemTest86 is an unfree program, so
-          this requires `allowUnfree` to be set to
-          `true`.
+          Make Memtest86+, a memory testing program, available from the
+          GRUB boot menu.
         '';
       };
 
@@ -65,20 +62,13 @@ in
 
   config = mkMerge [
     (mkIf (cfg.enable && efiSupport) {
-      assertions = [
-        {
-          assertion = cfg.params == [];
-          message = "Parameters are not available for MemTest86";
-        }
-      ];
-
       boot.loader.grub.extraFiles = {
-        "memtest86.efi" = "${pkgs.memtest86-efi}/BOOTX64.efi";
+        "memtest.efi" = "${memtest86}/memtest.efi";
       };
 
       boot.loader.grub.extraEntries = ''
-        menuentry "Memtest86" {
-          chainloader /memtest86.efi
+        menuentry "Memtest86+" {
+          chainloader /memtest.efi ${toString cfg.params}
         }
       '';
     })
