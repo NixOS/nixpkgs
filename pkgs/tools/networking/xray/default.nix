@@ -51,7 +51,7 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/xray \
-      --suffix XRAY_LOCATION_ASSET : $assetsDrv/share/v2ray
+      --suffix V2RAY_LOCATION_ASSET : $assetsDrv/share/v2ray
   '';
 
   passthru = {

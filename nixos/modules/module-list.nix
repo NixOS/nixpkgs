@@ -99,6 +99,7 @@
   ./hardware/video/switcheroo-control.nix
   ./hardware/video/uvcvideo/default.nix
   ./hardware/video/webcam/facetimehd.nix
+  ./hardware/video/webcam/ipu6.nix
   ./hardware/wooting.nix
   ./hardware/xone.nix
   ./hardware/xpadneo.nix
@@ -1130,6 +1131,7 @@
   ./services/video/replay-sorcery.nix
   ./services/video/rtsp-simple-server.nix
   ./services/video/unifi-video.nix
+  ./services/video/v4l2-relayd.nix
   ./services/wayland/cage.nix
   ./services/web-apps/akkoma.nix
   ./services/web-apps/alps.nix

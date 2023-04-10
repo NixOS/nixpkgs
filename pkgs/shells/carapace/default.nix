@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, carapace }:
 
 buildGoModule rec {
   pname = "carapace";
@@ -13,6 +13,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-s8U0ERAb/qLwen8ABfeZ21HLTgHWvHaYHazztSeP87c=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
+
   subPackages = [ "./cmd/carapace" ];
 
   tags = [ "release" ];
@@ -21,10 +27,12 @@ buildGoModule rec {
     go generate ./...
   '';
 
+  passthru.tests.version = testers.testVersion { package = carapace; };
+
   meta = with lib; {
     description = "Multi-shell multi-command argument completer";
     homepage = "https://rsteube.github.io/carapace-bin/";
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [ star-szr ];
     license = licenses.mit;
     platforms = platforms.unix;
   };

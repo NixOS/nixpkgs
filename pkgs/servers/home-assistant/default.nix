@@ -109,6 +109,33 @@ let
         };
       });
 
+      # moto tests are a nuissance
+      moto = super.moto.overridePythonAttrs (_: {
+        doCheck = false;
+      });
+
+      notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
+        version = "0.1.5";
+        format = "setuptools";
+
+        src = fetchFromGitHub {
+          owner = "engrbm87";
+          repo = "notifications_android_tv";
+          rev = "refs/tags/${version}";
+          hash = "sha256-adkcUuPl0jdJjkBINCTW4Kmc16C/HzL+jaRZB/Qr09A=";
+        };
+
+        nativeBuildInputs = with super; [
+          setuptools
+        ];
+
+        propagatedBuildInputs = with super; [
+          requests
+        ];
+
+        doCheck = false; # no tests
+      });
+
       # Pinned due to API changes in 1.3.0
       ovoenergy = super.ovoenergy.overridePythonAttrs (oldAttrs: rec {
         version = "1.2.0";
@@ -208,11 +235,11 @@ let
       });
 
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.6";
+        version = "2.0.9";
         src = super.fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
-          hash = "sha256-w0PwtUZJX116I5xwv1CpmkjXMhwWW4Kvr6hIO56+v24=";
+          hash = "sha256-lXGSFePscze59Xw8LtoOanYZvhlKUWbAfB5Zn2r8IPo=";
         };
       });
 
@@ -249,6 +276,16 @@ let
         };
       });
 
+      websockets = super.websockets.overridePythonAttrs (oldAttrs: rec {
+        version = "11.0.1";
+        src = fetchFromGitHub {
+          owner = "aaugustin";
+          repo = "websockets";
+          rev = "refs/tags/${version}";
+          hash = "sha256-cD8pC7n2OGS8AjG0VdjNXi8jXxvN7yKkadNR0GCqc90=";
+        };
+      });
+
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
@@ -273,7 +310,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.4.1";
+  hassVersion = "2023.4.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -289,7 +326,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p9dR8q9eWxDGo+cBXO0zd9MFdB7pFeAfLfudHsYxcK8=";
+    hash = "sha256-Fl8CxHK8Gg4wf+kyptyiLZx8MG/eI5kTr+pSLEl729I=";
   };
 
   # Secondary source is git for tests
@@ -297,7 +334,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-TSTn2o37XMmcU4XCPCMwvRNWW7BUadcfbK7NU/ulsNE=";
+    hash = "sha256-XCxFi7ts4KQdKl68YP4Ps60SWW22NoNuoGFo50xbl8s=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

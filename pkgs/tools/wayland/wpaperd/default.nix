@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wpaperd";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "danyspin97";
     repo = pname;
     rev = version;
-    sha256 = "n1zlC2afog0UazsJEBAzXpnhVDeP3xqpNGXlJ65umHQ=";
+    sha256 = "cgjHCSBrkX3aoz42qBS/1JUGhc7sZKarKByntp7ubaQ=";
   };
 
   nativeBuildInputs = [
@@ -21,9 +21,14 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "timer-0.2.0" = "sha256-yofy6Wszf6EwNGGdVDWNG0RcbpvBgv5/BdOjAFxghwc=";
+      "smithay-client-toolkit-0.16.0" = "iPDL7pxTez4EnIBaUH25lLSWpu3RRL2QBF9pfdTDsP8=";
     };
   };
+
+  postPatch = ''
+    rm Cargo.lock
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   meta = with lib; {
     description = "Minimal wallpaper daemon for Wayland";

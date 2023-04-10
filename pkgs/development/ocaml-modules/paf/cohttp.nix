@@ -22,7 +22,6 @@ buildDunePackage {
   inherit (paf)
     version
     src
-    patches
     ;
 
   duneVersion = "3";

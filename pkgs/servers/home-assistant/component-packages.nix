@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.4.1";
+  version = "2023.4.2";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -2483,7 +2483,8 @@
       nextdns
     ];
     "nfandroidtv" = ps: with ps; [
-    ]; # missing inputs: notifications-android-tv
+      notifications-android-tv
+    ];
     "nibe_heatpump" = ps: with ps; [
       nibe
     ];
@@ -4761,6 +4762,7 @@
     "nextbus"
     "nextcloud"
     "nextdns"
+    "nfandroidtv"
     "nibe_heatpump"
     "nightscout"
     "nina"
