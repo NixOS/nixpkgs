@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, zip, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, love, zip, fetchpatch, makeWrapper
+, makeDesktopItem, copyDesktopItems }:
+
 stdenv.mkDerivation rec {
   pname = "orthorobot";
   version = "1.1.1";
@@ -11,32 +13,39 @@ stdenv.mkDerivation rec {
   };
 
   icon = fetchurl {
-    url = "http://stabyourself.net/images/screenshots/orthorobot-5.png";
+    url = "https://stabyourself.net/images/screenshots/orthorobot-5.png";
     sha256 = "13fa4divdqz4vpdij1lcs5kf6w2c4jm3cc9q6bz5h7lkng31jzi6";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "orthorobot";
-    exec = pname;
-    icon = icon;
-    comment = "Robot game";
-    desktopName = "Orthorobot";
-    genericName = "orthorobot";
-    categories = [ "Game" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "orthorobot";
+      exec = pname;
+      icon = icon;
+      comment = "Robot game";
+      desktopName = "Orthorobot";
+      genericName = "orthorobot";
+      categories = [ "Game" ];
+    })
+  ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ lua love zip ];
+  nativeBuildInputs = [ makeWrapper zip copyDesktopItems ];
 
-  dontBuild = true;
+  patches = [
+    # support for love11
+    (fetchpatch {
+      url = "https://github.com/Stabyourself/orthorobot/pull/3.patch";
+      sha256 = "sha256-WHHP6QM7R5eEkVF+J2pGNnds/OKRIRXyon85wjd3GXI=";
+    })
+  ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/games/lovegames $out/share/applications
-    zip -9 -r ${pname}.love ./*
-    mv ${pname}.love $out/share/games/lovegames/${pname}.love
-    makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-    chmod +x $out/bin/${pname}
+    runHook preInstall
+    zip -9 -r orthorobot.love ./*
+    install -Dm444 -t $out/share/games/lovegames/ orthorobot.love
+    makeWrapper ${love}/bin/love $out/bin/orthorobot \
+                --add-flags $out/share/games/lovegames/orthorobot.love
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -44,6 +53,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.free;
-    downloadPage = "http://stabyourself.net/orthorobot/";
+    downloadPage = "https://stabyourself.net/orthorobot/";
   };
 }
