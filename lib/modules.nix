@@ -511,7 +511,7 @@ let
         imports = m.require or [] ++ m.imports or [];
         options = {};
         config = addFreeformType (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]);
-        class = m.class or null;
+        class = null;
       };
 
   applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }:

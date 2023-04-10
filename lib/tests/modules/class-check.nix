@@ -25,6 +25,7 @@
           ./module-class-is-nixos.nix
           { _file = "foo.nix#darwinModules.default";
             class = "darwin";
+            config = {};
             imports = [];
           }
         ];
