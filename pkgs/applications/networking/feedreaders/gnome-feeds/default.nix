@@ -20,14 +20,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-feeds";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gfeeds";
     rev = version;
-    sha256 = "sha256-qKSgqYt9aIg62VVD7WeW/Pid/7M4fKlCyZIo1cijCi8=";
+    sha256 = "sha256-bdDEAv4R4RRpuUgpLS2codl3tUeHK1gEzLbSgHdGKfg=";
   };
 
   format = "other";
