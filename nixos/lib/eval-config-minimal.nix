@@ -40,7 +40,9 @@ let
     inherit prefix modules;
     specialArgs = {
       modulesPath = builtins.toString ../modules;
-    } // specialArgs;
+    } // specialArgs // {
+      class = "nixos";
+    };
   };
 
 in
