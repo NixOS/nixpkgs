@@ -1,6 +1,7 @@
 { stdenvNoCC
 , lib
 , fetchFromGitHub
+, fetchpatch
 , nixosTests
 , php
 , pkgs
@@ -17,7 +18,17 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-l1SOaQA4C8yXbrfi7pEE1PpUO4DVmLTTDUSACCSQ5LE=";
   };
 
-  passthru.tests = nixosTests.freshrss;
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-22481.patch";
+      url = "https://github.com/FreshRSS/FreshRSS/commit/075cf4c800063e3cc65c3d41a9c23222e8ebb554.patch";
+      sha256 = "sha256-1a9ZWFm6NV9PbfMSAVTDFXT4x+Pr6oTidJK2oMwHW/A=";
+    })
+  ];
+
+  passthru.tests = {
+    inherit (nixosTests) freshrss-sqlite freshrss-pgsql;
+  };
 
   buildInputs = [ php ];
 
