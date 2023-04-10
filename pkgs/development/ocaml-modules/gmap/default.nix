@@ -4,14 +4,14 @@ buildDunePackage rec {
   pname = "gmap";
   version = "0.3.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/hannesm/gmap/releases/download/${version}/gmap-${version}.tbz";
     sha256 = "073wa0lrb0jj706j87cwzf1a8d1ff14100mnrjs8z3xc4ri9xp84";
   };
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
 
   checkInputs = [ alcotest fmt ];
 
