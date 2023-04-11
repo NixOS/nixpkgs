@@ -4802,8 +4802,6 @@ self: super: with self; {
 
   into-dbus-python = callPackage ../development/python-modules/into-dbus-python { };
 
-  intreehooks = callPackage ../development/python-modules/intreehooks { };
-
   invisible-watermark = callPackage ../development/python-modules/invisible-watermark { };
 
   invocations = callPackage ../development/python-modules/invocations { };
