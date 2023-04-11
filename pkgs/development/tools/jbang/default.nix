@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       jbang uses the java language to build scripts similar to groovy scripts. Dependencies are automatically
       downloaded and the java code runs.
     '';
-    homepage = "https://https://www.jbang.dev/";
+    homepage = "https://www.jbang.dev";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ moaxcp ];
