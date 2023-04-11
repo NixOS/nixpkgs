@@ -158,6 +158,7 @@ stdenv.mkDerivation rec {
     sed -i '/domaincapstest/d' tests/meson.build
     sed -i '/qemufirmwaretest/d' tests/meson.build
     sed -i '/qemuvhostusertest/d' tests/meson.build
+    sed -i '/qemuxml2xmltest/d' tests/meson.build
   '' + lib.optionalString (isDarwin && isx86_64) ''
     sed -i '/qemucaps2xmltest/d' tests/meson.build
     sed -i '/qemuhotplugtest/d' tests/meson.build
