@@ -1,35 +1,26 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{ lib, fetchFromGitHub, php }:
 
-let
+php.buildComposerProject (finalAttrs: {
   pname = "phpmd";
   version = "2.13.0";
-in
-mkDerivation {
-  inherit pname version;
 
-  src = fetchurl {
-    url = "https://github.com/phpmd/phpmd/releases/download/${version}/phpmd.phar";
-    sha256 = "LNR7qT3KIhIeq9WPdXVGsnuzzXN4ze/juDMpt1Ke/A0=";
+  src = fetchFromGitHub {
+    owner = "phpmd";
+    repo = "phpmd";
+    rev = finalAttrs.version;
+    hash = "sha256-4ZBtoAJC8nnfwZavIVDt33+yKQ1ZNLBym/UT11ciax8=";
   };
 
-  dontUnpack = true;
+  # TODO: Open a PR against https://github.com/phpmd/phpmd
+  # Missing `composer.lock` from the repository.
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-Y/3zSRUsuRUyV53wQI+vavudx2jVUV8rZv4CThX8DJE=";
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/phpmd/phpmd.phar
-    makeWrapper ${php}/bin/php $out/bin/phpmd \
-      --add-flags "$out/libexec/phpmd/phpmd.phar"
-    runHook postInstall
-  '';
-
-  meta = with lib; {
-    changelog = "https://github.com/phpmd/phpmd/releases/tag/${version}";
+  meta = {
+    changelog = "https://github.com/phpmd/phpmd/releases/tag/${finalAttrs.version}";
     description = "PHP code quality analyzer";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://phpmd.org/";
-    maintainers = teams.php.members;
+    maintainers = lib.teams.php.members;
   };
-}
+})
