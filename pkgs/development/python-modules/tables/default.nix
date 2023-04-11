@@ -16,6 +16,7 @@
   # Test inputs
 , python
 , pytest
+, py-cpuinfo
 }:
 
 buildPythonPackage rec {
@@ -42,9 +43,10 @@ buildPythonPackage rec {
   ];
   propagatedBuildInputs = [
     blosc2
+    py-cpuinfo
     numpy
     numexpr
-    packaging  # uses packaging.version at runtime
+    packaging # uses packaging.version at runtime
   ];
 
   # When doing `make distclean`, ignore docs
