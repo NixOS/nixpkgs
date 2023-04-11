@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , gitUpdater
+, testers
 , fetchFromGitHub
 , meson
 , ninja
@@ -19,14 +20,14 @@
 
 assert withGUI -> qtbase != null && wrapQtAppsHook != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alice-tools" + lib.optionalString withGUI "-qt${lib.versions.major qtbase.version}";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "nunuhara";
     repo = "alice-tools";
-    rev = version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-DazWnBeI5XShkIx41GFZLP3BbE0O8T9uflvKIZUXCHo=";
   };
@@ -76,7 +77,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    updateScript = gitUpdater { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = lib.optionalString withGUI "env QT_QPA_PLATFORM=minimal " + "${lib.getExe finalAttrs.finalPackage} --version";
+    };
+  };
 
   meta = with lib; {
     description = "Tools for extracting/editing files from AliceSoft games";
@@ -86,4 +93,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ OPNA2608 ];
     mainProgram = if withGUI then "galice" else "alice";
   };
-}
+})
