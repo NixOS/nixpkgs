@@ -2542,6 +2542,10 @@ self: super: {
     commonmark-extensions = lself.commonmark-extensions_0_2_3_2;
   });
 
+  # Test files missing from sdist
+  # https://github.com/tweag/webauthn/issues/166
+  webauthn = dontCheck super.webauthn;
+
   # doctest <0.19
   polysemy = doJailbreak super.polysemy;
 
