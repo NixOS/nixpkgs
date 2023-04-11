@@ -14855,15 +14855,6 @@ with pkgs;
     profiledCompiler = false;
   });
 
-  gfortran-tmp-noisystem = wrapCCWith { grossHackForStagingNext = true; cc = (gcc.cc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-    disableBootstrap = false;
-  }); };
-
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
     langFortran = true;
@@ -15345,12 +15336,8 @@ with pkgs;
   julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
   julia_18-bin = callPackage ../development/compilers/julia/1.8-bin.nix { };
 
-  julia_18 = callPackage ../development/compilers/julia/1.8.nix {
-    gfortran = gfortran-tmp-noisystem;
-  };
-  julia_19 = callPackage ../development/compilers/julia/1.9.nix {
-    gfortran = gfortran-tmp-noisystem;
-  };
+  julia_18 = callPackage ../development/compilers/julia/1.8.nix { };
+  julia_19 = callPackage ../development/compilers/julia/1.9.nix { };
 
   julia-lts-bin = julia_16-bin;
   julia-stable-bin = julia_18-bin;
