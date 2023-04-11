@@ -1469,6 +1469,12 @@
     githubId = 574938;
     name = "Jonathan Glines";
   };
+  austin-artificial = {
+    email = "austin.platt@artificial.io";
+    github = "austin-artificial";
+    githubId = 126663376;
+    name = "Austin Platt";
+  };
   austinbutler = {
     email = "austinabutler@gmail.com";
     github = "austinbutler";
