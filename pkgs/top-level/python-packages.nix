@@ -12236,6 +12236,8 @@ self: super: with self; {
     unicorn-emu = pkgs.unicorn;
   };
 
+  unicurses = callPackage ../development/python-modules/unicurses { };
+
   unicrypto = callPackage ../development/python-modules/unicrypto { };
 
   unidecode = callPackage ../development/python-modules/unidecode { };
