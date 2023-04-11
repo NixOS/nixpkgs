@@ -14243,6 +14243,18 @@ final: prev:
     meta.homepage = "https://github.com/folke/which-key.nvim/";
   };
 
+  whitespace-nvim = buildVimPluginFrom2Nix {
+    pname = "whitespace.nvim";
+    version = "2023-02-13";
+    src = fetchFromGitHub {
+      owner = "johnfrankmorgan";
+      repo = "whitespace.nvim";
+      rev = "525f67b3f01910c73f07f0848839aab0b7ab9f42";
+      sha256 = "0kv2b099jc9592g0b381rdgzv5wvryy3v95bfk1sdjr9bmzdyjn9";
+    };
+    meta.homepage = "https://github.com/johnfrankmorgan/whitespace.nvim/";
+  };
+
   wilder-nvim = buildVimPluginFrom2Nix {
     pname = "wilder.nvim";
     version = "2022-08-13";
