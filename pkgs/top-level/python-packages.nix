@@ -5627,6 +5627,8 @@ self: super: with self; {
 
   linuxfd = callPackage ../development/python-modules/linuxfd { };
 
+  lion-pytorch = callPackage ../development/python-modules/lion-pytorch { };
+
   liquidctl = callPackage ../development/python-modules/liquidctl { };
 
   lirc = toPythonModule (pkgs.lirc.override {
