@@ -1,32 +1,20 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{ fetchFromGitHub, lib, php }:
 
-let
+php.buildComposerProject (finalAttrs: {
   pname = "phpstan";
-  version = "1.9.4";
-in
-mkDerivation {
-  inherit pname version;
+  version = "1.10.14";
 
-  src = fetchurl {
-    url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-    sha256 = "sha256-A+F/ZoL6dLYx4MWN0eWXtQnmWJPYBqEcSgY4A1oR3mo=";
+  src = fetchFromGitHub {
+    owner = "phpstan";
+    repo = "phpstan-src";
+    rev = finalAttrs.version;
+    hash = "sha256-6f2BzwuoCK0koj4HxNFenIm2rACKMuBKnh468EqVmUY=";
   };
 
-  dontUnpack = true;
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/phpstan/phpstan.phar
-    makeWrapper ${php}/bin/php $out/bin/phpstan \
-      --add-flags "$out/libexec/phpstan/phpstan.phar"
-    runHook postInstall
-  '';
+  vendorHash = "sha256-OIOIL6FCA/FDHAZ8YL3LSNw1cSKIeUzC7oR9lAk4t4c=";
 
   meta = with lib; {
-    changelog = "https://github.com/phpstan/phpstan/releases/tag/${version}";
+    changelog = "https://github.com/phpstan/phpstan/releases/tag/${finalAttrs.version}";
     description = "PHP Static Analysis Tool";
     longDescription = ''
       PHPStan focuses on finding errors in your code without actually
@@ -39,4 +27,4 @@ mkDerivation {
     homepage = "https://github.com/phpstan/phpstan";
     maintainers = teams.php.members;
   };
-}
+})
