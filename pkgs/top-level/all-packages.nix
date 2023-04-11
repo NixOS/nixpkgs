@@ -11354,6 +11354,8 @@ with pkgs;
 
   pubs = callPackage ../tools/misc/pubs { };
 
+  pulldown-cmark = callPackage ../tools/typesetting/pulldown-cmark { };
+
   pulumictl = callPackage ../development/tools/pulumictl { };
 
   pure-prompt = callPackage ../shells/zsh/pure-prompt { };
