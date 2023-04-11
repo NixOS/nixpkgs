@@ -24570,13 +24570,6 @@ with pkgs;
     pkg = callPackage ../development/compilers/sbcl/bootstrap.nix {};
     faslExt = "fasl";
   };
-  # This is a deprecated derivation, marked internal to avoid third party
-  # packages depending on it. It is used for CLPM only, and will be removed
-  # soon.
-  _sbcl_2_1_9 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.9"; };
-    faslExt = "fasl";
-  };
   sbcl_2_2_11 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.11"; };
     faslExt = "fasl";

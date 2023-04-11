@@ -2,13 +2,19 @@
 , stdenv
 , fetchgit
 , wrapLisp
-# Broken on newer versions:
-# https://gitlab.common-lisp.net/clpm/clpm/-/issues/51
-# Once that bug is fixed, replace this with regular ‘sbcl’ and remove all
-# references to sbcl 2.1.9 from nixpkgs, including from sbcl/2.x.nix.
-, _sbcl_2_1_9
 , openssl
+, sbcl
 }:
+
+# Broken on newer versions:
+# "https://gitlab.common-lisp.net/clpm/clpm/-/issues/51". Once that bug is
+# fixed, remove this, and all 2.1.9 references from the SBCL build file.
+with rec {
+  sbcl_2_1_9 = sbcl.override (_: {
+    version = "2.1.9";
+  });
+};
+
 
 stdenv.mkDerivation rec {
   pname = "clpm";
@@ -40,7 +46,7 @@ stdenv.mkDerivation rec {
     # ld to complaing about `impure path used in link`.
     export HOME=$TMP
 
-    ${_sbcl_2_1_9}/bin/sbcl --script scripts/build-release.lisp
+    ${sbcl_2_1_9}/bin/sbcl --script scripts/build-release.lisp
 
     runHook postBuild
   '';
