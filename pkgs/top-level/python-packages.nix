@@ -3261,6 +3261,8 @@ self: super: with self; {
 
   expecttest = callPackage ../development/python-modules/expecttest { };
 
+  expiring-dict = callPackage ../development/python-modules/expiring-dict { };
+
   expiringdict = callPackage ../development/python-modules/expiringdict { };
 
   explorerscript = callPackage ../development/python-modules/explorerscript { };
@@ -10829,6 +10831,10 @@ self: super: with self; {
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
 
   simplehound = callPackage ../development/python-modules/simplehound { };
+
+  simpleitk = callPackage ../development/python-modules/simpleitk {
+    inherit (pkgs) simpleitk;
+  };
 
   simplejson = callPackage ../development/python-modules/simplejson { };
 

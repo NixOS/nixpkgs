@@ -4,13 +4,13 @@ let
   nodejs = nodejs-16_x;
 
   pname = "audiobookshelf";
-  version = "2.2.15";
+  version = "2.2.18";
 
   src = fetchFromGitHub {
     owner = "advplyr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BrIXbembbcfSPOPknoY2Vn9I85eHyOQLDCMsFOMORgM=";
+    sha256 = "sha256-Ar+OK6HiKf2/47HE+1iTw8MVz9A6qZg1hpZQdZ/40UM=";
   };
 
   client = buildNpmPackage {
@@ -24,7 +24,7 @@ let
     NODE_OPTIONS = "--openssl-legacy-provider";
 
     npmBuildScript = "generate";
-    npmDepsHash = "sha256-eyZdeBsZ5XBoO/4djXZzOOr/h9kDSUULbqgdOZJNNCg=";
+    npmDepsHash = "sha256-Hsa7ZauUTtYQcCxw1cpuxQ/RfdRvBIh3PO1DXDUbELk=";
   };
 
   wrapper = import ./wrapper.nix {
@@ -38,7 +38,7 @@ in buildNpmPackage {
 
   dontNpmBuild = true;
   npmInstallFlags = "--only-production";
-  npmDepsHash = "sha256-KbewULna+0mftIcdO5Z4A5rOrheBndpgzjkE1Jytfr4=";
+  npmDepsHash = "sha256-0PFeXiS8RSffhrocrHODNpb6d9+nbpulCW5qYIrytDI=";
 
   installPhase = ''
     mkdir -p $out/opt/client

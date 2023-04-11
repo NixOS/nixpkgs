@@ -48,6 +48,8 @@
 , libopus
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
+, nativeModemManagerSupport ? true
+, modemmanager
 , ofonoSupport ? true
 , hsphfpdSupport ? true
 , pulseTunnelSupport ? true
@@ -105,6 +107,13 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+
+      # backport patch fixing no sound in some cases
+      # FIXME: remove for next release
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/8748c77451ce332dd24549b414200499ede4f184.diff";
+        hash = "sha256-nxWszqLUbO1XS/DWIBYrGpVZFy2c5+E2V9dlBMekShM=";
+      })
     ];
 
     strictDeps = true;
@@ -139,6 +148,7 @@ let
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt liblc3 sbc fdk_aac libopus ]
+    ++ lib.optional nativeModemManagerSupport modemmanager
     ++ lib.optional pulseTunnelSupport libpulseaudio
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
@@ -169,8 +179,10 @@ let
       "-Dbluez5=${mesonEnableFeature bluezSupport}"
       "-Dbluez5-backend-hsp-native=${mesonEnableFeature nativeHspSupport}"
       "-Dbluez5-backend-hfp-native=${mesonEnableFeature nativeHfpSupport}"
+      "-Dbluez5-backend-native-mm=${mesonEnableFeature nativeModemManagerSupport}"
       "-Dbluez5-backend-ofono=${mesonEnableFeature ofonoSupport}"
       "-Dbluez5-backend-hsphfpd=${mesonEnableFeature hsphfpdSupport}"
+      # source code is not easily obtainable
       "-Dbluez5-codec-lc3plus=disabled"
       "-Dbluez5-codec-lc3=${mesonEnableFeature bluezSupport}"
       "-Dsysconfdir=/etc"
