@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
@@ -104,6 +104,11 @@ in
         description = lib.mdDoc ''
           Whether to enable the GNU GRUB boot loader.
         '';
+      };
+
+      version = mkOption {
+        visible = false;
+        type = types.int;
       };
 
       device = mkOption {
@@ -797,6 +802,10 @@ in
           assertion = cfg.efiInstallAsRemovable -> !config.boot.loader.efi.canTouchEfiVariables;
           message = "If you wish to to use boot.loader.grub.efiInstallAsRemovable, then turn off boot.loader.efi.canTouchEfiVariables";
         }
+        {
+          assertion = !(options.boot.loader.grub.version.isDefined && cfg.version == 1);
+          message = "Support for version 0.9x of GRUB was removed after being unsupported upstream for around a decade";
+        }
       ] ++ flip concatMap cfg.mirroredBoots (args: [
         {
           assertion = args.devices != [ ];
@@ -816,6 +825,11 @@ in
       }));
     })
 
+    (mkIf options.boot.loader.grub.version.isDefined {
+      warnings = [ ''
+        The boot.loader.grub.version option does not have any effect anymore, please remove it from your configuration.
+      '' ];
+    })
   ];
 
 
@@ -845,7 +859,6 @@ in
 
         See the boot.initrd.secrets option documentation for more information.
       '')
-      (mkRemovedOptionModule [ "boot" "loader" "grub" "version" ] "Support for version 0.9x of GRUB was removed after being unsupported upstream for around a decade")
     ];
 
 }
