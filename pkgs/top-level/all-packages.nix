@@ -26925,6 +26925,8 @@ with pkgs;
 
   gosec = callPackage ../development/tools/gosec { };
 
+  gotraceui = callPackage ../development/tools/gotraceui { };
+
   govers = callPackage ../development/tools/govers { };
 
   govendor = callPackage ../development/tools/govendor { };
