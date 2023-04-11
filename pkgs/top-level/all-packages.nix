@@ -260,6 +260,8 @@ with pkgs;
 
   aeskeyfind = callPackage ../tools/security/aeskeyfind { };
 
+  alterx = callPackage ../tools/security/alterx { };
+
   asn = callPackage ../applications/networking/asn { };
 
   asnmap = callPackage ../tools/security/asnmap { };
@@ -11352,6 +11354,8 @@ with pkgs;
 
   pubs = callPackage ../tools/misc/pubs { };
 
+  pulldown-cmark = callPackage ../tools/typesetting/pulldown-cmark { };
+
   pulumictl = callPackage ../development/tools/pulumictl { };
 
   pure-prompt = callPackage ../shells/zsh/pure-prompt { };
@@ -13833,7 +13837,9 @@ with pkgs;
 
   clipnotify = callPackage ../tools/misc/clipnotify { };
 
-  clipboard-jh = callPackage ../tools/misc/clipboard-jh { };
+  clipboard-jh = callPackage ../tools/misc/clipboard-jh {
+    stdenv = if stdenv.isDarwin then llvmPackages_15.stdenv else stdenv;
+  };
 
   clipbuzz = callPackage ../tools/misc/clipbuzz { };
 
@@ -14365,9 +14371,9 @@ with pkgs;
 
   chickenPackages_4 = callPackage ../development/compilers/chicken/4 { };
   chickenPackages_5 = callPackage ../development/compilers/chicken/5 { };
-  chickenPackages = chickenPackages_5;
+  chickenPackages = dontRecurseIntoAttrs chickenPackages_5;
 
-  inherit (chickenPackages)
+  inherit (chickenPackages_5)
     fetchegg
     eggDerivation
     chicken
@@ -18438,6 +18444,8 @@ with pkgs;
   mdl = callPackage ../development/tools/misc/mdl { };
 
   meraki-cli = python3Packages.callPackage ../tools/admin/meraki-cli { };
+
+  mermerd = callPackage ../development/tools/database/mermerd { };
 
   python-matter-server = with python3Packages; toPythonApplication python-matter-server;
 
@@ -26924,6 +26932,8 @@ with pkgs;
   gopkgs = callPackage ../development/tools/gopkgs { };
 
   gosec = callPackage ../development/tools/gosec { };
+
+  gotraceui = callPackage ../development/tools/gotraceui { };
 
   govers = callPackage ../development/tools/govers { };
 
