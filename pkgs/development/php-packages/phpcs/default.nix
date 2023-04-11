@@ -1,35 +1,26 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{ lib, fetchFromGitHub, php }:
 
-let
+php.buildComposerProject (finalAttrs: {
   pname = "phpcs";
-  version = "3.7.1";
-in
-mkDerivation {
-  inherit pname version;
+  version = "3.7.2";
 
-  src = fetchurl {
-    url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-    sha256 = "sha256-ehQyOhSvn1gwLRVEJJLuEHaozXLAGKgWy0SWW/OpsBU=";
+  src = fetchFromGitHub {
+    owner = "squizlabs";
+    repo = "PHP_CodeSniffer";
+    rev = finalAttrs.version;
+    hash = "sha256-EJF9e8gyUy5SZ+lmyWFPAabqnP7Fy5t80gfXWWxLpk8=";
   };
 
-  dontUnpack = true;
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/phpcs/phpcs.phar
-    makeWrapper ${php}/bin/php $out/bin/phpcs \
-      --add-flags "$out/libexec/phpcs/phpcs.phar"
-    runHook postInstall
-  '';
+  # TODO: Open a PR against https://github.com/squizlabs/PHP_CodeSniffer
+  # Missing `composer.lock` from the repository.
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-PoJROKnXXl9ZXIxgYM5wNVwvw/EAU6yII0t7L1e78us=";
 
   meta = with lib; {
-    changelog = "https://github.com/squizlabs/PHP_CodeSniffer/releases/tag/${version}";
+    changelog = "https://github.com/squizlabs/PHP_CodeSniffer/releases/tag/${finalAttrs.version}";
     description = "PHP coding standard tool";
     license = licenses.bsd3;
     homepage = "https://squizlabs.github.io/PHP_CodeSniffer/";
     maintainers = with maintainers; [ javaguirre ] ++ teams.php.members;
   };
-}
+})
