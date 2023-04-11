@@ -1,39 +1,24 @@
-{ stdenv, fetchFromGitHub, makeWrapper, unzip, lib, php81 }:
+{ lib, fetchFromGitHub, php81 }:
 
-let
+php81.buildComposerProject (finalAttrs: {
   pname = "n98-magerun";
   version = "2.3.0";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "netz98";
-    repo = "n98-magerun1-dist";
-    rev = version;
-    sha256 = "sha256-T7wQmEEYMG0J6+9nRt+tiMuihjnjjQ7UWy1C0vKoQY4=";
+    repo = "n98-magerun";
+    rev = finalAttrs.version;
+    sha256 = "sha256-/RffdYgl2cs8mlq4vHtzUZ6j0viV8Ot/cB/cB1dstFM=";
   };
 
-  dontUnpack = true;
+  vendorHash = "sha256-W5wzc94fGn5Q1jlLGOlTmGSFLSXRv+shdfSHtk9YIsg=";
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src/n98-magerun $out/libexec/n98-magerun/n98-magerun-${version}.phar
-    makeWrapper ${php81}/bin/php $out/bin/n98-magerun \
-      --add-flags "$out/libexec/n98-magerun/n98-magerun-${version}.phar" \
-      --prefix PATH : ${lib.makeBinPath [ unzip ]}
-    runHook postInstall
-  '';
-
-  meta = with lib; {
-    description = "The swiss army knife for Magento1/OpenMage developers";
-    license = licenses.mit;
-    homepage = "https://magerun.net/";
-    changelog = "https://magerun.net/category/magerun/";
-    maintainers = teams.php.members;
+  meta = {
     broken = true; # Not compatible with PHP 8.1, see https://github.com/netz98/n98-magerun/issues/1275
+    changelog = "https://magerun.net/category/magerun/";
+    description = "The swiss army knife for Magento1/OpenMage developers";
+    homepage = "https://magerun.net/";
+    license = lib.licenses.mit;
+    maintainers = lib.teams.php.members;
   };
-}
+})
