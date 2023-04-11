@@ -3,15 +3,13 @@
 , ocamlPackages
 , soupault
 , testers
+  # needed while overriding packages
+, fetchFromGitHub
 }:
 
-let
+ocamlPackages.buildDunePackage rec {
   pname = "soupault";
-
-  version = "4.4.0";
-in
-ocamlPackages.buildDunePackage {
-  inherit pname version;
+  version = "4.5.0";
 
   minimalOCamlVersion = "4.13";
 
@@ -22,19 +20,33 @@ ocamlPackages.buildDunePackage {
     owner = "PataphysicalSociety";
     repo = pname;
     rev = version;
-    sha256 = "sha256-M4gaPxBxQ1Bk2C3BwvobYHyaWKIZgQ6buZ6S5wBlvPg=";
+    sha256 = "sha256-LrDP3IX+UARUN98O8yP7lbyWGg2JT7+MtJumW00IiYw=";
   };
 
   buildInputs = with ocamlPackages; [
     base64
-    camomile
+    camlp-streams
+    (callPackage ./camomile-2_0_0.nix { })
     containers
     digestif
+    dune-site
     ezjsonm
     fileutils
     fmt
     jingoo
-    lambdasoup
+    # remove when merged: https://github.com/NixOS/nixpkgs/pull/230755
+    (lambdasoup.overrideAttrs (old: rec {
+      version = "1.0.0";
+      buildInputs = (old.buildInputs or [ ]) ++ (with ocamlPackages; [
+        camlp-streams
+      ]);
+      src = fetchFromGitHub {
+        owner = "aantron";
+        repo = "lambdasoup";
+        rev = version;
+        sha256 = "sha256-PZkhN5vkkLu8A3gYrh5O+nq9wFtig0Q4qD8zLGUGTRI=";
+      };
+    }))
     lua-ml
     logs
     markup
