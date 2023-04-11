@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSEnv
 , gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU
 , libGL, nvidia_cg_toolkit, zlib, openssl, libuuid , alsa-lib, udev, libjack2
 }:
@@ -73,7 +73,7 @@ let
   };
 
 # Lightworks expects some files in /usr/share/lightworks
-in buildFHSUserEnv {
+in buildFHSEnv {
   name = lightworks.name;
 
   targetPkgs = pkgs: [

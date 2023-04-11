@@ -2,7 +2,7 @@
 , lib
 , alsa-lib
 , autoPatchelfHook
-, buildFHSUserEnvBubblewrap
+, buildFHSEnvBubblewrap
 , copyDesktopItems
 , dbus
 , dpkg
@@ -97,7 +97,7 @@ let
     mimeTypes = [ "application/x-pkt" "application/x-pka" "application/x-pkz" ];
   };
 
-  fhs = buildFHSUserEnvBubblewrap {
+  fhs = buildFHSEnvBubblewrap {
     name = "packettracer8";
     runScript = "${ptFiles}/bin/packettracer";
     targetPkgs = pkgs: [ libudev0-shim ];

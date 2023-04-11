@@ -1,5 +1,5 @@
 { makeScopeWithSplicing, generateSplicesForMkScope
-, stdenv, buildFHSUserEnv, pkgsi686Linux
+, stdenv, buildFHSEnv, pkgsi686Linux
 }:
 
 let
@@ -19,7 +19,7 @@ let
         if self.steamArch == "amd64"
         then pkgsi686Linux.steamPackages.steam-runtime-wrapped
         else null;
-      inherit buildFHSUserEnv;
+      inherit buildFHSEnv;
     };
     steam-fhsenv-small = steam-fhsenv.override { withGameSpecificLibraries = false; };
     steamcmd = callPackage ./steamcmd.nix { };

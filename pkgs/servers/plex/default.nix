@@ -1,6 +1,6 @@
 # The actual Plex package that we run is a FHS userenv of the "raw" package.
 { stdenv
-, buildFHSUserEnvBubblewrap
+, buildFHSEnvBubblewrap
 , writeScript
 , plexRaw
 
@@ -9,7 +9,7 @@
 , dataDir ? "/var/lib/plex"
 }:
 
-buildFHSUserEnvBubblewrap {
+buildFHSEnvBubblewrap {
   name = "plexmediaserver";
 
   inherit (plexRaw) meta;
