@@ -2,6 +2,7 @@
 , buildPythonPackage
 , setuptools-scm
 , pythonOlder
+, pythonRelaxDepsHook
 , fetchFromGitHub
 , pytestCheckHook
 , pytest-xdist
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -41,11 +43,7 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  postPatch = ''
-     substituteInPlace pyproject.toml \
-       --replace "numpy >= 1.18.4, < 1.24" "numpy >= 1.18.4" \
-       --replace "numba >= 0.53, < 0.57" "numba >= 0.53" \
-    '';
+  pythonRelaxDeps = [ "numpy" "numba" ];
 
   pythonImportsCheck = [ "galois" ];
 
