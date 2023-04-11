@@ -1,5 +1,5 @@
 { lib
-, buildFHSEnvBubblewrap
+, buildFHSEnv
 , symlinkJoin
 , bottles-unwrapped
 , gst_all_1
@@ -99,8 +99,8 @@ in
 symlinkJoin {
   name = "bottles";
   paths = [
-    (buildFHSEnvBubblewrap (fhsEnv // { name = "bottles"; runScript = "bottles"; }))
-    (buildFHSEnvBubblewrap (fhsEnv // { name = "bottles-cli"; runScript = "bottles-cli"; }))
+    (buildFHSEnv (fhsEnv // { name = "bottles"; runScript = "bottles"; }))
+    (buildFHSEnv (fhsEnv // { name = "bottles-cli"; runScript = "bottles-cli"; }))
   ];
   postBuild = ''
     mkdir -p $out/share

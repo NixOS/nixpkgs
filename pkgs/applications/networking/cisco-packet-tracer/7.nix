@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, buildFHSEnvBubblewrap
+, buildFHSEnv
 , copyDesktopItems
 , dpkg
 , lndir
@@ -40,7 +40,7 @@ let
     mimeTypes = [ "application/x-pkt" "application/x-pka" "application/x-pkz" ];
   };
 
-  fhs = buildFHSEnvBubblewrap {
+  fhs = buildFHSEnv {
     name = "packettracer7";
     runScript = "${ptFiles}/bin/packettracer7";
 
