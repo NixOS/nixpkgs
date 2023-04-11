@@ -1,34 +1,25 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
+{ lib, fetchFromGitHub, php }:
 
-let
+php.buildComposerProject (finalAttrs: {
   pname = "phing";
-  version = "2.17.4";
-in
-mkDerivation {
-  inherit pname version;
+  version = "3.0.0-rc5";
 
-  src = fetchurl {
-    url = "https://github.com/phingofficial/phing/releases/download/v${version}/phing-${version}.phar";
-    sha256 = "sha256-3QZsl5QJkFX5Z4RovMtw2ELCp8Zl4xiZsIBikakJ474=";
+  src = fetchFromGitHub {
+    owner = "phingofficial";
+    repo = "phing";
+    rev = finalAttrs.version;
+    hash = "sha256-g9AKzAl4xO3ax7FNWvh0sqTea6Txapky5Tp7YT5L8ZQ=";
   };
 
-  dontUnpack = true;
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/phing/phing.phar
-    makeWrapper ${php}/bin/php $out/bin/phing \
-      --add-flags "$out/libexec/phing/phing.phar"
-    runHook postInstall
-  '';
+  # TODO: Open a PR against https://github.com/phingofficial/phing
+  # Their `composer.lock` is out of date therefore, we need to provide one
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-6jre6JfKh22Ga0wXDIQNf/NIh0syHmrFtianvluHdyI=";
 
   meta = with lib; {
     description = "PHing Is Not GNU make; it's a PHP project build system or build tool based on Apache Ant";
     license = licenses.lgpl3;
     homepage = "https://github.com/phingofficial/phing";
-    maintainers = with maintainers; teams.php.members;
+    maintainers = teams.php.members;
   };
-}
+})
