@@ -28,9 +28,10 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/tock/tockloader";
-    license = licenses.mit;
     description = "Tool for programming Tock onto hardware boards";
+    homepage = "https://github.com/tock/tockloader";
+    changelog = "https://github.com/tock/tockloader/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
 }
