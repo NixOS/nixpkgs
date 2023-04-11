@@ -4760,6 +4760,18 @@ final: prev:
     meta.homepage = "https://github.com/kkharji/lspsaga.nvim/";
   };
 
+  ltex_extra-nvim = buildVimPluginFrom2Nix {
+    pname = "ltex_extra.nvim";
+    version = "2023-01-29";
+    src = fetchFromGitHub {
+      owner = "barreiroleo";
+      repo = "ltex_extra.nvim";
+      rev = "1d2f288ceedc70d5a9c00f55c0d0cc788b5164f2";
+      sha256 = "1vknp3y3s1pavk9f4n4kb6nnymvcs7pbrnb8ckw18jyk02mfnjfs";
+    };
+    meta.homepage = "https://github.com/barreiroleo/ltex_extra.nvim/";
+  };
+
   lualine-lsp-progress = buildVimPluginFrom2Nix {
     pname = "lualine-lsp-progress";
     version = "2021-10-23";
