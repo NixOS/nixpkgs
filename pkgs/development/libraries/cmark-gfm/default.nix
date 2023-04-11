@@ -14,12 +14,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # remove when https://github.com/github/cmark-gfm/pull/248 merged and released
-  postInstall = ''
-    substituteInPlace $out/include/cmark-gfm-core-extensions.h \
-    --replace '#include "config.h"' '#include <stdbool.h>'
-  '';
-
   meta = with lib; {
     description = "GitHub's fork of cmark, a CommonMark parsing and rendering library and program in C";
     homepage = "https://github.com/github/cmark-gfm";
