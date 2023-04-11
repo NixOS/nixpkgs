@@ -17,11 +17,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.23.2";
+  version = "1.23.3";
 
   src = fetchzip {
     url = "https://github.com/mongodb/mongo-c-driver/releases/download/${version}/mongo-c-driver-${version}.tar.gz";
-    sha256 = "08v7xc5m86apd338swd8g83ccvd6ni75xbdhqqwkrjbznljf8fjf";
+    sha256 = "sha256-wxcBnJENL3hMzf7GKLucjw7K08tK35+0sMNWZb2mWIo=";
   };
 
   # https://github.com/NixOS/nixpkgs/issues/25585

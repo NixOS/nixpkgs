@@ -2045,6 +2045,8 @@ with pkgs;
 
   gst = callPackage ../applications/version-management/gst { };
 
+  gut = callPackage ../applications/version-management/gut { };
+
   hred = callPackage ../development/tools/hred { };
 
   hub = callPackage ../applications/version-management/hub { };
@@ -6345,8 +6347,8 @@ with pkgs;
 
   agebox = callPackage ../tools/security/agebox { };
 
-  age-plugin-yubikey = callPackage ../tools/security/age-plugin-yubikey {
-    inherit (pkgs.darwin.apple_sdk.frameworks) Foundation PCSC;
+  age-plugin-yubikey = darwin.apple_sdk_11_0.callPackage ../tools/security/age-plugin-yubikey {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation PCSC IOKit;
   };
 
   artim-dark = callPackage ../data/themes/artim-dark { };
@@ -23225,20 +23227,7 @@ with pkgs;
   qtEnv = qt5.env;
   qt5Full = qt5.full;
 
-  qt6 = recurseIntoAttrs (makeOverridable
-    (import ../development/libraries/qt-6) {
-      inherit newScope;
-      inherit lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper writeText;
-      inherit bison cups dconf harfbuzz libGL perl gtk3 ninja;
-      inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
-      inherit darwin buildPackages libglvnd;
-      stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-      cmake = cmake.overrideAttrs (attrs: {
-        patches = attrs.patches ++ [
-          ../development/libraries/qt-6/patches/cmake.patch
-        ];
-      });
-    });
+  qt6 = recurseIntoAttrs (callPackage ../development/libraries/qt-6 { });
 
   qt6Packages = recurseIntoAttrs (import ./qt6-packages.nix {
     inherit lib pkgs qt6;
@@ -25331,6 +25320,8 @@ with pkgs;
   oauth2-proxy = callPackage ../servers/oauth2-proxy { };
 
   olaris-server = callPackage ../servers/olaris { };
+
+  onagre = callPackage ../applications/misc/onagre { };
 
   onlyoffice-documentserver = callPackage ../servers/onlyoffice-documentserver { };
 
@@ -31555,6 +31546,10 @@ with pkgs;
   kup = libsForQt5.callPackage ../applications/misc/kup { };
 
   kupfer = callPackage ../applications/misc/kupfer { };
+
+  kuro = callPackage ../applications/misc/kuro {
+    electron = electron_22;
+  };
 
   kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
@@ -37807,7 +37802,7 @@ with pkgs;
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
-  nvc = callPackage ../applications/science/electronics/nvc { };
+  nvc = darwin.apple_sdk_11_0.callPackage ../applications/science/electronics/nvc { };
 
   openems = callPackage ../applications/science/electronics/openems {
     qcsxcad = libsForQt5.qcsxcad;

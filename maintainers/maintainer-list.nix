@@ -850,6 +850,12 @@
     githubId = 858965;
     name = "Andrew Morsillo";
   };
+  amz-x = {
+    email = "mail@amz-x.com";
+    github = "amz-x";
+    githubId = 18249234;
+    name = "Christopher Crouse";
+  };
   AnatolyPopov = {
     email = "aipopov@live.ru";
     github = "AnatolyPopov";
@@ -7094,6 +7100,13 @@
     keys = [{
       fingerprint = "7EB1 C02A B62B B464 6D7C  E4AE D1D0 9DE1 69EA 19A0";
     }];
+  };
+  jfvillablanca = {
+    email = "jmfv.dev@gmail.com";
+    matrix = "@jfvillablanca:matrix.org";
+    github = "jfvillablanca";
+    githubId = 31008330;
+    name = "Jann Marc Villablanca";
   };
   jgart = {
     email = "jgart@dismail.de";
@@ -16931,6 +16944,12 @@
     github = "zagy";
     githubId = 568532;
     name = "Christian Zagrodnick";
+  };
+  zahrun = {
+    email = "zahrun@murena.io";
+    github = "zahrun";
+    githubId = 10415894;
+    name = "Zahrun";
   };
   zakame = {
     email = "zakame@zakame.net";
