@@ -23,6 +23,7 @@
 , freezegun
 , gunicorn
 , pytest-mock
+, pytest-xdist
 , pytestCheckHook
 , re-assert
 , trustme
@@ -79,6 +80,7 @@ buildPythonPackage rec {
     freezegun
     gunicorn
     pytest-mock
+    pytest-xdist
     pytestCheckHook
     re-assert
   ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
@@ -116,7 +118,7 @@ buildPythonPackage rec {
   '' + lib.optionalString stdenv.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"
-   '';
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/aio-libs/aiohttp/blob/v${version}/CHANGES.rst";

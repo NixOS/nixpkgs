@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , fetchpatch
-, fetchurl
 , callPackage
 , pkg-config
 , cmake
@@ -71,13 +70,6 @@ let
       cxxStandard = "20";
     };
   };
-  glibmm = glibmm_2_68.overrideAttrs (_: {
-    version = "2.76.0";
-    src = fetchurl {
-      url = "mirror://gnome/sources/glibmm/2.76/glibmm-2.76.0.tar.xz";
-      sha256 = "sha256-hjfYDOq9lP3dbkiXCggqJkVY1KuCaE4V/8h+fvNGKrI=";
-    };
-  });
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
@@ -147,7 +139,7 @@ stdenv.mkDerivation rec {
     range-v3
     tl-expected
     hunspell
-    glibmm
+    glibmm_2_68
     webkitgtk_4_1
     jemalloc
     rnnoise

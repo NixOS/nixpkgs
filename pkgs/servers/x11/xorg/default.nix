@@ -1402,7 +1402,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libpciaccess = callPackage ({ stdenv, pkg-config, fetchurl, zlib }: stdenv.mkDerivation {
+  libpciaccess = callPackage ({ stdenv, pkg-config, fetchurl, hwdata, zlib }: stdenv.mkDerivation {
     pname = "libpciaccess";
     version = "0.16";
     builder = ./builder.sh;
@@ -1413,7 +1413,8 @@ self: with self; {
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ zlib ];
+    buildInputs = [ hwdata zlib ];
+    configureFlags = [ "--with-pciids-path=${hwdata}/share/hwdata" ];
     meta.platforms = lib.platforms.unix;
   }) {};
 

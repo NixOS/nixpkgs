@@ -71,7 +71,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.67";
+    version = "0.3.68";
 
     outputs = [
       "out"
@@ -89,7 +89,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-YM1WOv/SqaGnYevwoFxoOQhF6loFVx/fVPHQY3mpaH0=";
+      sha256 = "sha256-dm+mgtvXJEBjCYMBbiBHZq42ikfsEDaybMzLMPLxBcE=";
     };
 
     patches = [
@@ -201,7 +201,9 @@ let
         moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
       ''}
 
-      moveToOutput "bin/pipewire-pulse" "$pulse"
+      rm $out/bin/pipewire-pulse
+      mkdir -p $pulse/bin
+      ln -sf $out/bin/pipewire $pulse/bin/pipewire-pulse
 
       moveToOutput "bin/pw-jack" "$jack"
     '';
