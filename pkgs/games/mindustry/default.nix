@@ -34,20 +34,20 @@
 
 let
   pname = "mindustry";
-  version = "142";
+  version = "143.1";
   buildVersion = makeBuildVersion version;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    hash = "sha256-xL1oy93ljAl1hdzsdEF9NHZL/yb11markUg271C++R4=";
+    hash = "sha256-p6HxccLg+sjFW+ZGGTfo5ZvOIs6lKjub88kX/iaBres=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    hash = "sha256-CKcAnYAuHQb6wPkDUpinU83MVxhdvhYpjjuS3sEb6cg=";
+    hash = "sha256-fbFjelwqBRadcUmbW3/oDnhmNAjTj660qB5WwXugIIU=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -126,7 +126,7 @@ let
         | sh
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-Fy2GXdB+cmRfiQFKnnz+UTUxT+LBTZa69BNwC23XD84=";
+    outputHash = "sha256-uxnW5AqX6PazqHJYLuF/By5qpev8Se+992jCyacogSY=";
   };
 
 in
