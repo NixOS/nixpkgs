@@ -1,4 +1,4 @@
-{stdenv, lib}:
+{ stdenv, lib }:
 {
   kernel = stdenv.hostPlatform.parsed.kernel.name;
   abi = stdenv.hostPlatform.parsed.abi.name;
@@ -23,4 +23,29 @@
        !lib.strings.hasPrefix (toString (src + ("/" + f))) path
     ) excludedFiles
   ) src;
+
+  kinds = rec {
+    kind = {
+      lib = "lib";
+      test = "test";
+      bin = "bin";
+      bench = "bench";
+      example = "example";
+    };
+
+    kindToDir = t:
+      if isLib t then "lib" else
+      if isBin t then "bin" else
+      if isTest t then "tests" else
+      if isExample t then "examples" else
+      if isBench t then "benches" else
+      builtins.throw "Invalid kind: ${t}";
+
+    isLib = t: t == kind.lib;
+    isBin = t: t == kind.bin;
+    isTest = t: t == kind.test;
+    isBench = t: t == kind.bench;
+    isExample = t: t == kind.example;
+  };
+
 }
