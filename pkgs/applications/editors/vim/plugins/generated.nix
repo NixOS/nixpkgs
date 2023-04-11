@@ -9005,6 +9005,18 @@ final: prev:
     meta.homepage = "https://github.com/wellle/tmux-complete.vim/";
   };
 
+  tmux-nvim = buildVimPluginFrom2Nix {
+    pname = "tmux.nvim";
+    version = "2023-03-11";
+    src = fetchFromGitHub {
+      owner = "aserowy";
+      repo = "tmux.nvim";
+      rev = "9ba03cc5dfb30f1dc9eb50d0796dfdd52c5f454e";
+      sha256 = "0xkdihg0f9b0wc37zml7n3wsmy8ppy08zynv8f2j90xwlwad06b4";
+    };
+    meta.homepage = "https://github.com/aserowy/tmux.nvim/";
+  };
+
   tmuxline-vim = buildVimPluginFrom2Nix {
     pname = "tmuxline.vim";
     version = "2021-07-20";
