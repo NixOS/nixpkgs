@@ -5,6 +5,7 @@
 , version
 , desktopName
 , longDescription
+, broken ? false
 , buildFHSEnv
 , extraBuildInputs ? [ ]
 , jdk
@@ -94,6 +95,7 @@ buildFHSEnv {
     ];
     license = licenses.unfree;
     platforms = platforms.linux;
+    inherit broken;
     mainProgram = pname;
     maintainers = [ maintainers.pwoelfel ];
   };
