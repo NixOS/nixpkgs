@@ -25006,9 +25006,7 @@ with pkgs;
     buildGoModule = buildGo119Module; # nixosTests.grafana-agent go 1.20 failure
   };
 
-  grafana-loki = callPackage ../servers/monitoring/loki {
-    buildGoModule = buildGo119Module; # nixosTests.loki go 1.20 failure
-  };
+  grafana-loki = callPackage ../servers/monitoring/loki { };
   promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
 
   mimir = callPackage ../servers/monitoring/mimir { };
