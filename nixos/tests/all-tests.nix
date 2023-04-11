@@ -233,6 +233,7 @@ in {
   firewall = handleTest ./firewall.nix { nftables = false; };
   firewall-nftables = handleTest ./firewall.nix { nftables = true; };
   fish = handleTest ./fish.nix {};
+  flake-auto-upgrade = handleTest ./flake-auto-upgrade.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
   fluentd = handleTest ./fluentd.nix {};
   fluidd = handleTest ./fluidd.nix {};
