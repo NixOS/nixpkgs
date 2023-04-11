@@ -9748,8 +9748,6 @@ self: super: with self; {
 
   pytmx = callPackage ../development/python-modules/pytmx { };
 
-  pytoml = callPackage ../development/python-modules/pytoml { };
-
   pytomlpp = callPackage ../development/python-modules/pytomlpp { };
 
   pytoolconfig = callPackage ../development/python-modules/pytoolconfig { };
