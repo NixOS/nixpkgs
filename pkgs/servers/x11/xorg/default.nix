@@ -1805,11 +1805,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutil = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     pname = "xcb-util";
-    version = "0.4.0";
+    version = "0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-0.4.0.tar.bz2";
-      sha256 = "1sahmrgbpyki4bb72hxym0zvxwnycmswsxiisgqlln9vrdlr9r26";
+      url = "https://xcb.freedesktop.org/dist/xcb-util-0.4.1.tar.xz";
+      sha256 = "04p54r0zjc44fpw1hdy4rhygv37sx2vr2lllxjihykz5v2xkpgjs";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1835,17 +1835,17 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcbutilerrors = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xcbproto, xorgproto, m4 }: stdenv.mkDerivation {
+  xcbutilerrors = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xcbproto, xorgproto, m4, python3 }: stdenv.mkDerivation {
     pname = "xcb-util-errors";
-    version = "1.0";
+    version = "1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-errors-1.0.tar.bz2";
-      sha256 = "158rm913dg3hxrrhyvvxr8bcm0pjy5jws70dhy2s12w1krv829k8";
+      url = "https://xcb.freedesktop.org/dist/xcb-util-errors-1.0.1.tar.xz";
+      sha256 = "0mzkh3xj1n690dw8hrdhyjykd71ib0ls9n5cgf9asna2k1xwha2n";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config m4 ];
+    nativeBuildInputs = [ pkg-config m4 python3 ];
     buildInputs = [ gperf libxcb xcbproto xorgproto ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -1853,11 +1853,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilimage = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xcbutil, xorgproto, m4 }: stdenv.mkDerivation {
     pname = "xcb-util-image";
-    version = "0.4.0";
+    version = "0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-image-0.4.0.tar.bz2";
-      sha256 = "1z1gxacg7q4cw6jrd26gvi5y04npsyavblcdad1xccc8swvnmf9d";
+      url = "https://xcb.freedesktop.org/dist/xcb-util-image-0.4.1.tar.xz";
+      sha256 = "0g8dwknrlz96k176qxh8ar84x9kpppci9b978zyp24nvvbjqxbfc";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1869,11 +1869,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilkeysyms = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     pname = "xcb-util-keysyms";
-    version = "0.4.0";
+    version = "0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-keysyms-0.4.0.tar.bz2";
-      sha256 = "1nbd45pzc1wm6v5drr5338j4nicbgxa5hcakvsvm5pnyy47lky0f";
+      url = "https://xcb.freedesktop.org/dist/xcb-util-keysyms-0.4.1.tar.xz";
+      sha256 = "0f66snk179hmp8ppgv1zp9y7pl1vzn52znpikm1fsaj1ji90l9kw";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1885,11 +1885,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilrenderutil = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     pname = "xcb-util-renderutil";
-    version = "0.3.9";
+    version = "0.3.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.9.tar.bz2";
-      sha256 = "0nza1csdvvxbmk8vgv8vpmq7q8h05xrw3cfx9lwxd1hjzd47xsf6";
+      url = "https://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.10.tar.xz";
+      sha256 = "1fh4dnlwlqyccrhmmwlv082a7mxc7ss7vmzmp7xxp39dwbqd859y";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1901,11 +1901,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbutilwm = callPackage ({ stdenv, pkg-config, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     pname = "xcb-util-wm";
-    version = "0.4.1";
+    version = "0.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-wm-0.4.1.tar.bz2";
-      sha256 = "0gra7hfyxajic4mjd63cpqvd20si53j1q3rbdlkqkahfciwq3gr8";
+      url = "https://xcb.freedesktop.org/dist/xcb-util-wm-0.4.2.tar.xz";
+      sha256 = "02wai17mxfbvlnj4l4bjbvah97rccdivzvd7mrznhr32s0hlxhv2";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
