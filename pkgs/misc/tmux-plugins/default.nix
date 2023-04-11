@@ -693,6 +693,25 @@ in rec {
     };
   };
 
+  weather = mkTmuxPlugin {
+    pluginName = "weather";
+    version = "unstable-2020-02-08";
+    src = fetchFromGitHub {
+      owner = "xamut";
+      repo = "tmux-weather";
+      rev = "28a5fbe75bb25a408193d454304e28ddd75e9338";
+      hash = "sha256-of9E/npEsF1JVc9ttwrbC5WkIAwCNBJAgTfExfj79i4=";
+    };
+
+    meta = with lib; {
+      homepage = "https://github.com/xamut/tmux-weather";
+      description = "Shows weather in the status line";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ jfvillablanca ];
+    };
+  };
+
   yank = mkTmuxPlugin {
     pluginName = "yank";
     version = "unstable-2021-06-20";

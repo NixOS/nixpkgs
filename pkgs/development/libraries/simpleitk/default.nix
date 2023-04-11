@@ -4,12 +4,10 @@ stdenv.mkDerivation rec {
   pname = "simpleitk";
   version = "2.2.1";
 
-  outputs = [ "out" "dev" ];
-
   src = fetchFromGitHub {
     owner = "SimpleITK";
     repo = "SimpleITK";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-0YxmixUTXpjegZQv7DDCNTWFTH8QEWqQQszee7aQ5EI=";
   };
 

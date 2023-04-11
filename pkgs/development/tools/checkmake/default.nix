@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "checkmake";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "mrtazz";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Zkrr1BrP8ktRGf6EYhDpz3oTnX6msrSpfFqkqi9pmlc=";
+    sha256 = "sha256-Ql8XSQA/w7wT9GbmYOM2vG15GVqj9LxOGIu8Wqp9Wao=";
   };
 
   vendorSha256 = null;
@@ -41,7 +41,6 @@ buildGoModule rec {
     homepage = "https://github.com/mrtazz/checkmake";
     license = licenses.mit;
     maintainers = with maintainers; [ vidbina ];
-    platforms = platforms.linux;
     longDescription = ''
       checkmake is an experimental tool for linting and checking
       Makefiles. It may not do what you want it to.

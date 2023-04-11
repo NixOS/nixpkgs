@@ -122,6 +122,15 @@ super: lib.trivial.pipe super [
     ];
   }))
 
+  (patchExtension "Vitals@CoreCoding.com" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/vitals_at_corecoding.com.patch;
+        gtop_path = "${libgtop}/lib/girepository-1.0";
+      })
+    ];
+  }))
+
   (patchExtension "unite@hardpixel.eu" (old: {
     buildInputs = [ xprop ];
 

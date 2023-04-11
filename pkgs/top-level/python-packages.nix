@@ -1513,18 +1513,6 @@ self: super: with self; {
 
   buienradar = callPackage ../development/python-modules/buienradar { };
 
-  buildbot = callPackage ../development/python-modules/buildbot { };
-
-  buildbot-ui = self.buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
-
-  buildbot-full = self.buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view grid-view wsgi-dashboards badges ]);
-
-  buildbot-pkg = callPackage ../development/python-modules/buildbot/pkg.nix { };
-
-  buildbot-plugins = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/buildbot/plugins.nix { });
-
-  buildbot-worker = callPackage ../development/python-modules/buildbot/worker.nix { };
-
   build = callPackage ../development/python-modules/build { };
 
   buildcatrust = callPackage ../development/python-modules/buildcatrust { };
@@ -3259,6 +3247,8 @@ self: super: with self; {
 
   expecttest = callPackage ../development/python-modules/expecttest { };
 
+  expiring-dict = callPackage ../development/python-modules/expiring-dict { };
+
   expiringdict = callPackage ../development/python-modules/expiringdict { };
 
   explorerscript = callPackage ../development/python-modules/explorerscript { };
@@ -4801,8 +4791,6 @@ self: super: with self; {
   intervaltree = callPackage ../development/python-modules/intervaltree { };
 
   into-dbus-python = callPackage ../development/python-modules/into-dbus-python { };
-
-  intreehooks = callPackage ../development/python-modules/intreehooks { };
 
   invisible-watermark = callPackage ../development/python-modules/invisible-watermark { };
 
@@ -10829,6 +10817,10 @@ self: super: with self; {
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
 
   simplehound = callPackage ../development/python-modules/simplehound { };
+
+  simpleitk = callPackage ../development/python-modules/simpleitk {
+    inherit (pkgs) simpleitk;
+  };
 
   simplejson = callPackage ../development/python-modules/simplejson { };
 

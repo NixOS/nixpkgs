@@ -2,6 +2,7 @@
 , buildPythonPackage
 , setuptools-scm
 , pythonOlder
+, pythonRelaxDepsHook
 , fetchFromGitHub
 , pytestCheckHook
 , pytest-xdist
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -41,19 +43,15 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  postPatch = ''
-     substituteInPlace pyproject.toml \
-       --replace "numpy >= 1.18.4, < 1.24" "numpy >= 1.18.4" \
-       --replace "numba >= 0.53, < 0.57" "numba >= 0.53" \
-    '';
+  pythonRelaxDeps = [ "numpy" "numba" ];
 
   pythonImportsCheck = [ "galois" ];
 
-  meta = {
-    description = "A Python 3 package that extends NumPy arrays to operate over finite fields";
+  meta = with lib; {
+    description = "Python package that extends NumPy arrays to operate over finite fields";
     homepage = "https://github.com/mhostetter/galois";
-    downloadPage = "https://github.com/mhostetter/galois/releases";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ chrispattison ];
+    downloadPage = "https://github.com/mhostetter/galois/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ chrispattison ];
   };
 }
