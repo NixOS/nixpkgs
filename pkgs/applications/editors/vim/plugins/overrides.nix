@@ -884,6 +884,11 @@ self: super: {
         substituteInPlace lua/sniprun.lua --replace '@sniprun_bin@' ${sniprun-bin}
       '';
 
+      postInstall = ''
+        mkdir $out/doc
+        ln -s $out/docs/sniprun.txt $out/doc/sniprun.txt
+      '';
+
       propagatedBuildInputs = [ sniprun-bin ];
     };
 
