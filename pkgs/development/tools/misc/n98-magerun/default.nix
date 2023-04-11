@@ -1,32 +1,17 @@
-{ stdenv, fetchFromGitHub, makeWrapper, unzip, lib, php80 }:
+{ lib, fetchFromGitHub, php80 }:
 
-let
+php80.buildComposerProject (finalAttrs: {
   pname = "n98-magerun";
   version = "2.3.0";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "netz98";
-    repo = "n98-magerun1-dist";
-    rev = version;
-    sha256 = "sha256-T7wQmEEYMG0J6+9nRt+tiMuihjnjjQ7UWy1C0vKoQY4=";
+    repo = "n98-magerun";
+    rev = finalAttrs.version;
+    sha256 = "sha256-/RffdYgl2cs8mlq4vHtzUZ6j0viV8Ot/cB/cB1dstFM=";
   };
 
-  dontUnpack = true;
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src/n98-magerun $out/libexec/n98-magerun/n98-magerun-${version}.phar
-    makeWrapper ${php80}/bin/php $out/bin/n98-magerun \
-      --add-flags "$out/libexec/n98-magerun/n98-magerun-${version}.phar" \
-      --prefix PATH : ${lib.makeBinPath [ unzip ]}
-    runHook postInstall
-  '';
+  vendorHash = "sha256-bVRjCM+WZX3lLBXcISM0OlNoIWU8UvD8fDzs3GNo5Ws=";
 
   meta = with lib; {
     description = "The swiss army knife for Magento1/OpenMage developers";
@@ -35,4 +20,4 @@ stdenv.mkDerivation {
     changelog = "https://magerun.net/category/magerun/";
     maintainers = teams.php.members;
   };
-}
+})
