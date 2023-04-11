@@ -45,6 +45,7 @@ let
     , pearSupport ? true
     , pharSupport ? true
     , phpdbgSupport ? true
+    , sessionSupport ? true
 
       # Misc flags
     , apxs2Support ? false
@@ -229,7 +230,6 @@ let
             # PCRE
             ++ [ "--with-external-pcre=${pcre2.dev}" ]
 
-
             # Enable sapis
             ++ lib.optional (!cgiSupport) "--disable-cgi"
             ++ lib.optional (!cliSupport) "--disable-cli"
@@ -237,7 +237,7 @@ let
             ++ lib.optionals pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
             ++ lib.optional pharSupport "--enable-phar"
             ++ lib.optional (!phpdbgSupport) "--disable-phpdbg"
-
+            ++ lib.optional (!sessionSupport) "--disable-session"
 
             # Misc flags
             ++ lib.optional apxs2Support "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
@@ -249,7 +249,6 @@ let
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
             ++ lib.optional (ztsSupport && (lib.versionOlder version "8.0")) "--enable-maintainer-zts"
             ++ lib.optional (ztsSupport && (lib.versionAtLeast version "8.0")) "--enable-zts"
-
 
             # Sendmail
             ++ [ "PROG_SENDMAIL=${system-sendmail}/bin/sendmail" ]
