@@ -22,7 +22,8 @@
 buildPythonPackage rec {
   pname = "tables";
   version = "3.8.0";
-  disabled = pythonOlder "3.5";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     hdf5
     lzo
   ];
+
   propagatedBuildInputs = [
     blosc2
     py-cpuinfo
