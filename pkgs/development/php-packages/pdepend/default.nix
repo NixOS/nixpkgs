@@ -1,29 +1,20 @@
-{ stdenv, fetchurl, makeWrapper, lib, php }:
+{ lib, fetchFromGitHub, php }:
 
-let
+php.buildComposerProject (finalAttrs: {
   pname = "pdepend";
   version = "2.13.0";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
-  src = fetchurl {
-    url = "https://github.com/pdepend/pdepend/releases/download/${version}/pdepend.phar";
-    sha256 = "sha256-cd76PoHzAqsRxQzvklyEIsNO+4jByK8Mwx1aNu8rnnk=";
+  src = fetchFromGitHub {
+    owner = "pdepend";
+    repo = "pdepend";
+    rev = finalAttrs.version;
+    hash = "sha256-OmqbZwXzWbSM9+ViytfCRjLpw36M4MErmn4FnCAyPBg=";
   };
 
-  dontUnpack = true;
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/pdepend/pdepend.phar
-    makeWrapper ${php}/bin/php $out/bin/pdepend \
-      --add-flags "$out/libexec/pdepend/pdepend.phar"
-    runHook postInstall
-  '';
+  # TODO: Open a PR against https://github.com/pdepend/pdepend
+  # Missing `composer.lock` from the repository.
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-cEPJN6bsmsg8iMjzFjV3QoTtzpPFPVItbE/UGL6vhRQ=";
 
   meta = with lib; {
     description = "An adaptation of JDepend for PHP";
@@ -36,6 +27,5 @@ stdenv.mkDerivation {
       maintainability.
     ";
     maintainers = teams.php.members;
-    platforms = platforms.all;
   };
-}
+})
