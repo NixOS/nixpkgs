@@ -105,6 +105,13 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+
+      # backport patch fixing no sound in some cases
+      # FIXME: remove for next release
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/8748c77451ce332dd24549b414200499ede4f184.diff";
+        hash = "sha256-nxWszqLUbO1XS/DWIBYrGpVZFy2c5+E2V9dlBMekShM=";
+      })
     ];
 
     strictDeps = true;
