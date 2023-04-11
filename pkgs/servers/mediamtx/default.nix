@@ -4,7 +4,7 @@
 }:
 
 buildGoModule rec {
-  pname = "rtsp-simple-server";
+  pname = "mediamtx";
   version = "0.22.0";
 
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-X github.com/aler9/rtsp-simple-server/internal/core.version=v${version}"
+    "-X github.com/aler9/mediamtx/internal/core.version=v${version}"
   ];
 
   meta = with lib; {
