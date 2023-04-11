@@ -196,8 +196,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
 
-    phpcbf = callPackage ../development/php-packages/phpcbf { };
-
     phpcs = callPackage ../development/php-packages/phpcs { };
 
     phpmd = callPackage ../development/php-packages/phpmd { };
@@ -207,6 +205,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     psalm = callPackage ../development/php-packages/psalm { };
 
     psysh = callPackage ../development/php-packages/psysh { };
+  } // lib.optionalAttrs config.allowAliases {
+    phpcbf = throw "phpcbf is included in phpcs, use phpcs instead.";
   };
 
 
