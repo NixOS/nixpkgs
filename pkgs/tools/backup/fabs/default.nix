@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     alembic
-    dateutil
+    python-dateutil
     pyyaml
     setuptools
     sqlalchemy
