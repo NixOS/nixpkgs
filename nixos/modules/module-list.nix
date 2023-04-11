@@ -1725,6 +1725,7 @@
   ./tasks/filesystems/vfat.nix
   ./tasks/filesystems/xfs.nix
   ./tasks/filesystems/zfs.nix
+  ./tasks/flake-auto-upgrade.nix
   ./tasks/lvm.nix
   ./tasks/network-interfaces-scripted.nix
   ./tasks/network-interfaces-systemd.nix
