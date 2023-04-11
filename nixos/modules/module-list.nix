@@ -788,6 +788,7 @@
   ./services/network-filesystems/yandex-disk.nix
   ./services/networking/3proxy.nix
   ./services/networking/adguardhome.nix
+  ./services/networking/alice-lg.nix
   ./services/networking/amuled.nix
   ./services/networking/antennas.nix
   ./services/networking/aria2.nix
