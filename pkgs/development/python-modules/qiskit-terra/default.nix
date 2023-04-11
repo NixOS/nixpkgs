@@ -12,7 +12,7 @@
 , psutil
 , python-constraint
 , python-dateutil
-, retworkx
+, rustworkx
 , scipy
 , scikit-quant ? null
 , setuptools-rust
@@ -83,7 +83,7 @@ buildPythonPackage rec {
     psutil
     python-constraint
     python-dateutil
-    retworkx
+    rustworkx
     scipy
     scikit-quant
     stevedore
