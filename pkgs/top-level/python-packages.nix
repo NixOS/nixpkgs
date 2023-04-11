@@ -2695,6 +2695,8 @@ self: super: with self; {
 
   django-scim2 = callPackage ../development/python-modules/django-scim2 { };
 
+  django-shortuuidfield = callPackage ../development/python-modules/django-shortuuidfield { };
+
   djangoql = callPackage ../development/python-modules/djangoql { };
 
   django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };
