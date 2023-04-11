@@ -107,6 +107,8 @@ stdenv.mkDerivation rec {
     ln -s ${semver-cpp} lib/semver
   '';
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+
   # Somehow some of the install destination paths in the build system still
   # gets transformed to point to /var/empty/share, even though they are at least
   # relative to the nix output directory with our earlier patching.
