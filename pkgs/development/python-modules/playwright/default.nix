@@ -87,7 +87,7 @@ let
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
       outputHash = {
-        x86_64-darwin = "0z2kww4iby1izkwn6z2ai94y87bkjvwak8awdmjm8sgg00pa9l1a";
+        x86_64-darwin = "08qnb07d93h0rvp72ywan8isl9n0c2027viaymp807aavr3nnfjg";
       }.${system} or throwSystem;
     } ''
       export PLAYWRIGHT_BROWSERS_PATH=$out
