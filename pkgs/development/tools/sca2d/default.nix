@@ -2,7 +2,6 @@
 , python3
 , fetchFromGitLab
 , fetchFromGitHub
-,
 }:
 let
   python = python3.override {
