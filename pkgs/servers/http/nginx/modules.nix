@@ -58,9 +58,6 @@ let
 in
 
 let self = {
-  fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
-  ngx_aws_auth = throw "ngx_aws_auth was renamed to aws-auth";
-
   akamai-token-validate = {
     name = "akamai-token-validate";
     src = fetchFromGitHub {
@@ -1016,4 +1013,6 @@ let self = {
 }; in self // lib.optionalAttrs config.allowAliases {
   # deprecated or renamed packages
   modsecurity-nginx = self.modsecurity;
+  fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
+  ngx_aws_auth = throw "ngx_aws_auth was renamed to aws-auth";
 }
