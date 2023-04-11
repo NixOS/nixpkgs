@@ -23,6 +23,13 @@ buildPythonPackage rec {
     hash = "sha256-U2ixBtigY15RzMNIeUK71uNOndUepK2kE/CTFwl855w=";
   };
 
+  postPatch = ''
+    # https://github.com/bm1549/frigidaire/pull/13
+    substituteInPlace setup.py \
+      --replace "urllib3>==1.26.42" "urllib3" \
+      --replace 'version = "SNAPSHOT"' 'version = "${version}"'
+  '';
+
   propagatedBuildInputs = [
     certifi
     chardet
