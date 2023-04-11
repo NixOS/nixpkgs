@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv, makeWrapper, gitMinimal }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv, makeWrapper, gitMinimal, testers, gitsign }:
 
 buildGoModule rec {
   pname = "gitsign";
@@ -31,6 +31,8 @@ buildGoModule rec {
       wrapProgram $f --prefix PATH : ${lib.makeBinPath [ gitMinimal ]}
     done
   '';
+
+  passthru.tests.version = testers.testVersion { package = gitsign; };
 
   meta = {
     homepage = "https://github.com/sigstore/gitsign";
