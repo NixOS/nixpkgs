@@ -96,6 +96,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Hierarchical datasets for Python";
     homepage = "https://www.pytables.org/";
+    changelog = "https://github.com/PyTables/PyTables/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ drewrisinger ];
   };
