@@ -217,6 +217,19 @@ in lib.makeScope pkgs.newScope (self: with self; {
         };
       };
 
+      elm-spa = nodePkgs."elm-spa".overrideAttrs  (
+        old: {
+          nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ makeWrapper old.nodejs.pkgs.node-gyp-build ];
+
+          meta = with lib; nodePkgs."elm-spa".meta // {
+            description = "A tool for building single page apps in Elm";
+            homepage = "https://www.elm-spa.dev/";
+            license = licenses.bsd3;
+            maintainers = [ maintainers.ilyakooo0 ];
+          };
+        }
+      );
+
       elm-optimize-level-2 = nodePkgs."elm-optimize-level-2" // {
         meta = with lib; nodePkgs."elm-optimize-level-2".meta // {
           description = "A second level of optimization for the Javascript that the Elm Compiler produces";
