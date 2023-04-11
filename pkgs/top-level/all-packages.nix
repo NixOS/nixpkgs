@@ -12972,6 +12972,8 @@ with pkgs;
 
   transifex-client = python39.pkgs.callPackage ../tools/text/transifex-client { };
 
+  transifex-cli = callPackage ../applications/misc/transifex-cli { };
+
   translate-shell = callPackage ../applications/misc/translate-shell { };
 
   translatepy = with python3.pkgs; toPythonApplication translatepy;

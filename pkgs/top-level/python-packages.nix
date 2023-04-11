@@ -11100,6 +11100,8 @@ self: super: with self; {
 
   sphinx-hoverxref = callPackage ../development/python-modules/sphinx-hoverxref { };
 
+  sphinx-intl = callPackage ../development/python-modules/sphinx-intl { };
+
   sphinx-jupyterbook-latex = callPackage ../development/python-modules/sphinx-jupyterbook-latex { };
 
   sphinx-multitoc-numbering = callPackage ../development/python-modules/sphinx-multitoc-numbering { };
