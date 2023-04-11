@@ -26,6 +26,14 @@
 , x11Support ? cupsSupport
 , xorg # with CUPS, X11 only adds very little
 , dynamicDrivers ? true
+
+# for passthru.tests
+, graphicsmagick
+, imagemagick
+, libspectre
+, lilypond
+, pstoedit
+, python3
 }:
 
 let
@@ -158,7 +166,11 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  passthru.tests.test-corpus-render = callPackage ./test-corpus-render.nix {};
+  passthru.tests = {
+    test-corpus-render = callPackage ./test-corpus-render.nix {};
+    inherit graphicsmagick imagemagick libspectre lilypond pstoedit;
+    inherit (python3.pkgs) matplotlib;
+  };
 
   meta = {
     homepage = "https://www.ghostscript.com/";
