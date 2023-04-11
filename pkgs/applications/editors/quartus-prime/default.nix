@@ -44,7 +44,7 @@ in buildFHSEnv rec {
     xorg.libXext
     xorg.libXrender
     libudev0-shim
-    libxcrypt
+    libxcrypt-legacy
   ];
 
   passthru = { inherit unwrapped; };
