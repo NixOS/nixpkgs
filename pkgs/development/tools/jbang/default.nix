@@ -1,12 +1,12 @@
 { stdenv, lib, fetchzip, jdk, makeWrapper, coreutils, curl }:
 
 stdenv.mkDerivation rec {
-  version = "0.105.1";
+  version = "0.106.1";
   pname = "jbang";
 
   src = fetchzip {
     url = "https://github.com/jbangdev/jbang/releases/download/v${version}/${pname}-${version}.tar";
-    sha256 = "sha256-bkjXvubZVwmZgaTAa+ieJCAUplL7UTj11hJIMaQf8TA=";
+    sha256 = "sha256-XHrJvHX0fw/T00bJJaX4X3elr19zBJg2V7E01DEFdxs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
