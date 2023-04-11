@@ -10100,12 +10100,12 @@ final: prev:
 
   vim-clap = buildVimPluginFrom2Nix {
     pname = "vim-clap";
-    version = "2023-04-06";
+    version = "2023-04-02";
     src = fetchFromGitHub {
       owner = "liuchengxu";
       repo = "vim-clap";
-      rev = "4aea08196fb9d3dcf365192f4bf7da7d3813a23d";
-      sha256 = "19pkhqrn7hdyqwh034kgiq0kl8h3i10x6lp4cpfy9jd44445k02a";
+      rev = "5a3667644ca1beada1c6add865b3f8329b4727bc";
+      sha256 = "1066xdimc4vpqar95hnbwl1f2wijr3yss6z1s16k07ymvi02dgxs";
     };
     meta.homepage = "https://github.com/liuchengxu/vim-clap/";
   };
