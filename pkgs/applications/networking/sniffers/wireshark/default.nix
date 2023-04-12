@@ -1,27 +1,58 @@
-{ lib, stdenv, buildPackages, fetchurl, pkg-config, pcre2, perl, flex, bison
-, gettext, libpcap, libnl, c-ares, gnutls, libgcrypt, libgpg-error, geoip, openssl
-, lua5, python3, libcap, glib, libssh, nghttp2, zlib, cmake, makeWrapper, wrapGAppsHook
-, withQt ? true, qt5 ? null
-, ApplicationServices, SystemConfiguration, gmp
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitLab
+, pkg-config
+, pcre2
+, perl
+, flex
+, bison
+, gettext
+, libpcap
+, libnl
+, c-ares
+, gnutls
+, libgcrypt
+, libgpg-error
+, geoip
+, openssl
+, lua5
+, python3
+, libcap
+, glib
+, libssh
+, nghttp2
+, zlib
+, cmake
+, ninja
+, makeWrapper
+, wrapGAppsHook
+, withQt ? true
+, qt5 ? null
+, ApplicationServices
+, SystemConfiguration
+, gmp
 , asciidoctor
 }:
 
-assert withQt  -> qt5  != null;
+assert withQt -> qt5 != null;
 
 with lib;
 
 let
-  version = "4.0.3";
+  version = "4.0.4";
   variant = if withQt then "qt" else "cli";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "wireshark-${variant}";
   inherit version;
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
-    url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "sha256-bFHhW8wK+5NzTmhtv/NU/9FZ9XC9KQS8u61vP+t+lRE=";
+  src = fetchFromGitLab {
+    repo = "wireshark";
+    owner = "wireshark";
+    rev = "v${version}";
+    hash = "sha256-x7McplQVdLczTov+u9eqmT1Ons22KqRsCN65pUuwYGw=";
   };
 
   cmakeFlags = [
@@ -38,18 +69,30 @@ in stdenv.mkDerivation {
   # Avoid referencing -dev paths because of debug assertions.
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
-  nativeBuildInputs = [ asciidoctor bison cmake flex makeWrapper pkg-config python3 perl ]
-    ++ optionals withQt [ qt5.wrapQtAppsHook wrapGAppsHook ];
+  nativeBuildInputs = [ asciidoctor bison cmake ninja flex makeWrapper pkg-config python3 perl ]
+    ++ lib.optionals withQt [ qt5.wrapQtAppsHook wrapGAppsHook ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [
-    gettext pcre2 libpcap lua5 libssh nghttp2 openssl libgcrypt
-    libgpg-error gnutls geoip c-ares glib zlib
-  ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
-    ++ optionals stdenv.isLinux  [ libcap libnl ]
-    ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
-    ++ optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);
+    gettext
+    pcre2
+    libpcap
+    lua5
+    libssh
+    nghttp2
+    openssl
+    libgcrypt
+    libgpg-error
+    gnutls
+    geoip
+    c-ares
+    glib
+    zlib
+  ] ++ lib.optionals withQt (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
+  ++ lib.optionals stdenv.isLinux [ libcap libnl ]
+  ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
+  ++ lib.optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);
 
   strictDeps = true;
 
@@ -72,22 +115,23 @@ in stdenv.mkDerivation {
             install_name_tool -change "$dylib" "$out/lib/$dylib" "$f"
         done
     done
-  '' else optionalString withQt ''
-    pwd
-    install -Dm644 -t $out/share/applications ../resources/freedesktop/org.wireshark.Wireshark.desktop
+  '' else
+    lib.optionalString withQt ''
+      pwd
+      install -Dm644 -t $out/share/applications ../resources/freedesktop/org.wireshark.Wireshark.desktop
 
-    install -Dm644 ../resources/icons/wsicon.svg $out/share/icons/wireshark.svg
-    mkdir -pv $dev/include/{epan/{wmem,ftypes,dfilter},wsutil/wmem,wiretap}
+      install -Dm644 ../resources/icons/wsicon.svg $out/share/icons/wireshark.svg
+      mkdir -pv $dev/include/{epan/{wmem,ftypes,dfilter},wsutil/wmem,wiretap}
 
-    cp config.h $dev/include/wireshark/
-    cp ../epan/*.h $dev/include/epan/
-    cp ../epan/ftypes/*.h $dev/include/epan/ftypes/
-    cp ../epan/dfilter/*.h $dev/include/epan/dfilter/
-    cp ../include/ws_*.h $dev/include/
-    cp ../wiretap/*.h $dev/include/wiretap/
-    cp ../wsutil/*.h $dev/include/wsutil/
-    cp ../wsutil/wmem/*.h $dev/include/wsutil/wmem/
-  '');
+      cp config.h $dev/include/wireshark/
+      cp ../epan/*.h $dev/include/epan/
+      cp ../epan/ftypes/*.h $dev/include/epan/ftypes/
+      cp ../epan/dfilter/*.h $dev/include/epan/dfilter/
+      cp ../include/ws_*.h $dev/include/
+      cp ../wiretap/*.h $dev/include/wiretap/
+      cp ../wsutil/*.h $dev/include/wsutil/
+      cp ../wsutil/wmem/*.h $dev/include/wsutil/wmem/
+    '');
 
   dontFixCmake = true;
 
