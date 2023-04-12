@@ -24,6 +24,8 @@ let
 
     installBootloaderFiles = if cfg.installBootloaderFiles then "True" else "False";
 
+    imageDir = if cfg.imageDir == "/" then "" else cfg.imageDir;
+
     editor = if cfg.editor then "True" else "False";
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
@@ -100,6 +102,29 @@ in {
         The `memtest86` option is unaffected by this option: if that option
         is set to `true`, the MemTest86 image will be copied and a boot loader
         specification entry will be created for it, even if this is set to false.
+      '';
+    };
+
+    imageDir = mkOption {
+      default = "/EFI/nixos";
+
+      type = types.str;
+
+      apply = x: assert (hasPrefix "/" x || abort "Image directory path does not start with a forward slash as required"); x;
+
+      description = lib.mdDoc ''
+        The path on the boot partition where kernels and initrd files will
+        be copied to. You must specify a value for this option that starts
+        with a forward slash, because it will be prefixed by
+        `boot.loader.efi.efiSysMountPoint` during the copy operations. Note
+        that the systemd-boot module will remove all files in this path
+        that match the path name glob pattern
+        `????????????????????????????????-*.efi` (i.e. files whose name has
+        a dash as the 33rd character - NixOS prefixes kernels and initrd
+        images with base32 hashes - and ends in `.efi`), but that aren't
+        being kept based on option
+        `boot.loader.systemd-boot.configurationLimit`. Subdirectories and
+        files inside them are not affected.
       '';
     };
 

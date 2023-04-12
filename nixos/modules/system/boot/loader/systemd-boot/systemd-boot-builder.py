@@ -79,7 +79,7 @@ def copy_from_profile(profile: Optional[str], generation: int, specialisation: O
     store_file_path = profile_path(profile, generation, specialisation, name)
     suffix = os.path.basename(store_file_path)
     store_dir = os.path.basename(os.path.dirname(store_file_path))
-    efi_file_path = "/efi/nixos/%s-%s.efi" % (store_dir, suffix)
+    efi_file_path = "@imageDir@/%s-%s.efi" % (store_dir, suffix)
     if not dry_run:
         copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path))
     return efi_file_path
@@ -205,7 +205,7 @@ def remove_old_entries(gens: List[SystemIdentifier]) -> None:
             continue
         if not (prof, gen_number, None) in gens:
             os.unlink(path)
-    for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
+    for path in glob.iglob("@efiSysMountPoint@@imageDir@/????????????????????????????????-*.efi"):
         if not path in known_paths and not os.path.isdir(path):
             os.unlink(path)
 
@@ -290,7 +290,7 @@ def main() -> None:
                 print("updating systemd-boot from %s to %s" % (installed_version, available_version))
                 subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@"] + bootctl_flags + ["update"])
 
-    mkdir_p("@efiSysMountPoint@/efi/nixos")
+    mkdir_p("@efiSysMountPoint@@imageDir@")
     mkdir_p("@efiSysMountPoint@/loader/entries")
 
     gens = get_generations()
