@@ -8,7 +8,7 @@ let
 
   desktopItem = makeDesktopItem {
     name = "AnyDesk";
-    exec = "@out@/bin/anydesk";
+    exec = "@out@/bin/anydesk %u";
     icon = "anydesk";
     desktopName = "AnyDesk";
     genericName = description;
