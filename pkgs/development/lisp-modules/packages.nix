@@ -550,6 +550,35 @@ let
     ];
   };
 
+  duckdb = build-asdf-system {
+    pname = "duckdb";
+    version = "trunk";
+    src = pkgs.fetchFromGitHub {
+      owner = "ak-coram";
+      repo = "cl-duckdb";
+      rev = "2f0df62f59fbede0addd8d72cf286f4007818a3e";
+      hash = "sha256-+jeOuXtCFZwMvF0XvlRaqTNHIAAFKMx6y1pz6u8Wxug=";
+    };
+    systems = [ "duckdb" "duckdb/test" "duckdb/benchmark" ];
+    lispLibs = with super; [
+      bordeaux-threads
+      cffi-libffi
+      cl-ascii-table
+      cl-spark
+      fiveam
+      local-time
+      local-time-duration
+      periods
+      trivial-benchmark
+      serapeum
+      str
+      uuid
+    ];
+    nativeLibs = with pkgs; [
+      duckdb libffi
+    ];
+  };
+
   });
 
 in packages
