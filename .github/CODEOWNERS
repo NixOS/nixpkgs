@@ -90,6 +90,9 @@
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
 
+# NixOS QEMU virtualisation
+/nixos/virtualisation/qemu-vm.nix           @raitobezarius
+
 # Systemd
 /nixos/modules/system/boot/systemd.nix      @NixOS/systemd
 /nixos/modules/system/boot/systemd          @NixOS/systemd
