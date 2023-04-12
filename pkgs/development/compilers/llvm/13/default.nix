@@ -236,7 +236,7 @@ let
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
-               else stdenv-tmpDropB;
+               else stdenv;
     };
 
     compiler-rt-no-libc = callPackage ./compiler-rt {
