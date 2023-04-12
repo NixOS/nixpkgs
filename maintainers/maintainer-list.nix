@@ -11056,6 +11056,12 @@
     githubId = 47835714;
     name = "Nintron";
   };
+  niols = {
+    email = "niols@niols.fr";
+    github = "niols";
+    githubId = 5920602;
+    name = "Nicolas Jeannerod";
+  };
   nioncode = {
     email = "nioncode+github@gmail.com";
     github = "nioncode";
