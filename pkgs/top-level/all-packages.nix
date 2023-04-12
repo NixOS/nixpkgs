@@ -2493,6 +2493,8 @@ with pkgs;
 
   spaceFM = callPackage ../applications/file-managers/spacefm { };
 
+  tuifimanager = callPackage ../applications/file-managers/tuifimanager { };
+
   vifm = callPackage ../applications/file-managers/vifm { };
 
   vifm-full = vifm.override {
@@ -3581,7 +3583,7 @@ with pkgs;
 
   play-with-mpv = callPackage ../tools/video/play-with-mpv { };
 
-  plausible = callPackage ../servers/web-apps/plausible { };
+  plausible = callPackage ../servers/web-apps/plausible { nodejs = nodejs-16_x; };
 
   pam-reattach = callPackage ../os-specific/darwin/pam-reattach { };
 
@@ -6380,6 +6382,8 @@ with pkgs;
   };
 
   cask-server = libsForQt5.callPackage ../applications/misc/cask-server { };
+
+  cc2538-bsl = callPackage ../tools/misc/cc2538-bsl { };
 
   code-browser-qt = libsForQt5.callPackage ../applications/editors/code-browser { withQt = true; };
   code-browser-gtk2 = callPackage ../applications/editors/code-browser { withGtk2 = true; };
@@ -9747,6 +9751,10 @@ with pkgs;
 
   lv = callPackage ../tools/text/lv { };
 
+  lv_img_conv = callPackage ../development/tools/lv_img_conv  {
+    inherit (darwin.apple_sdk.frameworks) CoreText;
+  };
+
   lxc = callPackage ../os-specific/linux/lxc {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
@@ -12971,6 +12979,8 @@ with pkgs;
   tracefilesim = callPackage ../development/tools/analysis/garcosim/tracefilesim { };
 
   transifex-client = python39.pkgs.callPackage ../tools/text/transifex-client { };
+
+  transifex-cli = callPackage ../applications/misc/transifex-cli { };
 
   translate-shell = callPackage ../applications/misc/translate-shell { };
 
@@ -23030,6 +23040,10 @@ with pkgs;
 
   pe-parse = callPackage ../development/libraries/pe-parse { };
 
+  phetch = callPackage ../applications/networking/gopher/phetch {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   inherit (callPackage ../development/libraries/physfs {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   })
@@ -28177,8 +28191,7 @@ with pkgs;
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
     noto-fonts-emoji
-    noto-fonts-emoji-blob-bin
-    noto-fonts-extra;
+    noto-fonts-emoji-blob-bin;
 
   nuclear = callPackage ../applications/audio/nuclear { };
 
@@ -35626,7 +35639,7 @@ with pkgs;
 
   angband = callPackage ../games/angband { };
 
-  anki = python39Packages.callPackage ../games/anki {
+  anki = callPackage ../games/anki {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
   };
   anki-bin = callPackage ../games/anki/bin.nix { buildFHSUserEnv = buildFHSUserEnvBubblewrap; };
@@ -39519,10 +39532,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
-  inherit (callPackages ../development/libraries/spdlog { })
-    spdlog_0 spdlog_1;
-
-  spdlog = spdlog_1;
+  spdlog = callPackage ../development/libraries/spdlog { };
 
   dart = callPackage ../development/compilers/dart { };
 
