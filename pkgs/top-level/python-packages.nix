@@ -2931,6 +2931,8 @@ self: super: with self; {
 
   duckdb-engine = callPackage ../development/python-modules/duckdb-engine { };
 
+  duckduckgo-search = callPackage ../development/python-modules/duckduckgo-search { };
+
   duecredit = callPackage ../development/python-modules/duecredit { };
 
   duet = callPackage ../development/python-modules/duet { };
