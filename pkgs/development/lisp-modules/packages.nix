@@ -517,10 +517,10 @@ let
       cl-gobject-introspection-wrapper
     ] ++ [ self.cl-gtk4 ];
     nativeBuildInputs = [
-      pkgs.webkitgtk_5_0
+      pkgs.webkitgtk_6_0
     ];
     nativeLibs = [
-      pkgs.webkitgtk_5_0
+      pkgs.webkitgtk_6_0
     ];
   };
 

@@ -11,7 +11,9 @@ rustPlatform.buildRustPackage rec {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = [
+    rustPlatform.rust.rustc.llvm
+  ] ++ lib.optional stdenv.isDarwin Security;
 
   # As of 1.0.0 and rustc 1.30 rustfmt requires a nightly compiler
   RUSTC_BOOTSTRAP = 1;
