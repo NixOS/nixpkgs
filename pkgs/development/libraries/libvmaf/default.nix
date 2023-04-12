@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, nasm }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, nasm, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "libvmaf";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ meson ninja nasm ];
+  nativeBuildInputs = [ meson ninja nasm xxd ];
 
   mesonFlags = [ "-Denable_avx512=true" ];
 

@@ -41,8 +41,6 @@ let
 in
 
 rustPlatform.buildRustPackage.override { cargo-auditable = bootstrap; } (args // {
-  auditable = true; # TODO: remove when this is the default
-
   nativeBuildInputs = [
     installShellFiles
   ];
@@ -50,4 +48,8 @@ rustPlatform.buildRustPackage.override { cargo-auditable = bootstrap; } (args //
   postInstall = ''
     installManPage cargo-auditable/cargo-auditable.1
   '';
+
+  passthru = {
+    inherit bootstrap;
+  };
 })

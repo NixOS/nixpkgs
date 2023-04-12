@@ -14,7 +14,7 @@
 , rockspecVersion ? version
 
 # by default prefix `name` e.g. "lua5.2-${name}"
-, namePrefix ? "${lua.pname}${lib.versions.majorMinor version}-"
+, namePrefix ? "${lua.pname}${lib.versions.majorMinor lua.version}-"
 
 # Dependencies for building the package
 , buildInputs ? []

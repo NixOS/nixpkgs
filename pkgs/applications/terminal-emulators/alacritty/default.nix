@@ -60,8 +60,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-4liPfNJ2JGniz8Os4Np+XSXCJBHND13XLPWDy3Gc/F8=";
 
-  auditable = true; # TODO: remove when this is the default
-
   nativeBuildInputs = [
     cmake
     installShellFiles
