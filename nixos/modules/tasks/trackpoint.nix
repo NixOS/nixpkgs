@@ -82,7 +82,7 @@ with lib;
 
       system.activationScripts.trackpoint =
         ''
-          ${config.systemd.package}/bin/udevadm trigger --attr-match=name="${cfg.device}"
+          ${config.systemd.package}/bin/udevadm trigger "$(${config.systemd.package}/bin/udevadm trigger -vn --attr-match=name="${cfg.device}")"
         '';
     })
 
