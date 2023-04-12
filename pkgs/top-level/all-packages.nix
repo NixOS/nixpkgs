@@ -18811,6 +18811,8 @@ with pkgs;
 
   semantik = libsForQt5.callPackage ../applications/office/semantik { };
 
+  sca2d = callPackage ../development/tools/sca2d {  };
+
   sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   scons = sconsPackages.scons_latest;
 
@@ -30621,6 +30623,8 @@ with pkgs;
 
   grisbi = callPackage ../applications/office/grisbi { gtk = gtk3; };
 
+  gscreenshot = callPackage ../applications/graphics/gscreenshot { };
+
   gtkpod = callPackage ../applications/audio/gtkpod { };
 
   q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
@@ -32602,6 +32606,8 @@ with pkgs;
   micro = callPackage ../applications/editors/micro { };
 
   mle = callPackage ../applications/editors/mle { };
+
+  namaka = callPackage ../development/tools/misc/namaka { };
 
   nano = callPackage ../applications/editors/nano { };
 
