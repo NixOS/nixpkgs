@@ -261,6 +261,25 @@ stdenv.mkDerivation {
     inherit bintools;
     inherit cc libc libcxx nativeTools nativeLibc nativePrefix isGNU isClang;
 
+    # Expose the C++ standard library we're using. See the comments on "General
+    # libc++ support". This is also relevant when using older gcc than the
+    # stdenv's, as may be required e.g. by CUDAToolkit's nvcc.
+    cxxStdlib =
+      let
+        givenLibcxx = libcxx.isLLVM or false;
+        givenGccForLibs = useGccForLibs && gccForLibs.langCC or false;
+      in
+      if (!givenLibcxx) && givenGccForLibs then
+        { kind = "libstdc++"; lib = gccForLibs; }
+      else if givenLibcxx then
+        { kind = "libc++"; lib = libcxx; }
+      else
+      # We're probably using the `libstdc++` that came with our `gcc`.
+      # TODO: this is maybe not always correct?
+      # TODO: what happens when `nativeTools = true`?
+        { kind = "libstdc++"; lib = cc_solib; }
+    ;
+
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
       (mapc
@@ -440,6 +459,13 @@ stdenv.mkDerivation {
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
       echo "-L${gccForLibs_solib}/lib" >> $out/nix-support/cc-ldflags
     ''
+    # The above "fix" may be incorrect; gcc.cc.lib doesn't contain a
+    # `target-triple` dir but the correct fix may be to just remove the above?
+    #
+    # For clang it's not necessary (see `--gcc-toolchain` below) and for other
+    # situations adding in the above will bring in lots of other gcc libraries
+    # (i.e. sanitizer libraries, `libatomic`, `libquadmath`) besides just
+    # `libstdc++`; this may actually break clang.
 
     # TODO We would like to connect this to `useGccForLibs`, but we cannot yet
     # because `libcxxStdenv` on linux still needs this. Maybe someday we'll
