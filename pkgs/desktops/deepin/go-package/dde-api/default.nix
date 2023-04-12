@@ -35,7 +35,7 @@ buildGoPackage rec {
     sha256 = "sha256-F+vEOSpysqVtjs8de5mCmeANuCbYUQ860ZHl5rwNYac=";
   };
 
-  patches = [ ./0001-fix-PATH-for-NixOS.patch ];
+  patches = [ ./0001-dont-set-PATH.patch ];
 
   postPatch = ''
     substituteInPlace lang_info/lang_info.go \
@@ -47,7 +47,7 @@ buildGoPackage rec {
     substituteInPlace sound-theme-player/main.go \
       --replace "/usr/sbin/alsactl" "alsactl"
 
-    substituteInPlace misc/scripts/deepin-boot-sound.sh
+    substituteInPlace misc/scripts/deepin-boot-sound.sh \
      --replace "/usr/bin/dbus-send" "${dbus}/bin/dbus-send"
 
     substituteInPlace lunar-calendar/huangli.go adjust-grub-theme/main.go \
