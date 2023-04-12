@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "zipstream-ng";
-  version = "1.3.4";
+  version = "1.5.0";
 
   disabled = pythonOlder "3.7";
   src = fetchFromGitHub {
     owner = "pR0Ps";
     repo = "zipstream-ng";
     rev = "v${version}";
-    sha256 = "NTsnGCddGDUxdHbEoM2ew756psboex3sb6MkYKtaSjQ=";
+    hash = "sha256-4pS2t5IEIUHGJRaO6f9r8xnvXWA6p1EsDQ/jpD8CMLI=";
   };
 
   pythonImportsCheck = [
