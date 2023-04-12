@@ -210,7 +210,7 @@ in
           ExecStop = "${cfg.package}/bin/consul leave";
         });
 
-        path = with pkgs; [ iproute2 gnugrep gawk consul ];
+        path = with pkgs; [ iproute2 gawk cfg.package ];
         preStart = let
           family = if cfg.forceAddrFamily == "ipv6" then
             "-6"
