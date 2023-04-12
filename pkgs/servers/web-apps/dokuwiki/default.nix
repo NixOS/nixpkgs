@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dokuwiki";
-  version = "2022-07-31a";
+  version = "2023-04-04";
 
   src = fetchFromGitHub {
-    owner = "splitbrain";
+    owner = "dokuwiki";
     repo = pname;
-    rev = "release_stable_${version}";
-    sha256 = "sha256-gtWEtc3kbMokKycTx71XXblkDF39i926uN2kU3oOeVw=";
+    rev = "release-${version}";
+    sha256 = "sha256-QJnXKsEhvEcE88wvfMZR2j7X/pW8+28zlEnxhvhl+44=";
   };
 
   preload = writeText "preload.php" ''
