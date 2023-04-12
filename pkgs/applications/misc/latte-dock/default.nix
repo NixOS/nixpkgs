@@ -1,19 +1,20 @@
 { mkDerivation, lib, cmake, xorg, plasma-framework, plasma-wayland-protocols, fetchFromGitLab
-, extra-cmake-modules, karchive, kwindowsystem, qtx11extras, qtwayland, kcrash, knewstuff, wayland }:
+, extra-cmake-modules, karchive, kwindowsystem, qtx11extras, qtwayland, kcrash, knewstuff
+, wayland, plasma-workspace }:
 
 mkDerivation rec {
   pname = "latte-dock";
-  version = "unstable-2022-09-06";
+  version = "unstable-2023-03-31";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "plasma";
     repo = "latte-dock";
-    rev = "cd36798a61a37652eb549d7dfcdf06d2028eddc4";
-    sha256 = "sha256-X2PzI2XJje4DpPh7gTtYnMIwerR1IDY53HImvEtFmF4=";
+    rev = "4f93251d8c635c6150483ecb321eb276f34d4280";
+    sha256 = "sha256-oEfKfsVIAmYgQ7+WyBEQfVpI4IndWhYXWBsJE8bNNyI=";
   };
 
-  buildInputs = [ plasma-framework plasma-wayland-protocols qtwayland xorg.libpthreadstubs xorg.libXdmcp xorg.libSM wayland ];
+  buildInputs = [ plasma-framework plasma-wayland-protocols qtwayland xorg.libpthreadstubs xorg.libXdmcp xorg.libSM wayland plasma-workspace ];
 
   nativeBuildInputs = [ extra-cmake-modules cmake karchive kwindowsystem
     qtx11extras kcrash knewstuff ];
