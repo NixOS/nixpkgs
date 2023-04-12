@@ -16,6 +16,8 @@ in pkgs.stdenv.mkDerivation {
 
   src = pkgs.nix-gitignore.gitignoreSource [] ./.;
 
+  enableParallelBuilding = true;
+
   postPatch = ''
     ln -s ${doc-support} ./doc-support/result
   '';
