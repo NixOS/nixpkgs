@@ -25,7 +25,12 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-Rkzr5Y50Z2A+TeWCrrC6GUvu8/x6IgDxvd8D6mKbIGE=";
   };
-  cargoSha256 = "sha256-n2K0CghobLri69oMrs8nCNSwq/5eH3YlzLtC9JRriQ8=";
+  cargoSha256 = "sha256-D6YjBMUBlfSkPcNDSAln0coADFFCMf8ukO7kAbuZp+g=";
+
+  cargoPatches = [
+    # resolved in 1.31.2
+    ./CVE-2023-28446_escape_control_chars_backport.patch
+  ];
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
