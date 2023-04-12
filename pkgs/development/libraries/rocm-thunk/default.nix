@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     numactl
     valgrind
-    gcc.cc.libgcc # TODO: unhack this?
+    gcc.cc.libgcc or null # TODO: unhack this?
   ];
 
   cmakeFlags = [
