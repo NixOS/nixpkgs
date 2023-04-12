@@ -5,7 +5,6 @@
 , fetchpatch
 , makeSetupHook
 , makeWrapper
-, cmake
 , gst_all_1
 , libglvnd
 , darwin
@@ -27,11 +26,6 @@ let
       callPackage = self.newScope ({
         inherit qtModule srcs;
         stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-        cmake = cmake.overrideAttrs (attrs: {
-          patches = attrs.patches ++ [
-            ./patches/cmake.patch
-          ];
-        });
       });
     in
     {
