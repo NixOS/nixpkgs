@@ -13,10 +13,11 @@ let
   self =
     stdenv.mkDerivation {
       name = "$flutter-${version}-unwrapped";
+      inherit src patches version;
+
+      outputs = [ "out" "cache" ];
 
       buildInputs = [ git ];
-
-      inherit src patches version;
 
       postPatch = ''
         patchShebangs --build ./bin/
@@ -32,8 +33,23 @@ let
 
         export DART_SDK_PATH="${dart}"
 
-        HOME=../.. # required for pub upgrade --offline, ~/.pub-cache
-                   # path is relative otherwise it's replaced by /build/flutter
+        # The Flutter tool compilation requires dependencies to be cached, as there is no Internet access.
+        # Dart expects package caches to be mutable, and does not support composing cache directories.
+        # The packages cached during the build therefore cannot be easily used. They are provided through
+        # the derivation's "cache" output, though, in case they are needed.
+        #
+        # Note that non-cached packages will normally be fetched from the Internet when they are needed, so Flutter
+        # will function without an existing package cache as long as it has an Internet connection.
+        export PUB_CACHE="$cache"
+
+        if [ -d .pub-preload-cache ]; then
+          ${dart}/bin/dart pub cache preload .pub-preload-cache/*
+        elif [ -d .pub-cache ]; then
+          mv .pub-cache "$PUB_CACHE"
+        else
+          echo 'ERROR: Failed to locate the Dart package cache required to build the Flutter tool.'
+          exit 1
+        fi
 
         pushd "$FLUTTER_TOOLS_DIR"
         ${dart}/bin/dart pub get --offline
