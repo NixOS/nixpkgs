@@ -30,10 +30,10 @@ in {
   dbus = addToBuildInputsWithPkgConfig pkgs.dbus;
   epoxy = addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy;
   espeak = addToBuildInputsWithPkgConfig pkgs.espeak-ng;
-  exif = old: (brokenOnDarwin old) // (addToBuildInputs pkgs.libexif old);
-  expat = old: (brokenOnDarwin old) // (addToBuildInputs pkgs.expat old);
+  exif = addToBuildInputsWithPkgConfig pkgs.libexif;
+  expat = addToBuildInputsWithPkgConfig pkgs.expat;
   ezxdisp = addToBuildInputsWithPkgConfig pkgs.xorg.libX11;
-  freetype = old: (brokenOnDarwin old) // (addToBuildInputs pkgs.freetype old);
+  freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
   fuse = addToBuildInputsWithPkgConfig pkgs.fuse;
   # git = addToBuildInputsWithPkgConfig pkgs.libgit2;
   glfw3 = addToBuildInputsWithPkgConfig pkgs.glfw3;
