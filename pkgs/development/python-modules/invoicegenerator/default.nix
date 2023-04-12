@@ -47,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "This is library to generate a simple invoices.";
+    description = "A library to generate a simple invoices";
     homepage = "https://github.com/by-cx/InvoiceGenerator";
     changelog = "https://github.com/by-cx/InvoiceGenerator/releases/tag/v${version}";
     license = licenses.bsd3;
