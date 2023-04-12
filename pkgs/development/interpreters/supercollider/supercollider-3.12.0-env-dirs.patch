@@ -1,0 +1,65 @@
+diff --git a/common/SC_Filesystem_unix.cpp b/common/SC_Filesystem_unix.cpp
+index 52dc1fd2d..aae09ed9c 100644
+--- a/common/SC_Filesystem_unix.cpp
++++ b/common/SC_Filesystem_unix.cpp
+@@ -94,6 +94,10 @@ bool SC_Filesystem::isNonHostPlatformDirectoryName(const std::string& s) {
+ }
+ 
+ Path SC_Filesystem::defaultSystemAppSupportDirectory() {
++    const char* sc_data_dir = getenv("SC_DATA_DIR");
++    if (sc_data_dir)
++        return Path(sc_data_dir);
++
+ #    ifdef SC_DATA_DIR
+     return Path(SC_DATA_DIR);
+ #    else
+@@ -125,6 +129,10 @@ Path SC_Filesystem::defaultUserConfigDirectory() {
+ }
+ 
+ Path SC_Filesystem::defaultResourceDirectory() {
++    const char* sc_data_dir = getenv("SC_DATA_DIR");
++    if (sc_data_dir)
++        return Path(sc_data_dir);
++
+ #    ifdef SC_DATA_DIR
+     return Path(SC_DATA_DIR);
+ #    else
+diff --git a/server/scsynth/SC_Lib_Cintf.cpp b/server/scsynth/SC_Lib_Cintf.cpp
+index f6219307e..28e13eb98 100644
+--- a/server/scsynth/SC_Lib_Cintf.cpp
++++ b/server/scsynth/SC_Lib_Cintf.cpp
+@@ -178,9 +178,13 @@ void initialize_library(const char* uGensPluginPath) {
+     using DirName = SC_Filesystem::DirName;
+ 
+     if (loadUGensExtDirs) {
++        const char* sc_plugin_dir = getenv("SC_PLUGIN_DIR");
++        if (sc_plugin_dir) {
++            PlugIn_LoadDir(sc_plugin_dir, true);
++        }
+ #ifdef SC_PLUGIN_DIR
+         // load globally installed plugins
+-        if (bfs::is_directory(SC_PLUGIN_DIR)) {
++        else if (bfs::is_directory(SC_PLUGIN_DIR)) {
+             PlugIn_LoadDir(SC_PLUGIN_DIR, true);
+         }
+ #endif // SC_PLUGIN_DIR
+diff --git a/server/supernova/server/main.cpp b/server/supernova/server/main.cpp
+index b2b5adf4e..6cb8c411c 100644
+--- a/server/supernova/server/main.cpp
++++ b/server/supernova/server/main.cpp
+@@ -224,8 +224,14 @@ void set_plugin_paths(server_arguments const& args, nova::sc_ugen_factory* facto
+             }
+         }
+     } else {
++        const char* sc_plugin_dir = getenv("SC_PLUGIN_DIR");
++        if (sc_plugin_dir) {
++            factory->load_plugin_folder(sc_plugin_dir);
++        }
+ #ifdef SC_PLUGIN_DIR
+-        factory->load_plugin_folder(SC_PLUGIN_DIR);
++        else {
++            factory->load_plugin_folder(SC_PLUGIN_DIR);
++        }
+ #endif
+         factory->load_plugin_folder(SC_Filesystem::instance().getDirectory(DirName::Resource) / SC_PLUGIN_DIR_NAME);
+         factory->load_plugin_folder(SC_Filesystem::instance().getDirectory(DirName::SystemExtension));

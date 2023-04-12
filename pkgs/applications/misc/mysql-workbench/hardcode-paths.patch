@@ -1,0 +1,203 @@
+diff -u -r a/frontend/linux/workbench/mysql-workbench.in b/frontend/linux/workbench/mysql-workbench.in
+--- a/frontend/linux/workbench/mysql-workbench.in	2022-03-25 09:06:06.000000000 +0200
++++ b/frontend/linux/workbench/mysql-workbench.in	2022-06-17 00:22:51.290117109 +0300
+@@ -100,8 +100,8 @@
+ if test "$WB_DEBUG" != ""; then
+   $WB_DEBUG $MWB_BINARIES_DIR/mysql-workbench-bin "$@"
+ else
+-  if type -p catchsegv > /dev/null; then
+-  catchsegv $MWB_BINARIES_DIR/mysql-workbench-bin "$@"
++  if type -p @catchsegv@ > /dev/null; then
++  @catchsegv@ $MWB_BINARIES_DIR/mysql-workbench-bin "$@"
+   else
+   $MWB_BINARIES_DIR/mysql-workbench-bin "$@"
+   fi
+diff -u -r a/plugins/migration/frontend/migration_bulk_copy_data.py b/plugins/migration/frontend/migration_bulk_copy_data.py
+--- a/plugins/migration/frontend/migration_bulk_copy_data.py	2022-03-25 09:06:06.000000000 +0200
++++ b/plugins/migration/frontend/migration_bulk_copy_data.py	2022-06-17 00:13:29.430055453 +0300
+@@ -110,7 +110,7 @@
+         return 'sh'
+ 
+     def generate_import_script(self, connection_args, path_to_file, schema_name):
+-        output = ['#!/bin/bash']
++        output = ['#!/usr/bin/env bash']
+         output.append('MYPATH=\`pwd\`')
+         
+         output.append('if [ -f \$MYPATH/%s ] ; then' % self.error_log_name)
+@@ -164,7 +164,7 @@
+         return 'sh'
+ 
+     def generate_import_script(self, connection_args, path_to_file, schema_name):
+-        output = ['#!/bin/bash']
++        output = ['#!/usr/bin/env bash']
+         output.append('MYPATH=\`pwd\`')
+         
+         output.append('if [ -f \$MYPATH/%s ] ; then' % self.error_log_name)
+@@ -417,7 +417,7 @@
+     
+         with open(script_path, 'w+') as f:
+             os.chmod(script_path, 0o700)
+-            f.write('#!/bin/bash\n\n')
++            f.write('#!/usr/bin/env bash\n\n')
+             f.write('MYPATH=`pwd`\n')
+             
+             f.write("arg_source_password=\"<put source password here>\"\n")
+@@ -521,7 +521,7 @@
+     
+         with open(script_path, 'w+') as f:
+             os.chmod(script_path, 0o700)
+-            f.write('#!/bin/bash\n\n')
++            f.write('#!/usr/bin/env bash\n\n')
+             f.write('MYPATH=`pwd`\n')
+             
+             f.write("arg_source_password=\"<put source password here>\"\n")
+diff -u -r a/plugins/wb.admin/backend/wb_server_control.py b/plugins/wb.admin/backend/wb_server_control.py
+--- a/plugins/wb.admin/backend/wb_server_control.py	2022-03-25 09:06:06.000000000 +0200
++++ b/plugins/wb.admin/backend/wb_server_control.py	2022-06-17 00:14:26.937905324 +0300
+@@ -39,7 +39,7 @@
+ 
+ UnixVariant = {
+     "" : {
+-        'sudo_command' : "/usr/bin/sudo -k -S -p EnterPasswordHere ",
++        'sudo_command' : "@sudo@ -k -S -p EnterPasswordHere ",
+     }
+ }
+ 
+diff -u -r a/plugins/wb.admin/backend/wb_server_management.py b/plugins/wb.admin/backend/wb_server_management.py
+--- a/plugins/wb.admin/backend/wb_server_management.py	2022-03-25 09:06:06.000000000 +0200
++++ b/plugins/wb.admin/backend/wb_server_management.py	2022-06-17 00:18:58.034028354 +0300
+@@ -40,7 +40,7 @@
+ 
+ def reset_sudo_prefix():
+     global default_sudo_prefix
+-    default_sudo_prefix       = '/usr/bin/sudo -k -S -p EnterPasswordHere'
++    default_sudo_prefix       = '@sudo@ -k -S -p EnterPasswordHere'
+ 
+ reset_sudo_prefix()
+ 
+@@ -100,7 +100,7 @@
+ 
+     if to_spawn:
+         command += ' &'
+-        sudo_prefix += ' /usr/bin/nohup'
++        sudo_prefix += ' @nohup@'
+       
+     # If as_user is the CURRENT then there's no need to sudo
+     if as_user != Users.CURRENT:
+@@ -111,7 +111,7 @@
+         if '/bin/sh' in sudo_prefix or '/bin/bash' in sudo_prefix:
+             command = "LANG=C " + sudo_prefix + " \"" + command.replace('\\', '\\\\').replace('"', r'\"').replace('$','\\$') + "\""
+         else:
+-            command = "LANG=C " + sudo_prefix + " /bin/bash -c \"" + command.replace('\\', '\\\\').replace('"', r'\"').replace('$','\\$') + "\""
++            command = "LANG=C " + sudo_prefix + " @bash@ -c \"" + command.replace('\\', '\\\\').replace('"', r'\"').replace('$','\\$') + "\""
+ 
+     return command
+ 
+@@ -878,9 +878,9 @@
+     @useAbsPath("path")
+     def get_file_owner(self, path, as_user = Users.CURRENT, user_password = None):
+         if self.target_os == wbaOS.linux:
+-          command = 'LC_ALL=C stat -c %U '
++          command = 'LC_ALL=C @stat@ -c %U '
+         else:
+-          command = 'LC_ALL=C /usr/bin/stat -f "%Su" '
++          command = 'LC_ALL=C @stat@ -f "%Su" '
+       
+         output = io.StringIO()
+         command = command + quote_path(path)
+@@ -904,9 +904,9 @@
+             if as_user == Users.CURRENT:
+                 raise PermissionDeniedError("Cannot set owner of directory %s" % path)        
+             else:
+-                command = "/bin/mkdir %s && chown %s %s" % (quote_path(path), with_owner, quote_path(path))
++                command = "@mkdir@ %s && chown %s %s" % (quote_path(path), with_owner, quote_path(path))
+         else:
+-            command = "/bin/mkdir %s" % (quote_path(path))
++            command = "@mkdir@ %s" % (quote_path(path))
+             
+         res = self.process_ops.exec_cmd(command,
+                                         as_user   = as_user,
+@@ -935,7 +935,7 @@
+     @useAbsPath("path")
+     def remove_directory(self, path, as_user = Users.CURRENT, user_password = None):
+         output = io.StringIO()
+-        res = self.process_ops.exec_cmd('/bin/rmdir ' + quote_path(path),
++        res = self.process_ops.exec_cmd('@rmdir@ ' + quote_path(path),
+                                         as_user   = as_user,
+                                         user_password = user_password,
+                                         output_handler = output.write,
+@@ -948,7 +948,7 @@
+     @useAbsPath("path")
+     def remove_directory_recursive(self, path, as_user = Users.CURRENT, user_password = None):
+         output = io.StringIO()
+-        res = self.process_ops.exec_cmd('/bin/rm -R ' + quote_path(path),
++        res = self.process_ops.exec_cmd('@rm@ -R ' + quote_path(path),
+                                         as_user   = as_user,
+                                         user_password = user_password,
+                                         output_handler = output.write,
+@@ -961,7 +961,7 @@
+     @useAbsPath("path")
+     def delete_file(self, path, as_user = Users.CURRENT, user_password = None):
+         output = io.StringIO()
+-        res = self.process_ops.exec_cmd("/bin/rm " + quote_path(path),
++        res = self.process_ops.exec_cmd("@rm@ " + quote_path(path),
+                                         as_user   = as_user,
+                                         user_password = user_password,
+                                         output_handler = output.write,
+@@ -1009,7 +1009,7 @@
+     def _copy_file(self, source, dest, as_user = Users.CURRENT, user_password = None):
+         output = io.StringIO()
+         
+-        res = self.process_ops.exec_cmd("LC_ALL=C /bin/cp " + quote_path(source) + " " + quote_path(dest),
++        res = self.process_ops.exec_cmd("LC_ALL=C @cp@ " + quote_path(source) + " " + quote_path(dest),
+                       as_user   = as_user,
+                       user_password = user_password,
+                       output_handler = output.write,
+@@ -1085,9 +1085,9 @@
+             # for ls -l, the output format changes depending on stdout being a terminal or not
+             # since both cases are possible, we need to handle both at the same time (1st line being total <nnnn> or not)
+             # the good news is that if the line is there, then it will always start with total, regardless of the locale
+-            command = 'LC_ALL=C /bin/ls -l -p %s' % quote_path(path)
++            command = 'LC_ALL=C @ls@ -l -p %s' % quote_path(path)
+         else:
+-            command = 'LC_ALL=C /bin/ls -1 -p %s' % quote_path(path)
++            command = 'LC_ALL=C @ls@ -1 -p %s' % quote_path(path)
+             
+         output = io.StringIO()
+         res = self.process_ops.exec_cmd(command,
+@@ -2163,9 +2163,9 @@
+     def get_range(self, start, end):
+         f = io.StringIO()
+         if not self._need_sudo:
+-            ret = self.server_helper.execute_command("/bin/dd if=%s ibs=1 skip=%i count=%i 2> /dev/null" % (quote_path(self.path), start, end-start), as_user = Users.CURRENT, user_password=None, output_handler=f.write)
++            ret = self.server_helper.execute_command("@dd@ if=%s ibs=1 skip=%i count=%i 2> /dev/null" % (quote_path(self.path), start, end-start), as_user = Users.CURRENT, user_password=None, output_handler=f.write)
+         else:
+-            ret = self.server_helper.execute_command("/bin/dd if=%s ibs=1 skip=%i count=%i 2> /dev/null" % (quote_path(self.path), start, end-start), as_user = Users.ADMIN, user_password=self.get_password, output_handler=f.write)
++            ret = self.server_helper.execute_command("@dd@ if=%s ibs=1 skip=%i count=%i 2> /dev/null" % (quote_path(self.path), start, end-start), as_user = Users.ADMIN, user_password=self.get_password, output_handler=f.write)
+ 
+         if ret != 0:
+             raise RuntimeError("Could not get data from file %s" % self.path)
+@@ -2173,9 +2173,9 @@
+ 
+     def read_task(self, offset, file):
+         if not self._need_sudo:
+-            self.server_helper.execute_command("/bin/dd if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.CURRENT, user_password=None, output_handler=file.write)
++            self.server_helper.execute_command("@dd@ if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.CURRENT, user_password=None, output_handler=file.write)
+         else:
+-            self.server_helper.execute_command("/bin/dd if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.ADMIN, user_password=self.get_password, output_handler=file.write)
++            self.server_helper.execute_command("@dd@ if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.ADMIN, user_password=self.get_password, output_handler=file.write)
+         # this will signal the reader end that there's no more data
+         file.close()
+ 
+@@ -2202,9 +2202,9 @@
+         self._pos = offset
+         f = io.StringIO()
+         if not self._need_sudo:
+-            self.server_helper.execute_command("/bin/dd if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.CURRENT, user_password=None, output_handler=f.write)
++            self.server_helper.execute_command("@dd@ if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.CURRENT, user_password=None, output_handler=f.write)
+         else:
+-            self.server_helper.execute_command("/bin/dd if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.ADMIN, user_password=self._password, output_handler=f.write)
++            self.server_helper.execute_command("@dd@ if=%s ibs=1 skip=%i 2> /dev/null" % (quote_path(self.path), offset), as_user = Users.ADMIN, user_password=self._password, output_handler=f.write)
+         self.data = f
+         self.data.seek(0)
+         if self.skip_first_newline:

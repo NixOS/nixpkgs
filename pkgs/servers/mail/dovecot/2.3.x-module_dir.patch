@@ -1,0 +1,165 @@
+diff -ru dovecot-2.3.9.2.orig/src/auth/main.c dovecot-2.3.9.2/src/auth/main.c
+--- dovecot-2.3.9.2.orig/src/auth/main.c	2019-12-13 14:12:00.000000000 +0100
++++ dovecot-2.3.9.2/src/auth/main.c	2019-12-15 19:46:52.101597499 +0100
+@@ -191,7 +191,7 @@
+ 	mod_set.debug = global_auth_settings->debug;
+ 	mod_set.filter_callback = auth_module_filter;
+ 
+-	modules = module_dir_load(AUTH_MODULE_DIR, NULL, &mod_set);
++	modules = module_dir_load("/etc/dovecot/modules/auth", NULL, &mod_set);
+ 	module_dir_init(modules);
+ 
+ 	if (!worker)
+@@ -222,7 +222,7 @@
+ 	mod_set.debug = global_auth_settings->debug;
+ 	mod_set.ignore_missing = TRUE;
+ 
+-	modules = module_dir_load_missing(modules, AUTH_MODULE_DIR, names,
++	modules = module_dir_load_missing(modules, "/etc/dovecot/modules/auth", names,
+ 					  &mod_set);
+ 	module_dir_init(modules);
+ }
+diff -ru dovecot-2.3.9.2.orig/src/config/all-settings.c dovecot-2.3.9.2/src/config/all-settings.c
+--- dovecot-2.3.9.2.orig/src/config/all-settings.c	2019-12-13 14:12:32.000000000 +0100
++++ dovecot-2.3.9.2/src/config/all-settings.c	2019-12-15 19:49:42.764650074 +0100
+@@ -1080,7 +1080,7 @@
+ 	.last_valid_gid = 0,
+ 
+ 	.mail_plugins = "",
+-	.mail_plugin_dir = MODULEDIR,
++	.mail_plugin_dir = "/etc/dovecot/modules",
+ 
+ 	.mail_log_prefix = "%s(%u)<%{pid}><%{session}>: ",
+ 
+@@ -3849,7 +3849,7 @@
+ 	.login_log_format = "%$: %s",
+ 	.login_access_sockets = "",
+ 	.login_proxy_notify_path = "proxy-notify",
+-	.login_plugin_dir = MODULEDIR"/login",
++	.login_plugin_dir = "/etc/dovecot/modules""/login",
+ 	.login_plugins = "",
+ 	.login_proxy_max_disconnect_delay = 0,
+ 	.director_username_hash = "%u",
+@@ -4058,7 +4058,7 @@
+ 	.login_trusted_networks = "",
+ 
+ 	.mail_plugins = "",
+-	.mail_plugin_dir = MODULEDIR,
++	.mail_plugin_dir = "/etc/dovecot/modules",
+ };
+ static const struct setting_parser_info *lmtp_setting_dependencies[] = {
+ 	&lda_setting_parser_info,
+@@ -4823,7 +4823,7 @@
+ 	.base_dir = PKG_RUNDIR,
+ 	.libexec_dir = PKG_LIBEXECDIR,
+ 	.mail_plugins = "",
+-	.mail_plugin_dir = MODULEDIR,
++	.mail_plugin_dir = "/etc/dovecot/modules",
+ 	.mail_temp_dir = "/tmp",
+ 	.auth_debug = FALSE,
+ 	.auth_socket_path = "auth-userdb",
+diff -ru dovecot-2.3.9.2.orig/src/config/config-parser.c dovecot-2.3.9.2/src/config/config-parser.c
+--- dovecot-2.3.9.2.orig/src/config/config-parser.c	2019-12-13 14:12:00.000000000 +0100
++++ dovecot-2.3.9.2/src/config/config-parser.c	2019-12-15 19:46:52.102597505 +0100
+@@ -1077,7 +1077,7 @@
+ 
+ 	i_zero(&mod_set);
+ 	mod_set.abi_version = DOVECOT_ABI_VERSION;
+-	modules = module_dir_load(CONFIG_MODULE_DIR, NULL, &mod_set);
++	modules = module_dir_load("/etc/dovecot/modules/settings", NULL, &mod_set);
+ 	module_dir_init(modules);
+ 
+ 	i_array_init(&new_roots, 64);
+diff -ru dovecot-2.3.9.2.orig/src/dict/main.c dovecot-2.3.9.2/src/dict/main.c
+--- dovecot-2.3.9.2.orig/src/dict/main.c	2019-12-13 14:12:00.000000000 +0100
++++ dovecot-2.3.9.2/src/dict/main.c	2019-12-15 19:46:52.102597505 +0100
+@@ -104,7 +104,7 @@
+ 	mod_set.abi_version = DOVECOT_ABI_VERSION;
+ 	mod_set.require_init_funcs = TRUE;
+ 
+-	modules = module_dir_load(DICT_MODULE_DIR, NULL, &mod_set);
++	modules = module_dir_load("/etc/dovecot/modules/dict", NULL, &mod_set);
+ 	module_dir_init(modules);
+ 
+ 	/* Register only after loading modules. They may contain SQL drivers,
+diff -ru dovecot-2.3.9.2.orig/src/doveadm/doveadm-settings.c dovecot-2.3.9.2/src/doveadm/doveadm-settings.c
+--- dovecot-2.3.9.2.orig/src/doveadm/doveadm-settings.c	2019-12-13 14:12:00.000000000 +0100
++++ dovecot-2.3.9.2/src/doveadm/doveadm-settings.c	2019-12-15 19:47:29.525812499 +0100
+@@ -89,7 +89,7 @@
+ 	.base_dir = PKG_RUNDIR,
+ 	.libexec_dir = PKG_LIBEXECDIR,
+ 	.mail_plugins = "",
+-	.mail_plugin_dir = MODULEDIR,
++	.mail_plugin_dir = "/etc/dovecot/modules",
+ 	.mail_temp_dir = "/tmp",
+ 	.auth_debug = FALSE,
+ 	.auth_socket_path = "auth-userdb",
+diff -ru dovecot-2.3.9.2.orig/src/doveadm/doveadm-util.c dovecot-2.3.9.2/src/doveadm/doveadm-util.c
+--- dovecot-2.3.9.2.orig/src/doveadm/doveadm-util.c	2019-12-13 14:12:00.000000000 +0100
++++ dovecot-2.3.9.2/src/doveadm/doveadm-util.c	2019-12-15 19:52:32.003844670 +0100
+@@ -33,7 +33,7 @@
+ 	mod_set.debug = doveadm_debug;
+ 	mod_set.ignore_dlopen_errors = TRUE;
+ 
+-	modules = module_dir_load_missing(modules, DOVEADM_MODULEDIR,
++	modules = module_dir_load_missing(modules, "/etc/dovecot/modules/doveadm",
+ 					  NULL, &mod_set);
+ 	module_dir_init(modules);
+ }
+@@ -58,7 +58,7 @@
+ 			return FALSE;
+ 	}
+ 
+-	dir = opendir(DOVEADM_MODULEDIR);
++	dir = opendir("/etc/dovecot/modules/doveadm");
+ 	if (dir == NULL)
+ 		return FALSE;
+ 
+diff -ru dovecot-2.3.9.2.orig/src/lib-fs/fs-api.c dovecot-2.3.9.2/src/lib-fs/fs-api.c
+--- dovecot-2.3.9.2.orig/src/lib-fs/fs-api.c	2019-12-13 14:12:00.000000000 +0100
++++ dovecot-2.3.9.2/src/lib-fs/fs-api.c	2019-12-15 19:46:52.102597505 +0100
+@@ -114,7 +114,7 @@
+ 	mod_set.abi_version = DOVECOT_ABI_VERSION;
+ 	mod_set.ignore_missing = TRUE;
+ 
+-	fs_modules = module_dir_load_missing(fs_modules, MODULE_DIR,
++	fs_modules = module_dir_load_missing(fs_modules, "/etc/dovecot/modules",
+ 					     module_name, &mod_set);
+ 	module_dir_init(fs_modules);
+ 
+diff -ru dovecot-2.3.9.2.orig/src/lib-ssl-iostream/iostream-ssl.c dovecot-2.3.9.2/src/lib-ssl-iostream/iostream-ssl.c
+--- dovecot-2.3.9.2.orig/src/lib-ssl-iostream/iostream-ssl.c	2019-12-13 14:12:00.000000000 +0100
++++ dovecot-2.3.9.2/src/lib-ssl-iostream/iostream-ssl.c	2019-12-15 19:46:52.102597505 +0100
+@@ -54,7 +54,7 @@
+ 	mod_set.abi_version = DOVECOT_ABI_VERSION;
+ 	mod_set.setting_name = "<built-in lib-ssl-iostream lookup>";
+ 	mod_set.require_init_funcs = TRUE;
+-	ssl_module = module_dir_load(MODULE_DIR, plugin_name, &mod_set);
++	ssl_module = module_dir_load("/etc/dovecot/modules", plugin_name, &mod_set);
+ 	if (module_dir_try_load_missing(&ssl_module, MODULE_DIR, plugin_name,
+ 					&mod_set, error_r) < 0)
+ 		return -1;
+diff -ru dovecot-2.3.9.2.orig/src/lib-storage/mail-storage-settings.c dovecot-2.3.9.2/src/lib-storage/mail-storage-settings.c
+--- dovecot-2.3.9.2.orig/src/lib-storage/mail-storage-settings.c	2019-12-13 14:12:00.000000000 +0100
++++ dovecot-2.3.9.2/src/lib-storage/mail-storage-settings.c	2019-12-15 19:46:52.102597505 +0100
+@@ -337,7 +337,7 @@
+ 	.last_valid_gid = 0,
+ 
+ 	.mail_plugins = "",
+-	.mail_plugin_dir = MODULEDIR,
++	.mail_plugin_dir = "/etc/dovecot/modules",
+ 
+ 	.mail_log_prefix = "%s(%u)<%{pid}><%{session}>: ",
+ 
+diff -ru dovecot-2.3.9.2.orig/src/lmtp/lmtp-settings.c dovecot-2.3.9.2/src/lmtp/lmtp-settings.c
+--- dovecot-2.3.9.2.orig/src/lmtp/lmtp-settings.c	2019-12-13 14:12:00.000000000 +0100
++++ dovecot-2.3.9.2/src/lmtp/lmtp-settings.c	2019-12-15 19:46:52.102597505 +0100
+@@ -95,7 +95,7 @@
+ 	.login_trusted_networks = "",
+ 
+ 	.mail_plugins = "",
+-	.mail_plugin_dir = MODULEDIR,
++	.mail_plugin_dir = "/etc/dovecot/modules",
+ };
+ 
+ static const struct setting_parser_info *lmtp_setting_dependencies[] = {

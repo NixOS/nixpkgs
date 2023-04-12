@@ -1,0 +1,62 @@
+diff --git a/libs/qmlglsink/gst-plugins-good/ext/qt/gstqsgtexture.cc b/libs/qmlglsink/gst-plugins-good/ext/qt/gstqsgtexture.cc
+index 2b314e0..ad1425e 100644
+--- a/libs/qmlglsink/gst-plugins-good/ext/qt/gstqsgtexture.cc
++++ b/libs/qmlglsink/gst-plugins-good/ext/qt/gstqsgtexture.cc
+@@ -35,7 +35,7 @@ GST_DEBUG_CATEGORY_STATIC (GST_CAT_DEFAULT);
+ 
+ GstQSGTexture::GstQSGTexture ()
+ {
+-  static volatile gsize _debug;
++  static gsize _debug;
+ 
+   initializeOpenGLFunctions();
+ 
+diff --git a/libs/qmlglsink/gst-plugins-good/ext/qt/gstqtglutility.cc b/libs/qmlglsink/gst-plugins-good/ext/qt/gstqtglutility.cc
+index 3a68576..5203d13 100644
+--- a/libs/qmlglsink/gst-plugins-good/ext/qt/gstqtglutility.cc
++++ b/libs/qmlglsink/gst-plugins-good/ext/qt/gstqtglutility.cc
+@@ -58,7 +58,7 @@ gst_qt_get_gl_display ()
+ {
+   GstGLDisplay *display = NULL;
+   QGuiApplication *app = static_cast<QGuiApplication *> (QCoreApplication::instance ());
+-  static volatile gsize _debug;
++  static gsize _debug;
+ 
+   g_assert (app != NULL);
+ 
+diff --git a/libs/qmlglsink/gst-plugins-good/ext/qt/qtitem.cc b/libs/qmlglsink/gst-plugins-good/ext/qt/qtitem.cc
+index f031b36..3c6722a 100644
+--- a/libs/qmlglsink/gst-plugins-good/ext/qt/qtitem.cc
++++ b/libs/qmlglsink/gst-plugins-good/ext/qt/qtitem.cc
+@@ -106,7 +106,7 @@ void InitializeSceneGraph::run()
+ 
+ QtGLVideoItem::QtGLVideoItem()
+ {
+-  static volatile gsize _debug;
++  static gsize _debug;
+ 
+   if (g_once_init_enter (&_debug)) {
+     GST_DEBUG_CATEGORY_INIT (GST_CAT_DEFAULT, "qtglwidget", 0, "Qt GL Widget");
+diff --git a/libs/qmlglsink/gst-plugins-good/ext/qt/qtwindow.cc b/libs/qmlglsink/gst-plugins-good/ext/qt/qtwindow.cc
+index 8bf14ae..2f88aa9 100644
+--- a/libs/qmlglsink/gst-plugins-good/ext/qt/qtwindow.cc
++++ b/libs/qmlglsink/gst-plugins-good/ext/qt/qtwindow.cc
+@@ -107,7 +107,7 @@ QtGLWindow::QtGLWindow ( QWindow * parent, QQuickWindow *src ) :
+   QQuickWindow( parent ), source (src)
+ {
+   QGuiApplication *app = static_cast<QGuiApplication *> (QCoreApplication::instance ());
+-  static volatile gsize _debug;
++  static gsize _debug;
+ 
+   g_assert (app != NULL);
+ 
+@@ -156,7 +156,7 @@ QtGLWindow::beforeRendering()
+ 
+   g_mutex_lock (&this->priv->lock);
+ 
+-  static volatile gsize once = 0;
++  static gsize once = 0;
+   if (g_once_init_enter(&once)) {
+     this->priv->start = QDateTime::currentDateTime().toMSecsSinceEpoch();
+     g_once_init_leave(&once,1);
+

@@ -1,0 +1,115 @@
+From 2c563889fcad37df4ee4251bf0a63316d8b7b612 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
+Date: Thu, 14 May 2020 16:36:34 -0300
+Subject: [PATCH] wrapped setuid executables
+
+Installing programs with root ownership and setuid/setgid permissions
+in /nix/store is not allowed. They should be wrapped in the
+enlightenment service module, and the wrapped ones should be used
+instead.
+---
+ meson/meson_inst.sh           | 4 ++--
+ src/bin/e_auth.c              | 6 ++----
+ src/bin/e_fm/e_fm_main_eeze.c | 6 +++---
+ src/bin/e_start_main.c        | 3 +--
+ src/bin/e_system.c            | 2 +-
+ 5 files changed, 9 insertions(+), 12 deletions(-)
+
+diff --git a/meson/meson_inst.sh b/meson/meson_inst.sh
+index 321143e40..cd2399306 100755
+--- a/meson/meson_inst.sh
++++ b/meson/meson_inst.sh
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ 
+ for x in "$@" ; do
+-	chown root "$DESTDIR/$x"
+-	chmod a=rx,u+xs "$DESTDIR/$x"
++	echo TODO: chown root "$DESTDIR/$x"
++	echo TODO: chmod a=rx,u+xs "$DESTDIR/$x"
+ done
+diff --git a/src/bin/e_auth.c b/src/bin/e_auth.c
+index 6d07a0ac3..d519f0649 100644
+--- a/src/bin/e_auth.c
++++ b/src/bin/e_auth.c
+@@ -38,8 +38,7 @@ e_auth_begin(char *passwd)
+    pwlen = strlen(passwd);
+ 
+    snprintf(buf, sizeof(buf),
+-            "%s/enlightenment/utils/enlightenment_ckpasswd pw",
+-            e_prefix_lib_get());
++            "/run/wrappers/bin/enlightenment_ckpasswd pw");
+    exe = ecore_exe_pipe_run(buf, ECORE_EXE_PIPE_WRITE, NULL);
+    if (!exe) goto out;
+    snprintf(buf, sizeof(buf), "pw %s", passwd);
+@@ -75,8 +74,7 @@ e_auth_polkit_begin(char *passwd, const char *cookie, unsigned int uid)
+    pwlen = strlen(passwd);
+ 
+    snprintf(buf, sizeof(buf),
+-            "%s/enlightenment/utils/enlightenment_ckpasswd pk",
+-            e_prefix_lib_get());
++            "/run/wrappers/bin/enlightenment_ckpasswd pk");
+    exe = ecore_exe_pipe_run(buf, ECORE_EXE_PIPE_WRITE, NULL);
+    if (!exe) goto out;
+    snprintf(buf, sizeof(buf), "%s %u %s", cookie, uid, passwd);
+diff --git a/src/bin/e_fm/e_fm_main_eeze.c b/src/bin/e_fm/e_fm_main_eeze.c
+index 9b10b3117..0f0aa5b53 100644
+--- a/src/bin/e_fm/e_fm_main_eeze.c
++++ b/src/bin/e_fm/e_fm_main_eeze.c
+@@ -318,7 +318,7 @@ _e_fm_main_eeze_volume_eject(E_Volume *v)
+      {
+         char buf[PATH_MAX];
+ 
+-        snprintf(buf, sizeof(buf), "%s/enlightenment/utils/enlightenment_sys", eina_prefix_lib_get(pfx));
++        snprintf(buf, sizeof(buf), "/run/wrappers/bin/enlightenment_sys");
+         eeze_disk_mount_wrapper_set(v->disk, buf);
+      }
+    v->guard = ecore_timer_loop_add(E_FM_EJECT_TIMEOUT, (Ecore_Task_Cb)_e_fm_main_eeze_vol_eject_timeout, v);
+@@ -512,7 +512,7 @@ _e_fm_main_eeze_volume_unmount(E_Volume *v)
+      {
+         char buf[PATH_MAX];
+ 
+-        snprintf(buf, sizeof(buf), "%s/enlightenment/utils/enlightenment_sys", eina_prefix_lib_get(pfx));
++        snprintf(buf, sizeof(buf), "/run/wrappers/bin/enlightenment_sys");
+         eeze_disk_mount_wrapper_set(v->disk, buf);
+      }
+    v->guard = ecore_timer_loop_add(E_FM_UNMOUNT_TIMEOUT, (Ecore_Task_Cb)_e_fm_main_eeze_vol_unmount_timeout, v);
+@@ -548,7 +548,7 @@ _e_fm_main_eeze_volume_mount(E_Volume *v)
+      {
+         char buf2[PATH_MAX];
+ 
+-        snprintf(buf2, sizeof(buf2), "%s/enlightenment/utils/enlightenment_sys", eina_prefix_lib_get(pfx));
++        snprintf(buf2, sizeof(buf2), "/run/wrappers/bin/enlightenment_sys");
+         eeze_disk_mount_wrapper_set(v->disk, buf2);
+      }
+    v->guard = ecore_timer_loop_add(E_FM_MOUNT_TIMEOUT, (Ecore_Task_Cb)_e_fm_main_eeze_vol_mount_timeout, v);
+diff --git a/src/bin/e_start_main.c b/src/bin/e_start_main.c
+index 722063339..ee85aa9f1 100644
+--- a/src/bin/e_start_main.c
++++ b/src/bin/e_start_main.c
+@@ -596,8 +596,7 @@ main(int argc, char **argv)
+               eina_prefix_data_get(pfx));
+    putenv(buf2);
+    myasprintf(&buf3,
+-              "E_ALERT_SYSTEM_BIN=%s/enlightenment/utils/enlightenment_system",
+-              eina_prefix_lib_get(pfx));
++              "E_ALERT_SYSTEM_BIN=/run/wrappers/bin/enlightenment_system");
+    putenv(buf3);
+ 
+    home = getenv("HOME");
+diff --git a/src/bin/e_system.c b/src/bin/e_system.c
+index bfd43e7e2..6bf48e31f 100644
+--- a/src/bin/e_system.c
++++ b/src/bin/e_system.c
+@@ -133,7 +133,7 @@ _system_spawn(void)
+    else _respawn_count = 0;
+    if (_respawn_count > 5) return;
+    snprintf(buf, sizeof(buf),
+-            "%s/enlightenment/utils/enlightenment_system", e_prefix_lib_get());
++            "/run/wrappers/bin/enlightenment_system");
+    _system_exe = ecore_exe_pipe_run
+      (buf, ECORE_EXE_NOT_LEADER | ECORE_EXE_TERM_WITH_PARENT |
+       ECORE_EXE_PIPE_READ | ECORE_EXE_PIPE_WRITE, NULL);
+-- 
+2.34.0
+

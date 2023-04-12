@@ -1,0 +1,25 @@
+#!@stdenv_shell@ -e
+
+[ -z "$DT_DIR" ] && DT_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/dwarftherapist"
+
+install_dir="@install@"
+therapist_dir="@therapist@"
+
+@cat@ <<EOF >&2
+Using $DT_DIR as Dwarf Therapist overlay directory.
+EOF
+
+update_path() {
+  local path="$1"
+
+  @mkdir@ -p "$DT_DIR/$(@dirname@ "$path")"
+  if [ ! -e "$DT_DIR/$path" ] || [ -L "$DT_DIR/$path" ]; then
+    @rm@ -f "$DT_DIR/$path"
+    @ln@ -s "$install_dir/share/dwarftherapist/$path" "$DT_DIR/$path"
+  fi
+}
+
+cd "$install_dir/share/dwarftherapist"
+update_path memory_layouts
+
+exec "$therapist_dir/bin/dwarftherapist" "$@"

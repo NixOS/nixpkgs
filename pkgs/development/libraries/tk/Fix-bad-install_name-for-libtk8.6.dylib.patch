@@ -1,0 +1,29 @@
+From f90278dac42135acd55200b7d2153f44d72fec53 Mon Sep 17 00:00:00 2001
+From: Josef Knedl <josef.kemetmueller@aon.at>
+Date: Wed, 24 Feb 2016 00:37:40 +0100
+Subject: [PATCH] Fix bad install_name for libtk8.6.dylib
+
+This follows: https://trac.macports.org/ticket/37395
+and https://trac.macports.org/changeset/100816
+Alternative would be to use Quartz build instead:
+https://sourceforge.net/p/tktoolkit/bugs/3048/
+---
+ unix/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/unix/Makefile.in b/unix/Makefile.in
+index f21fdbb..1b89256 100644
+--- a/unix/Makefile.in
++++ b/unix/Makefile.in
+@@ -283,7 +283,7 @@ CC_SEARCH_FLAGS	= @CC_SEARCH_FLAGS@
+ LD_SEARCH_FLAGS	= @LD_SEARCH_FLAGS@
+ 
+ # support for embedded libraries on Darwin / Mac OS X
+-DYLIB_INSTALL_DIR	= ${LIB_RUNTIME_DIR}
++DYLIB_INSTALL_DIR	= $(libdir)
+ 
+ # support for building the Aqua resource file
+ TK_RSRC_FILE		= @TK_RSRC_FILE@
+-- 
+2.7.1
+

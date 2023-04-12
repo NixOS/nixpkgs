@@ -1,0 +1,26 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2039,6 +2039,7 @@ dependencies = [
+  "tokei",
+  "toml",
+  "yaml-rust",
++ "zstd",
+ ]
+ 
+ [[package]]
+@@ -3286,4 +3287,5 @@ checksum = "9fd07cbbc53846d9145dbffdf6dd09a7a0aa52be46741825f5c97bdd4f73f12b"
+ dependencies = [
+  "cc",
+  "libc",
++ "pkg-config",
+ ]
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -58,6 +58,7 @@ time-humanize = { version = "0.1.3", features = ["time"] }
+ tokei = "12.1.2"
+ toml = "0.5.9"
+ yaml-rust = "0.4.5"
++zstd = { version = "*", features = ["pkg-config"] }
+ 
+ [target.'cfg(windows)'.dependencies]
+ enable-ansi-support = "0.1.2"

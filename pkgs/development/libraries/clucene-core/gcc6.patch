@@ -1,0 +1,146 @@
+https://bugzilla.redhat.com/show_bug.cgi?id=998477
+
+diff -up clucene-core-0.9.21b/src/CLucene/debug/lucenebase.h.gcc48 clucene-core-0.9.21b/src/CLucene/debug/lucenebase.h
+--- clucene-core-0.9.21b/src/CLucene/debug/lucenebase.h.gcc48	2008-10-23 12:44:35.000000000 -0500
++++ clucene-core-0.9.21b/src/CLucene/debug/lucenebase.h	2013-08-27 13:17:35.754234297 -0500
+@@ -58,7 +58,7 @@ public:
+ 		__cl_refcount--;
+ 		return __cl_refcount;
+ 	}
+-    virtual ~LuceneBase(){};
++    virtual ~LuceneBase() throw(CLuceneError&) {};
+ };
+ 
+ class LuceneVoidBase{
+diff -up clucene-core-0.9.21b/src/CLucene/index/CompoundFile.cpp.gcc48 clucene-core-0.9.21b/src/CLucene/index/CompoundFile.cpp
+--- clucene-core-0.9.21b/src/CLucene/index/CompoundFile.cpp.gcc48	2013-08-27 13:17:35.754234297 -0500
++++ clucene-core-0.9.21b/src/CLucene/index/CompoundFile.cpp	2013-08-27 13:18:02.844949386 -0500
+@@ -94,7 +94,7 @@ CompoundFileReader::CompoundFileReader(D
+    )
+ }
+ 
+-CompoundFileReader::~CompoundFileReader(){
++CompoundFileReader::~CompoundFileReader() throw(CLuceneError&) {
+ 	close();
+ }
+ 
+diff -up clucene-core-0.9.21b/src/CLucene/index/CompoundFile.h.gcc48 clucene-core-0.9.21b/src/CLucene/index/CompoundFile.h
+--- clucene-core-0.9.21b/src/CLucene/index/CompoundFile.h.gcc48	2008-10-23 12:44:37.000000000 -0500
++++ clucene-core-0.9.21b/src/CLucene/index/CompoundFile.h	2013-08-27 13:17:35.755234286 -0500
+@@ -95,7 +95,7 @@ protected:
+ 
+ public:
+ 	CompoundFileReader(CL_NS(store)::Directory* dir, char* name);
+-	~CompoundFileReader();
++	~CompoundFileReader() throw(CLuceneError&);
+ 	CL_NS(store)::Directory* getDirectory();
+ 	const char* getName() const;
+ 
+diff -up clucene-core-0.9.21b/src/CLucene/index/Term.cpp.gcc48 clucene-core-0.9.21b/src/CLucene/index/Term.cpp
+--- clucene-core-0.9.21b/src/CLucene/index/Term.cpp.gcc48	2008-10-23 12:44:37.000000000 -0500
++++ clucene-core-0.9.21b/src/CLucene/index/Term.cpp	2013-08-27 13:17:35.755234286 -0500
+@@ -81,7 +81,7 @@ Term::Term(const TCHAR* fld, const TCHAR
+     set(fld,txt);
+ }
+ 
+-Term::~Term(){
++Term::~Term() throw (CLuceneError&) {
+ //Func - Destructor.
+ //Pre  - true
+ //Post - The instance has been destroyed. field and text have been deleted if pre(intrn) is false
+diff -up clucene-core-0.9.21b/src/CLucene/index/Term.h.gcc48 clucene-core-0.9.21b/src/CLucene/index/Term.h
+--- clucene-core-0.9.21b/src/CLucene/index/Term.h.gcc48	2008-10-23 12:44:37.000000000 -0500
++++ clucene-core-0.9.21b/src/CLucene/index/Term.h	2013-08-27 13:17:35.755234286 -0500
+@@ -68,7 +68,7 @@ class Term:LUCENE_REFBASE {
+ 	Term(const TCHAR* fld, const TCHAR* txt);
+ 	
+ 	///Destructor.
+-	~Term();
++	~Term() throw(CLuceneError&);
+ 
+ 	///Returns the field of this term, an interned string. The field indicates
+ 	///the part of a document which this term came from. 
+diff -up clucene-core-0.9.21b/src/CLucene/store/Directory.h.gcc48 clucene-core-0.9.21b/src/CLucene/store/Directory.h
+--- clucene-core-0.9.21b/src/CLucene/store/Directory.h.gcc48	2008-10-23 12:44:36.000000000 -0500
++++ clucene-core-0.9.21b/src/CLucene/store/Directory.h	2013-08-27 13:17:35.756234276 -0500
+@@ -41,7 +41,7 @@ CL_NS_DEF(store)
+ 	public:
+ 		DEFINE_MUTEX(THIS_LOCK)
+ 	   
+-		virtual ~Directory(){ };
++		virtual ~Directory() throw(CLuceneError&) { };
+ 
+ 		// Returns an null terminated array of strings, one for each file in the directory. 
+ 		char** list() const{
+diff -up clucene-core-0.9.21b/src/CLucene/store/FSDirectory.cpp.gcc48 clucene-core-0.9.21b/src/CLucene/store/FSDirectory.cpp
+--- clucene-core-0.9.21b/src/CLucene/store/FSDirectory.cpp.gcc48	2008-10-23 13:01:52.000000000 -0500
++++ clucene-core-0.9.21b/src/CLucene/store/FSDirectory.cpp	2013-08-27 13:17:35.756234276 -0500
+@@ -368,7 +368,7 @@ void FSDirectory::FSIndexInput::readInte
+       strcat(buffer,name);
+   }
+ 
+-  FSDirectory::~FSDirectory(){
++  FSDirectory::~FSDirectory() throw(CLuceneError&) {
+   }
+ 
+   void FSDirectory::list(vector<string>* names) const{ //todo: fix this, ugly!!!
+diff -up clucene-core-0.9.21b/src/CLucene/store/FSDirectory.h.gcc48 clucene-core-0.9.21b/src/CLucene/store/FSDirectory.h
+--- clucene-core-0.9.21b/src/CLucene/store/FSDirectory.h.gcc48	2008-10-23 13:00:43.000000000 -0500
++++ clucene-core-0.9.21b/src/CLucene/store/FSDirectory.h	2013-08-27 13:17:35.756234276 -0500
+@@ -155,7 +155,7 @@
+ 	  ///Destructor - only call this if you are sure the directory
+ 	  ///is not being used anymore. Otherwise use the ref-counting
+ 	  ///facilities of _CLDECDELETE
+-		~FSDirectory();
++		~FSDirectory() throw(CLuceneError&);
+ 
+ 		/// Get a list of strings, one for each file in the directory. 
+ 		void list(vector<string>* names) const;
+diff -up clucene-core-0.9.21b/src/CLucene/store/RAMDirectory.cpp.gcc48 clucene-core-0.9.21b/src/CLucene/store/RAMDirectory.cpp
+--- clucene-core-0.9.21b/src/CLucene/store/RAMDirectory.cpp.gcc48	2008-10-23 12:44:36.000000000 -0500
++++ clucene-core-0.9.21b/src/CLucene/store/RAMDirectory.cpp	2013-08-27 13:17:35.757234265 -0500
+@@ -219,7 +219,7 @@ CL_NS_DEF(store)
+   {
+   }
+   
+-  RAMDirectory::~RAMDirectory(){
++  RAMDirectory::~RAMDirectory() throw(CLuceneError&) {
+    //todo: should call close directory?
+   }
+ 
+diff -up clucene-core-0.9.21b/src/CLucene/store/RAMDirectory.h.gcc48 clucene-core-0.9.21b/src/CLucene/store/RAMDirectory.h
+--- clucene-core-0.9.21b/src/CLucene/store/RAMDirectory.h.gcc48	2008-10-23 12:44:36.000000000 -0500
++++ clucene-core-0.9.21b/src/CLucene/store/RAMDirectory.h	2013-08-27 13:17:35.757234265 -0500
+@@ -131,7 +131,7 @@ CL_NS_DEF(store)
+ 	  ///Destructor - only call this if you are sure the directory
+ 	  ///is not being used anymore. Otherwise use the ref-counting
+ 	  ///facilities of dir->close
+-		virtual ~RAMDirectory();
++		virtual ~RAMDirectory() throw(CLuceneError&);
+ 		RAMDirectory(Directory* dir);
+ 		
+ 	  /**
+diff -up clucene-core-0.9.21b/src/CLucene/store/TransactionalRAMDirectory.cpp.gcc48 clucene-core-0.9.21b/src/CLucene/store/TransactionalRAMDirectory.cpp
+--- clucene-core-0.9.21b/src/CLucene/store/TransactionalRAMDirectory.cpp.gcc48	2008-10-23 12:44:36.000000000 -0500
++++ clucene-core-0.9.21b/src/CLucene/store/TransactionalRAMDirectory.cpp	2013-08-27 13:17:35.757234265 -0500
+@@ -16,7 +16,7 @@ CL_NS_USE(util)
+   {
+     transOpen = false;
+   }
+-  TransactionalRAMDirectory::~TransactionalRAMDirectory(){
++  TransactionalRAMDirectory::~TransactionalRAMDirectory() throw(CLuceneError&) {
+   }
+ 
+   bool TransactionalRAMDirectory::archiveOrigFileIfNecessary(const char* name) {
+diff -up clucene-core-0.9.21b/src/CLucene/store/TransactionalRAMDirectory.h.gcc48 clucene-core-0.9.21b/src/CLucene/store/TransactionalRAMDirectory.h
+--- clucene-core-0.9.21b/src/CLucene/store/TransactionalRAMDirectory.h.gcc48	2008-10-23 12:44:36.000000000 -0500
++++ clucene-core-0.9.21b/src/CLucene/store/TransactionalRAMDirectory.h	2013-08-27 13:17:35.757234265 -0500
+@@ -44,7 +44,7 @@ CL_NS_DEF(store)
+ 
+   public:
+     TransactionalRAMDirectory();
+-    virtual ~TransactionalRAMDirectory();
++    virtual ~TransactionalRAMDirectory() throw(CLuceneError&);
+ 
+     bool transIsOpen() const;
+     void transStart();
