@@ -1,9 +1,9 @@
-{ lib, buildFHSUserEnv, version, src }:
+{ lib, buildFHSUserEnv, platformio-core }:
 
 let
   pio-pkgs = pkgs:
     let
-      python = pkgs.python3;
+      inherit (platformio-core) python;
     in
     (with pkgs; [
       platformio-core
@@ -35,10 +35,8 @@ buildFHSUserEnv {
   };
 
   extraInstallCommands = ''
-    mkdir -p $out/lib/udev/rules.d
-
     ln -s $out/bin/platformio $out/bin/pio
-    ln -s ${src}/platformio/assets/system/99-platformio-udev.rules $out/lib/udev/rules.d/99-platformio-udev.rules
+    ln -s ${platformio-core.udev}/lib $out/lib
   '';
 
   runScript = "platformio";
