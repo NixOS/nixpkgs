@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, buildPythonApplication
 , fetchPypi
 , makeWrapper
 , pythonOlder
@@ -25,17 +26,18 @@
 , lz4
 , setuptoolsTrial
 , buildbot-worker
-, buildbot-pkg
 , buildbot-plugins
+, buildbot-pkg
 , parameterized
 , git
 , openssh
 , glibcLocales
 , nixosTests
+, callPackage
 }:
 
 let
-  withPlugins = plugins: buildPythonPackage {
+  withPlugins = plugins: buildPythonApplication {
     pname = "${package.pname}-with-plugins";
     inherit (package) version;
     format = "other";
@@ -61,7 +63,7 @@ let
     };
   };
 
-  package = buildPythonPackage rec {
+  package = buildPythonApplication rec {
     pname = "buildbot";
     version = "3.7.0";
     format = "setuptools";

@@ -2,33 +2,32 @@
 , buildPythonPackage
 , fetchPypi
 , cryptography
-, types-pyopenssl
 }:
 
 buildPythonPackage rec {
-  pname = "types-redis";
-  version = "4.5.1.4";
+  pname = "types-pyopenssl";
+  version = "23.0.0.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-dmAXh1TWCkz6z1sz7gY6oGJTEXkcYgdc2TYTZiej978=";
+    pname = "types-pyOpenSSL";
+    inherit version;
+    hash = "sha256-izVQtuGdUc54qr1ySw2OvZYggaX86V5/haWS3828Fr8=";
   };
 
   propagatedBuildInputs = [
     cryptography
-    types-pyopenssl
   ];
 
   # Module doesn't have tests
   doCheck = false;
 
   pythonImportsCheck = [
-    "redis-stubs"
+    "OpenSSL-stubs"
   ];
 
   meta = with lib; {
-    description = "Typing stubs for redis";
+    description = "Typing stubs for pyopenssl";
     homepage = "https://github.com/python/typeshed";
     license = licenses.asl20;
     maintainers = with maintainers; [ gador ];
