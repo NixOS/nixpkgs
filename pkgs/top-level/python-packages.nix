@@ -1513,18 +1513,6 @@ self: super: with self; {
 
   buienradar = callPackage ../development/python-modules/buienradar { };
 
-  buildbot = callPackage ../development/python-modules/buildbot { };
-
-  buildbot-ui = self.buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
-
-  buildbot-full = self.buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view grid-view wsgi-dashboards badges ]);
-
-  buildbot-pkg = callPackage ../development/python-modules/buildbot/pkg.nix { };
-
-  buildbot-plugins = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/buildbot/plugins.nix { });
-
-  buildbot-worker = callPackage ../development/python-modules/buildbot/worker.nix { };
-
   build = callPackage ../development/python-modules/build { };
 
   buildcatrust = callPackage ../development/python-modules/buildcatrust { };
@@ -11114,6 +11102,8 @@ self: super: with self; {
 
   sphinx-hoverxref = callPackage ../development/python-modules/sphinx-hoverxref { };
 
+  sphinx-intl = callPackage ../development/python-modules/sphinx-intl { };
+
   sphinx-jupyterbook-latex = callPackage ../development/python-modules/sphinx-jupyterbook-latex { };
 
   sphinx-multitoc-numbering = callPackage ../development/python-modules/sphinx-multitoc-numbering { };
@@ -12127,6 +12117,8 @@ self: super: with self; {
 
   types-psutil = callPackage ../development/python-modules/types-psutil { };
 
+  types-pyopenssl = callPackage ../development/python-modules/types-pyopenssl { };
+
   types-python-dateutil = callPackage ../development/python-modules/types-python-dateutil { };
 
   types-pytz = callPackage ../development/python-modules/types-pytz { };
@@ -12245,6 +12237,8 @@ self: super: with self; {
   unicorn = callPackage ../development/python-modules/unicorn {
     unicorn-emu = pkgs.unicorn;
   };
+
+  unicurses = callPackage ../development/python-modules/unicurses { };
 
   unicrypto = callPackage ../development/python-modules/unicrypto { };
 

@@ -2495,6 +2495,8 @@ with pkgs;
 
   spaceFM = callPackage ../applications/file-managers/spacefm { };
 
+  tuifimanager = callPackage ../applications/file-managers/tuifimanager { };
+
   vifm = callPackage ../applications/file-managers/vifm { };
 
   vifm-full = vifm.override {
@@ -3080,10 +3082,8 @@ with pkgs;
   bucklespring-libinput = callPackage ../applications/audio/bucklespring { };
   bucklespring-x11 = callPackage ../applications/audio/bucklespring { legacy = true; };
 
-  buildbot = with python3Packages; toPythonApplication buildbot;
-  buildbot-ui = with python3Packages; toPythonApplication buildbot-ui;
-  buildbot-full = with python3Packages; toPythonApplication buildbot-full;
-  buildbot-worker = with python3Packages; toPythonApplication buildbot-worker;
+  inherit (python3.pkgs.callPackage ../development/tools/continuous-integration/buildbot {})
+    buildbot buildbot-ui buildbot-full buildbot-plugins buildbot-worker;
 
   bunyan-rs = callPackage ../development/tools/bunyan-rs { };
 
@@ -3574,7 +3574,7 @@ with pkgs;
 
   play-with-mpv = callPackage ../tools/video/play-with-mpv { };
 
-  plausible = callPackage ../servers/web-apps/plausible { };
+  plausible = callPackage ../servers/web-apps/plausible { nodejs = nodejs-16_x; };
 
   pam-reattach = callPackage ../os-specific/darwin/pam-reattach { };
 
@@ -6373,6 +6373,8 @@ with pkgs;
   };
 
   cask-server = libsForQt5.callPackage ../applications/misc/cask-server { };
+
+  cc2538-bsl = callPackage ../tools/misc/cc2538-bsl { };
 
   code-browser-qt = libsForQt5.callPackage ../applications/editors/code-browser { withQt = true; };
   code-browser-gtk2 = callPackage ../applications/editors/code-browser { withGtk2 = true; };
@@ -9740,6 +9742,10 @@ with pkgs;
 
   lv = callPackage ../tools/text/lv { };
 
+  lv_img_conv = callPackage ../development/tools/lv_img_conv  {
+    inherit (darwin.apple_sdk.frameworks) CoreText;
+  };
+
   lxc = callPackage ../os-specific/linux/lxc {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
@@ -12962,6 +12968,8 @@ with pkgs;
   tracefilesim = callPackage ../development/tools/analysis/garcosim/tracefilesim { };
 
   transifex-client = python39.pkgs.callPackage ../tools/text/transifex-client { };
+
+  transifex-cli = callPackage ../applications/misc/transifex-cli { };
 
   translate-shell = callPackage ../applications/misc/translate-shell { };
 
@@ -23038,6 +23046,10 @@ with pkgs;
 
   pe-parse = callPackage ../development/libraries/pe-parse { };
 
+  phetch = callPackage ../applications/networking/gopher/phetch {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   inherit (callPackage ../development/libraries/physfs {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   })
@@ -28184,8 +28196,7 @@ with pkgs;
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
     noto-fonts-emoji
-    noto-fonts-emoji-blob-bin
-    noto-fonts-extra;
+    noto-fonts-emoji-blob-bin;
 
   nuclear = callPackage ../applications/audio/nuclear { };
 
@@ -35640,7 +35651,7 @@ with pkgs;
 
   angband = callPackage ../games/angband { };
 
-  anki = python39Packages.callPackage ../games/anki {
+  anki = callPackage ../games/anki {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
   };
   anki-bin = callPackage ../games/anki/bin.nix { buildFHSUserEnv = buildFHSUserEnvBubblewrap; };
