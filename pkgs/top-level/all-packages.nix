@@ -1537,6 +1537,8 @@ with pkgs;
 
   godspeed = callPackage ../tools/networking/godspeed { };
 
+  gp-saml-gui = python3Packages.callPackage ../tools/networking/gp-saml-gui { };
+
   guestfs-tools = callPackage ../tools/virtualization/guestfs-tools { };
 
   fabs = callPackage ../tools/backup/fabs { };
