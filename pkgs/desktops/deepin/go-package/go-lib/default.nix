@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
-, replaceAll
 , runtimeShell
 }:
 
@@ -24,8 +23,6 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-RsN9hK26i/W6P/+e1l1spCLdlgIEWTehhIW6POBOvW4=";
     })
   ];
-
-  postPatch = replaceAll "/bin/sh" "${runtimeShell}";
 
   installPhase = ''
     runHook preInstall
