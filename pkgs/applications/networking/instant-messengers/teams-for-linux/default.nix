@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "teams-for-linux";
-  version = "1.0.53";
+  version = "1.0.59";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zigcOshtRQuQxJBXPWVmTjj5+4AorR5WW8lHVInUKFg=";
+    sha256 = "sha256-82uRZEktKHMQhozG5Zpa2DFu1VZOEDBWpsbfgMzoXY8=";
   };
 
   offlineCache = fetchYarnDeps {
