@@ -26,6 +26,8 @@ stdenv.mkDerivation (args // {
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ cmake ninja perl ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or [ ]);
 
+  moveToDev = false;
+
   outputs = args.outputs or [ "out" "dev" ];
 
   dontWrapQtApps = args.dontWrapQtApps or true;

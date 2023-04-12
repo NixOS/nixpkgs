@@ -259,6 +259,8 @@ stdenv.mkDerivation rec {
     "bin/uic"
   ];
 
+  moveToDev = false;
+
   postFixup = ''
     moveToOutput "mkspecs"   "$dev"
     moveToOutput "modules"   "$dev"
