@@ -25,14 +25,14 @@
 
 let
   pname = "anki";
-  version = "2.1.61";
-  rev = "0c1eaf4ce66c1b90867af9a79b95d9e507262cf8";
+  version = "2.1.65";
+  rev = "aa9a734f695d0b0981aa3c0aaa2745ce86832f08";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-prTGilOw7SfxWevnMsuGq8Zp5uLfVHzTkoAU57NzqHk=";
+    hash = "sha256-l+RTot8pJFJDDiapmQdKJ9WfwAuwRFiNJMbX+fBETeU=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,8 @@ let
     lockFile = ./Cargo.lock;
     outputHashes = {
       "csv-1.1.6" = "sha256-w728ffOVkI+IfK6FbmkGhr0CjuyqgJnPB1kutMJIUYg=";
-      "linkcheck-0.4.1-alpha.0" = "sha256-Fiom8oHW9y7vV2RLXW0ClzHOdIlBq3Z9jLP+p6Sk4GI=";
+      "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
+      "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
   };
 
@@ -88,7 +89,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-jP0ltYVB52LolGtN/GGjM4I7ira16rRTXfyJlrdjTX4=";
+    hash = "sha256-66mYsHojQQBfLTHd12+/HEf7FKF5Y2RZRFeYRS2yZco=";
   };
 
   # https://discourse.nixos.org/t/mkyarnpackage-lockfile-has-incorrect-entry/21586/3
