@@ -64,8 +64,7 @@ in {
   stemmer = old: (brokenOnDarwin old) // (addToBuildInputs pkgs.libstemmer old);
   stfl = old:
     (brokenOnDarwin old) // (addToBuildInputs [ pkgs.ncurses pkgs.stfl ] old);
-  taglib = old:
-    (brokenOnDarwin old) // (addToBuildInputs [ pkgs.zlib pkgs.taglib ] old);
+  taglib = addToBuildInputs [ pkgs.zlib pkgs.taglib ];
   uuid-lib = addToBuildInputs pkgs.libuuid;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
