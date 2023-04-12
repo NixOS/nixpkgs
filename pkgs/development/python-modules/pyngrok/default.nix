@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyngrok";
-  version = "5.2.1";
+  version = "5.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dws4Z4LzgkkOGTS5LZn/MU8ZKr70n4PWocezsDhxeT4=";
+    hash = "sha256-MfpuafEUhFNtEegvihCLmsnHYFBu8kKghfPRp3oqlb8=";
   };
 
   propagatedBuildInputs = [
