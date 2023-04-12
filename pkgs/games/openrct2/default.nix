@@ -25,51 +25,54 @@
 , pkg-config
 , speexdsp
 , zlib
+  # Those versions MUST match the pinned versions within the CMakeLists.txt
+  # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
+, openrct2-version ? "0.4.4"
+, openrct2-sha256 ? "sha256-kCGX+L3bXAG9fUjv04T9wV+R20kmmuREHY8h0w+CESg="
+, objects-version ? "1.3.8"
+, objects-sha256 ? "sha256-7fKv2dSsWJ/YIneyVeuPMjdNI/kgJ7zkMoAgV/s240w="
+, openmsx-version ? "1.1.0"
+, openmsx-sha256 ? "sha256-SqTYJSst1tgVot/c4seuPQVoxnqWiM2Jb/pP3mHtkKs="
+, opensfx-version ? "1.0.2"
+, opensfx-sha256 ? "sha256-AMuCpq1Hszi2Vikto/cX9g81LwBDskaRMTLxNzU0/Gk="
+, title-sequences-version ? "0.4.0"
+, title-sequences-sha256 ? "sha256-anqCZkhYoaxPu3MYCYSsFFngOmPp2wnx2MGb0hj6W5U="
 }:
 
 let
-  openrct2-version = "0.4.4";
-
-  # Those versions MUST match the pinned versions within the CMakeLists.txt
-  # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.3.8";
-  openmsx-version = "1.1.0";
-  opensfx-version = "1.0.2";
-  title-sequences-version = "0.4.0";
-
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    sha256 = "sha256-kCGX+L3bXAG9fUjv04T9wV+R20kmmuREHY8h0w+CESg=";
+    sha256 = openrct2-sha256;
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
     rev = "v${objects-version}";
-    sha256 = "sha256-7fKv2dSsWJ/YIneyVeuPMjdNI/kgJ7zkMoAgV/s240w=";
+    sha256 = objects-sha256;
   };
 
   openmsx-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenMusic";
     rev = "v${openmsx-version}";
-    sha256 = "sha256-SqTYJSst1tgVot/c4seuPQVoxnqWiM2Jb/pP3mHtkKs=";
+    sha256 = openmsx-sha256;
   };
 
   opensfx-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenSoundEffects";
     rev = "v${opensfx-version}";
-    sha256 = "sha256-AMuCpq1Hszi2Vikto/cX9g81LwBDskaRMTLxNzU0/Gk=";
+    sha256 = opensfx-sha256;
   };
 
   title-sequences-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "title-sequences";
     rev = "v${title-sequences-version}";
-    sha256 = "sha256-anqCZkhYoaxPu3MYCYSsFFngOmPp2wnx2MGb0hj6W5U=";
+    sha256 = title-sequences-sha256;
   };
 in
 stdenv.mkDerivation {
@@ -132,8 +135,11 @@ stdenv.mkDerivation {
     # Verify that the correct version of each third party repository is used.
     (let
       versionCheck = cmakeKey: version: ''
-        grep -q '^set(${cmakeKey}_VERSION "${version}")$' CMakeLists.txt \
-          || (echo "${cmakeKey} differs from expected version!"; exit 1)
+        requiredVersion=$(sed -n 's!^set(${cmakeKey}_VERSION "\([^)]*\)")$!\1!p' CMakeLists.txt)
+        if test -n "$requiredVersion" && test "$requiredVersion" != "${version}"; then
+          echo "${cmakeKey} ${version} is specified but version $requiredVersion is required to build openrct2 ${openrct2-version}." >/dev/stderr
+          exit 1
+        fi
       '';
     in
     (versionCheck "OBJECTS" objects-version) +
