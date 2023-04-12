@@ -7,6 +7,7 @@
   stdenv,
   wrapCCWith,
 }:
+
 let
   gccMajorVersion = nvccCompatibilities.${cudaVersion}.gccMaxMajorVersion;
   # We use buildPackages (= pkgsBuildHost) because we look for a gcc that
@@ -15,25 +16,35 @@ let
   # The target platform of buildPackages.gcc is our host platform, so its
   # .lib output should be the libstdc++ we want to be writing in the runpaths
   # Cf. https://github.com/NixOS/nixpkgs/pull/225661#discussion_r1164564576
-  nixpkgsCompatibleLibstdcxx = buildPackages.gcc.cc.lib;
+  ccForLibs = stdenv.cc.cc;
+  cxxStdlib = lib.getLib ccForLibs;
   nvccCompatibleCC = buildPackages."gcc${gccMajorVersion}".cc;
 
   cc = wrapCCWith {
     cc = nvccCompatibleCC;
 
-    # This option is for clang's libcxx, but we (ab)use it for gcc's libstdc++.
-    # Note that libstdc++ maintains forward-compatibility: if we load a newer
-    # libstdc++ into the process, we can still use libraries built against an
-    # older libstdc++. This, in practice, means that we should use libstdc++ from
-    # the same stdenv that the rest of nixpkgs uses.
-    # We currently do not try to support anything other than gcc and linux.
-    libcxx = nixpkgsCompatibleLibstdcxx;
+    # Note: normally the `useCcForLibs`/`gccForLibs` mechanism is used to get a
+    # clang based `cc` to use `libstdc++` (from gcc).
+
+    # Here we (ab)use it to use a `libstdc++` from a different `gcc` than our
+    # `cc`.
+
+    # Note that this does not inhibit our `cc`'s lib dir from being added to
+    # cflags/ldflags (see `cc_solib` in `cc-wrapper`) but this is okay: our
+    # `gccForLibs`'s paths should take precedence.
+    useCcForLibs = true;
+    gccForLibs = ccForLibs;
   };
   cudaStdenv = overrideCC stdenv cc;
   passthruExtra = {
-    inherit nixpkgsCompatibleLibstdcxx;
+    nixpkgsCompatibleLibstdcxx = lib.warn "cudaPackages.backendStdenv.nixpkgsCompatibleLibstdcxx is misnamed, deprecated, and will be removed after 24.05" cxxStdlib;
     # cc already exposed
   };
   assertCondition = true;
 in
+
+# We should use libstdc++ at least as new as nixpkgs' stdenv's one.
+assert ((stdenv.cc.cxxStdlib.kind or null) == "libstdc++")
+  -> lib.versionAtLeast cxxStdlib.version stdenv.cc.cxxStdlib.lib.version;
+
 lib.extendDerivation assertCondition passthruExtra cudaStdenv
