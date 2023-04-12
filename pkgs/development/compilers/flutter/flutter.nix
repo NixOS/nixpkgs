@@ -2,9 +2,8 @@
 , patches
 , dart
 , src
-}:
 
-{ lib
+, lib
 , git
 , stdenv
 , which

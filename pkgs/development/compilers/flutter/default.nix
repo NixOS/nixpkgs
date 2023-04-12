@@ -1,8 +1,8 @@
 { callPackage, fetchurl, dart }:
 let
-  mkFlutter = opts: callPackage (import ./flutter.nix opts) { };
-  wrapFlutter = flutter: callPackage (import ./wrapper.nix) { flutter = flutter; };
-  mkFlutterFHS = flutter: callPackage (import ./fhs.nix) { flutter = flutter; };
+  mkFlutter = { version, patches, dart, src }: callPackage ./flutter.nix { inherit version patches dart src; };
+  wrapFlutter = flutter: callPackage ./wrapper.nix { inherit flutter; };
+  mkFlutterFHS = flutter: callPackage ./fhs.nix { inherit flutter; };
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
     in map (f: dir + ("/" + f)) files;
