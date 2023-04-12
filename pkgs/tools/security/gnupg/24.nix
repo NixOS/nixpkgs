@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
