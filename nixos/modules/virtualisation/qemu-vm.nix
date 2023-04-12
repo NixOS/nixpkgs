@@ -171,12 +171,6 @@ let
 
       ${lib.optionalString cfg.useBootLoader
       ''
-        if ${if !cfg.persistBootDevice then "true" else "! test -e $TMPDIR/disk.img"}; then
-          # Create a writable copy/snapshot of the boot disk.
-          # A writable boot disk can be booted from automatically.
-          ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${bootDisk}/disk.img "$TMPDIR/disk.img"
-        fi
-
         NIX_EFI_VARS=$(readlink -f "''${NIX_EFI_VARS:-${config.system.name}-efi-vars.fd}")
 
         ${lib.optionalString cfg.useEFIBoot
@@ -285,7 +279,7 @@ in
     (mkRenamedOptionModule [ "virtualisation" "pathsInNixDB" ] [ "virtualisation" "additionalPaths" ])
     (mkRemovedOptionModule [ "virtualisation" "bootDevice" ] "This option was renamed to `virtualisation.rootDevice`, as it was incorrectly named and misleading. Take the time to review what you want to do and look at the new options like `virtualisation.{bootLoaderDevice, bootPartition}`, open an issue in case of issues.")
     (mkRemovedOptionModule [ "virtualisation" "efiVars" ] "This option was removed, it is possible to provide a template UEFI variable with `virtualisation.efi.variables` ; if this option is important to you, open an issue")
-    (mkRemovedOptionModule [ "virtualisation" "persistBootDevice" ] "Boot device is always persisted if you use a bootloader through the root disk image ; if this does not work for your usecase, please examine carefully what `virtualisation.{bootLoaderDevice, rootDevice, bootPartition}` options offers you and open an issue explaining your need.`")
+    (mkRemovedOptionModule [ "virtualisation" "persistBootDevice" ] "Boot device is always persisted if you use a bootloader through the root disk image ; if this does not work for your usecase, please examine carefully what `virtualisation.{bootDevice, rootDevice, bootPartition}` options offer you and open an issue explaining your need.`")
   ];
 
   options = {
@@ -382,17 +376,6 @@ in
 
             In case you are not using a default boot device or a default filesystem, you have to set explicitly your root device.
           '';
-      };
-
-    virtualisation.persistBootDevice =
-      mkOption {
-        type = types.bool;
-        default = false;
-        description =
-          lib.mdDoc ''
-            If useBootLoader is specified, whether to recreate the boot device
-            on each instantiaton or allow it to persist.
-            '';
       };
 
     virtualisation.emptyDiskImages =
