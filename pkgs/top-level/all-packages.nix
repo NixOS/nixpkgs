@@ -39532,10 +39532,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
-  inherit (callPackages ../development/libraries/spdlog { })
-    spdlog_0 spdlog_1;
-
-  spdlog = spdlog_1;
+  spdlog = callPackage ../development/libraries/spdlog { };
 
   dart = callPackage ../development/compilers/dart { };
 
