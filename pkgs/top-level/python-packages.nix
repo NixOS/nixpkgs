@@ -4798,6 +4798,8 @@ self: super: with self; {
 
   invocations = callPackage ../development/python-modules/invocations { };
 
+  invoicegenerator = callPackage ../development/python-modules/invoicegenerator { };
+
   invoke = callPackage ../development/python-modules/invoke { };
 
   iodata = callPackage ../development/python-modules/iodata { };
