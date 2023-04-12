@@ -40,10 +40,11 @@ buildPythonPackage rec {
       -e test_init_from_custom_config
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Thin wrapper around OVH's APIs";
     homepage = "https://github.com/ovh/python-ovh";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.makefu ];
+    changelog = "https://github.com/ovh/python-ovh/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ makefu ];
   };
 }
