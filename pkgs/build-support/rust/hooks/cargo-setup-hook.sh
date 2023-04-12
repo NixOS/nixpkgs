@@ -36,6 +36,11 @@ cargoSetupPostUnpackHook() {
     @cargoConfig@
 EOF
 
+    # This ignores any and all lints during compilation. Package authors may have opted in to strict lint
+    # levels, and/or a future version of Rust may introduce a deny-by-default lint, requiring patches to
+    # all affected packages.
+    export RUSTFLAGS="$RUSTFLAGS --cap-lints allow"
+
     echo "Finished cargoSetupPostUnpackHook"
 }
 
