@@ -22,14 +22,14 @@
 
 let
   pname = "anki";
-  version = "2.1.60";
-  rev = "76d8807315fcc2675e7fa44d9ddf3d4608efc487";
+  version = "2.1.61";
+  rev = "0c1eaf4ce66c1b90867af9a79b95d9e507262cf8";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-hNrf6asxF7r7QK2XO150yiRjyHAYKN8OFCFYX0SAiwA=";
+    hash = "sha256-prTGilOw7SfxWevnMsuGq8Zp5uLfVHzTkoAU57NzqHk=";
     fetchSubmodules = true;
   };
 
@@ -86,7 +86,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-bAtmMGWi5ETIidFFnG3jzJg2mSBnH5ONO2/Lr9A3PpQ=";
+    hash = "sha256-jP0ltYVB52LolGtN/GGjM4I7ira16rRTXfyJlrdjTX4=";
   };
 
   # https://discourse.nixos.org/t/mkyarnpackage-lockfile-has-incorrect-entry/21586/3
@@ -122,13 +122,7 @@ python3.pkgs.buildPythonApplication {
   patches = [
     ./patches/gl-fixup.patch
     ./patches/no-update-check.patch
-    # Upstreamed in https://github.com/ankitects/anki/pull/2446
-    # We can drop these once we update to an anki version that includes them
-    # already
-    ./patches/0001-Don-t-download-nodejs-if-NODE_BINARY-is-set.patch
-    ./patches/0002-Allow-setting-YARN_BINARY-for-the-build-system.patch
-    # Not upstreamed
-    ./patches/0003-Skip-formatting-python-code.patch
+    ./patches/0001-Skip-formatting-python-code.patch
   ];
 
   inherit cargoDeps;
