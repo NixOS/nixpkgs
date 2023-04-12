@@ -21,7 +21,7 @@ let
   inherit (lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
 in stdenv.mkDerivation rec {
-  pname = "rustc";
+  pname = "${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}rustc";
   inherit version;
 
   src = fetchurl {
