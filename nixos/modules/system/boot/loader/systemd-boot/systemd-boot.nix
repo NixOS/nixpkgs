@@ -26,6 +26,12 @@ let
 
     imageDir = if cfg.imageDir == "/" then "" else cfg.imageDir;
 
+    kernelSigningKey = optionalString (cfg.kernelSigningKey != null) cfg.kernelSigningKey;
+
+    kernelSigningCert = optionalString (cfg.kernelSigningCert != null) cfg.kernelSigningCert;
+
+    sbsigntool = optionalString (cfg.kernelSigningKey != null && cfg.kernelSigningCert != null) pkgs.sbsigntool;
+
     editor = if cfg.editor then "True" else "False";
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
@@ -125,6 +131,38 @@ in {
         being kept based on option
         `boot.loader.systemd-boot.configurationLimit`. Subdirectories and
         files inside them are not affected.
+      '';
+    };
+
+    kernelSigningKey = mkOption {
+      default = null;
+      type = types.nullOr types.str;
+      description = lib.mdDoc ''
+        The path to the PEM-encoded RSA private key to use for signing kernels,
+        so that they may be booted as EFI images in a UEFI Secure Boot environment.
+        This option is intended to be used when using a bootloader - other than
+        systemd-boot - that can EFISTUB-boot linux kernel images. In this case,
+        `boot.loader.systemd-boot.installBootloaderFiles` should be set to false.
+        This option doesn't make the module sign the systemd-boot bootloader files.
+
+        Kernel images will not be signed if either this option or
+        `boot.loader.systemd-boot.kernelSigningCert` are `null`.
+      '';
+    };
+
+    kernelSigningCert = mkOption {
+      default = null;
+      type = types.nullOr types.str;
+      description = lib.mdDoc ''
+        The path to the X.509 certificate to use for signing kernels,
+        so that they may be booted as EFI images in a UEFI Secure Boot environment.
+        This option is intended to be used when using a bootloader - other than
+        systemd-boot - that can EFISTUB-boot linux kernel images. In this case,
+        `boot.loader.systemd-boot.installBootloaderFiles` should be set to false.
+        This option doesn't make the module sign the systemd-boot bootloader files.
+
+        Kernel images will not be signed if either this option or
+        `boot.loader.systemd-boot.kernelSigningKey` are `null`.
       '';
     };
 

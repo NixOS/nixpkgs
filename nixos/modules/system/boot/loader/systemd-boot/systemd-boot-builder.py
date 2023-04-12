@@ -15,6 +15,7 @@ import re
 import datetime
 import glob
 import os.path
+import tempfile
 from typing import NamedTuple, List, Optional
 from packaging import version
 
@@ -24,9 +25,35 @@ class SystemIdentifier(NamedTuple):
     specialisation: Optional[str]
 
 
-def copy_if_not_exists(source: str, dest: str) -> None:
+def maybe_sign(source: str, is_kernel: bool) -> str:
+    # just return the clean image if we are not signing
+    # or if the image is not even a kernel image
+    if "@sbsigntool@" == "" or not is_kernel:
+        return source
+
+    signed_source = tempfile.mktemp()
+    subprocess.check_call(
+        [
+            "@sbsigntool@/bin/sbsign",
+            "--key",
+            "@kernelSigningKey@",
+            "--cert",
+            "@kernelSigningCert@",
+            "--output",
+            signed_source,
+            source
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+
+    return signed_source
+
+
+def copy_if_not_exists(source: str, dest: str, is_kernel: bool) -> None:
     if not os.path.exists(dest):
-        shutil.copyfile(source, dest)
+        file_to_copy = maybe_sign(source, is_kernel)
+        shutil.copyfile(file_to_copy, dest)
 
 
 def generation_dir(profile: Optional[str], generation: int) -> str:
@@ -81,7 +108,7 @@ def copy_from_profile(profile: Optional[str], generation: int, specialisation: O
     store_dir = os.path.basename(os.path.dirname(store_file_path))
     efi_file_path = "@imageDir@/%s-%s.efi" % (store_dir, suffix)
     if not dry_run:
-        copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path))
+        copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path), name == "kernel")
     return efi_file_path
 
 
