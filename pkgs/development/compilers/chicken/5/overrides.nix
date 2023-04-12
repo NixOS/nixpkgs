@@ -17,9 +17,8 @@ let
   broken = old: { meta = old.meta // { broken = true; }; };
   brokenOnDarwin = old: { meta = old.meta // { broken = stdenv.isDarwin; }; };
 in {
-  allegro = old:
-    (brokenOnDarwin old)
-    // (addToBuildInputsWithPkgConfig [ pkgs.allegro5 pkgs.libglvnd ] old);
+  allegro = addToBuildInputsWithPkgConfig ([ pkgs.allegro5 pkgs.libglvnd ]
+    ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenGL ]);
   breadline = addToBuildInputs pkgs.readline;
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   blosc = addToBuildInputs pkgs.c-blosc;
