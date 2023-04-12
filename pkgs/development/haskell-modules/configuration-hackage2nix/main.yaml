@@ -115,6 +115,7 @@ extra-packages:
   - optparse-applicative < 0.16         # needed for niv-0.2.19
   - ormolu == 0.1.4.1                   # 2022-09-21: needed for hls on ghc 8.8
   - ormolu == 0.2.*                     # 2022-02-21: For ghc 8.8 and 8.10
+  - ormolu == 0.5.*                     # 2022-04-12: For ghc 9.4
   - pantry == 0.5.2.1                   # needed for stack-2.7.3
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - relude == 0.7.0.0                   # 2022-02-25: Needed for ema 0.6
