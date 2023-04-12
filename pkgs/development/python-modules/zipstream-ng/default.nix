@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pR0Ps";
     repo = "zipstream-ng";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-4pS2t5IEIUHGJRaO6f9r8xnvXWA6p1EsDQ/jpD8CMLI=";
   };
 
@@ -32,6 +32,7 @@ buildPythonPackage rec {
       and folders on the fly without needing temporary files or excessive memory
     '';
     homepage = "https://github.com/pR0Ps/zipstream-ng";
+    changelog = "https://github.com/pR0Ps/zipstream-ng/blob/v${version}/CHANGELOG.md";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ gador ];
   };
