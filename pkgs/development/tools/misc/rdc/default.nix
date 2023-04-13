@@ -20,6 +20,7 @@
 let
   latex = lib.optionalAttrs buildDocs texlive.combine {
     inherit (texlive) scheme-small
+    changepage
     latexmk
     varwidth
     multirow
