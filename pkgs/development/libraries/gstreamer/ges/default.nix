@@ -10,23 +10,23 @@
 , gst-devtools
 , libxml2
 , flex
+, hotdoc
 , gettext
 , gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-editing-services";
-  version = "1.20.3";
+  version = "1.22.2";
 
   outputs = [
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
   ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-X9iW3mn74kQh62sP+NL4tMPLo/MCXOrNMCFy85qKuqI=";
+    hash = "sha256-RTsUZPw4V94mmnyw69lmr+Ahcdl772cqC4oKbUPgzr8=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     flex
 
     # documentation
-    # TODO add hotdoc here
+    hotdoc
   ];
 
   buildInputs = [
@@ -53,10 +53,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     gst-plugins-base
     gst-plugins-bad
-  ];
-
-  mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ];
 
   postPatch = ''
