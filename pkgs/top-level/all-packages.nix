@@ -13032,6 +13032,10 @@ with pkgs;
 
   ttylog = callPackage ../tools/misc/ttylog { };
 
+  twm = callPackage ../tools/misc/twm {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   txtpbfmt = callPackage ../development/tools/txtpbfmt { };
 
   ipbt = callPackage ../tools/misc/ipbt { };
