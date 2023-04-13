@@ -9,7 +9,7 @@ let
     "--smartctl.path=\"${pkgs.smartmontools}/bin/smartctl\" "
     "--smartctl.interval=\"${cfg.maxInterval}\" "
     "${concatMapStringsSep " " (device: "--smartctl.device=${device}") cfg.devices}"
-  ];
+  ] ++ cfg.extraFlags;
 in {
   port = 9633;
 
