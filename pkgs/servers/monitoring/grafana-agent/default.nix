@@ -56,6 +56,6 @@ buildGoModule rec {
     description = "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";
     license = licenses.asl20;
     homepage = "https://grafana.com/products/cloud";
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ flokli indeednotjames ];
   };
 }
