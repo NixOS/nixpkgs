@@ -1,36 +1,10 @@
-{ flutter
-, lib
-, llvmPackages_13
-, cmake
-, ninja
-, pkg-config
-, wrapGAppsHook
-, autoPatchelfHook
-, util-linux
-, libselinux
-, libsepol
-, libthai
-, libdatrie
-, libxkbcommon
-, at-spi2-core
-, libsecret
-, jsoncpp
-, xorg
-, dbus
-, gtk3
-, glib
-, pcre
-, libepoxy
+{ lib
 , stdenvNoCC
-, cacert
-, git
-, dart
+, autoPatchelfHook
 , nukeReferences
-, bash
-, curl
-, unzip
-, which
-, xz
+, llvmPackages_13
+, cacert
+, flutter
 }:
 
 # absolutely no mac support for now
@@ -42,23 +16,13 @@ let
   placeholder_flutter = pl "FLUTTER";
   fetchAttrs = [ "src" "sourceRoot" "setSourceRoot" "unpackPhase" "patches" ];
   getAttrsOrNull = names: attrs: lib.genAttrs names (name: if attrs ? ${name} then attrs.${name} else null);
-  flutterDeps = [
-    # flutter deps
-    flutter.wrapped
-    bash
-    curl
-    flutter.dart
-    git
-    unzip
-    which
-    xz
-  ];
   self =
 (self: llvmPackages_13.stdenv.mkDerivation (args // {
   deps = stdenvNoCC.mkDerivation (lib.recursiveUpdate (getAttrsOrNull fetchAttrs args) {
     name = "${self.name}-deps-flutter-v${flutter.unwrapped.version}-${stdenvNoCC.targetPlatform.system}.tar.gz";
 
-    nativeBuildInputs = flutterDeps ++ [
+    nativeBuildInputs = [
+      flutter
       nukeReferences
     ];
 
@@ -69,10 +33,7 @@ let
       . ${../fetchgit/deterministic-git}
 
       TMP=$(mktemp -d)
-
       export HOME="$TMP"
-      export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
-      export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
 
       flutter config --no-analytics &>/dev/null # mute first-run
       flutter config --enable-linux-desktop
@@ -151,44 +112,11 @@ let
 
   });
 
-  nativeBuildInputs = flutterDeps ++ [
-    # flutter dev tools
-    cmake
-    ninja
-    pkg-config
-    wrapGAppsHook
-    # flutter likes dynamic linking
-    autoPatchelfHook
-  ] ++ lib.optionals (args ? nativeBuildInputs) args.nativeBuildInputs;
+  nativeBuildInputs = [ flutter autoPatchelfHook ] ++ lib.optionals (args ? nativeBuildInputs) args.nativeBuildInputs;
 
-  buildInputs = [
-    # cmake deps
-    gtk3
-    glib
-    pcre
-    util-linux
-    # also required by cmake, not sure if really needed or dep of all packages
-    libselinux
-    libsepol
-    libthai
-    libdatrie
-    xorg.libXdmcp
-    xorg.libXtst
-    libxkbcommon
-    dbus
-    at-spi2-core
-    libsecret
-    jsoncpp
-    # build deps
-    xorg.libX11
-    # directly required by build
-    libepoxy
-  ] ++ lib.optionals (args ? buildInputs) args.buildInputs;
+  buildInputs = lib.optionals (args ? buildInputs) args.buildInputs;
 
-  # TODO: do we need this?
-  NIX_LDFLAGS = "-rpath ${lib.makeLibraryPath self.buildInputs}";
-  env.NIX_CFLAGS_COMPILE = "-I${xorg.libX11}/include";
-  LD_LIBRARY_PATH = lib.makeLibraryPath self.buildInputs;
+  dontAutoPatchelf = true;
 
   configurePhase = ''
     runHook preConfigure
@@ -207,7 +135,7 @@ let
     # after extracting update paths to point to real paths
     find "$depsFolder" -type f -exec sed -i \
       -e s,${placeholder_deps},$depsFolder,g \
-      -e s,${placeholder_flutter},${flutter.unwrapped},g \
+      -e s,${placeholder_flutter},${flutter},g \
       {} +
 
     # ensure we're using a lockfile for the right package version
@@ -223,9 +151,7 @@ let
     mv -v $(find $depsFolder/f -type f) .
 
     # prepare
-    export HOME=$depsFolder
-    export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
-    export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
+    export HOME="$depsFolder"
 
     # binaries need to be patched
     autoPatchelf -- "$depsFolder"
