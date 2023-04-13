@@ -95,6 +95,5 @@ in
     --prefix PATH : '${lib.makeBinPath buildTools}' \
     --prefix PKG_CONFIG_PATH : '${builtins.concatStringsSep ":" pkgConfigDirectories}' \
     --prefix CXXFLAGS "''\t" '${builtins.concatStringsSep " " cppFlags}' \
-    --prefix LDFLAGS "''\t" '${builtins.concatStringsSep " " (map (flag: "-Wl,${flag}") linkerFlags)}' \
-    --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath appPrebuiltDeps}'
+    --prefix LDFLAGS "''\t" '${builtins.concatStringsSep " " (map (flag: "-Wl,${flag}") linkerFlags)}'
 '')

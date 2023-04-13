@@ -4,12 +4,25 @@
 , src
 
 , lib
-, git
 , stdenv
+, autoPatchelfHook
+, git
 , which
+, atk
+, glib
+, gtk3
+, libepoxy
 }:
 
 let
+  # Libraries that Flutter artifacts depend on at runtime.
+  artifactRuntimeDeps = [
+    atk
+    glib
+    gtk3
+    libepoxy
+  ];
+
   self =
     stdenv.mkDerivation {
       name = "$flutter-${version}-unwrapped";
@@ -17,7 +30,8 @@ let
 
       outputs = [ "out" "cache" ];
 
-      buildInputs = [ git ];
+      nativeBuildInputs = [ autoPatchelfHook ];
+      buildInputs = [ git ] ++ artifactRuntimeDeps;
 
       postPatch = ''
         patchShebangs --build ./bin/
