@@ -204,7 +204,6 @@ stdenv.mkDerivation rec {
   preHook = ''
     . "$fix_qt_builtin_paths"
     . "$fix_qt_module_paths"
-    . ${../hooks/move-qt-dev-tools.sh}
     . ${../hooks/fix-qmake-libtool.sh}
   '';
 
@@ -263,30 +262,8 @@ stdenv.mkDerivation rec {
   moveToDev = false;
 
   postFixup = ''
-    moveToOutput "mkspecs"   "$dev"
-    moveToOutput "modules"   "$dev"
-    moveToOutput "lib/*.prl" "$dev"
-
-    fixQtModulePaths  "$dev/mkspecs/modules"
-    fixQtBuiltinPaths "$dev" '*.pr?'
-
-    # Move development tools to $dev
-    moveQtDevTools
-    moveToOutput libexec "$dev"
-
-    # fixup .pc file (where to find 'moc' etc.)
-    if [ -f "$dev/lib/pkgconfig/Qt6Core.pc" ]; then
-      sed -i "$dev/lib/pkgconfig/Qt6Core.pc" \
-        -e "/^bindir=/ c bindir=$dev/bin" \
-        -e "/^libexecdir=/ c libexecdir=$dev/libexec"
-    fi
-
-    patchShebangs $out $dev
-
-    # QTEST_ASSERT and other macros keeps runtime reference to qtbase.dev
-    if [ -f "$dev/include/QtTest/qtestassert.h" ]; then
-      substituteInPlace "$dev/include/QtTest/qtestassert.h" --replace "__FILE__" "__BASE_FILE__"
-    fi
+    fixQtModulePaths  "$out/mkspecs/modules"
+    fixQtBuiltinPaths "$out" '*.pr?'
   '';
 
   dontStrip = debugSymbols;

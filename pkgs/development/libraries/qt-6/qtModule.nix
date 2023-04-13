@@ -18,10 +18,6 @@ stdenv.mkDerivation (args // {
   inherit pname version src;
   patches = args.patches or patches.${pname} or [ ];
 
-  preHook = ''
-    . ${./hooks/move-qt-dev-tools.sh}
-  '';
-
   buildInputs = args.buildInputs or [ ];
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ cmake ninja perl ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or [ ]);
@@ -31,11 +27,6 @@ stdenv.mkDerivation (args // {
   outputs = args.outputs or [ "out" "dev" ];
 
   dontWrapQtApps = args.dontWrapQtApps or true;
-
-  postFixup = ''
-    moveToOutput "libexec" "''${!outputDev}"
-    moveQtDevTools
-  '' + args.postFixup or "";
 
   meta = with lib; {
     homepage = "https://www.qt.io/";
