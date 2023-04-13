@@ -4,26 +4,42 @@
 , dpkg
 , autoPatchelfHook
 , makeWrapper
+, copyDesktopItems
+, makeDesktopItem
 , dbus
 , nftables
 }:
 
 stdenv.mkDerivation rec {
   pname = "cloudflare-warp";
-  version = "2022.8.936";
+  version = "2023.1.133";
 
   src = fetchurl {
-    url = "https://pkg.cloudflareclient.com/uploads/cloudflare_warp_2022_8_936_1_amd64_1923bb9dba.deb";
-    sha256 = "sha256-ZuJyMl6g8KDwxc9UipH63naJ4dl/84Vhk7ini/VNPno=";
+    url = "https://pkg.cloudflareclient.com/uploads/cloudflare_warp_2023_1_133_1_amd64_734c1ff709.deb";
+    sha256 = "sha256-Yo1JnbXi9vbYYAkmwk4S7JZZE45SV4p4dB55Rt+w+LA=";
   };
 
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
     makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [ dbus ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "com.cloudflare.WarpCli";
+      desktopName = "Cloudflare Zero Trust Team Enrollment";
+      categories = [ "Utility" "Security" "ConsoleOnly" ];
+      noDisplay = true;
+      mimeTypes = [ "x-scheme-handler/com.cloudflare.warp" ];
+      exec = "warp-cli teams-enroll-token %u";
+      startupNotify = false;
+      terminal = true;
+    })
+  ];
 
   unpackPhase = ''
     dpkg-deb -x ${src} ./

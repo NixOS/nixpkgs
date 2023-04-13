@@ -26,6 +26,10 @@ import ./make-test-python.nix ({ lib, ... }: {
         # Wait until server accepts connections
         machine.wait_until_succeeds("curl -fs localhost:28981")
 
+    # Required for consuming documents via the web interface
+    with subtest("Task-queue gets ready"):
+        machine.wait_for_unit("paperless-task-queue.service")
+
     with subtest("Add a document via the web interface"):
         machine.succeed(
             "convert -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 -fill black "

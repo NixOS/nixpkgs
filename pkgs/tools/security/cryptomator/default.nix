@@ -116,6 +116,6 @@ in stdenv.mkDerivation rec {
     ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bachp ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/ambroisie/tree-sitter-tiger",
-  "rev": "eb1d3714998977ae76ca7c6a102b10ee37efc2b5",
-  "date": "2022-06-13T13:43:12+02:00",
-  "path": "/nix/store/97jbgip2nh59zrxyhnqlmw14g25c7g89-tree-sitter-tiger",
-  "sha256": "1p1hn99lsmqlmqgv7i3yw2jsqbj5xrrnvs87wkir74y7li2h9g4i",
+  "rev": "a233ebe360a73a92c50978e5c4e9e471bc59ff42",
+  "date": "2022-11-22T10:59:45+01:00",
+  "path": "/nix/store/30fd7jd6p4rc2x1ahax19jxxa0blz7lq-tree-sitter-tiger",
+  "sha256": "0jv8dawvdjws0klypf80z4fff4va5963vcxdp22rvp3g1n8dc3cm",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

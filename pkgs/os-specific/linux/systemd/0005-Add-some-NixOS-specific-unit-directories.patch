@@ -14,7 +14,7 @@ Also, remove /usr and /lib as these don't exist on NixOS.
  2 files changed, 6 insertions(+), 19 deletions(-)
 
 diff --git a/src/basic/path-lookup.c b/src/basic/path-lookup.c
-index 1f4331a8bf..4b9a8ae26e 100644
+index c99e9d8786..b9f85d1f8c 100644
 --- a/src/basic/path-lookup.c
 +++ b/src/basic/path-lookup.c
 @@ -92,11 +92,7 @@ int xdg_user_data_dir(char **ret, const char *suffix) {

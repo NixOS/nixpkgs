@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "goobook";
     repo = "goobook";
     rev = version;
-    sha256 = "sha256-gWmeRlte+lP7VP9gbPuMHwhVkx91wQ0GpQFQRLJ29h8=";
+    hash = "sha256-gWmeRlte+lP7VP9gbPuMHwhVkx91wQ0GpQFQRLJ29h8=";
   };
 
   postPatch = ''

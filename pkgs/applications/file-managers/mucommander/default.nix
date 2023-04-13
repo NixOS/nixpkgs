@@ -5,18 +5,18 @@
 , perl
 , makeWrapper
 , writeText
-, jdk11
+, jdk
 , gsettings-desktop-schemas
 }:
 
 let
-  version = "1.1.0-1";
+  version = "1.2.0-1";
 
   src = fetchFromGitHub {
     owner = "mucommander";
     repo = "mucommander";
     rev = version;
-    sha256 = "sha256-sCBbY3aBSuJmyOuy36pg8X2jX6hXwW8SW2UzYyp/isM=";
+    sha256 = "sha256-OrtC7E/8n9uEo7zgFHYQqXV3qLpdKtxwbwZfxoOqTqA=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-15ThPkvcmOfa5m/HMJzjrOOUi/BYbd57p5bBfj5/3n4=";
+    outputHash = "sha256-T4UhEzkaYh237+ZsoQTv1RgqcAKY4dPc/3x+dEie4A8=";
   };
 
 in
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/share/mucommander/mucommander.sh $out/bin/mucommander \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
-      --set JAVA_HOME ${jdk11}
+      --set JAVA_HOME ${jdk}
   '';
 
   meta = with lib; {

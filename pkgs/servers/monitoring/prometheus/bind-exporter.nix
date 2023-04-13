@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "bind_exporter";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus-community";
     repo = "bind_exporter";
-    sha256 = "sha256-ta+uy0FUEMcL4SW1K3v2j2bfDRmdAIz42MKPsNj4FbA=";
+    sha256 = "sha256-qyTfo4Pkp07v575p7SePwe/OfCZRVuHKGyaEQQOkYjk=";
   };
 
-  vendorSha256 = "sha256-L0jZM83u423tiLf7kcqnXsQi7QBvNEXhuU+IwXXAhE0=";
+  vendorHash = "sha256-ZQKQY7budLH6eAusLMwSF5cLJ6QdiXLJc29xJk+XBxI=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) bind; };
 

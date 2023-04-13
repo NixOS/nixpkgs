@@ -21,7 +21,7 @@ writeTextFile {
     # Drawio needs to run in a virtual X session, because Electron
     # refuses to work and dies with an unhelpful error message otherwise:
     # "The futex facility returned an unexpected error code."
-    XDG_CONFIG_HOME="$tmpdir" ${xvfb-run}/bin/xvfb-run ${drawio}/bin/drawio $@
+    XDG_CONFIG_HOME="$tmpdir" ${xvfb-run}/bin/xvfb-run --auto-display ${drawio}/bin/drawio $@
   '';
 
   meta = with lib; {

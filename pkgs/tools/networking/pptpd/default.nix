@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "http://poptop.sourceforge.net/dox/";
+    homepage    = "https://poptop.sourceforge.net/dox/";
     description = "The PPTP Server for Linux";
     platforms   = platforms.linux;
     maintainers = with maintainers; [ obadz ];

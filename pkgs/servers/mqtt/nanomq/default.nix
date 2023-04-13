@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, mbedtls, sqlite }:
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config
+, cyclonedds, libmysqlclient, mariadb, mbedtls, sqlite, zeromq
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.13.0";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
-    rev = version;
-    hash = "sha256-fxV/X34yohh/bxOsnoVngBKiwqABQDthLgZxvomC0+g=";
+    rev = finalAttrs.version;
+    hash = "sha256-9w4afVxuJbYrkagpAe1diftDnjrRjunyhJdJ0BZq3K0=";
     fetchSubmodules = true;
   };
 
@@ -17,14 +19,21 @@ stdenv.mkDerivation rec {
       --replace "DESTINATION /etc" "DESTINATION $out/etc"
   '';
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
-  buildInputs = [ mbedtls sqlite ];
+  buildInputs = [ cyclonedds libmysqlclient mariadb mbedtls sqlite zeromq ];
 
   cmakeFlags = [
-    "-DNNG_ENABLE_TLS=ON"
+    "-DBUILD_BENCH=ON"
+    "-DBUILD_DDS_PROXY=ON"
+    "-DBUILD_NANOMQ_CLI=ON"
+    "-DBUILD_ZMQ_GATEWAY=ON"
+    "-DENABLE_RULE_ENGINE=ON"
     "-DNNG_ENABLE_SQLITE=ON"
+    "-DNNG_ENABLE_TLS=ON"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
 
   meta = with lib; {
     description = "An ultra-lightweight and blazing-fast MQTT broker for IoT edge";
@@ -33,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };
-}
+})

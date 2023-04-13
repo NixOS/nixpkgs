@@ -3,6 +3,7 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
+, DarwinTools
 , libusb1
 , libiconv
 , AppKit
@@ -11,17 +12,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-run";
-  version = "0.3.5";
+  version = "0.3.7";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-C9JxQVsS1Bv9euQ7l+p5aehiGLKdrUMcno9z8UoZKR4=";
+    hash = "sha256-GLJrM5vIGYH5lNvwmpYKE/ISTRUwikCCj2o5h6Y9kW4=";
   };
 
-  cargoSha256 = "sha256-kmdRwAq6EOniGHC7JhB6Iov1E4hbQbxHlOcc6gUDOhY=";
+  cargoHash = "sha256-YevCel3HqwslwVmEA1vncsYYPMGQPUnwlkxLNQsnKG0=";
 
   nativeBuildInputs = [
     pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [
+    DarwinTools
   ];
 
   buildInputs = [

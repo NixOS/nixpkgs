@@ -13,7 +13,7 @@ let
     "x86_64-darwin" "i686-darwin" "aarch64-darwin" "armv7a-darwin"
 
     # FreeBSD
-    "i686-freebsd" "x86_64-freebsd"
+    "i686-freebsd13" "x86_64-freebsd13"
 
     # Genode
     "aarch64-genode" "i686-genode" "x86_64-genode"
@@ -22,7 +22,7 @@ let
     "x86_64-solaris"
 
     # JS
-    "js-ghcjs"
+    "javascript-ghcjs"
 
     # Linux
     "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
@@ -68,6 +68,7 @@ in {
   none = [];
 
   arm           = filterDoubles predicates.isAarch32;
+  armv7         = filterDoubles predicates.isArmv7;
   aarch64       = filterDoubles predicates.isAarch64;
   x86           = filterDoubles predicates.isx86;
   i686          = filterDoubles predicates.isi686;
@@ -75,6 +76,7 @@ in {
   microblaze    = filterDoubles predicates.isMicroBlaze;
   mips          = filterDoubles predicates.isMips;
   mmix          = filterDoubles predicates.isMmix;
+  power         = filterDoubles predicates.isPower;
   riscv         = filterDoubles predicates.isRiscV;
   riscv32       = filterDoubles predicates.isRiscV32;
   riscv64       = filterDoubles predicates.isRiscV64;
@@ -83,6 +85,7 @@ in {
   or1k          = filterDoubles predicates.isOr1k;
   m68k          = filterDoubles predicates.isM68k;
   s390          = filterDoubles predicates.isS390;
+  s390x         = filterDoubles predicates.isS390x;
   js            = filterDoubles predicates.isJavaScript;
 
   bigEndian     = filterDoubles predicates.isBigEndian;

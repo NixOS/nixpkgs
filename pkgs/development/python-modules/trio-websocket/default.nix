@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "HyperionGray";
     repo = "trio-websocket";
     rev = version;
-    sha256 = "sha256-8VrpI/pk5IhEvqzo036cnIbJ1Hu3UfQ6GHTNkNJUYvo=";
+    hash = "sha256-8VrpI/pk5IhEvqzo036cnIbJ1Hu3UfQ6GHTNkNJUYvo=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     wsproto
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-trio
     pytestCheckHook
     trustme

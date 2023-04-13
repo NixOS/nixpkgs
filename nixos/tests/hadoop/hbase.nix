@@ -53,6 +53,24 @@ with pkgs.lib;
         };
       };
     };
+    thrift = { ... }:{
+      services.hadoop = {
+        inherit coreSite;
+        hbase = {
+          inherit zookeeperQuorum;
+          thrift = defOpts;
+        };
+      };
+    };
+    rest = { ... }:{
+      services.hadoop = {
+        inherit coreSite;
+        hbase = {
+          inherit zookeeperQuorum;
+          rest = defOpts;
+        };
+      };
+    };
   };
 
   testScript = ''
@@ -80,5 +98,12 @@ with pkgs.lib;
     assert "1 active master, 0 backup masters, 1 servers" in master.succeed("echo status | HADOOP_USER_NAME=hbase hbase shell -n")
     regionserver.wait_until_succeeds("echo \"create 't1','f1'\" | HADOOP_USER_NAME=hbase hbase shell -n")
     assert "NAME => 'f1'" in regionserver.succeed("echo \"describe 't1'\" | HADOOP_USER_NAME=hbase hbase shell -n")
+
+    rest.wait_for_open_port(8080)
+    assert "${hbase.version}" in regionserver.succeed("curl http://rest:8080/version/cluster")
+
+    thrift.wait_for_open_port(9090)
   '';
+
+  meta.maintainers = with maintainers; [ illustris ];
 })

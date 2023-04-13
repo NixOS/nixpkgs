@@ -1,22 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "cppreference-doc";
-  version = "2022.07.30";
-  ver = builtins.replaceStrings ["."] [""] version;
+  version = "20220730";
 
-in fetchzip {
-  name = pname + "-" + version;
+  src = fetchurl {
+    url = "https://github.com/PeterFeicht/${pname}/releases/download/v${version}/html-book-${version}.tar.xz";
+    hash = "sha256-cfFQA8FouNxaAMuvGbZICps+h6t+Riqjnttj11EcAos=";
+  };
 
-  url = "https://github.com/PeterFeicht/${pname}/releases/download/v${ver}/html-book-${ver}.tar.xz";
-  sha256 = "sha256-gsYNpdxbWnmwcC9IJV1g+e0/s4Hoo5ig1MGoYPIHspw=";
+  sourceRoot = ".";
 
-  stripRoot = false;
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
-    rm $out/cppreference-doxygen-local.tag.xml $out/cppreference-doxygen-web.tag.xml
     mkdir -p $out/share/cppreference/doc
-    mv $out/reference $out/share/cppreference/doc/html
+    mv reference $out/share/cppreference/doc/html
+
+    runHook postInstall
   '';
 
   passthru = { inherit pname version; };

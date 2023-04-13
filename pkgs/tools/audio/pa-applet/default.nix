@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   '';
 
   # work around a problem related to gtk3 updates
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   postInstall = "";
 

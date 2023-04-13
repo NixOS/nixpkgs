@@ -17,7 +17,7 @@ buildPythonPackage rec {
     # Remove after https://github.com/pexpect/ptyprocess/pull/64 is merged.
     (fetchpatch {
       url = "https://github.com/pexpect/ptyprocess/commit/40c1ccf3432a6787be1801ced721540e34c6cd87.patch";
-      sha256 = "sha256-IemngBqBq3QRCmVscWtsuXHiFgvTOJIIB9SyAvsqHd0=";
+      hash = "sha256-IemngBqBq3QRCmVscWtsuXHiFgvTOJIIB9SyAvsqHd0=";
     })
   ];
 

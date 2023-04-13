@@ -1,6 +1,7 @@
 { async_generator
 , buildPythonPackage
 , fetchFromGitHub
+, hatchling
 , ipykernel
 , ipywidgets
 , jupyter-client
@@ -11,14 +12,15 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, testpath
 , traitlets
 , xmltodict
 }:
 
 let nbclient = buildPythonPackage rec {
   pname = "nbclient";
-  version = "0.6.8";
-  format = "setuptools";
+  version = "0.7.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -26,20 +28,31 @@ let nbclient = buildPythonPackage rec {
     owner = "jupyter";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+GQkEGWReo9y8bgcysslQdzJUcvQiZkQTQiwmWJ1mx8=";
+    hash = "sha256-2H6Oi1tK/GrtfMTR1j12tZdRzQkFUxXzMSpfCtGPyWE=";
   };
 
-  propagatedBuildInputs = [ async_generator traitlets nbformat nest-asyncio jupyter-client ];
+  nativeBuildInputs = [
+    hatchling
+  ];
+
+  propagatedBuildInputs = [
+    async_generator
+    traitlets
+    nbformat
+    nest-asyncio
+    jupyter-client
+  ];
 
   # circular dependencies if enabled by default
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     ipykernel
     ipywidgets
     nbconvert
     pytest-asyncio
     pytestCheckHook
+    testpath
     xmltodict
   ];
 
@@ -55,7 +68,7 @@ let nbclient = buildPythonPackage rec {
     homepage = "https://github.com/jupyter/nbclient";
     description = "A client library for executing notebooks";
     license = licenses.bsd3;
-    maintainers = [ maintainers.erictapen ];
+    maintainers = [ ];
   };
 };
 in nbclient

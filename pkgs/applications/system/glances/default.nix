@@ -1,5 +1,5 @@
 { stdenv, buildPythonApplication, fetchFromGitHub, fetchpatch, isPyPy, lib
-, defusedxml, future, packaging, psutil, setuptools
+, defusedxml, future, ujson, packaging, psutil, setuptools
 # Optional dependencies:
 , bottle, pysnmp
 , hddtemp
@@ -9,14 +9,14 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.3.0";
+  version = "3.3.1";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-4EZjr8oW5759U20YS6eWVZ0pelTCDj75FBc7IkAzd3M=";
+    sha256 = "sha256-93fghrNktcz+YyPkRl6ZiSZC+3a5TDql6eFZMy6veJc=";
   };
 
   # On Darwin this package segfaults due to mismatch of pure and impure
@@ -36,6 +36,7 @@ buildPythonApplication rec {
     bottle
     defusedxml
     future
+    ujson
     netifaces
     packaging
     psutil

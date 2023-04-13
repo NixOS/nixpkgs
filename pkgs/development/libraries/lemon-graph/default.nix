@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  doCheck = true;
+  # error: no viable conversion from ...
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     homepage = "https://lemon.cs.elte.hu/trac/lemon";
@@ -23,6 +24,5 @@ stdenv.mkDerivation rec {
     license = licenses.boost;
     maintainers = with maintainers; [ trepetti ];
     platforms = platforms.all;
-    broken = stdenv.isAarch64 || stdenv.isDarwin;
   };
 }

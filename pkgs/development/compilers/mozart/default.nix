@@ -7,7 +7,6 @@
 , boost169
 , pinnedBoost ? boost169
 , llvmPackages
-, llvmPackages_5
 , gmp
 , emacs
 , jre_headless
@@ -42,23 +41,9 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper unzip ];
 
-  # We cannot compile with both gcc and clang, but we need clang during the
-  # process, so we compile everything with clang.
-  # BUT, we need clang4 for parsing, and a more recent clang for compiling.
   cmakeFlags = [
-    "-DCMAKE_CXX_COMPILER=${llvmPackages.clang}/bin/clang++"
-    "-DCMAKE_C_COMPILER=${llvmPackages.clang}/bin/clang"
     "-DBoost_USE_STATIC_LIBS=OFF"
     "-DMOZART_BOOST_USE_STATIC_LIBS=OFF"
-    "-DCMAKE_PROGRAM_PATH=${llvmPackages_5.clang}/bin"
-    # Rationale: Nix's cc-wrapper needs to see a compile flag (like -c) to
-    # infer that it is not a linking call, and stop trashing the command line
-    # with linker flags.
-    # As it does not recognise -emit-ast, we pass -c immediately overridden
-    # by -emit-ast.
-    # The remaining is just the default flags that we cannot reuse and need
-    # to repeat here.
-    "-DMOZART_GENERATOR_FLAGS='-c;-emit-ast;--std=c++0x;-Wno-invalid-noreturn;-Wno-return-type;-Wno-braced-scalar-init'"
     # We are building with clang, as nix does not support having clang and
     # gcc together as compilers and we need clang for the sources generation.
     # However, clang emits tons of warnings about gcc's atomic-base library.
@@ -71,9 +56,6 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     pinnedBoost
-    llvmPackages_5.llvm
-    llvmPackages_5.clang
-    llvmPackages_5.clang-unwrapped
     gmp
     emacs
     jre_headless
@@ -81,10 +63,10 @@ in stdenv.mkDerivation rec {
     tk
   ];
 
-  meta = {
+  meta = with lib; {
     description = "An open source implementation of Oz 3";
-    maintainers = [ lib.maintainers.layus ];
-    license = lib.licenses.bsd2;
+    maintainers = with maintainers; [ layus h7x4 ];
+    license = licenses.bsd2;
     homepage = "https://mozart.github.io";
   };
 

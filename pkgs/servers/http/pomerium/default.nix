@@ -14,25 +14,24 @@ let
 in
 buildGoModule rec {
   pname = "pomerium";
-  version = "0.19.1";
+  version = "0.21.3";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    sha256 = "sha256-+YcYrhUQMiLUcBnYhTHxf+NrmQIdYpeO/blMgU33w6o=";
+    sha256 = "sha256-OB44/6ha72882SzaMpotchU8RrU10rvUL58sCiCKcok=";
   };
 
-  vendorSha256 = "sha256-Y8RFMW9nfO6cMCw1SDowKkpPHfUwGhzLPXr7vM6y6Nw=";
+  vendorSha256 = "sha256-8g3jhxKIT0EGUXh0hrvDbw3i04khqlAfGzM6k4q3O8g=";
 
   ui = mkYarnPackage {
     inherit version;
     src = "${src}/ui";
 
-    # update pomerium-ui-package.json when updating package, sourced from ui/package.json
-    packageJSON = ./pomerium-ui-package.json;
+    packageJSON = ./package.json;
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/ui/yarn.lock";
-      sha256 = "sha256:1n6swanrds9hbd4yyfjzpnfhsb8fzj1pwvvcg3w7b1cgnihclrmv";
+      sha256 = lib.fileContents ./yarn-hash;
     };
 
     buildPhase = ''
@@ -111,9 +110,12 @@ buildGoModule rec {
     install -Dm0755 $GOPATH/bin/pomerium $out/bin/pomerium
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) pomerium;
-    inherit pomerium-cli;
+  passthru = {
+    tests = {
+      inherit (nixosTests) pomerium;
+      inherit pomerium-cli;
+    };
+    updateScript = ./updater.sh;
   };
 
   meta = with lib; {

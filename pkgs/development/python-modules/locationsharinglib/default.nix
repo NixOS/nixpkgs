@@ -13,12 +13,14 @@
 
 buildPythonPackage rec {
   pname = "locationsharinglib";
-  version = "4.1.8";
+  version = "4.2.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-69NzKSWpuU0Riwlj6cFC4h/shc/83e1mpq++zxDqftY=";
+    hash = "sha256-1Eu+gHhUDYbZPeLblizxKuHMQfy9DhrHTaEcDYnnuP8=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +30,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     betamax
     emoji
     nose
@@ -49,11 +51,14 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "locationsharinglib" ];
+  pythonImportsCheck = [
+    "locationsharinglib"
+  ];
 
   meta = with lib; {
     description = "Python package to retrieve coordinates from a Google account";
     homepage = "https://locationsharinglib.readthedocs.io/";
+    changelog = "https://github.com/costastf/locationsharinglib/blob/${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

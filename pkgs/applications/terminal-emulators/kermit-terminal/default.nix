@@ -9,16 +9,15 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kermit";
-  version = "3.7";
+  version = "3.8";
 
   src = fetchFromGitHub {
-    name = "${pname}-${version}-src";
     owner = "orhun";
-    repo = pname;
-    rev = version;
-    hash = "sha256-O5jpiQ+aaOTPst4/Z+H5e7ylA8CNBevqNoH50p4uEA4=";
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
+    hash = "sha256-XPHF33Nu+H8OcQFwsuUOhDBDWKm8sh5B36sfROeSWPg=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +36,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/orhun/kermit";
     description = "A VTE-based, simple and froggy terminal emulator";
+    changelog = "https://github.com/orhun/kermit/releases/tag/${finalAttrs.version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
   };
-}
+})

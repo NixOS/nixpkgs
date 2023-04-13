@@ -13,7 +13,7 @@ let
     "OvmfPkg/OvmfPkgIa32.dsc"
   else if stdenv.isx86_64 then
     "OvmfPkg/OvmfPkgX64.dsc"
-  else if stdenv.isAarch64 then
+  else if stdenv.hostPlatform.isAarch then
     "ArmVirtPkg/ArmVirtQemu.dsc"
   else
     throw "Unsupported architecture";
@@ -21,6 +21,7 @@ let
   version = lib.getVersion edk2;
 
   suffixes = {
+    i686 = "FV/OVMF";
     x86_64 = "FV/OVMF";
     aarch64 = "FV/AAVMF";
   };
@@ -45,13 +46,13 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     ++ lib.optionals httpSupport [ "-D NETWORK_HTTP_ENABLE=TRUE" "-D NETWORK_HTTP_BOOT_ENABLE=TRUE" ]
     ++ lib.optionals tpmSupport [ "-D TPM_ENABLE" "-D TPM2_ENABLE" "-D TPM2_CONFIG_ENABLE"];
 
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.cc.isClang "-Qunused-arguments";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Qunused-arguments";
 
   postPatch = lib.optionalString csmSupport ''
     cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
   '';
 
-  postFixup = if stdenv.isAarch64 then ''
+  postFixup = if stdenv.hostPlatform.isAarch then ''
     mkdir -vp $fd/FV
     mkdir -vp $fd/AAVMF
     mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
@@ -87,7 +88,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     description = "Sample UEFI firmware for QEMU and KVM";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
     license = lib.licenses.bsd2;
-    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin"];
+    inherit (edk2.meta) platforms;
     maintainers = [ lib.maintainers.raitobezarius ];
   };
 })

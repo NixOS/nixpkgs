@@ -12,9 +12,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0rxl3ksjinw07q3p2vjqg80k3c6wx2q7pzpf2344zyfb4gkqzx1c";
   };
 
-  cargoSha256 = "1n4il3l59m2a6ca54vfaivzg25abf8s4w5kpd5q51p13624iz0kb";
-
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "x11-clipboard-0.6.0" = "sha256-dKx2kda5JC79juksP2qiO9yfeFCWymcYhGPSygQ0mrg=";
+    };
+  };
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
@@ -23,8 +26,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
 
-    clang
-    llvmPackages.libclang
+    rustPlatform.bindgenHook
 
     rustfmt
     protobuf

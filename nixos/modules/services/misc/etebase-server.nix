@@ -179,21 +179,21 @@ in
       description = "An Etebase (EteSync 2.0) server";
       after = [ "network.target" "systemd-tmpfiles-setup.service" ];
       wantedBy = [ "multi-user.target" ];
+      path = [ pythonEnv ];
       serviceConfig = {
         User = cfg.user;
         Restart = "always";
         WorkingDirectory = cfg.dataDir;
       };
       environment = {
-        PYTHONPATH = "${pythonEnv}/${pkgs.python3.sitePackages}";
         ETEBASE_EASY_CONFIG_PATH = configIni;
       };
       preStart = ''
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
         if [[ $(cat "$versionFile" 2>/dev/null) != ${pkgs.etebase-server} ]]; then
-          ${pythonEnv}/bin/etebase-server migrate --no-input
-          ${pythonEnv}/bin/etebase-server collectstatic --no-input --clear
+          etebase-server migrate --no-input
+          etebase-server collectstatic --no-input --clear
           echo ${pkgs.etebase-server} > "$versionFile"
         fi
       '';
@@ -204,7 +204,7 @@ in
           else "-b 0.0.0.0 -p ${toString cfg.port}";
         in ''
           cd "${pythonEnv}/lib/etebase-server";
-          ${pythonEnv}/bin/daphne ${networking} \
+          daphne ${networking} \
             etebase_server.asgi:application
         '';
     };

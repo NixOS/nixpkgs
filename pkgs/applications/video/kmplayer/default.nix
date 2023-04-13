@@ -27,6 +27,9 @@ mkDerivation rec {
       -e "s,^Exec.*,Exec=$out/bin/kmplayer -qwindowtitle %c %i %U,"
   '';
 
+  # required for kf5auth to work correctly
+  cmakeFlags = ["-DCMAKE_POLICY_DEFAULT_CMP0012=NEW"];
+
   nativeBuildInputs = [ extra-cmake-modules makeWrapper ];
 
   buildInputs = [

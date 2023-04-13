@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Y8mj6OfZXyE1q3C8HyVzGySuZB6rLSsL/CV/7axxaec=";
+    hash = "sha256-Y8mj6OfZXyE1q3C8HyVzGySuZB6rLSsL/CV/7axxaec=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
       --replace "future>=0.16" ""
   '';
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
   checkPhase = "nosetests pyxnat/tests";
   doCheck = false;  # requires a docker container running an XNAT server
 

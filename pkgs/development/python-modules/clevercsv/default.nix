@@ -1,40 +1,53 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, cchardet
+
+# propagates
 , chardet
-, cleo
-, clikit
-, pandas
 , regex
+, packaging
+
+# optionals
+, faust-cchardet
+, pandas
 , tabview
+# TODO: , wilderness
+
+# tests
 , python
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "clevercsv";
-  version = "0.7.4";
+  version = "0.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
-    rev = "v${version}";
-    sha256 = "sha256-2OLvVJbqV/wR+Quq0cAlR/vCUe1/Km/nALwfoHD9B+U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/JveB6fpIJvR5byGcmO9XBuCbUw7yNTpSoDs68Wffmo=";
   };
 
   propagatedBuildInputs = [
-    cchardet
     chardet
-    cleo
-    clikit
-    pandas
     regex
-    tabview
+    packaging
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  passthru.optional-dependencies = {
+    full = [
+      faust-cchardet
+      pandas
+      tabview
+      # TODO: wilderness
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.full;
 
   pythonImportsCheck = [
     "clevercsv"
@@ -66,7 +79,7 @@ buildPythonPackage rec {
       with CSV files.
     '';
     homepage = "https://github.com/alan-turing-institute/CleverCSV";
-    changelog = "https://github.com/alan-turing-institute/CleverCSV/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/alan-turing-institute/CleverCSV/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

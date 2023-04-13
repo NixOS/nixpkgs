@@ -1,4 +1,5 @@
 { lib
+, asgiref
 , blinker
 , buildPythonPackage
 , fetchPypi
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-Login";
     inherit version;
-    sha256 = "sha256-wKe6qf3ESM3T3W8JOd9y7sUXey96vmy4L8k00pyqycM=";
+    hash = "sha256-wKe6qf3ESM3T3W8JOd9y7sUXey96vmy4L8k00pyqycM=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +29,8 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    asgiref
     blinker
     pytestCheckHook
     semantic-version

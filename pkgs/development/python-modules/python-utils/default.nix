@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , loguru
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "3.4.5";
+  version = "3.5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,11 +20,12 @@ buildPythonPackage rec {
     owner = "WoLpH";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-O/+jvdzzxUFaQdAfUM9p40fPPDNN+stTauCD993HH6Y=";
+    hash = "sha256-FFBWkq7ct4JWSTH4Ldg+pbG/BAiW33puB7lqFPBjptw=";
   };
 
   postPatch = ''
     sed -i '/--cov/d' pytest.ini
+    sed -i '/--mypy/d' pytest.ini
   '';
 
   passthru.optional-dependencies = {
@@ -32,7 +34,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-mypy
     pytestCheckHook
@@ -46,9 +48,15 @@ buildPythonPackage rec {
     "_python_utils_tests"
   ];
 
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Flaky tests on darwin
+    "test_timeout_generator"
+  ];
+
   meta = with lib; {
     description = "Module with some convenient utilities";
     homepage = "https://github.com/WoLpH/python-utils";
+    changelog = "https://github.com/wolph/python-utils/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

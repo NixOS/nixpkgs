@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.uritools
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

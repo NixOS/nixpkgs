@@ -1,30 +1,24 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, cppo
-# De facto, option minimal seems to be the default. See the README.
-, minimal ? true
-}:
+{ buildDunePackage, lib, fetchurl, cppo }:
 
-stdenv.mkDerivation rec {
-  pname = "ocaml${ocaml.version}-extlib";
-  version = "1.7.8";
+buildDunePackage rec {
+  pname = "extlib";
+  version = "1.7.9";
+
+  minimalOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://ygrek.org/p/release/ocaml-extlib/extlib-${version}.tar.gz";
-    sha256 = "0npq4hq3zym8nmlyji7l5cqk6drx2rkcx73d60rxqh5g8dla8p4k";
+    url = "https://ygrek.org/p/release/ocaml-${pname}/${pname}-${version}.tar.gz";
+    sha512 = "2386ac69f037ea520835c0624d39ae9fbffe43a20b18e247de032232ed6f419d667b53d2314c6f56dc71d368bf0b6201a56c2f3f2a5bdfd933766c5a6cb98768";
   };
 
-  nativeBuildInputs = [ ocaml findlib cppo ];
+  nativeBuildInputs = [ cppo ];
 
-  strictDeps = true;
-
-  createFindlibDestdir = true;
-
-  makeFlags = lib.optional minimal "minimal=1";
+  doCheck = true;
 
   meta = {
     homepage = "https://github.com/ygrek/ocaml-extlib";
     description = "Enhancements to the OCaml Standard Library modules";
     license = lib.licenses.lgpl21Only;
-    inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

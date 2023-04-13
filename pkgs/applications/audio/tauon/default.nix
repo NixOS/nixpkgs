@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tauon";
-  version = "7.4.3";
+  version = "7.6.3";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
     rev = "v${version}";
-    sha256 = "sha256-eB4fwW5UvylVslSEvDFdCVYcEK3M2H+8VJGHH13vvA0=";
+    hash = "sha256-cNR4Ffn9HvgL5KV4FUSnbzEh6VfoKaIbfpb18/qKEns=";
   };
 
   postUnpack = ''
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     plexapi
     pulsectl
     pycairo
-    PyChromecast
+    pychromecast
     pylast
     pygobject3
     pylyrics
@@ -131,6 +131,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Linux desktop music player from the future";
     homepage = "https://tauonmusicbox.rocks/";
+    changelog = "https://github.com/Taiko2k/TauonMusicBox/releases/tag/v${version}";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jansol ];
     platforms = platforms.linux;

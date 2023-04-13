@@ -21,7 +21,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.3.23";
+  version = "0.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "jax-v${version}";
-    hash = "sha256-ruXOwpBwpi1G8jgH9nhbWbs14JupwWkjh+Wzrj8HVU4=";
+    rev = "refs/tags/jaxlib-v${version}";
+    hash = "sha256-ajLI0iD0YZRK3/uKSbhlIZGc98MdW174vA34vhoy7Iw=";
   };
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ etils.optional-dependencies.epath;
 
-  checkInputs = [
+  nativeCheckInputs = [
     jaxlib
     matplotlib
     pytestCheckHook
@@ -69,6 +69,12 @@ buildPythonPackage rec {
   disabledTests = [
     # Exceeds tolerance when the machine is busy
     "test_custom_linear_solve_aux"
+    # UserWarning: Explicitly requested dtype <class 'numpy.float64'>
+    #  requested in astype is not available, and will be truncated to
+    # dtype float32. (With numpy 1.24)
+    "testKde3"
+    "testKde5"
+    "testKde6"
   ] ++ lib.optionals usingMKL [
     # See
     #  * https://github.com/google/jax/issues/9705

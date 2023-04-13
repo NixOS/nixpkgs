@@ -9,6 +9,7 @@
 , kio
 , kitemmodels
 , kitemviews
+, kparts
 , kwindowsystem
 , libelf
 , qtbase
@@ -21,13 +22,13 @@
 
 mkDerivation rec {
   pname = "hotspot";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "hotspot";
-    rev = "v${version}";
-    sha256 = "1f68bssh3p387hkavfjkqcf7qf7w5caznmjfjldicxphap4riqr5";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DW4R7+rnonmEMbCkNS7TGodw+3mEyHl6OlFK3kbG5HM=";
     fetchSubmodules = true;
   };
 
@@ -36,12 +37,13 @@ mkDerivation rec {
     extra-cmake-modules
   ];
   buildInputs = [
-    elfutils
+    (elfutils.override { enableDebuginfod = true; }) # perfparser needs to find debuginfod.h
     kconfigwidgets
     ki18n
     kio
     kitemmodels
     kitemviews
+    kparts
     kwindowsystem
     libelf
     qtbase
@@ -60,12 +62,11 @@ mkDerivation rec {
     mkdir -p 3rdparty/{perfparser,PrefixTickLabels}/.git
   '';
 
-  cmakeFlags = [
-    "-DRUSTC_DEMANGLE_INCLUDE_DIR=${rustc-demangle}/include"
-    "-DRUSTC_DEMANGLE_LIBRARY=${rustc-demangle}/lib/librustc_demangle.so"
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ rustc-demangle ]}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A GUI for Linux perf";
     longDescription = ''
       hotspot is a GUI replacement for `perf report`.
@@ -73,8 +74,9 @@ mkDerivation rec {
       then displays the result in a graphical way.
     '';
     homepage = "https://github.com/KDAB/hotspot";
-    license = with lib.licenses; [ gpl2Only gpl3Only ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ nh2 ];
+    changelog = "https://github.com/KDAB/hotspot/releases/tag/v${version}";
+    license = with licenses; [ gpl2Only gpl3Only ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nh2 ];
   };
 }

@@ -1,17 +1,15 @@
-{ lib, fetchFromGitHub, rustPlatform, installShellFiles }:
+{ lib, rustPlatform, fetchCrate, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "trashy";
-  version = "1.0.3";
+  version = "2.0.0";
 
-  src = fetchFromGitHub {
-    owner = "oberblastmeister";
-    repo = "trashy";
-    rev = "v${version}";
-    sha256 = "sha256-b50Q7knJzXKDfM1kw6wLvXunhgOXVs+zYvZx/NYqMdk=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-1xHyhAV8hpgMngQdamRzEliyG60t+I3KfsDJi0+180o=";
   };
 
-  cargoSha256 = "sha256-2hNNLXuAHd1bquhHimniqryTVMfBmPAOossggICScqQ=";
+  cargoHash = "sha256-ZWqWtWzb+CLH1ravBb/oV+aPxplEyiC1wEFhvchcLqg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,9 +21,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple, fast, and featureful alternative to rm and trash-cli.";
+    description = "A simple, fast, and featureful alternative to rm and trash-cli";
     homepage = "https://github.com/oberblastmeister/trashy";
+    changelog = "https://github.com/oberblastmeister/trashy/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ oberblastmeister ];
+    mainProgram = "trash";
   };
 }

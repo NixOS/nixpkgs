@@ -24,7 +24,7 @@ buildPythonPackage rec {
   preCheck = ''
     rm setup.cfg
   '';
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   disabledTests = [
     # AssertionError: Some methods vary.
     "test_method_signatures"

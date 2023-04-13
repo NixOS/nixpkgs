@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stellarium";
-  version = "1.1";
+  version = "23.1";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "sha256-ellfBZWOkvlRauuwug96C7P/WjQ6dXiDnT0b3KH5zRM=";
+    hash = "sha256-7jzS3pRklPsCTgCr3nrywfHCNlBDHuyuGGvrVoI9+A0=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://stellarium.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , coverage
 , ipykernel
 , jupyter-client
@@ -15,11 +16,14 @@
 
 buildPythonPackage rec {
   pname = "nbval";
-  version = "0.9.6";
+  version = "0.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cfefcd2ef66ee2d337d0b252c6bcec4023384eb32e8b9e5fcc3ac80ab8cd7d40";
+    hash = "sha256-tKzv3BEyrvihtbYr+ak9Eo66UoObKFTqPkJZj023vrM=";
   };
 
   buildInputs = [
@@ -32,10 +36,9 @@ buildPythonPackage rec {
     jupyter-client
     nbformat
     pytest
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     matplotlib
     sympy
@@ -51,6 +54,8 @@ buildPythonPackage rec {
     "tests/test_timeouts.py"
     # No value for us
     "tests/test_coverage.py"
+    # nbdime marked broken
+    "tests/test_nbdime_reporter.py"
   ];
 
   # Some of the tests use localhost networking.

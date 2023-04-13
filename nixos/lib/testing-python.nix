@@ -1,3 +1,4 @@
+args@
 { system
 , pkgs ? import ../.. { inherit system config; }
   # Use a minimal kernel?
@@ -5,7 +6,7 @@
   # Ignored
 , config ? { }
   # !!! See comment about args in lib/modules.nix
-, specialArgs ? { }
+, specialArgs ? throw "legacy - do not use, see error below"
   # Modules to add to each VM
 , extraConfigurations ? [ ]
 }:
@@ -13,6 +14,13 @@ let
   nixos-lib = import ./default.nix { inherit (pkgs) lib; };
 in
 
+pkgs.lib.throwIf (args?specialArgs) ''
+  testing-python.nix: `specialArgs` is not supported anymore. If you're looking
+  for the public interface to the NixOS test framework, use `runTest`, and
+  `node.specialArgs`.
+  See https://nixos.org/manual/nixos/unstable/index.html#sec-calling-nixos-tests
+  and https://nixos.org/manual/nixos/unstable/index.html#test-opt-node.specialArgs
+''
 rec {
 
   inherit pkgs;

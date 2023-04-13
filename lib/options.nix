@@ -36,6 +36,12 @@ let
   inherit (lib.types)
     mkOptionType
     ;
+  inherit (lib.lists)
+    last
+    ;
+  prioritySuggestion = ''
+   Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
+  '';
 in
 rec {
 
@@ -104,17 +110,26 @@ rec {
   /* Creates an Option attribute set for an option that specifies the
      package a module should use for some purpose.
 
-     Type: mkPackageOption :: pkgs -> string -> { default :: [string], example :: null | string | [string] } -> option
+     The package is specified in the third argument under `default` as a list of strings
+     representing its attribute path in nixpkgs (or another package set).
+     Because of this, you need to pass nixpkgs itself (or a subset) as the first argument.
 
-     The package is specified as a list of strings representing its attribute path in nixpkgs.
+     The second argument may be either a string or a list of strings.
+     It provides the display name of the package in the description of the generated option
+     (using only the last element if the passed value is a list)
+     and serves as the fallback value for the `default` argument.
 
-     Because of this, you need to pass nixpkgs itself as the first argument.
+     To include extra information in the description, pass `extraDescription` to
+     append arbitrary text to the generated description.
+     You can also pass an `example` value, either a literal string or an attribute path.
 
-     The second argument is the name of the option, used in the description "The <name> package to use.".
+     The default argument can be omitted if the provided name is
+     an attribute of pkgs (if name is a string) or a
+     valid attribute path in pkgs (if name is a list).
 
-     You can also pass an example value, either a literal string or a package's attribute path.
+     If you wish to explicitly provide no default, pass `null` as `default`.
 
-     You can omit the default path if the name of the option is also attribute path in nixpkgs.
+     Type: mkPackageOption :: pkgs -> (string|[string]) -> { default? :: [string], example? :: null|string|[string], extraDescription? :: string } -> option
 
      Example:
        mkPackageOption pkgs "hello" { }
@@ -126,23 +141,47 @@ rec {
          example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
        }
        => { _type = "option"; default = «derivation /nix/store/jxx55cxsjrf8kyh3fp2ya17q99w7541r-ghc-8.10.7.drv»; defaultText = { ... }; description = "The GHC package to use."; example = { ... }; type = { ... }; }
+
+     Example:
+       mkPackageOption pkgs [ "python39Packages" "pytorch" ] {
+         extraDescription = "This is an example and doesn't actually do anything.";
+       }
+       => { _type = "option"; default = «derivation /nix/store/gvqgsnc4fif9whvwd9ppa568yxbkmvk8-python3.9-pytorch-1.10.2.drv»; defaultText = { ... }; description = "The pytorch package to use. This is an example and doesn't actually do anything."; type = { ... }; }
+
   */
   mkPackageOption =
-    # Package set (a specific version of nixpkgs)
+    # Package set (a specific version of nixpkgs or a subset)
     pkgs:
       # Name for the package, shown in option description
       name:
-      { default ? [ name ], example ? null }:
-      let default' = if !isList default then [ default ] else default;
+      {
+        # The attribute path where the default package is located (may be omitted)
+        default ? name,
+        # A string or an attribute path to use as an example (may be omitted)
+        example ? null,
+        # Additional text to include in the option description (may be omitted)
+        extraDescription ? "",
+      }:
+      let
+        name' = if isList name then last name else name;
+        default' = if isList default then default else [ default ];
+        defaultPath = concatStringsSep "." default';
+        defaultValue = attrByPath default'
+          (throw "${defaultPath} cannot be found in pkgs") pkgs;
       in mkOption {
+        defaultText = literalExpression ("pkgs." + defaultPath);
         type = lib.types.package;
-        description = lib.mdDoc "The ${name} package to use.";
-        default = attrByPath default'
-          (throw "${concatStringsSep "." default'} cannot be found in pkgs") pkgs;
-        defaultText = literalExpression ("pkgs." + concatStringsSep "." default');
+        description = "The ${name'} package to use."
+          + (if extraDescription == "" then "" else " ") + extraDescription;
+        ${if default != null then "default" else null} = defaultValue;
         ${if example != null then "example" else null} = literalExpression
           (if isList example then "pkgs." + concatStringsSep "." example else example);
       };
+
+  /* Like mkPackageOption, but emit an mdDoc description instead of DocBook. */
+  mkPackageOptionMD = pkgs: name: extra:
+    let option = mkPackageOption pkgs name extra;
+    in option // { description = lib.mdDoc option.description; };
 
   /* This option accepts anything, but it does not produce any result.
 
@@ -179,7 +218,7 @@ rec {
     if length defs == 1
     then (head defs).value
     else assert length defs > 1;
-      throw "The option `${showOption loc}' is defined multiple times.\n${message}\nDefinition values:${showDefs defs}";
+      throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
@@ -190,13 +229,13 @@ rec {
     else if length defs == 1 then (head defs).value
     else (foldl' (first: def:
       if def.value != first.value then
-        throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}"
+        throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}\n${prioritySuggestion}"
       else
         first) (head defs) (tail defs)).value;
 
   /* Extracts values of all "value" keys of the given list.
 
-     Type: getValues :: [ { value :: a } ] -> [a]
+     Type: getValues :: [ { value :: a; } ] -> [a]
 
      Example:
        getValues [ { value = 1; } { value = 2; } ] // => [ 1 2 ]
@@ -206,7 +245,7 @@ rec {
 
   /* Extracts values of all "file" keys of the given list
 
-     Type: getFiles :: [ { file :: a } ] -> [a]
+     Type: getFiles :: [ { file :: a; } ] -> [a]
 
      Example:
        getFiles [ { file = "file1"; } { file = "file2"; } ] // => [ "file1" "file2" ]
@@ -218,12 +257,13 @@ rec {
   # the set generated with filterOptionSets.
   optionAttrSetToDocList = optionAttrSetToDocList' [];
 
-  optionAttrSetToDocList' = prefix: options:
+  optionAttrSetToDocList' = _: options:
     concatMap (opt:
       let
+        name = showOption opt.loc;
         docOption = rec {
           loc = opt.loc;
-          name = showOption opt.loc;
+          inherit name;
           description = opt.description or null;
           declarations = filter (x: x != unknownModule) opt.declarations;
           internal = opt.internal or false;
@@ -234,9 +274,18 @@ rec {
           readOnly = opt.readOnly or false;
           type = opt.type.description or "unspecified";
         }
-        // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
-        // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
-        // optionalAttrs (opt ? defaultText) { default = opt.defaultText; }
+        // optionalAttrs (opt ? example) {
+          example =
+            builtins.addErrorContext "while evaluating the example of option `${name}`" (
+              renderOptionValue opt.example
+            );
+        }
+        // optionalAttrs (opt ? default) {
+          default =
+            builtins.addErrorContext "while evaluating the default value of option `${name}`" (
+              renderOptionValue (opt.defaultText or opt.default)
+            );
+        }
         // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
 
         subOptions =
@@ -256,6 +305,9 @@ rec {
      efficient: the XML representation of derivations is very large
      (on the order of megabytes) and is not actually used by the
      manual generator.
+
+     This function was made obsolete by renderOptionValue and is kept for
+     compatibility with out-of-tree code.
   */
   scrubOptionValue = x:
     if isDerivation x then
@@ -263,6 +315,17 @@ rec {
     else if isList x then map scrubOptionValue x
     else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
     else x;
+
+
+  /* Ensures that the given option value (default or example) is a `_type`d string
+     by rendering Nix values to `literalExpression`s.
+  */
+  renderOptionValue = v:
+    if v ? _type && v ? text then v
+    else literalExpression (lib.generators.toPretty {
+      multiline = true;
+      allowPrettyValues = true;
+    } v);
 
 
   /* For use in the `defaultText` and `example` option attributes. Causes the
@@ -305,19 +368,17 @@ rec {
 
   # Helper functions.
 
-  /* Convert an option, described as a list of the option parts in to a
-     safe, human readable version.
+  /* Convert an option, described as a list of the option parts to a
+     human-readable version.
 
      Example:
        (showOption ["foo" "bar" "baz"]) == "foo.bar.baz"
-       (showOption ["foo" "bar.baz" "tux"]) == "foo.bar.baz.tux"
+       (showOption ["foo" "bar.baz" "tux"]) == "foo.\"bar.baz\".tux"
+       (showOption ["windowManager" "2bwm" "enable"]) == "windowManager.\"2bwm\".enable"
 
      Placeholders will not be quoted as they are not actual values:
        (showOption ["foo" "*" "bar"]) == "foo.*.bar"
        (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
-
-     Unlike attributes, options can also start with numbers:
-       (showOption ["windowManager" "2bwm" "enable"]) == "windowManager.2bwm.enable"
   */
   showOption = parts: let
     escapeOptionPart = part:

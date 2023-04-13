@@ -13,7 +13,9 @@
 buildDunePackage rec {
   pname = "bls12-381-legacy";
 
-  inherit (bls12-381-gen) version src useDune2 doCheck;
+  inherit (bls12-381-gen) version src doCheck;
+
+  duneVersion = "3";
 
   minimalOCamlVersion = "4.08";
 

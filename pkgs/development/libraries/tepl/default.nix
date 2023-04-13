@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchurl
 , meson
+, mesonEmulatorHook
 , ninja
 , amtk
 , gnome
@@ -15,15 +16,16 @@
 
 stdenv.mkDerivation rec {
   pname = "tepl";
-  version = "6.2.0";
+  version = "6.4.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "jNaGXCw4GIdgyzjK4z3J4KiI+tGNCwTx1V5laqmJqEQ=";
+    sha256 = "XlayBmnQzwX6HWS1jIw0LFkVgSLcUYEA0JPVnfm4cyE=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
     pkg-config
     gtk-doc
     docbook-xsl-nons
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [

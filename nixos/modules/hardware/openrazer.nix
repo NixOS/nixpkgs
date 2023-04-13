@@ -110,7 +110,7 @@ in
     boot.extraModulePackages = [ kernelPackages.openrazer ];
     boot.kernelModules = drivers;
 
-    # Makes the man pages available so you can succesfully run
+    # Makes the man pages available so you can successfully run
     # > systemctl --user help openrazer-daemon
     environment.systemPackages = [ pkgs.python3Packages.openrazer-daemon.man ];
 

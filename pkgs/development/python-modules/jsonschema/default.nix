@@ -11,18 +11,29 @@
 , pythonOlder
 , twisted
 , typing-extensions
+
+# optionals
+, fqdn
+, idna
+, isoduration
+, jsonpointer
+, rfc3339-validator
+, rfc3986-validator
+, rfc3987
+, uri-template
+, webcolors
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.16.0";
+  version = "4.17.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FlBZ8Hbv9pcbrlt0L8App7TvP5vPBMFOR3anYF3hSyM=";
+    hash = "sha256-D4ZEN6uLYHa6ZwdFPvj5imoNUSqA6T+KvbZ29zfstg0=";
   };
 
   postPatch = ''
@@ -45,7 +56,30 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    format = [
+      fqdn
+      idna
+      isoduration
+      jsonpointer
+      rfc3339-validator
+      rfc3987
+      uri-template
+      webcolors
+    ];
+    format-nongpl = [
+      fqdn
+      idna
+      isoduration
+      jsonpointer
+      rfc3339-validator
+      rfc3986-validator
+      uri-template
+      webcolors
+    ];
+  };
+
+  nativeCheckInputs = [
     twisted
   ];
 

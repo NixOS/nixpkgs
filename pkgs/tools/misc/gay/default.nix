@@ -1,21 +1,20 @@
-{ lib, python3Packages }:
+{ lib,
+  python3,
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "gay";
-  version = "1.2.8";
+  version = "1.2.9";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/4IHqAoJthKvNyKqUgnGOQkgbC0aBEZ+x6dmKWUHXh0=";
+    hash = "sha256-x+RVVgQvJwV5j7DLYS7AnXb4OMJ4v+l0awUuonQIgzY=";
   };
 
   meta = with lib; {
-    description = "Colour your text / terminal to be more gay";
-    longDescription = ''
-      Applies pride flag colors to text, ala lolcat or displays a pride flag.
-    '';
     homepage = "https://github.com/ms-jpq/gay";
-    maintainers = with maintainers; [ CodeLongAndProsper90 ];
+    description = "Colour your text / terminal to be more gay";
     license = licenses.mit;
+    maintainers = with maintainers; [ AndersonTorres CodeLongAndProsper90 ];
   };
 }

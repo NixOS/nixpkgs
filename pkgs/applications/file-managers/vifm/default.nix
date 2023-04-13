@@ -1,24 +1,31 @@
 { stdenv, fetchurl, makeWrapper
+, perl # used to generate help tags
 , pkg-config
 , ncurses, libX11
 , util-linux, file, which, groff
 
   # adds support for handling removable media (vifm-media). Linux only!
 , mediaSupport ? false, python3 ? null, udisks2 ? null, lib ? null
+, gitUpdater
 }:
 
 let isFullPackage = mediaSupport;
 in stdenv.mkDerivation rec {
   pname = if isFullPackage then "vifm-full" else "vifm";
-  version = "0.12.1";
+  version = "0.13";
 
   src = fetchurl {
     url = "https://github.com/vifm/vifm/releases/download/v${version}/vifm-${version}.tar.bz2";
-    sha256 = "sha256-j+KBPr3Mz+ma7OArBdYqIJkVJdRrDM+67Dr2FMZlVog=";
+    hash = "sha256-DZKTdJp5QHat6Wfs3EfRQdheRQNwWUdlORvfGpvUUHU=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ perl pkg-config makeWrapper ];
   buildInputs = [ ncurses libX11 util-linux file which groff ];
+
+  postPatch = ''
+    # Avoid '#!/usr/bin/env perl' references to build help.
+    patchShebangs --build src/helpztags
+  '';
 
   postFixup = let
     path = lib.makeBinPath
@@ -28,11 +35,17 @@ in stdenv.mkDerivation rec {
 
     wrapVifmMedia = "wrapProgram $out/share/vifm/vifm-media --prefix PATH : ${path}";
   in ''
-    ${if mediaSupport then wrapVifmMedia else ""}
+    ${lib.optionalString mediaSupport wrapVifmMedia}
   '';
 
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/vifm/vifm.git";
+    rev-prefix = "v";
+    ignoredVersions = "beta";
+  };
+
   meta = with lib; {
-    description = "A vi-like file manager${if isFullPackage then "; Includes support for optional features" else ""}";
+    description = "A vi-like file manager${lib.optionalString isFullPackage "; Includes support for optional features"}";
     maintainers = with maintainers; [ raskin ];
     platforms = if mediaSupport then platforms.linux else platforms.unix;
     license = licenses.gpl2;

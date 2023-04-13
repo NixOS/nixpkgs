@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libsamplerate libsndfile lilv lrdf lv2 qtsvg rtaudio rubberband sord
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${lib.getDev serd}/include/serd-0" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev serd}/include/serd-0" ];
 
   meta = with lib; {
     homepage = "https://muse-sequencer.github.io/";

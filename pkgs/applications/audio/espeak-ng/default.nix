@@ -14,17 +14,19 @@
 , pcaudiolib
 , sonicSupport ? true
 , sonic
+, alsa-plugins
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "espeak-ng";
-  version = "1.51";
+  version = "1.51.1";
 
   src = fetchFromGitHub {
     owner = "espeak-ng";
     repo = "espeak-ng";
     rev = version;
-    hash = "sha256-KwzMlQ3/JgpNOpuV4zNc0zG9oWEGFbVSJ4bEd3dtD3Y=";
+    hash = "sha256-aAJ+k+kkOS6k835mEW7BvgAIYGhUHxf7Q4P5cKO8XTk=";
   };
 
   patches = lib.optionals mbrolaSupport [
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoconf automake which libtool pkg-config ronn ];
+  nativeBuildInputs = [ autoconf automake which libtool pkg-config ronn makeWrapper ];
 
   buildInputs = lib.optional mbrolaSupport mbrola
     ++ lib.optional pcaudiolibSupport pcaudiolib
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/espeak-ng)" $out/bin/speak-ng
+    wrapProgram $out/bin/espeak-ng \
+      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
   '';
 
   passthru = {

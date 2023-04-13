@@ -75,5 +75,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    broken = stdenv.hostPlatform.isMusl; # Broken at 2022-02-25
+                                         # See https://github.com/NixOS/nixpkgs/issues/218274
   };
 }

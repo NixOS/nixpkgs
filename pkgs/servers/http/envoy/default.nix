@@ -24,8 +24,8 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.23.1";
-    rev = "edd69583372955fdfa0b8ca3820dd7312c094e46";
+    version = "1.25.1";
+    rev = "bae2e9d642a6a8ae6c5d3810f77f3e888f0d97da";
   };
 in
 buildBazelPackage rec {
@@ -36,13 +36,12 @@ buildBazelPackage rec {
     owner = "envoyproxy";
     repo = "envoy";
     inherit (srcVer) rev;
-    sha256 = "sha256:157dbmp479xv5507n48yibvlgi2ac0l3sl9rzm28cm9lhzwva3k0";
+    sha256 = "sha256-qA3+bta2vXGtAYX3mg+CmSIEitk4576JQB/QLPsj9Vc=";
 
     postFetch = ''
       chmod -R +w $out
       rm $out/.bazelversion
       echo ${srcVer.rev} > $out/SOURCE_VERSION
-      sed -i 's/GO_VERSION = ".*"/GO_VERSION = "host"/g' $out/bazel/dependency_imports.bzl
     '';
   };
 
@@ -51,20 +50,15 @@ buildBazelPackage rec {
     sed -i '/javabase=/d' .bazelrc
     sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
 
-    # Use system Python.
-    sed -i -e '/python_interpreter_target =/d' -e '/@python3_10/d' bazel/python_dependencies.bzl
+    cp ${./protobuf.patch} bazel/protobuf.patch
   '';
 
   patches = [
-    # fix issues with brotli and GCC 11.2.0+ (-Werror=vla-parameter)
-    ./bump-brotli.patch
-
-    # fix linux-aarch64 WAMR builds
-    # (upstream WAMR only detects aarch64 on Darwin, not Linux)
-    ./fix-aarch64-wamr.patch
-
     # use system Python, not bazel-fetched binary Python
-    ./use-system-python.patch
+    ./0001-nixpkgs-use-system-Python.patch
+
+    # use system Go, not bazel-fetched binary Go
+    ./0002-nixpkgs-use-system-Go.patch
   ];
 
   nativeBuildInputs = [
@@ -81,10 +75,13 @@ buildBazelPackage rec {
     linuxHeaders
   ];
 
+  # external/com_github_grpc_grpc/src/core/ext/transport/binder/transport/binder_transport.cc:756:29: error: format not a string literal and no format arguments [-Werror=format-security]
+  hardeningDisable = [ "format" ];
+
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "10f1lcn8pynqcj2hlz100zbpmawvn0f2hwpcw3m9v6v3fcs2l6pr";
-      aarch64-linux = "1na7gna9563mm1y7sy34fh64f1kxz151xn26zigbi9amwcpjbav6";
+      x86_64-linux = "sha256-H2s8sTbmKF+yRfSzLsZAT2ckFuunFwh/FMSKj+GYyPM=";
+      aarch64-linux = "sha256-1/z7sZYMiuB4Re2itDZydsFVEel2NOYmi6vRmBGVO/4=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -143,12 +140,13 @@ buildBazelPackage rec {
   removeRulesCC = false;
   removeLocalConfigCc = true;
   removeLocal = false;
-  bazelTarget = "//source/exe:envoy-static";
+  bazelTargets = [ "//source/exe:envoy-static" ];
   bazelBuildFlags = [
     "-c opt"
     "--spawn_strategy=standalone"
     "--noexperimental_strict_action_env"
     "--cxxopt=-Wno-error"
+    "--linkopt=-Wl,-z,noexecstack"
 
     # Force use of system Java.
     "--extra_toolchains=@local_jdk//:all"

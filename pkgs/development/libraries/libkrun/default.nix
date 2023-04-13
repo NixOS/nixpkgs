@@ -15,21 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libkrun";
-  version = "1.3.0";
+  version = "1.5.1";
 
   src = if stdenv.isLinux then fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qVyEqiqaQ8wfZhL5u+Bsaa1yXlgHUitSj5bo7FJ5Y8c=";
+    hash = "sha256-N9AkG+zkjQHNaaCVrEpMfWUN9bQNHjMA2xi5NUulF5A=";
   } else fetchurl {
     url = "https://github.com/containers/libkrun/releases/download/v${version}/v${version}-with_macos_prebuilts.tar.gz";
-    hash = "sha256-RBqeGUhB6Sdt+JujyQBW/76mZwnT0LNs9AMYr8+OCVU=";
+    hash = "sha256-8hPbnZtDbiVdwBrtxt4nZ/QA2OFtui2VsQlaoOmWybo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-jxSzhj1iU8qY+sZEVCYTaUqpaA4egjJi9qxrapASQF0=";
+    hash = "sha256-nbtp7FP+ObVGfDOEzTt4Z7TZwcNlREczTKIAXGSflZU=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -61,5 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/containers/libkrun";
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];
+    platforms = libkrunfw.meta.platforms;
+    sourceProvenance = with sourceTypes; lib.optionals stdenv.isDarwin [ binaryNativeCode ];
   };
 }

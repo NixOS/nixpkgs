@@ -1,17 +1,19 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, gmic
+, gmic-qt
 }:
 
 stdenv.mkDerivation rec {
   pname = "cimg";
-  version = "3.1.6";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
-    owner = "dtschump";
+    owner = "GreycLab";
     repo = "CImg";
     rev = "v.${version}";
-    hash = "sha256-NZwivsTYgirZXuS25buGHL3uk75shRGMH4c3YdS7Mgg=";
+    hash = "sha256-DFTqx4v3Hf2HyT02yBLo4n1yKPuPVz1oa2C5LsIeyCY=";
   };
 
   outputs = [ "out" "doc" ];
@@ -28,6 +30,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.tests = {
+    # Need to update in lockstep.
+    inherit gmic gmic-qt;
+  };
+
   meta = with lib; {
     homepage = "http://cimg.eu/";
     description = "A small, open source, C++ toolkit for image processing";
@@ -38,7 +45,7 @@ stdenv.mkDerivation rec {
       processing applications.
     '';
     license = licenses.cecill-c;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ maintainers.AndersonTorres maintainers.lilyinstarlight ];
     platforms = platforms.unix;
   };
 }

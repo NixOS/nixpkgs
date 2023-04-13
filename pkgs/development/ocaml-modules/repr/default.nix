@@ -8,10 +8,11 @@ buildDunePackage rec {
     owner = "mirage";
     repo = "repr";
     rev = version;
-    sha256 = "sha256-jF8KmaG07CT26O/1ANc6s1yHFJqhXDtd0jgTA04tIgw=";
+    hash = "sha256-jF8KmaG07CT26O/1ANc6s1yHFJqhXDtd0jgTA04tIgw=";
   };
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
   strictDeps = true;
 
   propagatedBuildInputs = [

@@ -11,9 +11,10 @@
 , odd-unstable ? false
 , patchlevel-unstable ? false
 , url ? null
+, extraRegex ? null
 }:
 
 genericUpdater {
   inherit pname version attrPath ignoredVersions rev-prefix odd-unstable patchlevel-unstable;
-  versionLister = "${common-updater-scripts}/bin/list-directory-versions ${lib.optionalString (url != null) "--url=${lib.escapeShellArg url}"}";
+  versionLister = "${common-updater-scripts}/bin/list-directory-versions ${lib.optionalString (url != null) "--url=${lib.escapeShellArg url}"} ${lib.optionalString (extraRegex != null) "--extra-regex=${lib.escapeShellArg extraRegex}"}";
 }

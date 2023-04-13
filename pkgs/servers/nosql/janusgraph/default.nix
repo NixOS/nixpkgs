@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "janusgraph";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchzip {
     url = "https://github.com/JanusGraph/janusgraph/releases/download/v${version}/janusgraph-${version}.zip";
-    sha256 = "sha256-8TMYk8gGyL71zcFk0Lgo7Isvm4k3eh/H6PjfVePpkI4=";
+    sha256 = "sha256-KpGvDfQExU6pHheqmcOFoAhHdF4P+GBQu779h+/L5mE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

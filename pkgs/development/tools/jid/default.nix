@@ -1,19 +1,29 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, jid }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "jid";
   version = "0.7.6";
-
-  goPackagePath = "github.com/simeji/jid";
 
   src = fetchFromGitHub {
     owner = "simeji";
     repo = "jid";
     rev = "v${version}";
-    sha256 = "15fgi7cpq5bg2lnpr7rip359xwj2kvlj6j2qzi837c26adnw973x";
+    hash = "sha256-fZzEbVNGsDNQ/FhII+meQvKeyrgxn3wtFW8VfNmJz5U=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-Lq8ouTjPsGhqDwrCMpqkSU7FEGszYwAkwl92vAEZ68w=";
+
+  patches = [
+    # Run go mod tidy
+    ./go-mod.patch
+  ];
+
+  ldflags = [ "-s" "-w" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = jid;
+    version = "v${version}";
+  };
 
   meta = {
     description = "A command-line tool to incrementally drill down JSON";

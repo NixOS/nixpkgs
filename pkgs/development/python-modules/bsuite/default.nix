@@ -31,7 +31,7 @@ let bsuite = buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ak9McvXl7Nz5toUaPaRaJek9lurxiQiIW209GnZEjX0=";
+    hash = "sha256-ak9McvXl7Nz5toUaPaRaJek9lurxiQiIW209GnZEjX0=";
   };
 
   buildInputs = [
@@ -51,7 +51,7 @@ let bsuite = buildPythonPackage rec {
     termcolor
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     distrax
     dm-haiku
     dm-sonnet

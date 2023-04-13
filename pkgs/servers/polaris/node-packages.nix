@@ -3564,7 +3564,7 @@ let
     name = "polaris-web";
     packageName = "polaris-web";
     version = "1.0.0";
-    src = ../../../../../../../../../nix/store/jmc09cn278v9s9s503ani8jn55gqwfx7-source;
+    src = ../../../../../../../../../nix/store/fgp5qgah5zc0x8fx5la4fvnnmp45avzw-source;
     dependencies = [
       sources."@babel/code-frame-7.16.7"
       (sources."@babel/highlight-7.16.10" // {

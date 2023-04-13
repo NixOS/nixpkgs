@@ -1,4 +1,4 @@
-{ gcc11Stdenv
+{ gcc12Stdenv
 , lib
 , srcs
 
@@ -12,6 +12,7 @@
 , kdbusaddons
 , ki18n
 , kio
+, kirigami-addons
 , kirigami2
 , kitemmodels
 , knotifications
@@ -30,7 +31,7 @@
 }:
 
 # Workaround for AArch64 not using GCC11 yet.
-gcc11Stdenv.mkDerivation rec {
+gcc12Stdenv.mkDerivation rec {
   pname = "neochat";
   inherit (srcs.neochat) version src;
 
@@ -47,6 +48,7 @@ gcc11Stdenv.mkDerivation rec {
     kdbusaddons
     kio
     ki18n
+    kirigami-addons
     kirigami2
     kitemmodels
     knotifications

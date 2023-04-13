@@ -31,7 +31,7 @@ buildPythonPackage rec {
     python-box
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-datafiles
     pytest-vcr
     pytestCheckHook

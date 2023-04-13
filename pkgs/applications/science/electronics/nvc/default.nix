@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , check
 , flex
@@ -8,20 +9,34 @@
 , which
 , elfutils
 , libelf
+, libffi
 , llvm
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.7.2";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = pname;
     rev = "r${version}";
-    sha256 = "sha256-7N11S7OiAogyuNqrf7R5NZyVbiXgXxJ5t6lwBzL0YAU=";
+    hash = "sha256-hsoEAFSXI2bvzZV33jdg1849fipPQlUu3MZVvht54fI=";
   };
+
+  patches = [
+    # TODO: remove me on next release
+    (fetchpatch {
+      url = "https://github.com/nickg/nvc/commit/c857e16c33851f8a5386b97bc0dada2836b5db83.patch";
+      hash = "sha256-rvZHI1iQXT9zLpCugg5mGmMZBRbTe9PSHtDG7FVZ67Q=";
+    })
+  ];
+
+  # TODO: recheck me on next release
+  postPatch = lib.optionalString stdenv.isLinux ''
+    sed -i "/vhpi4/d" test/regress/testlist.txt
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -32,16 +47,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libffi
     llvm
     zlib
-  ] ++ [
-    (if stdenv.isLinux then elfutils else libelf)
+  ] ++ lib.optionals stdenv.isLinux [
+    elfutils
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    libelf
   ];
-
-  # TODO: recheck me on next release
-  postPatch = lib.optionalString stdenv.isLinux ''
-    sed -i "/vhpi4/d" test/regress/testlist.txt
-  '';
 
   preConfigure = ''
     mkdir build
@@ -61,7 +74,7 @@ stdenv.mkDerivation rec {
     description = "VHDL compiler and simulator";
     homepage = "https://www.nickg.me.uk/nvc/";
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 }

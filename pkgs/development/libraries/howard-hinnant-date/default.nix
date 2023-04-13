@@ -35,6 +35,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Tweaks to fix undefined variable substitutions
+  # https://github.com/HowardHinnant/date/pull/538#pullrequestreview-1373268697
+  postPatch = ''
+    substituteInPlace date.pc.in \
+      --replace '@CMAKE_INSTALL_LIB@' '@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace '@CMAKE_INSTALL_INCLUDE@' '@CMAKE_INSTALL_FULL_INCLUDEDIR@' \
+      --replace '@PACKAGE_VERSION@' '${version}'
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
@@ -49,7 +58,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "A date and time library based on the C++11/14/17 <chrono> header";
     homepage = "https://github.com/HowardHinnant/date";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ r-burns ];
   };
 }

@@ -25,9 +25,11 @@ let
       sha256 = hash;
     };
   };
+  flutter2Patches = getPatches ./patches/flutter2;
+  flutter3Patches = getPatches ./patches/flutter3;
 in
 {
-  inherit mkFlutter wrapFlutter flutterDrv;
+  inherit mkFlutter wrapFlutter flutterDrv flutter3Patches flutter2Patches;
   stable = flutterDrv {
     version = "3.7.11";
     dartVersion = "2.19.6";
@@ -36,7 +38,7 @@ in
       x86_64-linux = "sha256-D9/yXmrLo9YJQVWn40FjT43jR36Gwv2krUcjLBrfcE8=";
       aarch64-linux = "sha256-aRO3wLO3i8FB03LNRz2iF3Hlc3Kxq0XJd84VUMj/C5w=";
     };
-    patches = getPatches ./patches/flutter3;
+    patches = flutter3Patches;
   };
 
   v2 = flutterDrv {
@@ -47,6 +49,6 @@ in
       x86_64-linux = "sha256-egrYd7B4XhkBiHPIFE2zopxKtQ58GqlogAKA/UeiXnI=";
       aarch64-linux = "sha256-vmerjXkUAUnI8FjK+62qLqgETmA+BLPEZXFxwYpI+KY=";
     };
-    patches = getPatches ./patches/flutter2;
+    patches = flutter2Patches;
   };
 }

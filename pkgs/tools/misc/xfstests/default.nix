@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "2022.09.04";
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
+    url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
     rev = "v${version}";
     sha256 = "sha256-hPFoqNmB8pewvBN1nzVMkTrMHCo0xc8tmmIODaiDeRw=";
   };

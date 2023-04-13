@@ -25,7 +25,7 @@ buildPythonPackage rec {
     bleak
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

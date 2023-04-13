@@ -63,7 +63,7 @@ let
 
 in stdenv.mkDerivation rec {
 
-  pname = "vim_configurable";
+  pname = "vim-full";
 
   inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
 

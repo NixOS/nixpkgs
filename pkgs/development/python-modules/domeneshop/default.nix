@@ -11,20 +11,20 @@
 
 buildPythonPackage rec {
   pname = "domeneshop";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "tr3wsrscIU66kTz3nlvDHj2EXoEHCH3grD0yD7BU3Fc=";
+    hash = "sha256-kL0X1mEsmVWqnq5NgsMBxeAu48zjmi3muhZYryTCOMo=";
   };
 
   propagatedBuildInputs = [
     certifi
     urllib3
-  ] ++ urllib3.optional-dependencies.secure;
+  ];
 
   # There are none
   doCheck = false;

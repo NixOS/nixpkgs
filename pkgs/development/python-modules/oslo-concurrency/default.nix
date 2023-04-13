@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
-  version = "5.0.1";
+  version = "5.1.1";
 
   src = fetchPypi {
     pname = "oslo.concurrency";
     inherit version;
-    sha256 = "sha256-DfvzYJX0Y3/7tl5cJB9MJYUavTtyjd2tnwc5YwKnJUQ=";
+    hash = "sha256-EQ+2Adgi3UsI7qJ5d9cNAfnxzR6vbezQQqIfQ78/KyU=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   # tests hang for unknown reason and time the build out
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     eventlet
     fixtures
     oslotest

@@ -16,7 +16,7 @@
 
 let
   pname = "wallabag";
-  version = "2.5.2";
+  version = "2.5.4";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
       "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz"
       "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz"
     ];
-    hash = "sha256-Q989SorGPm3KBuQhGAinYU6HGIa9RrhtRPvwGALU6jk=";
+    hash = "sha256-yVMQXjGB8Yv1klQaHEbDGMZmOtANRocFJnawKn10xhg=";
   };
 
   patches = [
@@ -45,8 +45,12 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -R * $out/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

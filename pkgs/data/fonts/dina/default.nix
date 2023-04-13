@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip
+{ lib, stdenv, fetchzip, fontforge
 , bdftopcf, xorg
 }:
 
@@ -8,31 +8,40 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "bdf" ];
 
-  src = fetchurl {
-    url = "http://www.donationcoder.com/Software/Jibz/Dina/downloads/Dina.zip";
-    sha256 = "1kq86lbxxgik82aywwhawmj80vsbz3hfhdyhicnlv9km7yjvnl8z";
+  src = fetchzip {
+    url = "https://www.dcmembers.com/jibsen/download/61/?wpdmdl=61";
+    hash = "sha256-JK+vnOyhAbwT825S+WKbQuWgRrfZZHfyhaMQ/6ljO8s=";
+    extension = "zip";
+    stripRoot = false;
   };
 
   nativeBuildInputs =
-    [ unzip bdftopcf xorg.mkfontscale xorg.fonttosfnt ];
-
-  postPatch = ''
-    sed -i 's/microsoft-cp1252/ISO8859-1/' *.bdf
-  '';
+    [ fontforge bdftopcf xorg.mkfontscale xorg.fonttosfnt ];
 
   buildPhase = ''
     runHook preBuild
 
     newName() {
-        test "''${1:5:1}" = i && _it=Italic || _it=
-        case ''${1:6:3} in
-            400) test -z $it && _weight=Medium ;;
-            700) _weight=Bold ;;
-        esac
-        _pt=''${1%.bdf}
-        _pt=''${_pt#*-}
-        echo "Dina$_weight$_it$_pt"
+      local name=''${1##*/}
+      test "''${name:5:1}" = i && _it=Italic || _it=
+      case ''${name:6:3} in
+          400) _weight=Medium ;;
+          700) _weight=Bold ;;
+      esac
+      _pt=''${1%.bdf}
+      _pt=''${_pt#*-}
+      echo "Dina$_weight$_it$_pt"
     }
+
+    # Re-encode the provided BDF files from CP1252 to Unicode as fonttosfnt does
+    # not support the former.
+    # We could generate the PCF and OTB files with fontforge directly, but that
+    # results in incorrect spacing in various places.
+    for f in BDF/*.bdf; do
+      basename=''${f##*/} basename=''${basename%.*}
+      fontforge -lang=ff -c "Open(\"$f\"); Reencode(\"win\", 1); Reencode(\"unicode\"); Generate(\"$basename.bdf\")"
+      mv "$basename"-*.bdf "$basename".bdf # remove the superfluous added size suffix
+    done
 
     for f in *.bdf; do
         name=$(newName "$f")
@@ -62,9 +71,8 @@ stdenv.mkDerivation {
       relatively compact to allow a lot of code on screen, while (hopefully)
       clear enough to remain readable even at high resolutions.
     '';
-    homepage = "https://www.donationcoder.com/Software/Jibz/Dina/";
-    downloadPage = "https://www.donationcoder.com/Software/Jibz/Dina/";
+    homepage = "https://www.dcmembers.com/jibsen/download/61/";
     license = licenses.free;
-    maintainers = [ maintainers.prikhi ];
+    maintainers = with maintainers; [ prikhi ncfavier ];
   };
 }

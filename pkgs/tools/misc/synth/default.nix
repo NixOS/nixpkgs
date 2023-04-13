@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "synth";
-  version = "0.6.8";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     owner = "shuttle-hq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-siAm6Uq8Y+RexNrkL7nTw/f/v0LkUgqTUhAtJiy9QnE=";
+    sha256 = "sha256-/z2VEfeCCuffxlMh4WOpYkMSAgmh+sbx3ajcD5d4DdE=";
   };
 
-  cargoSha256 = "sha256-COy8szsYKEzjtRBH8063ug5BkMv3qpc3i2RNb+n4I04=";
+  cargoSha256 = "sha256-i2Pp9sfTBth3DtrQ99Vw+KLnGECrkqtlRNAKiwSWf48=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     AppKit

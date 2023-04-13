@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swtpm";
-  version = "0.7.3";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
     rev = "v${version}";
-    sha256 = "sha256-YaNQgxk0uT8FLUIxF80jpgO/L9ygGRHaABEcs5ukq5E=";
+    sha256 = "sha256-O+sHkmQ47FbqsgWpaqAc/j2AJ5xzsvpBj/p0Zea1nSI=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     which
   ];
 

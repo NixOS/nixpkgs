@@ -29,7 +29,7 @@ with lib;
     listen = mkOption {
       type = with types; listOf (submodule { options = {
         addr = mkOption { type = str;  description = lib.mdDoc "IP address.";  };
-        port = mkOption { type = int;  description = lib.mdDoc "Port number."; default = 80; };
+        port = mkOption { type = port;  description = lib.mdDoc "Port number."; default = 80; };
         ssl  = mkOption { type = bool; description = lib.mdDoc "Enable SSL.";  default = false; };
         extraParameters = mkOption { type = listOf str; description = lib.mdDoc "Extra parameters of this listen directive."; default = []; example = [ "backlog=1024" "deferred" ]; };
       }; });
@@ -54,8 +54,8 @@ with lib;
 
       description = lib.mdDoc ''
         Listen addresses for this virtual host.
-        Compared to `listen` this only sets the addreses
-        and the ports are choosen automatically.
+        Compared to `listen` this only sets the addresses
+        and the ports are chosen automatically.
 
         Note: This option overrides `enableIPv6`
       '';
@@ -88,7 +88,7 @@ with lib;
       type = types.nullOr types.str;
       default = "/var/lib/acme/acme-challenge";
       description = lib.mdDoc ''
-        Directory for the acme challenge which is PUBLIC, don't put certs or keys in here.
+        Directory for the ACME challenge, which is **public**. Don't put certs or keys in here.
         Set to null to inherit from config.security.acme.
       '';
     };
@@ -97,8 +97,12 @@ with lib;
       type = types.nullOr types.str;
       default = null;
       description = lib.mdDoc ''
-        Host which to proxy requests to if acme challenge is not found. Useful
+        Host which to proxy requests to if ACME challenge is not found. Useful
         if you want multiple hosts to be able to verify the same domain name.
+
+        With this option, you could request certificates for the present domain
+        with an ACME client that is running on another host, which you would
+        specify here.
       '';
     };
 
@@ -184,11 +188,11 @@ with lib;
       type = types.bool;
       default = true;
       description = lib.mdDoc ''
-        Whether to enable HTTP 2.
+        Whether to enable the HTTP/2 protocol.
         Note that (as of writing) due to nginx's implementation, to disable
-        HTTP 2 you have to disable it on all vhosts that use a given
+        HTTP/2 you have to disable it on all vhosts that use a given
         IP address / port.
-        If there is one server block configured to enable http2,then it is
+        If there is one server block configured to enable http2, then it is
         enabled for all server blocks on this IP.
         See https://stackoverflow.com/a/39466948/263061.
       '';
@@ -196,12 +200,42 @@ with lib;
 
     http3 = mkOption {
       type = types.bool;
+      default = true;
+      description = lib.mdDoc ''
+        Whether to enable the HTTP/3 protocol.
+        This requires using `pkgs.nginxQuic` package
+        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`
+        and activate the QUIC transport protocol
+        `services.nginx.virtualHosts.<name>.quic = true;`.
+        Note that HTTP/3 support is experimental and
+        *not* yet recommended for production.
+        Read more at https://quic.nginx.org/
+      '';
+    };
+
+    http3_hq = mkOption {
+      type = types.bool;
       default = false;
       description = lib.mdDoc ''
-        Whether to enable HTTP 3.
+        Whether to enable the HTTP/0.9 protocol negotiation used in QUIC interoperability tests.
+        This requires using `pkgs.nginxQuic` package
+        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`
+        and activate the QUIC transport protocol
+        `services.nginx.virtualHosts.<name>.quic = true;`.
+        Note that special application protocol support is experimental and
+        *not* yet recommended for production.
+        Read more at https://quic.nginx.org/
+      '';
+    };
+
+    quic = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Whether to enable the QUIC transport protocol.
         This requires using `pkgs.nginxQuic` package
         which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
-        Note that HTTP 3 support is experimental and
+        Note that QUIC support is experimental and
         *not* yet recommended for production.
         Read more at https://quic.nginx.org/
       '';

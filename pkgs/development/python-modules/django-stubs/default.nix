@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "django-stubs";
-  version = "1.12.0";
+  version = "1.15.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6os10NpJ97LumaeRJfGUPgM0Md0RRybWZDzDXeYZIw4=";
+    hash = "sha256-C7+esXLFsG7M/y1wTHw5BuSixhRt+MMu6fOlHikmVYE=";
   };
 
   propagatedBuildInputs = [

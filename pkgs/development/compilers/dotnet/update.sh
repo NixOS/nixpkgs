@@ -91,7 +91,7 @@ aspnetcore_packages () {
     # would fail due to missing dependencies.
     #
     # Moving them to a separate list stored alongside the SDK package definitions,
-    # and implictly including them along in buildDotnetModule allows us
+    # and implicitly including them along in buildDotnetModule allows us
     # to make updating .NET SDK packages a lot easier - we now just update
     # the versions of these packages in one place, and all packages that
     # use buildDotnetModule continue building with the new .NET version without changes.
@@ -141,7 +141,7 @@ sdk_packages () {
     # would fail due to missing dependencies.
     #
     # Moving them to a separate list stored alongside the SDK package definitions,
-    # and implictly including them along in buildDotnetModule allows us
+    # and implicitly including them along in buildDotnetModule allows us
     # to make updating .NET SDK packages a lot easier - we now just update
     # the versions of these packages in one place, and all packages that
     # use buildDotnetModule continue building with the new .NET version without changes.
@@ -219,35 +219,29 @@ sdk_packages () {
       "runtime.win-x86.Microsoft.NETCore.DotNetHost" \
       "runtime.win-x86.Microsoft.NETCore.DotNetHostPolicy" \
       "runtime.win-x86.Microsoft.NETCore.DotNetHostResolver" \
+      "Microsoft.NETCore.App.Composite" \
+      "Microsoft.NETCore.App.Host.linux-musl-arm" \
+      "Microsoft.NETCore.App.Host.osx-arm64" \
+      "Microsoft.NETCore.App.Runtime.linux-musl-arm" \
+      "Microsoft.NETCore.App.Runtime.osx-arm64" \
+      "Microsoft.NETCore.App.Ref" \
+      "Microsoft.NETCore.App.Runtime.Mono.linux-arm" \
+      "Microsoft.NETCore.App.Runtime.Mono.linux-arm64" \
+      "Microsoft.NETCore.App.Runtime.Mono.linux-musl-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.linux-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.osx-arm64" \
+      "Microsoft.NETCore.App.Runtime.Mono.osx-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.win-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.win-x86" \
+      "runtime.linux-musl-arm.Microsoft.NETCore.DotNetAppHost" \
+      "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHost" \
+      "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHostPolicy" \
+      "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHostResolver" \
+      "runtime.osx-arm64.Microsoft.NETCore.DotNetAppHost" \
+      "runtime.osx-arm64.Microsoft.NETCore.DotNetHost" \
+      "runtime.osx-arm64.Microsoft.NETCore.DotNetHostPolicy" \
+      "runtime.osx-arm64.Microsoft.NETCore.DotNetHostResolver" \
     )
-
-    # Packages that only apply to .NET 6 and up
-    if ! version_older "$version" "6"; then
-        pkgs+=( \
-          "Microsoft.NETCore.App.Composite" \
-          "Microsoft.NETCore.App.Host.linux-musl-arm" \
-          "Microsoft.NETCore.App.Host.osx-arm64" \
-          "Microsoft.NETCore.App.Runtime.linux-musl-arm" \
-          "Microsoft.NETCore.App.Runtime.osx-arm64" \
-          "Microsoft.NETCore.App.Ref" \
-          "Microsoft.NETCore.App.Runtime.Mono.linux-arm" \
-          "Microsoft.NETCore.App.Runtime.Mono.linux-arm64" \
-          "Microsoft.NETCore.App.Runtime.Mono.linux-musl-x64" \
-          "Microsoft.NETCore.App.Runtime.Mono.linux-x64" \
-          "Microsoft.NETCore.App.Runtime.Mono.osx-arm64" \
-          "Microsoft.NETCore.App.Runtime.Mono.osx-x64" \
-          "Microsoft.NETCore.App.Runtime.Mono.win-x64" \
-          "Microsoft.NETCore.App.Runtime.Mono.win-x86" \
-          "runtime.linux-musl-arm.Microsoft.NETCore.DotNetAppHost" \
-          "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHost" \
-          "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHostPolicy" \
-          "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHostResolver" \
-          "runtime.osx-arm64.Microsoft.NETCore.DotNetAppHost" \
-          "runtime.osx-arm64.Microsoft.NETCore.DotNetHost" \
-          "runtime.osx-arm64.Microsoft.NETCore.DotNetHostPolicy" \
-          "runtime.osx-arm64.Microsoft.NETCore.DotNetHostResolver" \
-        )
-    fi
 
     # Packages that only apply to .NET 7 and up
     if ! version_older "$version" "7"; then
@@ -273,8 +267,8 @@ main () {
 Get updated dotnet src (platform - url & sha512) expressions for specified versions
 
 Examples:
-  $pname 3.1.21 5.0.12    - specific x.y.z versions
-  $pname 3.1 5.0 6.0      - latest x.y versions
+  $pname 6.0.14 7.0.201    - specific x.y.z versions
+  $pname 6.0 7.0           - latest x.y versions
 " >&2
     exit 1
   fi
@@ -311,7 +305,7 @@ Examples:
             buildAspNetCore = { ... }: {}; \
             buildNetRuntime = { ... }: {}; \
             buildNetSdk = { version, ... }: version; \
-            icu = null; }).sdk_${major_minor_underscore}" | jq -r)
+            }).sdk_${major_minor_underscore}" | jq -r)
 
         if [[ "$current_version" == "$sdk_version" ]]; then
             echo "Nothing to update."
@@ -325,24 +319,21 @@ Examples:
 
     channel_version=$(jq -r '."channel-version"' <<< "$content")
     support_phase=$(jq -r '."support-phase"' <<< "$content")
-    echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk, icu }:
+    echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk }:
 
 # v$channel_version ($support_phase)
 {
   aspnetcore_$major_minor_underscore = buildAspNetCore {
-    inherit icu;
     version = \"${aspnetcore_version}\";
     $(platform_sources "$aspnetcore_files")
   };
 
   runtime_$major_minor_underscore = buildNetRuntime {
-    inherit icu;
     version = \"${runtime_version}\";
     $(platform_sources "$runtime_files")
   };
 
   sdk_$major_minor_underscore = buildNetSdk {
-    inherit icu;
     version = \"${sdk_version}\";
     $(platform_sources "$sdk_files")
     packages = { fetchNuGet }: [

@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, arrow-cpp
 , bokeh
 , buildPythonPackage
 , click
@@ -27,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2022.10.2";
+  version = "2023.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -36,16 +37,8 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-zHJR2WjHigUMWtRJW25+gk1fKGKedU53BBjwx5zaodA=";
+    hash = "sha256-7cuTxJ5SxOEf0v+SvSiaz7x8YYTx/qIS+KktbtubiDU=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix test_repartition_npartitions on platforms other than x86-64
-      url = "https://github.com/dask/dask/commit/65f40ad461c57065f981e6213e33b1d13cc9bc8f.patch";
-      hash = "sha256-KyTSms4ik1kYtL+I/huAxD+zK2AAuPkwmHA9FYk601Y=";
-    })
-  ];
 
   propagatedBuildInputs = [
     click
@@ -77,14 +70,15 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
-    fastparquet
-    pyarrow
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
     pytest-xdist
     scipy
     zarr
+  ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
+    fastparquet
+    pyarrow
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -107,8 +101,6 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
-    # DeprecationWarning: The 'sym_pos' keyword is deprecated and should be replaced by using 'assume_a = "pos"'. 'sym_pos' will be removed in SciPy 1.11.0.
-    "-W" "ignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -121,6 +113,9 @@ buildPythonPackage rec {
     "test_chunksize_files"
     # TypeError: 'ArrowStringArray' with dtype string does not support reduction 'min'
     "test_set_index_string"
+    # numpy 1.24
+    # RuntimeWarning: invalid value encountered in cast
+    "test_setitem_extended_API_2d_mask"
   ];
 
   __darwinAllowLocalNetworking = true;

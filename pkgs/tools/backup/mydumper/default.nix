@@ -1,29 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, glib, zlib, pcre, libmysqlclient, libressl }:
-
-let inherit (lib) getDev; in
+{ lib, stdenv, fetchFromGitHub
+, cmake, pkg-config, sphinx
+, glib , pcre
+, libmysqlclient, libressl
+, zlib, zstd
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.9.5";
   pname = "mydumper";
+  version = "0.14.3-1";
 
   src = fetchFromGitHub {
-    owner  = "maxbube";
-    repo   = "mydumper";
-    rev    = "v${version}";
-    sha256 = "0vbz0ri5hm6yzkrcgnaj8px6bf59myr5dbhyy7fd4cv44hr685k6";
+    owner  = "mydumper";
+    repo = "mydumper";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qyJGnrBOElQ3s2VoOWfW1luacd33haanmzKidMBgCpc=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  outputs = [ "out" "doc" "man" ];
 
-  buildInputs = [ glib zlib pcre libmysqlclient libressl ];
+  nativeBuildInputs = [ cmake pkg-config sphinx ];
 
-  cmakeFlags = [ "-DMYSQL_INCLUDE_DIR=${getDev libmysqlclient}/include/mysql" ];
+  buildInputs = [
+    glib pcre
+    libmysqlclient libressl
+    zlib zstd
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
+    "-DWITH_ZSTD=ON"
+  ];
 
   meta = with lib; {
     description = "High-perfomance MySQL backup tool";
     homepage = "https://github.com/maxbube/mydumper";
-    license = licenses.gpl3;
+    changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ];
   };

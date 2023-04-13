@@ -6,6 +6,12 @@
 # - Add plugin to it's own directory (because of future patches).
 
 {
+  advanced-scene-switcher = qt6Packages.callPackage ./advanced-scene-switcher { };
+
+  droidcam-obs = callPackage ./droidcam-obs { };
+
+  input-overlay = qt6Packages.callPackage ./input-overlay.nix { };
+
   looking-glass-obs = callPackage ./looking-glass-obs.nix { };
 
   obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
@@ -14,15 +20,21 @@
 
   obs-hyperion = qt6Packages.callPackage ./obs-hyperion/default.nix { };
 
+  obs-livesplit-one = callPackage ./obs-livesplit-one { };
+
   obs-move-transition = callPackage ./obs-move-transition.nix { };
 
   obs-multi-rtmp = qt6Packages.callPackage ./obs-multi-rtmp { };
 
-  obs-ndi = qt6Packages.callPackage ./obs-ndi.nix { };
+  obs-ndi = qt6Packages.callPackage ./obs-ndi { };
 
   obs-nvfbc = callPackage ./obs-nvfbc.nix { };
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
+
+  obs-source-record = callPackage ./obs-source-record.nix { };
+
+  obs-vaapi = callPackage ./obs-vaapi { };
 
   obs-vkcapture = callPackage ./obs-vkcapture.nix {
     obs-vkcapture32 = pkgsi686Linux.obs-studio-plugins.obs-vkcapture;

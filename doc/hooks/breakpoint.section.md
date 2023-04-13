@@ -10,9 +10,7 @@ nativeBuildInputs = [ breakpointHook ];
 When a build failure happens there will be an instruction printed that shows how to attach with `cntr` to the build sandbox.
 
 ::: {.note}
-::: {.title}
 Caution with remote builds
-:::
 
 This won’t work with remote builds as the build environment is on a different machine and can’t be accessed by `cntr`. Remote builds can be turned off by setting `--option builders ''` for `nix-build` or `--builders ''` for `nix build`.
 :::

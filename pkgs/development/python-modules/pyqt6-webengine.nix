@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-THHBMIYKvNEeBMr7IuM5g/qaOu6DI8UZCbFaFwGCjiE=";
+    hash = "sha256-THHBMIYKvNEeBMr7IuM5g/qaOu6DI8UZCbFaFwGCjiE=";
   };
 
   # fix include path and increase verbosity
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   # pkgs/development/interpreters/python/hooks/pip-build-hook.sh
   # does not use the enableParallelBuilding flag
   postUnpack = ''
-    export MAKEFLAGS+=" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES"
+    export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
   '';
 
   outputs = [ "out" "dev" ];

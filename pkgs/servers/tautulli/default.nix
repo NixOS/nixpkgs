@@ -2,7 +2,7 @@
 
 buildPythonApplication rec {
   pname = "Tautulli";
-  version = "2.10.4";
+  version = "2.12.2";
   format = "other";
 
   pythonPath = [ setuptools ];
@@ -12,7 +12,7 @@ buildPythonApplication rec {
     owner = "Tautulli";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G7rKPDozo5IyYOqfhoZcn1obASzJx8PpQt53CCmDZek=";
+    sha256 = "sha256-d2JGVmUQQMlwoEg3hsPB3jgUrUpui5Zsdf9Eq61TyZI=";
   };
 
   installPhase = ''
@@ -48,6 +48,6 @@ buildPythonApplication rec {
     homepage = "https://tautulli.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ csingley ];
+    maintainers = with maintainers; [ rhoriguchi ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, chicken, makeWrapper }:
+{ callPackage, lib, stdenv, chicken, makeWrapper }:
 { name, src
 , buildInputs ? []
 , chickenInstallFlags ? []
@@ -6,15 +6,15 @@
 , ...} @ args:
 
 let
-  overrides = import ./overrides.nix;
+  overrides = callPackage ./overrides.nix { };
   baseName = lib.getName name;
   override = if builtins.hasAttr baseName overrides
    then
      builtins.getAttr baseName overrides
    else
-     {};
+     lib.id;
 in
-stdenv.mkDerivation ({
+(stdenv.mkDerivation ({
   name = "chicken-${name}";
   propagatedBuildInputs = buildInputs;
   nativeBuildInputs = [ makeWrapper ];
@@ -27,16 +27,23 @@ stdenv.mkDerivation ({
 
     export CHICKEN_INSTALL_PREFIX=$out
     export CHICKEN_INSTALL_REPOSITORY=$out/lib/chicken/${toString chicken.binaryVersion}
-    chicken-install ${lib.concatStringsSep " " chickenInstallFlags}
+    chicken-install -cached ${lib.concatStringsSep " " chickenInstallFlags}
 
     for f in $out/bin/*
     do
       wrapProgram $f \
-        --prefix CHICKEN_REPOSITORY_PATH : "$out/lib/chicken/${toString chicken.binaryVersion}:$CHICKEN_REPOSITORY_PATH" \
-        --prefix CHICKEN_INCLUDE_PATH : "$CHICKEN_INCLUDE_PATH:$out/share" \
+        --prefix CHICKEN_REPOSITORY_PATH : "$out/lib/chicken/${toString chicken.binaryVersion}" \
+        --suffix CHICKEN_INCLUDE_PATH : "$out/share" \
         --prefix PATH : "$out/bin:${chicken}/bin:$CHICKEN_REPOSITORY_PATH"
     done
 
     runHook postInstall
   '';
-} // (builtins.removeAttrs args ["name" "buildInputs"]) // override)
+
+  dontBuild = true;
+  dontConfigure = true;
+
+  meta = {
+    inherit (chicken.meta) platforms;
+  } // args.meta or {};
+} // builtins.removeAttrs args ["name" "buildInputs" "meta"]) ).overrideAttrs override

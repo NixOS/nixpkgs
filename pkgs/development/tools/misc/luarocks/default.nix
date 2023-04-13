@@ -104,9 +104,7 @@ stdenv.mkDerivation (self: {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = self.pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

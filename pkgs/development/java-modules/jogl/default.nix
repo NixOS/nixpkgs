@@ -35,7 +35,7 @@
       # Workaround build failure on -fno-common toolchains:
       #   ld: ../obj/Bindingtest1p1Impl_JNI.o:(.bss+0x8): multiple definition of
       #     `unsigned_size_t_1'; ../obj/TK_Surface_JNI.o:(.bss+0x8): first defined here
-      NIX_CFLAGS_COMPILE = "-fcommon";
+      env.NIX_CFLAGS_COMPILE = "-fcommon";
 
       buildPhase = ''
         cp -r ${gluegen-src} $NIX_BUILD_TOP/gluegen

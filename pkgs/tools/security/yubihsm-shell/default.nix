@@ -10,18 +10,30 @@
 , pkg-config
 , pcsclite
 , help2man
+, darwin
+, libiconv
 }:
 
 stdenv.mkDerivation rec {
   pname = "yubihsm-shell";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-shell";
     rev = version;
-    sha256 = "sha256-rSIdI6ECLte+dEbT8NOUqS8jkozRhbo+eqFrdhTIKpY=";
+    hash = "sha256-zWhvECPdZnrbSAVPDVZk54SWHVkd/HEQxS3FgXoqXHY=";
   };
+
+  postPatch = ''
+    # Can't find libyubihsm at runtime because of dlopen() in C code
+    substituteInPlace lib/yubihsm.c \
+      --replace "libyubihsm_usb.so" "$out/lib/libyubihsm_usb.so" \
+      --replace "libyubihsm_http.so" "$out/lib/libyubihsm_http.so"
+    # ld: unknown option: -z
+    substituteInPlace CMakeLists.txt cmake/SecurityFlags.cmake \
+      --replace "AppleClang" "Clang"
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -34,16 +46,17 @@ stdenv.mkDerivation rec {
     libusb1
     libedit
     curl
-    pcsclite
     openssl
+  ] ++ lib.optionals stdenv.isLinux [
+    pcsclite
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.PCSC
+    libiconv
   ];
 
-  postPatch = ''
-    # Can't find libyubihsm at runtime because of dlopen() in C code
-    substituteInPlace lib/yubihsm.c \
-      --replace "libyubihsm_usb.so" "$out/lib/libyubihsm_usb.so" \
-      --replace "libyubihsm_http.so" "$out/lib/libyubihsm_http.so"
-  '';
+  cmakeFlags = lib.optionals stdenv.isDarwin [
+    "-DDISABLE_LTO=ON"
+  ];
 
   meta = with lib; {
     description = "yubihsm-shell and libyubihsm";

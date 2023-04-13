@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.13.3";
+  version = "0.13.4";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-COm+MZUbiFTB5EaOB+1+lIef1IfhQ95Ya1MmnJXGu6A=";
+    sha256 = "sha256-/u8jA7sLy3N8483uIzqBeSxEAGhX7+XS4D14n+15JHU=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -75,7 +75,7 @@ python3Packages.buildPythonApplication rec {
     HOME=$TMPDIR
   '';
 
-  checkInputs = [ glibcLocales git ] ++
+  nativeCheckInputs = [ glibcLocales git ] ++
     (with python3Packages; [ pyte pytestCheckHook pytest-mock pytest-subprocess ]);
 
   propagatedBuildInputs = with python3Packages; [ ply prompt-toolkit pygments ];

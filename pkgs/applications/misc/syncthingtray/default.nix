@@ -1,6 +1,7 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
+, substituteAll
 , qtbase
 , qtwebengine
 , qtdeclarative
@@ -18,17 +19,23 @@
 , kioPluginSupport ? true
 , plasmoidSupport  ? true
 , systemdSupport ? true
+/* It is possible to set via this option an absolute exec path that will be
+written to the `~/.config/autostart/syncthingtray.desktop` file generated
+during runtime. Alternatively, one can edit the desktop file themselves after
+it is generated See:
+https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
+, autostartExecPath ? "syncthingtray"
 }:
 
 mkDerivation rec {
-  version = "1.3.0";
+  version = "1.4.1";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "sha256-uhVRO9aiYJbUmwDp1+LIYF3wNBbVduVpTtVzaS0oUMU=";
+    sha256 = "sha256-6s78vytYxU7FWGQRO56qgmtZBlHbXMz3iVAbBXycDmI=";
   };
 
   buildInputs = [
@@ -58,6 +65,7 @@ mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DAUTOSTART_EXEC_PATH=${autostartExecPath}"
     # See https://github.com/Martchus/syncthingtray/issues/42
     "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/lib/qt-5"
   ] ++ lib.optionals (!plasmoidSupport) ["-DNO_PLASMOID=ON"]

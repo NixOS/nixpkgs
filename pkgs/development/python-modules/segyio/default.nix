@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     # PR https://github.com/equinor/segyio/pull/531
     (fetchpatch {
         url = "https://github.com/equinor/segyio/commit/628bc5e02d0f98b89fe70b072df9b8e677622e9e.patch";
-        sha256 = "sha256-j+vqHZNfPIh+yWBgqbGD3W04FBvFiDJKnmcC/oTk3a8=";
+        hash = "sha256-j+vqHZNfPIh+yWBgqbGD3W04FBvFiDJKnmcC/oTk3a8=";
     })
   ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "equinor";
     repo = pname;
     rev = version;
-    sha256 = "sha256-L3u5BHS5tARS2aIiQbumADkuzw1Aw4Yuav8H8tRNYNg=";
+    hash = "sha256-L3u5BHS5tARS2aIiQbumADkuzw1Aw4Yuav8H8tRNYNg=";
   };
 
   nativeBuildInputs = [ cmake ninja python scikit-build ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   # I'm not modifying the checkPhase nor adding a pytestCheckHook because the pytest is called
   # within the cmake test phase
-  checkInputs = [ pytest numpy ];
+  nativeCheckInputs = [ pytest numpy ];
 
   meta = with lib; {
     description = "Fast Python library for SEGY files";

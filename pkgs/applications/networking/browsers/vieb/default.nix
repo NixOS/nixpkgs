@@ -1,22 +1,24 @@
-{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib, p7zip }:
+{ stdenv, buildNpmPackage, fetchFromGitHub, electron, makeWrapper, python3, makeDesktopItem, nix-update-script, lib }:
 
-mkYarnPackage rec {
+buildNpmPackage rec {
   pname = "vieb";
-  version = "7.2.0";
+  version = "9.7.0";
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4iokmUzs72aVHb95D98ZITRygn4gGAc/K+M5uMnF2NM=";
+    hash = "sha256-uo5V5RRDSR+f9+AqojikrlybmtcWTmB7TPXEvLG9n4E=";
   };
 
-  packageJSON = ./package.json;
-  yarnLock = ./yarn.lock;
-  yarnNix = ./yarn.nix;
-  yarnFlags = [ "--production" ];
+  postPatch = ''
+    sed -i '/"electron"/d' package.json
+  '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  npmDepsHash = "sha256-RUpeqbb8bnSQ6sCYH8O9mL3Rpb+ZlcPi7fq6LlbkSic=";
+  dontNpmBuild = true;
+
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isAarch64 python3;
 
   desktopItem = makeDesktopItem {
     name = "vieb";
@@ -34,30 +36,28 @@ mkYarnPackage rec {
   };
 
   postInstall = ''
-    unlink $out/libexec/vieb/deps/vieb/node_modules
-    ln -s $out/libexec/vieb/node_modules $out/libexec/vieb/deps/vieb/node_modules
-
-    find $out/libexec/vieb/node_modules/7zip-bin -name 7za -exec ln -s -f ${p7zip}/bin/7za {} ';'
-
     install -Dm0644 {${desktopItem},$out}/share/applications/vieb.desktop
 
-    pushd $out/libexec/vieb/node_modules/vieb/app/img/icons
+    pushd $out/lib/node_modules/vieb/app/img/icons
     for file in *.png; do
       install -Dm0644 $file $out/share/icons/hicolor/''${file//.png}/apps/vieb.png
     done
     popd
 
     makeWrapper ${electron}/bin/electron $out/bin/vieb \
-      --add-flags $out/libexec/vieb/node_modules/vieb/app
+      --add-flags $out/lib/node_modules/vieb/app \
+      --set npm_package_version ${version}
   '';
 
   distPhase = ":"; # disable useless $out/tarballs directory
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     homepage = "https://vieb.dev/";
     changelog = "https://github.com/Jelmerro/Vieb/releases/tag/${version}";
     description = "Vim Inspired Electron Browser";
-    maintainers = with maintainers; [ gebner fortuneteller2k ];
+    maintainers = with maintainers; [ gebner fortuneteller2k tejing ];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
   };

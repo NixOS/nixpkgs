@@ -4,6 +4,9 @@
 , fetchPypi
 , pythonOlder
 
+# build
+, setuptools
+
 # runtime
 , aws-xray-sdk
 , boto3
@@ -18,9 +21,9 @@
 , jinja2
 , jsondiff
 , openapi-spec-validator
+, pyparsing
 , python-dateutil
 , python-jose
-, pytz
 , pyyaml
 , requests
 , responses
@@ -37,20 +40,19 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "4.0.3";
-  format = "setuptools";
+  version = "4.1.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-iutWdX5oavPkpj+Qr7yXPLIxrarYfFzonmiTbBCbC+k=";
+    hash = "sha256-yCAMyqlEDC6dqgvV4L12inGdtaLILqjXgvDj+gmjxeI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "werkzeug>=0.5,<2.2.0" "werkzeug>=0.5"
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aws-xray-sdk
@@ -66,9 +68,9 @@ buildPythonPackage rec {
     jinja2
     jsondiff
     openapi-spec-validator
+    pyparsing
     python-dateutil
     python-jose
-    pytz
     pyyaml
     requests
     responses
@@ -77,7 +79,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytestCheckHook
     sure
@@ -139,6 +141,8 @@ buildPythonPackage rec {
     "tests/test_awslambda/test_lambda_eventsourcemapping.py"
     "tests/test_awslambda/test_lambda_invoke.py"
     "tests/test_batch/test_batch_jobs.py"
+    "tests/test_kinesis/test_kinesis.py"
+    "tests/test_kinesis/test_kinesis_stream_consumers.py"
   ];
 
   disabledTests = [
@@ -152,6 +156,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Allows your tests to easily mock out AWS Services";
     homepage = "https://github.com/spulec/moto";
+    changelog = "https://github.com/getmoto/moto/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ ];
   };

@@ -17,16 +17,21 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.1.0-alpha.9";
+  version = "1.1.0-alpha.11";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "985462590b1c49b26a0b0ee01e24b1eb01942165";
-    hash = "sha256-JtoDuA3NCKmX+wDqav30VwrLeDALYat1iKFWpbYOO1s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TVGLL1Ir/Nld0kdhWmcYYmChrW42ctJPY/U7wtuEwCo=";
   };
 
-  cargoSha256 = "sha256-pkBkXIG2PF5YMeighQwHwhURWbJabfveyszRIdrQjcA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tracing-forest-0.1.4" = "sha256-ofBLxSzZ5SYy8cbViVUa6VXKbOgd8lt7QUYhL0BW6I4=";
+    };
+  };
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
 

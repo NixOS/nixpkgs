@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     EncodeIMAPUTF7
     FileCopyRecursive
     FileTail
-    IOSocketInet6
+    IOSocketINET6
     IOTee
     JSONWebToken
     LWP
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Mail folder synchronizer between IMAP servers";
     homepage = "https://imapsync.lamiral.info/";
-    license = licenses.wtfpl;
+    license = licenses.nlpl;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.unix;
   };

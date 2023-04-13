@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, unittest2
 }:
 
 buildPythonPackage rec {
@@ -13,7 +12,8 @@ buildPythonPackage rec {
     sha256 = "01f490098c18b19d2bd5bb5dc445b2054d2fa97f09a4280ba2c5f3c394c8162e";
   };
 
-  checkInputs = [ unittest2 ];
+  # requires unittest2, which has been removed
+  doCheck = false;
 
   meta = {
     description = "Backports and enhancements for the contextlib module";

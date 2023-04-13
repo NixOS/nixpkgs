@@ -14,7 +14,8 @@
 , gdk-pixbuf
 , libnotify
 , qttools
-, xlibsWrapper
+, libICE
+, libSM
 , libX11
 , libxkbfile
 , libXi
@@ -84,7 +85,8 @@ stdenv.mkDerivation rec {
     util-linux
     libselinux
     libsepol
-    xlibsWrapper
+    libICE
+    libSM
     libX11
     libXi
     libXtst
@@ -98,7 +100,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Silences many warnings
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
 
   cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
     # NSFilenamesPboardType is deprecated in 10.14+

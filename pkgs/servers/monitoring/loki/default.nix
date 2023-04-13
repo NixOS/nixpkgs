@@ -8,21 +8,17 @@
 }:
 
 buildGoModule rec {
-  version = "2.6.1";
+  version = "2.8.0";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "sha256-6g0tzI6ZW+wwbPrNTdj0t2H0/M8+M9ioJl6iPL0mAtY=";
+    rev = "v${version}";
+    hash = "sha256-RPa3G1zrWzunyQOdNUQ/dZGJ/7sh2OGvoEqeYaT7Qv0=";
   };
 
-  patches = [
-    ./go119.patch
-  ];
-
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [
     # TODO split every executable into its own package
@@ -52,13 +48,10 @@ buildGoModule rec {
     "-X ${t}.Revision=unknown"
   ];
 
-  doCheck = true;
-
   meta = with lib; {
     description = "Like Prometheus, but for logs";
     license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
-    maintainers = with maintainers; [ willibutz globin mmahut ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ willibutz globin mmahut indeednotjames ];
   };
 }

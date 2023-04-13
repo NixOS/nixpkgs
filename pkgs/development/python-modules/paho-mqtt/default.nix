@@ -16,10 +16,10 @@ buildPythonPackage rec {
     owner = "eclipse";
     repo = "paho.mqtt.python";
     rev = "v${version}";
-    sha256 = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
+    hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     six
   ] ++ lib.optionals (!isPy3k) [

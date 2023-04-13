@@ -25,7 +25,7 @@ buildPythonPackage rec {
     lxml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
     mock
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Python access to maven";
     homepage = "https://github.com/nexB/pymaven";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

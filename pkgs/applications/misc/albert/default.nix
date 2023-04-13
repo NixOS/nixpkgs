@@ -55,9 +55,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A fast and flexible keyboard launcher";

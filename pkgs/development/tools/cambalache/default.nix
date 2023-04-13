@@ -57,15 +57,16 @@ python3.pkgs.buildPythonApplication rec {
     libhandy
   ];
 
-  # Not compatible with gobject-introspection setup hooks.
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   # Prevent double wrapping.
   dontWrapGApps = true;
 
   postPatch = ''
     patchShebangs postinstall.py
+    # those programs are used at runtime not build time
+    # https://gitlab.gnome.org/jpu/cambalache/-/blob/main/meson.build#L79-80
+    substituteInPlace ./meson.build \
+      --replace "find_program('broadwayd', required: true)" "" \
+      --replace "find_program('gtk4-broadwayd', required: true)" ""
   '';
 
   preFixup = ''
@@ -83,9 +84,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

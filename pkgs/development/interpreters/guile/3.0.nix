@@ -25,11 +25,11 @@ let
 in
 builder rec {
   pname = "guile";
-  version = "3.0.8";
+  version = "3.0.9";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2qcGClbygE6bdMjX5/6L7tErQ6qyeJo4WFGD/MF7ihM=";
+    sha256 = "sha256-GiYlrHKyNm6VeS8/51j9Lfd1tARKkKSpeHMm5mwNdQ0=";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -38,7 +38,7 @@ builder rec {
   depsBuildBuild = [
     buildPackages.stdenv.cc
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    pkgsBuildBuild.guile;
+    pkgsBuildBuild.guile_3_0;
   nativeBuildInputs = [
     makeWrapper
     pkg-config

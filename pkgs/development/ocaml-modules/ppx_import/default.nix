@@ -25,8 +25,6 @@ buildDunePackage rec {
   pname = "ppx_import";
   inherit version;
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.05";
 
   src = fetchurl {

@@ -21,19 +21,20 @@
 , gnused
 , coreutils
 , jq
+, gmic-qt
 }:
 
 stdenv.mkDerivation rec {
   pname = "gmic";
-  version = "3.1.6";
+  version = "3.2.3";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchFromGitHub {
-    owner = "dtschump";
+    owner = "GreycLab";
     repo = "gmic";
-    rev = "326ea9b7dc320b3624fe660d7b7d81669ca12e6d";
-    sha256 = "RRCzYMN/IXViiUNnacJV3DNpku3hIHQkHbIrtixExT0=";
+    rev = "v.${version}";
+    hash = "sha256-slEyZoYSNFrZ0d8a+mnJeqWQLqcJTPrkfpDpdag/vLA=";
   };
 
   # TODO: build this from source
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib.h";
     url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] version}.h";
-    sha256 = "adObp8s+2TWaS+X/bQSphWRK6o85h+DGwlIDol6XN/4=";
+    hash = "sha256-ExMCxFkkctqrdSy5M/TXD5GBRmRA9YEdsYW8nWiTEYY=";
   };
 
   nativeBuildInputs = [
@@ -81,6 +82,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    tests = {
+      # Needs to update in lockstep.
+      inherit gmic-qt;
+    };
+
     updateScript = writeShellScript "${pname}-update-script" ''
       set -o errexit
       PATH=${lib.makeBinPath [ common-updater-scripts curl gnugrep gnused coreutils jq ]}
@@ -95,7 +101,7 @@ stdenv.mkDerivation rec {
       for component in src gmic_stdlib; do
           # The script will not perform an update when the version attribute is up to date from previous platform run
           # We need to clear it before each run
-          update-source-version "--source-key=$component" "gmic" 0 "$(printf '0%.0s' {1..64})"
+          update-source-version "--source-key=$component" "gmic" 0 "${lib.fakeHash}"
           update-source-version "--source-key=$component" "gmic" $latestVersion
       done
     '';
@@ -104,7 +110,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open and full-featured framework for image processing";
     homepage = "https://gmic.eu/";
-    license = licenses.cecill20;
+    license = licenses.cecill21;
+    maintainers = [ maintainers.lilyinstarlight ];
     platforms = platforms.unix;
   };
 }

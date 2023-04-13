@@ -53,30 +53,21 @@
 , libpng
 , libjpeg
 , AppKit
-, AudioToolbox
-, AudioUnit
-, Carbon
-, CoreAudio
 , CoreAudioKit
-, CoreServices
 }:
 
 # TODO
 # 1. detach sbsms
 
-let
-  inherit (lib) optionals;
-  pname = "audacity";
-  version = "3.2.1";
-in
 stdenv.mkDerivation rec {
-  inherit pname version;
+  pname = "audacity";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Audacity-${version}";
-    sha256 = "sha256-7rfttp9LnfM2LBT5seupPyDckS7LEzWDZoqtLsGgqgI=";
+    hash = "sha256-tMz55fZh+TfvLEyApDqC0QMd2hEQLJsNQ6y2Xy0xgaQ=";
   };
 
   postPatch = ''
@@ -84,6 +75,8 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinMinVersion "11.0") ''
+    sed -z -i "s/NSAppearanceName.*systemAppearance//" src/AudacityApp.mm
   '';
 
   nativeBuildInputs = [
@@ -93,7 +86,7 @@ stdenv.mkDerivation rec {
     python3
     makeWrapper
     wrapGAppsHook
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     linuxHeaders
   ];
 
@@ -127,7 +120,7 @@ stdenv.mkDerivation rec {
     portaudio
     wavpack
     wxGTK32
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     alsa-lib # for portaudio
     at-spi2-core
     dbus
@@ -140,10 +133,9 @@ stdenv.mkDerivation rec {
     libsepol
     libuuid
     util-linux
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     AppKit
-    CoreAudioKit
-    AudioUnit AudioToolbox CoreAudio CoreServices Carbon # for portaudio
+    CoreAudioKit # for portaudio
     libpng
     libjpeg
   ];
@@ -199,7 +191,5 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ lheckemann veprbl wegank ];
     platforms = platforms.unix;
-    # error: unknown type name 'NSAppearanceName'
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

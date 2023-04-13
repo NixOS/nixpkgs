@@ -46,11 +46,11 @@ let
   inherit (python3.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "8.0.30";
+  version = "8.0.32";
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "d094b391760948f42a3b879e8473040ae9bb26991eced482eb982a52c8ff8185";
+    sha256 = "sha256-ruGdYTG0KPhRnUdlfaZjt1r/tAhA1XeAtjDgu/K9okI=";
   };
 
   patches = [
@@ -140,8 +140,16 @@ in stdenv.mkDerivation rec {
     patchShebangs tools/get_wb_version.sh
   '';
 
-  # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
+    "-Wno-error=deprecated-declarations"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    # error: narrowing conversion of '-1' from 'int' to 'char'
+    "-Wno-error=narrowing"
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but problematic with some old GCCs
+    "-Wno-error=maybe-uninitialized"
+  ]);
 
   cmakeFlags = [
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"

@@ -94,7 +94,6 @@ in {
       };
 
       config = let
-        rootName = "${mkPathSafeName name}-chroot";
         inherit (config.confinement) binSh fullUnit;
         wantsAPIVFS = lib.mkDefault (config.confinement.mode == "full-apivfs");
       in lib.mkIf config.confinement.enable {

@@ -20,7 +20,7 @@
 
 let
   pname = "hatchling";
-  version = "1.9.0";
+  version = "1.13.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -28,7 +28,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tXxzYvQ3uUJuS5QiiiHSrFgE+7KrywGt3iVEo1uzA80=";
+    hash = "sha256-+NJ1osxyBzUoa3wuK8NdoFdh5tNpXC+kFlUDlfEMU8c=";
   };
 
   # listed in backend/src/hatchling/ouroboros.py
@@ -52,7 +52,7 @@ buildPythonPackage {
   doCheck = false;
 
   # listed in /backend/tests/downstream/requirements.txt
-  checkInputs = [
+  nativeCheckInputs = [
     build
     packaging
     requests
@@ -72,6 +72,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "Modern, extensible Python build backend";
     homepage = "https://hatch.pypa.io/latest/";
+    changelog = "https://github.com/pypa/hatch/releases/tag/hatchling-v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ofek ];
   };

@@ -11,15 +11,15 @@
 , wrapQtAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doublecmd";
-  version = "1.0.8";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "doublecmd";
     repo = "doublecmd";
-    rev = "v${version}";
-    hash = "sha256-kuqleoDoxzOj3baTK0lBJpbDECoHeFubWhLXAVkEqAk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UV5LooVkCBzUk9E7dYje6t19HOuMCO8jY+fNGTES0KA=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libqt5pas
   ];
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
 
   postPatch = ''
     patchShebangs build.sh install/linux/install.sh
@@ -70,5 +70,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; linux;
   };
-}
+})
 # TODO: deal with other platforms too

@@ -1,0 +1,28 @@
+Swift normally looks for the Clang resource dir in a subdir/symlink of its own
+resource dir. We provide a symlink to the Swift build-time Clang as a default
+there, but we also here patch a check to try locate it via NIX_CC.
+
+--- a/Sources/SwiftDriver/Jobs/Toolchain+LinkerSupport.swift
++++ b/Sources/SwiftDriver/Jobs/Toolchain+LinkerSupport.swift
+@@ -9,6 +9,7 @@
+ // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+ //
+ //===----------------------------------------------------------------------===//
++import Foundation
+ import TSCBasic
+ import SwiftOptions
+ 
+@@ -24,6 +25,13 @@ extension Toolchain {
+     for targetInfo: FrontendTargetInfo,
+     parsedOptions: inout ParsedOptions
+   ) throws -> VirtualPath {
++    let env = ProcessInfo.processInfo.environment
++    if let nixCC = env["NIX_CC"] {
++      return try VirtualPath(path: nixCC)
++        .appending(components: "resource-root", "lib",
++                   targetInfo.target.triple.platformName(conflatingDarwin: true)!)
++    }
++
+     return VirtualPath.lookup(targetInfo.runtimeResourcePath.path)
+       .appending(components: "clang", "lib",
+                  targetInfo.target.triple.platformName(conflatingDarwin: true)!)

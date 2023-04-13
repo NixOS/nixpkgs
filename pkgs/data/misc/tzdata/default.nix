@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages }:
+{ lib, stdenv, fetchurl, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "tzdata";
-  version = "2022f";
+  version = "2023c";
 
   srcs = [
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
-      hash = "sha256-mZDXH2ddISVnuTH+iq4cq3An+J/vuKedgIppM6Z68AA=";
+      hash = "sha256-P1ELXRtK6bs45IWqMCp3azF/s2N722QExK33tsrdllw=";
     })
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
-      hash = "sha256-5FQ+kPhPkfqCgJ6piTAFL9vBOIDIpiPuOk6qQvimTBU=";
+      hash = "sha256-RtF/K7Ga1zKQ8DogMAYVLg+g17EeW3FGfEqCOBGyFOc=";
     })
   ];
 
@@ -19,17 +19,6 @@ stdenv.mkDerivation rec {
 
   patches = lib.optionals stdenv.hostPlatform.isWindows [
     ./0001-Add-exe-extension-for-MS-Windows-binaries.patch
-  ] ++ [
-    (fetchpatch {
-      name = "fix-get-random-on-osx-1.patch";
-      url = "https://github.com/eggert/tz/commit/5db8b3ba4816ccb8f4ffeb84f05b99e87d3b1be6.patch";
-      hash = "sha256-FevGjiSahYwEjRUTvRY0Y6/jUO4YHiTlAAPixzEy5hw=";
-    })
-    (fetchpatch {
-      name = "fix-get-random-on-osx-2.patch";
-      url = "https://github.com/eggert/tz/commit/841183210311b1d4ffb4084bfde8fa8bdf3e6757.patch";
-      hash = "sha256-1tUTZBMT7V463P7eygpFS6/k5gTeeXumk5+V4gdKpEI=";
-    })
   ];
 
   outputs = [ "out" "bin" "man" "dev" ];
@@ -51,6 +40,7 @@ stdenv.mkDerivation rec {
     "AR=${stdenv.cc.targetPrefix}ar"
   ] ++ lib.optionals stdenv.hostPlatform.isWindows [
     "CFLAGS+=-DHAVE_DIRECT_H"
+    "CFLAGS+=-DHAVE_SETENV=0"
     "CFLAGS+=-DHAVE_SYMLINK=0"
     "CFLAGS+=-DRESERVE_STD_EXT_IDS"
   ];

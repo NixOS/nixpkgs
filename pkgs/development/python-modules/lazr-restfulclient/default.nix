@@ -22,14 +22,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-B1FxfH502xmH6adzNXB9TX2XzwSxrQiYuCLxIzPWiHw=";
+    hash = "sha256-B1FxfH502xmH6adzNXB9TX2XzwSxrQiYuCLxIzPWiHw=";
   };
 
   propagatedBuildInputs = [ distro httplib2 oauthlib setuptools six wadllib ];
 
   # E   ModuleNotFoundError: No module named 'lazr.uri'
   doCheck = false;
-  checkInputs = [ fixtures lazr-uri pytestCheckHook wsgi-intercept ];
+  nativeCheckInputs = [ fixtures lazr-uri pytestCheckHook wsgi-intercept ];
 
   pythonImportsCheck = [ "lazr.restfulclient" ];
 

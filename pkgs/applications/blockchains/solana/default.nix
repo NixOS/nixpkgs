@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   # all the following are needed for the checkphase
-  # checkInputs = lib.optionals stdenv.isDarwin [ pkg-config rustfmt ];
+  # nativeCheckInputs = lib.optionals stdenv.isDarwin [ pkg-config rustfmt ];
   # Needed to get openssl-sys to use pkg-config.
   # OPENSSL_NO_VENDOR = 1;
   # OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";

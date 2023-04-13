@@ -1,27 +1,25 @@
 { lib
-, stdenv
-, fetchFromGitHub
-, libiconv
 , rustPlatform
-, AppKit
+, fetchFromGitHub
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fclones";
-  version = "0.29.1";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "pkolaczk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-spWfZx2br7gSLS0xaUBvMgvA326ISh16i/s0K3m1HCI=";
+    sha256 = "sha256-eFWFXUARXy3VA53VPSZkJdw6ZvI+FtFnCCGHmCAdTto=";
   };
 
-  cargoSha256 = "sha256-qwjwauM2ejeMEbajVD8Deuhl/qMcB7MsvjR2CYGaF+M=";
+  cargoHash = "sha256-C7DKwEMYdypfItflMOL7rjbAdXDRsXDNoPlc9j6aBRA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    AppKit
-    libiconv
+    darwin.apple_sdk_11_0.frameworks.AppKit
   ];
 
   # device::test_physical_device_name test fails on Darwin

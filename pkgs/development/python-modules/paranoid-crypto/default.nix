@@ -42,7 +42,7 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fpylll
     pytestCheckHook
   ];

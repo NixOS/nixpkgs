@@ -29,7 +29,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.onlyoffice-documentserver;
-      defaultText = "pkgs.onlyoffice-documentserver";
+      defaultText = lib.literalExpression "pkgs.onlyoffice-documentserver";
       description = lib.mdDoc "Which package to use for the OnlyOffice instance.";
     };
 
@@ -54,7 +54,7 @@ in
     postgresName = mkOption {
       type = types.str;
       default = "onlyoffice";
-      description = lib.mdDoc "The name of databse OnlyOffice should user.";
+      description = lib.mdDoc "The name of database OnlyOffice should user.";
     };
 
     postgresPasswordFile = mkOption {
@@ -229,6 +229,9 @@ in
             cp -r ${cfg.package}/etc/onlyoffice/documentserver/* /run/onlyoffice/config/
             chmod u+w /run/onlyoffice/config/default.json
 
+            # Allow members of the onlyoffice group to serve files under /var/lib/onlyoffice/documentserver/App_Data
+            chmod g+x /var/lib/onlyoffice/documentserver
+
             cp /run/onlyoffice/config/default.json{,.orig}
 
             # for a mapping of environment variables from the docker container to json options see
@@ -267,7 +270,7 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper DocService/docservice /run/onlyoffice/config";
-            ExecStartPre = onlyoffice-prestart;
+            ExecStartPre = [ onlyoffice-prestart ];
             Group = "onlyoffice";
             Restart = "always";
             RuntimeDirectory = "onlyoffice";
@@ -284,6 +287,8 @@ in
         group = "onlyoffice";
         isSystemUser = true;
       };
+
+      nginx.extraGroups = [ "onlyoffice" ];
     };
 
     users.groups.onlyoffice = { };

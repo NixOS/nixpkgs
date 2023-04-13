@@ -60,7 +60,7 @@ in {
     '')
     (mkRemovedOptionModule [ "services" "matrix-synapse" "create_local_database" ] ''
       Database configuration must be done manually. An exemplary setup is demonstrated in
-      <nixpkgs/nixos/tests/matrix-synapse.nix>
+      <nixpkgs/nixos/tests/matrix/synapse.nix>
     '')
     (mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
     (mkRemovedOptionModule [ "services" "matrix-synapse" "room_invite_state_types" ] ''
@@ -80,7 +80,7 @@ in {
     (mkRemovedOptionModule [ "services" "matrix-synapse" "user_creation_max_duration" ] "It is no longer supported by synapse." )
     (mkRemovedOptionModule [ "services" "matrix-synapse" "verbose" ] "Use a log config instead." )
 
-    # options that were moved into rfc42 style settigns
+    # options that were moved into rfc42 style settings
     (mkRemovedOptionModule [ "services" "matrix-synapse" "app_service_config_files" ] "Use settings.app_service_config_files instead" )
     (mkRemovedOptionModule [ "services" "matrix-synapse" "database_args" ] "Use settings.database.args instead" )
     (mkRemovedOptionModule [ "services" "matrix-synapse" "database_name" ] "Use settings.database.args.database instead" )
@@ -286,6 +286,7 @@ in {
             log_config = mkOption {
               type = types.path;
               default = ./synapse-log_config.yaml;
+              defaultText = lib.literalExpression "nixos/modules/services/matrix/synapse-log_config.yaml";
               description = lib.mdDoc ''
                 The file that holds the logging configuration.
               '';
@@ -506,6 +507,12 @@ in {
                 sqlite3 = null;
                 psycopg2 = "matrix-synapse";
               }.${cfg.settings.database.name};
+              defaultText = lib.literalExpression ''
+                {
+                  sqlite3 = null;
+                  psycopg2 = "matrix-synapse";
+                }.''${cfg.settings.database.name};
+              '';
               description = lib.mdDoc ''
                 Username to connect with psycopg2, set to null
                 when using sqlite3.
@@ -704,7 +711,7 @@ in {
 
             If you
             - try to deploy a fresh synapse, you need to configure the database yourself. An example
-              for this can be found in <nixpkgs/nixos/tests/matrix-synapse.nix>
+              for this can be found in <nixpkgs/nixos/tests/matrix/synapse.nix>
             - update your existing matrix-synapse instance, you simply need to add `services.postgresql.enable = true`
               to your configuration.
 
@@ -748,8 +755,8 @@ in {
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
         ExecStartPre = [ ("+" + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
-          chown matrix-synapse:matrix-synapse ${cfg.dataDir}/homeserver.signing.key
-          chmod 0600 ${cfg.dataDir}/homeserver.signing.key
+          chown matrix-synapse:matrix-synapse ${cfg.settings.signing_key_path}
+          chmod 0600 ${cfg.settings.signing_key_path}
         '')) ];
         ExecStart = ''
           ${cfg.package}/bin/synapse_homeserver \
@@ -794,7 +801,7 @@ in {
 
   meta = {
     buildDocsInSandbox = false;
-    doc = ./synapse.xml;
+    doc = ./synapse.md;
     maintainers = teams.matrix.members;
   };
 

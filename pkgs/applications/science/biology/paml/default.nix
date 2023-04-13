@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: /build/ccKomtcd.o:(.bss+0x4544): multiple definition of `SeqTypes';
   #     /build/ccx7EsgU.o:(.bss+0x2a0dfdc): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preBuild = ''
     cd ./src/

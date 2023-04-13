@@ -83,22 +83,19 @@ let
     pname = "playwright-browsers";
     version = driverVersion;
 
-    src = runCommand "playwright-browsers-base" {
-      outputHashMode = "recursive";
-      outputHashAlgo = "sha256";
-      outputHash = {
-        x86_64-darwin = "0z2kww4iby1izkwn6z2ai94y87bkjvwak8awdmjm8sgg00pa9l1a";
-      }.${system} or throwSystem;
-    } ''
+    dontUnpack = true;
+
+    installPhase = ''
+      runHook preInstall
+
       export PLAYWRIGHT_BROWSERS_PATH=$out
       ${driver}/bin/playwright install
       rm -r $out/.links
+
+      runHook postInstall
     '';
 
-    installPhase = ''
-      mkdir $out
-      cp -r * $out/
-    '';
+    meta.platforms = lib.platforms.darwin;
   };
 
   browsers-linux = { withFirefox ? true, withChromium ? true }: let
@@ -144,7 +141,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "v${version}";
-    sha256 = "sha256-cI/4GdkmTikoP9O0Skh/0jCxxRypRua0231iKcxtBcY=";
+    hash = "sha256-cI/4GdkmTikoP9O0Skh/0jCxxRypRua0231iKcxtBcY=";
   };
 
   patches = [
@@ -193,6 +190,8 @@ buildPythonPackage rec {
     ln -s ${driver} $out/${python.sitePackages}/playwright/driver
   '';
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   # Skip tests because they require network access.
   doCheck = false;
 
@@ -221,5 +220,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/microsoft/playwright-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ techknowlogick yrd SuperSandro2000 ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

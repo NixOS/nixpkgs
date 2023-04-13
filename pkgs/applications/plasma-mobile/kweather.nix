@@ -5,6 +5,7 @@
 , extra-cmake-modules
 
 , kconfig
+, kholidays
 , ki18n
 , kirigami-addons
 , kirigami2
@@ -26,6 +27,7 @@ mkDerivation rec {
 
   buildInputs = [
     kconfig
+    kholidays
     ki18n
     kirigami-addons
     kirigami2

@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitLab, fetchurl, bash }:
 
 let
-  version = "15.5.1";
+  version = "15.10.0";
 in
 buildGoModule rec {
   inherit version;
@@ -17,13 +17,13 @@ buildGoModule rec {
   # For patchShebangs
   buildInputs = [ bash ];
 
-  vendorSha256 = "sha256-IcsYH1V3b5IUY2JqOADJrc4lkng1GS7lndfHObRQbxU=";
+  vendorHash = "sha256-ASmhcaywnVb62lPZk1+0hHme7IgXylnk8DryhCjQ6dc=";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "sha256-ZvQaA4DSuEIdHEoRKJg5tOnBQgf26paTAiWy6RLRG3o=";
+    sha256 = "sha256-HwG23eqTPQFvziRKhbMdl5O4OlrC9lgha92J2hzRRS8=";
   };
 
   patches = [
@@ -46,6 +46,7 @@ buildGoModule rec {
     rm executors/docker/terminal_test.go
     rm executors/docker/docker_test.go
     rm helpers/docker/auth/auth_test.go
+    rm executors/docker/services_test.go
   '';
 
   postInstall = ''

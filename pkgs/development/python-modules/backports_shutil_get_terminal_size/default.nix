@@ -9,7 +9,7 @@ if !(pythonOlder "3.3") then null else buildPythonPackage {
   pname = "backports.shutil_get_terminal_size";
   version = "unstable-2016-02-21";
 
-  # there have been numerous fixes commited since the initial release.
+  # there have been numerous fixes committed since the initial release.
   # Most notably fixing a problem where the backport would always return
   # terminal size 0. See https://trac.sagemath.org/ticket/25320#comment:5.
   # Unfortunately the maintainer seems inactive and has not responded to
@@ -22,7 +22,7 @@ if !(pythonOlder "3.3") then null else buildPythonPackage {
     sha256 = "17sgv8vg0xxfdnca45l1mmwwvj29gich5c8kqznnj51kfccch7sg";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

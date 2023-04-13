@@ -10,14 +10,17 @@
 , protobuf
 , rustPlatform
 , Security
+, CoreFoundation
 , stdenv
 , testers
 , unzip
+, nix-update-script
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "3.2.1";
+  version = "3.5.1";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -27,20 +30,33 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    sha256 = "sha256-Aqc3kk1rquhLKNZDlEun4bQpKI4Nsk7+Wr7E2IkJQEs=";
+    hash = "sha256-oF32s1nfzEZbaNUi5sQSrotcyOSinULj/qrRQWdMXHg=";
   };
 
-  cargoSha256 = "sha256-wGEk7OfEmyeRW65kq5stvKCdnCjfssyXUmNWGkGq42M=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "amcl-0.3.0" = "sha256-Mj4dXTlGVSleFfuTKgVDQ7S3jANMsdtVE5L90WGxA4U=";
+      "arbitrary-1.2.2" = "sha256-39ZefB5Xok28y8lIdKleILBv4aokY90eMOssxUtU7yA=";
+      "beacon-api-client-0.1.0" = "sha256-vqTC7bKXgliN7qd5LstNM5O6jRnn4aV/paj88Mua+Bc=";
+      "ethereum-consensus-0.1.1" = "sha256-aBrZ786Me0BWpnncxQc5MT3r+O0yLQhqGKFBiNTdqSA=";
+      "libmdbx-0.1.4" = "sha256-NMsR/Wl1JIj+YFPyeMMkrJFfoS07iEAKEQawO89a+/Q=";
+      "lmdb-rkv-0.14.0" = "sha256-sxmguwqqcyOlfXOZogVz1OLxfJPo+Q0+UjkROkbbOCk=";
+      "mev-rs-0.2.1" = "sha256-n3ns1oynw5fKQtp/CQHER41+C1EmLCVEBqggkHc3or4=";
+      "ssz-rs-0.8.0" = "sha256-k1JLu+jZrSqUyHou76gbJeA5CDWwdL0fPkek3Vzl4Gs=";
+      "warp-0.3.2" = "sha256-m9lkEgeSs0yEc+6N6DG7IfQY/evkUMoNyst2hMUR//c=";
+    };
+  };
 
   buildFeatures = [ "modern" "gnosis" ];
 
-  nativeBuildInputs = [ clang cmake perl protobuf ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook cmake perl protobuf ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
+    CoreFoundation
+    SystemConfiguration
   ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   depositContractSpec = fetchurl {
     url = "https://raw.githubusercontent.com/ethereum/eth2.0-specs/v${depositContractSpecVersion}/deposit_contract/contracts/validator_registration.json";
@@ -84,14 +100,17 @@ rustPlatform.buildRustPackage rec {
     "--skip subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nodePackages.ganache
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = lighthouse;
-    command = "lighthouse --version";
-    version = "v${lighthouse.version}";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = lighthouse;
+      command = "lighthouse --version";
+      version = "v${lighthouse.version}";
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

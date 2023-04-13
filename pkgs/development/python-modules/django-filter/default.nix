@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7Uc7duhPfoOyURuyBQw++zbRNSB9ASjf465LNuNZS6U=";
+    hash = "sha256-7Uc7duhPfoOyURuyBQw++zbRNSB9ASjf465LNuNZS6U=";
   };
 
   propagatedBuildInputs = [ django ];
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # Tests fail (needs the 'crispy_forms' module not packaged on nixos)
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     djangorestframework
     django
     mock

@@ -9,12 +9,12 @@ buildPythonPackage rec {
     owner = "Schrodinger-Hat";
     repo = "ImageGoNord-pip";
     rev = "v${version}";
-    sha256 = "sha256-O34COlGsXExJShRd2zvhdescNfYXWLNuGpkjcH3koPU=";
+    hash = "sha256-O34COlGsXExJShRd2zvhdescNfYXWLNuGpkjcH3koPU=";
   };
 
   propagatedBuildInputs = [ pillow ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A tool that can convert rgb images to nordtheme palette";

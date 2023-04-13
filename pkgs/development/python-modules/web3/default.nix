@@ -63,7 +63,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = true;
 
   # TODO: package eth-tester
-  #checkInputs = [
+  #nativeCheckInputs = [
   #  eth-tester
   #  eth-tester.optional-dependencies.py-evm
   #  py-geth

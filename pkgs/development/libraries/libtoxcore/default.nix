@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   doCheck = true;
-  checkInputs = [ check ];
+  nativeCheckInputs = [ check ];
 
   postInstall = ''
     substituteInPlace $out/lib/pkgconfig/toxcore.pc \
@@ -38,7 +38,6 @@ in stdenv.mkDerivation rec {
   # https://github.com/TokTok/c-toxcore/issues/2334
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "P2P FOSS instant messaging application aimed to replace Skype";
     homepage = "https://tox.chat";
     license = licenses.gpl3Plus;

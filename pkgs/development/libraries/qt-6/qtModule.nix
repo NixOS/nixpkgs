@@ -1,6 +1,4 @@
-{ stdenv, lib, perl, cmake, ninja, writeText }:
-
-{ self, srcs, patches ? [ ] }:
+{ stdenv, lib, perl, cmake, ninja, writeText, qtbase, qmake, srcs, patches ? [ ] }:
 
 args:
 
@@ -18,7 +16,7 @@ stdenv.mkDerivation (args // {
     perl
     cmake
     ninja
-    self.qmake
+    qmake
   ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or [ ]);
 
@@ -33,7 +31,7 @@ stdenv.mkDerivation (args // {
   postInstall = ''
     if [ ! -z "$dev" ]; then
       mkdir "$dev"
-      for dir in bin libexec mkspecs
+      for dir in libexec mkspecs
       do
         moveToOutput "$dir" "$dev"
       done
@@ -61,7 +59,7 @@ stdenv.mkDerivation (args // {
       if [[ -z "$dontSyncQt" && -f sync.profile ]]; then
         # FIXME: this probably breaks crosscompiling as it's not from nativeBuildInputs
         # I don't know how to get /libexec from nativeBuildInputs to work, it's not under /bin
-        ${self.qtbase.dev.nativeDrv or self.qtbase.dev}/libexec/syncqt.pl -version "''${version%%-*}"
+        ${lib.getDev qtbase}/libexec/syncqt.pl -version "''${version%%-*}"
       fi
     '';
 
@@ -83,6 +81,6 @@ stdenv.mkDerivation (args // {
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ milahu nickcao ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   } // (args.meta or { });
 })

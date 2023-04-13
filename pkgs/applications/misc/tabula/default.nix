@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.dpaetzel ];
     platforms = platforms.all;
+    broken = true; # on 2022-11-23 this package builds, but produces an executable that fails immediately
   };
 }

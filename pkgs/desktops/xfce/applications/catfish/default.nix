@@ -41,7 +41,6 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pyxdg
     python3Packages.ptyprocess
     python3Packages.pycairo
-    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ];
 
   propagatedBuildInputs = [

@@ -2,7 +2,9 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
+, pythonAtLeast
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , gdb
 , django
@@ -13,33 +15,36 @@
 , pytest-xdist
 , pytestCheckHook
 , requests
+, llvmPackages
 }:
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.6.3";
+  version = "1.6.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  # Currently doesn't support 3.11:
+  # https://github.com/microsoft/debugpy/issues/1107
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
-    owner = "Microsoft";
-    repo = pname;
+    owner = "microsoft";
+    repo = "debugpy";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ERsqs+pCJfYQInOWPBhM/7hC5TTfQAksYJwFCcd+vlk=";
+    hash = "sha256-jEhvpPO3QeKjPiOMxg2xOWitWtZ6UCWyM1WvnbrKnFI=";
   };
 
   patches = [
-    # Hard code GDB path (used to attach to process)
-    (substituteAll {
-      src = ./hardcode-gdb.patch;
-      inherit gdb;
-    })
-
     # Use nixpkgs version instead of versioneer
     (substituteAll {
       src = ./hardcode-version.patch;
       inherit version;
+    })
+
+    # https://github.com/microsoft/debugpy/issues/1230
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/microsoft/debugpy/pull/1232.patch";
+      sha256 = "sha256-m5p+xYiJ4w4GcaFIaPmlnErp/7WLwcvJmaCqa2SeSxU=";
     })
 
     # Fix importing debugpy in:
@@ -51,6 +56,18 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
+  ] ++ lib.optionals stdenv.isLinux [
+    # Hard code GDB path (used to attach to process)
+    (substituteAll {
+      src = ./hardcode-gdb.patch;
+      inherit gdb;
+    })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Hard code LLDB path (used to attach to process)
+    (substituteAll {
+      src = ./hardcode-lldb.patch;
+      inherit (llvmPackages) lldb;
+    })
   ];
 
   # Remove pre-compiled "attach" libraries and recompile for host platform
@@ -69,7 +86,7 @@ buildPythonPackage rec {
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}
   )'';
 
-  checkInputs = [
+  nativeCheckInputs = [
     django
     flask
     gevent
@@ -93,9 +110,13 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "--timeout=0"
   ];
-
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    # https://github.com/microsoft/debugpy/issues/1241
+    "test_flask_breakpoint_multiproc"
+  ];
 
   pythonImportsCheck = [
     "debugpy"
@@ -104,6 +125,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "An implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
+    changelog = "https://github.com/microsoft/debugpy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "i686-darwin" "aarch64-darwin" ];

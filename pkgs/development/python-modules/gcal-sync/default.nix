@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "gcal-sync";
-  version = "4.0.1";
+  version = "4.1.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "gcal_sync";
     rev = "refs/tags/${version}";
-    hash = "sha256-sfGfF0kz37QX0Xjrtdl9XU9biVu7v8l6u/S27NeAW+k=";
+    hash = "sha256-LJJyJj1HXNdBBs4hDvkuz74PDHRpeVpwbq0vSfESuXY=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytest-aiohttp
     pytest-asyncio

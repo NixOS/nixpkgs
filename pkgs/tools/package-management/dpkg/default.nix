@@ -1,20 +1,22 @@
-{ lib, stdenv, fetchurl, perl, zlib, bzip2, xz, zstd
-, makeWrapper, coreutils, autoreconfHook, pkg-config
+{ lib, stdenv, fetchgit, perl, gnutar, zlib, bzip2, xz, zstd
+, libmd, makeWrapper, coreutils, autoreconfHook, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.21.1ubuntu2.1";
+  version = "1.21.21ubuntu1";
 
-  src = fetchurl {
-    url = "mirror://ubuntu/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "sha256-YvVQbQn2MhOIOE43VO0H1QsKIYCsjNAFzKMoFeSrqZk=";
+  src = fetchgit {
+    url = "https://git.launchpad.net/ubuntu/+source/dpkg";
+    rev = "applied/${version}";
+    hash = "sha256-ZrJdf4oEvNeSMVHB8/TJgz5+YqLhih70ktLdnDurhUc=";
   };
 
   configureFlags = [
     "--disable-dselect"
     "--with-admindir=/var/lib/dpkg"
     "PERL_LIBDIR=$(out)/${perl.libPrefix}"
+    "TAR=${gnutar}/bin/tar"
     (lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
     (lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
   ];
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
        --replace '"diff"' \"${coreutils}/bin/diff\"
   '';
 
-  buildInputs = [ perl zlib bzip2 xz zstd ];
+  buildInputs = [ perl zlib bzip2 xz zstd libmd ];
   nativeBuildInputs = [ makeWrapper perl autoreconfHook pkg-config ];
 
   postInstall =

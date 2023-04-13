@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libayatana-indicator";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "libayatana-indicator";
     rev = version;
-    sha256 = "sha256-Bi+whbODdJMSQ6iiIrHAwht1Efi83icerT7ubQvE5n0=";
+    sha256 = "sha256-tOZcrcuZowqDg/LRYTY6PCxKnpEd67k4xAHrIKupunI=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "prometheus-cpp";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jupp0r";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-F8paJhptEcOMtP0FCJ3ragC4kv7XSVPiZheM5UZChno=";
+    sha256 = "sha256-qx6oBxd0YrUyFq+7ArnKBqOwrl5X8RS9nErhRDUJ7+8=";
   };
 
   nativeBuildInputs = [ cmake ];

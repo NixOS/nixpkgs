@@ -11,6 +11,9 @@ _separateDebugInfo() {
     local dst="${debug:-$out}"
     if [ "$prefix" = "$dst" ]; then return 0; fi
 
+    # in case there is nothing to strip, don't fail the build
+    mkdir -p "$dst"
+
     dst="$dst/lib/debug/.build-id"
 
     # Find executables and dynamic libraries.
@@ -26,7 +29,7 @@ _separateDebugInfo() {
         fi
 
         # Extract the debug info.
-        header "separating debug info from $i (build ID $id)"
+        echo "separating debug info from $i (build ID $id)"
         mkdir -p "$dst/${id:0:2}"
 
         # This may fail, e.g. if the binary is for a different

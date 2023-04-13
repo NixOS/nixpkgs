@@ -1,5 +1,6 @@
 { qtModule
 , qtbase
+, qtlanguageserver
 , qtshadertools
 , openssl
 , python3
@@ -7,7 +8,7 @@
 
 qtModule {
   pname = "qtdeclarative";
-  qtInputs = [ qtbase qtshadertools ];
+  qtInputs = [ qtbase qtlanguageserver qtshadertools ];
   propagatedBuildInputs = [ openssl python3 ];
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/build/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -35,9 +36,5 @@ qtModule {
     "bin/qmlprofiler"
     "bin/qmlscene"
     "bin/qmltestrunner"
-  ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-fmacro-prefix-map=${qtbase.dev}=qtbase.dev"
   ];
 }

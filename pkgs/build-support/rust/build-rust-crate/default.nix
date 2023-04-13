@@ -276,7 +276,9 @@ crate_: lib.makeOverridable
       name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
       version = crate.version;
       depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
-      nativeBuildInputs = [ rust stdenv.cc cargo jq ] ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_;
+      nativeBuildInputs = [ rust stdenv.cc cargo jq ]
+        ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
+        ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_;
       buildInputs = lib.optionals stdenv.isDarwin [ libiconv ] ++ (crate.buildInputs or [ ]) ++ buildInputs_;
       dependencies = map lib.getLib dependencies_;
       buildDependencies = map lib.getLib buildDependencies_;
@@ -299,7 +301,7 @@ crate_: lib.makeOverridable
         );
 
       libName = if crate ? libName then crate.libName else crate.crateName;
-      libPath = if crate ? libPath then crate.libPath else "";
+      libPath = lib.optionalString (crate ? libPath) crate.libPath;
 
       # Seed the symbol hashes with something unique every time.
       # https://doc.rust-lang.org/1.0.0/rustc/metadata/loader/index.html#frobbing-symbols
@@ -350,6 +352,7 @@ crate_: lib.makeOverridable
           metadata hasCrateBin crateBin verbose colors
           extraRustcOpts buildTests codegenUnits;
       };
+      dontStrip = !release;
       installPhase = installCrate crateName metadata buildTests;
 
       # depending on the test setting we are either producing something with bins

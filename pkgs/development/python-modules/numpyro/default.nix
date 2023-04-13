@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.10.1";
+  version = "0.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-36iW8ByN9D3dQWY68rPi/Erqc0ieZpR06DMpsYOykVA=";
+    hash = "sha256-01fdGgFZ+G1FwjNwitM6PT1TQx0FtLvs4dBorkFoqo4=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for probabilistic programming with NumPy";
     homepage = "https://num.pyro.ai/";
+    changelog = "https://github.com/pyro-ppl/numpyro/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , fetchurl
 , pythonOlder
 , substituteAll
@@ -16,6 +17,7 @@
 
 # psycopg-c
 , cython_3
+, tomli
 
 # docs
 , furo
@@ -32,13 +34,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.3";
+  version = "3.1.8";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-cAfFxUDgfI3KTlBU9wV/vQkPun4cR3se8eSIHHcEr4g=";
+    hash = "sha256-VmuotHcLWd+k8/GLv0N2wSZR0sZjY+TmGBQjhpYE3YA=";
   };
 
   patches = [
@@ -46,6 +48,11 @@ let
       src = ./ctypes.patch;
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
+    })
+    (fetchpatch {
+      name = "cython-3.0.0b1-compat.patch";
+      url = "https://github.com/psycopg/psycopg/commit/573446a14312f36257ed9dcfb8eb2756b69d5d9b.patch";
+      hash = "sha256-NWItarNb/Yyfj1avb/SXTkinVGxvWUGH8y6tR/zhVmE=";
     })
   ];
 
@@ -70,9 +77,10 @@ let
     '';
 
     nativeBuildInputs = [
-      setuptools
       cython_3
       postgresql
+      setuptools
+      tomli
     ];
 
     # tested in psycopg
@@ -96,7 +104,7 @@ let
       cd psycopg_pool
     '';
 
-    propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+    propagatedBuildInputs = [
       typing-extensions
     ];
 
@@ -146,7 +154,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     psycopg-c
-  ] ++ lib.optionals (pythonOlder "3.11") [
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
@@ -167,7 +174,7 @@ buildPythonPackage rec {
     cd ..
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pproxy
     pytest-asyncio
     pytest-randomly
@@ -181,10 +188,6 @@ buildPythonPackage rec {
     # don't depend on mypy for tests
     "test_version"
     "test_package_version"
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    # racy test
-    "test_sched"
-    "test_sched_error"
   ];
 
   disabledTestPaths = [
@@ -197,7 +200,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-o cache_dir=$TMPDIR"
+    "-o" "cache_dir=$TMPDIR"
+    "-m" "'not timing'"
   ];
 
   postCheck = ''

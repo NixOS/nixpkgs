@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/share/i3lock-fancy/icons
     cp i3lock-fancy $out/bin/i3lock-fancy
+    ln -s $out/bin/i3lock-fancy $out/bin/i3lock
     cp icons/lock*.png $out/share/i3lock-fancy/icons
   '';
 

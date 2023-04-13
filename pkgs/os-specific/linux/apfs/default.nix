@@ -2,17 +2,21 @@
 , stdenv
 , fetchFromGitHub
 , kernel
+, nixosTests
 }:
 
+let
+  tag = "0.3.1";
+in
 stdenv.mkDerivation {
   pname = "apfs";
-  version = "unstable-2022-08-15-${kernel.version}";
+  version = "${tag}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
-    rev = "e4bf2d51d3fe8485ad2b28a89c157ada32ee3d77";
-    sha256 = "sha256-zvl1H9AIExgt6t2A2w7zDwXmRsmLY8y3P6EfbBuFdh8=";
+    rev = "v${tag}";
+    sha256 = "sha256-KYPZsCAEqJl0VjV/TmJWi20Y7yApIJH0YMwQIL80Ep4=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -24,8 +28,19 @@ stdenv.mkDerivation {
     "INSTALL_MOD_PATH=$(out)"
   ];
 
+  passthru.tests.test = nixosTests.apfs;
+
   meta = with lib; {
     description = "APFS module for linux";
+    longDescription = ''
+      The Apple File System (APFS) is the copy-on-write filesystem currently
+      used on all Apple devices. This module provides a degree of experimental
+      support on Linux.
+      If you make use of the write support, expect data corruption.
+      Read-only support is somewhat more complete, with sealed volumes,
+      snapshots, and all the missing compression algorithms recently added.
+      Encryption is still not in the works though.
+    '';
     homepage = "https://github.com/linux-apfs/linux-apfs-rw";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

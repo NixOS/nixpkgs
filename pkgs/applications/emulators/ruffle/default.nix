@@ -19,13 +19,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruffle";
-  version = "nightly-2022-09-26";
+  version = "nightly-2022-12-16";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-o0geKXODFRPKN4JgW+Sg16uPhBS5rrlMCmFSc9AcNPQ=";
+    sha256 = "sha256-VOaXn/dJB0AbuZ8owBbUYEPrL/H8DM73MhwhBjxq2Pg=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,18 @@ rustPlatform.buildRustPackage rec {
       "''${gappsWrapperArgs[@]}"
   '';
 
-  cargoSha256 = "sha256-erqBuU66k7SGG9ueyYEINjeXbyC7A2I/r1bBqdsJemY=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "dasp-0.11.0" = "sha256-CZNgTLL4IG7EJR2xVp9X9E5yre8foY6VX2hUMRawxiI=";
+      "flash-lso-0.5.0" = "sha256-WQ+x0fVIdJPKECc8zA8xITS0vc58e5zxvSHc+UfsO70=";
+      "gc-arena-0.2.2" = "sha256-InZH9bzSKa+agqa3T9luWYNhoCwCdpg46mr4D+uWokc=";
+      "h263-rs-0.1.0" = "sha256-E1/bWJ/UU3nVz2IKUDaPh3cyoDBbAJ08TnIo/FcABWY=";
+      "nellymoser-rs-0.1.2" = "sha256-GykDQc1XwySOqfxW/OcSxkKCFJyVmwSLy/CEBcwcZJs=";
+      "nihav_codec_support-0.1.0" = "sha256-rE9AIiQr+PnHC9xfDQULndSfFHSX4sqKkCAQYVNaJcQ=";
+      "quick-xml-0.22.0" = "sha256-3rHOChcoBUWaUIJ+ZbJzRAJm2fpV0aa6/76qQB5ICgE=";
+    };
+  };
 
   meta = with lib; {
     description = "An Adobe Flash Player emulator written in the Rust programming language.";

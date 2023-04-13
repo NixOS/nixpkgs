@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ncdu";
-  version = "2.1.2";
+  version = "2.2.2";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ng1u8DYYo8MWcmv0khe37+Rc7HWLLJF86JLe10Myxtw=";
+    hash = "sha256-kNkgAk51Ixi0aXds5X4Ds8cC1JMprZglruqzbDur+ZM=";
   };
 
   XDG_CACHE_HOME="Cache"; # FIXME This should be set in stdenv
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://dev.yorhel.nl/ncdu";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub SuperSandro2000 ];
+    maintainers = with maintainers; [ pSub SuperSandro2000 rodrgz ];
   };
 }

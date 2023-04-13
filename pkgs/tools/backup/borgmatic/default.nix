@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.7.2";
+  version = "1.7.9";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0o2tKg7BfhkNt/k8XdZ1agaSJxKO5OxB5aaRgV9IPeU=";
+    sha256 = "sha256-v3Qxwy7V6rqX90G4/Xp6mVTUkrqDXmudgh3th0GCjuk=";
   };
 
-  checkInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
+  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
 
   # - test_borgmatic_version_matches_news_version
   # The file NEWS not available on the pypi source, and this test is useless
@@ -34,11 +34,13 @@ python3Packages.buildPythonApplication rec {
 
     mkdir -p $out/lib/systemd/system
     cp sample/systemd/borgmatic.timer $out/lib/systemd/system/
+    # there is another "sleep", so choose the one with the space after it
+    # due to https://github.com/borgmatic-collective/borgmatic/commit/2e9f70d49647d47fb4ca05f428c592b0e4319544
     substitute sample/systemd/borgmatic.service \
                $out/lib/systemd/system/borgmatic.service \
                --replace /root/.local/bin/borgmatic $out/bin/borgmatic \
                --replace systemd-inhibit ${systemd}/bin/systemd-inhibit \
-               --replace sleep ${coreutils}/bin/sleep
+               --replace "sleep " "${coreutils}/bin/sleep "
   '';
 
   passthru.tests.version = testers.testVersion { package = borgmatic; };

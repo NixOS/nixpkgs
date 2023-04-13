@@ -11,6 +11,8 @@
 , sha256
 , patches ? []
 , fd
+, ripgrep
+, wezterm
 , firefox
 , thunderbird
 }:
@@ -145,6 +147,18 @@ in stdenv.mkDerivation rec {
 
     # Useful debugging parameter
     # export VERBOSE=1
+  '' + lib.optionalString (stdenv.targetPlatform.isMusl && !stdenv.targetPlatform.isStatic) ''
+    # Upstream rustc still assumes that musl = static[1].  The fix for
+    # this is to disable crt-static by default for non-static musl
+    # targets.
+    #
+    # Even though Cargo will build build.rs files for the build platform,
+    # cross-compiling _from_ musl appears to work fine, so we only need
+    # to do this when rustc's target platform is dynamically linked musl.
+    #
+    # [1]: https://github.com/rust-lang/compiler-team/issues/422
+    substituteInPlace compiler/rustc_target/src/spec/linux_musl_base.rs \
+        --replace "base.crt_static_default = true" "base.crt_static_default = false"
   '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     # See https://github.com/jemalloc/jemalloc/issues/1997
     # Using a value of 48 should work on both emulated and native x86_64-darwin.
@@ -163,10 +177,8 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl ]
-    ++ optionals stdenv.isDarwin [ Security ]
+    ++ optionals stdenv.isDarwin [ libiconv Security ]
     ++ optional (!withBundledLLVM) llvmShared;
-
-  depsTargetTargetPropagated = optionals stdenv.isDarwin [ libiconv ];
 
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
@@ -193,9 +205,7 @@ in stdenv.mkDerivation rec {
 
   configurePlatforms = [];
 
-  # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
-  # https://github.com/rust-lang/rust/issues/30181
-  # enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   setupHooks = ./setup-hook.sh;
 
@@ -204,13 +214,15 @@ in stdenv.mkDerivation rec {
   passthru = {
     llvm = llvmShared;
     inherit llvmPackages;
-    tests = { inherit fd; } // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
+    tests = {
+      inherit fd ripgrep wezterm;
+    } // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
   };
 
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";
     description = "A safe, concurrent, practical language";
-    maintainers = with maintainers; [ cstrahan globin havvy ];
+    maintainers = with maintainers; [ cstrahan globin havvy ] ++ teams.rust.members;
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
   };

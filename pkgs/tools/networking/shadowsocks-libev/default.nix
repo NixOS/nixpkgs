@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake
-, libsodium, mbedtls, libev, c-ares, pcre
+, libsodium, mbedtls_2, libev, c-ares, pcre
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ libsodium mbedtls libev c-ares pcre ];
+  buildInputs = [ libsodium mbedtls_2 libev c-ares pcre ];
   nativeBuildInputs = [ cmake asciidoc xmlto docbook_xml_dtd_45
                         docbook_xsl libxslt ];
 

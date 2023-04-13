@@ -25,11 +25,6 @@ stdenv.mkDerivation rec {
     test = nixosTests.nbd;
   };
 
-  # Glib calls `clock_gettime', which is in librt. Linking that library
-  # here ensures that a proper rpath is added to the executable so that
-  # it can be loaded at run-time.
-  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lrt -lpthread";
-
   meta = {
     homepage = "https://nbd.sourceforge.io/";
     description = "Map arbitrary files as block devices over the network";

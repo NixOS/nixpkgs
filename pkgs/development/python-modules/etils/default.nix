@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "etils";
-  version = "0.8.0";
+  version = "1.1.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0dWve9nHhKJzxOHsz6qP6speBIGghxe1MT+iMdoiqQM=";
+    hash = "sha256-eipJUHeaKB70x+WVriFZkLFcHYxviwonhQCSr1rSxkE=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = rec {
     array-types = enp;
+    eapp = [ absl-py /* FIXME package simple-parsing */ ] ++ epy;
     ecolab = [ jupyter numpy mediapy ] ++ enp ++ epy;
     edc = epy;
     enp = [ numpy ] ++ epy;
@@ -53,8 +54,8 @@ buildPythonPackage rec {
     etree = array-types ++ epy ++ enp ++ etqdm;
     etree-dm = [ dm-tree ] ++ etree;
     etree-jax = [ jax ] ++ etree;
-    etree-tf = [ tensorflow etree ] ++ etree;
-    all = array-types ++ ecolab ++ edc ++ enp ++ epath ++ epy ++ etqdm
+    etree-tf = [ tensorflow ] ++ etree;
+    all = array-types ++ eapp ++ ecolab ++ edc ++ enp ++ epath ++ epy ++ etqdm
       ++ etree ++ etree-dm ++ etree-jax ++ etree-tf;
   };
 
@@ -62,7 +63,7 @@ buildPythonPackage rec {
     "etils"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     chex
     jaxlib
     pytest-subtests
@@ -73,14 +74,13 @@ buildPythonPackage rec {
   ++ passthru.optional-dependencies.all;
 
   disabledTests = [
-    "test_repr" # known to fail on Python 3.10, see https://github.com/google/etils/issues/143
     "test_public_access" # requires network access
-    "test_resource_path" # known to fail on Python 3.10, see https://github.com/google/etils/issues/143
   ];
 
   doCheck = false; # error: infinite recursion encountered
 
   meta = with lib; {
+    changelog = "https://github.com/google/etils/blob/v${version}/CHANGELOG.md";
     description = "Collection of eclectic utils for python";
     homepage = "https://github.com/google/etils";
     license = licenses.asl20;

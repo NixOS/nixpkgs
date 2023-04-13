@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-std=c++11"
     (lib.optional stdenv.cc.isClang "-Wno-error=c++11-narrowing")
   ];

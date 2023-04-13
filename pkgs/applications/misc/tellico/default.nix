@@ -1,5 +1,5 @@
 { lib
-, fetchurl
+, fetchFromGitLab
 , mkDerivation
 , cmake
 , exempi
@@ -24,16 +24,20 @@
 
 mkDerivation rec {
   pname = "tellico";
-  version = "3.4.1";
+  version = "3.4.6";
 
-  src = fetchurl {
-    # version 3.3.0 just uses 3.3 in its file name
-    urls = [
-      "https://tellico-project.org/files/tellico-${version}.tar.xz"
-      "https://tellico-project.org/files/tellico-${lib.versions.majorMinor version}.tar.xz"
-    ];
-    sha256 = "sha256-+FFN6sO0mvlage8JazyrqNZk4onejz1XJPiOK3gnhWE=";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "office";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-aHA4DYuxh4vzXL82HRGMPfqS0DGqq/FLMEuhsr4eLko=";
   };
+
+  postPatch = ''
+    substituteInPlace src/gui/imagewidget.h \
+      --replace ksane_version.h KF5/ksane_version.h
+  '';
 
   nativeBuildInputs = [
     cmake

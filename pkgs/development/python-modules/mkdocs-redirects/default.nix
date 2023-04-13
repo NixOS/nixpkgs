@@ -14,14 +14,14 @@ buildPythonPackage rec {
     owner = "mkdocs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-+Ti+Z5gL5vVlQDt+KRw9nNHHKhRtEfguQe1K001DK9E=";
+    hash = "sha256-+Ti+Z5gL5vVlQDt+KRw9nNHHKhRtEfguQe1K001DK9E=";
   };
 
   propagatedBuildInputs = [
     mkdocs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

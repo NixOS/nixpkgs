@@ -7,6 +7,19 @@ This module generates a package containing configuration files and link it in /e
 Fontconfig reads files in folder name / file name order, so the number prepended to the configuration file name decide the order of parsing.
 Low number means high priority.
 
+NOTE: Please take extreme care when adjusting the default settings of this module.
+People care a lot, and I mean A LOT, about their font rendering, and you will be
+The Person That Broke It if it changes in a way people don't like.
+
+See prior art:
+- https://github.com/NixOS/nixpkgs/pull/194594
+- https://github.com/NixOS/nixpkgs/pull/222236
+- https://github.com/NixOS/nixpkgs/pull/222689
+
+And do not repeat our mistakes.
+
+- @K900, March 2023
+
 */
 
 { config, pkgs, lib, ... }:
@@ -218,6 +231,8 @@ let
     paths = cfg.confPackages;
     ignoreCollisions = true;
   };
+
+  fontconfigNote = "Consider manually configuring fonts.fontconfig according to personal preference.";
 in
 {
   imports = [
@@ -229,6 +244,8 @@ in
     (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "dpi" ] "Use display server-specific options")
+    (mkRemovedOptionModule [ "hardware" "video" "hidpi" "enable" ] fontconfigNote)
+    (mkRemovedOptionModule [ "fonts" "optimizeForVeryHighDPI" ] fontconfigNote)
   ] ++ lib.forEach [ "enable" "substitutions" "preset" ]
      (opt: lib.mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
        The fonts.fontconfig.ultimate module and configuration is obsolete.

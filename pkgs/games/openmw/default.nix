@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , fetchpatch
@@ -16,6 +17,7 @@
 , libXt
 , lz4
 , recastnavigation
+, VideoDecodeAcceleration
 }:
 
 let
@@ -27,6 +29,15 @@ let
         rev = "bbe61c3bc510a4f5bb4aea21cce506519c2d24e6";
         sha256 = "sha256-t3smLqstp7wWfi9HXJoBCek+3acqt/ySBYF8RJOG6Mo=";
       };
+      patches = [
+        (fetchpatch {
+          # For Darwin, OSG doesn't build some plugins as they're redundant with QuickTime.
+          # OpenMW doesn't like this, and expects them to be there. Apply their patch for it.
+          name = "darwin-osg-plugins-fix.patch";
+          url = "https://gitlab.com/OpenMW/openmw-dep/-/raw/0abe3c9c3858211028d881d7706813d606335f72/macos/osg.patch";
+          sha256 = "sha256-/CLRZofZHot8juH78VG1/qhTHPhy5DoPMN+oH8hC58U=";
+        })
+      ];
     });
 
   bullet_openmw = bullet.overrideDerivation (old: rec {
@@ -63,7 +74,17 @@ mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Don't fix Darwin app bundle
+    sed -i '/fixup_bundle/d' CMakeLists.txt
+  '';
+
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+
+  # If not set, OSG plugin .so files become shell scripts on Darwin.
+  dontWrapQtApps = true;
 
   buildInputs = [
     SDL2
@@ -77,12 +98,16 @@ mkDerivation rec {
     unshield
     lz4
     recastnavigation
+  ] ++ lib.optionals stdenv.isDarwin [
+    VideoDecodeAcceleration
   ];
 
   cmakeFlags = [
     # as of 0.46, openmw is broken with GLVND
     "-DOpenGL_GL_PREFERENCE=LEGACY"
     "-DOPENMW_USE_SYSTEM_RECASTNAVIGATION=1"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DOPENMW_OSX_DEPLOYMENT=ON"
   ];
 
   meta = with lib; {
@@ -90,6 +115,6 @@ mkDerivation rec {
     homepage = "https://openmw.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abbradar marius851000 ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -2,6 +2,10 @@
 
 let
   libc = pkgs.stdenv.cc.libc;
+  patchelf = pkgs.patchelf.overrideAttrs(previousAttrs: {
+    NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or []) ++ [ "-static-libgcc" "-static-libstdc++" ];
+    NIX_CFLAGS_LINK = (previousAttrs.NIX_CFLAGS_LINK or []) ++ [ "-static-libgcc" "-static-libstdc++" ];
+  });
 in with pkgs; rec {
 
 
@@ -115,7 +119,7 @@ in with pkgs; rec {
         cp ${gawk.out}/bin/gawk $out/bin
         cp -d ${gawk.out}/bin/awk $out/bin
         cp ${tarMinimal.out}/bin/tar $out/bin
-        cp ${gzip.out}/bin/gzip $out/bin
+        cp ${gzip.out}/bin/.gzip-wrapped $out/bin/gzip
         cp ${bzip2.bin}/bin/bzip2 $out/bin
         cp -d ${gnumake.out}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
@@ -127,7 +131,7 @@ in with pkgs; rec {
         cp -d ${bootGCC.out}/bin/gcc $out/bin
         cp -d ${bootGCC.out}/bin/cpp $out/bin
         cp -d ${bootGCC.out}/bin/g++ $out/bin
-        cp -d ${bootGCC.lib}/lib/libgcc_s.so* $out/lib
+        cp    ${bootGCC.lib}/lib/libgcc_s.so* $out/lib
         cp -d ${bootGCC.lib}/lib/libstdc++.so* $out/lib
         cp -d ${bootGCC.out}/lib/libssp.a* $out/lib
         cp -d ${bootGCC.out}/lib/libssp_nonshared.a $out/lib
@@ -149,6 +153,7 @@ in with pkgs; rec {
         rm -rf $out/include/c++/*/ext/parallel
 
         cp -d ${gmpxx.out}/lib/libgmp*.so* $out/lib
+        cp -d ${isl.out}/lib/libisl*.so* $out/lib
         cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
         cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
         cp -d ${zlib.out}/lib/libz.so* $out/lib
@@ -272,16 +277,17 @@ in with pkgs; rec {
       gcc --version
 
     '' + lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
-      ldlinux=$(echo ${bootstrapTools}/lib/${builtins.baseNameOf binutils.dynamicLinker})
-      export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
-      export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
-      export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
+      rtld=$(echo ${bootstrapTools}/lib/${builtins.unsafeDiscardStringContext /* only basename */ (builtins.baseNameOf binutils.dynamicLinker)})
+      libc_includes=${bootstrapTools}/include-glibc
     '' + lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-      ldmusl=$(echo ${bootstrapTools}/lib/ld-musl*.so.?)
-      export CPP="cpp -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools}"
-      export CC="gcc -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools} -Wl,-dynamic-linker,$ldmusl -Wl,-rpath,${bootstrapTools}/lib"
-      export CXX="g++ -idirafter ${bootstrapTools}/include-libc -B${bootstrapTools} -Wl,-dynamic-linker,$ldmusl -Wl,-rpath,${bootstrapTools}/lib"
+      rtld=$(echo ${bootstrapTools}/lib/ld-musl*.so.?)
+      libc_includes=${bootstrapTools}/include-libc
     '' + ''
+      # path to version-specific libraries, like libstdc++.so
+      cxx_libs=$(echo ${bootstrapTools}/lib/gcc/*/*)
+      export CPP="cpp -idirafter $libc_includes -B${bootstrapTools}"
+      export  CC="gcc -idirafter $libc_includes -B${bootstrapTools} -Wl,-dynamic-linker,$rtld -Wl,-rpath,${bootstrapTools}/lib -Wl,-rpath,$cxx_libs"
+      export CXX="g++ -idirafter $libc_includes -B${bootstrapTools} -Wl,-dynamic-linker,$rtld -Wl,-rpath,${bootstrapTools}/lib -Wl,-rpath,$cxx_libs"
 
       echo '#include <stdio.h>' >> foo.c
       echo '#include <limits.h>' >> foo.c

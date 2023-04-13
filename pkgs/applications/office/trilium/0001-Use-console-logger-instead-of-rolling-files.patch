@@ -1,5 +1,5 @@
 diff --git a/src/services/log.js b/src/services/log.js
-index 0fcd9812..dcbff070 100644
+index a141eae14..094b9381b 100644
 --- a/src/services/log.js
 +++ b/src/services/log.js
 @@ -1,15 +1,7 @@
@@ -35,7 +35,7 @@ index 0fcd9812..dcbff070 100644
 -function initLogFile() {
 -    todaysMidnight = getTodaysMidnight();
 -
--    const path = dataDir.LOG_DIR + '/trilium-' + formatDate() + '.log';
+-    const path = `${dataDir.LOG_DIR}/trilium-${formatDate()}.log`;
 -
 -    if (logFile) {
 -        logFile.end();
@@ -65,7 +65,7 @@ index 0fcd9812..dcbff070 100644
 -
 -    millisSinceMidnight = checkDate(millisSinceMidnight);
 -
--    logFile.write(formatTime(millisSinceMidnight) + ' ' + str + NEW_LINE);
+-    logFile.write(`${formatTime(millisSinceMidnight)} ${str}${NEW_LINE}`);
 -
      console.log(str);
  }

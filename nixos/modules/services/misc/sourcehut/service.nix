@@ -71,7 +71,7 @@ let
       # Note that each systemd service gets its own ${runDir}/config.ini file.
       ExecStartPre = mkBefore [("+"+pkgs.writeShellScript "${serviceName}-credentials" ''
         set -x
-        # Replace values begining with a '<' by the content of the file whose name is after.
+        # Replace values beginning with a '<' by the content of the file whose name is after.
         gawk '{ if (match($0,/^([^=]+=)<(.+)/,m)) { getline f < m[2]; print m[1] f } else print $0 }' ${configIni} |
         ${optionalString (!allowStripe) "gawk '!/^stripe-secret-key=/' |"}
         install -o ${srvCfg.user} -g root -m 400 /dev/stdin ${runDir}/config.ini

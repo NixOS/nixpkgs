@@ -2,8 +2,6 @@
 , gcc, python3Packages, perl, perlPackages, makeWrapper, fetchpatch
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "john";
   version = "1.9.0-jumbo-1";
@@ -20,6 +18,12 @@ stdenv.mkDerivation rec {
       name = "fix-gcc-11-struct-allignment-incompatibility.patch";
       url = "https://github.com/openwall/john/commit/154ee1156d62dd207aff0052b04c61796a1fde3b.patch";
       sha256 = "sha256-3rfS2tu/TF+KW2MQiR+bh4w/FVECciTooDQNTHNw31A=";
+    })
+    (fetchpatch {
+      name = "improve-apple-clang-pseudo-intrinsics-portability.patch";
+      url = "https://github.com/openwall/john/commit/c9825e688d1fb9fdd8942ceb0a6b4457b0f9f9b4.patch";
+      excludes = [ "doc/*" ];
+      sha256 = "sha256-hgoiz7IgR4f66fMP7bV1F8knJttY8g2Hxyk3QfkTu+g=";
     })
   ];
 
@@ -77,7 +81,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "John the Ripper password cracker";
     license = licenses.gpl2Plus;
     homepage = "https://github.com/openwall/john/";

@@ -9,14 +9,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.83";
+  version = "2.85";
   pname = "asymptote";
 
   src = fetchFromGitHub {
     owner = "vectorgraphics";
     repo = pname;
     rev = version;
-    hash = "sha256-Kz1uh3fMbADd39seunfL5O2Q31VLGKhu/ZuKi9/kuEc=";
+    hash = "sha256-GyW9OEolV97WtrSdIxp4MCP3JIyA1c/DQSqg8jLC0WQ=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "--with-context=$out/share/texmf/tex/context/third"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
+  env.NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
 
   postInstall = ''
     mv $out/share/info/asymptote/*.info $out/share/info/
@@ -67,6 +67,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  # Missing install depends:
+  #   ...-coreutils-9.1/bin/install: cannot stat 'asy-keywords.el': No such file or directory
+  #   make: *** [Makefile:272: install-asy] Error 1
+  enableParallelInstalling = false;
 
   meta = with lib; {
     description =  "A tool for programming graphics intended to replace Metapost";

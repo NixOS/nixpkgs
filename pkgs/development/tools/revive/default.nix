@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "revive";
-  version = "1.2.4";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "mgechev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tD6Z7W/sPwHKqvCXjXLlxkGj3FZ4+QCv9vn7KdCmSv4=";
+    sha256 = "sha256-Iqe3iFE9hTPUgIO6MoPHAkr+KU5mEJ3ZY4Oh9xhXido=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -18,7 +18,7 @@ buildGoModule rec {
       rm -rf $out/.git
     '';
   };
-  vendorSha256 = "sha256-sa4OkTSRyoPFXTGmjpiqBug+EKgxkcJrNxQwbTRfN2A=";
+  vendorHash = "sha256-FHm4TjsAYu4VM2WAHdd2xPP3/54YM6ei6cppHWF8LDc=";
 
   ldflags = [
     "-s"
@@ -35,7 +35,7 @@ buildGoModule rec {
 
   # The following tests fail when built by nix:
   #
-  # $ nix log /nix/store/build-revive.1.2.4.drv | grep FAIL
+  # $ nix log /nix/store/build-revive.1.3.1.drv | grep FAIL
   #
   # --- FAIL: TestAll (0.01s)
   # --- FAIL: TestTimeEqual (0.00s)

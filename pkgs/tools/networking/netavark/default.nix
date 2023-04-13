@@ -3,29 +3,34 @@
 , fetchFromGitHub
 , installShellFiles
 , mandown
+, protobuf
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "netavark";
-  version = "1.3.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5LczayUgIJ2mcSiHKadegzTM8PvejAD0lhUlXO4Js30=";
+    hash = "sha256-USGmYLBv2ynnLx5jg+WkRle0AMtO7dDgf41VIepoHN0=";
   };
 
-  cargoHash = "sha256-gBdhdJD5EkkYNdpTNq+spySaoWnWViy9+bXTL7ps4PE=";
+  cargoHash = "sha256-zj1eE7f4/wSVe+78abMePqsIrCPl6Uhtavn8hq7+ZRY=";
 
-  nativeBuildInputs = [ installShellFiles mandown ];
+  nativeBuildInputs = [ installShellFiles mandown protobuf ];
 
   postBuild = ''
-    make -C docs
-    installManPage docs/*.1
+    make -C docs netavark.1
+    installManPage docs/netavark.1
   '';
 
+  passthru.tests = { inherit (nixosTests) podman; };
+
   meta = with lib; {
+    changelog = "https://github.com/containers/netavark/releases/tag/${src.rev}";
     description = "Rust based network stack for containers";
     homepage = "https://github.com/containers/netavark";
     license = licenses.asl20;

@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "eth-keys";
     rev = "v${version}";
-    sha256 = "sha256-jG/jJPM4t3z6UQIdc8L6y0DxZiGx5pVuGL8XwbIt60o=";
+    hash = "sha256-jG/jJPM4t3z6UQIdc8L6y0DxZiGx5pVuGL8XwbIt60o=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     eth-utils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asn1tools
     factory_boy
     hypothesis
@@ -50,6 +50,8 @@ buildPythonPackage rec {
     "test_public_key_compression_is_equal"
     "test_public_key_decompression_is_equal"
     "test_signatures_with_high_s"
+    # timing sensitive
+    "test_encode_decode_pairings"
   ];
 
   pythonImportsCheck = [ "eth_keys" ];

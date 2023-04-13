@@ -3,8 +3,10 @@
 , fetchFromGitHub
 , pythonOlder
 
-# build
+# build-system
+, cython
 , poetry-core
+, setuptools
 
 # propagates
 , cryptography
@@ -15,7 +17,7 @@
 
 let
   pname = "chacha20poly1305-reuseable";
-  version = "0.0.4";
+  version = "0.2.2";
 in
 
 buildPythonPackage {
@@ -28,11 +30,13 @@ buildPythonPackage {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iOGDTQyiznjYblT/NfHxewIwEZsPnp7bdNVD1p9/H1M=";
+    hash = "sha256-vMc5fgFYS06m01WDLRyna3T1uuR+JinqM6huXAQ34rI=";
   };
 
   nativeBuildInputs = [
+    cython
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -48,7 +52,7 @@ buildPythonPackage {
       --replace "--cov=chacha20poly1305_reuseable --cov-report=term-missing:skip-covered" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

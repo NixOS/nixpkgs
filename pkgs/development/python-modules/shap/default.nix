@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "slundberg";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-rYVWQ3VRvIObSQPwDRsxhTOGOKNkYkLtiHzVwoB3iJ0=";
+    hash = "sha256-rYVWQ3VRvIObSQPwDRsxhTOGOKNkYkLtiHzVwoB3iJ0=";
   };
 
   propagatedBuildInputs = [
@@ -89,7 +89,7 @@ buildPythonPackage rec {
     # These tests are marked as "Expected fail" (xfail)
     cat ${conftestSkipNetworkErrors} >> tests/conftest.py
   '';
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mpl
     matplotlib
@@ -130,7 +130,7 @@ buildPythonPackage rec {
 
   #pytestFlagsArray = ["-x" "-W" "ignore"]; # uncomment this to debug
 
-  pythonImportCheck = [
+  pythonImportsCheck = [
     "shap"
     "shap.explainers"
     "shap.explainers.other"
@@ -146,8 +146,12 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A unified approach to explain the output of any machine learning model";
     homepage = "https://github.com/slundberg/shap";
+    changelog = "https://github.com/slundberg/shap/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ evax ];
     platforms = platforms.unix;
+    # No support for scikit-learn > 1.2
+    # https://github.com/slundberg/shap/issues/2866
+    broken = true;
   };
 }

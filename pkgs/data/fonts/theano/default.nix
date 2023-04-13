@@ -1,20 +1,25 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "theano";
   version = "2.0";
-in fetchzip rec {
-  name = "theano-${version}";
 
-  url = "https://github.com/akryukov/theano/releases/download/v${version}/theano-${version}.otf.zip";
+  src = fetchzip {
+    url = "https://github.com/akryukov/theano/releases/download/v${version}/theano-${version}.otf.zip";
+    stripRoot = false;
+    hash = "sha256-9wnwHcRHB+AToOvGwZSXvHkQ8hqMd7Sdl26Ty/IwbPw=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.txt -d "$out/share/doc/${name}"
-  '';
+    mkdir -p $out/share/doc/${pname}-${version}
+    cp *.otf $out/share/fonts/opentype
+    cp *.txt $out/share/doc/${pname}-${version}
 
-  sha256 = "1my1symb7k80ys33iphsxvmf6432wx6vjdnxhzhkgrang1rhx1h8";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/akryukov/theano";

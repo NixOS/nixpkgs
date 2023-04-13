@@ -11,6 +11,7 @@ in {
     systemd.shutdownRamfs.contents."/etc/systemd/system-shutdown/shutdown-message".source = pkgs.writeShellScript "shutdown-message" ''
       echo "${msg}"
     '';
+    boot.initrd.systemd.enable = systemdStage1;
   };
 
   testScript = ''

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyparsing six ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pretend
   ];

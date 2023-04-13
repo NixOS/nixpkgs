@@ -17,6 +17,7 @@ let
         if (builtins.tryEval attrs.drvPath).success
         then { inherit (attrs) name drvPath; }
         else { failed = true; }
+      else if attrs == null then {}
       else { recurseForDerivations = true; } //
            mapAttrs (n: v: let path' = path ++ [n]; in trace path' (recurse path' v)) attrs
     else { };

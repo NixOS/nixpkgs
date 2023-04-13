@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cython numpy scikit-learn six ];
 
-  checkInputs = [ pytest pytest-cov ];
+  nativeCheckInputs = [ pytest pytest-cov ];
 
   # Checks require test data downloaded separately
   # See project source Makefile:test-data rule for reference

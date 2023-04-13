@@ -82,7 +82,8 @@ rec {
 
 
   findLhs2TeXIncludes =
-    { rootFile
+    { lib
+    , rootFile
     }:
 
     builtins.genericClosure {
@@ -97,7 +98,7 @@ rec {
             { src = key; }
             "${pkgs.stdenv.bash}/bin/bash ${./find-lhs2tex-includes.sh}");
 
-        in pkgs.lib.concatMap (x: if builtins.pathExists x then [{key = x;}] else [])
+        in pkgs.lib.concatMap (x: lib.optionals (builtins.pathExists x) [{key = x;}])
                               (map (x: dirOf key + ("/" + x)) deps);
     };
 

@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchurl, readline }:
+{ lib
+, stdenv
+, fetchurl
+, readline
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "mujs";
-  version = "1.2.0";
+  version = "1.3.3";
 
   src = fetchurl {
-    url = "https://mujs.com/downloads/mujs-${version}.tar.xz";
-    sha256 = "sha256-ZpdtHgajUnVKI0Kvc9Guy7U8x82uK2jNoBO33c+SMjM=";
+    url = "https://mujs.com/downloads/mujs-${version}.tar.gz";
+    hash = "sha256-4sXuVBbf2iIwx6DLeJXfmpstWyBluxjn5k3sKnlqvhs=";
   };
 
   buildInputs = [ readline ];
 
   makeFlags = [ "prefix=$(out)" ];
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to track releases
+    url = "git://git.ghostscript.com/mujs.git";
+  };
 
   meta = with lib; {
     homepage = "https://mujs.com/";

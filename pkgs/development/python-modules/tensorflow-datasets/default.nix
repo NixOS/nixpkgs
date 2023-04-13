@@ -42,13 +42,13 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
-  version = "4.6.0";
+  version = "4.8.2";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-z52UZz9d1AaZklLOPbWuzByEl1hJ6ra4Hoz6eNGD+hg=";
+    hash = "sha256-FYFk53WKNQTSrnGGiA6cn9LffbMJkZtjlGuOF52Og7c=";
   };
 
   patches = [
@@ -76,7 +76,7 @@ buildPythonPackage rec {
     "tensorflow_datasets"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     apache-beam
     beautifulsoup4
     ffmpeg

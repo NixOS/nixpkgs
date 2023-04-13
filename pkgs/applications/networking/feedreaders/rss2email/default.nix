@@ -7,7 +7,7 @@ buildPythonApplication rec {
   version = "3.14";
 
   propagatedBuildInputs = [ feedparser html2text ];
-  checkInputs = [ beautifulsoup4 ];
+  nativeCheckInputs = [ beautifulsoup4 ];
 
   src = fetchurl {
     url = "mirror://pypi/r/rss2email/${pname}-${version}.tar.gz";

@@ -6,7 +6,6 @@
 , qmake
 , qtbase
 , qttools
-, qtwayland
 , openssl
 , libscrypt
 , wrapQtAppsHook
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VQ1ZkXaZ5sUbtWa/GreTr5uXvnZ2Go6owJ2ZBK25zns=";
   };
 
-  buildInputs = [ qtbase qtwayland libX11 libXtst openssl libscrypt ];
+  buildInputs = [ qtbase libX11 libXtst openssl libscrypt ];
   nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
 
   # Upstream install is mostly defunct. It hardcodes target.path and doesn't

@@ -22,27 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "7.0.0";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
     rev = version;
-    sha256 = "sha256-DO3nybH7tb/ISrSQ3+Oj612m64Ov6X0GAWePMbKjCc4=";
+    sha256 = "sha256-IY+ml/ftLSk0A3Emi0ZL2wxIDIngNU6QKbHErRAaaMA=";
   };
 
   patches = [
-    # build: fix documentation build
-    # https://github.com/elementary/mail/pull/795
+    # MessageListItem: avoid crashing on empty Mime
+    # https://github.com/elementary/mail/pull/828
     (fetchpatch {
-      url = "https://github.com/elementary/mail/commit/52a422cb1c5f061d8a683005e44da0a1c2195096.patch";
-      sha256 = "sha256-ndcIZXvmQbM/31Wtm6OSCnXdMYx+OlJrqV+baq6m+KY=";
-    })
-    # build: support webkit2gtk-4.1
-    # https://github.com/elementary/mail/pull/794
-    (fetchpatch {
-      url = "https://github.com/elementary/mail/commit/7d4878543b27251664852c708d54abc1e4580eab.patch";
-      sha256 = "sha256-yl6Bzjinp+ti/aX+t22GibGeQFtharZNk3MmbuJm0Tk=";
+      url = "https://github.com/elementary/mail/commit/7cb412dee4cc8c0bfab55057c47d5ecce6918788.patch";
+      sha256 = "sha256-7rYvgFeVmV/rVYzC/xt/lioRlveM0d8ORqZdMYkm/d4=";
     })
   ];
 
@@ -73,9 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

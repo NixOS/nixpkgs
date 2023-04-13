@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-nature";
-  version = "0.4.3";
+  version = "0.5.2";
 
   disabled = pythonOlder "3.6";
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-trThxcft6AOxalOglOKPwrJ23Bqt/FmMCAucKmNmB7c=";
+    hash = "sha256-rUY5fnsWg2UisF0tGORvHot8laCs8eVAvuVKUOG5ibw=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     scipy
   ] ++ lib.optional withPyscf pyscf;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ddt
     pylatexenc

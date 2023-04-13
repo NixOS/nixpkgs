@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "6.1.0";
+  version = "6.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rstcheck";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-dw/KggiZpKaFZMcTIaSBUhR4oQsZI3iSmEj9Sy80wTs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UMByfnnP1va3v1IgyQL0f3kC+W6HoiWScb7U2FAvWkU=";
   };
 
   nativeBuildInputs = [
@@ -43,15 +43,9 @@ buildPythonPackage rec {
     importlib-metadata
   ] ++ typer.optional-dependencies.all;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'docutils = ">=0.7, <0.19"' 'docutils = ">=0.7"' \
-      --replace 'types-docutils = ">=0.18, <0.19"' 'types-docutils = ">=0.18"'
-  '';
 
   pythonImportsCheck = [
     "rstcheck"
@@ -65,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Checks syntax of reStructuredText and code blocks nested within it";
     homepage = "https://github.com/myint/rstcheck";
+    changelog = "https://github.com/rstcheck/rstcheck/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ staccato ];
   };

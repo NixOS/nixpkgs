@@ -25,6 +25,22 @@ let
   extraNodeConfs = {
     sqlite = {};
 
+    socket = { config, ... }: {
+      services.grafana.settings.server = {
+        protocol = "socket";
+        socket = "/run/grafana/sock";
+        socket_gid = config.users.groups.nginx.gid;
+      };
+
+      users.users.grafana.extraGroups = [ "nginx" ];
+
+      services.nginx = {
+        enable = true;
+        recommendedProxySettings = true;
+        virtualHosts."_".locations."/".proxyPass = "http://unix:/run/grafana/sock";
+      };
+    };
+
     declarativePlugins = {
       services.grafana.declarativePlugins = [ pkgs.grafanaPlugins.grafana-clock-panel ];
     };
@@ -91,6 +107,17 @@ in {
             "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/org/users | grep admin\@localhost"
         )
         sqlite.shutdown()
+
+    with subtest("Successful API query as admin user with sqlite db listening on socket"):
+        socket.wait_for_unit("grafana.service")
+        socket.wait_for_open_port(80)
+        print(socket.succeed(
+            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1/api/org/users -i"
+        ))
+        socket.succeed(
+            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1/api/org/users | grep admin\@localhost"
+        )
+        socket.shutdown()
 
     with subtest("Successful API query as admin user with postgresql db"):
         postgresql.wait_for_unit("grafana.service")

@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   doCheck = pythonOlder "3.10"; # all tests result in RuntimeError on 3.10
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ]
   ++ passthru.optional-dependencies.async;

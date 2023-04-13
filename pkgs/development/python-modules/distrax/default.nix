@@ -6,15 +6,16 @@
 , chex
 , dm-haiku
 , pytestCheckHook
-, jaxlib }:
+, jaxlib
+}:
 
 buildPythonPackage rec {
   pname = "distrax";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-b/+rxjdowNMuhUBhRCuN45z/iUbj1hN1qCSQqqAtZIw=";
+    hash = "sha256-x9ORfhGX5catEZMfR+iXkZSRa/wIb0B3CrCWOWf35Ks=";
   };
 
   buildInputs = [
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     tensorflow-probability
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dm-haiku
     pytestCheckHook
   ];
@@ -53,5 +54,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/deepmind/distrax";
     license = licenses.asl20;
     maintainers = with maintainers; [ onny ];
+    # Broken on all platforms (starting 2022-07-27)
+    broken = true;
   };
 }

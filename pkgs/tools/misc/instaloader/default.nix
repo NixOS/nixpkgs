@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "instaloader";
-  version = "4.9.5";
+  version = "4.9.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "instaloader";
     repo = "instaloader";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-3uO5EVK5mR3BwDF885onEraP3NYACTRwnGOsM009uig=";
+    sha256 = "sha256-ZxvJPDj+r7KSyXpYNQIgnda5OS77GOFM901ZHgR6c4k=";
   };
 
   propagatedBuildInputs = [

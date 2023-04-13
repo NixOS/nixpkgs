@@ -109,7 +109,7 @@ impl Cache {
 
         let mut file = File::options().append(true).create(true).open(index_path)?;
 
-        write!(file, "\n{:x}\t{data}", Sha1::new().chain(&data).finalize())?;
+        write!(file, "{:x}\t{data}", Sha1::new().chain(&data).finalize())?;
 
         Ok(())
     }

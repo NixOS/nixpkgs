@@ -7,7 +7,7 @@
 , libGL
 , zlib
 , openssl
-, libyamlcpp
+, yaml-cpp
 , boost
 , SDL
 , SDL_image
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ SDL SDL_gfx SDL_image SDL_mixer boost libyamlcpp libGLU libGL openssl zlib ];
+  buildInputs = [ SDL SDL_gfx SDL_image SDL_mixer boost yaml-cpp libGLU libGL openssl zlib ];
 
   meta = with lib; {
     description = "Open source clone of UFO: Enemy Unknown";

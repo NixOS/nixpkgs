@@ -6,6 +6,12 @@
 with lib;
 
 let
+  # This is copied into the installer image, so it's important that it is filtered
+  # to avoid including a large .git directory.
+  # We also want the source name to be normalised to "source" to avoid depending on the
+  # location of nixpkgs.
+  # In the future we might want to expose the ISO image from the flake and use
+  # `self.outPath` directly instead.
   nixpkgs = lib.cleanSource pkgs.path;
 
   # We need a copy of the Nix expressions for Nixpkgs and NixOS on the
@@ -31,7 +37,14 @@ let
 in
 
 {
-  nix.registry.nixpkgs.flake.outPath = builtins.path { name = "source"; path = pkgs.path; };
+  # Pin the nixpkgs flake in the installer to our cleaned up nixpkgs source.
+  # FIXME: this might be surprising and is really only needed for offline installations,
+  # see discussion in https://github.com/NixOS/nixpkgs/pull/204178#issuecomment-1336289021
+  nix.registry.nixpkgs.to = {
+    type = "path";
+    path = "${channelSources}/nixos";
+  };
+
   # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
   # for nixos-install.
   boot.postBootCommands = mkAfter

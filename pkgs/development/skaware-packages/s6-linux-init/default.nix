@@ -4,8 +4,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "s6-linux-init";
-  version = "1.0.8.0";
-  sha256 = "sha256-kgVaeWTPZmBAZq2WSiwjku58XmSCG+AxRsE0Hg2MPcY=";
+  version = "1.1.1.0";
+  sha256 = "rUg/NTJleQB+Wn48ufH9EXfq9x7FwRxHzXhKBClWqO4=";
 
   description = "A set of minimalistic tools used to create a s6-based init system, including a /sbin/init binary, on a Linux kernel";
   platforms = lib.platforms.linux;

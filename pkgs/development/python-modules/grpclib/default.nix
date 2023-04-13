@@ -23,7 +23,7 @@ buildPythonPackage {
     owner = "vmagamedov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zjctvsuX5yJl1EXIAaiukWGYJbdgU7OZllgOYAmp1b4=";
+    hash = "sha256-zjctvsuX5yJl1EXIAaiukWGYJbdgU7OZllgOYAmp1b4=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage {
     multidict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     async-timeout

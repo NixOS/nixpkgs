@@ -19,10 +19,10 @@ mkDerivation {
     ki18n
     kcoreaddons
     plasma-wayland-protocols
-    libepoxy
     ffmpeg
     mesa
     pipewire
     wayland
   ];
+  propagatedBuildInputs = [ libepoxy ];
 }

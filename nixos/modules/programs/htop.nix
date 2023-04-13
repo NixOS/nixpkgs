@@ -20,7 +20,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.htop;
-      defaultText = "pkgs.htop";
+      defaultText = lib.literalExpression "pkgs.htop";
       description = lib.mdDoc ''
         The htop package that should be used.
       '';

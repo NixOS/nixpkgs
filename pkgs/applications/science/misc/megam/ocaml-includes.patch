@@ -15,7 +15,7 @@ diff -ru megam_0.92/Makefile megam_0.92-b/Makefile
  
  #WITHCLIBS =-I /usr/lib/ocaml/3.09.2/caml
 -WITHCLIBS =-I /usr/lib/ocaml/caml
-+WITHCLIBS =-I $(CAML_INCLUDES) 
++WITHCLIBS =-I $(CAML_INCLUDES) -I +unix -I +str
  
  ################ End of user's variables #####################
  

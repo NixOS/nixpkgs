@@ -15,22 +15,6 @@ from typing import Iterable
 
 import requests
 
-# Always keep this in sync with the GitLaab version you're updating to.
-# If you see any errors about vendored dependencies during an update, check the Gemfile.
-VENDORED_GEMS = [
-    "bundler-checksum",
-    "devise-pbkdf2-encryptable",
-    "omniauth-azure-oauth2",
-    "omniauth-cas3",
-    "omniauth-gitlab",
-    "omniauth-google-oauth2",
-    "omniauth_crowd",
-    "omniauth-salesforce",
-    "mail-smtp_pool",
-    "microsoft_graph_mailer",
-    "ipynbdiff",
-    "error_tracking_open_api",
-]
 logger = logging.getLogger(__name__)
 
 
@@ -101,8 +85,7 @@ class GitLabRepo:
                     owner=self.owner,
                     repo=self.repo,
                     rev=rev,
-                    passthru=passthru,
-                    vendored_gems=VENDORED_GEMS)
+                    passthru=passthru)
 
 
 def _get_data_json():
@@ -155,35 +138,25 @@ def update_rubyenv():
     # load rev from data.json
     data = _get_data_json()
     rev = data['rev']
+    version = data['version']
 
-    gemfile = repo.get_file('Gemfile', rev)
-    gemfile_lock = repo.get_file('Gemfile.lock', rev)
+    for fn in ['Gemfile.lock', 'Gemfile']:
+        with open(rubyenv_dir / fn, 'w') as f:
+            f.write(repo.get_file(fn, rev))
 
-    if "pg (1.4.1)" in gemfile_lock:
-        gemfile_lock = gemfile_lock.replace("pg (1.4.1)", "pg (1.4.3)")
-    else:
-        logger.info("Looks like pg was updated! Please remove update-pg.patch, as this will cause a build failure")
+    # Fetch vendored dependencies temporarily in order to build the gemset.nix
+    subprocess.check_output(['mkdir', '-p', 'vendor/gems'], cwd=rubyenv_dir)
+    subprocess.check_output(['sh', '-c', f'curl -L https://gitlab.com/gitlab-org/gitlab/-/archive/v{version}-ee/gitlab-v{version}-ee.tar.bz2?path=vendor/gems | tar -xj --strip-components=3'], cwd=f'{rubyenv_dir}/vendor/gems')
 
-    with open(rubyenv_dir / 'Gemfile', 'w') as f:
-        f.write(re.sub(f'.*({"|".join(VENDORED_GEMS)}).*', "", gemfile))
-
-    with open(rubyenv_dir / 'Gemfile.lock', 'w') as f:
-        f.write(gemfile_lock)
+    # Undo our gemset.nix patches so that bundix runs through
+    subprocess.check_output(['sed', '-i', '-e', '1d', '-e', 's:\\${src}/::g' , 'gemset.nix'], cwd=rubyenv_dir)
 
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
 
-    with open(rubyenv_dir / 'Gemfile', 'w') as f:
-        for gem in VENDORED_GEMS:
-            gemfile = gemfile.replace(f'path: \'vendor/gems/{gem}\'', f'path: \'{gem}\'')
+    subprocess.check_output(['sed', '-i', '-e', '1i\\src:', '-e', 's:path = \\(vendor/[^;]*\\);:path = "${src}/\\1";:g', 'gemset.nix'], cwd=rubyenv_dir)
+    subprocess.check_output(['rm', '-rf', 'vendor'], cwd=rubyenv_dir)
 
-        f.write(gemfile)
-
-    with open(rubyenv_dir / 'Gemfile.lock', 'w') as f:
-        for gem in VENDORED_GEMS:
-            gemfile_lock = gemfile_lock.replace(f'remote: vendor/gems/{gem}', f'remote: {gem}')
-
-        f.write(gemfile_lock)
 
 
 @cli.command('update-gitaly')
@@ -202,6 +175,14 @@ def update_gitaly():
     subprocess.check_output(['bundix'], cwd=gitaly_dir)
 
     _call_nix_update('gitaly', gitaly_server_version)
+
+
+@cli.command('update-gitlab-pages')
+def update_gitlab_pages():
+    """Update gitlab-shell"""
+    data = _get_data_json()
+    gitlab_pages_version = data['passthru']['GITLAB_PAGES_VERSION']
+    _call_nix_update('gitlab-pages', gitlab_pages_version)
 
 
 @cli.command('update-gitlab-shell')
@@ -228,6 +209,7 @@ def update_all(ctx, rev: str):
     ctx.invoke(update_data, rev=rev)
     ctx.invoke(update_rubyenv)
     ctx.invoke(update_gitaly)
+    ctx.invoke(update_gitlab_pages)
     ctx.invoke(update_gitlab_shell)
     ctx.invoke(update_gitlab_workhorse)
 

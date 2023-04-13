@@ -47,7 +47,7 @@ in
 {
   options = {
     services.nitter = {
-      enable = mkEnableOption (lib.mdDoc "If enabled, start Nitter.");
+      enable = mkEnableOption (lib.mdDoc "Nitter");
 
       package = mkOption {
         default = pkgs.nitter;
@@ -183,6 +183,13 @@ in
           default = "";
           example = "piped.kavin.rocks";
           description = lib.mdDoc "Replace YouTube links with links to this instance (blank to disable).";
+        };
+
+        replaceReddit = mkOption {
+          type = types.str;
+          default = "";
+          example = "teddit.net";
+          description = lib.mdDoc "Replace Reddit links with links to this instance (blank to disable).";
         };
 
         replaceInstagram = mkOption {

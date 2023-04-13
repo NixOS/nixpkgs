@@ -64,6 +64,9 @@ checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix
+checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' config.enable ./define-enable-throw.nix
+checkConfigError 'while evaluating a definition from `.*/define-enable-abort.nix' config.enable ./define-enable-abort.nix
+checkConfigError 'while evaluating the error message for definitions for .enable., which is an option that does not exist' config.enable ./define-enable-abort.nix
 
 checkConfigOutput '^1$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix
 checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix
@@ -138,6 +141,14 @@ checkConfigError "The option .*enable.* does not exist. Definition values:\n\s*-
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-define-enable.nix ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-enable-modules.nix
 
+checkConfigOutput '^true$' 'config.positive.enable' ./disable-module-with-key.nix
+checkConfigOutput '^false$' 'config.negative.enable' ./disable-module-with-key.nix
+checkConfigError 'Module ..*disable-module-bad-key.nix. contains a disabledModules item that is an attribute set, presumably a module, that does not have a .key. attribute. .*' 'config.enable' ./disable-module-bad-key.nix
+
+# Not sure if we want to keep supporting module keys that aren't strings, paths or v?key, but we shouldn't remove support accidentally.
+checkConfigOutput '^true$' 'config.positive.enable' ./disable-module-with-toString-key.nix
+checkConfigOutput '^false$' 'config.negative.enable' ./disable-module-with-toString-key.nix
+
 # Check _module.args.
 set -- config.enable ./declare-enable.nix ./define-enable-with-custom-arg.nix
 checkConfigError 'while evaluating the module argument .*custom.* in .*define-enable-with-custom-arg.nix.*:' "$@"
@@ -178,7 +189,7 @@ checkConfigOutput '^"foo"$' config.submodule.foo ./declare-submoduleWith-special
 ## shorthandOnlyDefines config behaves as expected
 checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-noshorthand.nix
-checkConfigError "You're trying to declare a value of type \`bool'\n\s*rather than an attribute-set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
+checkConfigError "You're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-noshorthand.nix
 
 ## submoduleWith should merge all modules in one swoop
@@ -243,7 +254,7 @@ checkConfigError 'A definition for option .* is not of type .*' \
 ## Freeform modules
 # Assigning without a declared option should work
 checkConfigOutput '^"24"$' config.value ./freeform-attrsOf.nix ./define-value-string.nix
-# No freeform assigments shouldn't make it error
+# No freeform assignments shouldn't make it error
 checkConfigOutput '^{ }$' config ./freeform-attrsOf.nix
 # but only if the type matches
 checkConfigError 'A definition for option .* is not of type .*' config.value ./freeform-attrsOf.nix ./define-value-list.nix
@@ -354,6 +365,10 @@ checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
 checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. has been renamed to `c\.d\.e.\."$' \
   config.result \
   ./doRename-warnings.nix
+
+# Anonymous modules get deduplicated by key
+checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix
+checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
 
 cat <<EOF
 ====== module tests ======

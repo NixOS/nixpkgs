@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_TESTS=ON" ];
 
   doCheck = true;
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
   checkTarget = "xtest";
 
   # https://github.com/xtensor-stack/xtensor/issues/2542

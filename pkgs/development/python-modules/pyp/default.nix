@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyp";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hauntsaninja";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "09k7y77h7g4dg0x6lg9pn2ga9z7xiy4vlj15fj0991ffsi4ydqgm";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-A1Ip41kxH17BakHEWEuymfa24eBEl5FIHAWL+iZFM4I=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     coreutils
     jq

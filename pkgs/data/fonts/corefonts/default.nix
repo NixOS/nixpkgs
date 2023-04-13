@@ -17,7 +17,7 @@ let
   ];
 
   eula = fetchurl {
-    url = "http://corefonts.sourceforge.net/eula.htm";
+    url = "https://corefonts.sourceforge.net/eula.htm";
     sha256 = "1aqbcnl032g2hd7iy56cs022g47scb0jxxp3mm206x1yqc90vs1c";
   };
 in
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "http://corefonts.sourceforge.net/";
+    homepage = "https://corefonts.sourceforge.net/";
     description = "Microsoft's TrueType core fonts for the Web";
     platforms = platforms.all;
     license = licenses.unfreeRedistributable;

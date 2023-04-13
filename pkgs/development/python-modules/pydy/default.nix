@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pydy";
-  version = "0.6.0";
+  version = "0.7.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-e/Ssfd5llioA7ccLULlRdHR113IbR4AJ4/HmzQuU7vI=";
+    hash = "sha256-aaRinJMGR8v/OVkeSp1hA4+QLOrmDWq50wvA6b/suvk=";
   };
 
   propagatedBuildInputs = [
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sympy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     cython
     pytestCheckHook

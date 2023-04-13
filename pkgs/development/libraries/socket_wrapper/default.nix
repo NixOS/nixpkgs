@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "socket_wrapper";
-  version = "1.3.4";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "mirror://samba/cwrap/socket_wrapper-${version}.tar.gz";
-    sha256 = "sha256-dmYeXGXbe05WiT2ZDrH4aCmymDjj8SqrZyEc3d0Uf0Y=";
+    sha256 = "sha256-IGQQBSyh8hjZuymmRtU4FI2n7FyYmP28Nun9eorvAHY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -7,7 +7,6 @@
 , bison
 , proj
 , geos
-, xlibsWrapper
 , sqlite
 , gsl
 , qwt
@@ -29,11 +28,12 @@
 , qtkeychain
 , qt3d
 , qscintilla
+, qtlocation
 , qtserialport
 , qtxmlpatterns
 , withGrass ? true
 , grass
-, withWebKit ? true
+, withWebKit ? false
 , qtwebkit
 , pdal
 , zstd
@@ -73,14 +73,14 @@ let
     six
   ];
 in mkDerivation rec {
-  version = "3.26.2";
+  version = "3.28.3";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-WU1yamZM/UVhtZjoZ/5J8gt7FOHEHi0D2Z9BWEl4br0=";
+    hash = "sha256-nXauZSC78BX1fcx0SXniwQpRmdSLfoqZ5jlbXeHgRGI=";
   };
 
   passthru = {
@@ -92,7 +92,6 @@ in mkDerivation rec {
     openssl
     proj
     geos
-    xlibsWrapper
     sqlite
     gsl
     qwt
@@ -111,6 +110,7 @@ in mkDerivation rec {
     qca-qt5
     qtkeychain
     qscintilla
+    qtlocation
     qtserialport
     qtxmlpatterns
     qt3d
@@ -134,7 +134,11 @@ in mkDerivation rec {
     "-DWITH_3D=True"
     "-DWITH_PDAL=TRUE"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/grass78";
+    ++ lib.optional withGrass (let
+        gmajor = lib.versions.major grass.version;
+        gminor = lib.versions.minor grass.version;
+      in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
+    );
 
   dontWrapGApps = true; # wrapper params passed below
 
@@ -153,6 +157,6 @@ in mkDerivation rec {
     homepage = "https://www.qgis.org";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ lsix sikmir erictapen willcohen ];
+    maintainers = with lib.maintainers; [ lsix sikmir willcohen ];
   };
 }

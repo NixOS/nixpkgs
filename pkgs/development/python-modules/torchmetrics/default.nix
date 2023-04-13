@@ -15,7 +15,7 @@
 
 let
   pname = "torchmetrics";
-  version = "0.9.3";
+  version = "0.11.3";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,7 +24,7 @@ buildPythonPackage {
     owner = "PyTorchLightning";
     repo = "metrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L2p8UftRkuBuRJX4V5+OYkJeJ5pCK3MvfA1OvSfgglY=";
+    hash = "sha256-cyzAY5NKP+SgoZmwBBLsI0yQ1M4jdOB6/9+/k/+5mns=";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage {
     torch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytorch-lightning
     scikit-learn
     scikitimage

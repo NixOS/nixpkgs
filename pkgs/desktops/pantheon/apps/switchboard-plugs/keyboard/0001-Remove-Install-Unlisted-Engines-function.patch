@@ -263,7 +263,7 @@ deleted file mode 100644
 index 275c302..0000000
 --- a/src/InputMethod/Installer/InstallList.vala
 +++ /dev/null
-@@ -1,73 +0,0 @@
+@@ -1,75 +0,0 @@
 -/*
 -* 2019-2020 elementary, Inc. (https://elementary.io)
 -*
@@ -306,7 +306,7 @@ index 275c302..0000000
 -            case KO:
 -                return { "ibus-hangul" };
 -            case ZH:
--                return { "ibus-cangjie", "ibus-chewing", "ibus-pinyin" };
+-                return { "ibus-cangjie", "ibus-chewing", "ibus-pinyin", "ibus-rime" };
 -            default:
 -                assert_not_reached ();
 -        }
@@ -327,6 +327,8 @@ index 275c302..0000000
 -            case "ibus-chewing":
 -                return ZH;
 -            case "ibus-pinyin":
+-                return ZH;
+-            case "ibus-rime":
 -                return ZH;
 -            default:
 -                assert_not_reached ();

@@ -1,6 +1,19 @@
 # Testers {#chap-testers}
 This chapter describes several testing builders which are available in the <literal>testers</literal> namespace.
 
+## `hasPkgConfigModule` {#tester-hasPkgConfigModule}
+
+Checks whether a package exposes a certain `pkg-config` module.
+
+Example:
+
+```nix
+passthru.tests.pkg-config = testers.hasPkgConfigModule {
+  package = finalAttrs.finalPackage;
+  moduleName = "libfoo";
+}
+```
+
 ## `testVersion` {#tester-testVersion}
 
 Checks the command output contains the specified version
@@ -33,6 +46,70 @@ passthru.tests.version = testers.testVersion {
   # The output needs to contain the 'version' string without any prefix or suffix.
   version = "v${version}";
 };
+```
+
+## `testBuildFailure` {#tester-testBuildFailure}
+
+Make sure that a build does not succeed. This is useful for testing testers.
+
+This returns a derivation with an override on the builder, with the following effects:
+
+ - Fail the build when the original builder succeeds
+ - Move `$out` to `$out/result`, if it exists (assuming `out` is the default output)
+ - Save the build log to `$out/testBuildFailure.log` (same)
+
+Example:
+
+```nix
+runCommand "example" {
+  failed = testers.testBuildFailure (runCommand "fail" {} ''
+    echo ok-ish >$out
+    echo failing though
+    exit 3
+  '');
+} ''
+  grep -F 'ok-ish' $failed/result
+  grep -F 'failing though' $failed/testBuildFailure.log
+  [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
+  touch $out
+'';
+```
+
+While `testBuildFailure` is designed to keep changes to the original builder's
+environment to a minimum, some small changes are inevitable.
+
+ - The file `$TMPDIR/testBuildFailure.log` is present. It should not be deleted.
+ - `stdout` and `stderr` are a pipe instead of a tty. This could be improved.
+ - One or two extra processes are present in the sandbox during the original
+   builder's execution.
+ - The derivation and output hashes are different, but not unusual.
+ - The derivation includes a dependency on `buildPackages.bash` and
+   `expect-failure.sh`, which is built to include a transitive dependency on
+   `buildPackages.coreutils` and possibly more. These are not added to `PATH`
+   or any other environment variable, so they should be hard to observe.
+
+## `testEqualContents` {#tester-equalContents}
+
+Check that two paths have the same contents.
+
+Example:
+
+```nix
+testers.testEqualContents {
+  assertion = "sed -e performs replacement";
+  expected = writeText "expected" ''
+    foo baz baz
+  '';
+  actual = runCommand "actual" {
+    # not really necessary for a package that's in stdenv
+    nativeBuildInputs = [ gnused ];
+    base = writeText "base" ''
+      foo bar baz
+    '';
+  } ''
+    sed -e 's/bar/baz/g' $base >$out
+  '';
+}
 ```
 
 ## `testEqualDerivation` {#tester-testEqualDerivation}
@@ -83,7 +160,7 @@ tests.fetchgit = testers.invalidateFetcherByDrvHash fetchgit {
   name = "nix-source";
   url = "https://github.com/NixOS/nix";
   rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
-  sha256 = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+  hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
 };
 ```
 
@@ -101,7 +178,7 @@ letting NixOS invoke Nixpkgs anew.
 If a test machine needs to set NixOS options under `nixpkgs`, it must set only the
 `nixpkgs.pkgs` option.
 
-### Parameter
+### Parameter {#tester-nixosTest-parameter}
 
 A [NixOS VM test network](https://nixos.org/nixos/manual/index.html#sec-nixos-tests), or path to it. Example:
 
@@ -123,7 +200,7 @@ A [NixOS VM test network](https://nixos.org/nixos/manual/index.html#sec-nixos-te
 }
 ```
 
-### Result
+### Result {#tester-nixosTest-result}
 
 A derivation that runs the VM test.
 

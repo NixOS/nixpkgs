@@ -85,7 +85,7 @@ in
         WorkingDirectory = libDir;
         SyslogIdentifier = "pykms";
         Restart = "on-failure";
-        MemoryLimit = cfg.memoryLimit;
+        MemoryMax = cfg.memoryLimit;
       };
     };
   };

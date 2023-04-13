@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Library for concurrency agnostic serial connunication";
+    description = "Library for concurrency agnostic serial communication";
     homepage = "https://github.com/tiagocoutinho/serialio";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];

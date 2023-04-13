@@ -28,7 +28,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     factory_boy
     faker
     numpy

@@ -83,9 +83,12 @@ let
     inherit (args) src;
     inherit (go) GOOS GOARCH;
 
+    prePatch = args.prePatch or "";
     patches = args.patches or [];
     patchFlags = args.patchFlags or [];
+    postPatch = args.postPatch or "";
     preBuild = args.preBuild or "";
+    postBuild = args.postBuild or "";
     sourceRoot = args.sourceRoot or "";
 
     GO111MODULE = "on";
@@ -102,9 +105,9 @@ let
       runHook postConfigure
     '';
 
-    buildPhase = args.modBuildPhase or ''
+    buildPhase = args.modBuildPhase or (''
       runHook preBuild
-    '' + lib.optionalString (deleteVendor == true) ''
+    '' + lib.optionalString deleteVendor ''
       if [ ! -d vendor ]; then
         echo "vendor folder does not exist, 'deleteVendor' is not needed"
         exit 10
@@ -130,7 +133,7 @@ let
       mkdir -p vendor
 
       runHook postBuild
-    '';
+    '');
 
     installPhase = args.modInstallPhase or ''
       runHook preInstall
@@ -141,6 +144,11 @@ let
     '' else ''
       cp -r --reflink=auto vendor $out
     ''}
+
+      if ! [ "$(ls -A $out)" ]; then
+        echo "vendor folder is empty, please set 'vendorHash = null;' or 'vendorSha256 = null;' in your expression"
+        exit 10
+      fi
 
       runHook postInstall
     '';
@@ -166,9 +174,9 @@ let
 
     GO111MODULE = "on";
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
-    inherit CGO_ENABLED;
+    inherit CGO_ENABLED enableParallelBuilding;
 
-    configurePhase = args.configurePhase or ''
+    configurePhase = args.configurePhase or (''
       runHook preConfigure
 
       export GOCACHE=$TMPDIR/go-cache
@@ -185,10 +193,16 @@ let
       ''}
     '' + ''
 
-      runHook postConfigure
-    '';
+      # currently pie is only enabled by default in pkgsMusl
+      # this will respect the `hardening{Disable,Enable}` flags if set
+      if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
+        export GOFLAGS="-buildmode=pie $GOFLAGS"
+      fi
 
-    buildPhase = args.buildPhase or ''
+      runHook postConfigure
+    '');
+
+    buildPhase = args.buildPhase or (''
       runHook preBuild
 
       exclude='\(/_\|examples\|Godeps\|testdata'
@@ -209,7 +223,7 @@ let
         flags+=($buildFlags "''${buildFlagsArray[@]}")
         flags+=(''${tags:+-tags=${lib.concatStringsSep "," tags}})
         flags+=(''${ldflags:+-ldflags="$ldflags"})
-        flags+=("-v" "-p" "$NIX_BUILD_CORES")
+        flags+=("-p" "$NIX_BUILD_CORES")
 
         if [ "$cmd" = "test" ]; then
           flags+=(-vet=off)
@@ -268,7 +282,7 @@ let
       )
     '' + ''
       runHook postBuild
-    '';
+    '');
 
     doCheck = args.doCheck or true;
     checkPhase = args.checkPhase or ''
@@ -298,8 +312,6 @@ let
     disallowedReferences = lib.optional (!allowGoReference) go;
 
     passthru = passthru // { inherit go go-modules vendorSha256 vendorHash; };
-
-    enableParallelBuilding = enableParallelBuilding;
 
     meta = {
       # Add default meta information

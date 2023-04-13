@@ -8,6 +8,7 @@
 , objgraph
 , path
 , portend
+, pyopenssl
 , pytest-forked
 , pytest-services
 , pytestCheckHook
@@ -55,7 +56,7 @@ buildPythonPackage rec {
     jaraco_collections
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     objgraph
     path
     pytest-forked
@@ -78,6 +79,9 @@ buildPythonPackage rec {
 
     "test_antistampede"
     "test_file_stream"
+    "test_basic_request"
+    "test_3_Redirect"
+    "test_4_File_deletion"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_block"
   ];
@@ -96,13 +100,14 @@ buildPythonPackage rec {
     json = [ simplejson ];
     memcached_session = [ python-memcached ];
     routes_dispatcher = [ routes ];
+    ssl = [ pyopenssl ];
     # not packaged yet
     xcgi = [ /* flup */ ];
   };
 
   meta = with lib; {
     description = "Object-oriented HTTP framework";
-    homepage = "https://www.cherrypy.org";
+    homepage = "https://cherrypy.dev/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

@@ -16,12 +16,12 @@ buildPythonPackage rec {
     owner = "jpetrucciani";
     repo = "bucketstore";
     rev = version;
-    sha256 = "sha256-BtoyGqFbeBhGQeXnmeSfiuJLZtXFrK26WO0SDlAtKG4=";
+    hash = "sha256-BtoyGqFbeBhGQeXnmeSfiuJLZtXFrK26WO0SDlAtKG4=";
   };
 
   propagatedBuildInputs = [ boto3 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     moto
   ];

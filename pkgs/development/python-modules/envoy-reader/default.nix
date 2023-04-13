@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "jesserizzo";
     repo = "envoy_reader";
     rev = version;
-    sha256 = "sha256-aIpZ4ln4L57HwK8H0FqsyNnXosnAp3ingrJI6/MPS90=";
+    hash = "sha256-aIpZ4ln4L57HwK8H0FqsyNnXosnAp3ingrJI6/MPS90=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-raises
     pytest-asyncio
     pytestCheckHook

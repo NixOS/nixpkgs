@@ -17,13 +17,31 @@
 , llvmPackages
 , z3
 , fmt_8
+, suitesparse
 }:
 
 let
+  igraph' = igraph.overrideAttrs (old: rec {
+    version = "0.9.10";
+    src = fetchFromGitHub {
+      owner = "igraph";
+      repo = "igraph";
+      rev = version;
+      hash = "sha256-prDadHsNhDRkNp1i0niKIYxE0g85Zs0ngvUy6uK8evk=";
+    };
+    postPatch = old.postPatch + lib.optionalString stdenv.isAarch64 ''
+      # https://github.com/igraph/igraph/issues/1694
+      substituteInPlace tests/CMakeLists.txt \
+        --replace "igraph_scg_grouping3" "" \
+        --replace "igraph_scg_semiprojectors2" ""
+    '';
+    buildInputs = old.buildInputs ++ [ suitesparse ];
+    cmakeFlags = old.cmakeFlags ++ [ "-DIGRAPH_USE_INTERNAL_CXSPARSE=OFF" ];
+  });
   # no stable hal release yet with recent spdlog/fmt support, remove
   # once 4.0.0 is released - see https://github.com/emsec/hal/issues/452
   spdlog' = spdlog.override {
-    fmt_8 = fmt_8.overrideAttrs (_: rec {
+    fmt = fmt_8.overrideAttrs (_: rec {
       version = "8.0.1";
       src = fetchFromGitHub {
         owner = "fmtlib";
@@ -64,7 +82,7 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
-  buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog' graphviz wrapQtAppsHook z3 ]
+  buildInputs = [ qtbase qtsvg boost rapidjson igraph' spdlog' graphviz wrapQtAppsHook z3 ]
     ++ (with python3Packages; [ python pybind11 ])
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 

@@ -12,13 +12,13 @@
 }:
 buildPythonPackage rec {
   pname = "viv-utils";
-  version = "0.7.5";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "viv-utils";
-    rev = "v${version}";
-    sha256 = "sha256-JDu+1n1wP2Vsp2V/bKdE+RFp6bE8RNmimi4wdsatwME=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ih6CtnsGfHRLDjoaF7BkoUENu+0pU3NB6TG0A70f3nE=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     vivisect
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-sugar
     pytestCheckHook
   ];
@@ -50,7 +50,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utilities for working with vivisect";
     homepage = "https://github.com/williballenthin/viv-utils";
+    changelog = "https://github.com/williballenthin/viv-utils/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

@@ -18,15 +18,17 @@
 , gssSupport   ? true
 , writeScript
 }:
+assert smimeSupport -> sslSupport;
+assert gpgmeSupport -> sslSupport;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.2.8";
+  version = "2.2.10";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    sha256 = "A/PSN6LuKh0WM2QXyaXxe0nPcEXu/qYCHwggu/hdClM=";
+    sha256 = "sha256-TXc/IkIveQlve5S1e+5FZUrZolFl27NkY8WClbTNPYg=";
   };
 
   patches = lib.optional smimeSupport (fetchpatch {

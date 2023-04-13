@@ -36,7 +36,7 @@ in
       description = lib.mdDoc "Location of Jirafeau storage directory.";
     };
 
-    enable = mkEnableOption (lib.mdDoc "Jirafeau file upload application.");
+    enable = mkEnableOption (lib.mdDoc "Jirafeau file upload application");
 
     extraConfig = mkOption {
       type = types.lines;

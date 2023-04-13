@@ -1,22 +1,22 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv
-, raft-canonical, sqlite-replication }:
+, raft-canonical, sqlite, lxd }:
 
 stdenv.mkDerivation rec {
   pname = "dqlite";
-  version = "1.9.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0zalsvr0vy7632nhm96a29lrfy18iqsmbxpyz2lvq80mrjlbrzsn";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-x76f9Sw3BMgWSY7DLIqDjbggp/qVu8mJBtf4znTz9hA=";
   };
 
   nativeBuildInputs = [ autoreconfHook file pkg-config ];
   buildInputs = [
     libuv
     raft-canonical.dev
-    sqlite-replication
+    sqlite
   ];
 
   enableParallelBuilding = true;
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
+  passthru.tests = {
+    inherit lxd;
+  };
+
   meta = with lib; {
     description = ''
       Expose a SQLite database over the network and replicate it across a
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://dqlite.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ joko ];
+    maintainers = with maintainers; [ joko adamcstephens ];
     platforms = platforms.linux;
   };
 }

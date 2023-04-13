@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "moderngl";
-  version = "5.7.2";
+  version = "5.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sfmCY5Yny1HgZfEN10AE1Ev1EVQ6JE51646DXjoQxyA=";
+    hash = "sha256-tmwY1/SrepS+P5655MpoNurR2lAtYugbf3pIFQ4u05E=";
   };
 
   buildInputs = [
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "High performance rendering for Python";
     homepage = "https://github.com/moderngl/moderngl";
+    changelog = "https://github.com/moderngl/moderngl/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];
     # should be mesaPlatforms, darwin build breaks.

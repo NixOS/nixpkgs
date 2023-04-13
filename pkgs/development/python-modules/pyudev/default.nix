@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sqOv4cmep1H4KWZSVX6sVZh02iobHsBiUXhwbsWjRfM=";
+    hash = "sha256-sqOv4cmep1H4KWZSVX6sVZh02iobHsBiUXhwbsWjRfM=";
   };
 
   postPatch = ''
@@ -16,7 +16,7 @@ buildPythonPackage rec {
       --replace "find_library(name)" "'${lib.getLib udev}/lib/libudev.so'"
     '';
 
-  checkInputs = [ pytest mock hypothesis docutils ];
+  nativeCheckInputs = [ pytest mock hypothesis docutils ];
   propagatedBuildInputs = [ six ];
 
   checkPhase = ''

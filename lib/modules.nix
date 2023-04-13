@@ -21,6 +21,7 @@ let
     isBool
     isFunction
     isList
+    isPath
     isString
     length
     mapAttrs
@@ -44,6 +45,9 @@ let
     showFiles
     showOption
     unknownModule
+    ;
+  inherit (lib.strings)
+    isConvertibleWithToString
     ;
 
   showDeclPrefix = loc: decl: prefix:
@@ -157,6 +161,11 @@ rec {
             ${if prefix == []
               then null  # unset => visible
               else "internal"} = true;
+            # TODO: hidden during the markdown transition to not expose downstream
+            # users of the docs infra to markdown if they're not ready for it.
+            # we don't make this visible conditionally because it can impact
+            # performance (https://github.com/NixOS/nixpkgs/pull/208407#issuecomment-1368246192)
+            visible = false;
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
@@ -284,7 +293,18 @@ rec {
         if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
           let
             firstDef = head merged.unmatchedDefns;
-            baseMsg = "The option `${showOption (prefix ++ firstDef.prefix)}' does not exist. Definition values:${showDefs [ firstDef ]}";
+            baseMsg =
+              let
+                optText = showOption (prefix ++ firstDef.prefix);
+                defText =
+                  builtins.addErrorContext
+                    "while evaluating the error message for definitions for `${optText}', which is an option that does not exist"
+                    (builtins.addErrorContext
+                      "while evaluating a definition from `${firstDef.file}'"
+                      ( showDefs [ firstDef ])
+                    );
+              in
+                "The option `${optText}' does not exist. Definition values:${defText}";
           in
             if attrNames options == [ "_module" ]
               then
@@ -387,7 +407,7 @@ rec {
             key = module.key;
             module = module;
             modules = collectedImports.modules;
-            disabled = module.disabledModules ++ collectedImports.disabled;
+            disabled = (if module.disabledModules != [] then [{ file = module._file; disabled = module.disabledModules; }] else []) ++ collectedImports.disabled;
           }) initialModules);
 
       # filterModules :: String -> { disabled, modules } -> [ Module ]
@@ -396,10 +416,30 @@ rec {
       # modules recursively. It returns the final list of unique-by-key modules
       filterModules = modulesPath: { disabled, modules }:
         let
-          moduleKey = m: if isString m && (builtins.substring 0 1 m != "/")
-            then toString modulesPath + "/" + m
-            else toString m;
-          disabledKeys = map moduleKey disabled;
+          moduleKey = file: m:
+            if isString m
+            then
+              if builtins.substring 0 1 m == "/"
+              then m
+              else toString modulesPath + "/" + m
+
+            else if isConvertibleWithToString m
+            then
+              if m?key && m.key != toString m
+              then
+                throw "Module `${file}` contains a disabledModules item that is an attribute set that can be converted to a string (${toString m}) but also has a `.key` attribute (${m.key}) with a different value. This makes it ambiguous which module should be disabled."
+              else
+                toString m
+
+            else if m?key
+            then
+              m.key
+
+            else if isAttrs m
+            then throw "Module `${file}` contains a disabledModules item that is an attribute set, presumably a module, that does not have a `key` attribute. This means that the module system doesn't have any means to identify the module that should be disabled. Make sure that you've put the correct value in disabledModules: a string path relative to modulesPath, a path value, or an attribute set with a `key` attribute."
+            else throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${builtins.typeOf m}.";
+
+          disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabled;
           keyFilter = filter (attrs: ! elem attrs.key disabledKeys);
         in map (attrs: attrs.module) (builtins.genericClosure {
           startSet = keyFilter modules;
@@ -468,7 +508,7 @@ rec {
       ) (lib.functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
-      # context on the explicited arguments of "args" too. This update
+      # context on the explicit arguments of "args" too. This update
       # operator is used to make the "args@{ ... }: with args.lib;" notation
       # works.
     in f (args // extraArgs)
@@ -527,15 +567,19 @@ rec {
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.${attr}; in
               if !(builtins.isAttrs subtree) then
-                throw ''
-                  You're trying to declare a value of type `${builtins.typeOf subtree}'
-                  rather than an attribute-set for the option
+                throw (if attr == "config" then ''
+                  You're trying to define a value of type `${builtins.typeOf subtree}'
+                  rather than an attribute set for the option
                   `${builtins.concatStringsSep "." prefix}'!
 
                   This usually happens if `${builtins.concatStringsSep "." prefix}' has option
                   definitions inside that are not matched. Please check how to properly define
                   this option by e.g. referring to `man 5 configuration.nix'!
-                ''
+                '' else ''
+                  An option declaration for `${builtins.concatStringsSep "." prefix}' has type
+                  `${builtins.typeOf subtree}' rather than an attribute set.
+                  Did you mean to define this outside of `options'?
+                '')
               else
                 mapAttrs (n: f module) subtree
               ) modules);
@@ -833,7 +877,7 @@ rec {
 
   filterOverrides' = defs:
     let
-      getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPriority;
+      getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultOverridePriority;
       highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in {
@@ -842,7 +886,7 @@ rec {
     };
 
   /* Sort a list of properties.  The sort priority of a property is
-     1000 by default, but can be overridden by wrapping the property
+     defaultOrderPriority by default, but can be overridden by wrapping the property
      using mkOrder. */
   sortProperties = defs:
     let
@@ -851,7 +895,7 @@ rec {
         then def // { value = def.value.content; inherit (def.value) priority; }
         else def;
       defs' = map strip defs;
-      compare = a: b: (a.priority or 1000) < (b.priority or 1000);
+      compare = a: b: (a.priority or defaultOrderPriority) < (b.priority or defaultOrderPriority);
     in sort compare defs';
 
   # This calls substSubModules, whose entire purpose is only to ensure that
@@ -887,9 +931,12 @@ rec {
 
   mkOptionDefault = mkOverride 1500; # priority of option defaults
   mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
+  defaultOverridePriority = 100;
   mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+
+  defaultPriority = lib.warnIf (lib.isInOldestRelease 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead." defaultOverridePriority;
 
   mkFixStrictness = lib.warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
@@ -899,10 +946,8 @@ rec {
     };
 
   mkBefore = mkOrder 500;
+  defaultOrderPriority = 1000;
   mkAfter = mkOrder 1500;
-
-  # The default priority for things that don't have a priority specified.
-  defaultPriority = 100;
 
   # Convenient property used to transfer all definitions and their
   # properties from one option to another. This property is useful for
@@ -930,10 +975,10 @@ rec {
   # Similar to mkAliasAndWrapDefinitions but copies over the priority from the
   # option as well.
   #
-  # If a priority is not set, it assumes a priority of defaultPriority.
+  # If a priority is not set, it assumes a priority of defaultOverridePriority.
   mkAliasAndWrapDefsWithPriority = wrap: option:
     let
-      prio = option.highestPrio or defaultPriority;
+      prio = option.highestPrio or defaultOverridePriority;
       defsWithPrio = map (mkOverride prio) option.definitions;
     in mkAliasIfDef option (wrap (mkMerge defsWithPrio));
 
@@ -1098,6 +1143,15 @@ rec {
     use = id;
   };
 
+  /* Transitional version of mkAliasOptionModule that uses MD docs. */
+  mkAliasOptionModuleMD = from: to: doRename {
+    inherit from to;
+    visible = true;
+    warn = false;
+    use = id;
+    markdown = true;
+  };
+
   /* mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b
 
     Create config definitions with the same priority as the definition of another option.
@@ -1115,10 +1169,10 @@ rec {
   # to definitions.
   mkDerivedConfig = opt: f:
     mkOverride
-      (opt.highestPrio or defaultPriority)
+      (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
-  doRename = { from, to, visible, warn, use, withPriority ? true }:
+  doRename = { from, to, visible, warn, use, withPriority ? true, markdown ? false }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
@@ -1129,7 +1183,9 @@ rec {
     {
       options = setAttrByPath from (mkOption {
         inherit visible;
-        description = lib.mdDoc "Alias of {option}`${showOption to}`.";
+        description = if markdown
+          then lib.mdDoc "Alias of {option}`${showOption to}`."
+          else "Alias of <option>${showOption to}</option>.";
         apply = x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;

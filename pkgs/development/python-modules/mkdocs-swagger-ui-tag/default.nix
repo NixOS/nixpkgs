@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-swagger-ui-tag";
-  version = "0.4.3";
+  version = "0.5.2";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-N/7JhVX3STsUAz7O6yWkvKz72+3RZA5CNb3Z6FTrdRs=";
+    hash = "sha256-qurnqgpsppO4LPg8fN6HobUoNHQTDI6OmEDjVtObA78=";
   };
 
   propagatedBuildInputs = [ mkdocs beautifulsoup4 ];

@@ -1,6 +1,10 @@
 { lib, buildDunePackage, fetchFromGitLab
-, ff-sig, zarith, zarith_stubs_js, integers_stubs_js, integers, hex
-, alcotest, ff-pbt }:
+, ff-sig, zarith
+, zarith_stubs_js ? null
+, integers_stubs_js
+, integers, hex
+, alcotest, ff-pbt
+}:
 
 buildDunePackage rec {
   pname = "bls12-381";
@@ -13,6 +17,7 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     ff-sig

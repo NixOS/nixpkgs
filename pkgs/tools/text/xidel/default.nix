@@ -4,35 +4,42 @@ let
   flreSrc = fetchFromGitHub {
     owner = "benibela";
     repo = "flre";
-    rev = "5aa8a9e032feff7a5790104f2d53fa74c70bb1d9"; # latest as of 0.9.8 release date
-    sha256 = "1zny494jm92fjgfirzwmxff988j4yygblaxmaclkkmcvzkjrzs05";
+    rev = "3e926d45d4352f1b7c7cd411ccd625df117dad5c";
+    hash = "sha256-fs7CIjd3fwD/SORYh5pmJxIdrr8F9e36TNmnKUbUxP0=";
   };
-  synapseSrc = fetchsvn {
-    url = "http://svn.code.sf.net/p/synalist/code/synapse/40/";
-    rev = 237;
-    sha256 = "0ciqd2xgpinwrk42cpyinh9gz2i5s5rlww4mdlsca1h6saivji96";
+  synapseSrc = fetchFromGitHub {
+    owner = "benibela";
+    repo = "ararat-synapse";
+    rev = "7a77db926de66809080bada68b54172da7f84c0e";
+    hash = "sha256-bVLQ0ohGJYtuP88Krxy9a7RnHHrW0OWw8H/uxa3PerU=";
   };
   rcmdlineSrc = fetchFromGitHub {
     owner = "benibela";
     repo = "rcmdline";
-    rev = "96859e574e82d76eae49d5552a8c5aa7574a5987"; # latest as of 0.9.8 release date
-    sha256 = "0vwvpwrxsy9axicbck143yfxxrdifc026pv9c2lzqxzskf9fd78b";
+    rev = "ea02b770c4568717dd7b3b72da191a8bbcb4c751";
+    hash = "sha256-6YtvAf0joRvtCKbUAaLwuwABw1GEIzammFLhboq9aG0=";
   };
   internettoolsSrc = fetchFromGitHub {
     owner = "benibela";
     repo = "internettools";
-    rev = "c9c5cc3a87271180d4fb5bb0b17040763d2cfe06"; # latest as of 0.9.8 release date
-    sha256 = "057hn7cb1vy827gvim3b6vwgfdh2ckjy8h9yj1ry7lv6hw8ynx6n";
+    rev = "dd972caaa4415468fa679ea7262976ead3fd3e38";
+    hash = "sha256-09sADxPiE6ky1EX7dTXRBYVT3IarUcLYf5knzi7+CHU=";
+  };
+  pasdblstrutilsSrc = fetchFromGitHub {
+    owner = "BeRo1985";
+    repo = "pasdblstrutils";
+    rev = "1696f0a2b822fef26c8992f96620f1be129cfa99";
+    hash = "sha256-x0AjOTa1g7gJOR2iBO76yBt1kzcRNujHRUsq5QOlfP0=";
   };
 in stdenv.mkDerivation rec {
   pname = "xidel";
-  version = "0.9.8";
+  version = "unstable-2022-11-01";
 
   src = fetchFromGitHub {
     owner = "benibela";
     repo = pname;
-    rev = "Xidel_${version}";
-    sha256 = "0q75jjyciybvj6y17s2283zis9fcw8w5pfsq8bn7diinnbjnzgl6";
+    rev = "6d5655c1d73b88ddeb32d2450a35ee36e4762bb8";
+    hash = "sha256-9x2d5AKRBjocRawRHdeI4heIM5nb00/F/EIj+/to7ac=";
   };
 
   nativeBuildInputs = [ fpc ];
@@ -53,9 +60,10 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuildPhase = ''
-    mkdir -p import/{flre,synapse} rcmdline internettools
+    mkdir -p import/{flre,synapse,pasdblstrutils} rcmdline internettools
     cp -R ${flreSrc}/. import/flre
     cp -R ${synapseSrc}/. import/synapse
+    cp -R ${pasdblstrutilsSrc}/. import/pasdblstrutils
     cp -R ${rcmdlineSrc}/. rcmdline
     cp -R ${internettoolsSrc}/. internettools
   '';
@@ -72,18 +80,9 @@ in stdenv.mkDerivation rec {
     cp xidel "$out/bin/"
   '';
 
-  doCheck = true;
-
+  # disabled, because tests require network
   checkPhase = ''
-    # Not all, if any, of these tests are blockers. Failing or not this phase will pass.
-    # As of 2021-08-15, all of 37 failed tests are linked with the lack of network access.
     ./tests/tests.sh
-  '';
-
-  doInstallCheck = true;
-
-  installCheckPhase = ''
-    $out/bin/xidel --version | grep "${version}"
   '';
 
   meta = with lib; {

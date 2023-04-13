@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yM0SDBpkiZEbaZ0ugjiMwwUFKqZGbmh1JNlv5qvPAYo=";
+    hash = "sha256-yM0SDBpkiZEbaZ0ugjiMwwUFKqZGbmh1JNlv5qvPAYo=";
   };
 
   patches = [
@@ -27,13 +27,13 @@ buildPythonPackage rec {
     # Upstream PR (already merged): https://github.com/nexB/univers/pull/77
     (fetchpatch {
       url = "https://github.com/nexB/univers/commit/b74229cc1c8790287633cd7220d6b2e97c508302.patch";
-      sha256 = "sha256-i6zWv9rAlwCMghd9g5FP6WIQLLDLYvp+6qJ1E7nfTSY=";
+      hash = "sha256-i6zWv9rAlwCMghd9g5FP6WIQLLDLYvp+6qJ1E7nfTSY=";
     })
   ];
 
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ attrs packaging pyparsing semantic-version semver ];
-  checkInputs = [ commoncode pytestCheckHook saneyaml ];
+  nativeCheckInputs = [ commoncode pytestCheckHook saneyaml ];
 
   dontConfigure = true; # ./configure tries to setup virtualenv and downloads dependencies
 

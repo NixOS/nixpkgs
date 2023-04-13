@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "Slide blocks to solve the puzzle";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

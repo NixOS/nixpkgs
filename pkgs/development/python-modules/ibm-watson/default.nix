@@ -5,7 +5,6 @@
 , pytestCheckHook
 , python-dotenv
 , pytest-rerunfailures
-, tox
 , requests
 , python-dateutil
 , websocket-client
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-jvDkAwuDFgo7QlZ8N7TNVsY7+aXdIDc50uIIoO+5MLs=";
+    hash = "sha256-jvDkAwuDFgo7QlZ8N7TNVsY7+aXdIDc50uIIoO+5MLs=";
   };
 
   propagatedBuildInputs = [
@@ -34,12 +33,11 @@ buildPythonPackage rec {
     ibm-cloud-sdk-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     responses
     pytestCheckHook
     python-dotenv
     pytest-rerunfailures
-    tox
   ];
 
   postPatch = ''

@@ -23,12 +23,20 @@
             "https://github.com/abseil/abseil-cpp/archive/refs/tags/20211102.0.tar.gz"
         ]
     },
-    "2de300726a1ba2de9a468468dc5ff9ed17a3215f.tar.gz": {
-        "name": "2de300726a1ba2de9a468468dc5ff9ed17a3215f.tar.gz",
-        "sha256": "6a5f67874af66b239b709c572ac1a5a00fdb1b29beaf13c3e6f79b1ba10dc7c4",
+    "2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz": {
+        "name": "2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz",
+        "sha256": "5bb6b0253ccf64b53d6c7249625a7e3f6c3bc6402abd52d3778bfa48258703a0",
         "urls": [
-            "https://mirror.bazel.build/github.com/protocolbuffers/upb/archive/2de300726a1ba2de9a468468dc5ff9ed17a3215f.tar.gz",
-            "https://github.com/protocolbuffers/upb/archive/2de300726a1ba2de9a468468dc5ff9ed17a3215f.tar.gz"
+            "https://mirror.bazel.build/github.com/googleapis/googleapis/archive/2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz",
+            "https://github.com/googleapis/googleapis/archive/2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz"
+        ]
+    },
+    "4694024279bdac52b77e22dc87808bd0fd732b69.tar.gz": {
+        "name": "4694024279bdac52b77e22dc87808bd0fd732b69.tar.gz",
+        "sha256": "1e490b98005664d149b379a9529a6aa05932b8a11b76b4cd86f3d22d76346f47",
+        "urls": [
+            "https://mirror.bazel.build/github.com/envoyproxy/protoc-gen-validate/archive/4694024279bdac52b77e22dc87808bd0fd732b69.tar.gz",
+            "https://github.com/envoyproxy/protoc-gen-validate/archive/4694024279bdac52b77e22dc87808bd0fd732b69.tar.gz"
         ]
     },
     "5847d6a06302136d95a14b4cbd4b55a9c9f1436e.zip": {
@@ -37,6 +45,14 @@
         "urls": [
             "https://mirror.bazel.build/github.com/google/desugar_jdk_libs/archive/5847d6a06302136d95a14b4cbd4b55a9c9f1436e.zip",
             "https://github.com/google/desugar_jdk_libs/archive/5847d6a06302136d95a14b4cbd4b55a9c9f1436e.zip"
+        ]
+    },
+    "6654436a307a5a686b008c1d4c93b0085da6e6d8.tar.gz": {
+        "name": "6654436a307a5a686b008c1d4c93b0085da6e6d8.tar.gz",
+        "sha256": "ec76c5e79db59762776bece58b69507d095856c37b81fd35bfb0958e74b61d93",
+        "urls": [
+            "https://mirror.bazel.build/github.com/c-ares/c-ares/archive/6654436a307a5a686b008c1d4c93b0085da6e6d8.tar.gz",
+            "https://github.com/c-ares/c-ares/archive/6654436a307a5a686b008c1d4c93b0085da6e6d8.tar.gz"
         ]
     },
     "7cf3cefd652008d0a64a419c34c13bdca6c8f178.zip": {
@@ -55,6 +71,14 @@
             "https://github.com/bazelbuild/rules_proto/archive/7e4afce6fe62dbff0a4a03450143146f9f2d7488.tar.gz"
         ]
     },
+    "a5477045acaa34586420942098f5fecd3570f577.tar.gz": {
+        "name": "a5477045acaa34586420942098f5fecd3570f577.tar.gz",
+        "sha256": "cf7f71eaff90b24c1a28b49645a9ff03a9a6c1e7134291ce70901cb63e7364b5",
+        "urls": [
+            "https://mirror.bazel.build/github.com/protocolbuffers/upb/archive/a5477045acaa34586420942098f5fecd3570f577.tar.gz",
+            "https://github.com/protocolbuffers/upb/archive/a5477045acaa34586420942098f5fecd3570f577.tar.gz"
+        ]
+    },
     "aecba11114cf1fac5497aeb844b6966106de3eb6.tar.gz": {
         "name": "aecba11114cf1fac5497aeb844b6966106de3eb6.tar.gz",
         "sha256": "9f385e146410a8150b6f4cb1a57eab7ec806ced48d427554b1e754877ff26c3e",
@@ -64,9 +88,11 @@
         ]
     },
     "android_tools": {
+        "generator_function": "maybe",
+        "generator_name": "android_tools",
         "name": "android_tools",
-        "sha256": "ed5290594244c2eeab41f0104519bcef51e27c699ff4b379fcbd25215270513e",
-        "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.23.0.tar.gz"
+        "sha256": "1afa4b7e13c82523c8b69e87f8d598c891ec7e2baa41d9e24e08becd723edb4d",
+        "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.27.0.tar.gz"
     },
     "android_tools_for_testing": {
         "name": "android_tools_for_testing",
@@ -78,22 +104,22 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "a86d205da8bd08515d18bb4b98e4b66b8805e57008ec55118ff5ce038c57a5f1",
-        "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.26.0.tar.gz"
+        "sha256": "1afa4b7e13c82523c8b69e87f8d598c891ec7e2baa41d9e24e08becd723edb4d",
+        "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.27.0.tar.gz"
     },
-    "android_tools_pkg-0.26.0.tar.gz": {
-        "name": "android_tools_pkg-0.26.0.tar.gz",
-        "sha256": "a86d205da8bd08515d18bb4b98e4b66b8805e57008ec55118ff5ce038c57a5f1",
+    "android_tools_pkg-0.27.0.tar.gz": {
+        "name": "android_tools_pkg-0.27.0.tar.gz",
+        "sha256": "1afa4b7e13c82523c8b69e87f8d598c891ec7e2baa41d9e24e08becd723edb4d",
         "urls": [
-            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.26.0.tar.gz"
+            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.27.0.tar.gz"
         ]
     },
-    "b1c40e1de81913a3c40e5948f78719c28152486d.zip": {
-        "name": "b1c40e1de81913a3c40e5948f78719c28152486d.zip",
-        "sha256": "d0c573b94a6ef20ef6ff20154a23d0efcb409fb0e1ff0979cec318dfe42f0cdd",
+    "bazel-gazelle-v0.24.0.tar.gz": {
+        "name": "bazel-gazelle-v0.24.0.tar.gz",
+        "sha256": "de69a09dc70417580aabf20a28619bb3ef60d038470c7cf8442fafcf627c21cb",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_cc/archive/b1c40e1de81913a3c40e5948f78719c28152486d.zip",
-            "https://github.com/bazelbuild/rules_cc/archive/b1c40e1de81913a3c40e5948f78719c28152486d.zip"
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.24.0/bazel-gazelle-v0.24.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.24.0/bazel-gazelle-v0.24.0.tar.gz"
         ]
     },
     "bazel-skylib-1.0.3.tar.gz": {
@@ -116,14 +142,13 @@
         ]
     },
     "bazel_gazelle": {
-        "generator_function": "grpc_deps",
+        "generator_function": "dist_http_archive",
         "generator_name": "bazel_gazelle",
         "name": "bazel_gazelle",
-        "sha256": "d987004a72697334a095bbaa18d615804a28280201a50ed6c234c40ccc41e493",
-        "strip_prefix": "bazel-gazelle-0.19.1",
+        "sha256": "de69a09dc70417580aabf20a28619bb3ef60d038470c7cf8442fafcf627c21cb",
         "urls": [
-            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/bazelbuild/bazel-gazelle/archive/v0.19.1.tar.gz",
-            "https://github.com/bazelbuild/bazel-gazelle/archive/v0.19.1.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.24.0/bazel-gazelle-v0.24.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.24.0/bazel-gazelle-v0.24.0.tar.gz"
         ]
     },
     "bazel_skylib": {
@@ -148,11 +173,11 @@
         "generator_function": "grpc_deps",
         "generator_name": "bazel_toolchains",
         "name": "bazel_toolchains",
-        "sha256": "0b36eef8a66f39c8dbae88e522d5bbbef49d5e66e834a982402c79962281be10",
-        "strip_prefix": "bazel-toolchains-1.0.1",
+        "sha256": "179ec02f809e86abf56356d8898c8bd74069f1bd7c56044050c2cd3d79d0e024",
+        "strip_prefix": "bazel-toolchains-4.1.0",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-toolchains/archive/1.0.1.tar.gz",
-            "https://github.com/bazelbuild/bazel-toolchains/releases/download/1.0.1/bazel-toolchains-1.0.1.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-toolchains/archive/4.1.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-toolchains/releases/download/4.1.0/bazel-toolchains-4.1.0.tar.gz"
         ]
     },
     "bazelci_rules": {
@@ -186,32 +211,31 @@
         "generator_function": "grpc_deps",
         "generator_name": "boringssl",
         "name": "boringssl",
-        "sha256": "6f640262999cd1fb33cf705922e453e835d2d20f3f06fe0d77f6426c19257308",
-        "strip_prefix": "boringssl-fc44652a42b396e1645d5e72aba053349992136a",
+        "sha256": "534fa658bd845fd974b50b10f444d392dfd0d93768c4a51b61263fd37d851c40",
+        "strip_prefix": "boringssl-b9232f9e27e5668bc0414879dcdedb2a59ea75f2",
         "urls": [
-            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/google/boringssl/archive/fc44652a42b396e1645d5e72aba053349992136a.tar.gz",
-            "https://github.com/google/boringssl/archive/fc44652a42b396e1645d5e72aba053349992136a.tar.gz"
+            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/google/boringssl/archive/b9232f9e27e5668bc0414879dcdedb2a59ea75f2.tar.gz",
+            "https://github.com/google/boringssl/archive/b9232f9e27e5668bc0414879dcdedb2a59ea75f2.tar.gz"
         ]
     },
     "build_bazel_apple_support": {
         "generator_function": "grpc_deps",
         "generator_name": "build_bazel_apple_support",
         "name": "build_bazel_apple_support",
-        "sha256": "122ebf7fe7d1c8e938af6aeaee0efe788a3a2449ece5a8d6a428cb18d6f88033",
+        "sha256": "76df040ade90836ff5543888d64616e7ba6c3a7b33b916aa3a4b68f342d1b447",
         "urls": [
-            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/bazelbuild/apple_support/releases/download/0.7.1/apple_support.0.7.1.tar.gz",
-            "https://github.com/bazelbuild/apple_support/releases/download/0.7.1/apple_support.0.7.1.tar.gz"
+            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/bazelbuild/apple_support/releases/download/0.11.0/apple_support.0.11.0.tar.gz",
+            "https://github.com/bazelbuild/apple_support/releases/download/0.11.0/apple_support.0.11.0.tar.gz"
         ]
     },
     "build_bazel_rules_apple": {
         "generator_function": "grpc_deps",
         "generator_name": "build_bazel_rules_apple",
         "name": "build_bazel_rules_apple",
-        "sha256": "bdc8e66e70b8a75da23b79f1f8c6207356df07d041d96d2189add7ee0780cf4e",
-        "strip_prefix": "rules_apple-b869b0d3868d78a1d4ffd866ccb304fb68aa12c3",
+        "sha256": "0052d452af7742c8f3a4e0929763388a66403de363775db7e90adecb2ba4944b",
         "urls": [
-            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/bazelbuild/rules_apple/archive/b869b0d3868d78a1d4ffd866ccb304fb68aa12c3.tar.gz",
-            "https://github.com/bazelbuild/rules_apple/archive/b869b0d3868d78a1d4ffd866ccb304fb68aa12c3.tar.gz"
+            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/bazelbuild/rules_apple/releases/download/0.31.3/rules_apple.0.31.3.tar.gz",
+            "https://github.com/bazelbuild/rules_apple/releases/download/0.31.3/rules_apple.0.31.3.tar.gz"
         ]
     },
     "build_bazel_rules_nodejs": {
@@ -224,15 +248,29 @@
             "https://github.com/bazelbuild/rules_nodejs/releases/download/5.5.0/rules_nodejs-5.5.0.tar.gz"
         ]
     },
+    "cb28da3451f158a947dfc45090fe92b07b243bc1.tar.gz": {
+        "name": "cb28da3451f158a947dfc45090fe92b07b243bc1.tar.gz",
+        "sha256": "5bc8365613fe2f8ce6cc33959b7667b13b7fe56cb9d16ba740c06e1a7c4242fc",
+        "urls": [
+            "https://mirror.bazel.build/github.com/cncf/xds/archive/cb28da3451f158a947dfc45090fe92b07b243bc1.tar.gz",
+            "https://github.com/cncf/xds/archive/cb28da3451f158a947dfc45090fe92b07b243bc1.tar.gz"
+        ]
+    },
     "com_envoyproxy_protoc_gen_validate": {
-        "generator_function": "grpc_deps",
+        "generator_function": "dist_http_archive",
         "generator_name": "com_envoyproxy_protoc_gen_validate",
         "name": "com_envoyproxy_protoc_gen_validate",
-        "sha256": "dd4962e4a9e8388a4fbc5c33e64d73bdb222f103e4bad40ca5535f81c2c606c2",
-        "strip_prefix": "protoc-gen-validate-59da36e59fef2267fc2b1849a05159e3ecdf24f3",
+        "patch_args": [
+            "-p1"
+        ],
+        "patches": [
+            "//third_party/protoc_gen_validate:protoc_gen_validate.patch"
+        ],
+        "sha256": "1e490b98005664d149b379a9529a6aa05932b8a11b76b4cd86f3d22d76346f47",
+        "strip_prefix": "protoc-gen-validate-4694024279bdac52b77e22dc87808bd0fd732b69",
         "urls": [
-            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/envoyproxy/protoc-gen-validate/archive/59da36e59fef2267fc2b1849a05159e3ecdf24f3.tar.gz",
-            "https://github.com/envoyproxy/protoc-gen-validate/archive/59da36e59fef2267fc2b1849a05159e3ecdf24f3.tar.gz"
+            "https://mirror.bazel.build/github.com/envoyproxy/protoc-gen-validate/archive/4694024279bdac52b77e22dc87808bd0fd732b69.tar.gz",
+            "https://github.com/envoyproxy/protoc-gen-validate/archive/4694024279bdac52b77e22dc87808bd0fd732b69.tar.gz"
         ]
     },
     "com_github_cares_cares": {
@@ -240,22 +278,39 @@
         "generator_function": "grpc_deps",
         "generator_name": "com_github_cares_cares",
         "name": "com_github_cares_cares",
-        "sha256": "e8c2751ddc70fed9dc6f999acd92e232d5846f009ee1674f8aee81f19b2b915a",
-        "strip_prefix": "c-ares-e982924acee7f7313b4baa4ee5ec000c5e373c30",
+        "sha256": "ec76c5e79db59762776bece58b69507d095856c37b81fd35bfb0958e74b61d93",
+        "strip_prefix": "c-ares-6654436a307a5a686b008c1d4c93b0085da6e6d8",
         "urls": [
-            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/c-ares/c-ares/archive/e982924acee7f7313b4baa4ee5ec000c5e373c30.tar.gz",
-            "https://github.com/c-ares/c-ares/archive/e982924acee7f7313b4baa4ee5ec000c5e373c30.tar.gz"
+            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/c-ares/c-ares/archive/6654436a307a5a686b008c1d4c93b0085da6e6d8.tar.gz",
+            "https://github.com/c-ares/c-ares/archive/6654436a307a5a686b008c1d4c93b0085da6e6d8.tar.gz"
+        ]
+    },
+    "com_github_cncf_udpa": {
+        "generator_function": "dist_http_archive",
+        "generator_name": "com_github_cncf_udpa",
+        "name": "com_github_cncf_udpa",
+        "patch_args": [
+            "-p1"
+        ],
+        "patches": [
+            "//third_party/cncf_udpa:cncf_udpa_0.0.1.patch"
+        ],
+        "sha256": "5bc8365613fe2f8ce6cc33959b7667b13b7fe56cb9d16ba740c06e1a7c4242fc",
+        "strip_prefix": "xds-cb28da3451f158a947dfc45090fe92b07b243bc1",
+        "urls": [
+            "https://mirror.bazel.build/github.com/cncf/xds/archive/cb28da3451f158a947dfc45090fe92b07b243bc1.tar.gz",
+            "https://github.com/cncf/xds/archive/cb28da3451f158a947dfc45090fe92b07b243bc1.tar.gz"
         ]
     },
     "com_github_google_benchmark": {
         "generator_function": "grpc_deps",
         "generator_name": "com_github_google_benchmark",
         "name": "com_github_google_benchmark",
-        "sha256": "daa4a97e0547d76de300e325a49177b199f3689ce5a35e25d47696f7cb050f86",
-        "strip_prefix": "benchmark-73d4d5e8d6d449fc8663765a42aa8aeeee844489",
+        "sha256": "0b921a3bc39e35f4275c8dcc658af2391c150fb966102341287b0401ff2e6f21",
+        "strip_prefix": "benchmark-0baacde3618ca617da95375e0af13ce1baadea47",
         "urls": [
-            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/google/benchmark/archive/73d4d5e8d6d449fc8663765a42aa8aeeee844489.tar.gz",
-            "https://github.com/google/benchmark/archive/73d4d5e8d6d449fc8663765a42aa8aeeee844489.tar.gz"
+            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/google/benchmark/archive/0baacde3618ca617da95375e0af13ce1baadea47.tar.gz",
+            "https://github.com/google/benchmark/archive/0baacde3618ca617da95375e0af13ce1baadea47.tar.gz"
         ]
     },
     "com_github_grpc_grpc": {
@@ -266,14 +321,26 @@
             "-p1"
         ],
         "patches": [
-            "//third_party/grpc:grpc_1.41.0.patch",
-            "//third_party/grpc:grpc_1.41.0.win_arm64.patch"
+            "//third_party/grpc:grpc_1.47.0.patch",
+            "//third_party/grpc:grpc_1.47.0.win_arm64.patch"
         ],
-        "sha256": "e5fb30aae1fa1cffa4ce00aa0bbfab908c0b899fcf0bbc30e268367d660d8656",
-        "strip_prefix": "grpc-1.41.0",
+        "sha256": "271bdc890bf329a8de5b65819f0f9590a5381402429bca37625b63546ed19e54",
+        "strip_prefix": "grpc-1.47.0",
         "urls": [
-            "https://mirror.bazel.build/github.com/grpc/grpc/archive/v1.41.0.tar.gz",
-            "https://github.com/grpc/grpc/archive/v1.41.0.tar.gz"
+            "https://mirror.bazel.build/github.com/grpc/grpc/archive/v1.47.0.tar.gz",
+            "https://github.com/grpc/grpc/archive/v1.47.0.tar.gz"
+        ]
+    },
+    "com_github_libuv_libuv": {
+        "build_file": "@com_github_grpc_grpc//third_party:libuv.BUILD",
+        "generator_function": "grpc_deps",
+        "generator_name": "com_github_libuv_libuv",
+        "name": "com_github_libuv_libuv",
+        "sha256": "5ca4e9091f3231d8ad8801862dc4e851c23af89c69141d27723157776f7291e7",
+        "strip_prefix": "libuv-02a9e1be252b623ee032a3137c0b0c94afbe6809",
+        "urls": [
+            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/libuv/libuv/archive/02a9e1be252b623ee032a3137c0b0c94afbe6809.tar.gz",
+            "https://github.com/libuv/libuv/archive/02a9e1be252b623ee032a3137c0b0c94afbe6809.tar.gz"
         ]
     },
     "com_google_absl": {
@@ -288,23 +355,23 @@
         ]
     },
     "com_google_googleapis": {
-        "generator_function": "grpc_deps",
+        "generator_function": "dist_http_archive",
         "generator_name": "com_google_googleapis",
         "name": "com_google_googleapis",
         "sha256": "5bb6b0253ccf64b53d6c7249625a7e3f6c3bc6402abd52d3778bfa48258703a0",
         "strip_prefix": "googleapis-2f9af297c84c55c8b871ba4495e01ade42476c92",
         "urls": [
-            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/googleapis/googleapis/archive/2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz",
+            "https://mirror.bazel.build/github.com/googleapis/googleapis/archive/2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz",
             "https://github.com/googleapis/googleapis/archive/2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz"
         ]
     },
     "com_google_googletest": {
         "name": "com_google_googletest",
-        "sha256": "9dc9157a9a1551ec7a7e43daea9a694a0bb5fb8bec81235d8a1e6ef64c716dcb",
-        "strip_prefix": "googletest-release-1.10.0",
+        "sha256": "81964fe578e9bd7c94dfdb09c8e4d6e6759e19967e397dbea48d1c10e45d0df2",
+        "strip_prefix": "googletest-release-1.12.1",
         "urls": [
-            "https://mirror.bazel.build/github.com/google/googletest/archive/release-1.10.0.tar.gz",
-            "https://github.com/google/googletest/archive/release-1.10.0.tar.gz"
+            "https://mirror.bazel.build/github.com/google/googletest/archive/refs/tags/release-1.12.1.tar.gz",
+            "https://github.com/google/googletest/archive/refs/tags/release-1.12.1.tar.gz"
         ]
     },
     "com_google_protobuf": {
@@ -323,13 +390,13 @@
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
         "patches": [
-            "//third_party/protobuf:3.19.2.patch"
+            "//third_party/protobuf:3.19.6.patch"
         ],
-        "sha256": "4dd35e788944b7686aac898f77df4e9a54da0ca694b8801bd6b2a9ffc1b3085e",
-        "strip_prefix": "protobuf-3.19.2",
+        "sha256": "9a301cf94a8ddcb380b901e7aac852780b826595075577bb967004050c835056",
+        "strip_prefix": "protobuf-3.19.6",
         "urls": [
-            "https://mirror.bazel.build/github.com/protocolbuffers/protobuf/archive/v3.19.2.tar.gz",
-            "https://github.com/protocolbuffers/protobuf/archive/v3.19.2.tar.gz"
+            "https://mirror.bazel.build/github.com/protocolbuffers/protobuf/archive/v3.19.6.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v3.19.6.tar.gz"
         ]
     },
     "com_google_testparameterinjector": {
@@ -346,11 +413,11 @@
         "generator_function": "grpc_deps",
         "generator_name": "com_googlesource_code_re2",
         "name": "com_googlesource_code_re2",
-        "sha256": "9f385e146410a8150b6f4cb1a57eab7ec806ced48d427554b1e754877ff26c3e",
-        "strip_prefix": "re2-aecba11114cf1fac5497aeb844b6966106de3eb6",
+        "sha256": "319a58a58d8af295db97dfeecc4e250179c5966beaa2d842a82f0a013b6a239b",
+        "strip_prefix": "re2-8e08f47b11b413302749c0d8b17a1c94777495d5",
         "urls": [
-            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/google/re2/archive/aecba11114cf1fac5497aeb844b6966106de3eb6.tar.gz",
-            "https://github.com/google/re2/archive/aecba11114cf1fac5497aeb844b6966106de3eb6.tar.gz"
+            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/google/re2/archive/8e08f47b11b413302749c0d8b17a1c94777495d5.tar.gz",
+            "https://github.com/google/re2/archive/8e08f47b11b413302749c0d8b17a1c94777495d5.tar.gz"
         ]
     },
     "coverage_output_generator-v2.6.zip": {
@@ -365,10 +432,10 @@
         "generator_function": "grpc_deps",
         "generator_name": "cython",
         "name": "cython",
-        "sha256": "e2e38e1f0572ca54d6085df3dec8b607d20e81515fb80215aed19c81e8fe2079",
-        "strip_prefix": "cython-0.29.21",
+        "sha256": "bb72b2f0ef029472759c711f0a4bded6e15e3f9bda3797550cef3c1d87d02283",
+        "strip_prefix": "cython-0.29.26",
         "urls": [
-            "https://github.com/cython/cython/archive/0.29.21.tar.gz"
+            "https://github.com/cython/cython/archive/0.29.26.tar.gz"
         ]
     },
     "desugar_jdk_libs": {
@@ -380,14 +447,6 @@
         "urls": [
             "https://mirror.bazel.build/github.com/google/desugar_jdk_libs/archive/5847d6a06302136d95a14b4cbd4b55a9c9f1436e.zip",
             "https://github.com/google/desugar_jdk_libs/archive/5847d6a06302136d95a14b4cbd4b55a9c9f1436e.zip"
-        ]
-    },
-    "e982924acee7f7313b4baa4ee5ec000c5e373c30.tar.gz": {
-        "name": "e982924acee7f7313b4baa4ee5ec000c5e373c30.tar.gz",
-        "sha256": "e8c2751ddc70fed9dc6f999acd92e232d5846f009ee1674f8aee81f19b2b915a",
-        "urls": [
-            "https://mirror.bazel.build/github.com/c-ares/c-ares/archive/e982924acee7f7313b4baa4ee5ec000c5e373c30.tar.gz",
-            "https://github.com/c-ares/c-ares/archive/e982924acee7f7313b4baa4ee5ec000c5e373c30.tar.gz"
         ]
     },
     "enum34": {
@@ -405,11 +464,11 @@
         "generator_function": "grpc_deps",
         "generator_name": "envoy_api",
         "name": "envoy_api",
-        "sha256": "330f2f9c938fc038b7ab438919b692d30cdfba3cf596e7824410f88da16c30b5",
-        "strip_prefix": "data-plane-api-2f0d081fab0b0823f088c6e368f40e1992f46fcd",
+        "sha256": "c5807010b67033330915ca5a20483e30538ae5e689aa14b3631d6284beca4630",
+        "strip_prefix": "data-plane-api-9c42588c956220b48eb3099d186487c2f04d32ec",
         "urls": [
-            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/envoyproxy/data-plane-api/archive/2f0d081fab0b0823f088c6e368f40e1992f46fcd.tar.gz",
-            "https://github.com/envoyproxy/data-plane-api/archive/2f0d081fab0b0823f088c6e368f40e1992f46fcd.tar.gz"
+            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/envoyproxy/data-plane-api/archive/9c42588c956220b48eb3099d186487c2f04d32ec.tar.gz",
+            "https://github.com/envoyproxy/data-plane-api/archive/9c42588c956220b48eb3099d186487c2f04d32ec.tar.gz"
         ]
     },
     "futures": {
@@ -427,18 +486,24 @@
         "generator_function": "grpc_deps",
         "generator_name": "io_bazel_rules_go",
         "name": "io_bazel_rules_go",
-        "sha256": "dbf5a9ef855684f84cac2e7ae7886c5a001d4f66ae23f6904da0faaaef0d61fc",
+        "sha256": "69de5c704a05ff37862f7e0f5534d4f479418afc21806c887db544a316f3cb6b",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.24.11/rules_go-v0.24.11.tar.gz",
-            "https://github.com/bazelbuild/rules_go/releases/download/v0.24.11/rules_go-v0.24.11.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.27.0/rules_go-v0.27.0.tar.gz",
+            "https://github.com/bazelbuild/rules_go/releases/download/v0.27.0/rules_go-v0.27.0.tar.gz"
         ]
     },
     "io_bazel_rules_python": {
         "generator_function": "grpc_deps",
         "generator_name": "io_bazel_rules_python",
         "name": "io_bazel_rules_python",
-        "sha256": "aa96a691d3a8177f3215b14b0edc9641787abaaa30363a080165d06ab65e1161",
-        "url": "https://github.com/bazelbuild/rules_python/releases/download/0.0.1/rules_python-0.0.1.tar.gz"
+        "patch_args": [
+            "-p1"
+        ],
+        "patches": [
+            "@com_github_grpc_grpc//third_party:rules_python.patch"
+        ],
+        "sha256": "954aa89b491be4a083304a2cb838019c8b8c3720a7abb9c4cb81ac7a24230cea",
+        "url": "https://github.com/bazelbuild/rules_python/releases/download/0.4.0/rules_python-0.4.0.tar.gz"
     },
     "io_bazel_rules_sass": {
         "generator_function": "dist_http_archive",
@@ -473,36 +538,36 @@
             "https://github.com/census-instrumentation/opencensus-cpp/archive/c9a4da319bc669a772928ffc55af4a61be1a1176.tar.gz"
         ]
     },
-    "java_tools-v11.8.zip": {
-        "name": "java_tools-v11.8.zip",
-        "sha256": "8fb4d3138bd92a9d3324dae29c9f70d91ca2db18cd0bf1997446eed4657d19b3",
+    "java_tools-v11.9.zip": {
+        "name": "java_tools-v11.9.zip",
+        "sha256": "5cd59ea6bf938a1efc1e11ea562d37b39c82f76781211b7cd941a2346ea8484d",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.8/java_tools-v11.8.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.8/java_tools-v11.8.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools-v11.9.zip"
         ]
     },
-    "java_tools_darwin-v11.8.zip": {
-        "name": "java_tools_darwin-v11.8.zip",
-        "sha256": "0dcf4500cc4a1de8e563c1d48a079a7a0cf77cc246e39fd37fcc78ddf409ed26",
+    "java_tools_darwin-v11.9.zip": {
+        "name": "java_tools_darwin-v11.9.zip",
+        "sha256": "b9e962c6a836ba1d7573f2473fab3a897c6370d4c2724bde4017b40932ff4fe4",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.8/java_tools_darwin-v11.8.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.8/java_tools_darwin-v11.8.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_darwin-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_darwin-v11.9.zip"
         ]
     },
-    "java_tools_linux-v11.8.zip": {
-        "name": "java_tools_linux-v11.8.zip",
-        "sha256": "41502b293eea292b0577b46e8d7738bfe88180562acbf99ed620b5387a60efee",
+    "java_tools_linux-v11.9.zip": {
+        "name": "java_tools_linux-v11.9.zip",
+        "sha256": "512582cac5b7ea7974a77b0da4581b21f546c9478f206eedf54687eeac035989",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.8/java_tools_linux-v11.8.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.8/java_tools_linux-v11.8.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_linux-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_linux-v11.9.zip"
         ]
     },
-    "java_tools_windows-v11.8.zip": {
-        "name": "java_tools_windows-v11.8.zip",
-        "sha256": "056ed8ba64920409eab63e3c4888c1970a523d2c03965784fc3243e37195318b",
+    "java_tools_windows-v11.9.zip": {
+        "name": "java_tools_windows-v11.9.zip",
+        "sha256": "677ab910046205020fd715489147c2bcfad8a35d9f5d94fdc998d217545bd87a",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.8/java_tools_windows-v11.8.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.8/java_tools_windows-v11.8.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_windows-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_windows-v11.9.zip"
         ]
     },
     "microsoft-jdk-11.0.13.8.1-windows-aarch64.zip": {
@@ -510,6 +575,126 @@
         "sha256": "b8a28e6e767d90acf793ea6f5bed0bb595ba0ba5ebdf8b99f395266161e53ec2",
         "urls": [
             "https://mirror.bazel.build/aka.ms/download-jdk/microsoft-jdk-11.0.13.8.1-windows-aarch64.zip"
+        ]
+    },
+    "nuget_python_i686_3.10.0": {
+        "build_file_content": "\ncc_import(\n    name = \"python_full_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python310.dll\",\n    interface_library = \"libs/python310.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n\ncc_import(\n    name = \"python_limited_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python3.dll\",\n    interface_library = \"libs/python3.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n",
+        "generator_function": "grpc_extra_deps",
+        "generator_name": "nuget_python_i686_3.10.0",
+        "name": "nuget_python_i686_3.10.0",
+        "patch_cmds": [
+            "cp -r include/* ."
+        ],
+        "sha256": "e115e102eb90ce160ab0ef7506b750a8d7ecc385bde0a496f02a54337a8bc333",
+        "strip_prefix": "tools",
+        "type": "zip",
+        "urls": [
+            "https://www.nuget.org/api/v2/package/pythonx86/3.10.0"
+        ]
+    },
+    "nuget_python_i686_3.7.0": {
+        "build_file_content": "\ncc_import(\n    name = \"python_full_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python37.dll\",\n    interface_library = \"libs/python37.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n\ncc_import(\n    name = \"python_limited_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python3.dll\",\n    interface_library = \"libs/python3.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n",
+        "generator_function": "grpc_extra_deps",
+        "generator_name": "nuget_python_i686_3.7.0",
+        "name": "nuget_python_i686_3.7.0",
+        "patch_cmds": [
+            "cp -r include/* ."
+        ],
+        "sha256": "a8bb49fa1ca62ad55430fcafaca1b58015e22943e66b1a87d5e7cef2556c6a54",
+        "strip_prefix": "tools",
+        "type": "zip",
+        "urls": [
+            "https://www.nuget.org/api/v2/package/pythonx86/3.7.0"
+        ]
+    },
+    "nuget_python_i686_3.8.0": {
+        "build_file_content": "\ncc_import(\n    name = \"python_full_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python38.dll\",\n    interface_library = \"libs/python38.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n\ncc_import(\n    name = \"python_limited_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python3.dll\",\n    interface_library = \"libs/python3.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n",
+        "generator_function": "grpc_extra_deps",
+        "generator_name": "nuget_python_i686_3.8.0",
+        "name": "nuget_python_i686_3.8.0",
+        "patch_cmds": [
+            "cp -r include/* ."
+        ],
+        "sha256": "87a6481f5eef30b42ac12c93f06f73bd0b8692f26313b76a6615d1641c4e7bca",
+        "strip_prefix": "tools",
+        "type": "zip",
+        "urls": [
+            "https://www.nuget.org/api/v2/package/pythonx86/3.8.0"
+        ]
+    },
+    "nuget_python_i686_3.9.0": {
+        "build_file_content": "\ncc_import(\n    name = \"python_full_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python39.dll\",\n    interface_library = \"libs/python39.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n\ncc_import(\n    name = \"python_limited_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python3.dll\",\n    interface_library = \"libs/python3.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n",
+        "generator_function": "grpc_extra_deps",
+        "generator_name": "nuget_python_i686_3.9.0",
+        "name": "nuget_python_i686_3.9.0",
+        "patch_cmds": [
+            "cp -r include/* ."
+        ],
+        "sha256": "229abecbe49dc08fe5709e0b31e70edfb3b88f23335ebfc2904c44f940fd59b6",
+        "strip_prefix": "tools",
+        "type": "zip",
+        "urls": [
+            "https://www.nuget.org/api/v2/package/pythonx86/3.9.0"
+        ]
+    },
+    "nuget_python_x86-64_3.10.0": {
+        "build_file_content": "\ncc_import(\n    name = \"python_full_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python310.dll\",\n    interface_library = \"libs/python310.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n\ncc_import(\n    name = \"python_limited_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python3.dll\",\n    interface_library = \"libs/python3.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n",
+        "generator_function": "grpc_extra_deps",
+        "generator_name": "nuget_python_x86-64_3.10.0",
+        "name": "nuget_python_x86-64_3.10.0",
+        "patch_cmds": [
+            "cp -r include/* ."
+        ],
+        "sha256": "4474c83c25625d93e772e926f95f4cd398a0abbb52793625fa30f39af3d2cc00",
+        "strip_prefix": "tools",
+        "type": "zip",
+        "urls": [
+            "https://www.nuget.org/api/v2/package/python/3.10.0"
+        ]
+    },
+    "nuget_python_x86-64_3.7.0": {
+        "build_file_content": "\ncc_import(\n    name = \"python_full_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python37.dll\",\n    interface_library = \"libs/python37.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n\ncc_import(\n    name = \"python_limited_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python3.dll\",\n    interface_library = \"libs/python3.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n",
+        "generator_function": "grpc_extra_deps",
+        "generator_name": "nuget_python_x86-64_3.7.0",
+        "name": "nuget_python_x86-64_3.7.0",
+        "patch_cmds": [
+            "cp -r include/* ."
+        ],
+        "sha256": "66eb796a5bdb1e6787b8f655a1237a6b6964af2115b7627cf4f0032cf068b4b2",
+        "strip_prefix": "tools",
+        "type": "zip",
+        "urls": [
+            "https://www.nuget.org/api/v2/package/python/3.7.0"
+        ]
+    },
+    "nuget_python_x86-64_3.8.0": {
+        "build_file_content": "\ncc_import(\n    name = \"python_full_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python38.dll\",\n    interface_library = \"libs/python38.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n\ncc_import(\n    name = \"python_limited_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python3.dll\",\n    interface_library = \"libs/python3.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n",
+        "generator_function": "grpc_extra_deps",
+        "generator_name": "nuget_python_x86-64_3.8.0",
+        "name": "nuget_python_x86-64_3.8.0",
+        "patch_cmds": [
+            "cp -r include/* ."
+        ],
+        "sha256": "96c61321ce90dd053c8a04f305a5f6cc6d91350b862db34440e4a4f069b708a0",
+        "strip_prefix": "tools",
+        "type": "zip",
+        "urls": [
+            "https://www.nuget.org/api/v2/package/python/3.8.0"
+        ]
+    },
+    "nuget_python_x86-64_3.9.0": {
+        "build_file_content": "\ncc_import(\n    name = \"python_full_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python39.dll\",\n    interface_library = \"libs/python39.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n\ncc_import(\n    name = \"python_limited_api\",\n    hdrs = glob([\"**/*.h\"]),\n    shared_library = \"python3.dll\",\n    interface_library = \"libs/python3.lib\",\n    visibility = [\"@upb//python:__pkg__\"],\n)\n",
+        "generator_function": "grpc_extra_deps",
+        "generator_name": "nuget_python_x86-64_3.9.0",
+        "name": "nuget_python_x86-64_3.9.0",
+        "patch_cmds": [
+            "cp -r include/* ."
+        ],
+        "sha256": "6af58a733e7dfbfcdd50d55788134393d6ffe7ab8270effbf724bdb786558832",
+        "strip_prefix": "tools",
+        "type": "zip",
+        "urls": [
+            "https://www.nuget.org/api/v2/package/python/3.9.0"
         ]
     },
     "opencensus_proto": {
@@ -897,6 +1082,19 @@
             "https://github.com/bazelbuild/platforms/releases/download/0.0.5/platforms-0.0.5.tar.gz"
         ]
     },
+    "python-3.7.0": {
+        "build_file_content": "\ncc_library(\n    name = \"python_headers\",\n    hdrs = glob([\"**/Include/**/*.h\"]),\n    strip_include_prefix = \"Python-3.7.0/Include\",\n    visibility = [\"//visibility:public\"],\n)\n",
+        "generator_function": "grpc_extra_deps",
+        "generator_name": "python-3.7.0",
+        "name": "python-3.7.0",
+        "patch_cmds": [
+            "echo '#define SIZEOF_WCHAR_T 4' > Python-3.7.0/Include/pyconfig.h"
+        ],
+        "sha256": "85bb9feb6863e04fb1700b018d9d42d1caac178559ffa453d7e6a436e259fd0d",
+        "urls": [
+            "https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz"
+        ]
+    },
     "r8-3.3.28.jar": {
         "name": "r8-3.3.28.jar",
         "sha256": "8626ca32fb47aba7fddd2c897615e2e8ffcdb4d4b213572a2aefb3f838f01972",
@@ -905,20 +1103,40 @@
         ]
     },
     "remote_coverage_tools": {
+        "generator_function": "dist_http_archive",
+        "generator_name": "remote_coverage_tools",
         "name": "remote_coverage_tools",
-        "sha256": "cd14f1cb4559e4723e63b7e7b06d09fcc3bd7ba58d03f354cdff1439bd936a7d",
+        "patch_cmds": [
+            "test -f BUILD && chmod u+w BUILD || true",
+            "echo >> BUILD",
+            "echo 'exports_files([\"WORKSPACE\"], visibility = [\"//visibility:public\"])' >> BUILD"
+        ],
+        "patch_cmds_win": [
+            "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
+        ],
+        "sha256": "7006375f6756819b7013ca875eab70a541cf7d89142d9c511ed78ea4fefa38af",
         "urls": [
-            "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v2.5.zip"
+            "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v2.6.zip"
+        ]
+    },
+    "remote_java_tools": {
+        "generator_function": "maybe",
+        "generator_name": "remote_java_tools",
+        "name": "remote_java_tools",
+        "sha256": "5cd59ea6bf938a1efc1e11ea562d37b39c82f76781211b7cd941a2346ea8484d",
+        "urls": [
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools-v11.9.zip"
         ]
     },
     "remote_java_tools_darwin": {
         "generator_function": "maybe",
         "generator_name": "remote_java_tools_darwin",
         "name": "remote_java_tools_darwin",
-        "sha256": "d15b05d2061382748f779dc566537ea567a46bcba6fa34b56d7cb6e6d668adab",
+        "sha256": "b9e962c6a836ba1d7573f2473fab3a897c6370d4c2724bde4017b40932ff4fe4",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.6/java_tools_javac11_darwin-v10.6.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.6/java_tools_javac11_darwin-v10.6.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_darwin-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_darwin-v11.9.zip"
         ]
     },
     "remote_java_tools_darwin_for_testing": {
@@ -933,10 +1151,10 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "0dcf4500cc4a1de8e563c1d48a079a7a0cf77cc246e39fd37fcc78ddf409ed26",
+        "sha256": "b9e962c6a836ba1d7573f2473fab3a897c6370d4c2724bde4017b40932ff4fe4",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.8/java_tools_darwin-v11.8.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.8/java_tools_darwin-v11.8.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_darwin-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_darwin-v11.9.zip"
         ]
     },
     "remote_java_tools_for_testing": {
@@ -951,20 +1169,20 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "8fb4d3138bd92a9d3324dae29c9f70d91ca2db18cd0bf1997446eed4657d19b3",
+        "sha256": "5cd59ea6bf938a1efc1e11ea562d37b39c82f76781211b7cd941a2346ea8484d",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.8/java_tools-v11.8.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.8/java_tools-v11.8.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools-v11.9.zip"
         ]
     },
     "remote_java_tools_linux": {
         "generator_function": "maybe",
         "generator_name": "remote_java_tools_linux",
         "name": "remote_java_tools_linux",
-        "sha256": "085c0ba53ba764e81d4c195524f3c596085cbf9cdc01dd8e6d2ae677e726af35",
+        "sha256": "512582cac5b7ea7974a77b0da4581b21f546c9478f206eedf54687eeac035989",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.6/java_tools_javac11_linux-v10.6.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.6/java_tools_javac11_linux-v10.6.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_linux-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_linux-v11.9.zip"
         ]
     },
     "remote_java_tools_linux_for_testing": {
@@ -979,10 +1197,10 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "41502b293eea292b0577b46e8d7738bfe88180562acbf99ed620b5387a60efee",
+        "sha256": "512582cac5b7ea7974a77b0da4581b21f546c9478f206eedf54687eeac035989",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.8/java_tools_linux-v11.8.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.8/java_tools_linux-v11.8.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_linux-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_linux-v11.9.zip"
         ]
     },
     "remote_java_tools_test": {
@@ -997,10 +1215,10 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "8fb4d3138bd92a9d3324dae29c9f70d91ca2db18cd0bf1997446eed4657d19b3",
+        "sha256": "5cd59ea6bf938a1efc1e11ea562d37b39c82f76781211b7cd941a2346ea8484d",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.8/java_tools-v11.8.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.8/java_tools-v11.8.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools-v11.9.zip"
         ]
     },
     "remote_java_tools_test_darwin": {
@@ -1015,10 +1233,10 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "0dcf4500cc4a1de8e563c1d48a079a7a0cf77cc246e39fd37fcc78ddf409ed26",
+        "sha256": "b9e962c6a836ba1d7573f2473fab3a897c6370d4c2724bde4017b40932ff4fe4",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.8/java_tools_darwin-v11.8.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.8/java_tools_darwin-v11.8.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_darwin-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_darwin-v11.9.zip"
         ]
     },
     "remote_java_tools_test_linux": {
@@ -1033,10 +1251,10 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "41502b293eea292b0577b46e8d7738bfe88180562acbf99ed620b5387a60efee",
+        "sha256": "512582cac5b7ea7974a77b0da4581b21f546c9478f206eedf54687eeac035989",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.8/java_tools_linux-v11.8.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.8/java_tools_linux-v11.8.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_linux-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_linux-v11.9.zip"
         ]
     },
     "remote_java_tools_test_windows": {
@@ -1051,20 +1269,20 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "056ed8ba64920409eab63e3c4888c1970a523d2c03965784fc3243e37195318b",
+        "sha256": "677ab910046205020fd715489147c2bcfad8a35d9f5d94fdc998d217545bd87a",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.8/java_tools_windows-v11.8.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.8/java_tools_windows-v11.8.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_windows-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_windows-v11.9.zip"
         ]
     },
     "remote_java_tools_windows": {
         "generator_function": "maybe",
         "generator_name": "remote_java_tools_windows",
         "name": "remote_java_tools_windows",
-        "sha256": "873f1e53d1fa9c8e46b717673816cd822bb7acc474a194a18ff849fd8fa6ff00",
+        "sha256": "677ab910046205020fd715489147c2bcfad8a35d9f5d94fdc998d217545bd87a",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.6/java_tools_javac11_windows-v10.6.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.6/java_tools_javac11_windows-v10.6.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_windows-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_windows-v11.9.zip"
         ]
     },
     "remote_java_tools_windows_for_testing": {
@@ -1079,10 +1297,10 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "056ed8ba64920409eab63e3c4888c1970a523d2c03965784fc3243e37195318b",
+        "sha256": "677ab910046205020fd715489147c2bcfad8a35d9f5d94fdc998d217545bd87a",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.8/java_tools_windows-v11.8.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.8/java_tools_windows-v11.8.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_windows-v11.9.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_windows-v11.9.zip"
         ]
     },
     "remotejdk11_linux": {
@@ -1090,10 +1308,11 @@
         "generator_function": "maybe",
         "generator_name": "remotejdk11_linux",
         "name": "remotejdk11_linux",
-        "sha256": "360626cc19063bc411bfed2914301b908a8f77a7919aaea007a977fa8fb3cde1",
-        "strip_prefix": "zulu11.37.17-ca-jdk11.0.6-linux_x64",
+        "sha256": "e064b61d93304012351242bf0823c6a2e41d9e28add7ea7f05378b7243d34247",
+        "strip_prefix": "zulu11.56.19-ca-jdk11.0.15-linux_x64",
         "urls": [
-            "https://mirror.bazel.build/openjdk/azul-zulu11.37.17-ca-jdk11.0.6/zulu11.37.17-ca-jdk11.0.6-linux_x64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-linux_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-linux_x64.tar.gz"
         ]
     },
     "remotejdk11_linux_aarch64": {
@@ -1101,10 +1320,11 @@
         "generator_function": "maybe",
         "generator_name": "remotejdk11_linux_aarch64",
         "name": "remotejdk11_linux_aarch64",
-        "sha256": "a452f1b9682d9f83c1c14e54d1446e1c51b5173a3a05dcb013d380f9508562e4",
-        "strip_prefix": "zulu11.37.48-ca-jdk11.0.6-linux_aarch64",
+        "sha256": "fc7c41a0005180d4ca471c90d01e049469e0614cf774566d4cf383caa29d1a97",
+        "strip_prefix": "zulu11.56.19-ca-jdk11.0.15-linux_aarch64",
         "urls": [
-            "https://mirror.bazel.build/openjdk/azul-zulu11.37.48-ca-jdk11.0.6/zulu11.37.48-ca-jdk11.0.6-linux_aarch64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu-embedded/bin/zulu11.56.19-ca-jdk11.0.15-linux_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu-embedded/bin/zulu11.56.19-ca-jdk11.0.15-linux_aarch64.tar.gz"
         ]
     },
     "remotejdk11_linux_aarch64_for_testing": {
@@ -1152,11 +1372,11 @@
         "generator_function": "maybe",
         "generator_name": "remotejdk11_linux_ppc64le",
         "name": "remotejdk11_linux_ppc64le",
-        "sha256": "a417db0295b1f4b538ecbaf7c774f3a177fab9657a665940170936c0eca4e71a",
-        "strip_prefix": "jdk-11.0.7+10",
+        "sha256": "a8fba686f6eb8ae1d1a9566821dbd5a85a1108b96ad857fdbac5c1e4649fc56f",
+        "strip_prefix": "jdk-11.0.15+10",
         "urls": [
-            "https://mirror.bazel.build/openjdk/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.7_10.tar.gz",
-            "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.7_10.tar.gz"
+            "https://mirror.bazel.build/github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.15+10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.15_10.tar.gz",
+            "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.15+10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.15_10.tar.gz"
         ]
     },
     "remotejdk11_linux_ppc64le_for_testing": {
@@ -1184,11 +1404,11 @@
         "generator_function": "maybe",
         "generator_name": "remotejdk11_linux_s390x",
         "name": "remotejdk11_linux_s390x",
-        "sha256": "d9b72e87a1d3ebc0c9552f72ae5eb150fffc0298a7cb841f1ce7bfc70dcd1059",
-        "strip_prefix": "jdk-11.0.7+10",
+        "sha256": "a58fc0361966af0a5d5a31a2d8a208e3c9bb0f54f345596fd80b99ea9a39788b",
+        "strip_prefix": "jdk-11.0.15+10",
         "urls": [
-            "https://mirror.bazel.build/github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_s390x_linux_hotspot_11.0.7_10.tar.gz",
-            "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_s390x_linux_hotspot_11.0.7_10.tar.gz"
+            "https://mirror.bazel.build/github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.15+10/OpenJDK11U-jdk_s390x_linux_hotspot_11.0.15_10.tar.gz",
+            "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.15+10/OpenJDK11U-jdk_s390x_linux_hotspot_11.0.15_10.tar.gz"
         ]
     },
     "remotejdk11_linux_s390x_for_testing": {
@@ -1216,10 +1436,11 @@
         "generator_function": "maybe",
         "generator_name": "remotejdk11_macos",
         "name": "remotejdk11_macos",
-        "sha256": "e1fe56769f32e2aaac95e0a8f86b5a323da5af3a3b4bba73f3086391a6cc056f",
-        "strip_prefix": "zulu11.37.17-ca-jdk11.0.6-macosx_x64",
+        "sha256": "2614e5c5de8e989d4d81759de4c333aa5b867b17ab9ee78754309ba65c7f6f55",
+        "strip_prefix": "zulu11.56.19-ca-jdk11.0.15-macosx_x64",
         "urls": [
-            "https://mirror.bazel.build/openjdk/azul-zulu11.37.17-ca-jdk11.0.6/zulu11.37.17-ca-jdk11.0.6-macosx_x64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-macosx_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-macosx_x64.tar.gz"
         ]
     },
     "remotejdk11_macos_aarch64": {
@@ -1227,11 +1448,11 @@
         "generator_function": "maybe",
         "generator_name": "remotejdk11_macos_aarch64",
         "name": "remotejdk11_macos_aarch64",
-        "sha256": "3dcc636e64ae58b922269c2dc9f20f6f967bee90e3f6847d643c4a566f1e8d8a",
-        "strip_prefix": "zulu11.45.27-ca-jdk11.0.10-macosx_aarch64",
+        "sha256": "6bb0d2c6e8a29dcd9c577bbb2986352ba12481a9549ac2c0bcfd00ed60e538d2",
+        "strip_prefix": "zulu11.56.19-ca-jdk11.0.15-macosx_aarch64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu11.45.27-ca-jdk11.0.10-macosx_aarch64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu11.45.27-ca-jdk11.0.10-macosx_aarch64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64.tar.gz"
         ]
     },
     "remotejdk11_macos_aarch64_for_testing": {
@@ -1279,10 +1500,22 @@
         "generator_function": "maybe",
         "generator_name": "remotejdk11_win",
         "name": "remotejdk11_win",
-        "sha256": "a9695617b8374bfa171f166951214965b1d1d08f43218db9a2a780b71c665c18",
-        "strip_prefix": "zulu11.37.17-ca-jdk11.0.6-win_x64",
+        "sha256": "a106c77389a63b6bd963a087d5f01171bd32aa3ee7377ecef87531390dcb9050",
+        "strip_prefix": "zulu11.56.19-ca-jdk11.0.15-win_x64",
         "urls": [
-            "https://mirror.bazel.build/openjdk/azul-zulu11.37.17-ca-jdk11.0.6/zulu11.37.17-ca-jdk11.0.6-win_x64.zip"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-win_x64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-win_x64.zip"
+        ]
+    },
+    "remotejdk11_win_arm64": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk11_win_arm64",
+        "name": "remotejdk11_win_arm64",
+        "sha256": "b8a28e6e767d90acf793ea6f5bed0bb595ba0ba5ebdf8b99f395266161e53ec2",
+        "strip_prefix": "jdk-11.0.13+8",
+        "urls": [
+            "https://mirror.bazel.build/aka.ms/download-jdk/microsoft-jdk-11.0.13.8.1-windows-aarch64.zip"
         ]
     },
     "remotejdk11_win_arm64_for_testing": {
@@ -1324,85 +1557,28 @@
             "https://cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-win_x64.zip"
         ]
     },
-    "remotejdk14_linux": {
+    "remotejdk17_linux": {
         "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
         "generator_function": "maybe",
-        "generator_name": "remotejdk14_linux",
-        "name": "remotejdk14_linux",
-        "sha256": "48bb8947034cd079ad1ef83335e7634db4b12a26743a0dc314b6b861480777aa",
-        "strip_prefix": "zulu14.28.21-ca-jdk14.0.1-linux_x64",
+        "generator_name": "remotejdk17_linux",
+        "name": "remotejdk17_linux",
+        "sha256": "73d5c4bae20325ca41b606f7eae64669db3aac638c5b3ead4a975055846ad6de",
+        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-linux_x64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu14.28.21-ca-jdk14.0.1-linux_x64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_x64.tar.gz"
         ]
     },
-    "remotejdk14_macos": {
+    "remotejdk17_linux_aarch64": {
         "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
         "generator_function": "maybe",
-        "generator_name": "remotejdk14_macos",
-        "name": "remotejdk14_macos",
-        "sha256": "088bd4d0890acc9f032b738283bf0f26b2a55c50b02d1c8a12c451d8ddf080dd",
-        "strip_prefix": "zulu14.28.21-ca-jdk14.0.1-macosx_x64",
+        "generator_name": "remotejdk17_linux_aarch64",
+        "name": "remotejdk17_linux_aarch64",
+        "sha256": "2b8066bbdbc5cff422bb6b6db1b8f8d362b576340cce8492f1255502af632b06",
+        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-linux_aarch64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu14.28.21-ca-jdk14.0.1-macosx_x64.tar.gz"
-        ]
-    },
-    "remotejdk14_win": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
-        "generator_function": "maybe",
-        "generator_name": "remotejdk14_win",
-        "name": "remotejdk14_win",
-        "sha256": "9cb078b5026a900d61239c866161f0d9558ec759aa15c5b4c7e905370e868284",
-        "strip_prefix": "zulu14.28.21-ca-jdk14.0.1-win_x64",
-        "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu14.28.21-ca-jdk14.0.1-win_x64.zip"
-        ]
-    },
-    "remotejdk15_linux": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
-        "generator_function": "maybe",
-        "generator_name": "remotejdk15_linux",
-        "name": "remotejdk15_linux",
-        "sha256": "0a38f1138c15a4f243b75eb82f8ef40855afcc402e3c2a6de97ce8235011b1ad",
-        "strip_prefix": "zulu15.27.17-ca-jdk15.0.0-linux_x64",
-        "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu15.27.17-ca-jdk15.0.0-linux_x64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu15.27.17-ca-jdk15.0.0-linux_x64.tar.gz"
-        ]
-    },
-    "remotejdk15_macos": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
-        "generator_function": "maybe",
-        "generator_name": "remotejdk15_macos",
-        "name": "remotejdk15_macos",
-        "sha256": "f80b2e0512d9d8a92be24497334c974bfecc8c898fc215ce0e76594f00437482",
-        "strip_prefix": "zulu15.27.17-ca-jdk15.0.0-macosx_x64",
-        "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu15.27.17-ca-jdk15.0.0-macosx_x64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu15.27.17-ca-jdk15.0.0-macosx_x64.tar.gz"
-        ]
-    },
-    "remotejdk15_macos_aarch64": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
-        "generator_function": "maybe",
-        "generator_name": "remotejdk15_macos_aarch64",
-        "name": "remotejdk15_macos_aarch64",
-        "sha256": "2613c3f15eef6b6ecd0fd102da92282b985e4573905dc902f1783d8059c1efc5",
-        "strip_prefix": "zulu15.29.15-ca-jdk15.0.2-macosx_aarch64",
-        "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu15.29.15-ca-jdk15.0.2-macosx_aarch64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu15.29.15-ca-jdk15.0.2-macosx_aarch64.tar.gz"
-        ]
-    },
-    "remotejdk15_win": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
-        "generator_function": "maybe",
-        "generator_name": "remotejdk15_win",
-        "name": "remotejdk15_win",
-        "sha256": "f535a530151e6c20de8a3078057e332b08887cb3ba1a4735717357e72765cad6",
-        "strip_prefix": "zulu15.27.17-ca-jdk15.0.0-win_x64",
-        "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu15.27.17-ca-jdk15.0.0-win_x64.zip",
-            "https://cdn.azul.com/zulu/bin/zulu15.27.17-ca-jdk15.0.0-win_x64.zip"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_aarch64.tar.gz"
         ]
     },
     "remotejdk17_linux_for_testing": {
@@ -1423,6 +1599,30 @@
         "urls": [
             "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_x64.tar.gz",
             "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_x64.tar.gz"
+        ]
+    },
+    "remotejdk17_macos": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk17_macos",
+        "name": "remotejdk17_macos",
+        "sha256": "89d04b2d99b05dcb25114178e65f6a1c5ca742e125cab0a63d87e7e42f3fcb80",
+        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-macosx_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_x64.tar.gz"
+        ]
+    },
+    "remotejdk17_macos_aarch64": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk17_macos_aarch64",
+        "name": "remotejdk17_macos_aarch64",
+        "sha256": "54247dde248ffbcd3c048675504b1c503b81daf2dc0d64a79e353c48d383c977",
+        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-macosx_aarch64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_aarch64.tar.gz"
         ]
     },
     "remotejdk17_macos_aarch64_for_testing": {
@@ -1465,6 +1665,30 @@
             "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_x64.tar.gz"
         ]
     },
+    "remotejdk17_win": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk17_win",
+        "name": "remotejdk17_win",
+        "sha256": "e965aa0ea7a0661a3446cf8f10ee00684b851f883b803315289f26b4aa907fdb",
+        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-win_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-win_x64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-win_x64.zip"
+        ]
+    },
+    "remotejdk17_win_arm64": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk17_win_arm64",
+        "name": "remotejdk17_win_arm64",
+        "sha256": "811d7e7591bac4f081dfb00ba6bd15b6fc5969e1f89f0f327ef75147027c3877",
+        "strip_prefix": "zulu17.30.15-ca-jdk17.0.1-win_aarch64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip"
+        ]
+    },
     "remotejdk17_win_arm64_for_testing": {
         "build_file": "@local_jdk//:BUILD.bazel",
         "generator_function": "dist_http_archive",
@@ -1505,6 +1729,30 @@
             "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-win_x64.zip"
         ]
     },
+    "remotejdk18_linux": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk18_linux",
+        "name": "remotejdk18_linux",
+        "sha256": "959a94ca4097dcaabc7886784cec10dfdf2b0a3bff890ea8943cc09c5fff29cb",
+        "strip_prefix": "zulu18.28.13-ca-jdk18.0.0-linux_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_x64.tar.gz"
+        ]
+    },
+    "remotejdk18_linux_aarch64": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk18_linux_aarch64",
+        "name": "remotejdk18_linux_aarch64",
+        "sha256": "a1d5f78172f32f819d08e9043b0f82fa7af738b37c55c6ca8d6092c61d204d53",
+        "strip_prefix": "zulu18.28.13-ca-jdk18.0.0-linux_aarch64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_aarch64.tar.gz"
+        ]
+    },
     "remotejdk18_linux_for_testing": {
         "build_file": "@local_jdk//:BUILD.bazel",
         "generator_function": "dist_http_archive",
@@ -1523,6 +1771,30 @@
         "urls": [
             "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_x64.tar.gz",
             "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_x64.tar.gz"
+        ]
+    },
+    "remotejdk18_macos": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk18_macos",
+        "name": "remotejdk18_macos",
+        "sha256": "780a9aa4bda95a6793bf41d13f837c59ef915e9bfd0e0c5fd4c70e4cdaa88541",
+        "strip_prefix": "zulu18.28.13-ca-jdk18.0.0-macosx_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-macosx_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-macosx_x64.tar.gz"
+        ]
+    },
+    "remotejdk18_macos_aarch64": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk18_macos_aarch64",
+        "name": "remotejdk18_macos_aarch64",
+        "sha256": "9595e001451e201fdf33c1952777968a3ac18fe37273bdeaea5b5ed2c4950432",
+        "strip_prefix": "zulu18.28.13-ca-jdk18.0.0-macosx_aarch64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-macosx_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-macosx_aarch64.tar.gz"
         ]
     },
     "remotejdk18_macos_aarch64_for_testing": {
@@ -1563,6 +1835,30 @@
         "urls": [
             "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-macosx_x64.tar.gz",
             "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-macosx_x64.tar.gz"
+        ]
+    },
+    "remotejdk18_win": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk18_win",
+        "name": "remotejdk18_win",
+        "sha256": "6c75498163b047595386fdb909cb6d4e04282c3a81799743c5e1f9316391fe16",
+        "strip_prefix": "zulu18.28.13-ca-jdk18.0.0-win_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-win_x64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-win_x64.zip"
+        ]
+    },
+    "remotejdk18_win_arm64": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk18_win_arm64",
+        "name": "remotejdk18_win_arm64",
+        "sha256": "9b52b259516e4140ee56b91f77750667bffbc543e78ad8c39082449d4c377b54",
+        "strip_prefix": "zulu18.28.13-ca-jdk18.0.0-win_aarch64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-win_aarch64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-win_aarch64.zip"
         ]
     },
     "remotejdk18_win_arm64_for_testing": {
@@ -1617,11 +1913,16 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "d0c573b94a6ef20ef6ff20154a23d0efcb409fb0e1ff0979cec318dfe42f0cdd",
-        "strip_prefix": "rules_cc-b1c40e1de81913a3c40e5948f78719c28152486d",
+        "sha256": "58bff40957ace85c2de21ebfc72e53ed3a0d33af8cc20abd0ceec55c63be7de2",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_cc/archive/b1c40e1de81913a3c40e5948f78719c28152486d.zip",
-            "https://github.com/bazelbuild/rules_cc/archive/b1c40e1de81913a3c40e5948f78719c28152486d.zip"
+            "https://github.com/bazelbuild/rules_cc/releases/download/0.0.2/rules_cc-0.0.2.tar.gz"
+        ]
+    },
+    "rules_cc-0.0.2.tar.gz": {
+        "name": "rules_cc-0.0.2.tar.gz",
+        "sha256": "58bff40957ace85c2de21ebfc72e53ed3a0d33af8cc20abd0ceec55c63be7de2",
+        "urls": [
+            "https://github.com/bazelbuild/rules_cc/releases/download/0.0.2/rules_cc-0.0.2.tar.gz"
         ]
     },
     "rules_java": {
@@ -1745,38 +2046,38 @@
         ]
     },
     "upb": {
-        "generator_function": "grpc_deps",
+        "generator_function": "dist_http_archive",
         "generator_name": "upb",
         "name": "upb",
-        "sha256": "6a5f67874af66b239b709c572ac1a5a00fdb1b29beaf13c3e6f79b1ba10dc7c4",
-        "strip_prefix": "upb-2de300726a1ba2de9a468468dc5ff9ed17a3215f",
+        "sha256": "cf7f71eaff90b24c1a28b49645a9ff03a9a6c1e7134291ce70901cb63e7364b5",
+        "strip_prefix": "upb-a5477045acaa34586420942098f5fecd3570f577",
         "urls": [
-            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/protocolbuffers/upb/archive/2de300726a1ba2de9a468468dc5ff9ed17a3215f.tar.gz",
-            "https://github.com/protocolbuffers/upb/archive/2de300726a1ba2de9a468468dc5ff9ed17a3215f.tar.gz"
+            "https://mirror.bazel.build/github.com/protocolbuffers/upb/archive/a5477045acaa34586420942098f5fecd3570f577.tar.gz",
+            "https://github.com/protocolbuffers/upb/archive/a5477045acaa34586420942098f5fecd3570f577.tar.gz"
         ]
     },
-    "v1.41.0.tar.gz": {
-        "name": "v1.41.0.tar.gz",
-        "sha256": "e5fb30aae1fa1cffa4ce00aa0bbfab908c0b899fcf0bbc30e268367d660d8656",
+    "v1.47.0.tar.gz": {
+        "name": "v1.47.0.tar.gz",
+        "sha256": "271bdc890bf329a8de5b65819f0f9590a5381402429bca37625b63546ed19e54",
         "urls": [
-            "https://mirror.bazel.build/github.com/grpc/grpc/archive/v1.41.0.tar.gz",
-            "https://github.com/grpc/grpc/archive/v1.41.0.tar.gz"
+            "https://mirror.bazel.build/github.com/grpc/grpc/archive/v1.47.0.tar.gz",
+            "https://github.com/grpc/grpc/archive/v1.47.0.tar.gz"
         ]
     },
-    "v1.5.0-4.zip": {
-        "name": "v1.5.0-4.zip",
-        "sha256": "d320d59b89a163c5efccbe4915ae6a49883ce653cdc670643dfa21c6063108e4",
+    "v1.5.2-3.zip": {
+        "name": "v1.5.2-3.zip",
+        "sha256": "366009a43cfada35015e4cc40a7efc4b7f017c6b8df5cac3f87d2478027b2056",
         "urls": [
-            "https://mirror.bazel.build/github.com/luben/zstd-jni/archive/v1.5.0-4.zip",
-            "https://github.com/luben/zstd-jni/archive/v1.5.0-4.zip"
+            "https://mirror.bazel.build/github.com/luben/zstd-jni/archive/refs/tags/v1.5.2-3.zip",
+            "https://github.com/luben/zstd-jni/archive/refs/tags/v1.5.2-3.zip"
         ]
     },
-    "v3.19.2.tar.gz": {
-        "name": "v3.19.2.tar.gz",
-        "sha256": "4dd35e788944b7686aac898f77df4e9a54da0ca694b8801bd6b2a9ffc1b3085e",
+    "v3.19.6.tar.gz": {
+        "name": "v3.19.6.tar.gz",
+        "sha256": "9a301cf94a8ddcb380b901e7aac852780b826595075577bb967004050c835056",
         "urls": [
-            "https://mirror.bazel.build/github.com/protocolbuffers/protobuf/archive/v3.19.2.tar.gz",
-            "https://github.com/protocolbuffers/protobuf/archive/v3.19.2.tar.gz"
+            "https://mirror.bazel.build/github.com/protocolbuffers/protobuf/archive/v3.19.6.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/archive/v3.19.6.tar.gz"
         ]
     },
     "zlib": {
@@ -1784,11 +2085,11 @@
         "generator_function": "grpc_deps",
         "generator_name": "zlib",
         "name": "zlib",
-        "sha256": "6d4d6640ca3121620995ee255945161821218752b551a1a180f4215f7d124d45",
-        "strip_prefix": "zlib-cacf7f1d4e3d44d871b605da3b647f07d718623f",
+        "sha256": "ef47b0fbe646d69a2fc5ba012cb278de8e8946a8e9649f83a807cc05559f0eff",
+        "strip_prefix": "zlib-21767c654d31d2dccdde4330529775c6c5fd5389",
         "urls": [
-            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/madler/zlib/archive/cacf7f1d4e3d44d871b605da3b647f07d718623f.tar.gz",
-            "https://github.com/madler/zlib/archive/cacf7f1d4e3d44d871b605da3b647f07d718623f.tar.gz"
+            "https://storage.googleapis.com/grpc-bazel-mirror/github.com/madler/zlib/archive/21767c654d31d2dccdde4330529775c6c5fd5389.tar.gz",
+            "https://github.com/madler/zlib/archive/21767c654d31d2dccdde4330529775c6c5fd5389.tar.gz"
         ]
     },
     "zstd-jni": {
@@ -1810,11 +2111,11 @@
         "patches": [
             "//third_party:zstd-jni/Native.java.patch"
         ],
-        "sha256": "d320d59b89a163c5efccbe4915ae6a49883ce653cdc670643dfa21c6063108e4",
-        "strip_prefix": "zstd-jni-1.5.0-4",
+        "sha256": "366009a43cfada35015e4cc40a7efc4b7f017c6b8df5cac3f87d2478027b2056",
+        "strip_prefix": "zstd-jni-1.5.2-3",
         "urls": [
-            "https://mirror.bazel.build/github.com/luben/zstd-jni/archive/v1.5.0-4.zip",
-            "https://github.com/luben/zstd-jni/archive/v1.5.0-4.zip"
+            "https://mirror.bazel.build/github.com/luben/zstd-jni/archive/refs/tags/v1.5.2-3.zip",
+            "https://github.com/luben/zstd-jni/archive/refs/tags/v1.5.2-3.zip"
         ]
     },
     "zulu11.56.19-ca-jdk11.0.15-linux_aarch64.tar.gz": {
@@ -1863,6 +2164,22 @@
         "urls": [
             "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip",
             "https://cdn.azul.com/zulu/bin/zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip"
+        ]
+    },
+    "zulu17.32.13-ca-jdk17.0.2-linux_aarch64.tar.gz": {
+        "name": "zulu17.32.13-ca-jdk17.0.2-linux_aarch64.tar.gz",
+        "sha256": "2b8066bbdbc5cff422bb6b6db1b8f8d362b576340cce8492f1255502af632b06",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_aarch64.tar.gz"
+        ]
+    },
+    "zulu18.28.13-ca-jdk18.0.0-linux_aarch64.tar.gz": {
+        "name": "zulu18.28.13-ca-jdk18.0.0-linux_aarch64.tar.gz",
+        "sha256": "a1d5f78172f32f819d08e9043b0f82fa7af738b37c55c6ca8d6092c61d204d53",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_aarch64.tar.gz"
         ]
     },
     "zulu18.28.13-ca-jdk18.0.0-win_aarch64.zip": {

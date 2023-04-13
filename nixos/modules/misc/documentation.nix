@@ -48,10 +48,15 @@ let
         };
         scrubDerivations = namePrefix: pkgSet: mapAttrs
           (name: value:
-            let wholeName = "${namePrefix}.${name}"; in
-            if isAttrs value then
+            let
+              wholeName = "${namePrefix}.${name}";
+              guard = lib.warn "Attempt to evaluate package ${wholeName} in option documentation; this is not supported and will eventually be an error. Use `mkPackageOption{,MD}` or `literalExpression` instead.";
+            in if isAttrs value then
               scrubDerivations wholeName value
-              // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
+              // optionalAttrs (isDerivation value) {
+                outPath = guard "\${${wholeName}}";
+                drvPath = guard drvPath;
+              }
             else value
           )
           pkgSet;
@@ -126,7 +131,8 @@ let
     desktopItem = pkgs.makeDesktopItem {
       name = "nixos-manual";
       desktopName = "NixOS Manual";
-      genericName = "View NixOS documentation in a web browser";
+      genericName = "System Manual";
+      comment = "View NixOS documentation in a web browser";
       icon = "nix-snowflake";
       exec = "nixos-help";
       categories = ["System"];
@@ -351,6 +357,14 @@ in
 
     (mkIf cfg.nixos.enable {
       system.build.manual = manual;
+
+      system.activationScripts.check-manual-docbook = ''
+        if [[ $(cat ${manual.optionsUsedDocbook}) = 1 ]]; then
+          echo -e "\e[31;1mwarning\e[0m: This configuration contains option documentation in docbook." \
+                  "Support for docbook is deprecated and will be removed after NixOS 23.05." \
+                  "See nix-store --read-log ${builtins.unsafeDiscardStringContext manual.optionsJSON.drvPath}"
+        fi
+      '';
 
       environment.systemPackages = []
         ++ optional cfg.man.enable manual.manpages

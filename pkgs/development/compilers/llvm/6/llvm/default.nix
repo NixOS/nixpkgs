@@ -4,6 +4,7 @@
 , cmake
 , python3
 , libffi
+, enableGoldPlugin ? libbfd.hasPluginAPI
 , libbfd
 , libxml2
 , ncurses
@@ -12,6 +13,8 @@
 , zlib
 , buildLlvmTools
 , fetchpatch
+, doCheck ? stdenv.isLinux && (!stdenv.isi686)
+  && (stdenv.hostPlatform == stdenv.buildPlatform)
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
@@ -25,6 +28,29 @@ let
   versionSuffixes = with lib;
     let parts = splitVersion release_version; in
     imap (i: _: concatStringsSep "." (take i parts)) parts;
+
+  # Ordinarily we would just the `doCheck` and `checkDeps` functionality
+  # `mkDerivation` gives us to manage our test dependencies (instead of breaking
+  # out `doCheck` as a package level attribute).
+  #
+  # Unfortunately `lit` does not forward `$PYTHONPATH` to children processes, in
+  # particular the children it uses to do feature detection.
+  #
+  # This means that python deps we add to `checkDeps` (which the python
+  # interpreter is made aware of via `$PYTHONPATH` – populated by the python
+  # setup hook) are not picked up by `lit` which causes it to skip tests.
+  #
+  # Adding `python3.withPackages (ps: [ ... ])` to `checkDeps` also doesn't work
+  # because this package is shadowed in `$PATH` by the regular `python3`
+  # package.
+  #
+  # So, we "manually" assemble one python derivation for the package to depend
+  # on, taking into account whether checks are enabled or not:
+  python = if doCheck then
+    let
+      checkDeps = ps: with ps; [ psutil ];
+    in python3.withPackages checkDeps
+  else python3;
 in
 
 stdenv.mkDerivation (rec {
@@ -45,7 +71,7 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "lib" "dev" "python" ];
 
-  nativeBuildInputs = [ cmake python3 ]
+  nativeBuildInputs = [ cmake python ]
     ++ optional enableManpages python3.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ];
@@ -162,7 +188,7 @@ stdenv.mkDerivation (rec {
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ optionals (!isDarwin) [
+  ] ++ optionals (enableGoldPlugin) [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ] ++ optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
@@ -226,8 +252,7 @@ stdenv.mkDerivation (rec {
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '';
 
-  doCheck = stdenv.isLinux && (!stdenv.isi686)
-    && (stdenv.hostPlatform == stdenv.buildPlatform);
+  inherit doCheck;
 
   checkTarget = "check-all";
 

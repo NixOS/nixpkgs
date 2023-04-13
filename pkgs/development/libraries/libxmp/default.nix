@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Extended module player library";
-    homepage    = "http://xmp.sourceforge.net/";
+    homepage    = "https://xmp.sourceforge.net/";
     longDescription = ''
       Libxmp is a library that renders module files to PCM data. It supports
       over 90 mainstream and obscure module formats including Protracker (MOD),

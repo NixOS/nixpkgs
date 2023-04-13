@@ -1,18 +1,20 @@
-{ lib
-, fetchzip
-}:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip rec {
+stdenvNoCC.mkDerivation rec {
   pname = "hackgen-nf-font";
-  version = "2.7.1";
+  version = "2.8.0";
 
-  url = "https://github.com/yuru7/HackGen/releases/download/v${version}/HackGen_NF_v${version}.zip";
-  sha256 = "sha256-9sylGr37kKIGWgThZFqL2y6oI3t2z4kbXYk5DBMIb/g=";
-  postFetch = ''
-    install -Dm644 $out/*.ttf -t $out/share/fonts/hackgen-nf
-    shopt -s extglob dotglob
-    rm -rf $out/!(share)
-    shopt -u extglob dotglob
+  src = fetchzip {
+    url = "https://github.com/yuru7/HackGen/releases/download/v${version}/HackGen_NF_v${version}.zip";
+    hash = "sha256-RLEq5IoA3gk/IzabV8wdJYj8yMpbWQVz+Qunef6oNOs=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/hackgen-nf
+
+    runHook postInstall
   '';
 
   meta = with lib; {

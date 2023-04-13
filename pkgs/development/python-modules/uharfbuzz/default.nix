@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "harfbuzz";
     repo = "uharfbuzz";
     rev = "v${version}";
-    sha256 = "sha256-DyFXbwB28JH2lvmWDezRh49tjCvleviUNSE5LHG3kUg=";
+    hash = "sha256-DyFXbwB28JH2lvmWDezRh49tjCvleviUNSE5LHG3kUg=";
     fetchSubmodules = true;
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

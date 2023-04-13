@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-V9IOxLEN1pTSsFu2S8axCcboWmwUBXlM6H7Ys0GrP0Q=";
+    hash = "sha256-V9IOxLEN1pTSsFu2S8axCcboWmwUBXlM6H7Ys0GrP0Q=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ packaging appdirs requests ];
 
   preCheck = "HOME=$TMPDIR";
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   # tries to touch network
   disabledTests = [
     "pooch_custom_url"

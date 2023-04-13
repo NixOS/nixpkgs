@@ -15,6 +15,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bzip2 libxml2 libzip boost lua luabind tbb expat ];
 
+  patches = [ ./darwin.patch ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=stringop-overflow"
+    "-Wno-error=uninitialized"
+  ];
+
   postInstall = "mkdir -p $out/share/osrm-backend && cp -r ../profiles $out/share/osrm-backend/profiles";
 
   meta = {
@@ -22,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "Open Source Routing Machine computes shortest paths in a graph. It was designed to run well with map data from the Openstreetmap Project";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers;[ erictapen ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

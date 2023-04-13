@@ -16,7 +16,7 @@ buildFishPlugin rec {
     cp functions/__bass.py $out/share/fish/vendor_functions.d/
   '';
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
   checkPhase = ''
     make test
   '';

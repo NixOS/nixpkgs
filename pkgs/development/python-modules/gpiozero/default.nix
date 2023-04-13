@@ -39,7 +39,7 @@ buildPythonPackage rec {
     "gpiozero.tools"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
@@ -49,6 +49,7 @@ buildPythonPackage rec {
     description = "A simple interface to GPIO devices with Raspberry Pi";
     homepage = "https://github.com/gpiozero/gpiozero";
     license = licenses.bsd3;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ hexa ];
   };
 }

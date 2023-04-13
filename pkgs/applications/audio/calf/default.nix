@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "17x4hylgq4dn9qycsdacfxy64f5cv57n2qgkvsdp524gnqzw4az3";
   };
 
+  outputs = [ "out" "doc" ];
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config ];
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://calf-studio-gear.org";
+    homepage = "https://calf-studio-gear.org";
     description = "A set of high quality open source audio plugins for musicians";
     license = licenses.lgpl2;
     maintainers = [ maintainers.goibhniu ];

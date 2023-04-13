@@ -22,7 +22,7 @@ buildPythonPackage rec {
   ];
 
   # Needed so dot is on path of the test script
-  checkInputs = [ graphviz ];
+  nativeCheckInputs = [ graphviz ];
 
   checkPhase = ''
     runHook preCheck

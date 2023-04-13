@@ -55,10 +55,13 @@ trim_trailing_whitespace = unset
 [*.lock]
 indent_size = unset
 
-# trailing whitespace is an actual syntax element of classic Markdown/
-# CommonMark to enforce a line break
+# Although Markdown/CommonMark allows using two trailing spaces to denote
+# a hard line break, we do not use that feature in nixpkgs since
+# it forces the surrounding paragraph to become a <literallayout> which
+# does not wrap reasonably.
+# Instead of a hard line break, start a new paragraph by inserting a blank line.
 [*.md]
-trim_trailing_whitespace = unset
+trim_trailing_whitespace = true
 
 # binaries
 [*.nib]
@@ -92,3 +95,9 @@ trim_trailing_whitespace = unset
 
 [pkgs/tools/misc/timidity/timidity.cfg]
 trim_trailing_whitespace = unset
+
+[pkgs/tools/virtualization/ovftool/*.ova]
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+charset = unset

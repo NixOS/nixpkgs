@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "A prototype-based dynamic object-oriented programming language, environment, and virtual machine";
     homepage = "https://selflanguage.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.doublec ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

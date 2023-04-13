@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: dns_resolv.o:(.bss+0x20): multiple definition of `system_info'; webalizer.o:(.bss+0x76e0): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preConfigure =
     ''

@@ -1,4 +1,6 @@
-{ lib, stdenv
+{ lib
+, nixosTests
+, stdenv
 , fetchurl
 , fetchpatch
 , pkg-config
@@ -169,6 +171,8 @@ stdenv.mkDerivation rec {
   ;
 
   doCheck = true;
+
+  passthru.tests.connman = nixosTests.connman;
 
   meta = with lib; {
     description = "A daemon for managing internet connections";

@@ -10,10 +10,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tnps4/aTfYUGgYJ3FL5zCqNhwEnjd1Lj7Z3xHn8jL/s=";
+    hash = "sha256-tnps4/aTfYUGgYJ3FL5zCqNhwEnjd1Lj7Z3xHn8jL/s=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pylsqpack" ];
 

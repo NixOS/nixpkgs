@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -7,26 +8,31 @@
 , cairo
 , gtk3
 , webkitgtk
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+in
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
-  version = "1.0.5";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-mp9U46H03NTMumUkx5kjsh9LnbPBrvlhh3yCH6FYdbE=";
+    rev = "tauri-v${version}";
+    sha256 = "sha256-BzstYoRZuZTNAkVGqPGYrd/AiWEhoH6t/XezDaFdmVo=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
   sourceRoot = "source/tooling/cli";
 
-  cargoSha256 = "sha256-iFXuVrxE/QmM+TAZmN8Ivt6Le19NWYIfVn1PNPvmhZo=";
+  cargoHash = "sha256-t5MlJpQOA5T/EwbPoSD95kATGReiZTmq+JkbDVbRj+0=";
 
-  buildInputs = [ glibc libsoup cairo gtk3 webkitgtk ];
+  buildInputs = lib.optionals stdenv.isLinux [ glibc libsoup cairo gtk3 webkitgtk ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {

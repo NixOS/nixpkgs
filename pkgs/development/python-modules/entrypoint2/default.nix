@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, EasyProcess
+, easyprocess
 , path
 , pytestCheckHook
 , pythonOlder
@@ -19,8 +19,8 @@ buildPythonPackage rec {
     hash = "sha256-/At/57IazatHpYWrlAfKflxPlstoiFddtrDOuR8OEFo=";
   };
 
-  checkInputs = [
-    EasyProcess
+  nativeCheckInputs = [
+    easyprocess
     path
     pytestCheckHook
   ];

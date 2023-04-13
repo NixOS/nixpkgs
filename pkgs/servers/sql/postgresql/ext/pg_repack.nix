@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "reorg";
     repo   = "pg_repack";
-    rev    = "f42c1bd707bd5d69a9eb33494133db2e47a2c05a"; # no release tag
-    sha256 = "sha256-pZjspnmPTXS/SbyLAd7vcoF01cbC6PnxZjuto4lUuQA=";
+    rev    = "ver_${version}";
+    sha256 = "sha256-Et8aMRzG7ez0uy9wG6qsg57/kPPZdUhb+/gFxW86D08=";
   };
 
   installPhase = ''
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
       exclusive lock on the processed tables during processing. pg_repack is efficient to boot,
       with performance comparable to using CLUSTER directly.
     '';
+    homepage = "https://github.com/reorg/pg_repack";
     license = licenses.bsd3;
     maintainers = with maintainers; [ danbst ];
     inherit (postgresql.meta) platforms;
-    inherit (src.meta) homepage;
   };
 }

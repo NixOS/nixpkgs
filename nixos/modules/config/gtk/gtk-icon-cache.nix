@@ -52,10 +52,8 @@ with lib;
 
     environment.extraSetup = ''
       # For each icon theme directory ...
-
-      find $out/share/icons -mindepth 1 -maxdepth 1 -print0 | while read -d $'\0' themedir
+      find $out/share/icons -exec test -d {} ';' -mindepth 1 -maxdepth 1 -print0 | while read -d $'\0' themedir
       do
-
         # In order to build the cache, the theme dir should be
         # writable. When the theme dir is a symbolic link to somewhere
         # in the nix store it is not writable and it means that only

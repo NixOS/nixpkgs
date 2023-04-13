@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , mypy
 , pytestCheckHook
 , python-lsp-server
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pylsp-mypy";
-  version = "0.6.3";
+  version = "0.6.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "Richardk2n";
     repo = "pylsp-mypy";
     rev = "refs/tags/${version}";
-    hash = "sha256-fZ2bPPjBK/H2jMI4S3EhvWJaNl4tK7HstxcHSAkoFW4=";
+    hash = "sha256-9B+GSEoQEqd1W/g0oup4xULKWOF0TgSG5DfBtyWA3vs=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -8,7 +8,7 @@
 # Cluster joins that are outside this window will fail, and nodes that skew
 # outside the window after joining will promptly get kicked out.
 #
-# To accomodate this, we use QEMU/virtio infrastructure and load the 'ptp_kvm'
+# To accommodate this, we use QEMU/virtio infrastructure and load the 'ptp_kvm'
 # driver inside a guest. This driver allows the host machine to pass its clock
 # through to the guest as a hardware clock that appears as a Precision Time
 # Protocol (PTP) Clock device, generally /dev/ptp0. PTP devices can be measured

@@ -6,13 +6,7 @@ set -u
 set -o pipefail
 set -x
 
-NIX_VERSION=$(nix --version|cut -d ' ' -f 3|cut -c -3)
-if [[ "$NIX_VERSION" > 2.3 ]]; then
-  nixFlags="--option experimental-features nix-command eval --raw --impure --expr"
-else
-  nixFlags="eval --raw"
-fi
-
+nixFlags="--option experimental-features nix-command eval --raw --impure --expr"
 export WP_VERSION=$(nix $nixFlags '(import <nixpkgs> {}).wordpress.version')
 
 PLUGINS=`cat wordpress-plugins.json | jq -r '.[]' | sed -z 's/\n/,/g;s/,$/\n/'`

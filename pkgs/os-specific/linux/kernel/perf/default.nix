@@ -4,9 +4,7 @@
 , fetchurl
 , kernel
 , elfutils
-, python2
 , python3
-, python3Packages
 , perl
 , newt
 , slang
@@ -27,10 +25,12 @@
 , libbfd_2_38
 , libopcodes
 , libopcodes_2_38
+, libtraceevent
 , openssl
 , systemtap
 , numactl
 , zlib
+, babeltrace
 , withGtk ? false
 , gtk2
 , withZstd ? true
@@ -60,37 +60,29 @@ stdenv.mkDerivation {
 
   inherit (kernel) src;
 
-  patches = lib.optionals (lib.versionAtLeast kernel.version "5.19" && lib.versionOlder kernel.version "5.20") [
-    # binutils-2.39 support around init_disassemble_info()
-    # API change.
-    # Will be included in 5.20.
-    ./5.19-binutils-2.39-support.patch
-  ];
-
   postPatch = ''
-    patchShebangs scripts tools/perf/pmu-events/jevents.py
+    # Linux scripts
+    patchShebangs scripts
 
-    substituteInPlace tools/perf/scripts/python/flamegraph.py \
-      --replace "/usr/share/d3-flame-graph/d3-flamegraph-base.html" \
-      "${d3-flame-graph-templates}/share/d3-flame-graph/d3-flamegraph-base.html"
-  '';
-
-  preConfigure = ''
     cd tools/perf
-
-    substituteInPlace Makefile \
-      --replace /usr/include/elfutils $elfutils/include/elfutils
 
     for x in util/build-id.c util/dso.c; do
       substituteInPlace $x --replace /usr/lib/debug /run/current-system/sw/lib/debug
     done
 
-    if [ -f bash_completion ]; then
-      sed -i 's,^have perf,_have perf,' bash_completion
-    fi
+  '' + lib.optionalString (lib.versionAtLeast kernel.version "5.8") ''
+    substituteInPlace scripts/python/flamegraph.py \
+      --replace "/usr/share/d3-flame-graph/d3-flamegraph-base.html" \
+      "${d3-flame-graph-templates}/share/d3-flame-graph/d3-flamegraph-base.html"
+
+  '' + lib.optionalString (lib.versionAtLeast kernel.version "6.0") ''
+    patchShebangs pmu-events/jevents.py
   '';
 
-  makeFlags = [ "prefix=$(out)" "WERROR=0" ] ++ kernel.makeFlags;
+  makeFlags = [ "prefix=$(out)" "WERROR=0" "ASCIIDOC8=1" ] ++ kernel.makeFlags
+    ++ lib.optional (!withGtk) "NO_GTK2=1"
+    ++ lib.optional (!withZstd) "NO_LIBZSTD=1"
+    ++ lib.optional (!withLibcap) "NO_LIBCAP=1";
 
   hardeningDisable = [ "format" ];
 
@@ -114,23 +106,24 @@ stdenv.mkDerivation {
     elfutils
     newt
     slang
+    libtraceevent
     libunwind
     zlib
     openssl
-    systemtap.stapBuild
     numactl
     python3
     perl
+    babeltrace
   ] ++ (if (lib.versionAtLeast kernel.version "5.19")
   then [ libbfd libopcodes ]
   else [ libbfd_2_38 libopcodes_2_38 ])
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform systemtap) systemtap.stapBuild
   ++ lib.optional withGtk gtk2
-  ++ (if (lib.versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ])
   ++ lib.optional withZstd zstd
   ++ lib.optional withLibcap libcap
-  ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3Packages.setuptools;
+  ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools;
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"
     "-Wno-error=bool-compare"
     "-Wno-error=deprecated-declarations"
@@ -138,22 +131,23 @@ stdenv.mkDerivation {
   ];
 
   doCheck = false; # requires "sparse"
-  doInstallCheck = false; # same
 
-  separateDebugInfo = true;
-  installFlags = [ "install" "install-man" "ASCIIDOC8=1" "prefix=$(out)" ];
+  installTargets = [ "install" "install-man" ];
 
-  postInstall =''
+  # TODO: Add completions based on perf-completion.sh
+  postInstall = ''
     # Same as perf. Remove.
     rm -f $out/bin/trace
   '';
+
+  separateDebugInfo = true;
 
   preFixup = ''
     # Pull in 'objdump' into PATH to make annotations work.
     # The embeded Python interpreter will search PATH to calculate the Python path configuration(Should be fixed by upstream).
     # Add python.interpreter to PATH for now.
     wrapProgram $out/bin/perf \
-      --prefix PATH : ${lib.makeBinPath ([ binutils-unwrapped ] ++ (if (lib.versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ]))}
+      --prefix PATH : ${lib.makeBinPath [ binutils-unwrapped python3 ]}
   '';
 
   meta = with lib; {

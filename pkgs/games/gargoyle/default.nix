@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   #   ld: build/linux.release/alan3/Location.o:(.bss+0x0): multiple definition of
   #     `logFile'; build/linux.release/alan3/act.o:(.bss+0x0): first defined here
   # TODO: drop once updated to 2022.1 or later.
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 

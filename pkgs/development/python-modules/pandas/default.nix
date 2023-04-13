@@ -20,7 +20,7 @@
 , pytestCheckHook
 , pytest-xdist
 , pytest-asyncio
-, XlsxWriter
+, xlsxwriter
 # Darwin inputs
 , runtimeShell
 , libcxx
@@ -28,13 +28,13 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.4.4";
+  version = "1.5.3";
   format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q2wNc4YXtnUYPl8o2zK1FItpStm7oKQMPqJtlrQx22c=";
+    hash = "sha256-dKP9flp+wFLxgyc9x7Cs06hj7fdSD106F2XAT/2zsLE=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -47,14 +47,15 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
-    hypothesis
+    # hypothesis indirectly depends on pandas to build its documentation
+    (hypothesis.override { enableDocumentation = false; })
     jinja2
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
-    XlsxWriter
+    xlsxwriter
   ];
 
   # Doesn't work with -Werror,-Wunused-command-line-argument
@@ -96,6 +97,10 @@ buildPythonPackage rec {
     # than expected, e.g. on amd64 with FMA or on arm64
     # https://github.com/pandas-dev/pandas/issues/38921
     "test_rolling_var_numerical_issues"
+    # Requires mathplotlib
+    "test_subset_for_boolean_cols"
+    # DeprecationWarning from numpy
+    "test_sort_values_sparse_no_warning"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"

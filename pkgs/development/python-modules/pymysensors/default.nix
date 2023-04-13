@@ -47,7 +47,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-sugar
     pytest-timeout
     pytestCheckHook

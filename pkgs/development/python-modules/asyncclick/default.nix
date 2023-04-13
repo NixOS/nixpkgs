@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-by1clF+WAfN/gjOg/F60O1tCZ3qAhWqiiJJY04iMzQ8=";
+    hash = "sha256-by1clF+WAfN/gjOg/F60O1tCZ3qAhWqiiJJY04iMzQ8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -31,9 +31,13 @@ buildPythonPackage rec {
     anyio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     trio
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [

@@ -1,42 +1,46 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , patchelf
 , cmake
 , pkg-config
-
 , intel-gmmlib
 , intel-graphics-compiler
+, level-zero
 , libva
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "22.35.24055";
+  version = "23.05.25593.11";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    sha256 = "sha256-MOWlhzhEGYyHGk6N+H7O2BLho4YFyvcCbj/zafhzLEw=";
+    sha256 = "sha256-AsJGcyVqRGz7OBWTlQeTS412iUzMAbIsA4w6CmEf1G8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ intel-gmmlib intel-graphics-compiler libva ];
+  buildInputs = [ intel-gmmlib intel-graphics-compiler libva level-zero ];
 
   cmakeFlags = [
     "-DSKIP_UNIT_TESTS=1"
-
     "-DIGC_DIR=${intel-graphics-compiler}"
     "-DOCL_ICD_VENDORDIR=${placeholder "out"}/etc/OpenCL/vendors"
-
     # The install script assumes this path is relative to CMAKE_INSTALL_PREFIX
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
+  outputs = [ "out" "drivers" ];
+
   postInstall = ''
     # Avoid clash with intel-ocl
     mv $out/etc/OpenCL/vendors/intel.icd $out/etc/OpenCL/vendors/intel-neo.icd
+
+    mkdir -p $drivers/lib
+    mv -t $drivers/lib $out/lib/libze_intel*
   '';
 
   postFixup = ''
@@ -45,10 +49,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://github.com/intel/compute-runtime";
+    homepage = "https://github.com/intel/compute-runtime";
     description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ gloaming ];
+    license = licenses.mit;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

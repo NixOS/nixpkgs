@@ -8,9 +8,9 @@ let
   systemd = cfg.package;
 in rec {
 
-  shellEscape = s: (replaceChars [ "\\" ] [ "\\\\" ] s);
+  shellEscape = s: (replaceStrings [ "\\" ] [ "\\\\" ] s);
 
-  mkPathSafeName = lib.replaceChars ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""];
+  mkPathSafeName = lib.replaceStrings ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""];
 
   # a type for options that take a unit name
   unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
@@ -24,7 +24,7 @@ in rec {
         }
         ''
           name=${shellEscape name}
-          mkdir -p "$out/$(dirname "$name")"
+          mkdir -p "$out/$(dirname -- "$name")"
           echo -n "$text" > "$out/$name"
         ''
     else
@@ -258,7 +258,7 @@ in rec {
 
   makeJobScript = name: text:
     let
-      scriptName = replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
+      scriptName = replaceStrings [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
       out = (pkgs.writeShellScriptBin scriptName ''
         set -e
         ${text}

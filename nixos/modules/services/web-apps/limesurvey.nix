@@ -32,7 +32,25 @@ in
   # interface
 
   options.services.limesurvey = {
-    enable = mkEnableOption (lib.mdDoc "Limesurvey web application.");
+    enable = mkEnableOption (lib.mdDoc "Limesurvey web application");
+
+    encryptionKey = mkOption {
+      type = types.str;
+      default = "E17687FC77CEE247F0E22BB3ECF27FDE8BEC310A892347EC13013ABA11AA7EB5";
+      description = lib.mdDoc ''
+        This is a 32-byte key used to encrypt variables in the database.
+        You _must_ change this from the default value.
+      '';
+    };
+
+    encryptionNonce = mkOption {
+      type = types.str;
+      default = "1ACC8555619929DB91310BE848025A427B0F364A884FFA77";
+      description = lib.mdDoc ''
+        This is a 24-byte nonce used to encrypt variables in the database.
+        You _must_ change this from the default value.
+      '';
+    };
 
     database = {
       type = mkOption {
@@ -42,6 +60,12 @@ in
         description = lib.mdDoc "Database engine to use.";
       };
 
+      dbEngine = mkOption {
+        type = types.enum [ "MyISAM" "InnoDB" ];
+        default = "InnoDB";
+        description = lib.mdDoc "Database storage engine to use.";
+      };
+
       host = mkOption {
         type = types.str;
         default = "localhost";
@@ -49,7 +73,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = if cfg.database.type == "pgsql" then 5442 else 3306;
         defaultText = literalExpression "3306";
         description = lib.mdDoc "Database host port.";
@@ -180,6 +204,8 @@ in
       config = {
         tempdir = "${stateDir}/tmp";
         uploaddir = "${stateDir}/upload";
+        encryptionnonce = cfg.encryptionNonce;
+        encryptionsecretboxkey = cfg.encryptionKey;
         force_ssl = mkIf (cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL) "on";
         config.defaultlang = "en";
       };
@@ -200,6 +226,8 @@ in
 
     services.phpfpm.pools.limesurvey = {
       inherit user group;
+      phpPackage = pkgs.php80;
+      phpEnv.DBENGINE = "${cfg.database.dbEngine}";
       phpEnv.LIMESURVEY_CONFIG = "${limesurveyConfig}";
       settings = {
         "listen.owner" = config.services.httpd.user;
@@ -256,11 +284,12 @@ in
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-limesurvey.service" ];
       after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      environment.DBENGINE = "${cfg.database.dbEngine}";
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required
-        ${pkgs.php}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
-        ${pkgs.php}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
+        ${pkgs.php80}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
+        ${pkgs.php80}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
       '';
       serviceConfig = {
         User = user;

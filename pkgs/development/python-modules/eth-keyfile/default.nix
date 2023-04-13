@@ -18,7 +18,7 @@ buildPythonPackage rec {
     repo = "eth-keyfile";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-JD4bRoD9L0JXcd+bTZrq/BkWw5QGzOi1RvoyLJC77kk=";
+    hash = "sha256-JD4bRoD9L0JXcd+bTZrq/BkWw5QGzOi1RvoyLJC77kk=";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pycryptodome
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

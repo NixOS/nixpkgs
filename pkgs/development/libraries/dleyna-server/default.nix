@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Library to discover, browse and manipulate Digital Media Servers";
     homepage = "https://github.com/phako/dleyna-server";
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.lgpl21Only;
   };
 }

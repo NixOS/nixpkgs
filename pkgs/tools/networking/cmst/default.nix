@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "cmst";
-  version = "2022.05.01";
+  version = "2023.03.14";
 
   src = fetchFromGitHub {
     repo = "cmst";
     owner = "andrew-bibb";
     rev = "${pname}-${version}";
-    sha256 = "sha256-d3uvJf1tI9vXyq1eIbHkKrinBuPkYoBUcusHsJmSqMA=";
+    sha256 = "sha256-yTqPxywPbtxTy1PPG+Mq64u8MrB27fEdmt1B0pn0BVk=";
   };
 
   nativeBuildInputs = [ qmake qttools ];

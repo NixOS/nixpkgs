@@ -1,48 +1,79 @@
-{ stdenv, lib, darwin, fetchFromGitHub
-, tbb, gtk3, glfw, pkg-config, freetype, Carbon, AppKit, capstone, dbus
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, capstone
+, freetype
+, glfw
+, dbus
+, hicolor-icon-theme
+, tbb
+, darwin
 }:
 
 let
   disableLTO = stdenv.cc.isClang && stdenv.isDarwin;  # workaround issue #19098
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "tracy";
-  version = "0.8.2.1";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
     rev = "v${version}";
-    sha256 = "sha256-SVzNy0JP/JrUYgelypBn8SPO+Ksm1rq2yGnxk1hCLkQ=";
+    sha256 = "sha256-K1lQNRS8+ju9HyKNVXtHqslrPWcPgazzTitvwkIO3P4";
   };
+
+  patches = lib.optionals (stdenv.isDarwin && !(lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")) [
+    ./0001-remove-unifiedtypeidentifiers-framework
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ glfw capstone ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon AppKit freetype ]
-    ++ lib.optionals stdenv.isLinux [ gtk3 tbb dbus ];
+  buildInputs = [
+    capstone
+    freetype
+    glfw
+  ] ++ lib.optionals stdenv.isLinux [
+    dbus
+    hicolor-icon-theme
+    tbb
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk.frameworks.Carbon
+  ] ++ lib.optionals (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") [
+    darwin.apple_sdk.frameworks.UniformTypeIdentifiers
+  ];
 
-  NIX_CFLAGS_COMPILE = [ ]
+  env.NIX_CFLAGS_COMPILE = toString ([ ]
     # Apple's compiler finds a format string security error on
     # ../../../server/TracyView.cpp:649:34, preventing building.
     ++ lib.optional stdenv.isDarwin "-Wno-format-security"
     ++ lib.optional stdenv.isLinux "-ltbb"
     ++ lib.optional stdenv.cc.isClang "-faligned-allocation"
-    ++ lib.optional disableLTO "-fno-lto";
-
-  NIX_CFLAGS_LINK = lib.optional disableLTO "-fno-lto";
+    ++ lib.optional disableLTO "-fno-lto");
 
   buildPhase = ''
-    make -j $NIX_BUILD_CORES -C profiler/build/unix release
+    runHook preBuild
+
+    make -j $NIX_BUILD_CORES -C profiler/build/unix release LEGACY=1
     make -j $NIX_BUILD_CORES -C import-chrome/build/unix/ release
     make -j $NIX_BUILD_CORES -C capture/build/unix/ release
     make -j $NIX_BUILD_CORES -C update/build/unix/ release
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D ./profiler/build/unix/Tracy-release $out/bin/Tracy
     install -D ./import-chrome/build/unix/import-chrome-release $out/bin/import-chrome
     install -D ./capture/build/unix/capture-release $out/bin/capture
     install -D ./update/build/unix/update-release $out/bin/update
+
+    runHook postInstall
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''

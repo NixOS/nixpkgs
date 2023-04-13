@@ -5,7 +5,8 @@
 buildDunePackage {
   pname = "js_of_ocaml-lwt";
 
-  inherit (js_of_ocaml-compiler) version src useDune2;
+  inherit (js_of_ocaml-compiler) version src;
+  duneVersion = "3";
 
   buildInputs = [ js_of_ocaml-ppx ];
 

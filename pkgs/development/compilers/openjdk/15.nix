@@ -4,21 +4,24 @@
 , libXcursor, libXrandr, fontconfig, openjdk15-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
 let
-  major = "15";
-  update = ".0.1";
-  build = "-ga";
+  version = {
+    major = "15";
+    update = ".0.1";
+    build = "-ga";
+    __toString = self: "${self.major}${self.update}${self.build}";
+  };
 
-  openjdk = stdenv.mkDerivation rec {
+  openjdk = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${major}${update}${build}";
+    inherit version;
 
     src = fetchurl {
-      url = "https://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
+      url = "https://hg.openjdk.java.net/jdk-updates/jdk${version.major}u/archive/jdk-${version}.tar.gz";
       sha256 = "1h8n5figc9q0k9p8b0qggyhvqagvxanfih1lj5j492c74cd1mx1l";
     };
 
@@ -72,7 +75,7 @@ let
 
     separateDebugInfo = true;
 
-    NIX_CFLAGS_COMPILE = "-Wno-error";
+    env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
@@ -131,12 +134,12 @@ let
     postFixup = ''
       # Build the set of output library directories to rpath against
       LIBDIRS=""
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort | uniq | tr '\n' ':'):$LIBDIRS"
       done
       # Add the local library paths to remove dependencies on the bootstrap
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         OUTPUTDIR=$(eval echo \$$output)
         BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
@@ -149,7 +152,8 @@ let
 
     disallowedReferences = [ openjdk15-bootstrap ];
 
-    meta = import ./meta.nix lib version;
+    pos = builtins.unsafeGetAttrPos "major" version;
+    meta = import ./meta.nix lib version.major;
 
     passthru = {
       architecture = "";

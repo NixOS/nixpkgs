@@ -13,13 +13,12 @@
 , librsvg
 , libspnav
 , libuuid
-, opencascade
+, opencascade-occt
 , pkg-config
 , podofo
 , python3
 , sqlite
 , wrapGAppsHook
-, zeromq
 }:
 
 stdenv.mkDerivation rec {
@@ -44,11 +43,10 @@ stdenv.mkDerivation rec {
     librsvg
     libspnav
     libuuid
-    opencascade
+    opencascade-occt
     podofo
     python3
     sqlite
-    zeromq
   ];
 
   nativeBuildInputs = [
@@ -57,7 +55,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  CASROOT = opencascade;
+  CASROOT = opencascade-occt;
 
   installFlags = [
     "INSTALL=${coreutils}/bin/install"

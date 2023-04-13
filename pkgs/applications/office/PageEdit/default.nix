@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "PageEdit";
-  version = "1.9.10";
+  version = "1.9.20";
 
   src = fetchFromGitHub {
     owner = "Sigil-Ebook";
     repo = pname;
     rev = version;
-    hash = "sha256-y2Z5enEptiOrwEGBKlo4H4I9ojIPG9KP3BlvTCj4PVY=";
+    hash = "sha256-naoflFANeMwabbdrNL3+ndvEXYT4Yqf+Mo77HcCexHE=";
   };
 
   nativeBuildInputs = [ cmake qttranslations ];

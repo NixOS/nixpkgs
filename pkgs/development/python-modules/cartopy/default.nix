@@ -1,27 +1,52 @@
-{ buildPythonPackage, lib, fetchPypi
-, pytestCheckHook, filelock, mock, pep8
-, cython, setuptools-scm
-, six, pyshp, shapely, geos, numpy
-, gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
-, proj, flufl_lock
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, fetchpatch
+, cython
+, setuptools-scm
+, geos
+, proj
+, matplotlib
+, numpy
+, pyproj
+, pyshp
+, shapely
+, owslib
+, pillow
+, gdal
+, scipy
+, fontconfig
+, pytest-mpl
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.21.0";
+  version = "0.21.1";
+
+  disabled = pythonOlder "3.8";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "Cartopy";
-    sha256 = "sha256-zh06KKEy6UyJrDN2mlD4H2VjSrK9QFVjF+Fb1srRzkI=";
+    hash = "sha256-idVklxLIWCIxxuEYJaBMhfbwzulNu4nk2yPqvKHMJQo=";
   };
 
-  postPatch = ''
-    # https://github.com/SciTools/cartopy/issues/1880
-    substituteInPlace lib/cartopy/tests/test_crs.py \
-      --replace "test_osgb(" "dont_test_osgb(" \
-      --replace "test_epsg(" "dont_test_epsg("
-  '';
+  patches = [
+    # https://github.com/SciTools/cartopy/pull/2163
+    (fetchpatch {
+      url = "https://github.com/SciTools/cartopy/commit/7fb57e294914dbda0ebe8caaeac4deffe5e71639.patch";
+      hash = "sha256-qc14q+v2IMC+1NQ+OqLjUfJA3Sr5txniqS7CTQ6c7LI=";
+    })
+    # https://github.com/SciTools/cartopy/pull/2130
+    (fetchpatch {
+      url = "https://github.com/SciTools/cartopy/commit/6b4572ba1a8a877f28e25dfe9559c14b7a565958.patch";
+      hash = "sha256-0u6VJMrvoD9bRLHiQV4HQCKDyWEb9dDS2A3rjm6uqYw=";
+    })
+  ];
 
   nativeBuildInputs = [
     cython
@@ -35,14 +60,27 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    # required
-    six pyshp shapely numpy
-
-    # optional
-    gdal pillow matplotlib pyepsg pykdtree scipy fiona owslib
+    matplotlib
+    numpy
+    pyproj
+    pyshp
+    shapely
   ];
 
-  checkInputs = [ pytestCheckHook filelock mock pep8 flufl_lock ];
+  passthru.optional-dependencies = {
+    ows = [ owslib pillow ];
+    plotting = [ gdal pillow scipy ];
+  };
+
+  nativeCheckInputs = [
+    pytest-mpl
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  preCheck = ''
+    export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+    export HOME=$TMPDIR
+  '';
 
   pytestFlagsArray = [
     "--pyargs" "cartopy"
@@ -50,8 +88,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_nightshade_image"
-    "background_img"
     "test_gridliner_labels_bbox_style"
   ];
 

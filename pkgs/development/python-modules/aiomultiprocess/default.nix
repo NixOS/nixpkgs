@@ -16,12 +16,12 @@ buildPythonPackage rec {
     owner = "omnilib";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yOP69FXDb2Grmtszx7oa6uiJGUar8su3KwqQPI+xjrw=";
+    hash = "sha256-yOP69FXDb2Grmtszx7oa6uiJGUar8su3KwqQPI+xjrw=";
   };
 
   nativeBuildInputs = [ flit-core ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "aiomultiprocess/tests/*.py" ];
 

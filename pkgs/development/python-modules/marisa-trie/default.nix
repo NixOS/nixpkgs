@@ -9,18 +9,18 @@
 
 buildPythonPackage rec {
   pname = "marisa-trie";
-  version = "0.7.7";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bbeafb7d92839dc221365340e79d012cb50ee48a1f3f30dd916eb35a8b93db00";
+    hash = "sha256-PQGdF7DX9i1ubXvQUjbYJSYk6hwUC+uL+cbu/zizxwc=";
   };
 
   nativeBuildInputs = [
     cython
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     readme_renderer
     hypothesis

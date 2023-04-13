@@ -16,13 +16,15 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "3.0.2";
+  version = "3.4.0";
+
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3oVkZcLvaFIYTQi/1ZwMoBkEhls3OiezgwNKxrQSjrY=";
+    hash = "sha256-vrvktAuijBKo3IsMQzUs5EyfwFCFGmvXZ4kCvlbeGWE=";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +37,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  checkInputs = [ pytest responses glibcLocales ];
+  nativeCheckInputs = [ pytest responses glibcLocales ];
 
   # tests depend on network
   doCheck = false;

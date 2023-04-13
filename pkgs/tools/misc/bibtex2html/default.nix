@@ -9,7 +9,9 @@ stdenv.mkDerivation {
     sha256 = "07gzrs4lfrkvbn48cgn2gn6c7cx3jsanakkrb2irj0gmjzfxl96j";
   };
 
-  buildInputs = [ ocaml perl ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml perl ];
 
   meta = with lib; {
     description = "A collection of tools for translating from BibTeX to HTML";

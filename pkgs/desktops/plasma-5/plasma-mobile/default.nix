@@ -2,10 +2,6 @@
 , lib
 , extra-cmake-modules
 , kdoctools
-, coreutils
-, dbus
-, gnugrep
-, gnused
 , libdbusmenu
 , pam
 , wayland
@@ -16,6 +12,7 @@
 , kconfig
 , krunner
 , kinit
+, kirigami-addons
 , kwayland
 , kwin
 , plasma-framework
@@ -29,11 +26,8 @@
 , maliit-framework
 , maliit-keyboard
 , qtfeedback
-, qtwayland
 , qttools
 }:
-
-let inherit (lib) getBin getLib; in
 
 mkDerivation {
   pname = "plasma-mobile";
@@ -50,6 +44,7 @@ mkDerivation {
     kconfig
     krunner
     kinit
+    kirigami-addons
     kwayland
     kwin
     plasma-framework

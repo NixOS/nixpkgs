@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "XWwkuw+Um/cflRWjIeIgQUxJLrk2DLDmx7K+pMWvIlI=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3.pkgs.inkex
     python3.pkgs.pytestCheckHook
   ];

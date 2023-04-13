@@ -34,10 +34,10 @@ jobs:
         pairs:
           - from: master
             into: haskell-updates
-          - from: release-22.05
-            into: staging-next-22.05
-          - from: staging-next-22.05
-            into: staging-22.05
+          - from: release-22.11
+            into: staging-next-22.11
+          - from: staging-next-22.11
+            into: staging-22.11
     name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
     steps:
       - uses: actions/checkout@v3
@@ -51,7 +51,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Comment on failure
-        uses: peter-evans/create-or-update-comment@v2
+        uses: peter-evans/create-or-update-comment@v3
         if: ${{ failure() }}
         with:
           issue-number: 105153

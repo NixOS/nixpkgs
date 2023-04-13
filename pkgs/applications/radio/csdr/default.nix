@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "csdr";
-  version = "0.18.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4XO3QYF0yaMNFjBHulrlZvO0/A1fFscD98QxnC6Itmk=";
+    sha256 = "sha256-Cmms+kQzTP+CMDRXCbtWuizosFe9FywLobjBOUA79O0=";
   };
 
   nativeBuildInputs = [
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     libsamplerate
   ];
 
+  hardeningDisable = lib.optional stdenv.isAarch64 "format";
+
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/csdr.pc \
       --replace '=''${prefix}//' '=/' \
@@ -30,11 +32,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://github.com/jketterl/csdr";
     description = "A simple DSP library and command-line tool for Software Defined Radio";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     maintainers = teams.c3d2.members;
   };
 }

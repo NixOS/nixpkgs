@@ -3,17 +3,23 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "22.1.0";
-  disabled = pythonOlder "3.5";
+  version = "22.2.0";
+  disabled = pythonOlder "3.6";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ka3CZlRH5RkdDnxWj954sh+WctNEKB0MbhqwhUKbIrY=";
+    hash = "sha256-ySJ7/C8BmTwD9o2zfR0VyWkBiDI8BnxkHxo1ylgYX5k=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   outputs = [
     "out"
@@ -23,7 +29,7 @@ buildPythonPackage rec {
   postInstall = ''
     # Install tests as the tests output.
     mkdir $testout
-    cp -R tests $testout/tests
+    cp -R conftest.py tests $testout
   '';
 
   pythonImportsCheck = [

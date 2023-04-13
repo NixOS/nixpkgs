@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "embotech";
     repo = "ecos-python";
     rev = "v${version}";
-    sha256 = "sha256-TPxrTyVZ1KXgPoDbZZqXT5+NEIEndg9qepujqFQwK+Q=";
+    hash = "sha256-TPxrTyVZ1KXgPoDbZZqXT5+NEIEndg9qepujqFQwK+Q=";
     fetchSubmodules = true;
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 

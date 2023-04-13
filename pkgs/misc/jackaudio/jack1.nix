@@ -2,6 +2,8 @@
 
 # Optional Dependencies
 , alsa-lib ? null, db ? null, libuuid ? null, libffado ? null, celt ? null
+
+, testers
 }:
 
 let
@@ -13,12 +15,12 @@ let
   optLibffado = shouldUsePkg libffado;
   optCelt = shouldUsePkg celt;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jack1";
   version = "0.125.0";
 
   src = fetchurl {
-    url = "https://jackaudio.org/downloads/jack-audio-connection-kit-${version}.tar.gz";
+    url = "https://jackaudio.org/downloads/jack-audio-connection-kit-${finalAttrs.version}.tar.gz";
     sha256 = "0i6l25dmfk2ji2lrakqq9icnwjxklgcjzzk65dmsff91z2zva5rm";
   };
 
@@ -30,11 +32,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ optAlsaLib optDb optLibffado optCelt ];
   propagatedBuildInputs = [ optLibuuid ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "JACK audio connection kit";
     homepage = "https://jackaudio.org";
     license = with licenses; [ gpl2 lgpl21 ];
+    pkgConfigModules = [ "jack" ];
     platforms = platforms.unix;
   };
-}
+})

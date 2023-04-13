@@ -123,7 +123,7 @@ in
           };
         };
         description = lib.mdDoc ''
-          Extra settings merged in and overwritting defaults in sddm.conf.
+          Extra settings merged in and overwriting defaults in sddm.conf.
         '';
       };
 
@@ -215,10 +215,12 @@ in
     };
 
     security.pam.services = {
-      sddm = {
-        allowNullPassword = true;
-        startSession = true;
-      };
+      sddm.text = ''
+        auth      substack      login
+        account   include       login
+        password  substack      login
+        session   include       login
+      '';
 
       sddm-greeter.text = ''
         auth     required       pam_succeed_if.so audit quiet_success user = sddm

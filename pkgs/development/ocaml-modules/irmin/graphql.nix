@@ -7,6 +7,7 @@ buildDunePackage rec {
   pname = "irmin-graphql";
 
   inherit (irmin) version src;
+  duneVersion = "3";
 
   propagatedBuildInputs = [ cohttp-lwt cohttp-lwt-unix graphql-cohttp graphql-lwt irmin git-unix ];
 

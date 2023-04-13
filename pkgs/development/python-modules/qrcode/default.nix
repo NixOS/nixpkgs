@@ -1,28 +1,46 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, six
-, pillow
-, pymaging_png
-, mock
 , setuptools
+, pillow
+, pypng
+, typing-extensions
+, mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "qrcode";
-  version = "7.3.1";
+  version = "7.4.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "375a6ff240ca9bd41adc070428b5dfc1dcfbb0f2507f1ac848f6cded38956578";
+    hash = "sha256-ndlpRUgn4Sfb2TaWsgdHI55tVA4IKTfJDxSslbMPWEU=";
   };
 
-  propagatedBuildInputs = [ six pillow pymaging_png setuptools ];
-  checkInputs = [ mock ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    typing-extensions
+    pypng
+  ];
+
+  passthru.optional-dependencies.pil = [
+    pillow
+  ];
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.pil;
 
   meta = with lib; {
-    description = "Quick Response code generation for Python";
-    homepage = "https://pypi.python.org/pypi/qrcode";
+    description = "Python QR Code image generator";
+    homepage = "https://github.com/lincolnloop/python-qrcode";
+    changelog = "https://github.com/lincolnloop/python-qrcode/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
   };
 

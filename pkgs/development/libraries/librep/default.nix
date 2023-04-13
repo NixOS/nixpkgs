@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
     readline
   ];
 
+  # ensure libsystem/ctype functions don't get duplicated when using clang
+  configureFlags = lib.optionals stdenv.isDarwin [ "CFLAGS=-std=gnu89" ];
+
   setupHook = ./setup-hook.sh;
 
   meta = with lib;{
@@ -44,7 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/librep.x86_64-darwin
   };
 }
 # TODO: investigate fetchFromGithub

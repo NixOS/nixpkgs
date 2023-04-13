@@ -18,7 +18,9 @@ buildDunePackage rec {
     sha256 = "sha256-+WJhA2ixZHiSZBoX14dnQKk7JfVAIME4JooNSnhRp44=";
   };
 
-  buildInputs = [ ppxlib ];
+  nativeBuildInputs = [ reason ];
+
+  buildInputs = [ ppxlib reason ];
 
   propagatedBuildInputs = [
     reason

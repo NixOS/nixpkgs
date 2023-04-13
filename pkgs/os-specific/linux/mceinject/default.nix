@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex bison ];
 
-  NIX_CFLAGS_COMPILE = "-Os -g -Wall";
+  env.NIX_CFLAGS_COMPILE = "-Os -g -Wall";
 
   NIX_LDFLAGS = [ "-lpthread" ];
 

@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ ];
     mainProgram = "cd-paranoia";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

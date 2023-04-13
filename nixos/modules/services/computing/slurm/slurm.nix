@@ -383,7 +383,7 @@ in
       "d /var/spool/slurmd 755 root root -"
     ];
 
-    services.openssh.forwardX11 = mkIf cfg.client.enable (mkDefault true);
+    services.openssh.settings.X11Forwarding = mkIf cfg.client.enable (mkDefault true);
 
     systemd.services.slurmctld = mkIf (cfg.server.enable) {
       path = with pkgs; [ wrappedSlurm munge coreutils ]

@@ -9,7 +9,7 @@ gccStdenv.mkDerivation rec {
     sha256 = "15zxg6spcmd35r6xbidq2fgcg2nzyv1sbbqds08lzll70mqx4pj7";
   };
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=format"
     "-Wno-error=format-truncation"
     "-Wno-error=pointer-compare"

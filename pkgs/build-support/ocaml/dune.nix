@@ -30,11 +30,16 @@ stdenv.mkDerivation ({
   '';
   installPhase = ''
     runHook preInstall
-    dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${pname}
+    dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${pname} \
+     ${if lib.versionAtLeast Dune.version "2.9"
+       then "--docdir $out/share/doc --mandir $out/share/man"
+       else ""}
     runHook postInstall
   '';
 
-} // (builtins.removeAttrs args [ "minimalOCamlVersion" "duneVersion" ]) // {
+  strictDeps = true;
+
+} // (builtins.removeAttrs args [ "minimalOCamlVersion"  "duneVersion" ]) // {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
 

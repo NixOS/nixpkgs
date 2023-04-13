@@ -1,12 +1,16 @@
-{ lib, stdenv, fetchurl, perl, nixosTests }:
+{ lib, stdenv, fetchurl, perl
+# Update the enabled crypt scheme ids in passthru when the enabled hashes change
+, enableHashes ? "strong"
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "libxcrypt";
-  version = "4.4.30";
+  version = "4.4.33";
 
   src = fetchurl {
     url = "https://github.com/besser82/libxcrypt/releases/download/v${version}/libxcrypt-${version}.tar.xz";
-    sha256 = "sha256-s2Z/C6hdqtavJGukCQ++UxY62TyLaioSV9IqeLt87ro=";
+    hash = "sha256-6HrPnGUsVzpHE9VYIVn5jzBdVu1fdUzmT1fUGU1rOm8=";
   };
 
   outputs = [
@@ -15,10 +19,10 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--enable-hashes=all"
+    "--enable-hashes=${enableHashes}"
     "--enable-obsolete-api=glibc"
     "--disable-failure-tokens"
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+  ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.libc == "bionic") [
     "--disable-werror"
   ];
 
@@ -30,8 +34,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.tests = {
-    inherit (nixosTests) login shadow;
+  passthru = {
+    tests = {
+      inherit (nixosTests) login shadow;
+    };
+    enabledCryptSchemeIds = [
+      # https://github.com/besser82/libxcrypt/blob/v4.4.33/lib/hashes.conf
+      "y"   # yescrypt
+      "gy"  # gost_yescrypt
+      "7"   # scrypt
+      "2b"  # bcrypt
+      "2y"  # bcrypt_y
+      "2a"  # bcrypt_a
+      "6"   # sha512crypt
+    ];
   };
 
   meta = with lib; {

@@ -40,7 +40,7 @@ buildGoModule {
     description = "Debian Code Search";
     homepage = "https://github.com/Debian/dcs";
     license = licenses.bsd3;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
     broken = stdenv.isAarch64
       || stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dcs.x86_64-darwin
   };

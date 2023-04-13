@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     p11-kit
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
   ];
 

@@ -5,16 +5,18 @@
 , aiohttp
 , asn1crypto
 , cryptography
+, freezegun
 , oscrypto
 , requests
 , uritools
 , openssl
+, pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyhanko-certvalidator";
-  version = "0.19.5";
+  version = "0.20.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +26,7 @@ buildPythonPackage rec {
     owner = "MatthiasValvekens";
     repo = "certvalidator";
     rev = version;
-    sha256 = "sha256-UxlBggKgqvbKioG98UaKvhW0YgEa6PqV913nqYvTx1I=";
+    hash = "sha256-0RSveoSZb7R6d4cMlF1mIrDfnTx2DYNwfTMMtmg+RpM=";
   };
 
   propagatedBuildInputs = [
@@ -35,14 +37,14 @@ buildPythonPackage rec {
     uritools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
+    freezegun
+    pytest-asyncio
     pytestCheckHook
   ];
 
   disabledTestPaths = [
-    # Test looks for libcrypto.so.1.1
-    "dev/stress_test.py"
     # Requests
     "tests/test_crl_client.py"
   ];

@@ -1,3 +1,5 @@
+diff --git a/test/run b/test/run
+index 43a57312..398be8d8 100755
 --- a/test/run
 +++ b/test/run
 @@ -148,21 +148,17 @@ file_size() {
@@ -19,9 +21,9 @@
  
  objdump_grep_cmd() {
 -    if $HOST_OS_APPLE; then
--        fgrep -q "\"$1\""
+-        grep -Fq "\"$1\""
 -    elif $HOST_OS_WINDOWS || $HOST_OS_CYGWIN; then
 +    if $HOST_OS_WINDOWS || $HOST_OS_CYGWIN; then
-         fgrep -q "$1"
+         grep -Fq "$1"
      else
-         fgrep -q ": $1"
+         grep -Fq ": $1"

@@ -2,38 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "apr";
-  version = "1.7.0";
+  version = "1.7.2";
 
   src = fetchurl {
     url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
-    sha256 = "1spp6r2a3xcl5yajm9safhzyilsdzgagc2dadif8x6z9nbq4iqg2";
+    sha256 = "sha256-ded8yGd2wDDApcQI370L8qC3Xu1TUeUtVDn6HlUJpD4=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "CVE-2021-35940.patch";
-      url = "https://dist.apache.org/repos/dist/release/apr/patches/apr-1.7.0-CVE-2021-35940.patch";
-      sha256 = "1qd511dyqa1b7bj89iihrlbaavbzl6yyblqginghmcnhw8adymbs";
-      # convince fetchpatch to restore missing `a/`, `b/` to paths
-      extraPrefix = "";
-    })
-
-    # Fix cross.
-    (fetchpatch {
-      url = "https://github.com/apache/apr/commit/374210c50ee9f4dbf265f0172dcf2d45b97d0550.patch";
-      sha256 = "04k62c5dh043jhkgs5qma6yqkq4q7nh0zswr81il4l7q1zil581y";
-    })
-    (fetchpatch {
-      url = "https://github.com/apache/apr/commit/866e1df66be6704a584feaf5c3d241e3d631d03a.patch";
-      sha256 = "0hhm5v5wx985c28dq6d9ngnyqihpsphq4mw7rwylk39k2p90ppcm";
-    })
-
-    # Cross fix. Patch the /dev/zero mmapable detection logic. https://bugs.gentoo.org/show_bug.cgi?id=830833
-    (fetchpatch {
-      url = "https://830833.bugs.gentoo.org/attachment.cgi?id=761676";
-      name = "cross-assume-dev-zero-mmappable.patch";
-      sha256 = "sha256-rsouJp1o7p0d+AJ5KvyhUU79vAJOcVHEuwSEKaCEGa8=";
-    })
+    ./cross-assume-dev-zero-mmappable.patch
   ];
 
   # This test needs the net

@@ -7,27 +7,24 @@
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "046xk2y59wa0pdp7s3hp1gh8sqdw0yl4xab22r2x44iwwcyb0gy5";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zJH2ojLQChElRvU2TWg4lW+Mey+wP0XbLJhVF16nvss=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'click = "^7.0"' 'click = "*"' \
-      --replace 'docutils = "^0.16"' 'docutils = "*"' \
-      --replace 'sqlalchemy = "^1.3"' 'sqlalchemy = "*"' \
-      --replace 'token-bucket = "^0.2.0"' 'token-bucket = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'sqlalchemy = "^1.4"' 'sqlalchemy = "*"'
+  '';
 
   propagatedBuildInputs = [
     click
@@ -36,15 +33,12 @@ with python3.pkgs; buildPythonApplication rec {
     pygments-better-html
     sqlalchemy
     token-bucket
-    toml
+    tomli
     tornado
   ];
 
-  checkInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # pygments renamed rst to restructuredText, hence a mismatch on this test
-    "test_guess_language"
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -52,9 +46,10 @@ with python3.pkgs; buildPythonApplication rec {
   passthru.tests = nixosTests.pinnwand;
 
   meta = with lib; {
+    changelog = "https://github.com/supakeen/pinnwand/releases/tag/v${version}";
+    description = "A Python pastebin that tries to keep it simple";
     homepage = "https://supakeen.com/project/pinnwand/";
     license = licenses.mit;
-    description = "A Python pastebin that tries to keep it simple";
     maintainers = with maintainers; [ hexa ];
   };
 }

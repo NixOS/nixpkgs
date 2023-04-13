@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     xorg.libXrender
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2 -fgnu89-inline";
+  env.NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2 -fgnu89-inline";
 
   meta = with lib; {
     homepage = "https://www.logicalshift.co.uk/unix/zoom/";

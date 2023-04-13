@@ -2,20 +2,18 @@
 
 buildGoModule rec {
   pname = "goda";
-  version = "0.5.3";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "loov";
     repo = "goda";
     rev = "v${version}";
-    sha256 = "sha256-qBuhwIQvfUZMyzCJ/7Kedc+InrGwpcLhDLvX9i0ws2A=";
+    sha256 = "sha256-l9ehpDAqZqNV+07ENXJ2GJEY6bb6W37Ls6UqjE9DEWQ=";
   };
 
   vendorSha256 = "sha256-BYYuB4ZlCWD8NILkf4qrgM4q72ZTy7Ze3ICUXdoI5Ms=";
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/loov/goda";

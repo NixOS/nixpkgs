@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     perl
   ];
 

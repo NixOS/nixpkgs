@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UJM5syzNjXsAwiBMMnNs3njbU6MuahYtMSR40lYmzZo=";
+    hash = "sha256-UJM5syzNjXsAwiBMMnNs3njbU6MuahYtMSR40lYmzZo=";
   };
 
   patches = [
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     ++ lib.optional withXcffib xcffib;
 
   # pytestCheckHook does not work
-  checkInputs = [ numpy pikepdf pytest glibcLocales ];
+  nativeCheckInputs = [ numpy pikepdf pytest glibcLocales ];
 
   checkPhase = ''
     py.test $out/${python.sitePackages}

@@ -2,7 +2,9 @@
 , stdenv
 , fetchgit
 , wrapLisp
-, sbcl
+# Broken on newer versions:
+# https://gitlab.common-lisp.net/clpm/clpm/-/issues/51
+, sbcl_2_0_8
 , openssl
 }:
 
@@ -18,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    (wrapLisp sbcl)
+    sbcl_2_0_8
   ];
 
   propagatedBuildInputs = [
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
     # ld to complaing about `impure path used in link`.
     export HOME=$TMP
 
-    common-lisp.sh --script scripts/build-release.lisp
+    sbcl --script scripts/build-release.lisp
 
     runHook postBuild
   '';

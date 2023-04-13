@@ -135,7 +135,7 @@ in
       }
       {
         assertion = (cfg.configFile != null) != (cfg.settings != null);
-        message = "You need to either specify services.klipper.settings or services.klipper.defaultConfig.";
+        message = "You need to either specify services.klipper.settings or services.klipper.configFile.";
       }
     ];
 

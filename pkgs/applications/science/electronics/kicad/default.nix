@@ -14,8 +14,7 @@
 
 , pname ? "kicad"
 , stable ? true
-, withOCC ? true
-, withNgspice ? true
+, withNgspice ? !stdenv.isDarwin
 , libngspice
 , withScripting ? true
 , python3
@@ -24,7 +23,6 @@
 , sanitizeThreads ? false
 , with3d ? true
 , withI18n ? true
-, withPCM ? true # Plugin and Content Manager
 , srcs ? { }
 }:
 
@@ -118,7 +116,7 @@ stdenv.mkDerivation rec {
     inherit stable baseName;
     inherit kicadSrc kicadVersion;
     inherit wxGTK python wxPython;
-    inherit withOCC withNgspice withScripting withI18n withPCM;
+    inherit withNgspice withScripting withI18n;
     inherit debug sanitizeAddress sanitizeThreads;
   };
 
@@ -132,14 +130,13 @@ stdenv.mkDerivation rec {
   dontFixup = true;
 
   pythonPath = optionals (withScripting)
-    [ wxPython python.pkgs.six ];
+    [ wxPython python.pkgs.six python.pkgs.requests ];
 
   nativeBuildInputs = [ makeWrapper ]
     ++ optionals (withScripting)
     [ python.pkgs.wrapPython ];
 
-  # We are emulating wrapGAppsHook, along with other variables to the
-  # wrapper
+  # We are emulating wrapGAppsHook, along with other variables to the wrapper
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
@@ -151,15 +148,15 @@ stdenv.mkDerivation rec {
     "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
     # required to open a bug report link in firefox-wayland
     "--set-default MOZ_DBUS_REMOTE 1"
-    "--set-default KICAD6_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
-    "--set-default KICAD6_SYMBOL_DIR ${symbols}/share/kicad/symbols"
-    "--set-default KICAD6_TEMPLATE_DIR ${templates}/share/kicad/template"
-    "--prefix KICAD6_TEMPLATE_DIR : ${symbols}/share/kicad/template"
-    "--prefix KICAD6_TEMPLATE_DIR : ${footprints}/share/kicad/template"
+    "--set-default KICAD7_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
+    "--set-default KICAD7_SYMBOL_DIR ${symbols}/share/kicad/symbols"
+    "--set-default KICAD7_TEMPLATE_DIR ${templates}/share/kicad/template"
+    "--prefix KICAD7_TEMPLATE_DIR : ${symbols}/share/kicad/template"
+    "--prefix KICAD7_TEMPLATE_DIR : ${footprints}/share/kicad/template"
   ]
   ++ optionals (with3d)
   [
-    "--set-default KICAD6_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
+    "--set-default KICAD7_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
   ]
   ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
@@ -171,8 +168,9 @@ stdenv.mkDerivation rec {
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
   installPhase =
     let
+      bin = if stdenv.isDarwin then "*.app/Contents/MacOS" else "bin";
       tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
-      utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad2step" ];
+      utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad-cli" ];
     in
     (concatStringsSep "\n"
       (flatten [
@@ -182,13 +180,13 @@ stdenv.mkDerivation rec {
 
         # wrap each of the directly usable tools
         (map
-          (tool: "makeWrapper ${base}/bin/${tool} $out/bin/${tool} $makeWrapperArgs"
+          (tool: "makeWrapper ${base}/${bin}/${tool} $out/bin/${tool} $makeWrapperArgs"
             + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
           )
           tools)
 
         # link in the CLI utils
-        (map (util: "ln -s ${base}/bin/${util} $out/bin/${util}") utils)
+        (map (util: "ln -s ${base}/${bin}/${util} $out/bin/${util}") utils)
 
         "runHook postInstall"
       ])
@@ -214,7 +212,7 @@ stdenv.mkDerivation rec {
     description = (if (stable)
     then "Open Source Electronics Design Automation suite"
     else "Open Source EDA suite, development build")
-    + (if (!with3d) then ", without 3D models" else "");
+    + (lib.optionalString (!with3d) ", without 3D models");
     homepage = "https://www.kicad.org/";
     longDescription = ''
       KiCad is an open source software suite for Electronic Design Automation.
@@ -224,6 +222,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ evils kiwi ];
     # kicad is cross platform
     platforms = lib.platforms.all;
+    broken = stdenv.isDarwin;
 
     hydraPlatforms = if (with3d) then [ ] else platforms;
     # We can't download the 3d models on Hydra,
@@ -231,5 +230,7 @@ stdenv.mkDerivation rec {
     # as long as the base and libraries (minus 3d) are build,
     # this wrapper does not need to get built
     # the kicad-*small "packages" cause this to happen
+
+    mainProgram = "kicad";
   };
 }

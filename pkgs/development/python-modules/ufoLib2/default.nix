@@ -4,35 +4,46 @@
 , attrs
 , fonttools
 , pytestCheckHook
-, fs
 , setuptools-scm
+
+# optionals
+, cattrs
+, lxml
+, orjson
+, msgpack
 }:
 
 buildPythonPackage rec {
   pname = "ufoLib2";
-  version = "0.13.1";
-
+  version = "0.14.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MnWi2mI+bUt+4pyYTNs6W4a7wj8KHOlEhti7XDCKpHs=";
+    hash = "sha256-OdUJfNe3nOQyCf3nT9/5y/C8vZXnSAWiLHvZ8GXMViw=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     attrs
     fonttools
-    # required by fonttools[ufo]
-    fs
-  ];
+  ] ++ fonttools.optional-dependencies.ufo;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  passthru.optional-dependencies = {
+    lxml = [ lxml ];
+    converters = [ cattrs ];
+    json = [ cattrs orjson ];
+    msgpack = [ cattrs msgpack ];
+  };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-pythonImportsCheck = [ "ufoLib2" ];
+  pythonImportsCheck = [ "ufoLib2" ];
 
   meta = with lib; {
     description = "Library to deal with UFO font sources";

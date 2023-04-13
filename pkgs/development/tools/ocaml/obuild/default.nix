@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dqWP9rwWmr7i3O29v/kipJL01B3qQozaToOFCdfTWZU=";
   };
 
-  buildInputs = [ ocaml ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml ];
 
   buildPhase = ''
     patchShebangs ./bootstrap

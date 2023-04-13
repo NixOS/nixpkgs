@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "5.10.1";
+  version = "5.12.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
-    rev = version;
-    sha256 = "09spgl2k9xrprr5gbpfc91a8p7mx7a0c64ydgc91b3jhrmnd9jg1";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8ija4xWWZuYkElXLdziV7ulN8dubIsChcZQ5dx9hfO0=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     colorama
     hypothesis
     pylama

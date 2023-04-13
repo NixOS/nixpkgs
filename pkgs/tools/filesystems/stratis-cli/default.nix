@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "stratis-cli";
-  version = "3.3.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tS9kjXE7wn5j13PO8c3C98MpFbgmR4le/PNKoXKPKQg=";
+    rev = "v${version}";
+    hash = "sha256-aDWHXKmlKKJo+ckW1vA0bm4q5z2g/Zx5frVDR6Kwgjw=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     packaging
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

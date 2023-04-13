@@ -41,8 +41,6 @@ buildPythonApplication rec {
   ];
 
   buildInputs = [
-    # To avoid enabling strictDeps = false (#56943)
-    gobject-introspection
     librsvg
     pango
     webkitgtk
@@ -70,6 +68,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/ProtonVPN/linux-app";
     maintainers = with maintainers; [ wolfangaukang ];
     license = licenses.gpl3Plus;
+    mainProgram = "protonvpn";
     platforms = platforms.linux;
   };
 }

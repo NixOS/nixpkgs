@@ -20,7 +20,7 @@ buildPythonPackage rec {
     deprecation
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     voluptuous
   ];

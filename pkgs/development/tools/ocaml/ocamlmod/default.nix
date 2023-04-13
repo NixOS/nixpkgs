@@ -14,7 +14,9 @@ stdenv.mkDerivation {
     sha256 = "0cgp9qqrq7ayyhddrmqmq1affvfqcn722qiakjq4dkywvp67h4aa";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  strictDeps = !doCheck;
+
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
 
   configurePhase = "ocaml setup.ml -configure --prefix $out"
     + lib.optionalString doCheck " --enable-tests";
@@ -22,7 +24,7 @@ stdenv.mkDerivation {
   installPhase   = "ocaml setup.ml -install";
 
   inherit doCheck;
-  checkInputs = [ ounit ];
+  nativeCheckInputs = [ ounit ];
 
   checkPhase = "ocaml setup.ml -test";
 

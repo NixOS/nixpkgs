@@ -2,11 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "ldapvi";
-  version = "0lz1sb5r0y9ypy8d7hm0l2wfa8l69f8ll0i5c78c0apz40nyjqkg";
+  version = "unstable-2012-04-28";
 
   # use latest git, it includes some important patches since 2007 release
   src = fetchgit {
     url = "http://www.lichteblau.com/git/ldapvi.git";
+    rev = "f1d42bad66cc4623d1ff21fbd5dddbf5009d3e40";
     sha256 = "3ef3103030ecb04d7fe80180e3fd490377cf81fb2af96782323fddabc3225030";
   };
 

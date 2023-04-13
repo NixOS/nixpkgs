@@ -1,7 +1,6 @@
 { type
 , version
 , srcs
-, icu # passing icu as an argument, because dotnet 3.1 has troubles with icu71
 , packages ? null
 }:
 
@@ -15,7 +14,7 @@ assert if type == "sdk" then packages != null else true;
 , autoPatchelfHook
 , makeWrapper
 , libunwind
-, openssl_1_1
+, icu
 , libuuid
 , zlib
 , libkrb5
@@ -24,6 +23,7 @@ assert if type == "sdk" then packages != null else true;
 , testers
 , runCommand
 , writeShellScript
+, mkNugetDeps
 }:
 
 let
@@ -40,6 +40,12 @@ let
     runtime = ".NET Runtime ${version}";
     sdk = ".NET SDK ${version}";
   };
+
+  packageDeps = if type == "sdk" then mkNugetDeps {
+    name = "${pname}-${version}-deps";
+    nugetDeps = packages;
+  } else null;
+
 in
 stdenv.mkDerivation (finalAttrs: rec {
   inherit pname version;
@@ -54,9 +60,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     zlib
     icu
     libkrb5
-    # this must be before curl for autoPatchElf to find it
-    # curl brings in its own openssl
-    openssl_1_1
     curl
   ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
 
@@ -120,14 +123,8 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   passthru = rec {
-    inherit icu packages;
-
-    runtimeIdentifierMap = {
-      "x86_64-linux" = "linux-x64";
-      "aarch64-linux" = "linux-arm64";
-      "x86_64-darwin" = "osx-x64";
-      "aarch64-darwin" = "osx-arm64";
-    };
+    inherit icu;
+    packages = packageDeps;
 
     updateScript =
       if type == "sdk" then
@@ -140,9 +137,6 @@ stdenv.mkDerivation (finalAttrs: rec {
         pushd pkgs/development/compilers/dotnet
         exec ${./update.sh} "${majorVersion}"
       '' else null;
-
-    # Convert a "stdenv.hostPlatform.system" to a dotnet RID
-    systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
 
     tests = {
       version = testers.testVersion {

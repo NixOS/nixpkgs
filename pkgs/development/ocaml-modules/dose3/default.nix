@@ -1,6 +1,6 @@
 { lib, buildDunePackage, fetchFromGitLab
 , camlzip, ocamlgraph, parmap, re, stdlib-shims
-, base64, bz2, ocaml_extlib, cudf
+, base64, bz2, extlib, cudf
 , dpkg, git, ocaml, ounit, python39, python39Packages
 }:
 
@@ -27,18 +27,20 @@ buildDunePackage rec {
     bz2
     camlzip
     cudf
-    ocaml_extlib
+    extlib
     ocamlgraph
     re
     stdlib-shims
   ];
 
-  checkInputs = [
-    dpkg                      # Replaces: conf-dpkg
-    git
-    ounit
+  nativeCheckInputs = [
     python39                  # Replaces: conf-python-3
     python39Packages.pyyaml   # Replaces: conf-python3-yaml
+    git
+  ];
+  checkInputs = [
+    dpkg                      # Replaces: conf-dpkg
+    ounit
   ];
   doCheck = false; # Tests are failing.
                    # To enable tests use: lib.versionAtLeast ocaml.version "4.04";

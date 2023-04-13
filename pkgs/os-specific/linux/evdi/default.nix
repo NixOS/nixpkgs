@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "evdi";
-  version = "1.12.0";
+  version = "unstable-2022-10-13";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-JZKZ7+1OMbBtUA7pAZ41TzeDDyiD0h7yTXJINJ5FjN4=";
+    rev = "bdc258b25df4d00f222fde0e3c5003bf88ef17b5";
+    hash = "sha256-mt+vEp9FFf7smmE2PzuH/3EYl7h89RBN1zTVvv2qJ/o=";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error -Wno-error=sign-compare";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error -Wno-error=sign-compare";
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

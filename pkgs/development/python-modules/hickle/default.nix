@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ h5py numpy dill ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook scipy pandas astropy
   ];
 

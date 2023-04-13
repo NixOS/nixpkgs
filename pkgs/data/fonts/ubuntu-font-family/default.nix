@@ -1,18 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip rec {
+stdenvNoCC.mkDerivation rec {
   pname = "ubuntu-font-family";
   version = "0.83";
 
-  url = "https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-${version}.zip";
+  src = fetchzip {
+    url = "https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-${version}.zip";
+    hash = "sha256-FAg1xn8Gcbwmuvqtg9SquSet4oTT9nqE+Izeq7ZMVcA=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/ubuntu
-    mv $out/*.ttf $out/share/fonts/ubuntu
-    find $out -maxdepth 1 ! -type d -exec rm {} +
-  '';
+    mv *.ttf $out/share/fonts/ubuntu
 
-  sha256 = "090y665h4kf2bi623532l6wiwkwnpd0xds0jr7560xwfwys1hiqh";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Ubuntu Font Family";

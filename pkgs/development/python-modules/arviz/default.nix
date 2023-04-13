@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, bokeh
 , emcee
 , matplotlib
 , netcdf4
@@ -19,6 +18,7 @@
 , xarray
 , xarray-einstats
 , zarr
+, ffmpeg
 , h5py
 , jaxlib
 , torchvision
@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.13.0";
+  version = "0.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-DGTGUMnkEQcwGR44WhmBpTBMcRcAtVIpM4YVnnlakE8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LcdITCT9Bvycfj/taXhzkjn4IfZrxWX9MYXD6+MifOs=";
   };
 
   propagatedBuildInputs = [
@@ -55,10 +55,10 @@ buildPythonPackage rec {
     xarray-einstats
   ];
 
-  checkInputs = [
-    bokeh
+  nativeCheckInputs = [
     cloudpickle
     emcee
+    ffmpeg
     h5py
     jax
     jaxlib

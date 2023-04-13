@@ -1,5 +1,5 @@
 { lib
-, fetchFromGitHub
+, fetchPypi
 , buildPythonPackage
 , tzlocal
 , six
@@ -8,13 +8,12 @@
 
 buildPythonPackage rec {
   pname = "js2py";
-  version = "0.71";
+  version = "0.74";
 
-  src = fetchFromGitHub {
-    owner = "PiotrDabkowski";
-    repo = "Js2Py";
-    rev = "5f665f60083a9796ec33861240ce31d6d2b844b6";
-    sha256 = "sha256-1omTV7zkYSQfxhkNgI4gtXTenWt9J1r3VARRHoRsSfc=";
+  src = fetchPypi {
+    pname = "Js2Py";
+    inherit version;
+    hash = "sha256-OfOmqoRpGA77o8hncnHfJ8MTMv0bRx3xryr1i4e4ly8=";
   };
 
   propagatedBuildInputs = [

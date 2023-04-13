@@ -24,19 +24,19 @@ stdenv.mkDerivation rec {
       CoreGraphics CoreVideo
     ]);
 
-  checkInputs = [ expect ];
+  nativeCheckInputs = [ expect ];
   doCheck = true;
 
   makeFlags = [ "kerf" "kerf_test" ];
 
   # avoid a huge amount of warnings to make failures clearer
-  NIX_CFLAGS_COMPILE = map (x: "-Wno-${x}") [
+  env.NIX_CFLAGS_COMPILE = toString (map (x: "-Wno-${x}") [
     "void-pointer-to-int-cast"
     "format"
     "implicit-function-declaration"
     "gnu-variable-sized-type-not-at-end"
     "unused-result"
-  ] ++ lib.optionals stdenv.isDarwin [ "-fcommon" ];
+  ] ++ lib.optionals stdenv.isDarwin [ "-fcommon" ]);
 
   patchPhase = ''
     substituteInPlace ./Makefile \

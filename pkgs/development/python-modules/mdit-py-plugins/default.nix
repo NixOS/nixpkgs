@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, setuptools
+, flit-core
 , markdown-it-py
 , pytest-regressions
 , pytestCheckHook
@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "mdit-py-plugins";
-  version = "0.3.0";
+  version = "0.3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -18,19 +18,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-3zFSTjqwjUV6+fU6falYbIzj/Hp7E/9EXKZIi00tkg4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-BvxqMSl8YXD84O6qjDI0VZgZpqL0UL0vYDMKxCc9qtI=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
   ];
 
   propagatedBuildInputs = [
     markdown-it-py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-regressions
   ];

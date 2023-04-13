@@ -1,16 +1,3 @@
---- a/src/shared/CLucene/LuceneThreads.h
-+++ b/src/shared/CLucene/LuceneThreads.h
-@@ -7,6 +7,9 @@
- #ifndef _LuceneThreads_h
- #define  _LuceneThreads_h
-
-+#if defined(_CL_HAVE_PTHREAD)
-+	#include <pthread.h>
-+#endif
-
- CL_NS_DEF(util)
- class CLuceneThreadIdCompare;
-
 --- a/src/shared/CLucene/config/repl_tchar.h
 +++ b/src/shared/CLucene/config/repl_tchar.h
 @@ -28,26 +28,26 @@

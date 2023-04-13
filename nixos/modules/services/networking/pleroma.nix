@@ -52,7 +52,7 @@ in {
           the right place to store any secret
 
           Have a look to Pleroma section in the NixOS manual for more
-          informations.
+          information.
           '';
       };
 
@@ -141,9 +141,11 @@ in {
         NoNewPrivileges = true;
         CapabilityBoundingSet = "~CAP_SYS_ADMIN";
       };
+      # disksup requires bash
+      path = [ pkgs.bash ];
     };
 
   };
   meta.maintainers = with lib.maintainers; [ ninjatrappeur ];
-  meta.doc = ./pleroma.xml;
+  meta.doc = ./pleroma.md;
 }

@@ -33,6 +33,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "XOR Key Extractor";
     homepage = "https://github.com/Neo23x0/xorex";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

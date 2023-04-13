@@ -1,9 +1,11 @@
 # Options that can be used for creating a jupyter kernel.
-{lib }:
+{ lib, pkgs }:
 
 with lib;
 
 {
+  freeformType = (pkgs.formats.json { }).type;
+
   options = {
 
     displayName = mkOption {
@@ -37,6 +39,15 @@ with lib;
       example = "python";
       description = lib.mdDoc ''
         Language of the environment. Typically the name of the binary.
+      '';
+    };
+
+    env = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      example = { OMP_NUM_THREADS = "1"; };
+      description = lib.mdDoc ''
+        Environment variables to set for the kernel.
       '';
     };
 

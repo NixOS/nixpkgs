@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.85.2";
+  version = "0.92.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-j3Set+xWNcRqbn90DJOJQhMrJYI3msvWHlFvN1habP0=";
+    hash = "sha256-4USWfYvPxR+LzPELRTDg0Jl4K5yBnumYKfXT84FWctg=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace '"databases[sqlite] >=0.3.2,<0.7.0",' "" \
       --replace "starlette==" "starlette>="
   '';
 
@@ -47,9 +48,9 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiosqlite
-    databases
+    # databases FIXME incompatible with SQLAlchemy 2.0
     flask
     httpx
     orjson
@@ -73,6 +74,9 @@ buildPythonPackage rec {
     "tests/test_default_response_class.py"
     # Don't test docs and examples
     "docs_src"
+    # databases is incompatible with SQLAlchemy 2.0
+    "tests/test_tutorial/test_async_sql_databases"
+    "tests/test_tutorial/test_sql_databases"
   ];
 
   disabledTests = [
@@ -84,6 +88,8 @@ buildPythonPackage rec {
     "test_head"
     "test_options"
     "test_trace"
+    # Unexpected number of warnings caught
+    "test_warn_duplicate_operation_id"
   ];
 
   pythonImportsCheck = [

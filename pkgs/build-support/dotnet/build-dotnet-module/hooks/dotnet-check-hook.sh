@@ -7,7 +7,7 @@ dotnetCheckHook() {
     runHook preCheck
 
     if [ "${disabledTests-}" ]; then
-        local -r disabledTestsFlag="--filter FullyQualifiedName!=@disabledTests@"
+        local -r disabledTestsFlag="--filter @disabledTests@"
     fi
 
     if [ "${enableParallelBuilding-}" ]; then
@@ -16,7 +16,7 @@ dotnetCheckHook() {
         local -r maxCpuFlag="1"
     fi
 
-    for project in ${testProjectFile[@]-}; do
+    for project in ${testProjectFile[@]-${projectFile[@]}}; do
         env "LD_LIBRARY_PATH=@libraryPath@" \
             dotnet test "$project" \
               -maxcpucount:$maxCpuFlag \

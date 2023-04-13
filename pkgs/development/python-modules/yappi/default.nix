@@ -24,7 +24,7 @@ buildPythonPackage rec {
     ./tests.patch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gevent
   ];
 

@@ -1,33 +1,30 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , libxcrypt
 , ncurses
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "tcsh";
-  version = "6.24.00";
+  version = "6.24.07";
 
   src = fetchurl {
     url = "mirror://tcsh/${pname}-${version}.tar.gz";
-    hash = "sha256-YL4sUEvY8fpuQksZVkldfnztUqKslNtf0n9La/yPdPA=";
+    hash = "sha256-dOTpgFy9lBPtNLT/odcvyNDvgaW3lHaFQJFBbOkzaZU=";
   };
 
   strictDeps = true;
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
   buildInputs = [
     libxcrypt
     ncurses
   ];
-
-  patches = lib.optional stdenv.hostPlatform.isMusl
-    # Use system malloc
-    (fetchpatch {
-      name = "sysmalloc.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/tcsh/001-sysmalloc.patch?id=184585c046cdd56512f1a76e426dd799b368f8cf";
-      sha256 = "1qc6ydxhdfizsbkaxhpn3wib8sfphrw10xnnsxx2prvzg9g2zp67";
-    });
 
   meta = with lib; {
     homepage = "https://www.tcsh.org/";

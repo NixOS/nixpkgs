@@ -1,7 +1,7 @@
 { lib, buildPythonApplication, fetchPypi, pythonOlder
 , installShellFiles
 , mock, pytest, nose
-, pyyaml, backports_ssl_match_hostname, colorama, docopt
+, pyyaml, colorama, docopt
 , dockerpty, docker, jsonschema, requests
 , six, texttable, websocket-client, cached-property
 , enum34, functools32, paramiko, distro, python-dotenv
@@ -13,18 +13,18 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TIzZ0h0jdBJ5PRi9MxEASe6a+Nqz/iwhO70HM5WbCbc=";
+    hash = "sha256-TIzZ0h0jdBJ5PRi9MxEASe6a+Nqz/iwhO70HM5WbCbc=";
   };
 
   # lots of networking and other fails
   doCheck = false;
   nativeBuildInputs = [ installShellFiles ];
-  checkInputs = [ mock pytest nose ];
+  nativeCheckInputs = [ mock pytest nose ];
   propagatedBuildInputs = [
     pyyaml colorama dockerpty docker
     jsonschema requests six texttable websocket-client
     docopt cached-property paramiko distro python-dotenv
-  ] ++ lib.optional (pythonOlder "3.7") backports_ssl_match_hostname
+  ]
   ++ lib.optional (pythonOlder "3.4") enum34
   ++ lib.optional (pythonOlder "3.2") functools32;
 

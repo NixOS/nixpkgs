@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
       rm -rfv $out/share/fonts/truetype/NerdFonts/*Windows\ Compatible.*
     ''}
   '';
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Iconic font aggregator, collection, & patcher. 3,600+ icons, 50+ patched fonts";

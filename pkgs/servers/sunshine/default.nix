@@ -1,6 +1,12 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
+, fetchurl
+, fetchpatch
+, autoPatchelfHook
+, makeWrapper
+, buildNpmPackage
 , cmake
 , avahi
 , libevdev
@@ -9,7 +15,7 @@
 , libxcb
 , openssl
 , libopus
-, ffmpeg-full
+, ffmpeg_5-full
 , boost
 , pkg-config
 , libdrm
@@ -17,32 +23,79 @@
 , libffi
 , libcap
 , mesa
+, curl
+, libva
+, libvdpau
+, numactl
+, amf-headers
+, svt-av1
+, vulkan-loader
+, libappindicator
 , cudaSupport ? false
 , cudaPackages ? {}
 }:
-
+let
+  libcbs = callPackage ./libcbs.nix { };
+  # get cmake file used to find external ffmpeg from previous sunshine version
+  findFfmpeg = fetchurl {
+    url = "https://raw.githubusercontent.com/LizardByte/Sunshine/6702802829869547708dfec98db5b8cbef39be89/cmake/FindFFMPEG.cmake";
+    sha256 = "sha256:1hl3sffv1z8ghdql5y9flk41v74asvh23y6jmaypll84f1s6k1xa";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "sunshine";
-  version = "0.15.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-/eekvpjopCivb2FJqh5W1G54GznLwdjk8ANOosdfuxw=";
+    sha256 = "sha256-fifwctVrSkAcMK8juAirIbIP64H7GKEwC+sUR/U6Q3Y=";
     fetchSubmodules = true;
+  };
+
+  # remove pre-built ffmpeg; use ffmpeg from nixpkgs
+  patches = [
+    ./ffmpeg.diff
+    # fix for X11 not being added to libraries unless prebuilt FFmpeg is used: https://github.com/LizardByte/Sunshine/pull/1166
+    (fetchpatch {
+      url = "https://github.com/LizardByte/Sunshine/commit/a067da6cae72cf36f76acc06fcf1e814032af886.patch";
+      sha256 = "sha256-HMxM7luiFBEmFkvQtkdAMMSjAaYPEFX3LL0T/ActUhM=";
+    })
+  ];
+
+  # fetch node_modules needed for webui
+  ui = buildNpmPackage {
+    inherit src version;
+    pname = "sunshine-ui";
+    npmDepsHash = "sha256-sdwvM/Irejo8DgMHJWWCxwOykOK9foqLFFd/tuzrkxI=";
+
+    dontNpmBuild = true;
+
+    # use generated package-lock.json as upstream does not provide one
+    postPatch = ''
+      cp ${./package-lock.json} ./package-lock.json
+    '';
+
+    installPhase = ''
+      mkdir -p $out
+      cp -r node_modules $out/
+    '';
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchelfHook
+    makeWrapper
   ] ++ lib.optionals cudaSupport [
     cudaPackages.autoAddOpenGLRunpathHook
   ];
 
   buildInputs = [
+    libcbs
     avahi
-    ffmpeg-full
+    ffmpeg_5-full
     libevdev
     libpulseaudio
     xorg.libX11
@@ -50,6 +103,7 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXrandr
     xorg.libXtst
+    xorg.libXi
     openssl
     libopus
     boost
@@ -59,52 +113,63 @@ stdenv.mkDerivation rec {
     libevdev
     libcap
     libdrm
+    curl
+    libva
+    libvdpau
+    numactl
     mesa
+    amf-headers
+    svt-av1
+    libappindicator
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
   ];
 
-  CXXFLAGS = [
-    "-Wno-format-security"
-  ];
-  CFLAGS = [
-    "-Wno-format-security"
+  runtimeDependencies = [
+    avahi
+    mesa
+    xorg.libXrandr
+    libxcb
   ];
 
   cmakeFlags = [
-    "-D" "FFMPEG_LIBRARIES=${ffmpeg-full}/lib"
-    "-D" "FFMPEG_INCLUDE_DIRS=${ffmpeg-full}/include"
-    "-D" "LIBAVCODEC_INCLUDE_DIR=${ffmpeg-full}/include"
-    "-D" "LIBAVCODEC_LIBRARIES=${ffmpeg-full}/lib/libavcodec.so"
-    "-D" "LIBAVDEVICE_INCLUDE_DIR=${ffmpeg-full}/include"
-    "-D" "LIBAVDEVICE_LIBRARIES=${ffmpeg-full}/lib/libavdevice.so"
-    "-D" "LIBAVFORMAT_INCLUDE_DIR=${ffmpeg-full}/include"
-    "-D" "LIBAVFORMAT_LIBRARIES=${ffmpeg-full}/lib/libavformat.so"
-    "-D" "LIBAVUTIL_INCLUDE_DIR=${ffmpeg-full}/include"
-    "-D" "LIBAVUTIL_LIBRARIES=${ffmpeg-full}/lib/libavutil.so"
-    "-D" "LIBSWSCALE_LIBRARIES=${ffmpeg-full}/lib/libswscale.so"
-    "-D" "LIBSWSCALE_INCLUDE_DIR=${ffmpeg-full}/include"
+    "-Wno-dev"
   ];
 
   postPatch = ''
-    # Don't force the need for a static boost, fix hardcoded libevdev path
+    # fix hardcoded libevdev and icon path
     substituteInPlace CMakeLists.txt \
-      --replace 'set(Boost_USE_STATIC_LIBS ON)' '# set(Boost_USE_STATIC_LIBS ON)' \
-      --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0'
+      --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0' \
+      --replace '/usr/share' "$out/share"
 
-    # fix libgbm path
-    substituteInPlace src/platform/linux/graphics.cpp \
-      --replace 'handle = dyn::handle({ "libgbm.so.1", "libgbm.so" });' 'handle = dyn::handle({ "${mesa}/lib/libgbm.so.1", "${mesa}/lib/libgbm.so" });'
+    substituteInPlace packaging/linux/sunshine.desktop \
+      --replace '@PROJECT_NAME@' 'Sunshine'
 
-    # fix avahi path
-    substituteInPlace src/platform/linux/publish.cpp \
-      --replace 'handle = dyn::handle({ "libavahi-client.so.3", "libavahi-client.so" });' 'handle = dyn::handle({ "${avahi}/lib/libavahi-client.so.3", "${avahi}/lib/libavahi-client.so" });' \
-      --replace 'handle = dyn::handle({ "libavahi-common.so.3", "libavahi-common.so" });' 'handle = dyn::handle({ "${avahi}/lib/libavahi-common.so.3", "${avahi}/lib/libavahi-common.so" });'
+    # add FindFFMPEG to source tree
+    cp ${findFfmpeg} cmake/FindFFMPEG.cmake
   '';
+
+  preBuild = ''
+    # copy node_modules where they can be picked up by build
+    mkdir -p ../node_modules
+    cp -r ${ui}/node_modules/* ../node_modules
+  '';
+
+  # allow Sunshine to find libvulkan
+  postFixup = lib.optionalString cudaSupport ''
+    wrapProgram $out/bin/sunshine \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
+  '';
+
+  postInstall = ''
+    install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
+  '';
+
+  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     description = "Sunshine is a Game stream host for Moonlight.";
-    homepage = "https://docs.lizardbyte.dev/projects/sunshine/";
+    homepage = "https://github.com/LizardByte/Sunshine";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ devusb ];
     platforms = platforms.linux;

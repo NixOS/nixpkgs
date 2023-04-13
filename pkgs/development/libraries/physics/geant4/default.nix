@@ -29,7 +29,7 @@
 
 # For enableQt, enableXM, enableOpenGLX11, enableRaytracerX11.
 , libGLU, libGL
-, xlibsWrapper
+, libXext
 , libXmu
 
 # For enablePython
@@ -47,12 +47,12 @@ in
 lib.warnIf (enableQT != false) "geant4: enableQT is deprecated, please use enableQt"
 
 stdenv.mkDerivation rec {
-  version = "11.0.3";
+  version = "11.0.4";
   pname = "geant4";
 
-  src = fetchurl{
+  src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-cvi2h1EtbmMNxsZMXEG6cRIgRoVAEymZ0A5PzhkIrkg=";
+    hash = "sha256-4wofoo0vLPd8/9CFY8EonpL8R9mcg5Wa9H/ve9UDSyc=";
   };
 
   cmakeFlags = [
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   ];
   dontWrapQtApps = true; # no binaries
 
-  buildInputs = [ libGLU xlibsWrapper libXmu ]
+  buildInputs = [ libGLU libXext libXmu ]
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
     ++ lib.optionals enablePython [ boost_python python3 ];
 

@@ -17,12 +17,12 @@ buildPythonPackage rec {
     owner = "pika";
     repo = "pika";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-j+5AF/+MlyMl3JXh+bo7pHxohbso17CJokcDR7uroz8=";
+    hash = "sha256-j+5AF/+MlyMl3JXh+bo7pHxohbso17CJokcDR7uroz8=";
   };
 
   propagatedBuildInputs = [ gevent tornado twisted ];
 
-  checkInputs = [ nose2 mock ];
+  nativeCheckInputs = [ nose2 mock ];
 
   postPatch = ''
     # don't stop at first test failure

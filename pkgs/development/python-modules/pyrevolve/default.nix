@@ -16,13 +16,13 @@ buildPythonPackage rec {
     owner = "devitocodes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5a4zvyf2vfz8aI6vFMI2vxekYrcUi/YuPFvZnUOx+Zs=";
+    hash = "sha256-5a4zvyf2vfz8aI6vFMI2vxekYrcUi/YuPFvZnUOx+Zs=";
   };
 
   nativeBuildInputs = [ versioneer cython ];
   propagatedBuildInputs = [ contexttimer numpy ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   # Using approach bellow bcs the tests fail with the pytestCheckHook, throwing the following error
   # ImportError: cannot import name 'crevolve' from partially initialized module 'pyrevolve'
   # (most likely due to a circular import)

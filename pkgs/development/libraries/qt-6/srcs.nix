@@ -4,283 +4,283 @@
 
 {
   qt3d = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qt3d-everywhere-src-6.4.0.tar.xz";
-      sha256 = "1sxxxa6gaiy573j7x2k06dr4jsxbr9r1brcjfkn0zjgl46sbbgba";
-      name = "qt3d-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qt3d-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0w9xmsrd3mqbm5vf1m8cv67kcjrcbjnfmm6fmw2icg95jzwjb0m8";
+      name = "qt3d-everywhere-src-6.4.3.tar.xz";
     };
   };
   qt5compat = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qt5compat-everywhere-src-6.4.0.tar.xz";
-      sha256 = "1h54jiqkiipbb3i3sjznrinc67y76ld237qr17ald0pp6w45sivk";
-      name = "qt5compat-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qt5compat-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0ymak3cr36b8hyr3axxywrv153ds4kcj8p04x7p7bm93p2mlkcnl";
+      name = "qt5compat-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtactiveqt = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtactiveqt-everywhere-src-6.4.0.tar.xz";
-      sha256 = "1pdam1ggxanrxr0pz8rap2ya59zyd4j56b9kfqbxm5kpkps345ar";
-      name = "qtactiveqt-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtactiveqt-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0v8wf7xv5dqcw9v75a1zhhfqhmrya9q66az3awkfscjda78y2gh9";
+      name = "qtactiveqt-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtbase = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtbase-everywhere-src-6.4.0.tar.xz";
-      sha256 = "0zdkv7m98axjfpdmbv8v2xqndvhnanh75c7vgygw8rw5pnh7ar6b";
-      name = "qtbase-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtbase-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0q0si40bmgbplczr1skacd98zkfh6mmigax4q71pnphnn3jwk1sh";
+      name = "qtbase-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtcharts = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtcharts-everywhere-src-6.4.0.tar.xz";
-      sha256 = "1ls077dhvkb4v7g2wwnb6v0rgg5fh4i2fx11fvzdlnsi4k7cmhr8";
-      name = "qtcharts-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtcharts-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0in36za9iq41mc1hq62vjd8zni6amdd2b24gqngzcpdmzzsy8qaa";
+      name = "qtcharts-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtconnectivity = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtconnectivity-everywhere-src-6.4.0.tar.xz";
-      sha256 = "0kn52xibbp7a0021x6jznp9jxlf57fk85zba0z3lqqzanmyigp2s";
-      name = "qtconnectivity-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtconnectivity-everywhere-src-6.4.3.tar.xz";
+      sha256 = "17acli5wksd793v145mv8a4ld59v8g9dvv32wxlyvdsarha2137r";
+      name = "qtconnectivity-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtdatavis3d = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtdatavis3d-everywhere-src-6.4.0.tar.xz";
-      sha256 = "038591l0s9mkzxxxxm3knvyrk1vdimbp0gi5m26n79bx8lw01d0d";
-      name = "qtdatavis3d-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtdatavis3d-everywhere-src-6.4.3.tar.xz";
+      sha256 = "15brg1gcx2am3wbr54lx20fw1q42gryjxxnxf600nmk3nrfsqy69";
+      name = "qtdatavis3d-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtdeclarative = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtdeclarative-everywhere-src-6.4.0.tar.xz";
-      sha256 = "10s35iivmafprw2spca6fw3gamf10lyp54376af9437srhpyfd1l";
-      name = "qtdeclarative-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtdeclarative-everywhere-src-6.4.3.tar.xz";
+      sha256 = "15d73d957zfhls3ny322i1n9iqvg2nxk8swi00v5w4w8p6rx3pk7";
+      name = "qtdeclarative-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtdoc = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtdoc-everywhere-src-6.4.0.tar.xz";
-      sha256 = "11j2vp2k3liz7388702ccy7fjb5ickhxnsc0iyiyirdmll187zgf";
-      name = "qtdoc-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtdoc-everywhere-src-6.4.3.tar.xz";
+      sha256 = "10w12bsfwmxw6z4n50mv653q6vj7bcb7r0pmik52kxi9sr6w7skk";
+      name = "qtdoc-everywhere-src-6.4.3.tar.xz";
     };
   };
   qthttpserver = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qthttpserver-everywhere-src-6.4.0.tar.xz";
-      sha256 = "10rlmpcj36qfr4465prpb515imrcfa6b2kiz16qyr8m4c86wb51i";
-      name = "qthttpserver-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qthttpserver-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0yf162pxm55aybm62z1qqf3h9ff39iy72ffpxk775fbrqynxqyn3";
+      name = "qthttpserver-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtimageformats = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtimageformats-everywhere-src-6.4.0.tar.xz";
-      sha256 = "0g2zjipayhzh0lwn6xgxw5mx6f5dpak75xszm2cg1h83bnvsf68l";
-      name = "qtimageformats-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtimageformats-everywhere-src-6.4.3.tar.xz";
+      sha256 = "165pk7z2k0ymzkm1r8fjykc6hlxdrpc2b0ysqlbldf3l5q35izqa";
+      name = "qtimageformats-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtlanguageserver = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtlanguageserver-everywhere-src-6.4.0.tar.xz";
-      sha256 = "09bhg3cm27d8imih1s7rk00zqwf863183znbzhhr3nkl6mqscy0q";
-      name = "qtlanguageserver-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtlanguageserver-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0xbrsg1z9p9wwx1zhh9birb44lb8ri1c6afjlv2cf69f8h31120f";
+      name = "qtlanguageserver-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtlottie = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtlottie-everywhere-src-6.4.0.tar.xz";
-      sha256 = "1d66fr2my8wcbalikppiykqwisflxahcl86zgqqy2s2wkv5bzz0w";
-      name = "qtlottie-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtlottie-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0gb9y4c9d1x548hpvcjbgr0pvw3v4c1vicqy6ppavv368ph54v7z";
+      name = "qtlottie-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtmultimedia = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtmultimedia-everywhere-src-6.4.0.tar.xz";
-      sha256 = "0vvrgqcvvr6ch5vnmq3j3lx1xci21b8vc1fv24d9aamfgj28wbp8";
-      name = "qtmultimedia-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtmultimedia-everywhere-src-6.4.3.tar.xz";
+      sha256 = "003xav0vxlh6i6l0nk9m7ikaa86nfxk2xarjw2gfb89dw5lj99x4";
+      name = "qtmultimedia-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtnetworkauth = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtnetworkauth-everywhere-src-6.4.0.tar.xz";
-      sha256 = "1cqp1z73d1kgnz5l5vvgxa58mfx61kdsr9xg1wgwrwbpzpw7g6v0";
-      name = "qtnetworkauth-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtnetworkauth-everywhere-src-6.4.3.tar.xz";
+      sha256 = "1rbaf73ijvr6y91scdyk5cjnsm930yj2ck2gnvxwif7lfajmn4ad";
+      name = "qtnetworkauth-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtpositioning = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtpositioning-everywhere-src-6.4.0.tar.xz";
-      sha256 = "0d58zgjzdmi2fv8wbn0iz941mlpsxclcldzadwwhh0dbdmgmq6rd";
-      name = "qtpositioning-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtpositioning-everywhere-src-6.4.3.tar.xz";
+      sha256 = "036pph2hy2wzr1z6gs3zc688zxifnkc001p9ba9y44kwsghv265j";
+      name = "qtpositioning-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtquick3d = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtquick3d-everywhere-src-6.4.0.tar.xz";
-      sha256 = "1v0py2njivqbj0562pmwpfkqz1ylwkffsn7j943ky46lsih1c2pi";
-      name = "qtquick3d-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtquick3d-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0l40vkada3l1zkz042lcg9ybkqd3bg6wlc0vzngr76s4bmb8v8vq";
+      name = "qtquick3d-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtquick3dphysics = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtquick3dphysics-everywhere-src-6.4.0.tar.xz";
-      sha256 = "01zx50f5gmvwg2mb853hsr2hgrciyg62h365ryq5y9fi6hs48nfw";
-      name = "qtquick3dphysics-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtquick3dphysics-everywhere-src-6.4.3.tar.xz";
+      sha256 = "05fv5mbcfqzmrr3ciqlx3vw5b6agk3kpb4r548h0hcacqjiyi1mb";
+      name = "qtquick3dphysics-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtquicktimeline = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtquicktimeline-everywhere-src-6.4.0.tar.xz";
-      sha256 = "0msg0l75m0slwar9p3vpx99cyf3j3mfbajfra26jmi0haf5s5s3h";
-      name = "qtquicktimeline-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtquicktimeline-everywhere-src-6.4.3.tar.xz";
+      sha256 = "199xbvjq1xg1lzkkq4ilbp1jiikiqg9khbzijz3ribx3qd3w821q";
+      name = "qtquicktimeline-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtremoteobjects = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtremoteobjects-everywhere-src-6.4.0.tar.xz";
-      sha256 = "1kp1as4ih021dz37z53nv7s2byb4w04cxpj4qkxqdvvgxvmps6pm";
-      name = "qtremoteobjects-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtremoteobjects-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0shq1i26k76nymvlj48l5n4afn06j6kbca463lclk8nbg7glg54w";
+      name = "qtremoteobjects-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtscxml = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtscxml-everywhere-src-6.4.0.tar.xz";
-      sha256 = "0r3nv4bbdab8hsvzz0d03qq977smlfmp7k4wm6n2jj2rwsjp61yl";
-      name = "qtscxml-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtscxml-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0fignzvz9wc37s94bdnqd7z8x6a5m3adbiz32gkh4k23dl0jqwpy";
+      name = "qtscxml-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtsensors = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtsensors-everywhere-src-6.4.0.tar.xz";
-      sha256 = "1njhrbhknbil8dllknc8p3q16k65rmqdx1gkhlcn6qlzbcphg37k";
-      name = "qtsensors-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtsensors-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0j5wp93hlf1gpb9y55llad9pimjz20hp5w5xl0v6fic953x68faz";
+      name = "qtsensors-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtserialbus = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtserialbus-everywhere-src-6.4.0.tar.xz";
-      sha256 = "14ga962x9h5rkgybf63b4b4fn8i96c0z9q60ns2ml20jgikmbjpg";
-      name = "qtserialbus-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtserialbus-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0rj3nfs017vmp8i7f1hg2mrav7fkwh6cby803ib4xw6i2rsnli5n";
+      name = "qtserialbus-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtserialport = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtserialport-everywhere-src-6.4.0.tar.xz";
-      sha256 = "10s4997n3b0vp51slrjcdkkfqf8kabcn8ypz5gl2h8nfhygcqj7i";
-      name = "qtserialport-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtserialport-everywhere-src-6.4.3.tar.xz";
+      sha256 = "1plmzkn1g00g0vrw5n9kawq1y6fj0cgbryrr5a59m8zgcy8av5sz";
+      name = "qtserialport-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtshadertools = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtshadertools-everywhere-src-6.4.0.tar.xz";
-      sha256 = "141vmracfa9r71l0mqilgllfb3c1ygpc913yx8pwsy411vqabmnv";
-      name = "qtshadertools-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtshadertools-everywhere-src-6.4.3.tar.xz";
+      sha256 = "1y384xw3jb1x4z3qzwzjxp7ymg20qn4sb4i7sq5s4sg7wd6bfj66";
+      name = "qtshadertools-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtspeech = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtspeech-everywhere-src-6.4.0.tar.xz";
-      sha256 = "1xrx323vyvrgrphxvf3nxy8s7ps26pgxaj71rlgipl58jqhc4fw7";
-      name = "qtspeech-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtspeech-everywhere-src-6.4.3.tar.xz";
+      sha256 = "1qja4n2wkkxkcczr1afi8d083qq4lrngkvj698w1s1habqcx1q3r";
+      name = "qtspeech-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtsvg = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtsvg-everywhere-src-6.4.0.tar.xz";
-      sha256 = "09av5ky5zlsz4smf3xwvk07ylkz1wz3g5hbx73xdqx6h6yaaxz83";
-      name = "qtsvg-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtsvg-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0jlshycc0cy3ja652g6jb51p4q31dsxfsz28brq9h67qdj45ycc8";
+      name = "qtsvg-everywhere-src-6.4.3.tar.xz";
     };
   };
   qttools = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qttools-everywhere-src-6.4.0.tar.xz";
-      sha256 = "18pv3b0y9ycbn5v98rjir8wsvsy40vy8xc5pyylfg2s5ikwdbwwp";
-      name = "qttools-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qttools-everywhere-src-6.4.3.tar.xz";
+      sha256 = "14d0qmqdyrz524srb5iwn5j2fm136582bs32zs7axlswrllzhzc6";
+      name = "qttools-everywhere-src-6.4.3.tar.xz";
     };
   };
   qttranslations = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qttranslations-everywhere-src-6.4.0.tar.xz";
-      sha256 = "0pwjfsi4b4fr2hw9mx76fiix0mz0wss3ic4pmd9yngk91f9kmfbs";
-      name = "qttranslations-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qttranslations-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0b4pprdczbnk1gvda2bs1fg84yinii9ih201m2l4k5nl01w6prbr";
+      name = "qttranslations-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtvirtualkeyboard = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtvirtualkeyboard-everywhere-src-6.4.0.tar.xz";
-      sha256 = "087xlc7ljkbmm85n42qx0cz8rvyhfkw1dzypxp5h3c5glamhkar5";
-      name = "qtvirtualkeyboard-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtvirtualkeyboard-everywhere-src-6.4.3.tar.xz";
+      sha256 = "1r8fvqjmh18x89snxflzci1vinf7jvflfjihidffc02vdwi8aiiz";
+      name = "qtvirtualkeyboard-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtwayland = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtwayland-everywhere-src-6.4.0.tar.xz";
-      sha256 = "1z32bdgcril9ijqsn4d60znm610mm72rgn1a6dblvhxy9zhsi2zh";
-      name = "qtwayland-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtwayland-everywhere-src-6.4.3.tar.xz";
+      sha256 = "12a7pi39zn7miyli6ywhkfx7vh0sl2h5iddp226f80acizd63cf6";
+      name = "qtwayland-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtwebchannel = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtwebchannel-everywhere-src-6.4.0.tar.xz";
-      sha256 = "0nk92cbdph5ri91pnh54i3bdpx1pn9pbgyysmpg59265gj1nv3sj";
-      name = "qtwebchannel-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtwebchannel-everywhere-src-6.4.3.tar.xz";
+      sha256 = "1a7kpsy5c9vmwk69csnni6n6kn4zpvbf9fwbr1j4mrzhhx2h8mg9";
+      name = "qtwebchannel-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtwebengine = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtwebengine-everywhere-src-6.4.0.tar.xz";
-      sha256 = "00skwxlin6za8wsh6ddhy7nmpabzjzj1lxf2w81fj04vb7nfjak6";
-      name = "qtwebengine-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtwebengine-everywhere-src-6.4.3.tar.xz";
+      sha256 = "09995fhpzkpycjgad4s2wh5wx3vxl95h35cd3fj7kp516vvmmy2m";
+      name = "qtwebengine-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtwebsockets = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtwebsockets-everywhere-src-6.4.0.tar.xz";
-      sha256 = "1jlvxidjaj44hky1cwm0y8gj6zynrnd70hf44dhjcdv5rllncg7z";
-      name = "qtwebsockets-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtwebsockets-everywhere-src-6.4.3.tar.xz";
+      sha256 = "13s5im5ms7bza9f9dy6ahnxb5d9ndgvxfw83asp86pjwnmz3a9yy";
+      name = "qtwebsockets-everywhere-src-6.4.3.tar.xz";
     };
   };
   qtwebview = {
-    version = "6.4.0";
+    version = "6.4.3";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/6.4/6.4.0/submodules/qtwebview-everywhere-src-6.4.0.tar.xz";
-      sha256 = "19z5d1gs6jm2776si9i3dxn4j70y3s8yh3m299gvb2b8fby8xfwl";
-      name = "qtwebview-everywhere-src-6.4.0.tar.xz";
+      url = "${mirror}/official_releases/qt/6.4/6.4.3/submodules/qtwebview-everywhere-src-6.4.3.tar.xz";
+      sha256 = "0hz8ydf45nfxdsp2srff1yq2qpan50flwyw2aa4js52y95q1g5ai";
+      name = "qtwebview-everywhere-src-6.4.3.tar.xz";
     };
   };
 }

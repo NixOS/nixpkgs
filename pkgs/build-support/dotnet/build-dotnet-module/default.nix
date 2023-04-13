@@ -2,13 +2,11 @@
 , stdenvNoCC
 , callPackage
 , writeShellScript
-, writeText
 , srcOnly
 , linkFarmFromDrvs
 , symlinkJoin
 , makeWrapper
 , dotnetCorePackages
-, dotnetPackages
 , mkNugetSource
 , mkNugetDeps
 , nuget-to-nix
@@ -61,6 +59,9 @@
   # Libraries that need to be available at runtime should be passed through this.
   # These get wrapped into `LD_LIBRARY_PATH`.
 , runtimeDeps ? [ ]
+  # The dotnet runtime ID. If null, fetch-deps will gather dependencies for all
+  # platforms in meta.platforms which are supported by the sdk.
+, runtimeId ? null
 
   # Tests to disable. This gets passed to `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all frameworks.
   # See https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-test#filter-option-details for more details.
@@ -73,6 +74,8 @@
 , buildType ? "Release"
   # If set to true, builds the application as a self-contained - removing the runtime dependency on dotnet
 , selfContainedBuild ? false
+  # Whether to explicitly enable UseAppHost when building
+, useAppHost ? true
   # The dotnet SDK to use.
 , dotnet-sdk ? dotnetCorePackages.sdk_6_0
   # The dotnet runtime to use.
@@ -90,6 +93,10 @@ let
 
   inherit (callPackage ./hooks {
     inherit dotnet-sdk dotnet-test-sdk disabledTests nuget-source dotnet-runtime runtimeDeps buildType;
+    runtimeId =
+      if runtimeId != null
+      then runtimeId
+      else dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
   }) dotnetConfigureHook dotnetBuildHook dotnetCheckHook dotnetInstallHook dotnetFixupHook;
 
   localDeps =
@@ -111,17 +118,16 @@ let
     deps = [ _nugetDeps ] ++ lib.optional (localDeps != null) localDeps;
   };
 
-  # this contains all the nuget packages that are implictly referenced by the dotnet
+  # this contains all the nuget packages that are implicitly referenced by the dotnet
   # build system. having them as separate deps allows us to avoid having to regenerate
   # a packages dependencies when the dotnet-sdk version changes
-  sdkDeps = mkNugetDeps {
-    name = "dotnet-sdk-${dotnet-sdk.version}-deps";
-    nugetDeps = dotnet-sdk.passthru.packages;
-  };
+  sdkDeps = lib.lists.flatten [ dotnet-sdk.packages ];
 
-  sdkSource = mkNugetSource {
-    name = "dotnet-sdk-${dotnet-sdk.version}-source";
-    deps = [ sdkDeps ];
+  sdkSource = let
+    version = dotnet-sdk.version or (lib.concatStringsSep "-" dotnet-sdk.versions);
+  in mkNugetSource {
+    name = "dotnet-sdk-${version}-source";
+    deps = sdkDeps;
   };
 
   nuget-source = symlinkJoin {
@@ -152,22 +158,27 @@ stdenvNoCC.mkDerivation (args // {
   # gappsWrapperArgs gets included when wrapping for dotnet, as to avoid double wrapping
   dontWrapGApps = args.dontWrapGApps or true;
 
+  inherit selfContainedBuild useAppHost;
+
   passthru = {
     inherit nuget-source;
 
     fetch-deps =
       let
-        # Derivations may set flags such as `--runtime <rid>` based on the host platform to avoid restoring/building nuget dependencies they dont have or dont need.
-        # This introduces an issue; In this script we loop over all platforms from `meta` and add the RID flag for it, as to fetch all required dependencies.
-        # The script would inherit the RID flag from the derivation based on the platform building the script, and set the flag for any iteration we do over the RIDs.
-        # That causes conflicts. To circumvent it we remove all occurances of the flag.
-        flags =
-          let
-            hasRid = flag: lib.any (v: v) (map (rid: lib.hasInfix rid flag) (lib.attrValues dotnet-sdk.runtimeIdentifierMap));
-          in
-          builtins.filter (flag: !(hasRid flag)) (dotnetFlags ++ dotnetRestoreFlags);
-
-        runtimeIds = map (system: dotnet-sdk.systemToDotnetRid system) platforms;
+        flags = dotnetFlags ++ dotnetRestoreFlags;
+        runtimeIds =
+          if runtimeId != null
+          then [ runtimeId ]
+          else map (system: dotnetCorePackages.systemToDotnetRid system) platforms;
+        defaultDepsFile =
+          # Wire in the nugetDeps file such that running the script with no args
+          # runs it agains the correct deps file by default.
+          # Note that toString is necessary here as it results in the path at
+          # eval time (i.e. to the file in your local Nixpkgs checkout) rather
+          # than the Nix store path of the path after it's been imported.
+          if lib.isPath nugetDeps && !lib.hasPrefix "${builtins.storeDir}/" (toString nugetDeps)
+          then toString nugetDeps
+          else ''$(mktemp -t "${pname}-deps-XXXXXX.nix")'';
       in
       writeShellScript "fetch-${pname}-deps" ''
         set -euo pipefail
@@ -190,7 +201,13 @@ stdenvNoCC.mkDerivation (args // {
             esac
         done
 
-        export tmp=$(mktemp -td "${pname}-tmp-XXXXXX")
+        if [[ ''${TMPDIR:-} == /run/user/* ]]; then
+           # /run/user is usually a tmpfs in RAM, which may be too small
+           # to store all downloaded dotnet packages
+           TMPDIR=
+        fi
+
+        export tmp=$(mktemp -td "deps-${pname}-XXXXXX")
         HOME=$tmp/home
 
         exitTrap() {
@@ -232,7 +249,8 @@ stdenvNoCC.mkDerivation (args // {
         export DOTNET_NOLOGO=1
         export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-        depsFile=$(realpath "''${1:-$(mktemp -t "${pname}-deps-XXXXXX.nix")}")
+        depsFile=$(realpath "''${1:-${defaultDepsFile}}")
+        echo Will write lockfile to "$depsFile"
         mkdir -p "$tmp/nuget_pkgs"
 
         storeSrc="${srcOnly args}"
@@ -255,7 +273,12 @@ stdenvNoCC.mkDerivation (args // {
 
         echo "Writing lockfile..."
         echo -e "# This file was automatically generated by passthru.fetch-deps.\n# Please dont edit it manually, your changes might get overwritten!\n" > "$depsFile"
-        nuget-to-nix "$tmp/nuget_pkgs" "${sdkDeps}" >> "$depsFile"
+
+        excluded_sources="${lib.concatStringsSep " " sdkDeps}"
+        for excluded_source in ''${excluded_sources[@]}; do
+          ls "$excluded_source" >> "$tmp/excluded_list"
+        done
+        nuget-to-nix "$tmp/nuget_pkgs" "$tmp/excluded_list" >> "$depsFile"
         echo "Succesfully wrote lockfile to $depsFile"
       '';
   } // args.passthru or { };

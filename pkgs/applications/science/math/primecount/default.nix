@@ -7,18 +7,22 @@
 
 stdenv.mkDerivation rec {
   pname = "primecount";
-  version = "7.4";
+  version = "7.8";
 
   src = fetchFromGitHub {
     owner = "kimwalisch";
     repo = "primecount";
     rev = "v${version}";
-    hash = "sha256-ZKrTeeDJgVy+6Q0twFW9+bQulUmOL1dxznYK9nWd07Y=";
+    hash = "sha256-yKk+zXvA/MI7y9gCMwJNYHRYIYgeWyJHjyPi1uNWVnM=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  buildInputs = [ primesieve ];
+  buildInputs = [
+    primesieve
+  ];
 
   cmakeFlags = [
     "-DBUILD_LIBPRIMESIEVE=ON"
@@ -30,6 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/kimwalisch/primecount";
+    changelog = "https://github.com/kimwalisch/primecount/blob/v${version}/ChangeLog";
     description = "Fast prime counting function implementations";
     longDescription = ''
       primecount is a command-line program and C/C++ library that counts the

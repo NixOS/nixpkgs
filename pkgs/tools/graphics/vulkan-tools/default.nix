@@ -21,18 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.231.0";
+  version = "1.3.243.0";
 
-  # It's not strictly necessary to have matching versions here, however
-  # since we're using the SDK version we may as well be consistent with
-  # the rest of nixpkgs.
-  src = (assert (version) == vulkan-headers.version;
-    fetchFromGitHub {
-      owner = "KhronosGroup";
-      repo = "Vulkan-Tools";
-      rev = "sdk-${version}";
-      hash = "sha256-6oimP4ISa0dX4bLU3Nch8Ur6MzEMQscnL8EfRrqT/Es=";
-    });
+  src = fetchFromGitHub {
+    owner = "KhronosGroup";
+    repo = "Vulkan-Tools";
+    rev = "sdk-${version}";
+    hash = "sha256-8XJON+iBEPRtuQWf1bPXyOJHRkuRLnLXgTIjk7gYQwE=";
+  };
 
   nativeBuildInputs = [
     cmake
@@ -107,5 +103,6 @@ stdenv.mkDerivation rec {
     platforms   = platforms.unix;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];
+    broken = (version != vulkan-headers.version);
   };
 }

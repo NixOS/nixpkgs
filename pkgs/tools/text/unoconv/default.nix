@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -i "s|/usr/bin/env python.*|${python3}/bin/${python3.executable}|" "$out/bin/unoconv"
     wrapProgram "$out/bin/unoconv" --set UNO_PATH "${libreoffice-unwrapped}/lib/libreoffice/program/"
-  '' + (if installSymlinks then ''
+  '' + lib.optionalString installSymlinks ''
     make install-links prefix="$out"
-  '' else "");
+  '';
 
   meta = with lib; {
     description = "Convert between any document format supported by LibreOffice/OpenOffice";

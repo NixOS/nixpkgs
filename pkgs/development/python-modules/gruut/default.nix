@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , callPackage
-, pythonOlder
 , fetchFromGitHub
 , babel
 , gruut-ipa
@@ -9,7 +8,6 @@
 , jsonlines
 , num2words
 , python-crfsuite
-, dataclasses
 , python
 , networkx
 , glibcLocales
@@ -43,14 +41,14 @@ buildPythonPackage rec {
     owner = "rhasspy";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-DD7gnvH9T2R6E19+exWE7Si+XEpfh0Iy5FYbycjgzgM=";
+    hash = "sha256-DD7gnvH9T2R6E19+exWE7Si+XEpfh0Iy5FYbycjgzgM=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "dateparser~=1.0.0" "dateparser" \
       --replace "gruut_lang_en~=2.0.0" "gruut_lang_en" \
-      --replace "jsonlines~=1.2.0" "jsonlines"
+      --replace "jsonlines~=1.2.0" "jsonlines" \
+      --replace "networkx>=2.5.0,<3.0.0" "networkx"
   '';
 
   propagatedBuildInputs = [
@@ -61,13 +59,11 @@ buildPythonPackage rec {
     python-crfsuite
     dateparser
     networkx
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ] ++ (map (lang: callPackage ./language-pack.nix {
     inherit lang version format src;
   }) langPkgs);
 
-  checkInputs = [ glibcLocales pytestCheckHook ];
+  nativeCheckInputs = [ glibcLocales pytestCheckHook ];
 
   disabledTests = [
     # https://github.com/rhasspy/gruut/issues/25

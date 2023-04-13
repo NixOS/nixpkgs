@@ -6,6 +6,7 @@
 , wlroots
 , wayland
 , wayland-protocols
+, wayland-scanner
 , egl-wayland
 , glew-egl
 , mpv
@@ -26,12 +27,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0LjIwOY2hBUb0nziD3HLP2Ek5+8v3ntssRFD9eQgWkc=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     makeWrapper
     installShellFiles
+    wayland-scanner
   ];
 
   buildInputs = [

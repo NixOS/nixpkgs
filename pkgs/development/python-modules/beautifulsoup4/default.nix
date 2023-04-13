@@ -12,15 +12,16 @@
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.11.1";
+  version = "4.11.2";
   format = "setuptools";
+
   outputs = ["out" "doc"];
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rZqlW2XvKAjrQF9Gz3Tff8twRNXLwmSH+W6y7y5DZpM=";
+    hash = "sha256-vEvdpnF95aKYdDb7jXL0XckN2Fa9/VEqExTOkDSaAQY=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     soupsieve
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://git.launchpad.net/beautifulsoup/tree/CHANGELOG?h=${version}";
     homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
     description = "HTML and XML parser";
     license = licenses.mit;

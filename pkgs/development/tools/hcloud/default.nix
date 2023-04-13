@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "hcloud";
-  version = "1.30.4";
+  version = "1.33.0";
 
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-282DJegj4lf7oynkdjNC6/PVvQaFbIqOJViua83KTdg=";
+    sha256 = "sha256-Itu/VS6wpEHWLmDiGq9m7qyUr6lMr4uQm8SJNAkOPsQ=";
   };
 
-  vendorSha256 = "sha256-Y2HlY8u2ZFtkAyYG7jqm+DMOFsWSQ6TxI7dm2woGA/Y=";
+  vendorHash = "sha256-gz8vSVWh9wyM91rjJT102UJXBpeDoU895lTrHHZpj3I=";
 
   ldflags = [
     "-s" "-w"
@@ -28,6 +28,7 @@ buildGoModule rec {
   '';
 
   meta = {
+    changelog = "https://github.com/hetznercloud/cli/releases/tag/v${version}";
     description = "A command-line interface for Hetzner Cloud, a provider for cloud virtual private servers";
     homepage = "https://github.com/hetznercloud/cli";
     license = lib.licenses.mit;

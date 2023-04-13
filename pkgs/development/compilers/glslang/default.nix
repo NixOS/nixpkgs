@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , bison
 , cmake
 , jq
@@ -9,13 +10,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "glslang";
-  version = "1.3.231.0";
+  version = "1.3.243.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
     rev = "sdk-${version}";
-    hash = "sha256-huPrQr+lPi7QCF8CufAavHEKGDDimGrcskiojhH9QYk=";
+    hash = "sha256-U45/7G02o82EP4zh7i2Go0VCnsO1B7vxDwIokjyo5Rk=";
   };
 
   # These get set at all-packages, keep onto them for child drvs
@@ -25,6 +26,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake python3 bison jq ];
+
+  patches = [
+    # Related PR: https://github.com/KhronosGroup/glslang/pull/3067
+    ./use-CMAKE_INSTALL_FULL_LIBDIR-in-compat-cmake-files.patch
+    # Upstream tries to detect the Darwin linker by checking for AppleClang, but it’s just Clang in nixpkgs.
+    # Revert the commit to allow the build to work on Darwin with the nixpkg Darwin Clang toolchain.
+    (fetchpatch {
+      name = "Fix-Darwin-linker-error.patch";
+      url = "https://github.com/KhronosGroup/glslang/commit/586baa35a47b3aa6ad3fa829a27f0f4206400668.patch";
+      hash = "sha256-paAl4E8GzogcxDEzn/XuhNH6XObp+i7WfArqAiuH4Mk=";
+      revert = true;
+    })
+  ];
 
   postPatch = ''
     cp --no-preserve=mode -r "${spirv-tools.src}" External/spirv-tools

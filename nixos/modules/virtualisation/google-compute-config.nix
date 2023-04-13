@@ -29,8 +29,8 @@ with lib;
   # Allow root logins only using SSH keys
   # and disable password authentication in general
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "prohibit-password";
-  services.openssh.passwordAuthentication = mkDefault false;
+  services.openssh.settings.PermitRootLogin = "prohibit-password";
+  services.openssh.settings.PasswordAuthentication = mkDefault false;
 
   # enable OS Login. This also requires setting enable-oslogin=TRUE metadata on
   # instance or project level

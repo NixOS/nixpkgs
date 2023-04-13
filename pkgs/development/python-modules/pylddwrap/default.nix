@@ -37,7 +37,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "lddwrap" ];
 

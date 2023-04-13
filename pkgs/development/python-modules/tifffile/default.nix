@@ -12,21 +12,21 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2022.8.12";
+  version = "2023.2.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PnTg/UiDhHfrz0Dgm3eAvQle5ZILIjj0heLGhGOj3LQ=";
+    hash = "sha256-RY31rZpSF/Zo7dY23Bn7xzYGK/eKrII6uEzbrp3o6qY=";
   };
 
   propagatedBuildInputs = [
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dask
     fsspec
     lxml
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Read and write image data from and to TIFF files";
     homepage = "https://github.com/cgohlke/tifffile/";
+    changelog = "https://github.com/cgohlke/tifffile/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lebastr ];
   };

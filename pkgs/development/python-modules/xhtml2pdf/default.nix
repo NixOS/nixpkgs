@@ -5,7 +5,7 @@
 , html5lib
 , pillow
 , pyhanko
-, pypdf3
+, pypdf
 , pytestCheckHook
 , python-bidi
 , pythonOlder
@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "xhtml2pdf";
-  version = "0.2.8";
+  version = "0.2.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     # Currently it is not possible to fetch from version as there is a branch with the same name
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-zWzg/r18wjzxWyD5QJ7l4pY+4bJTvHjrD11FRuuy8H8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MrzAsa0AZX3+0LN/Can3QBoPBRxb0a/F2jLBd8rD5H4=";
   };
 
   propagatedBuildInputs = [
@@ -34,13 +34,13 @@ buildPythonPackage rec {
     html5lib
     pillow
     pyhanko
-    pypdf3
+    pypdf
     python-bidi
     reportlab
     svglib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

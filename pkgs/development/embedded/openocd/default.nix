@@ -1,20 +1,23 @@
 { stdenv
 , lib
-, fetchpatch
 , fetchurl
 , pkg-config
 , hidapi
-, libftdi1
 , libusb1
 , libgpiod
+
+, enableFtdi ? true, libftdi1
+
+# Allow selection the hardware targets (SBCs, JTAG Programmers, JTAG Adapters)
+, extraHardwareSupport ? []
 }:
 
 stdenv.mkDerivation rec {
   pname = "openocd";
-  version = "0.11.0";
+  version = "0.12.0";
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0z8y7mmv0mhn2l5gs3vz6l7cnwak7agklyc7ml33f7gz99rwx8s3";
+    sha256 = "sha256-ryVHiL6Yhh8r2RA/5uYKd07Jaow3R0Tu+Rl/YEMHWvo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -22,34 +25,24 @@ stdenv.mkDerivation rec {
   buildInputs = [ hidapi libftdi1 libusb1 ]
     ++ lib.optional stdenv.isLinux libgpiod;
 
-  patches = [
-    # Patch is upstream, so can be removed when OpenOCD 0.12.0 or later is released.
-    (fetchpatch
-      {
-        url = "https://github.com/openocd-org/openocd/commit/cff0e417da58adef1ceef9a63a99412c2cc87ff3.patch";
-        sha256 = "Xxzf5miWy4S34sbQq8VQdAbY/oqGyhL/AJxiEPRuj3Q=";
-      })
-  ];
-
   configureFlags = [
     "--disable-werror"
     "--enable-jtag_vpi"
-    "--enable-usb_blaster_libftdi"
-    (lib.enableFeature (! stdenv.isDarwin) "amtjtagaccel")
-    (lib.enableFeature (! stdenv.isDarwin) "gw16012")
-    "--enable-presto_libftdi"
-    "--enable-openjtag_ftdi"
-    (lib.enableFeature (! stdenv.isDarwin) "oocd_trace")
     "--enable-buspirate"
-    (lib.enableFeature stdenv.isLinux "sysfsgpio")
-    (lib.enableFeature stdenv.isLinux "linuxgpiod")
     "--enable-remote-bitbang"
-  ];
+    (lib.enableFeature enableFtdi "ftdi")
+    (lib.enableFeature stdenv.isLinux "linuxgpiod")
+    (lib.enableFeature stdenv.isLinux "sysfsgpio")
+  ] ++
+    map (hardware: "--enable-${hardware}") extraHardwareSupport
+  ;
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  enableParallelBuilding = true;
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     "-Wno-error=cpp"
     "-Wno-error=strict-prototypes" # fixes build failure with hidapi 0.10.0
-  ];
+  ]);
 
   postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p "$out/etc/udev/rules.d"

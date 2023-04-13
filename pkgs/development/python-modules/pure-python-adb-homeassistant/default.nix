@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xXXEp8oYGcJLTfoBDUSZrIHSgDvB2EHbVMHoG4Hk+t8=";
+    hash = "sha256-xXXEp8oYGcJLTfoBDUSZrIHSgDvB2EHbVMHoG4Hk+t8=";
   };
 
   # Disable tests as they require docker, docker-compose and a dedicated
