@@ -17,7 +17,7 @@ let
           http = ":8000";
         };
       };
-      boot.cleanTmpDir = true;
+      boot.tmp.cleanOnBoot = true;
       # for exchange rates
       security.pki.certificateFiles = [ ./server.crt ];
       networking.extraHosts = "127.0.0.1 api.exchangerate.host";
