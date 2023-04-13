@@ -10,9 +10,9 @@ index d355b9dc..94fef33f 100644
 +{
 +  switch (location) {
 +    case QLibraryInfo::BinariesPath:
-+      return QLatin1String(NIX_OUTPUT_DEV) + QLatin1String("/bin");
++      return QLatin1String(NIX_OUTPUT_OUT) + QLatin1String("/bin");
 +    case QLibraryInfo::LibraryExecutablesPath:
-+      return QLatin1String(NIX_OUTPUT_DEV) + QLatin1String("/libexec");
++      return QLatin1String(NIX_OUTPUT_OUT) + QLatin1String("/libexec");
 +    default:
 +      return QLibraryInfo::path(location);
 +  }
