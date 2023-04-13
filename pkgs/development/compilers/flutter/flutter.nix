@@ -4,6 +4,7 @@
 , src
 
 , lib
+, callPackage
 , stdenv
 , autoPatchelfHook
 , git
@@ -108,6 +109,9 @@ let
         # When other derivations wrap this one, any unmodified files
         # found here should be included as-is, for tooling compatibility.
         sdk = self;
+        mkFlutterApp = callPackage ../../../build-support/flutter {
+          flutter = callPackage ./wrapper.nix { flutter = self; };
+        };
       };
 
       meta = with lib; {
