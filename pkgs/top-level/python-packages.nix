@@ -4658,6 +4658,8 @@ self: super: with self; {
 
   ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
 
+  ifcfg = callPackage ../development/python-modules/ifcfg { };
+
   ifcopenshell = callPackage ../development/python-modules/ifcopenshell { };
 
   ignite = callPackage ../development/python-modules/ignite { };
