@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0003-Fix-NixOS-containers.patch
-    ./0004-Look-for-fsck-in-the-right-place.patch
+    ./0004-fsck-look-for-fsck-binary-not-just-in-sbin.patch
     ./0005-Add-some-NixOS-specific-unit-directories.patch
     ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
     ./0007-Fix-hwdb-paths.patch
