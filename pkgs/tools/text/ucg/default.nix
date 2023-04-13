@@ -8,14 +8,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ucg";
-  version = "unstable-2019-02-25";
+  version = "unstable-2022-09-03";
 
   src = fetchFromGitHub {
     owner = "gvansickle";
     repo = "ucg";
-    rev = "c3a67632f1e3f332bfb102f0db167f34a2e42da7";
-    hash = "sha256-/wU1PmI4ejlv7gZzZNasgROYXFiDiIxE9BFoCo6+G5Y=";
+    rev = "cbb185e8adad6546b7e1c5e9ca59a81f98dca49f";
+    hash = "sha256-Osdyxp8DoEjcr2wQLCPqOQ2zQf/0JWYxaDpZB02ACWo=";
   };
+
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -42,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta =  {
-    homepage = "https://github.com/gvansickle/ucg/";
+    homepage = "https://gvansickle.github.io/ucg/";
     description = "Grep-like tool for searching large bodies of source code";
     longDescription = ''
       UniversalCodeGrep (ucg) is an extremely fast grep-like tool specialized
