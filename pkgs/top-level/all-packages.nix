@@ -35069,8 +35069,7 @@ with pkgs;
   };
 
   xmp = callPackage ../applications/audio/xmp {
-    inherit (darwin.apple_sdk.frameworks) AudioUnit;
-    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio;
   };
 
   xnee = callPackage ../tools/X11/xnee { };
