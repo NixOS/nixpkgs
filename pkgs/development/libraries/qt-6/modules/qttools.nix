@@ -41,4 +41,8 @@ qtModule {
     "bin/macdeployqt"
   ];
 
+  postInstall = ''
+    mkdir -p "$dev"
+    ln -s "$out/bin" "$dev/bin"
+  '';
 }
