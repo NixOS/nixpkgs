@@ -40,9 +40,6 @@ in
 
       # Apparently --bindir is not respected.
       makeFlagsArray+=("bindir=$bin/bin" "sbindir=$bin/sbin" "rootsbindir=$bin/sbin")
-    '' + lib.optionalString stdenv.buildPlatform.isDarwin ''
-      # ld-wrapper will otherwise attempt to inject CoreFoundation into ld-linux's RUNPATH
-      export NIX_COREFOUNDATION_RPATH=
     '';
 
     # The pie, stackprotector and fortify hardening flags are autodetected by

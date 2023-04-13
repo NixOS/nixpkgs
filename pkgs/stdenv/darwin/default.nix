@@ -681,7 +681,6 @@ rec {
       targetPlatform = localSystem;
 
       preHook = commonPreHook + ''
-        export NIX_COREFOUNDATION_RPATH=${pkgs.darwin.CF}/Library/Frameworks
         export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
       '';
 
