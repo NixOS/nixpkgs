@@ -132,6 +132,11 @@ let
         default = false;
         description = lib.mdDoc "Allow users to edit datasources from the UI.";
       };
+      isDefault = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Toggles whether the data source is pre-selected for new panels. You can set only one default datasource per organization.";
+      };
       secureJsonData = mkOption {
         type = types.nullOr types.attrs;
         default = null;
