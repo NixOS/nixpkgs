@@ -1,6 +1,5 @@
 { lib
 , stdenvNoCC
-, autoPatchelfHook
 , nukeReferences
 , llvmPackages_13
 , cacert
@@ -111,11 +110,9 @@ let
 
   });
 
-  nativeBuildInputs = [ flutter autoPatchelfHook ] ++ lib.optionals (args ? nativeBuildInputs) args.nativeBuildInputs;
+  nativeBuildInputs = [ flutter ] ++ lib.optionals (args ? nativeBuildInputs) args.nativeBuildInputs;
 
   buildInputs = lib.optionals (args ? buildInputs) args.buildInputs;
-
-  dontAutoPatchelf = true;
 
   configurePhase = ''
     runHook preConfigure
@@ -152,8 +149,6 @@ let
     # prepare
     export HOME="$depsFolder"
 
-    # binaries need to be patched
-    autoPatchelf -- "$depsFolder"
 
     runHook postConfigure
   '';
@@ -186,9 +181,6 @@ let
     for f in $(find $out/app -maxdepth 1 -type f); do
       ln -s $f $out/bin/$(basename $f)
     done
-
-    # this confuses autopatchelf hook otherwise
-    rm -rf "$depsFolder"
 
     # make *.so executable
     find $out/app -iname "*.so" -type f -exec chmod +x {} +
