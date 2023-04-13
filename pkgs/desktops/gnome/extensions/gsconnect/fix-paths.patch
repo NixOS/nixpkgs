@@ -1,8 +1,8 @@
 diff --git a/data/org.gnome.Shell.Extensions.GSConnect.desktop.in b/data/org.gnome.Shell.Extensions.GSConnect.desktop.in
-index ffb23342..b405c73b 100644
+index 3fb887c3..e8cbe1bd 100644
 --- a/data/org.gnome.Shell.Extensions.GSConnect.desktop.in
 +++ b/data/org.gnome.Shell.Extensions.GSConnect.desktop.in
-@@ -1,7 +1,7 @@
+@@ -5,7 +5,7 @@
  [Desktop Entry]
  Type=Application
  Name=GSConnect
@@ -12,10 +12,11 @@ index ffb23342..b405c73b 100644
  NoDisplay=true
  Icon=org.gnome.Shell.Extensions.GSConnect
 diff --git a/src/extension.js b/src/extension.js
-index e7fd971a..8474bb3b 100644
+index 3fae443a..7aa19842 100644
 --- a/src/extension.js
 +++ b/src/extension.js
-@@ -1,5 +1,7 @@
+@@ -4,6 +4,8 @@
+ 
  'use strict';
  
 +'@typelibPath@'.split(':').forEach(path => imports.gi.GIRepository.Repository.prepend_search_path(path));
@@ -24,10 +25,11 @@ index e7fd971a..8474bb3b 100644
  const GObject = imports.gi.GObject;
  const Gtk = imports.gi.Gtk;
 diff --git a/src/prefs.js b/src/prefs.js
-index 922ea60c..2cd62eb5 100644
+index b8860c82..d6292606 100644
 --- a/src/prefs.js
 +++ b/src/prefs.js
-@@ -1,5 +1,7 @@
+@@ -4,6 +4,8 @@
+ 
  'use strict';
  
 +'@typelibPath@'.split(':').forEach(path => imports.gi.GIRepository.Repository.prepend_search_path(path));

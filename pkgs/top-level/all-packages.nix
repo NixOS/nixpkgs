@@ -3180,9 +3180,7 @@ with pkgs;
 
   cudd = callPackage ../development/libraries/cudd { };
 
-  cue = callPackage ../development/tools/cue {
-    buildGoModule = buildGo118Module; # tests fail with 1.19
-  };
+  cue = callPackage ../development/tools/cue { };
 
   writeCueValidator = callPackage ../development/tools/cue/validator.nix { };
 
@@ -6390,6 +6388,8 @@ with pkgs;
 
   changetower = callPackage ../tools/networking/changetower { };
 
+  chatblade = callPackage ../applications/misc/chatblade { };
+
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
   checkmate = callPackage ../development/tools/checkmate { };
@@ -6624,11 +6624,7 @@ with pkgs;
 
   deer = callPackage ../shells/zsh/zsh-deer { };
 
-  deno = callPackage ../development/web/deno {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks)
-      Security CoreServices Metal Foundation QuartzCore;
-  };
+  deno = callPackage ../development/web/deno { };
 
   detox = callPackage ../tools/misc/detox { };
 
@@ -11408,6 +11404,8 @@ with pkgs;
     inherit (qt5) qttools;
   };
 
+  revolt-desktop = callPackage ../applications/networking/instant-messengers/revolt-desktop { };
+
   rbw = callPackage ../tools/security/rbw {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -13026,6 +13024,10 @@ with pkgs;
   ttygif = callPackage ../tools/misc/ttygif { };
 
   ttylog = callPackage ../tools/misc/ttylog { };
+
+  twm = callPackage ../tools/misc/twm {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   txtpbfmt = callPackage ../development/tools/txtpbfmt { };
 
@@ -16085,7 +16087,7 @@ with pkgs;
   };
   cargo-insta = callPackage ../development/tools/rust/cargo-insta { };
   cargo-lambda = callPackage ../development/tools/rust/cargo-lambda {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
   cargo-limit = callPackage ../development/tools/rust/cargo-limit { };
   cargo-make = callPackage ../development/tools/rust/cargo-make {
@@ -36022,11 +36024,15 @@ with pkgs;
   katago = callPackage ../games/katago { };
 
   katagoWithCuda = katago.override {
-    enableCuda = true;
+    backend = "cuda";
   };
 
   katagoCPU = katago.override {
-    enableGPU = false;
+    backend = "eigen";
+  };
+
+  katagoTensorRT = katago.override {
+    backend = "tensorrt";
   };
 
   klavaro = callPackage ../games/klavaro { };
@@ -36249,6 +36255,8 @@ with pkgs;
   pacvim = callPackage ../games/pacvim { };
 
   papermc = callPackage ../games/papermc { };
+
+  path-of-building = qt6Packages.callPackage ../games/path-of-building {};
 
   pentobi = libsForQt5.callPackage ../games/pentobi { };
 
