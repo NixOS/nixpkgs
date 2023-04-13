@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    for x in $src/*.pl $src/*.awk $src/dev/*.pl $src/dev/*.d; do
+    for x in $src/*.pl $src/*.awk $src/*.py $src/*.php $src/dev/*.pl $src/dev/*.d; do
       cp $x $out/bin
     done
 
