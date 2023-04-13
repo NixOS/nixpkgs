@@ -6,6 +6,8 @@
 , makeWrapper
 , runCommandLocal
 , writeShellScript
+, git
+, which
 , pkg-config
 , atk
 , cairo
@@ -30,6 +32,9 @@ let
     export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
     ${flutter}/bin/flutter --no-version-check "$@"
   '';
+
+  # Tools that the Flutter tool depends on.
+  tools = [ git which ];
 
   # Libraries that Flutter apps depend on at runtime.
   appRuntimeDeps = lib.optionals supportsLinuxDesktop [
@@ -84,7 +89,7 @@ in
   mkdir -p $out/bin
   makeWrapper '${immutableFlutter}' $out/bin/flutter \
     --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
-    --prefix PATH : '${lib.makeBinPath buildTools}' \
+    --prefix PATH : '${lib.makeBinPath (tools ++ buildTools)}' \
     --prefix PKG_CONFIG_PATH : '${builtins.concatStringsSep ":" pkgConfigDirectories}' \
     --prefix LIBRARY_PATH : '${lib.makeLibraryPath appStaticBuildDeps}' \
     --prefix CXXFLAGS "''\t" '${builtins.concatStringsSep " " cppFlags}' \
