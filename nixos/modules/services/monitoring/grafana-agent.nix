@@ -140,7 +140,7 @@ in
         # We can't use Environment=HOSTNAME=%H, as it doesn't include the domain part.
         export HOSTNAME=$(< /proc/sys/kernel/hostname)
 
-        exec ${cfg.package}/bin/agent -config.expand-env -config.file ${configFile}
+        exec ${lib.getExe cfg.package} -config.expand-env -config.file ${configFile}
       '';
       serviceConfig = {
         Restart = "always";
