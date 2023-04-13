@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "kubo";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ mguentner ];
+    maintainers = [ mguentner Luflosi ];
   };
 
   nodes.machine = { ... }: {
