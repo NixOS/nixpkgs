@@ -204,7 +204,6 @@ stdenv.mkDerivation rec {
   preHook = ''
     . "$fix_qt_builtin_paths"
     . "$fix_qt_module_paths"
-    . ${../hooks/fix-qmake-libtool.sh}
   '';
 
   qtPluginPrefix = "lib/qt-6/plugins";
