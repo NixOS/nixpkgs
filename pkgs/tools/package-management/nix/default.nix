@@ -133,5 +133,5 @@ in lib.makeExtensible (self: {
 
   stable = self.nix_2_13;
 
-  unstable = self.nix_2_14;
+  unstable = self.nix_2_15;
 })
