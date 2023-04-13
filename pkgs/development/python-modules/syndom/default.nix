@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "syndom";
-  version = "1.0";
+  version = "unstable-2023-03-25";
 
   format = "other";
 
   src = fetchFromGitLab {
     owner = "gabmus";
     repo = "syndication-domination";
-    rev = version;
-    sha256 = "sha256-IABeXK8fUMSFG8y5c3lZS68TO+Ui3CaOoXJ6HKWaOJ0=";
+    rev = "75920321062d682437f3fb0319dad227d8b18f6c";
+    sha256 = "sha256-fOlE9CsNcmGkVBXaqYHxLDWB8voeRp46+dZYIJIwg7o=";
   };
 
   # Python 2.x is not supported.

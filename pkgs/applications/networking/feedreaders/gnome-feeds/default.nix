@@ -14,20 +14,20 @@
 , glib-networking
 , gtk4
 , libadwaita
-, webkitgtk_5_0
+, webkitgtk_6_0
 , python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-feeds";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gfeeds";
     rev = version;
-    sha256 = "sha256-bdDEAv4R4RRpuUgpLS2codl3tUeHK1gEzLbSgHdGKfg=";
+    sha256 = "sha256-XKwRFjz4ocH01mj8KshLGmGxbm/uvDiyYRf65KL0UFw=";
   };
 
   format = "other";
@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     glib-networking
     gtk4
     libadwaita
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
