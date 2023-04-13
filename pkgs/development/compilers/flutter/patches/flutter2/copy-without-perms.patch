@@ -1,0 +1,17 @@
+diff --git a/packages/flutter_tools/lib/src/build_system/targets/assets.dart b/packages/flutter_tools/lib/src/build_system/targets/assets.dart
+index 68a4cd0257..1e212b9b0d 100644
+--- a/packages/flutter_tools/lib/src/build_system/targets/assets.dart
++++ b/packages/flutter_tools/lib/src/build_system/targets/assets.dart
+@@ -101,7 +101,11 @@ Future<Depfile> copyAssets(Environment environment, Directory outputDirectory, {
+             outputPath: file.path,
+             relativePath: entry.key,
+           )) {
+-            await (content.file as File).copy(file.path);
++             // Not using File.copy because it preserves permissions.
++             final sourceFile = content.file as File;
++             final destinationFile = file;
++ 
++             await destinationFile.writeAsBytes(await sourceFile.readAsBytes(), flush: true);
+           }
+         } else {
+           await file.writeAsBytes(await entry.value.contentsAsBytes());
