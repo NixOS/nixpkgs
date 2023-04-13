@@ -78,7 +78,7 @@ let
 in
 (callPackage ./sdk-symlink.nix { }) (runCommandLocal "flutter-wrapped"
 {
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   passthru = flutter.passthru // {
     unwrapped = flutter;
