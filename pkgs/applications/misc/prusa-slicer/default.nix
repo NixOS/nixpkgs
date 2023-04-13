@@ -114,11 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
   # additionally need to set the path via the NLOPT environment variable.
   NLOPT = nlopt;
 
-  # Disable compiler warnings that clutter the build log.
-  # It seems to be a known issue for Eigen:
-  # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
-  env.NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
-
   # prusa-slicer uses dlopen on `libudev.so` at runtime
   NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";
 
