@@ -38,7 +38,6 @@ let
       flutter config --no-analytics &>/dev/null # mute first-run
       flutter config --enable-linux-desktop
       flutter packages get
-      flutter build linux || true # so it downloads tools
       ${lib.optionalString (args ? flutterExtraFetchCommands) args.flutterExtraFetchCommands}
 
       RES="$TMP"
