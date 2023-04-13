@@ -131,6 +131,18 @@ in lib.makeExtensible (self: {
   # conflict with every subsequent rebase that touches nearby
   # lines of code.
 
+  nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
+
+  nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
+
+  nix_2_6 = throw "nixVersions.nix_2_6 has been removed";
+
+  nix_2_7 = throw "nixVersions.nix_2_7 has been removed";
+
+  nix_2_8 = throw "nixVersions.nix_2_8 has been removed";
+
+  nix_2_9 = throw "nixVersions.nix_2_9 has been removed";
+
 } //
 
 (let
