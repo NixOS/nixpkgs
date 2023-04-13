@@ -226,12 +226,6 @@ qtModule {
     export NINJAFLAGS="-j$NIX_BUILD_CORES"
   '';
 
-  postFixup = ''
-    # This is required at runtime
-    mkdir -p $out/libexec
-    mv $dev/libexec/QtWebEngineProcess $out/libexec
-  '';
-
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
     platforms = platforms.linux;
