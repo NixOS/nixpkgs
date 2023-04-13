@@ -284,7 +284,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "sha256-fZUQ/3q8w6BkFZRaezT7rpKQtAEGBR5qEc4rMm9I36c=";
+      sha256 = "0mz1b3vnschsndv42787mm6kybpb2yskkdss3rcm7xc6jjh815ik";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -1359,15 +1359,8 @@ self: super: {
   # 2022-08-31: Jailbreak is done to allow aeson 2.0.*:
   # https://github.com/haskell-CI/haskell-ci/commit/6ad0d5d701cbe101013335d597acaf5feadd3ab9#r82681900
   cabal-install-parsers = doJailbreak (dontCheck (super.cabal-install-parsers.override {
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_10_1_0;
   }));
-  cabal-install-parsers_0_4_5 = doDistribute (
-    dontCheck (
-      super.cabal-install-parsers_0_4_5.override {
-        Cabal = self.Cabal_3_6_3_0;
-      }
-    )
-  );
 
   # 2022-03-12: Pick patches from master for compat with Stackage Nightly
   # 2022-12-07: Lift bounds to allow dependencies shipped with LTS-20
@@ -2067,14 +2060,9 @@ self: super: {
   gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
-  # 2022-01-16 haskell-ci needs Cabal 3.6
-  haskell-ci = (appendPatches [
-    # Allow building with optparse-applicative 0.17* and ShellCheck 0.8.0
-    ./patches/haskell-ci-optparse-applicative-0.17-ShellCheck-0.8.patch
-  ] super.haskell-ci).overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_3_0;
-    cabal-install-parsers = self.cabal-install-parsers_0_4_5;
-    ShellCheck = self.ShellCheck_0_8_0;
+  # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
+  haskell-ci = super.haskell-ci.overrideScope (self: super: {
+    Cabal-syntax = self.Cabal-syntax_3_10_1_0;
   });
 
   large-hashable = lib.pipe (super.large-hashable.override {
@@ -2553,6 +2541,15 @@ self: super: {
   emanote = super.emanote.overrideScope (lself: lsuper: {
     commonmark-extensions = lself.commonmark-extensions_0_2_3_2;
   });
+
+  # Test files missing from sdist
+  # https://github.com/tweag/webauthn/issues/166
+  webauthn = dontCheck super.webauthn;
+
+  # Too strict lower bound on hspec
+  wai-token-bucket-ratelimiter =
+    assert lib.versionOlder self.hspec.version "2.10";
+    doJailbreak super.wai-token-bucket-ratelimiter;
 
   # doctest <0.19
   polysemy = doJailbreak super.polysemy;

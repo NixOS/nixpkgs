@@ -233,10 +233,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  postInstall = ''
-    moveToOutput "mkspecs" "$dev"
-  '';
-
   devTools = [
     "libexec/moc"
     "libexec/rcc"
@@ -264,10 +260,12 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    # Don't retain build-time dependencies like gdb.
-    sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
-    fixQtModulePaths "''${!outputDev}/mkspecs/modules"
-    fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
+    moveToOutput "mkspecs"   "$dev"
+    moveToOutput "modules"   "$dev"
+    moveToOutput "lib/*.prl" "$dev"
+
+    fixQtModulePaths  "$dev/mkspecs/modules"
+    fixQtBuiltinPaths "$dev" '*.pr?'
 
     # Move development tools to $dev
     moveQtDevTools

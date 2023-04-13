@@ -2565,8 +2565,6 @@ with pkgs;
   microcom = callPackage ../applications/terminal-emulators/microcom { };
 
   mlterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/mlterm {
-    libssh2 = null;
-    openssl = null;
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa;
   };
 
@@ -24591,50 +24589,6 @@ with pkgs;
     pkg = callPackage ../development/compilers/sbcl/bootstrap.nix {};
     faslExt = "fasl";
   };
-  sbcl_2_0_8 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.0.8"; };
-    faslExt = "fasl";
-  };
-  sbcl_2_0_9 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.0.9"; };
-    faslExt = "fasl";
-  };
-  sbcl_2_1_1 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.1"; };
-    faslExt = "fasl";
-  };
-  sbcl_2_1_2 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.2"; };
-    faslExt = "fasl";
-  };
-  sbcl_2_1_9 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.9"; };
-    faslExt = "fasl";
-  };
-  sbcl_2_1_10 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.10"; };
-    faslExt = "fasl";
-  };
-  sbcl_2_1_11 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.11"; };
-    faslExt = "fasl";
-  };
-  sbcl_2_2_4 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.4"; };
-    faslExt = "fasl";
-  };
-  sbcl_2_2_6 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.6"; };
-    faslExt = "fasl";
-  };
-  sbcl_2_2_9 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.9"; };
-    faslExt = "fasl";
-  };
-  sbcl_2_2_10 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.10"; };
-    faslExt = "fasl";
-  };
   sbcl_2_2_11 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.11"; };
     faslExt = "fasl";
@@ -35055,7 +35009,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  xmp = callPackage ../applications/audio/xmp { };
+  xmp = callPackage ../applications/audio/xmp {
+    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio;
+  };
 
   xnee = callPackage ../tools/X11/xnee { };
 
