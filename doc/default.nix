@@ -1,6 +1,6 @@
 { pkgs ? (import ./.. { }), nixpkgs ? { }}:
 let
-  doc-support = import ./doc-support { inherit pkgs nixpkgs; };
+  doc-support = import ./doc-support { inherit pkgs; nixpkgs-revision = nixpkgs.revision; };
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 

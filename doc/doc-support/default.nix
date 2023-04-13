@@ -1,4 +1,4 @@
-{ pkgs ? (import ../.. {}), nixpkgs ? { }}:
+{ pkgs ? (import ../.. {}), nixpkgs-revision }:
 let
   inherit (pkgs) lib;
   inherit (lib) hasPrefix removePrefix;
@@ -18,7 +18,7 @@ let
     { name = "cli"; description = "command-line serialization functions"; }
   ];
 
-  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs libsets; };
+  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs-revision libsets; };
   functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs libsets; };
   version = pkgs.lib.version;
 
