@@ -130,10 +130,10 @@
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "9";
+        patch = "11";
         suffix = "";
       };
-      sha256 = "sha256-WuA+MIJgFkuro5kh/bTb+ObQPYI1qTnUWCsz8LXkaoM=";
+      sha256 = "sha256-PDvDBIMDchyQSgPrgya2Mekh8RzDvimIRWpC8RXa8Ew=";
     };
   };
 
@@ -195,10 +195,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "11";
-      patch = "1";
+      patch = "3";
       suffix = "";
     };
-    sha256 = "sha256-hYeRkvLP/VbLFsCSkFlJ6/Pl45S392RyNSljeQHftY8=";
+    sha256 = "sha256-il25nJYafs8nx1lWGJyWAslodR8R2+riuQDb/xwIW14=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
