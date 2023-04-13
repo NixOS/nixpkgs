@@ -3,6 +3,7 @@
 , libiconv, ijs, lcms2, callPackage, bash, buildPackages, openjpeg
 , cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups
 , x11Support ? cupsSupport, xorg # with CUPS, X11 only adds very little
+, fetchpatch
 }:
 
 let
@@ -40,6 +41,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./urw-font-files.patch
     ./doc-no-ref.diff
+    (fetchpatch {
+      name = "CVE-2023-28879.patch";
+      url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=37ed5022cecd584de868933b5b60da2e995b3179";
+      sha256 = "sha256-nJtFpvlKDj80qZ/XLtcXc5iznVvgpV9DhNiMaUkZKhY=";
+    })
   ];
 
   outputs = [ "out" "man" "doc" ];
