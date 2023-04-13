@@ -5,6 +5,8 @@
 , autoreconfHook
 , pkg-config
 
+, callPackage
+
 # for passthru.tests
 , imagemagick
 , libheif
@@ -12,7 +14,7 @@
 , gst_all_1
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   version = "1.0.11";
   pname = "libde265";
 
@@ -43,6 +45,10 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit imagemagick libheif imlib2Full;
     inherit (gst_all_1) gst-plugins-bad;
+
+    test-corpus-decode = callPackage ./test-corpus-decode.nix {
+      libde265 = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
@@ -52,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ gebner ];
   };
-}
+})
