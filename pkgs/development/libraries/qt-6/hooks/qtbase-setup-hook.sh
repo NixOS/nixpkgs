@@ -53,25 +53,18 @@ else # Only set up Qt once.
         # Prevent this hook from running multiple times
         dontPatchMkspecs=1
 
-        local bin="${!outputBin}"
-        local dev="${!outputDev}"
-        local doc="${!outputDoc}"
         local lib="${!outputLib}"
 
-        moveToOutput "mkspecs"   "$dev"
-        moveToOutput "modules"   "$dev"
-        moveToOutput "lib/*.prl" "$dev"
-
-        if [ -d "$dev/mkspecs/modules" ]; then
-            fixQtModulePaths "$dev/mkspecs/modules"
+        if [ -d "$lib/mkspecs/modules" ]; then
+            fixQtModulePaths "$lib/mkspecs/modules"
         fi
 
-        if [ -d "$dev/mkspecs" ]; then
-            fixQtBuiltinPaths "$dev/mkspecs" '*.pr?'
+        if [ -d "$lib/mkspecs" ]; then
+            fixQtBuiltinPaths "$lib/mkspecs" '*.pr?'
         fi
 
-        if [ -d "$dev/lib" ]; then
-            fixQtBuiltinPaths "$dev/lib" '*.pr?'
+        if [ -d "$lib/lib" ]; then
+            fixQtBuiltinPaths "$lib/lib" '*.pr?'
         fi
     }
     if [ -z "${dontPatchMkspecs-}" ]; then
