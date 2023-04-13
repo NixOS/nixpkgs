@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   # https://github.com/dtrx-py/dtrx/issues/45
-  patchPhase = ''
+  postPatch = ''
     sed -i "s/platform==unsupported/# platform==unsupported/" setup.cfg
   '';
 
