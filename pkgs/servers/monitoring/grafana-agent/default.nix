@@ -41,11 +41,6 @@ buildGoModule rec {
   # https://github.com/coreos/go-systemd/issues/351
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isLinux [ "-I${lib.getDev systemd}/include" ]);
 
-  # tries to access /sys: https://github.com/grafana/agent/issues/333
-  preBuild = ''
-    rm pkg/integrations/node_exporter/node_exporter_test.go
-  '';
-
   # go-systemd uses libsystemd under the hood, which does dlopen(libsystemd) at
   # runtime.
   # Add to RUNPATH so it can be found.
