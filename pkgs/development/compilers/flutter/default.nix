@@ -2,7 +2,6 @@
 let
   mkFlutter = { version, patches, dart, src }: callPackage ./flutter.nix { inherit version patches dart src; };
   wrapFlutter = flutter: callPackage ./wrapper.nix { inherit flutter; };
-  mkFlutterFHS = flutter: callPackage ./fhs.nix { inherit flutter; };
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
     in map (f: dir + ("/" + f)) files;
@@ -28,7 +27,7 @@ let
   };
 in
 {
-  inherit mkFlutter wrapFlutter mkFlutterFHS flutterDrv;
+  inherit mkFlutter wrapFlutter flutterDrv;
   stable = flutterDrv {
     version = "3.3.3";
     dartVersion = "2.18.2";
