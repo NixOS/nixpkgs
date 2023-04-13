@@ -1,6 +1,6 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, libxshmfence, buildPackages
-, atomEnv, at-spi2-atk, autoPatchelfHook
+, atomEnv, at-spi2-atk, autoPatchelfHook, procps
 , systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap, wayland
 
 # Populate passthru.tests
@@ -66,7 +66,7 @@ let
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
       ++ lib.optionals (!stdenv.isDarwin) ([ at-spi2-atk ] ++ atomEnv.packages);
 
-    runtimeDependencies = lib.optionals stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu wayland ];
+    runtimeDependencies = lib.optionals stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib wayland ];
 
     nativeBuildInputs = [ unzip ]
       ++ lib.optionals stdenv.isLinux [
@@ -108,6 +108,9 @@ let
 
     preFixup = ''
       gappsWrapperArgs+=(
+        ${ # we cannot use runtimeDependencies otherwise libdbusmenu do not work on kde
+          lib.optionalString stdenv.isLinux
+          "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}"}
         # Add gio to PATH so that moving files to the trash works when not using a desktop environment
         --prefix PATH : ${glib.bin}/bin
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
@@ -135,6 +138,9 @@ let
 
       # this fixes bundled ripgrep
       chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
+      # this fixes "Node Debugger:Attach to process"
+      substituteInPlace resources/app/extensions/ms-vscode.js-debug/src/extension.js --replace "/bin/ps" "${procps}/bin/ps"
+
 
       # see https://github.com/gentoo/gentoo/commit/4da5959
       chmod +x resources/app/node_modules/node-pty/build/Release/spawn-helper
