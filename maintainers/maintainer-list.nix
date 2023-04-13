@@ -10411,6 +10411,13 @@
     githubId = 20026143;
     name = "Katona László";
   };
+  movefasta = {
+    email = "movefasta@dezcom.org";
+    matrix = "@movefasta:matrix.org";
+    github = "movefasta";
+    githubId = 5147021;
+    name = "Igor Brylyov";
+  };
   MP2E = {
     email = "MP2E@archlinux.us";
     github = "MP2E";
