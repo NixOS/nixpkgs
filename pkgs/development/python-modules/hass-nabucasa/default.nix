@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.64.0";
+  version = "0.64.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-30Z8KBgcd53Nd9lf39Wt28PaYFcnBZ5LC7B+1cestKM=";
+    hash = "sha256-bElM5wzuSYWEn9xcPFUKSkjC24o2ExBRJE4abRL1uNM=";
   };
 
   postPatch = ''
