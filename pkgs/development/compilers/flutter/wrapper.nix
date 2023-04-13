@@ -58,15 +58,6 @@ let
   # They must be manually included.
   appStaticBuildDeps = lib.optionals supportsLinuxDesktop [ libX11 xorgproto zlib ];
 
-  # Some runtime components are prebuilt, and do not know where to find their dependencies.
-  # Ideally, these prebuilt components would be patched by the SDK derivation, but this
-  # is tricky as they are tyically downloaded from Google on-demand.
-  # Building the Engine manually should solve this issue: https://github.com/NixOS/nixpkgs/issues/201574
-  appPrebuiltDeps = lib.optionals supportsLinuxDesktop [
-    # flutter_linux_gtk.so
-    libepoxy
-  ];
-
   # Tools used by the Flutter SDK to compile applications.
   buildTools = lib.optionals supportsLinuxDesktop [
     pkg-config
