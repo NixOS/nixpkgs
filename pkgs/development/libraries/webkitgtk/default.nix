@@ -209,13 +209,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_GTKDOC=OFF"
     "-DENABLE_MINIBROWSER=OFF"
     "-DENABLE_QUARTZ_TARGET=ON"
-    "-DENABLE_VIDEO=ON"
-    "-DENABLE_WEBGL=OFF"
-    "-DENABLE_WEB_AUDIO=OFF"
     "-DENABLE_X11_TARGET=OFF"
     "-DUSE_APPLE_ICU=OFF"
     "-DUSE_OPENGL_OR_ES=OFF"
-    "-DUSE_SYSTEM_MALLOC=ON"
   ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
     "-DUSE_GTK4=ON"
   ] ++ lib.optionals (!systemdSupport) [
