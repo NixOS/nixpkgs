@@ -6729,6 +6729,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-pack/nvim-spectre/";
   };
 
+  nvim-spider = buildVimPluginFrom2Nix {
+    pname = "nvim-spider";
+    version = "2023-04-12";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "nvim-spider";
+      rev = "23fa1260be2090f2d675ee90e0b83fd993f6c3dc";
+      sha256 = "1ij9kv1dm6lrdvrw83wc833yw32k4wdgqg1gd5d4qdddnqhix6zw";
+    };
+    meta.homepage = "https://github.com/chrisgrieser/nvim-spider/";
+  };
+
   nvim-surround = buildVimPluginFrom2Nix {
     pname = "nvim-surround";
     version = "2023-04-02";
