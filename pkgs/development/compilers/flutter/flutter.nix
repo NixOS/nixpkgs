@@ -25,7 +25,7 @@ let
 
   self =
     stdenv.mkDerivation {
-      name = "$flutter-${version}-unwrapped";
+      name = "flutter-${version}-unwrapped";
       inherit src patches version;
 
       outputs = [ "out" "cache" ];
