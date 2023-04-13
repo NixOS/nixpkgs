@@ -18,7 +18,6 @@
 , glew
 , glib
 , gmp
-, gtest
 , gtk3
 , hicolor-icon-theme
 , ilmbase
@@ -105,10 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libX11
   ] ++ lib.optionals withSystemd [
     systemd
-  ] ++ finalAttrs.nativeCheckInputs;
+  ];
 
   doCheck = true;
-  nativeCheckInputs = [ gtest ];
 
   separateDebugInfo = true;
 
