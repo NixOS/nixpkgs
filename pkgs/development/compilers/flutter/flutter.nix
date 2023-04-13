@@ -24,7 +24,7 @@ let
     libepoxy
   ];
 
-  self =
+  unwrapped =
     stdenv.mkDerivation {
       name = "flutter-${version}-unwrapped";
       inherit src patches version;
@@ -108,9 +108,9 @@ let
         # The derivation containing the original Flutter SDK files.
         # When other derivations wrap this one, any unmodified files
         # found here should be included as-is, for tooling compatibility.
-        sdk = self;
+        sdk = unwrapped;
         mkFlutterApp = callPackage ../../../build-support/flutter {
-          flutter = callPackage ./wrapper.nix { flutter = self; };
+          flutter = callPackage ./wrapper.nix { flutter = unwrapped; };
         };
       };
 
@@ -128,4 +128,4 @@ let
     }
   ;
 in
-self
+unwrapped
