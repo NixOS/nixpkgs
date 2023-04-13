@@ -4,6 +4,7 @@
 , llvmPackages_13
 , cacert
 , flutter
+, git
 }:
 
 # absolutely no mac support for now
@@ -22,6 +23,7 @@ let
 
     nativeBuildInputs = [
       flutter
+      git
       nukeReferences
     ];
 
