@@ -31495,6 +31495,8 @@ with pkgs;
 
   kubectl-images = callPackage ../applications/networking/cluster/kubectl-images { };
 
+  kubectl-ktop = callPackage ../applications/networking/cluster/kubectl-ktop { };
+
   kubectl-node-shell = callPackage ../applications/networking/cluster/kubectl-node-shell { };
 
   kubectl-tree = callPackage ../applications/networking/cluster/kubectl-tree { };
