@@ -38441,6 +38441,8 @@ with pkgs;
 
   hjson-go = callPackage ../development/tools/hjson-go { };
 
+  nixpkgsManual = callPackage ../../doc { inherit pkgs; };
+
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   utsushi = callPackage ../misc/drivers/utsushi { };
