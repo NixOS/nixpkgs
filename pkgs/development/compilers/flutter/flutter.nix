@@ -60,8 +60,7 @@ let
         echo "$revision" > "$STAMP_PATH"
         echo -n "${version}" > version
 
-        rm -r bin/cache/{artifacts,dart-sdk,downloads}
-        rm bin/cache/*.stamp
+        rm -r bin/cache/dart-sdk
       '';
 
       installPhase = ''
