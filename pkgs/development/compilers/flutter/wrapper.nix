@@ -17,6 +17,7 @@
 , pango
 , libX11
 , xorgproto
+, zlib
 , cmake
 , ninja
 , clang
@@ -53,9 +54,9 @@ let
     in
     builtins.concatMap collect appRuntimeDeps;
 
-  # Some header files are not properly located by the Flutter SDK.
+  # Some header files and libraries are not properly located by the Flutter SDK.
   # They must be manually included.
-  appStaticBuildDeps = lib.optionals supportsLinuxDesktop [ libX11 xorgproto ];
+  appStaticBuildDeps = lib.optionals supportsLinuxDesktop [ libX11 xorgproto zlib ];
 
   # Some runtime components are prebuilt, and do not know where to find their dependencies.
   # Ideally, these prebuilt components would be patched by the SDK derivation, but this
@@ -94,6 +95,7 @@ in
     --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
     --prefix PATH : '${lib.makeBinPath buildTools}' \
     --prefix PKG_CONFIG_PATH : '${builtins.concatStringsSep ":" pkgConfigDirectories}' \
+    --prefix LIBRARY_PATH : '${lib.makeLibraryPath appStaticBuildDeps}' \
     --prefix CXXFLAGS "''\t" '${builtins.concatStringsSep " " cppFlags}' \
     --prefix LDFLAGS "''\t" '${builtins.concatStringsSep " " (map (flag: "-Wl,${flag}") linkerFlags)}'
 '')
