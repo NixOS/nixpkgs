@@ -18811,6 +18811,8 @@ with pkgs;
 
   semantik = libsForQt5.callPackage ../applications/office/semantik { };
 
+  sca2d = callPackage ../development/tools/sca2d {  };
+
   sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   scons = sconsPackages.scons_latest;
 
@@ -26360,6 +26362,10 @@ with pkgs;
 
   fwts = callPackage ../os-specific/linux/fwts { };
 
+  gasket = callPackage ../os-specific/linux/gasket {
+    inherit (linuxPackages) kernel;
+  };
+
   gobi_loader = callPackage ../os-specific/linux/gobi_loader { };
 
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
@@ -30620,6 +30626,8 @@ with pkgs;
   graphicsmagick-imagemagick-compat = callPackage ../applications/graphics/graphicsmagick/compat.nix { };
 
   grisbi = callPackage ../applications/office/grisbi { gtk = gtk3; };
+
+  gscreenshot = callPackage ../applications/graphics/gscreenshot { };
 
   gtkpod = callPackage ../applications/audio/gtkpod { };
 
