@@ -2,16 +2,17 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.30.2";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "agent";
-    sha256 = "sha256-yexCK4GBA997CShtuQQTs1GBsXoknUnWWO0Uotb9EG8=";
+    sha256 = "sha256-t5rQSNLpX0ktK4mKgX6OhNLkANQ1LbFEjmQo/r7UHOM=";
   };
 
-  vendorHash = "sha256-Cl3oygH1RPF+ZdJvkDmr7eyU5daxaZwNE8pQOHK/qP4=";
+  vendorHash = "sha256-5beHG1mZkNcDhccleqTlMA+uiV5d6SSh2QWiL4g3O28=";
+  proxyVendor = true; # darwin/linux hash mismatch
 
   ldflags = let
     prefix = "github.com/grafana/agent/pkg/build";
@@ -32,8 +33,8 @@ buildGoModule rec {
   ];
 
   subPackages = [
-    "cmd/agent"
-    "cmd/agentctl"
+    "cmd/grafana-agent"
+    "cmd/grafana-agentctl"
   ];
 
   # uses go-systemd, which uses libsystemd headers
@@ -50,8 +51,8 @@ buildGoModule rec {
   # Add to RUNPATH so it can be found.
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf \
-      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/agent)" \
-      $out/bin/agent
+      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/grafana-agent)" \
+      $out/bin/grafana-agent
   '';
 
   passthru.tests.grafana-agent = nixosTests.grafana-agent;
