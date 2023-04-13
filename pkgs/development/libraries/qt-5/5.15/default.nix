@@ -185,7 +185,7 @@ let
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
         inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
           ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication
-          MediaPlayer MediaAccessibility SecurityInterface Vision CoreML;
+          MediaPlayer MediaAccessibility SecurityInterface Vision CoreML OpenDirectory Accelerate;
         libobjc = darwin.apple_sdk_11_0.objc4;
       };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
