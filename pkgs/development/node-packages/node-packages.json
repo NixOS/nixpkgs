@@ -120,6 +120,7 @@
 , "degit"
 , "dhcp"
 , "diagnostic-languageserver"
+, "diff2html-cli"
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
 , "@electron-forge/cli"
