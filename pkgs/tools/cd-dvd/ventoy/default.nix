@@ -50,7 +50,7 @@ let
     or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ventoy-bin";
+  pname = "ventoy";
   version = "1.0.90";
 
   src = let
@@ -183,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ventoy.net";
     description = "A New Bootable USB Solution";
     longDescription = ''
@@ -200,10 +200,9 @@ stdenv.mkDerivation (finalAttrs: {
       800+ image files are tested.  90%+ distros in DistroWatch supported.
     '';
     changelog = "https://www.ventoy.net/doc_news.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    mainProgram = "ventoy";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
