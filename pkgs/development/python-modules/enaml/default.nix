@@ -1,14 +1,15 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
 , atom
-, ply
-, kiwisolver
-, qtpy
-, sip_4
-, cppy
+, buildPythonPackage
 , bytecode
+, cppy
+, fetchFromGitHub
+, kiwisolver
+, pegen
+, ply
+, qtpy
+, setuptools-scm
+, sip_4
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,24 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-0W5FWGS4vu5+O6/C4El60QDsRNj+P4xGQ62NdkfJd5I=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    atom
+    bytecode
+    cppy
+    kiwisolver
+    pegen
+    ply
+    qtpy
+    sip_4
+  ];
+
 
   # qt bindings cannot be found during tests
   doCheck = false;
@@ -39,18 +58,6 @@ buildPythonPackage rec {
     "enaml.widgets"
     "enaml.workbench"
   ];
-
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [
-    atom
-    ply
-    kiwisolver
-    qtpy
-    sip_4
-    cppy
-    bytecode
-  ];
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   meta = with lib; {
     description = "Declarative User Interfaces for Python";
