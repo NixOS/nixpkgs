@@ -212,6 +212,7 @@ stdenv.mkDerivation rec {
   qtQmlPrefix = "lib/qt-6/qml";
 
   cmakeFlags = [
+    "-DQT_EMBED_TOOLCHAIN_COMPILER=OFF"
     "-DINSTALL_PLUGINSDIR=${qtPluginPrefix}"
     "-DINSTALL_QMLDIR=${qtQmlPrefix}"
     "-DQT_FEATURE_libproxy=ON"
