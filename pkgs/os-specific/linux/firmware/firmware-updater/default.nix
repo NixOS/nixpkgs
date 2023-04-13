@@ -1,17 +1,13 @@
 { lib
 , flutter2
 , fetchFromGitHub
-, stdenv
 }:
 
 flutter2.mkFlutterApp {
   pname = "firmware-updater";
   version = "unstable";
 
-  vendorHash =
-    if stdenv.system == "aarch64-linux"
-    then "sha256-+ACmcIKXtGtaYBuwc7jY9hEdIS9qxQCbuxRKJQohX5A="
-    else "sha256-nPblucEpNCBJYpIqx1My6SWq8CjXYuHDG/uphdcrWjQ=";
+  vendorHash = "sha256-QPLAMFL/enMfbmUZx6qQSswI/vxeWgjytRdoNxziQ18=";
 
   src = fetchFromGitHub {
     owner = "canonical";

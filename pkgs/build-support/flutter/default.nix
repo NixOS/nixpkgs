@@ -86,7 +86,8 @@ let
       # Build a reproducible tar, per instructions at https://reproducible-builds.org/docs/archives/
       tar --owner=0 --group=0 --numeric-owner --format=gnu \
           --sort=name --mtime="@$SOURCE_DATE_EPOCH" \
-          -czf "$out" -C "$RES" .
+          -czf "$out" -C "$RES" \
+          pubspec.yaml pubspec.lock f .pub-cache
     '';
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
@@ -120,35 +121,32 @@ let
     # for some reason fluffychat build breaks without this - seems file gets overriden by some tool
     cp pubspec.yaml pubspec-backup
 
-    # we get this from $depsFolder so disabled for now, but we might need it again once deps are fetched properly
-    # flutter config --no-analytics >/dev/null 2>/dev/null # mute first-run
-    # flutter config --enable-linux-desktop
+    TMP=$(mktemp -d)
+    export HOME="$TMP"
+
+    flutter config --no-analytics &>/dev/null # mute first-run
+    flutter config --enable-linux-desktop
 
     # extract deps
-    depsFolder=$(mktemp -d)
-    tar xzf "$deps" -C "$depsFolder"
+    tar xzf "$deps" -C "$HOME"
 
     # after extracting update paths to point to real paths
-    find "$depsFolder" -type f -exec sed -i \
-      -e s,${placeholder_deps},$depsFolder,g \
+    find "$HOME" -type f -exec sed -i \
+      -e s,${placeholder_deps},"$HOME",g \
       -e s,${placeholder_flutter},${flutter},g \
       {} +
 
     # ensure we're using a lockfile for the right package version
     if [ -e pubspec.lock ]; then
       # FIXME: currently this is broken. in theory this should not break, but flutter has it's own way of doing things.
-      # diff -u pubspec.lock $depsFolder/pubspec.lock
+      # diff -u pubspec.lock "$HOME/pubspec.lock"
       true
     else
-      cp -v "$depsFolder/pubspec.lock" .
+      cp -v "$HOME/pubspec.lock" .
     fi
-    diff -u pubspec.yaml $depsFolder/pubspec.yaml
+    diff -u pubspec.yaml "$HOME/pubspec.yaml"
 
-    mv -v $(find $depsFolder/f -type f) .
-
-    # prepare
-    export HOME="$depsFolder"
-
+    mv -v $(find "$HOME/f" -type f) .
 
     runHook postConfigure
   '';
