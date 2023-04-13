@@ -29,12 +29,12 @@ in
 {
   inherit mkFlutter wrapFlutter flutterDrv;
   stable = flutterDrv {
-    version = "3.3.3";
-    dartVersion = "2.18.2";
-    hash = "sha256-MTZeWQUp4/TcPzYIT6eqIKSPUPvn2Mp/thOQzNgpTXg=";
+    version = "3.7.11";
+    dartVersion = "2.19.6";
+    hash = "sha256-/vtjoPB4Hn8RtP09uMdUYtDS7lzQvskdrNszEYlpOBc=";
     dartHash = {
-      x86_64-linux = "sha256-C3+YjecXLvSmJrLwi9H7TgD9Np0AArRWx3EdBrfQpTU";
-      aarch64-linux = "sha256-zyIK1i5/9P2C+sjzdArhFwpVO4P+It+/X50l+n9gekI=";
+      x86_64-linux = "sha256-D9/yXmrLo9YJQVWn40FjT43jR36Gwv2krUcjLBrfcE8=";
+      aarch64-linux = "sha256-aRO3wLO3i8FB03LNRz2iF3Hlc3Kxq0XJd84VUMj/C5w=";
     };
     patches = getPatches ./patches/flutter3;
   };
