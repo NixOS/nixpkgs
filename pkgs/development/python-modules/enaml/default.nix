@@ -53,8 +53,9 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   meta = with lib; {
-    homepage = "https://github.com/nucleic/enaml";
     description = "Declarative User Interfaces for Python";
+    homepage = "https://github.com/nucleic/enaml";
+    changelog = "https://github.com/nucleic/enaml/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ raboof ];
   };
