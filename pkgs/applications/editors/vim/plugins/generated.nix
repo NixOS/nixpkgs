@@ -7341,6 +7341,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-lua/plenary.nvim/";
   };
 
+  poimandres-nvim = buildVimPluginFrom2Nix {
+    pname = "poimandres.nvim";
+    version = "2023-02-17";
+    src = fetchFromGitHub {
+      owner = "olivercederborg";
+      repo = "poimandres.nvim";
+      rev = "43ea31d1e19f7603697bb3272b233930d0292383";
+      sha256 = "1q3xszkwlz008n9dh3q2agii6yjk45c47k38g3fj7ssgzmq56q21";
+    };
+    meta.homepage = "https://github.com/olivercederborg/poimandres.nvim/";
+  };
+
   pony-vim-syntax = buildVimPluginFrom2Nix {
     pname = "pony-vim-syntax";
     version = "2017-09-26";
