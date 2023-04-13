@@ -226,9 +226,9 @@ qtModule {
     export NINJAFLAGS="-j$NIX_BUILD_CORES"
   '';
 
-  postInstall = ''
+  postFixup = ''
     # This is required at runtime
-    mkdir $out/libexec
+    mkdir -p $out/libexec
     mv $dev/libexec/QtWebEngineProcess $out/libexec
   '';
 

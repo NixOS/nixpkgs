@@ -58,7 +58,9 @@ else # Only set up Qt once.
         local doc="${!outputDoc}"
         local lib="${!outputLib}"
 
-        moveToOutput "mkspecs" "$dev"
+        moveToOutput "mkspecs"   "$dev"
+        moveToOutput "modules"   "$dev"
+        moveToOutput "lib/*.prl" "$dev"
 
         if [ -d "$dev/mkspecs/modules" ]; then
             fixQtModulePaths "$dev/mkspecs/modules"
@@ -68,8 +70,8 @@ else # Only set up Qt once.
             fixQtBuiltinPaths "$dev/mkspecs" '*.pr?'
         fi
 
-        if [ -d "$lib" ]; then
-            fixQtBuiltinPaths "$lib" '*.pr?'
+        if [ -d "$dev/lib" ]; then
+            fixQtBuiltinPaths "$dev/lib" '*.pr?'
         fi
     }
     if [ -z "${dontPatchMkspecs-}" ]; then
