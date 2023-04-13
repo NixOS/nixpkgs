@@ -17,9 +17,42 @@
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
+, grossHackForStagingNext ? false
+
+# Whether or not to add `-B` and `-L` to `nix-support/cc-{c,ld}flags`
+, useCcForLibs ?
+
+  # Always add these flags for Clang, because in order to compile (most
+  # software) it needs libraries that are shipped and compiled with gcc.
+  if isClang then true
+
+  # Never add these flags for a build!=host cross-compiler or a host!=target
+  # ("cross-built-native") compiler; currently nixpkgs has a special build
+  # path for these (`crossStageStatic`).  Hopefully at some point that build
+  # path will be merged with this one and this conditional will be removed.
+  else if (with stdenvNoCC; buildPlatform != hostPlatform || hostPlatform != targetPlatform) then false
+
+  # Never add these flags when wrapping the bootstrapFiles' compiler; it has a
+  # /usr/-like layout with everything smashed into a single outpath, so it has
+  # no trouble finding its own libraries.
+  else if (cc.passthru.isFromBootstrapFiles or false) then false
+
+  # Add these flags when wrapping `xgcc` (the first compiler that nixpkgs builds)
+  else if (cc.passthru.isXgcc or false) then true
+
+  # Add these flags when wrapping `stdenv.cc`
+  else if (cc.stdenv.cc.cc.passthru.isXgcc or false) then true
+
+  # Do not add these flags in any other situation.  This is `false` mainly to
+  # prevent these flags from being added when wrapping *old* versions of gcc
+  # (e.g. `gcc6Stdenv`), since they will cause the old gcc to get `-B` and
+  # `-L` flags pointing at the new gcc's libstdc++ headers.  Example failure:
+  # https://hydra.nixos.org/build/213125495
+  else false
+
+# the derivation at which the `-B` and `-L` flags added by `useCcForLibs` will point
 , gccForLibs ? if useCcForLibs then cc else null
-# same as `gccForLibs`, but generalized beyond clang
-, useCcForLibs ? isClang
+, tmpDropB ? false # temporary hack; see PR #225846
 }:
 
 with lib;
@@ -226,12 +259,10 @@ stdenv.mkDerivation {
         ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
       fi
 
-      if [ -e $ccPath/cpp ]; then
-        wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
-    '' + lib.optionalString (hostPlatform != targetPlatform) ''
-      elif [ -e $ccPath/${targetPrefix}cpp ]; then
+      if [ -e $ccPath/${targetPrefix}cpp ]; then
         wrap ${targetPrefix}cpp $wrapper $ccPath/${targetPrefix}cpp
-    '' + ''
+      elif [ -e $ccPath/cpp ]; then
+        wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
       fi
     ''
 
@@ -305,9 +336,11 @@ stdenv.mkDerivation {
     ##
     ## GCC libs for non-GCC support
     ##
-    + optionalString useGccForLibs ''
+    + optionalString (useGccForLibs && !tmpDropB) ''
 
       echo "-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-cflags
+    ''
+    + optionalString useGccForLibs ''
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
       echo "-L${gccForLibs.lib}/${targetPlatform.config}/lib" >> $out/nix-support/cc-ldflags
     ''
@@ -323,7 +356,7 @@ stdenv.mkDerivation {
                       && targetPlatform.isLinux
                       && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
                       && !(stdenv.targetPlatform.useLLVM or false)
-                      && gccForLibs != null) ''
+                      && gccForLibs != null) (''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
 
       # Pull in 'cc.out' target to get 'libstdc++fs.a'. It should be in
@@ -331,6 +364,11 @@ stdenv.mkDerivation {
       # TODO(trofi): remove once gcc is fixed to move libraries to .lib output.
       echo "-L${gccForLibs}/${optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}"}/lib" >> $out/nix-support/cc-ldflags
     ''
+    # this ensures that when clang passes -lgcc_s to lld (as it does
+    # when building e.g. firefox), lld is able to find libgcc_s.so
+    + lib.optionalString (gccForLibs?libgcc) ''
+      echo "-L${gccForLibs.libgcc}/lib" >> $out/nix-support/cc-ldflags
+    '')
 
     ##
     ## General libc support
@@ -373,7 +411,11 @@ stdenv.mkDerivation {
       touch "$out/nix-support/libcxx-cxxflags"
       touch "$out/nix-support/libcxx-ldflags"
     ''
-    + optionalString (libcxx == null && (useGccForLibs && gccForLibs.langCC or false)) ''
+    # Adding -isystem flags should be done only for clang; gcc
+    # already knows how to find its own libstdc++, and adding
+    # additional -isystem flags will confuse gfortran (see
+    # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
+    + optionalString (libcxx == null && (if grossHackForStagingNext then isClang else true) && (useGccForLibs && gccForLibs.langCC or false)) ''
       for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done

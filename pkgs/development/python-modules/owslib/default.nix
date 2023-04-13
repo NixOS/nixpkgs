@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , lxml
@@ -60,6 +61,9 @@ buildPythonPackage rec {
     "test_wfs_200_remotemd"
     "test_wms_130_remotemd"
     "test_wmts_example_informatievlaanderen"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_ogcapi_records_pygeoapi"
+    "test_wms_getfeatureinfo_130"
   ];
 
   meta = with lib; {

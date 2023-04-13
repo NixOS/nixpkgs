@@ -48,6 +48,12 @@ mapAliases ({
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
   bsblan = python-bsblan; # added 2022-11-04
   btchip = btchip-python; # added 2023-03-03
+  buildbot = throw "use pkgs.buildbot instead"; # added 2022-04-07
+  buildbot-ui = throw "use pkgs.buildbot-ui instead"; # added 2022-04-07
+  buildbot-full = throw "use pkgs.buildbot-full instead"; # added 2022-04-07
+  buildbot-plugins = throw "use pkgs.buildbot-plugins instead"; # added 2022-04-07
+  buildbot-worker = throw "use pkgs.buildbot-worker instead"; # added 2022-04-07
+  buildbot-pkg = throw "buildbot-pkg has been removed, it's only internally used in buildbot"; # added 2022-04-07
   bt_proximity = bt-proximity; # added 2021-07-02
   BTrees = btrees; # added 2023-02-19
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
@@ -124,6 +130,7 @@ mapAliases ({
   hyperkitty = throw "Please use pkgs.mailmanPackages.hyperkitty"; # added 2022-04-29
   IMAPClient = imapclient; # added 2021-10-28
   imdbpy = throw "imdbpy has been renamed to cinemagoer"; # added 2022-08-08
+  intreehook =  throw "intreehooks has been removed because it is obsolete as a backend-path key was added to PEP 517"; # added 2023-04-11
   ipaddress = throw "ipaddress has been removed because it is no longer required since python 2.7."; # added 2022-05-30
   influxgraph = throw "influxgraph has been removed because it is no longer maintained"; # added 2022-07-10
   itanium_demangler = itanium-demangler; # added 2022-1017
@@ -220,6 +227,7 @@ mapAliases ({
   pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
   pytestquickcheck = pytest-quickcheck; # added 2021-07-20
   pytestrunner = pytest-runner; # added 2021-01-04
+  python-forecastio = throw "python-forecastio has been removed, as the Dark Sky service was shut down."; # added 2023-04-05
   python-igraph = igraph; # added 2021-11-11
   python-lz4 = lz4; # added 2018-06-01
   python_magic = python-magic; # added 2022-05-07

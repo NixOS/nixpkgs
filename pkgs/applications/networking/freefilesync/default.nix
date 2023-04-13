@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freefilesync";
-  version = "12.1";
+  version = "12.2";
 
   src = fetchFromGitHub {
     owner = "hkneptune";
     repo = "FreeFileSync";
     rev = "v${version}";
-    hash = "sha256-KA3Bn8skJ2gMmihmwlUmN6jXZmfoYY/f4vqbKwvxwgw=";
+    hash = "sha256-pCXMpK+NF06vgEgX31wyO24+kPhvPhdTeRk1j84nYd0=";
   };
 
   # Patches from Debian

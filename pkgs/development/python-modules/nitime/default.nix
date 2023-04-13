@@ -1,7 +1,8 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , pytestCheckHook
 , cython
 , numpy
@@ -14,21 +15,20 @@
 buildPythonPackage rec {
   pname = "nitime";
   version = "0.10.1";
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-NnoVrSt6MTTcNup1e+/1v5JoHCYcycuQH4rHLzXJt+Y=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
   buildInputs = [ cython ];
   propagatedBuildInputs = [ numpy scipy matplotlib networkx nibabel ];
 
-  disabledTests = [
-    # https://github.com/nipy/nitime/issues/197
-    "test_FilterAnalyzer"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  doCheck = !stdenv.isDarwin;  # tests hang indefinitely
+  pythonImportsCheck = [ "nitime" ];
 
   meta = with lib; {
     homepage = "https://nipy.org/nitime";

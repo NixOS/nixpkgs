@@ -99,6 +99,7 @@
   ./hardware/video/switcheroo-control.nix
   ./hardware/video/uvcvideo/default.nix
   ./hardware/video/webcam/facetimehd.nix
+  ./hardware/video/webcam/ipu6.nix
   ./hardware/wooting.nix
   ./hardware/xone.nix
   ./hardware/xpadneo.nix
@@ -179,6 +180,7 @@
   ./programs/haguichi.nix
   ./programs/hamster.nix
   ./programs/htop.nix
+  ./programs/hyprland.nix
   ./programs/iay.nix
   ./programs/iftop.nix
   ./programs/i3lock.nix
@@ -195,6 +197,7 @@
   ./programs/mdevctl.nix
   ./programs/mepo.nix
   ./programs/mininet.nix
+  ./programs/minipro.nix
   ./programs/miriway.nix
   ./programs/mosh.nix
   ./programs/msmtp.nix
@@ -276,6 +279,7 @@
   ./security/doas.nix
   ./security/duosec.nix
   ./security/google_oslogin.nix
+  ./security/ipa.nix
   ./security/lock-kernel-modules.nix
   ./security/misc.nix
   ./security/oath.nix
@@ -612,7 +616,6 @@
   ./services/misc/gammu-smsd.nix
   ./services/misc/geoipupdate.nix
   ./services/misc/gitea.nix
-  # ./services/misc/gitit.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gitweb.nix
@@ -1039,6 +1042,7 @@
   ./services/networking/wg-quick.nix
   ./services/networking/wireguard.nix
   ./services/networking/wpa_supplicant.nix
+  ./services/networking/wstunnel.nix
   ./services/networking/x2goserver.nix
   ./services/networking/xandikos.nix
   ./services/networking/xinetd.nix
@@ -1128,6 +1132,7 @@
   ./services/video/replay-sorcery.nix
   ./services/video/rtsp-simple-server.nix
   ./services/video/unifi-video.nix
+  ./services/video/v4l2-relayd.nix
   ./services/wayland/cage.nix
   ./services/web-apps/akkoma.nix
   ./services/web-apps/alps.nix

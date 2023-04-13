@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "1.27.0";
+  version = "1.28.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     rev = "refs/tags/v${version}";
-    hash = "sha256-axg1kwzH6ZRQwyI80oNPjP8ApjAEZ5u0iCIadkEP/Ps=";
+    hash = "sha256-JSN51zwIh9N/Id3fhBXjmwGa2tLK/LoyPlHPl2rbVU4=";
   };
 
   propagatedBuildInputs = [

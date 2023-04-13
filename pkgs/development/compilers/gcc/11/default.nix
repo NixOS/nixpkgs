@@ -28,6 +28,8 @@
 , buildPackages
 , libxcrypt
 , disableGdbPlugin ? !enablePlugin
+, nukeReferences
+, callPackage
 }:
 
 # Make sure we get GNU sed.
@@ -49,7 +51,7 @@ with builtins;
 
 let majorVersion = "11";
     version = "${majorVersion}.3.0";
-    disableBootstrap = !(with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform);
+    disableBootstrap = !stdenv.hostPlatform.isDarwin;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -60,6 +62,7 @@ let majorVersion = "11";
         url = "https://gcc.gnu.org/git/?p=gcc.git;a=patch;h=de31f5445b12fd9ab9969dc536d821fe6f0edad0";
         sha256 = "0sd52c898msqg7m316zp0ryyj7l326cjcn2y19dcxqp15r74qj0g";
       })
+      ./fix-struct-redefinition-on-glibc-2.36.patch
     ] ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional (noSysDirs && hostPlatform.isRiscV) ../no-sys-dirs-riscv.patch
@@ -159,7 +162,7 @@ let majorVersion = "11";
 
 in
 
-stdenv.mkDerivation ({
+lib.pipe (stdenv.mkDerivation ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -250,9 +253,8 @@ stdenv.mkDerivation ({
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
   buildFlags =
-    let target =
-          lib.optionalString (profiledCompiler) "profiled" +
-          lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
+    let target = lib.optionalString (profiledCompiler) "profiled"
+      + lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
     in lib.optional (target != "") target;
 
   inherit (callFile ../common/strip-attributes.nix { })
@@ -310,4 +312,8 @@ stdenv.mkDerivation ({
 }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
-)
+))
+[
+  (callPackage ../common/libgcc.nix   { inherit langC langCC langJit; })
+  (callPackage ../common/checksum.nix { inherit langC langCC; })
+]

@@ -14,7 +14,7 @@
 , libsecret
 , libadwaita
 , gtksourceview5
-, webkitgtk_5_0
+, webkitgtk_6_0
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     libsecret
     libadwaita
     gtksourceview5
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

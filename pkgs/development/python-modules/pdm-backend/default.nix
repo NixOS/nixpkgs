@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pdm-backend";
-  version = "2.0.5";
+  version = "2.0.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm-backend";
     rev = "refs/tags/${version}";
-    hash = "sha256-d5kr5pr9tBc6So0wTy3/ASgk8KTOf2AV8Vfsmml5Qh0=";
+    hash = "sha256-NMnb9DiW5xvfsI1nHFNIwvA/yH2boqe+WeD5re/ojAM=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [

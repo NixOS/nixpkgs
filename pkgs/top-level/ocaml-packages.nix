@@ -609,6 +609,8 @@ let
 
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
+    headache = callPackage ../development/ocaml-modules/headache { };
+
     hex = callPackage ../development/ocaml-modules/hex { };
 
     hidapi = callPackage ../development/ocaml-modules/hidapi { };
@@ -1258,8 +1260,6 @@ let
     paf = callPackage ../development/ocaml-modules/paf { };
 
     paf-cohttp = callPackage ../development/ocaml-modules/paf/cohttp.nix { };
-
-    paf-le = callPackage ../development/ocaml-modules/paf/le.nix { };
 
     parany = callPackage ../development/ocaml-modules/parany { };
 

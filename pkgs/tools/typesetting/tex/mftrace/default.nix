@@ -20,7 +20,7 @@
   - fontforge = null (limited functionality)
 */
 
-let self = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "mftrace";
   version = "1.2.20";
 
@@ -39,14 +39,16 @@ let self = stdenv.mkDerivation rec {
   buildInputs = [ fontforge potrace ];
 
   postInstall = ''
-    wrapProgram $out/bin/mftrace --prefix PATH : ${lib.makeBinPath buildInputs}
+    wrapProgram $out/bin/mftrace --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
   '';
 
   # experimental texlive.combine support
   # (note that only the bin/ folder will be combined into texlive)
-  passthru.tlType = "bin";
-  passthru.pkgs = [ self ] ++
-    (with texlive; kpathsea.pkgs ++ t1utils.pkgs ++ metafont.pkgs);
+  passthru = {
+    tlType = "bin";
+    tlDeps = with texlive; [ kpathsea t1utils metafont ];
+    pkgs = [ finalAttrs.finalPackage ];
+  };
 
   meta = with lib; {
     description = "Scalable PostScript Fonts for MetaFont";
@@ -60,4 +62,4 @@ let self = stdenv.mkDerivation rec {
     maintainers = with maintainers; [ xworld21 ];
     platforms = platforms.all;
   };
-}; in self
+})

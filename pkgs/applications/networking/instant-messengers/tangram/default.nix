@@ -18,7 +18,7 @@
 , ninja
 , pkg-config
 , python3
-, webkitgtk_5_0
+, webkitgtk_6_0
 , blueprint-compiler
 , wrapGAppsHook
 }:
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk4
     libadwaita
-    webkitgtk_5_0
+    webkitgtk_6_0
   ] ++ (with gst_all_1; [
     gstreamer
     gst-libav

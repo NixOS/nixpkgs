@@ -12,6 +12,7 @@
 , OpenGL
 , AppKit
 , Cocoa
+, libxcrypt
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -119,6 +120,10 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace "$out/share/bash-completion/completions/meson" \
       --replace "python3 -c " "${python3.interpreter} -c "
   '';
+
+  buildInputs = lib.optionals (python3.pythonOlder "3.9") [
+    libxcrypt
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

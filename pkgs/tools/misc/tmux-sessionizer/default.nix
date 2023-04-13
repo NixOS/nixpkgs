@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tmux-sessionizer";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "jrmoulton";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FSh3ww5KpktNSvqB3kcIaTxNHypwsVTHze0mgBtuJQE=";
+    sha256 = "sha256-fV+LBs+jbcOjArUfygEXkyxg/xGhI35YduUkx4AyQhk=";
   };
 
-  cargoSha256 = "sha256-3DyLYegAzNbPpW6MUIDLm1QUqmGg8zH0Ps1dbdaSezs=";
+  cargoHash = "sha256-Bg4C4r3h/kaMsAqzit9JVuAe7vYrRB9W5OLOWPgCJHc=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];

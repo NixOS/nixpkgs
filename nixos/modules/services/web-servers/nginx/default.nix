@@ -31,6 +31,7 @@ let
 
   # Mime.types values are taken from brotli sample configuration - https://github.com/google/ngx_brotli
   # and Nginx Server Configs - https://github.com/h5bp/server-configs-nginx
+  # "text/html" is implicitly included in {brotli,gzip,zstd}_types
   compressMimeTypes = [
     "application/atom+xml"
     "application/geo+json"
@@ -55,7 +56,6 @@ let
     "text/calendar"
     "text/css"
     "text/csv"
-    "text/html"
     "text/javascript"
     "text/markdown"
     "text/plain"
@@ -101,6 +101,17 @@ let
     proxy_set_header        X-Forwarded-Host $host;
     proxy_set_header        X-Forwarded-Server $host;
   '';
+
+  proxyCachePathConfig = concatStringsSep "\n" (mapAttrsToList (name: proxyCachePath: ''
+    proxy_cache_path ${concatStringsSep " " [
+      "/var/cache/nginx/${name}"
+      "keys_zone=${proxyCachePath.keysZoneName}:${proxyCachePath.keysZoneSize}"
+      "levels=${proxyCachePath.levels}"
+      "use_temp_path=${if proxyCachePath.useTempPath then "on" else "off"}"
+      "inactive=${proxyCachePath.inactive}"
+      "max_size=${proxyCachePath.maxSize}"
+    ]};
+  '') (filterAttrs (name: conf: conf.enable) cfg.proxyCachePath));
 
   upstreamConfig = toString (flip mapAttrsToList cfg.upstreams (name: upstream: ''
     upstream ${name} {
@@ -241,15 +252,9 @@ let
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
 
-      ${optionalString cfg.proxyCache.enable ''
-        proxy_cache_path /var/cache/nginx keys_zone=${cfg.proxyCache.keysZoneName}:${cfg.proxyCache.keysZoneSize}
-                                          levels=${cfg.proxyCache.levels}
-                                          use_temp_path=${if cfg.proxyCache.useTempPath then "on" else "off"}
-                                          inactive=${cfg.proxyCache.inactive}
-                                          max_size=${cfg.proxyCache.maxSize};
-      ''}
-
       ${cfg.commonHttpConfig}
+
+      ${proxyCachePathConfig}
 
       ${vhosts}
 
@@ -808,10 +813,10 @@ in
           '';
       };
 
-      proxyCache = mkOption {
-        type = types.submodule {
+      proxyCachePath = mkOption {
+        type = types.attrsOf (types.submodule ({ ... }: {
           options = {
-            enable = mkEnableOption (lib.mdDoc "Enable proxy cache");
+            enable = mkEnableOption (lib.mdDoc "this proxy cache path entry");
 
             keysZoneName = mkOption {
               type = types.str;
@@ -869,9 +874,12 @@ in
               description = lib.mdDoc "Set maximum cache size";
             };
           };
-        };
+        }));
         default = {};
-        description = lib.mdDoc "Configure proxy cache";
+        description = lib.mdDoc ''
+          Configure a proxy cache path entry.
+          See <http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_path> for documentation.
+        '';
       };
 
       resolver = mkOption {
@@ -982,6 +990,12 @@ in
       The Nginx log directory has been moved to /var/log/nginx, the cache directory
       to /var/cache/nginx. The option services.nginx.stateDir has been removed.
     '')
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "inactive" ] [ "services" "nginx" "proxyCachePath" "" "inactive" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "useTempPath" ] [ "services" "nginx" "proxyCachePath" "" "useTempPath" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "levels" ] [ "services" "nginx" "proxyCachePath" "" "levels" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "keysZoneSize" ] [ "services" "nginx" "proxyCachePath" "" "keysZoneSize" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "keysZoneName" ] [ "services" "nginx" "proxyCachePath" "" "keysZoneName" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "enable" ] [ "services" "nginx" "proxyCachePath" "" "enable" ])
   ];
 
   config = mkIf cfg.enable {

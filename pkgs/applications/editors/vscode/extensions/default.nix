@@ -798,6 +798,57 @@ let
         };
       };
 
+      devsense.composer-php-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "composer-php-vscode";
+          publisher = "devsense";
+          version = "1.33.12924";
+          sha256 = "sha256-9Uz8B4qQ57gfETitzRAVEq/Ou/s3jOF/p2EyEDo1jP8=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.composer-php-vscode/changelog";
+          description = "A visual studio code extension for full development integration for Composer, the PHP package manager.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DEVSENSE.composer-php-vscode";
+          homepage = "https://github.com/DEVSENSE/phptools-docs";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
+      devsense.phptools-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "phptools-vscode";
+          publisher = "devsense";
+          version = "1.33.12924";
+          sha256 = "sha256-ImaGkIe+MTO/utfVh3Giu0+jTSN0mmhgg6LvOod1suE=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.phptools-vscode/changelog";
+          description = "A visual studio code extension for full development integration for the PHP language.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DEVSENSE.phptools-vscode";
+          homepage = "https://github.com/DEVSENSE/phptools-docs";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
+      devsense.profiler-php-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "profiler-php-vscode";
+          publisher = "devsense";
+          version = "1.33.12924";
+          sha256 = "sha256-6+spMS+oypq8KFW5vsoy0Cmn7RD5L1JQnHSyJAvYhTk=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.profiler-php-vscode/changelog";
+          description = "A visual studio code extension for PHP and XDebug profiling and inspecting.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DEVSENSE.profiler-php-vscode";
+          homepage = "https://github.com/DEVSENSE/phptools-docs";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
       dhall.dhall-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dhall-lang";
@@ -1002,6 +1053,23 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      equinusocio.vsc-material-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vsc-material-theme";
+          publisher = "Equinusocio";
+          version = "33.8.0";
+          sha256 = "sha256-+I4AUwsrElT62XNvmuAC2iBfHfjNYY0bmAqzQvfwUYM=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/Equinusocio.vsc-material-theme/changelog";
+          description = "The most epic theme now for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Equinusocio.vsc-material-theme";
+          homepage = "https://github.com/material-theme/vsc-material-theme";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.stunkymonkey ];
         };
       };
 
@@ -2140,6 +2208,23 @@ let
           homepage = "https://github.com/NilsJPWerner/autoDocstring";
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.kamadorueda ];
+        };
+      };
+
+      nonylene.dark-molokai-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "dark-molokai-theme";
+          publisher = "nonylene";
+          version = "1.0.5";
+          sha256 = "sha256-2qjV6iSz8DDU1yP1II9sxGSgiETmEtotFvfNjm+cTuI=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/nonylene.dark-molokai-theme/changelog";
+          description = "Theme inspired by VSCode default dark theme, monokai theme and Vim Molokai theme";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=nonylene.dark-molokai-theme";
+          homepage = "https://github.com/nonylene/vscode-dark-molokai-theme";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.amz-x ];
         };
       };
 

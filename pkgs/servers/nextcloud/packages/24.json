@@ -1,6 +1,6 @@
 {
   "bookmarks": {
-    "sha256": "511aadcda0b1f051191c20cfd7048150536cfb1e748deb11b568bec4e535a173",
+    "sha256": "1jkbwzig4xd042jcbdbdh4whkpxb87f7ba0c89c78bdgcqzjv1a3",
     "url": "https://github.com/nextcloud/bookmarks/releases/download/v11.0.4/bookmarks-11.0.4.tar.gz",
     "version": "11.0.4",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- 🔍 Full-text search\n- 📲 Synchronize with all your browsers and devices\n- 👪 Share bookmarks with other users and publicly\n- ☠ Find broken links\n- ⚛ Generate RSS feeds of your collections\n- 📔 Read archived versions of your links in case they are depublished\n- 💬 Create new bookmarks directly from within Nextcloud Talk\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP v7.4+\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "1cb3rjqgjysmirfvda4fqyr24ljh1203bzygmzzm9n26ji72636f",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v3.5.6/calendar-v3.5.6.tar.gz",
-    "version": "3.5.6",
+    "sha256": "0zzq556727yryxa0zas6agm6azl1898gbjx4wnl8d8m9hczf6xr2",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v3.5.7/calendar-v3.5.7.tar.gz",
+    "version": "3.5.7",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -110,9 +110,9 @@
     ]
   },
   "news": {
-    "sha256": "029rzfnqf2h37pw30hmclmvizz8v7r2sgqbs4gkp0kj0s6fx388z",
-    "url": "https://github.com/nextcloud/news/releases/download/21.2.0-beta1/news.tar.gz",
-    "version": "21.2.0-beta1",
+    "sha256": "0l8ps13y00hq3xh1w874f3zx73gpmi4jxd3gzwhggx1r495gxqbh",
+    "url": "https://github.com/nextcloud/news/releases/download/21.2.0-beta2/news.tar.gz",
+    "version": "21.2.0-beta2",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
@@ -120,7 +120,7 @@
     ]
   },
   "notes": {
-    "sha256": "adddee56456d0115f87a74405a6d62bd5e3af256e86199d87bbff3b2a6876299",
+    "sha256": "0b88xsznfi31la7iyj4b7j1qlb8wvrmq49z9dgdrwja3r81mxnsr",
     "url": "https://github.com/nextcloud/notes/releases/download/v4.5.1/notes.tar.gz",
     "version": "4.5.1",
     "description": "The Notes app is a distraction free notes taking app for [Nextcloud](https://www.nextcloud.com/). It provides categories for better organization and supports formatting using [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax. Notes are saved as files in your Nextcloud, so you can view and edit them with every Nextcloud client. Furthermore, a separate [REST API](https://github.com/nextcloud/notes/blob/master/docs/api/README.md) allows for an easy integration into third-party apps (currently, there are notes apps for [Android](https://github.com/nextcloud/notes-android), [iOS](https://github.com/nextcloud/notes-ios) and the [console](https://git.danielmoch.com/nncli/about) which allow convenient access to your Nextcloud notes). Further features include marking notes as favorites.",
@@ -160,9 +160,9 @@
     ]
   },
   "previewgenerator": {
-    "sha256": "0652pbbdibc37nqzb897b9h7xs57liiv60m6n70pmv9yxx0jwll2",
-    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.2.1/previewgenerator-v5.2.1.tar.gz",
-    "version": "5.2.1",
+    "sha256": "0vwlx3z80i12f9hm0qrm014a0wybjk2j5is7vyn9wcizhr6mpzjv",
+    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.2.2/previewgenerator-v5.2.2.tar.gz",
+    "version": "5.2.2",
     "description": "The Preview Generator app allows admins to pre-generate previews. The app listens to edit events and stores this information. Once a cron job is triggered it will generate start preview generation. This means that you can better utilize your system by pre-generating previews when your system is normally idle and thus putting less load on your machine when the requests are actually served.\n\nThe app does not replace on demand preview generation so if a preview is requested before it is pre-generated it will still be shown.\nThe first time you install this app, before using a cron job, you properly want to generate all previews via:\n**./occ preview:generate-all -vvv**\n\n**Important**: To enable pre-generation of previews you must add **php /var/www/nextcloud/occ preview:pre-generate** to a system cron job that runs at times of your choosing.",
     "homepage": "https://github.com/nextcloud/previewgenerator",
     "licenses": [
@@ -190,7 +190,7 @@
     ]
   },
   "tasks": {
-    "sha256": "fdfa3168ac80eaef3e2de5009eee02a369acc8d35dfd8283d1f25423bdf3c532",
+    "sha256": "0jm13d6nm7cfsw27yfiq1il9xjlh0qrq8xby2yz9dmggn7lk1dx5",
     "url": "https://github.com/nextcloud/tasks/releases/download/v0.14.5/tasks.tar.gz",
     "version": "0.14.5",
     "description": "Once enabled, a new Tasks menu will appear in your Nextcloud apps menu. From there you can add and delete tasks, edit their title, description, start and due dates and mark them as important. Tasks can be shared between users. Tasks can be synchronized using CalDav (each task list is linked to an Nextcloud calendar, to sync it to your local client: Thunderbird, Evolution, KDE Kontact, iCal … - just add the calendar as a remote calendar in your client). You can download your tasks as ICS files using the download button for each calendar.",
@@ -220,7 +220,7 @@
     ]
   },
   "twofactor_webauthn": {
-    "sha256": "291c20032cfc1f2fb081cc8721e272bc503d103987c6abb7ce442e497d278d0a",
+    "sha256": "10f6dm9cxljicmfk9l4ncg6r7c1jy1pvm0b5kvz35q9jgniq0hcs",
     "url": "https://github.com/nextcloud-releases/twofactor_webauthn/releases/download/v0.3.3/twofactor_webauthn-v0.3.3.tar.gz",
     "version": "0.3.3",
     "description": "A two-factor provider for WebAuthn devices",

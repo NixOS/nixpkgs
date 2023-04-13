@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-TViBclvCJeoOInTt13B7297JDtRkwvOjIf6AVAbpanU=";
 
-  auditable = true; # TODO: remove when this is the default
-
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   passthru = {

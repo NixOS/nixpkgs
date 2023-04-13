@@ -25,6 +25,7 @@
 , enchant2
 , xorg
 , libxkbcommon
+, libavif
 , libepoxy
 , at-spi2-core
 , libxml2
@@ -60,6 +61,7 @@
 , xdg-dbus-proxy
 , substituteAll
 , glib
+, unifdef
 , addOpenGLRunpath
 , enableGeoLocation ? true
 , withLibsecret ? true
@@ -69,8 +71,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.38.5";
-  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "5.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
+  version = "2.40.0";
+  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "6.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -80,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QMIMQwIidN9Yk/IrEFT6iUw+6gVzibsIruCMWwuwwac=";
+    hash = "sha256-pGB+ob+JZp6JscssY/quxRP5PeCbauYMxx1qiqt6s5M=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -89,8 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (builtins) storeDir;
       inherit (addOpenGLRunpath) driverLink;
     })
-
-    ./libglvnd-headers.patch
 
     # Hardcode path to WPE backend
     # https://github.com/NixOS/nixpkgs/issues/110468
@@ -122,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     ruby
     gi-docgen
     glib # for gdbus-codegen
+    unifdef
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
   ];
@@ -129,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     at-spi2-core
     enchant2
+    libavif
     libepoxy
     gnutls
     gst-plugins-bad
