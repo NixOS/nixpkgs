@@ -6390,6 +6390,8 @@ with pkgs;
 
   changetower = callPackage ../tools/networking/changetower { };
 
+  chatblade = callPackage ../applications/misc/chatblade { };
+
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
   checkmate = callPackage ../development/tools/checkmate { };
