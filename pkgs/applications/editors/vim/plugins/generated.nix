@@ -10098,18 +10098,6 @@ final: prev:
     meta.homepage = "https://github.com/rhysd/vim-clang-format/";
   };
 
-  vim-clap = buildVimPluginFrom2Nix {
-    pname = "vim-clap";
-    version = "2023-04-02";
-    src = fetchFromGitHub {
-      owner = "liuchengxu";
-      repo = "vim-clap";
-      rev = "5a3667644ca1beada1c6add865b3f8329b4727bc";
-      sha256 = "1066xdimc4vpqar95hnbwl1f2wijr3yss6z1s16k07ymvi02dgxs";
-    };
-    meta.homepage = "https://github.com/liuchengxu/vim-clap/";
-  };
-
   vim-clojure-highlight = buildVimPluginFrom2Nix {
     pname = "vim-clojure-highlight";
     version = "2015-07-05";
