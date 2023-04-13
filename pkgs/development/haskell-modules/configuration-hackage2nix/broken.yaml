@@ -1404,7 +1404,6 @@ broken-packages:
   - eved
   - event
   - event-driven
-  - eventlog2html #  failure  in job https://hydra.nixos.org/build/214597490 at 2023-04-07
   - eventsource-api
   - eventsourced
   - eventstore
