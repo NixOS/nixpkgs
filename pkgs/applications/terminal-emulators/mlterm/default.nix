@@ -2,7 +2,7 @@
 , libX11, gdk-pixbuf, cairo, libXft, gtk3, vte
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
-, openssl, libssh2 #build-in ssh
+, libssh2 #build-in ssh
 , fcitx5, fcitx5-gtk, ibus, uim #IME
 , wrapGAppsHook #color picker in mlconfig
 , Cocoa #Darwin
@@ -28,20 +28,16 @@ stdenv.mkDerivation rec {
     gtk3
     harfbuzz
     fribidi
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # need linker magic, not adapted for Darwin yet
-    openssl
-    libssh2
-
-    # Not supported on Darwin
     vte
+
+    libssh2
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # Not supported on Darwin
     m17n_lib
 
     fcitx5
     fcitx5-gtk
     ibus
-  ] ++ lib.optionals (stdenv.system != "aarch64-linux") [
-    # FIXME Currently broken on aarch64-linux
     uim
   ];
 
@@ -64,15 +60,6 @@ stdenv.mkDerivation rec {
       --replace "-m 2755 -g utmp" " " \
       --replace "-m 4755 -o root" " "
   '';
-  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "
-    -L${stdenv.cc.cc.lib}/lib
-    -lX11 -lgdk_pixbuf-2.0 -lcairo -lfontconfig -lfreetype -lXft
-    -lvte-2.91 -lgtk-3 -lharfbuzz -lfribidi -lm17n
-  " + lib.optionalString (openssl != null) "
-    -lcrypto
-  " + lib.optionalString (libssh2 != null) "
-    -lssh2
-  ";
 
   configureFlags = [
     "--with-imagelib=gdk-pixbuf" #or mlimgloader depending on your bugs of choice
@@ -89,7 +76,7 @@ stdenv.mkDerivation rec {
     "--enable-m17nlib" #character encodings
   ] ++ lib.optionals stdenv.isDarwin [
     "--with-gui=quartz"
-  ] ++ lib.optionals (libssh2 == null) [ " --disable-ssh2" ];
+  ];
 
   enableParallelBuilding = true;
 
@@ -121,8 +108,7 @@ stdenv.mkDerivation rec {
     description = "Multi Lingual TERMinal emulator";
     homepage = "https://mlterm.sourceforge.net/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ vrthra ramkromberg atemu ];
-    platforms = with platforms; linux ++ darwin;
-    broken = stdenv.system == "aarch64-darwin"; # https://github.com/arakiken/mlterm/issues/51
+    maintainers = with maintainers; [ ramkromberg atemu ];
+    platforms = platforms.all;
   };
 }
