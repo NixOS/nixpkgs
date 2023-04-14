@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     description = "Library that bundles ForkAwesome for use within Qt applications";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
 }
 
