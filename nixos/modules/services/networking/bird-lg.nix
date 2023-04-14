@@ -33,6 +33,7 @@ let
     "--bird" = px.birdSocket;
     "--listen" = px.listenAddress;
     "--traceroute_bin" = px.traceroute.binary;
+    "--traceroute_flags" = concatStringsSep " " px.traceroute.flags;
     "--traceroute_raw" = px.traceroute.rawOutput;
   };
 
@@ -214,6 +215,12 @@ in
             default = "${pkgs.traceroute}/bin/traceroute";
             defaultText = literalExpression ''"''${pkgs.traceroute}/bin/traceroute"'';
             description = lib.mdDoc "Traceroute's binary path.";
+          };
+
+          flags = mkOption {
+            type = with types; listOf str;
+            default = [ ];
+            description = lib.mdDoc "Flags for traceroute process";
           };
 
           rawOutput = mkOption {
