@@ -183,10 +183,12 @@ in
           options = {
             Addresses.API = mkOption {
               type = types.oneOf [ types.str (types.listOf types.str) ];
-              default = "/ip4/127.0.0.1/tcp/5001";
+              default = [ ];
               description = lib.mdDoc ''
                 Multiaddr or array of multiaddrs describing the address to serve the local HTTP API on.
                 In addition to the multiaddrs listed here, the daemon will also listen on a Unix domain socket.
+                To allow the ipfs CLI tools to communicate with the daemon over that socket,
+                add your user to the correct group, e.g. `users.users.alice.extraGroups = [ config.services.kubo.group ];`
               '';
             };
 
@@ -377,10 +379,15 @@ in
 
     systemd.sockets.ipfs-api = {
       wantedBy = [ "sockets.target" ];
-      # We also include "%t/ipfs.sock" because there is no way to put the "%t"
-      # in the multiaddr.
-      socketConfig.ListenStream =
-        [ "" "%t/ipfs.sock" ] ++ multiaddrsToListenStreams cfg.settings.Addresses.API;
+      socketConfig = {
+        # We also include "%t/ipfs.sock" because there is no way to put the "%t"
+        # in the multiaddr.
+        ListenStream =
+          [ "" "%t/ipfs.sock" ] ++ (multiaddrsToListenStreams cfg.settings.Addresses.API);
+        SocketMode = "0660";
+        SocketUser = cfg.user;
+        SocketGroup = cfg.group;
+      };
     };
   };
 

@@ -4,7 +4,7 @@
     maintainers = [ mguentner Luflosi ];
   };
 
-  nodes.machine = { ... }: {
+  nodes.machine = { config, ... }: {
     services.kubo = {
       enable = true;
       # Also will add a unix domain socket socket API address, see module.
@@ -14,15 +14,21 @@
     };
     users.users.alice = {
       isNormalUser = true;
+      extraGroups = [ config.services.kubo.group ];
     };
   };
 
-  nodes.fuse = { ... }: {
+  nodes.fuse = { config, ... }: {
     services.kubo = {
       enable = true;
-      # Only allow API access through the Unix domain socket
-      settings.Addresses.API = [ ];
       autoMount = true;
+    };
+    users.users.alice = {
+      isNormalUser = true;
+      extraGroups = [ config.services.kubo.group ];
+    };
+    users.users.bob = {
+      isNormalUser = true;
     };
   };
 
@@ -59,11 +65,12 @@
         machine.succeed("test ! -e /var/lib/ipfs/")
 
     with subtest("FUSE mountpoint"):
+        fuse.fail("echo a | su bob -l -c 'ipfs add --quieter'")
         # The FUSE mount functionality is broken as of v0.13.0 and v0.17.0.
         # See https://github.com/ipfs/kubo/issues/9044.
         # Workaround: using CID Version 1 avoids that.
         ipfs_hash = fuse.succeed(
-            "echo fnord3 | ipfs add --quieter --cid-version=1"
+            "echo fnord3 | su alice -l -c 'ipfs add --quieter --cid-version=1'"
         ).strip()
 
         fuse.succeed(f"cat /ipfs/{ipfs_hash} | grep fnord3")
