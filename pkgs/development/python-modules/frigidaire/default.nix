@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "frigidaire";
-  version = "0.18.4";
+  version = "0.18.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,14 +19,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bm1549";
     repo = pname;
-    rev = "regs/tags/${version}";
-    hash = "sha256-U2ixBtigY15RzMNIeUK71uNOndUepK2kE/CTFwl855w=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-mmHcS0cjj43hCHLiCO8cGPfQoh+nqlNK3MdFP8IhD4w=";
   };
 
   postPatch = ''
-    # https://github.com/bm1549/frigidaire/pull/13
+    # https://github.com/bm1549/frigidaire/issues/14
     substituteInPlace setup.py \
-      --replace "urllib3>==1.26.42" "urllib3" \
+      --replace "urllib3>=1.26.42" "urllib3" \
       --replace 'version = "SNAPSHOT"' 'version = "${version}"'
   '';
 

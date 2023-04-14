@@ -24,6 +24,7 @@
 , pythonOlder
 , pythonRelaxDepsHook
 , pyarrow
+, pytz
 , pyyaml
 , querystring_parser
 , requests
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   # but not mlflow has a 'skinny' install option which does not require `shap`.
   nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRemoveDeps = [ "shap" ];
+  pythonRelaxDeps = [ "pytz" ];
 
   propagatedBuildInputs = [
     alembic
@@ -74,6 +76,7 @@ buildPythonPackage rec {
     protobuf
     python-dateutil
     pyarrow
+    pytz
     pyyaml
     querystring_parser
     requests

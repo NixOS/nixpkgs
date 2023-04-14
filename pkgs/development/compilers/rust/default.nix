@@ -83,7 +83,13 @@ in
       };
       cargo-auditable = self.callPackage ./cargo-auditable.nix { };
       cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };
-      clippy = self.callPackage ./clippy.nix { inherit Security; };
+      clippy = callPackage ./clippy.nix {
+        # We want to use self, not buildRustPackages, so that
+        # buildPackages.clippy uses the cross compiler and supports
+        # linting for the target platform.
+        rustPlatform = makeRustPlatform self;
+        inherit Security;
+      };
     });
   };
 }

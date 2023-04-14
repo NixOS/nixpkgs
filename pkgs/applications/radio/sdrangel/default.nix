@@ -50,13 +50,13 @@
 
 mkDerivation rec {
   pname = "sdrangel";
-  version = "7.11.0";
+  version = "7.13.0";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    hash = "sha256-zWux84a1MCK0XJXRXcaLHieJ47d4n/wO/xdwTYuuGJw=";
+    hash = "sha256-xG41FNlMfqH5MaGVFFENP0UFEkZYiWhtpNSPh2s4Irk=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
