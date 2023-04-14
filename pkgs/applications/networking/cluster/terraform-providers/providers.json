@@ -584,11 +584,11 @@
     "vendorHash": null
   },
   "infoblox": {
-    "hash": "sha256-bLZK2lZqnpiE5vsJAAiGw4BrBzVWGyg5VZq/Ngr8VlA=",
+    "hash": "sha256-C7j9WvhLePQvZlGvYC51GQRIa5JwgARNDG1nGZwY6FU=",
     "homepage": "https://registry.terraform.io/providers/infobloxopen/infoblox",
     "owner": "infobloxopen",
     "repo": "terraform-provider-infoblox",
-    "rev": "v2.2.0",
+    "rev": "v2.3.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
