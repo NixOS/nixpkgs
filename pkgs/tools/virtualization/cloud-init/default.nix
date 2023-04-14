@@ -11,6 +11,7 @@
 , systemd
 , coreutils
 , gitUpdater
+, busybox
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-w1UP7JIt/+6UlASB8kv2Lil+1sMTDIrADoYOT/WtaeE=";
   };
 
-  patches = [ ./0001-add-nixos-support.patch ];
+  patches = [ ./0001-add-nixos-support.patch ./0002-Add-Udhcpc-support.patch ];
 
   prePatch = ''
     substituteInPlace setup.py \
@@ -73,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ dmidecode cloud-utils.guest ]}/bin"
+    "--prefix PATH : ${lib.makeBinPath [ dmidecode cloud-utils.guest busybox ]}/bin"
   ];
 
   disabledTests = [
@@ -120,7 +121,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://cloudinit.readthedocs.org";
+    homepage = "https://github.com/canonical/cloud-init";
     description = "Provides configuration and customization of cloud instance";
     license = with licenses; [ asl20 gpl3Plus ];
     maintainers = with maintainers; [ illustris jfroche ];
