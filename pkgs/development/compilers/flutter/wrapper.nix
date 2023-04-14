@@ -19,6 +19,7 @@
 , pango
 , libX11
 , xorgproto
+, libdeflate
 , zlib
 , cmake
 , ninja
@@ -47,7 +48,7 @@ let
     libepoxy
     pango
     libX11
-    (callPackage ./packages/libdeflate { })
+    libdeflate
   ];
 
   # Development packages required for compilation.
