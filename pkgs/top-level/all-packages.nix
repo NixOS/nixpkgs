@@ -6778,6 +6778,8 @@ with pkgs;
 
   doas = callPackage ../tools/security/doas { };
 
+  doas-sudo-shim = callPackage ../tools/security/doas-sudo-shim { };
+
   docbook2x = callPackage ../tools/typesetting/docbook2x { };
 
   docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
