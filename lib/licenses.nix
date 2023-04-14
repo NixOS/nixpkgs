@@ -235,6 +235,12 @@ in mkLicense lset) ({
     free = false;
   };
 
+  cc-by-nc-nd-40 = {
+    spdxId = "CC-BY-NC-ND-4.0";
+    fullName = "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International";
+    free = false;
+  };
+
   cc-by-nc-sa-20 = {
     spdxId = "CC-BY-NC-SA-2.0";
     fullName = "Creative Commons Attribution Non Commercial Share Alike 2.0";
