@@ -8139,6 +8139,11 @@
     githubId = 12160;
     name = "Kirill Radzikhovskyy";
   };
+  kiskae = {
+    github = "Kiskae";
+    githubId = 546681;
+    name = "Jeroen van Leusen";
+  };
   kisonecat = {
     email = "kisonecat@gmail.com";
     github = "kisonecat";
@@ -12556,6 +12561,12 @@
     github = "PyroLagus";
     githubId = 4579165;
     name = "Danny Bautista";
+  };
+  pyxels = {
+    email = "pyxels.dev@gmail.com";
+    github = "Pyxels";
+    githubId = 39232833;
+    name = "Jonas";
   };
   q3k = {
     email = "q3k@q3k.org";

@@ -1042,6 +1042,8 @@ let
 
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
+    morbig = callPackage ../development/ocaml-modules/morbig { };
+
     mparser =  callPackage ../development/ocaml-modules/mparser { };
 
     mparser-pcre =  callPackage ../development/ocaml-modules/mparser/pcre.nix { };
