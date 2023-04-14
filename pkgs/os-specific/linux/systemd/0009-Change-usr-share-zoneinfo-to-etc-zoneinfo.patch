@@ -103,7 +103,7 @@ index 65d9e7e398..dd44d529ca 100644
  
  static bool etc_writable(void) {
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index ad483301ef..a7f22b1c86 100644
+index 31ed86955b..8db8d8c288 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
 @@ -282,7 +282,7 @@ static int context_read_data(Context *c) {
