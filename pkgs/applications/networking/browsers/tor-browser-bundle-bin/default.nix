@@ -211,7 +211,7 @@ stdenv.mkDerivation rec {
 
     // Insist on using IPC for communicating with Tor
     //
-    // Defaults to creating \$TBB_HOME/TorBrowser/Data/Tor/{socks,control}.socket
+    // Defaults to creating \$XDG_RUNTIME_DIR/Tor/{socks,control}.socket
     lockPref("extensions.torlauncher.control_port_use_ipc", true);
     lockPref("extensions.torlauncher.socks_port_use_ipc", true);
 
@@ -333,6 +333,7 @@ stdenv.mkDerivation rec {
       echo "user_pref(\"extensions.torlauncher.toronionauthdir_path\", \"\$HOME/TorBrowser/Data/Tor/onion-auth\");"
       echo "user_pref(\"extensions.torlauncher.torrc_path\", \"\$HOME/TorBrowser/Data/Tor/torrc\");"
       echo "user_pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/TorBrowser/Data/Tor\");"
+      echo "user_pref(\"network.proxy.socks\", \"file://\$XDG_RUNTIME_DIR/Tor/socks.socket\");"
     } >> "\$HOME/TorBrowser/Data/Browser/profile.default/prefs.js"
 
     # Lift-off
