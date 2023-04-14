@@ -10,18 +10,19 @@
 , shadow
 , systemd
 , coreutils
+, gitUpdater
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "22.4";
+  version = "23.1.1";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
     rev = "refs/tags/${version}";
-    hash = "sha256-MsT5t2da79Eb9FlTLPr2893JcF0ujNnToJTCQRT1QEo=";
+    hash = "sha256-w1UP7JIt/+6UlASB8kv2Lil+1sMTDIrADoYOT/WtaeE=";
   };
 
   patches = [ ./0001-add-nixos-support.patch ];
@@ -82,6 +83,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_path_env_gets_set_from_main"
     # tries to read from /etc/ca-certificates.conf while inside the sandbox
     "test_handler_ca_certs"
+    "TestRemoveDefaultCaCerts"
     # Doesn't work in the sandbox
     "TestEphemeralDhcpNoNetworkSetup"
     "TestHasURLConnectivity"
@@ -112,13 +114,16 @@ python3.pkgs.buildPythonApplication rec {
     "cloudinit"
   ];
 
-  passthru.tests = { inherit (nixosTests) cloud-init cloud-init-hostname; };
+  passthru = {
+    tests = { inherit (nixosTests) cloud-init cloud-init-hostname; };
+    updateScript = gitUpdater { ignoredVersions = ".ubuntu.*"; };
+  };
 
   meta = with lib; {
     homepage = "https://cloudinit.readthedocs.org";
     description = "Provides configuration and customization of cloud instance";
     license = with licenses; [ asl20 gpl3Plus ];
-    maintainers = with maintainers; [ illustris ];
+    maintainers = with maintainers; [ illustris jfroche ];
     platforms = platforms.all;
   };
 }
