@@ -1,4 +1,5 @@
 { fetchFromGitHub
+, fetchpatch
 , lib
 , stdenv
 , autoreconfHook
@@ -25,6 +26,25 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-jXNhHzydWaMhFbEKoFHyZ77GCvAqxyT3P0xIAgFlTzY=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-26767.patch";
+      url = "https://github.com/liblouis/liblouis/commit/517f6f1f35fc5c57ac2f045caa168191bdeaadde.patch";
+      excludes = [ "NEWS" ];
+      sha256 = "sha256-qNFDHIEvSVIkZ3kjHYQtk7+KQ36TnBUJhxEZmZHapoA=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-26768.patch";
+      url = "https://github.com/liblouis/liblouis/commit/21a2ee76d5de1ab3ce789ef18106343c8e65a175.patch";
+      sha256 = "sha256-nFt56Mh9ZUxqcOgykgTaq0Va1nq5VWBuwU7O+Fq+dp0=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-26769.patch";
+      url = "https://github.com/liblouis/liblouis/commit/b2e2995d1600e1d3b2131d4a2c5a57927d795608.patch";
+      sha256 = "sha256-BSHexbFqed6RYodapEXwOEA0YmzJCByBsRsNJbeM5dY=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
