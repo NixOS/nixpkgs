@@ -48177,7 +48177,6 @@ in lib.makeScope pkgs.newScope (self: {
     systems = [ "mcclim-bezier" ];
     lispLibs = [ (getAttr "clim" self) (getAttr "clim-pdf" self) (getAttr "clim-postscript" self) (getAttr "flexichain" self) (getAttr "mcclim-clx" self) (getAttr "mcclim-null" self) (getAttr "mcclim-render" self) ];
     meta = {
-      broken = true;
       hydraPlatforms = [  ];
     };
   });
