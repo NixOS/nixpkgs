@@ -91,7 +91,7 @@ let
       qt5compat = callPackage ./modules/qt5compat.nix { };
       qtcharts = callPackage ./modules/qtcharts.nix { };
       qtconnectivity = callPackage ./modules/qtconnectivity.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) PCSC;
+        inherit (darwin.apple_sdk_11_0.frameworks) IOBluetooth PCSC;
       };
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };

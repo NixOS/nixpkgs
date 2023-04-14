@@ -27,6 +27,25 @@ let
       })
     generatedDerivations;
 
+  grammarToPlugin = grammar:
+    let
+      name = lib.pipe grammar [
+        lib.getName
+
+        # added in buildGrammar
+        (lib.removeSuffix "-grammar")
+
+        # grammars from tree-sitter.builtGrammars
+        (lib.removePrefix "tree-sitter-")
+        (lib.replaceStrings [ "-" ] [ "_" ])
+      ];
+    in
+
+    runCommand "nvim-treesitter-grammar-${name}" { } ''
+      mkdir -p $out/parser
+      ln -s ${grammar}/parser $out/parser/${name}.so
+    '';
+
   allGrammars = lib.attrValues generatedDerivations;
 
   # Usage:
@@ -35,26 +54,7 @@ let
   # pkgs.vimPlugins.nvim-treesitter.withAllGrammars
   withPlugins =
     f: self.nvim-treesitter.overrideAttrs (_: {
-      passthru.dependencies = map
-        (grammar:
-          let
-            name = lib.pipe grammar [
-              lib.getName
-
-              # added in buildGrammar
-              (lib.removeSuffix "-grammar")
-
-              # grammars from tree-sitter.builtGrammars
-              (lib.removePrefix "tree-sitter-")
-              (lib.replaceStrings [ "-" ] [ "_" ])
-            ];
-          in
-
-          runCommand "nvim-treesitter-${name}-grammar" { } ''
-            mkdir -p $out/parser
-            ln -s ${grammar}/parser $out/parser/${name}.so
-          ''
-        )
+      passthru.dependencies = map grammarToPlugin
         (f (tree-sitter.builtGrammars // builtGrammars));
     });
 
@@ -67,7 +67,9 @@ in
   '';
 
   passthru = {
-    inherit builtGrammars allGrammars withPlugins withAllGrammars;
+    inherit builtGrammars allGrammars grammarToPlugin withPlugins withAllGrammars;
+
+    grammarPlugins = lib.mapAttrs (_: grammarToPlugin) generatedDerivations;
 
     tests.check-queries =
       let
