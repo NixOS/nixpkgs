@@ -304,4 +304,9 @@ in
       };
     };
   };
+
+  meta.maintainers = with lib.maintainers; [
+    e1mo
+    tchekda
+  ];
 }
