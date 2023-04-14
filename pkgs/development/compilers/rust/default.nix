@@ -82,7 +82,9 @@ in
         inherit CoreFoundation Security;
       };
       cargo-auditable = self.callPackage ./cargo-auditable.nix { };
-      cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };
+      cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix {
+        writeShellScriptBin = pkgsBuildBuild.writeShellScriptBin; # TODO: fix
+      };
       clippy = self.callPackage ./clippy.nix { inherit Security; };
     });
   };

@@ -474,7 +474,7 @@ stdenv.mkDerivation {
     ## Hardening support
     ##
     + ''
-      export hardening_unsupported_flags="${builtins.concatStringsSep " " (cc.hardeningUnsupportedFlags or [])}"
+      export hardening_unsupported_flags="${builtins.concatStringsSep " " ((cc.hardeningUnsupportedFlags or []) ++ lib.optional targetPlatform.isUefi "pic") /* TODO: where should this go? */}"
     ''
 
     # Machine flags. These are necessary to support

@@ -6,6 +6,8 @@ with lib.lists;
 let abis_ = abis; in
 let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis_; in
 
+# TODO: isUefi
+
 rec {
   # these patterns are to be matched against {host,build,target}Platform.parsed
   patterns = rec {
@@ -81,6 +83,8 @@ rec {
     isGnu          = with abis; map (a: { abi = a; }) [ gnuabi64 gnu gnueabi gnueabihf gnuabielfv1 gnuabielfv2 ];
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf muslabin32 muslabi64 ];
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
+
+    isUefi         = { /* kernel = kernels.windows; replace with none? */ abi = abis.coff; vendor = vendors.pc; }; # this may not be restrictive enough? TODO
 
     isEfi = [
       { cpu = { family = "arm"; version = "6"; }; }

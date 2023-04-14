@@ -5181,6 +5181,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  lanzaboote = callPackage ../tools/misc/lanzaboote { };
+
   lapce = callPackage ../applications/editors/lapce {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Security CoreServices ApplicationServices Carbon AppKit;
@@ -15469,7 +15471,7 @@ with pkgs;
       else if platform.isAndroid then 12
       else if platform.isLinux then 11
       else if platform.isWasm then 12
-      else latest_version;
+      else 15;
     # We take the "max of the mins". Why? Since those are lower bounds of the
     # supported version set, this is like intersecting those sets and then
     # taking the min bound of that.
@@ -20307,6 +20309,7 @@ with pkgs;
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
     else if name == "relibc" then targetPackages.relibc or relibc
     else if stdenv.targetPlatform.isGhcjs then null
+    else if name == null then null # TODO: have a `isUefi` check like ghcJs above
     else throw "Unknown libc ${name}";
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;

@@ -377,6 +377,9 @@ rec {
     uclibceabihf = { float = "hard"; };
     uclibc       = {};
 
+    # object format, not an abi...
+    coff         = {}; # TODO: probably assert win32?
+
     unknown = {};
   };
 

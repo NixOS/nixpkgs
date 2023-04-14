@@ -7,7 +7,7 @@
 let
 
   useLLVM = stdenv.hostPlatform.useLLVM or false;
-  bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
+  bareMetal = (stdenv.hostPlatform.parsed.kernel.name == "none") || stdenv.hostPlatform.isUefi; # TODO: shouldn't need to special case UEFI here... can we actually drop win32 from our triple?
   haveLibc = stdenv.cc.libc != null;
   inherit (stdenv.hostPlatform) isMusl isGnu;
 
@@ -31,9 +31,11 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
-  env.NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isUefi [
+    "-U_MSC_VER"
+  ]);
 
   cmakeFlags = [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
