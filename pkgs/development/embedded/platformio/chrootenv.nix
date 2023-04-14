@@ -10,6 +10,7 @@ let
       zlib
       git
       xdg-user-dirs
+      ncurses
     ]) ++ (with python.pkgs; [
       python
       setuptools
