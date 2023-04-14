@@ -244,7 +244,8 @@ stdenv.mkDerivation rec {
   moveToDev = false;
 
   postFixup = ''
-    fixQtModulePaths  "$out/mkspecs/modules"
+    moveToOutput      "mkspecs/modules" "$dev"
+    fixQtModulePaths  "$dev/mkspecs/modules"
     fixQtBuiltinPaths "$out" '*.pr?'
   '';
 
