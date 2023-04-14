@@ -5,7 +5,6 @@
 , fetchpatch
 , makeSetupHook
 , makeWrapper
-, cmake
 , gst_all_1
 , libglvnd
 , darwin
@@ -27,11 +26,6 @@ let
       callPackage = self.newScope ({
         inherit qtModule srcs;
         stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-        cmake = cmake.overrideAttrs (attrs: {
-          patches = attrs.patches ++ [
-            ./patches/cmake.patch
-          ];
-        });
       });
     in
     {
@@ -46,10 +40,12 @@ let
         inherit developerBuild;
         inherit (darwin.apple_sdk_11_0.frameworks) AGL AVFoundation AppKit GSS MetalKit;
         patches = [
-          ./patches/qtbase-qmake-mkspecs-mac.patch
-          ./patches/qtbase-qmake-pkg-config.patch
-          ./patches/qtbase-tzdir.patch
-          ./patches/qtbase-variable-fonts.patch
+          ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
+          ./patches/0002-qtbase-qmake-fix-mkspecs-for-darwin.patch
+          ./patches/0003-qtbase-qmake-fix-includedir-in-generated-pkg-config.patch
+          ./patches/0004-qtbase-fix-locating-tzdir-on-NixOS.patch
+          ./patches/0005-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
+          ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
           # Remove symlink check causing build to bail out and fail.
           # https://gitlab.kitware.com/cmake/cmake/-/issues/23251
           (fetchpatch {
