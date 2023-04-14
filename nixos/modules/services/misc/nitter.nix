@@ -155,6 +155,22 @@ in
           description = lib.mdDoc "Use base64 encoding for proxied media URLs.";
         };
 
+        enableRSS = mkEnableOption (lib.mdDoc "RSS feeds") // { default = true; };
+
+        enableDebug = mkEnableOption (lib.mdDoc "request logs and debug endpoints");
+
+        proxy = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = lib.mdDoc "URL to a HTTP/HTTPS proxy.";
+        };
+
+        proxyAuth = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = lib.mdDoc "Credentials for proxy.";
+        };
+
         tokenCount = mkOption {
           type = types.int;
           default = 10;
@@ -274,6 +290,12 @@ in
           type = types.bool;
           default = false;
           description = lib.mdDoc "Hide tweet replies.";
+        };
+
+        squareAvatars = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Square profile pictures.";
         };
       };
 
