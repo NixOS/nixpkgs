@@ -25,11 +25,11 @@
 
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.19.0-3";
+  version = "1.19.1-0";
 
   src = fetchurl {
     url = "https://codeberg.org/forgejo/forgejo/releases/download/v${version}/forgejo-src-${version}.tar.gz";
-    hash = "sha256-u27DDw3JUtVJ2nvkKfaGzpYP8bpRnwc1LUVra8Epkjc=";
+    hash = "sha256-zoYEkUmJx7lt++2Rmjx/jgyZ2Y9uJH4k8VpD++My7mU=";
   };
 
   vendorHash = null;
