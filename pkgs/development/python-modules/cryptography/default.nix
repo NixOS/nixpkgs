@@ -21,6 +21,11 @@
 , py
 , pytz
 , hypothesis
+, buildPackages
+, rust
+, cargo
+, rustc
+, python3
 }:
 
 let
@@ -46,15 +51,26 @@ buildPythonPackage rec {
 
   cargoRoot = "src/rust";
 
+  env = {
+    PYO3_CROSS_LIB_DIR = "${python3}/lib/";
+    CARGO_BUILD_TARGET = "${rust.toRustTargetSpec stdenv.hostPlatform}";
+  };
+
   nativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
   ] ++ [
-    rustPlatform.cargoSetupHook
-    setuptools-rust
-  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+    cargo
+    rustc
+  ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = [
+    openssl
+    setuptools-rust
+    rustPlatform.cargoSetupHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    libiconv
+  ];
 
   propagatedBuildInputs = lib.optionals (!isPyPy) [
     cffi
