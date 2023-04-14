@@ -22,6 +22,18 @@ let
 
   configFile = settingsFormat.generate "kubo-config.json" customizedConfig;
 
+  # Create a fake repo containing only the file "api".
+  # $IPFS_PATH will point to this directory instead of the real one.
+  # For some reason the Kubo CLI tools insist on reading the
+  # config file when it exists. But the Kubo daemon sets the file
+  # permissions such that only the ipfs user is allowed to read
+  # this file. This prevents normal users from talking to the daemon.
+  # To work around this terrible design, create a fake repo with no
+  # config file, only an api file and everything should work as expected.
+  fakeKuboRepo = pkgs.writeTextDir "api" ''
+    /unix/run/ipfs.sock
+  '';
+
   kuboFlags = utils.escapeSystemdExecArgs (
     optional cfg.autoMount "--mount" ++
     optional cfg.enableGC "--enable-gc" ++
@@ -248,7 +260,7 @@ in
     ];
 
     environment.systemPackages = [ cfg.package ];
-    environment.variables.IPFS_PATH = cfg.dataDir;
+    environment.variables.IPFS_PATH = fakeKuboRepo;
 
     # https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
     boot.kernel.sysctl."net.core.rmem_max" = mkDefault 2500000;

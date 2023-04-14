@@ -12,6 +12,9 @@
       settings.Addresses.API = "/ip4/127.0.0.1/tcp/2324";
       dataDir = "/mnt/ipfs";
     };
+    users.users.alice = {
+      isNormalUser = true;
+    };
   };
 
   nodes.fuse = { ... }: {
@@ -24,6 +27,14 @@
 
   testScript = ''
     start_all()
+
+    with subtest("Automatic socket activation"):
+        ipfs_hash = machine.succeed(
+            "echo fnord0 | su alice -l -c 'ipfs add --quieter'"
+        )
+        machine.succeed(f"ipfs cat /ipfs/{ipfs_hash.strip()} | grep fnord0")
+
+    machine.stop_job("ipfs")
 
     with subtest("IPv4 socket activation"):
         machine.succeed("ipfs --api /ip4/127.0.0.1/tcp/2324 id")
@@ -51,7 +62,7 @@
         # See https://github.com/ipfs/kubo/issues/9044.
         # Workaround: using CID Version 1 avoids that.
         ipfs_hash = fuse.succeed(
-            "echo fnord3 | ipfs --api /ip4/127.0.0.1/tcp/2324 add --quieter --cid-version=1"
+            "echo fnord3 | ipfs add --quieter --cid-version=1"
         ).strip()
 
         fuse.succeed(f"cat /ipfs/{ipfs_hash} | grep fnord3")
