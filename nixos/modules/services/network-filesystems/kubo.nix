@@ -50,6 +50,22 @@ let
 
   splitMulitaddr = addrRaw: lib.tail (lib.splitString "/" addrRaw);
 
+  multiaddrsToListenStreams = addrIn:
+    let
+      addrs = if builtins.typeOf addrIn == "list"
+      then addrIn else [ addrIn ];
+      unfilteredResult = map multiaddrToListenStream addrs;
+    in
+      builtins.filter (addr: addr != null) unfilteredResult;
+
+  multiaddrsToListenDatagrams = addrIn:
+    let
+      addrs = if builtins.typeOf addrIn == "list"
+      then addrIn else [ addrIn ];
+      unfilteredResult = map multiaddrToListenDatagram addrs;
+    in
+      builtins.filter (addr: addr != null) unfilteredResult;
+
   multiaddrToListenStream = addrRaw:
     let
       addr = splitMulitaddr addrRaw;
@@ -166,13 +182,16 @@ in
 
           options = {
             Addresses.API = mkOption {
-              type = types.str;
+              type = types.oneOf [ types.str (types.listOf types.str) ];
               default = "/ip4/127.0.0.1/tcp/5001";
-              description = lib.mdDoc "Where Kubo exposes its API to";
+              description = lib.mdDoc ''
+                Multiaddr or array of multiaddrs describing the address to serve the local HTTP API on.
+                In addition to the multiaddrs listed here, the daemon will also listen on a Unix domain socket.
+              '';
             };
 
             Addresses.Gateway = mkOption {
-              type = types.str;
+              type = types.oneOf [ types.str (types.listOf types.str) ];
               default = "/ip4/127.0.0.1/tcp/8080";
               description = lib.mdDoc "Where the IPFS Gateway can be reached";
             };
@@ -350,15 +369,9 @@ in
       wantedBy = [ "sockets.target" ];
       socketConfig = {
         ListenStream =
-          let
-            fromCfg = multiaddrToListenStream cfg.settings.Addresses.Gateway;
-          in
-          [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
+          [ "" ] ++ (multiaddrsToListenStreams cfg.settings.Addresses.Gateway);
         ListenDatagram =
-          let
-            fromCfg = multiaddrToListenDatagram cfg.settings.Addresses.Gateway;
-          in
-          [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
+          [ "" ] ++ (multiaddrsToListenDatagrams cfg.settings.Addresses.Gateway);
       };
     };
 
@@ -367,10 +380,7 @@ in
       # We also include "%t/ipfs.sock" because there is no way to put the "%t"
       # in the multiaddr.
       socketConfig.ListenStream =
-        let
-          fromCfg = multiaddrToListenStream cfg.settings.Addresses.API;
-        in
-        [ "" "%t/ipfs.sock" ] ++ lib.optional (fromCfg != null) fromCfg;
+        [ "" "%t/ipfs.sock" ] ++ multiaddrsToListenStreams cfg.settings.Addresses.API;
     };
   };
 

@@ -20,7 +20,8 @@
   nodes.fuse = { ... }: {
     services.kubo = {
       enable = true;
-      settings.Addresses.API = "/ip4/127.0.0.1/tcp/2324";
+      # Only allow API access through the Unix domain socket
+      settings.Addresses.API = [ ];
       autoMount = true;
     };
   };
