@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, dart }:
+{ callPackage, fetchzip, dart }:
 let
   mkFlutter = { version, patches, dart, src }: callPackage ./flutter.nix { inherit version patches dart src; };
   wrapFlutter = flutter: callPackage ./wrapper.nix { inherit flutter; };
@@ -10,17 +10,17 @@ let
     dart = dart.override {
       version = dartVersion;
       sources = {
-        "${dartVersion}-x86_64-linux" = fetchurl {
+        "${dartVersion}-x86_64-linux" = fetchzip {
           url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
           sha256 = dartHash.x86_64-linux;
         };
-        "${dartVersion}-aarch64-linux" = fetchurl {
+        "${dartVersion}-aarch64-linux" = fetchzip {
           url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
           sha256 = dartHash.aarch64-linux;
         };
       };
     };
-    src = fetchurl {
+    src = fetchzip {
       url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${version}-stable.tar.xz";
       sha256 = hash;
     };
@@ -33,10 +33,10 @@ in
   stable = flutterDrv {
     version = "3.7.11";
     dartVersion = "2.19.6";
-    hash = "sha256-/vtjoPB4Hn8RtP09uMdUYtDS7lzQvskdrNszEYlpOBc=";
+    hash = "sha256-H2S8nRpTte6ux34jTkCneGbSMQldrnjH1dI+/pzrcNg=";
     dartHash = {
-      x86_64-linux = "sha256-D9/yXmrLo9YJQVWn40FjT43jR36Gwv2krUcjLBrfcE8=";
-      aarch64-linux = "sha256-aRO3wLO3i8FB03LNRz2iF3Hlc3Kxq0XJd84VUMj/C5w=";
+      x86_64-linux = "sha256-4ezRuwhQHVCxZg5WbzU/tBUDvZVpfCo6coDE4K0UzXo=";
+      aarch64-linux = "sha256-pYmClIqOo0sRPOkrcF4xQbo0mHlrr1TkhT1fnNyYNck=";
     };
     patches = flutter3Patches;
   };
@@ -44,10 +44,10 @@ in
   v2 = flutterDrv {
     version = "2.10.5";
     dartVersion = "2.16.2";
-    hash = "sha256-DTZwxlMUYk8NS1SaWUJolXjD+JnRW73Ps5CdRHDGnt0=";
+    hash = "sha256-MxaWvlcCfXN8gsC116UMzqb4LgixHL3YjrGWy7WYgW4=";
     dartHash = {
-      x86_64-linux = "sha256-egrYd7B4XhkBiHPIFE2zopxKtQ58GqlogAKA/UeiXnI=";
-      aarch64-linux = "sha256-vmerjXkUAUnI8FjK+62qLqgETmA+BLPEZXFxwYpI+KY=";
+      x86_64-linux = "sha256-vxKxysg6e3Qxtlp4dLxOZaBtgHGtl7XYd73zFZd9yJc=";
+      aarch64-linux = "sha256-ZfpR6fj/a9Bsgrg31Z/uIJaCHIWtcQH3VTTVkDJKkwA=";
     };
     patches = flutter2Patches;
   };
