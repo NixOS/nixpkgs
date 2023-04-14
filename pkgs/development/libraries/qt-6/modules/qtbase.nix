@@ -232,32 +232,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  devTools = [
-    "libexec/moc"
-    "libexec/rcc"
-    "libexec/syncqt.pl"
-    "libexec/qlalr"
-    "libexec/ensure_pro_file.cmake"
-    "libexec/cmake_automoc_parser"
-    "libexec/qvkgen"
-    "libexec/tracegen"
-    "libexec/uic"
-    "bin/fixqt4headers.pl"
-    "bin/moc"
-    "bin/qdbuscpp2xml"
-    "bin/qdbusxml2cpp"
-    "bin/qlalr"
-    "bin/qmake"
-    "bin/qmake6"
-    "bin/qt-cmake"
-    "bin/qt-cmake-private"
-    "bin/qt-cmake-private-install.cmake"
-    "bin/qt-cmake-standalone-test"
-    "bin/rcc"
-    "bin/syncqt.pl"
-    "bin/uic"
-  ];
-
   moveToDev = false;
 
   postFixup = ''
