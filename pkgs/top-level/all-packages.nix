@@ -514,6 +514,8 @@ with pkgs;
 
   deadnix = callPackage ../development/tools/deadnix { };
 
+  dec-decode = callPackage ../development/tools/dec-decode { };
+
   dsq = callPackage ../tools/misc/dsq { };
 
   dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
@@ -31361,6 +31363,8 @@ with pkgs;
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
   kiwix-tools = callPackage ../applications/misc/kiwix/tools.nix { };
+
+  kickoff = callPackage ../applications/misc/kickoff { };
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
