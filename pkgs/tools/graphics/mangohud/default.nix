@@ -11,7 +11,6 @@
 , xdg-utils
 , dbus
 , hwdata
-, libX11
 , mangohud32
 , appstream
 , glslang
@@ -22,8 +21,9 @@
 , pkg-config
 , unzip
 , libXNVCtrl
-, spdlog
 , wayland
+, libX11
+, spdlog
 , glew
 , glfw
 , nlohmann_json
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
 
       libdbus = dbus.lib;
-      inherit hwdata libX11;
+      inherit hwdata;
     })
   ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
     # Support 32bit OpenGL applications by appending the mangohud32
@@ -142,14 +142,17 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     unzip
+
+    # Only the headers are used from these packages
+    # The corresponding libraries are loaded at runtime from the app's runpath
+    libXNVCtrl
+    wayland
+    libX11
   ];
 
   buildInputs = [
     dbus
-    libX11
-    libXNVCtrl
     spdlog
-    wayland
   ] ++ lib.optionals gamescopeSupport [
     glew
     glfw

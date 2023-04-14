@@ -11,16 +11,6 @@ index 3b3cccb..1405725 100644
          SPDLOG_ERROR("Could not load libdbus-1.so.3");
          return false;
      }
-diff --git a/src/loaders/loader_x11.cpp b/src/loaders/loader_x11.cpp
-index 4db6f78..c60d08c 100644
---- a/src/loaders/loader_x11.cpp
-+++ b/src/loaders/loader_x11.cpp
-@@ -89,4 +89,4 @@ void libx11_loader::CleanUp(bool unload) {
- 
- }
- 
--std::shared_ptr<libx11_loader> g_x11(new libx11_loader("libX11.so.6"));
-+std::shared_ptr<libx11_loader> g_x11(new libx11_loader("@libX11@/lib/libX11.so.6"));
 diff --git a/src/logging.cpp b/src/logging.cpp
 index 1668226..f0c8df5 100644
 --- a/src/logging.cpp
