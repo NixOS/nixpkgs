@@ -45,6 +45,11 @@ let
   '';
 in
 {
+  imports = [
+    # https://github.com/zedeus/nitter/pull/772
+    (mkRemovedOptionModule [ "services" "nitter" "replaceInstagram" ] "Nitter no longer supports this option as Bibliogram has been discontinued.")
+  ];
+
   options = {
     services.nitter = {
       enable = mkEnableOption (lib.mdDoc "Nitter");
@@ -206,12 +211,6 @@ in
           default = "";
           example = "teddit.net";
           description = lib.mdDoc "Replace Reddit links with links to this instance (blank to disable).";
-        };
-
-        replaceInstagram = mkOption {
-          type = types.str;
-          default = "";
-          description = lib.mdDoc "Replace Instagram links with links to this instance (blank to disable).";
         };
 
         mp4Playback = mkOption {
