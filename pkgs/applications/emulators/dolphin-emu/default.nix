@@ -46,6 +46,7 @@
   # Darwin-only dependencies
 , CoreBluetooth
 , ForceFeedback
+, IOBluetooth
 , IOKit
 , moltenvk
 , OpenGL
@@ -106,6 +107,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     CoreBluetooth
     ForceFeedback
+    IOBluetooth
     IOKit
     moltenvk
     OpenGL
