@@ -1360,6 +1360,8 @@ with pkgs;
     wine = null;
   };
 
+  ledfx = callPackage ../applications/audio/ledfx { };
+
   libdislocator = callPackage ../tools/security/afl/libdislocator.nix { };
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
