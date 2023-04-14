@@ -33099,6 +33099,8 @@ with pkgs;
 
   ps2client = callPackage ../applications/networking/ps2client { };
 
+  ps2eps = callPackage ../tools/typesetting/ps2eps { };
+
   psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
 
   psi-plus = libsForQt5.callPackage ../applications/networking/instant-messengers/psi-plus { };
