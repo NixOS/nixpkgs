@@ -1,6 +1,6 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ lib, ...} : {
   name = "kubo";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ mguentner Luflosi ];
   };
 
@@ -25,21 +25,18 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   testScript = ''
     start_all()
 
-    # IPv4 activation
-
+    # IPv4 socket activation
     machine.succeed("ipfs --api /ip4/127.0.0.1/tcp/2324 id")
     ipfs_hash = machine.succeed(
-        "echo fnord | ipfs --api /ip4/127.0.0.1/tcp/2324 add | awk '{ print $2 }'"
+        "echo fnord | ipfs --api /ip4/127.0.0.1/tcp/2324 add --quieter"
     )
-
     machine.succeed(f"ipfs cat /ipfs/{ipfs_hash.strip()} | grep fnord")
-
-    # Unix domain socket activation
 
     machine.stop_job("ipfs")
 
+    # Unix domain socket activation
     ipfs_hash = machine.succeed(
-        "echo fnord2 | ipfs --api /unix/run/ipfs.sock add | awk '{ print $2 }'"
+        "echo fnord2 | ipfs --api /unix/run/ipfs.sock add --quieter"
     )
     machine.succeed(
         f"ipfs --api /unix/run/ipfs.sock cat /ipfs/{ipfs_hash.strip()} | grep fnord2"
@@ -66,4 +63,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     fuse.succeed(f"cat /ipfs/{ipfs_hash} | grep fnord3")
   '';
-})
+}
