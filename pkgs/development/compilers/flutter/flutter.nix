@@ -2,27 +2,75 @@
 , patches
 , dart
 , src
+, includedEngineArtifacts ? {
+    common = [
+      "flutter_patched_sdk"
+      "flutter_patched_sdk_product"
+    ];
+    platform = {
+      android = lib.optionalAttrs stdenv.hostPlatform.isx86_64
+        ((lib.genAttrs [ "arm" "arm64" "x64" ] (architecture: [ "profile" "release" ])) // { x86 = [ "jit-release" ]; });
+      linux = lib.optionals stdenv.hostPlatform.isLinux
+        (lib.genAttrs ((lib.optional stdenv.hostPlatform.isx86_64 "x64") ++ (lib.optional stdenv.hostPlatform.isAarch64 "arm64"))
+          (architecture: [ "debug" "profile" "release" ]));
+    };
+  }
 
 , lib
 , callPackage
 , stdenv
-, autoPatchelfHook
+, runCommandLocal
+, symlinkJoin
+, lndir
 , git
 , which
-, atk
-, glib
-, gtk3
-, libepoxy
-}:
+}@args:
 
 let
-  # Libraries that Flutter artifacts depend on at runtime.
-  artifactRuntimeDeps = [
-    atk
-    glib
-    gtk3
-    libepoxy
-  ];
+  engineArtifactDirectory =
+    let
+      engineArtifacts = callPackage ./engine-artifacts {
+        engineVersion = lib.removeSuffix "\n" (builtins.readFile (src + /bin/internal/engine.version));
+      };
+    in
+    runCommandLocal "flutter-engine-artifacts-${version}" { }
+      (
+        let
+          mkCommonArtifactLinkCommand = { artifact }:
+            ''
+              mkdir -p $out/common
+              ${lndir}/bin/lndir -silent ${artifact} $out/common
+            '';
+          mkPlatformArtifactLinkCommand = { artifact, os, architecture, variant ? null }:
+            let
+              artifactDirectory = "${os}-${architecture}${lib.optionalString (variant != null) "-${variant}"}";
+            in
+            ''
+              mkdir -p $out/${artifactDirectory}
+                ${lndir}/bin/lndir -silent ${artifact} $out/${artifactDirectory}
+            '';
+        in
+        ''
+          ${
+            builtins.concatStringsSep "\n"
+              ((map (name: mkCommonArtifactLinkCommand {
+                artifact = engineArtifacts.common.${name};
+              }) (if includedEngineArtifacts ? common then includedEngineArtifacts.common else [ ])) ++
+              (builtins.foldl' (commands: os: commands ++
+                (builtins.foldl' (commands: architecture: commands ++
+                  (builtins.foldl' (commands: variant: commands ++
+                    (map (artifact: mkPlatformArtifactLinkCommand {
+                      inherit artifact os architecture variant;
+                    }) engineArtifacts.platform.${os}.${architecture}.variants.${variant}))
+                  (map (artifact: mkPlatformArtifactLinkCommand {
+                    inherit artifact os architecture;
+                  }) engineArtifacts.platform.${os}.${architecture}.base)
+                  includedEngineArtifacts.platform.${os}.${architecture}))
+                [] (builtins.attrNames includedEngineArtifacts.platform.${os})))
+              [] (builtins.attrNames (if includedEngineArtifacts ? platform then includedEngineArtifacts.platform else { }))))
+          }
+        ''
+      );
 
   unwrapped =
     stdenv.mkDerivation {
@@ -31,8 +79,7 @@ let
 
       outputs = [ "out" "cache" ];
 
-      nativeBuildInputs = [ autoPatchelfHook ];
-      buildInputs = [ git ] ++ artifactRuntimeDeps;
+      buildInputs = [ git ];
 
       postPatch = ''
         patchShebangs --build ./bin/
@@ -75,7 +122,10 @@ let
         echo "$revision" > "$STAMP_PATH"
         echo -n "${version}" > version
 
-        rm -r bin/cache/dart-sdk
+        # Certain prebuilts should be replaced with Nix-built (or at least Nix-patched) equivalents.
+        rm -r \
+          bin/cache/dart-sdk \
+          bin/cache/artifacts/engine
       '';
 
       installPhase = ''
@@ -83,8 +133,8 @@ let
 
         mkdir -p $out
         cp -r . $out
-        mkdir -p $out/bin/cache/
         ln -sf ${dart} $out/bin/cache/dart-sdk
+        ln -sf ${engineArtifactDirectory} $out/bin/cache/artifacts/engine
 
         runHook postInstall
       '';
@@ -110,7 +160,17 @@ let
         # found here should be included as-is, for tooling compatibility.
         sdk = unwrapped;
         mkFlutterApp = callPackage ../../../build-support/flutter {
-          flutter = callPackage ./wrapper.nix { flutter = unwrapped; };
+          # Package a minimal version of Flutter that only uses Linux desktop release artifacts.
+          flutter = callPackage ./wrapper.nix {
+            flutter = callPackage ./flutter.nix (args // {
+              includedEngineArtifacts = {
+                common = [ "flutter_patched_sdk_product" ];
+                platform.linux = lib.optionals stdenv.hostPlatform.isLinux
+                  (lib.genAttrs ((lib.optional stdenv.hostPlatform.isx86_64 "x64") ++ (lib.optional stdenv.hostPlatform.isAarch64 "arm64"))
+                    (architecture: [ "release" ]));
+              };
+            });
+          };
         };
       };
 
@@ -125,7 +185,6 @@ let
         platforms = [ "x86_64-linux" "aarch64-linux" ];
         maintainers = with maintainers; [ babariviere ericdallo FlafyDev gilice hacker1024 ];
       };
-    }
-  ;
+    };
 in
 unwrapped
