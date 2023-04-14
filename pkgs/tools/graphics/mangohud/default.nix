@@ -22,6 +22,7 @@
 , pkg-config
 , unzip
 , libXNVCtrl
+, spdlog
 , wayland
 , glew
 , glfw
@@ -44,27 +45,6 @@ let
     patch = fetchurl {
       url = "https://wrapdb.mesonbuild.com/v2/imgui_${version}-1/get_patch";
       sha256 = "sha256-bQC0QmkLalxdj4mDEdqvvOFtNwz2T1MpTDuMXGYeQ18=";
-    };
-  };
-
-  # Derived from subprojects/spdlog.wrap
-  #
-  # NOTE: We only statically link spdlog due to a bug in pressure-vessel:
-  # https://github.com/ValveSoftware/steam-runtime/issues/511
-  #
-  # Once this fix is released upstream, we should switch back to using
-  # the system provided spdlog
-  spdlog = rec {
-    version = "1.8.5";
-    src = fetchFromGitHub {
-      owner = "gabime";
-      repo = "spdlog";
-      rev = "refs/tags/v${version}";
-      sha256 = "sha256-D29jvDZQhPscaOHlrzGN1s7/mXlcsovjbqYpXd7OM50=";
-    };
-    patch = fetchurl {
-      url = "https://wrapdb.mesonbuild.com/v2/spdlog_${version}-1/get_patch";
-      sha256 = "sha256-PDjyddV5KxKGORECWUMp6YsXc3kks0T5gxKrCZKbdL4=";
     };
   };
 
@@ -101,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''(
     cd "$sourceRoot/subprojects"
     cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
-    cp -R --no-preserve=mode,ownership ${spdlog.src} spdlog-${spdlog.version}
     cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
   )'';
 
@@ -142,12 +121,12 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''(
     cd subprojects
     unzip ${imgui.patch}
-    unzip ${spdlog.patch}
     unzip ${vulkan-headers.patch}
   )'';
 
   mesonFlags = [
     "-Dwith_wayland=enabled"
+    "-Duse_system_spdlog=enabled"
   ] ++ lib.optionals gamescopeSupport [
     "-Dmangoapp_layer=true"
     "-Dmangoapp=true"
@@ -169,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libX11
     libXNVCtrl
+    spdlog
     wayland
   ] ++ lib.optionals gamescopeSupport [
     glew
