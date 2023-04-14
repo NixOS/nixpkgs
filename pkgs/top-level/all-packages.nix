@@ -39987,4 +39987,6 @@ with pkgs;
   zf = callPackage ../tools/misc/zf { };
 
   isolate = callPackage ../tools/security/isolate { };
+
+  qc = callPackage ../development/tools/qc { };
 }
