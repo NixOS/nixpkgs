@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchurl
 , makeDesktopItem
+, writeText
 
 # Common run-time dependencies
 , zlib
@@ -112,6 +113,19 @@ let
       hash = "sha256-mi8btxI6de5iQ8HzNpvuFdJHjzi03zZJT65dsWEiDHA=";
     };
   };
+
+  distributionIni = writeText "distribution.ini" (lib.generators.toINI {} {
+    # Some light branding indicating this build uses our distro preferences
+    Global = {
+      id = "nixos";
+      version = "1.0";
+      about = "Tor Browser for NixOS";
+    };
+  });
+
+  policiesJson = writeText "policies.json" (builtins.toJSON {
+    policies.DisableAppUpdate = true;
+  });
 in
 stdenv.mkDerivation rec {
   pname = "tor-browser-bundle-bin";
@@ -132,7 +146,9 @@ stdenv.mkDerivation rec {
     categories = [ "Network" "WebBrowser" "Security" ];
   };
 
-  buildCommand = ''
+  buildPhase = ''
+    runHook preBuild
+
     # For convenience ...
     TBB_IN_STORE=$out/share/tor-browser
     interp=$(< $NIX_CC/nix-support/dynamic-linker)
@@ -417,6 +433,18 @@ stdenv.mkDerivation rec {
     echo "Checking tor-browser wrapper ..."
       TBB_HOME=$(mktemp -d) \
       $out/bin/tor-browser --version >/dev/null
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    # Install distribution customizations
+    install -Dvm644 ${distributionIni} $out/share/tor-browser/distribution/distribution.ini
+    install -Dvm644 ${policiesJson} $out/share/tor-browser/distribution/policies.json
+
+    runHook postInstall
   '';
 
   meta = with lib; {
