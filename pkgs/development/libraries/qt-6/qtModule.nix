@@ -3,6 +3,7 @@
 , cmake
 , ninja
 , perl
+, moveBuildTree
 , srcs
 , patches ? [ ]
 }:
@@ -19,7 +20,8 @@ stdenv.mkDerivation (args // {
   patches = args.patches or patches.${pname} or [ ];
 
   buildInputs = args.buildInputs or [ ];
-  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ cmake ninja perl ];
+  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ cmake ninja perl ]
+    ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or [ ]);
 
   moveToDev = false;
