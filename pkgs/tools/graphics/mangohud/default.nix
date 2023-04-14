@@ -161,11 +161,16 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXrandr
   ];
 
-  # Support 32bit Vulkan applications by linking in 32bit Vulkan layer
+  # Support 32bit Vulkan applications by linking in 32bit Vulkan layers
   # This is needed for the same reason the 32bit OpenGL workaround is needed.
   postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
     ln -s ${mangohud32}/share/vulkan/implicit_layer.d/MangoHud.json \
       "$out/share/vulkan/implicit_layer.d/MangoHud.x86.json"
+
+    ${lib.optionalString gamescopeSupport ''
+      ln -s ${mangohud32}/share/vulkan/implicit_layer.d/libMangoApp.json \
+        "$out/share/vulkan/implicit_layer.d/libMangoApp.x86.json"
+    ''}
   '';
 
   postFixup = ''
