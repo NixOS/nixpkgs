@@ -8,7 +8,7 @@ let
 
   # remove null values from the final configuration
   finalSettings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
-  configFile = format.generate "homeserver.yaml" finalSettings;
+  commonConfigFile = format.generate "homeserver.yaml" finalSettings;
   logConfigFile = format.generate "log_config.yaml" cfg.logConfig;
 
   pluginsEnv = cfg.package.python.buildEnv.override {
@@ -42,7 +42,7 @@ let
     pkgs.writeShellScriptBin "matrix-synapse-register_new_matrix_user" ''
       exec ${cfg.package}/bin/register_new_matrix_user \
         $@ \
-        ${lib.concatMapStringsSep " " (x: "-c ${x}") ([ configFile ] ++ cfg.extraConfigFiles)} \
+        ${lib.concatMapStringsSep " " (x: "-c ${x}") ([ commonConfigFile ] ++ cfg.extraConfigFiles)} \
         "${listenerProtocol}://${
           if (isIpv6 bindAddress) then
             "[${bindAddress}]"
@@ -134,6 +134,7 @@ in {
     (mkRemovedOptionModule [ "services" "matrix-synapse" "macaroon_secret_key" ] "Pass this value via extraConfigFiles instead" )
     (mkRemovedOptionModule [ "services" "matrix-synapse" "registration_shared_secret" ] "Pass this value via extraConfigFiles instead" )
 
+    (import ./workers.nix { inherit commonConfigFile format pluginsEnv; })
   ];
 
   options = {
@@ -446,20 +447,32 @@ in {
                   };
                 };
               });
-              default = [ {
-                port = 8008;
-                bind_addresses = [ "127.0.0.1" ];
-                type = "http";
-                tls = false;
-                x_forwarded = true;
-                resources = [ {
-                  names = [ "client" ];
-                  compress = true;
-                } {
-                  names = [ "federation" ];
-                  compress = false;
-                } ];
-              } ];
+              default = [
+                {
+                  port = 8008;
+                  bind_addresses = [ "127.0.0.1" ];
+                  type = "http";
+                  tls = false;
+                  x_forwarded = true;
+                  resources = [ {
+                    names = [ "client" ];
+                    compress = true;
+                  } {
+                    names = [ "federation" ];
+                    compress = false;
+                  } ];
+                }
+                (mkIf (cfg.workers.instances != { }) {
+                  port = 9093;
+                  bind_addresses = [ "127.0.0.1" ];
+                  tls = false;
+                  resources = [ {
+                      names = [ "replication" ];
+                      compress = false;
+                    }
+                  ];
+                })
+              ];
               description = lib.mdDoc ''
                 List of ports that Synapse should listen on, their purpose and their configuration.
               '';
@@ -608,6 +621,26 @@ in {
               '';
             };
 
+            redis = mkOption {
+              type = types.submodule {
+                freeformType = format.type;
+                options = {
+                  enabled = mkOption {
+                    type = types.bool;
+                    description = lib.mdDoc ''
+                      Whether to enable redis within synapse.
+
+                      This is required for worker support.
+                    '';
+                    default = cfg.workers.instances != { };
+                    defaultText = literalExpression "config.matrix-synapse.workers.instances != { }";
+                  };
+                };
+              };
+              default = { };
+              description = lib.mdDoc "Settings to for synapse to connect to a redis server.";
+            };
+
             turn_uris = mkOption {
               type = types.listOf types.str;
               default = [];
@@ -705,7 +738,7 @@ in {
       }
     ];
 
-    services.matrix-synapse.configFile = configFile;
+    services.matrix-synapse.configFile = commonConfigFile;
 
     users.users.matrix-synapse = {
       group = "matrix-synapse";
@@ -719,13 +752,19 @@ in {
       gid = config.ids.gids.matrix-synapse;
     };
 
-    systemd.services.matrix-synapse = {
-      description = "Synapse Matrix homeserver";
+    systemd.targets.matrix-synapse = {
+      description = "Matrix synapse parent target";
       after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
+    };
+
+    systemd.services.matrix-synapse = {
+      description = "Synapse Matrix homeserver";
+      wantedBy = [ "matrix-synapse.target" ];
+      partOf = [ "matrix-synapse.target" ];
       preStart = ''
         ${cfg.package}/bin/synapse_homeserver \
-          --config-path ${configFile} \
+          --config-path ${commonConfigFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
       '';
@@ -745,7 +784,7 @@ in {
         '')) ];
         ExecStart = ''
           ${cfg.package}/bin/synapse_homeserver \
-            ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
+            ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ commonConfigFile ] ++ cfg.extraConfigFiles) }
             --keys-directory ${cfg.dataDir}
         '';
         ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";

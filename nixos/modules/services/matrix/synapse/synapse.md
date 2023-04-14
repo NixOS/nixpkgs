@@ -113,6 +113,31 @@ in {
 }
 ```
 
+### Workers {#module-services-matrix-synapse-workers}
+
+The synapse module also supports instantiating workers via the `services.matrix-synapse.workers.instances` option.
+This allows spreading synapse's load over multiple cores.
+
+```
+{
+  services.matrix-synapse = {
+    settings = {
+      send_federation = false;
+      federation_senders = [ "federation_sender1" ];
+    };
+    workers.instances = {
+      federation_sender1 = { ... };
+      federation_receiver = { ... };
+    };
+  };
+}
+```
+
+Setting up a worker will require more changes to the main synapse config and
+routing traffic to the right places via your nginx config.
+
+You should consult synapses upstream documentation on workers for how to configure this.
+
 ## Registering Matrix users {#module-services-matrix-register-users}
 
 If you want to run a server with public registration by anybody, you can
