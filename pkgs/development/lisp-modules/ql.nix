@@ -218,6 +218,12 @@ let
         self.mcclim-fonts
       ];
     });
+    mcclim-layouts = super.mcclim-layouts.overrideLispAttrs (o: {
+      systems = [ "mcclim-layouts" "mcclim-layouts/tab" ];
+      lispLibs = o.lispLibs ++ [
+        self.mcclim
+      ];
+});
   });
 
   qlpkgs =
