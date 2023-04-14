@@ -17,20 +17,20 @@
 
 stdenv.mkDerivation rec {
   pname = "pods";
-  version = "1.0.6";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "marhkb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZryzNlEj/2JTp5FJiDzXN9v1DvczfebqEOrJP+dKaRw=";
+    sha256 = "sha256-BvSDFWmIQ55kbZtWybemZXT7lSDwxSCpPAsqwElZOBM=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "containers-api-0.7.0" = "sha256-S6uDIjxFxHNqt1GK4Z+ZSTxjChNP1R5ASrO24/2oDi0=";
-      "podman-api-0.8.0" = "sha256-Gq1xcqqQZPqQ3+VEyfbdiBxeiaYiluXIa6E0el/sUIo=";
+      "podman-api-0.10.0-dev" = "sha256-6xpPdssfgXY5sDyZOzApaZPjzDLqq734UEl9FTkZyQQ=";
+      "vte4-0.5.0" = "sha256-7yXIcvMNAAeyK57O5l42ndBI+Ij55KFwClhBeLM5Zlo=";
     };
   };
 
