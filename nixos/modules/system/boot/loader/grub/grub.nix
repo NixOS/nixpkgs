@@ -13,11 +13,7 @@ let
     if cfg.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
   realGrub = if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
-    else if cfg.trustedBoot.enable
-         then if cfg.trustedBoot.isHPLaptop
-              then grubPkgs.trustedGrub-for-HP
-              else grubPkgs.trustedGrub
-         else grubPkgs.grub2;
+    else grubPkgs.grub2;
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -674,39 +670,6 @@ in
         '';
       };
 
-      trustedBoot = {
-
-        enable = mkOption {
-          default = false;
-          type = types.bool;
-          description = lib.mdDoc ''
-            Enable trusted boot. GRUB will measure all critical components during
-            the boot process to offer TCG (TPM) support.
-          '';
-        };
-
-        systemHasTPM = mkOption {
-          default = "";
-          example = "YES_TPM_is_activated";
-          type = types.str;
-          description = lib.mdDoc ''
-            Assertion that the target system has an activated TPM. It is a safety
-            check before allowing the activation of 'trustedBoot.enable'. TrustedBoot
-            WILL FAIL TO BOOT YOUR SYSTEM if no TPM is available.
-          '';
-        };
-
-        isHPLaptop = mkOption {
-          default = false;
-          type = types.bool;
-          description = lib.mdDoc ''
-            Use a special version of TrustedGRUB that is needed by some HP laptops
-            and works only for the HP laptops.
-          '';
-        };
-
-      };
-
     };
 
   };
@@ -783,18 +746,6 @@ in
           message = "You cannot have duplicated devices in mirroredBoots";
         }
         {
-          assertion = !cfg.efiSupport || !cfg.trustedBoot.enable;
-          message = "Trusted GRUB does not have EFI support";
-        }
-        {
-          assertion = !cfg.zfsSupport || !cfg.trustedBoot.enable;
-          message = "Trusted GRUB does not have ZFS support";
-        }
-        {
-          assertion = !cfg.trustedBoot.enable || cfg.trustedBoot.systemHasTPM == "YES_TPM_is_activated";
-          message = "Trusted GRUB can break the system! Confirm that the system has an activated TPM by setting 'systemHasTPM'.";
-        }
-        {
           assertion = cfg.efiInstallAsRemovable -> cfg.efiSupport;
           message = "If you wish to to use boot.loader.grub.efiInstallAsRemovable, then turn on boot.loader.grub.efiSupport";
         }
@@ -841,6 +792,10 @@ in
       (mkRenamedOptionModule [ "boot" "grubDevice" ] [ "boot" "loader" "grub" "device" ])
       (mkRenamedOptionModule [ "boot" "bootMount" ] [ "boot" "loader" "grub" "bootDevice" ])
       (mkRenamedOptionModule [ "boot" "grubSplashImage" ] [ "boot" "loader" "grub" "splashImage" ])
+      (mkRemovedOptionModule [ "boot" "loader" "grub" "trustedBoot" ] ''
+        Support for Trusted GRUB has been removed, because the project
+        has been retired upstream.
+      '')
       (mkRemovedOptionModule [ "boot" "loader" "grub" "extraInitrd" ] ''
         This option has been replaced with the bootloader agnostic
         boot.initrd.secrets option. To migrate to the initrd secrets system,
