@@ -12,6 +12,7 @@
 , dbus
 , hwdata
 , mangohud32
+, addOpenGLRunpath
 , appstream
 , glslang
 , makeWrapper
@@ -28,7 +29,6 @@
 , glfw
 , nlohmann_json
 , xorg
-, addOpenGLRunpath
 , gamescopeSupport ? true # build mangoapp and mangohudctl
 }:
 
@@ -134,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    addOpenGLRunpath
     appstream
     glslang
     makeWrapper
@@ -167,18 +168,17 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/share/vulkan/implicit_layer.d/MangoHud.x86.json"
   '';
 
-  # Support Nvidia cards by adding OpenGL path and support overlaying
-  # Vulkan applications without requiring MangoHud to be installed
   postFixup = ''
+    # Add OpenGL driver path to RUNPATH to support NVIDIA cards
+    addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
+    ${lib.optionalString gamescopeSupport ''
+      addOpenGLRunpath "$out/bin/mangoapp"
+    ''}
+
+    # Prefix XDG_DATA_DIRS to support overlaying Vulkan apps without
+    # requiring MangoHud to be installed
     wrapProgram "$out/bin/mangohud" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
       --prefix XDG_DATA_DIRS : "$out/share"
-  '' + lib.optionalString (gamescopeSupport) ''
-    if [[ -e "$out/bin/mangoapp" ]]; then
-      wrapProgram "$out/bin/mangoapp" \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
-        --prefix XDG_DATA_DIRS : "$out/share"
-    fi
   '';
 
   meta = with lib; {
