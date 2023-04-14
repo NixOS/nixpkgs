@@ -24,6 +24,7 @@ let
       meta = with lib; {
         description = "Bird Looking Glass";
         homepage = "https://github.com/xddxdd/bird-lg-go";
+        changelog = "https://github.com/xddxdd/bird-lg-go/releases/tag/v${version}";
         license = licenses.gpl3Plus;
         maintainers = with maintainers; [ tchekda ];
       };
@@ -39,4 +40,9 @@ let
     vendorSha256 = "sha256-QHLq4RuQaCMjefs7Vl7zSVgjLMDXvIZcM8d6/B5ECZc=";
   };
 in
-symlinkJoin { name = "bird-lg"; paths = [ bird-lg-frontend bird-lg-proxy ]; }
+symlinkJoin {
+  name = "bird-lg-${bird-lg-frontend.version}";
+  paths = [ bird-lg-frontend bird-lg-proxy ];
+} // {
+  inherit (bird-lg-frontend) version meta;
+}
