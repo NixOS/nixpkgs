@@ -30,6 +30,7 @@
 , nlohmann_json
 , xorg
 , gamescopeSupport ? true # build mangoapp and mangohudctl
+, nix-update-script
 }:
 
 let
@@ -185,6 +186,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/mangohud" \
       --prefix XDG_DATA_DIRS : "$out/share"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more";
