@@ -31,7 +31,7 @@ let
   # Wrap it to ensure that it does not do that, preferring home directories instead.
   immutableFlutter = writeShellScript "flutter_immutable" ''
     export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
-    ${flutter}/bin/flutter --no-version-check "$@"
+    ${flutter}/bin/flutter "$@"
   '';
 
   # Tools that the Flutter tool depends on.
