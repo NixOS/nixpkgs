@@ -90,3 +90,22 @@
 +  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/devkit-internal/html DESTINATION ${CMAKE_INSTALL_DOCDIR}/devkit COMPONENT doc-devkit-internal OPTIONAL)
  
  endif()
+--- a/src/lib/geogram/geogram.pc.in	2023-03-03 16:08:49.000000000 +0100
++++ b/src/lib/geogram/geogram.pc.in	2023-04-14 14:25:52.323499268 +0200
+@@ -1,13 +1,12 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-exec_prefix=${prefix}
+-includedir=${prefix}/include/@VORPALINE_INCLUDE_SUBPATH@
+-libdir=${exec_prefix}/lib@LIB_SUFFIX@
++includedir=@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_LIBDIR@
+ 
+ Name: geogram
+ Description: fast, simple and easy-to-use primitives for geometric programming
+ Version: @VORPALINE_VERSION@
+ URL: http://alice.loria.fr/software/geogram
+-Requires.private: 
++Requires.private: zlib
+ Libs: -L${libdir} -Wl,-rpath ${libdir} -lgeogram
+ Libs.private: 
+ Cflags: -I${includedir}
