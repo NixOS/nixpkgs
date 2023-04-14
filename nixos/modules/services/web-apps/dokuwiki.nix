@@ -91,13 +91,13 @@ let
 
       page = mkOption {
         type = types.str;
-        description = "Page or namespace to restrict";
+        description = lib.mdDoc "Page or namespace to restrict";
         example = "start";
       };
 
       actor = mkOption {
         type = types.str;
-        description = "User or group to restrict";
+        description = lib.mdDoc "User or group to restrict";
         example = "@external";
       };
 
@@ -113,7 +113,7 @@ let
       in mkOption {
         type = types.enum ((attrValues available) ++ (attrNames available));
         apply = x: if isInt x then x else available.${x};
-        description = ''
+        description = lib.mdDoc ''
           Permission level to restrict the actor(s) to.
           See <https://www.dokuwiki.org/acl#background_info> for explanation
         '';
