@@ -19,7 +19,7 @@ let
   self =
 (self: llvmPackages_13.stdenv.mkDerivation (args // {
   deps = stdenvNoCC.mkDerivation (lib.recursiveUpdate (getAttrsOrNull fetchAttrs args) {
-    name = "${self.name}-deps-flutter-v${flutter.unwrapped.version}-${stdenvNoCC.targetPlatform.system}.tar.gz";
+    name = "${self.name}-deps-flutter-v${flutter.unwrapped.version}.tar.gz";
 
     nativeBuildInputs = [
       flutter
