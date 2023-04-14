@@ -71,10 +71,14 @@
 , unixODBC
 , unixODBCDrivers
   # darwin
+, moveBuildTree
 , xcbuild
 , AGL
 , AVFoundation
 , AppKit
+, Contacts
+, CoreBluetooth
+, EventKit
 , GSS
 , MetalKit
   # optional dependencies
@@ -166,6 +170,9 @@ stdenv.mkDerivation rec {
     AGL
     AVFoundation
     AppKit
+    Contacts
+    CoreBluetooth
+    EventKit
     GSS
     MetalKit
   ] ++ lib.optional libGLSupported libGL;
@@ -184,7 +191,8 @@ stdenv.mkDerivation rec {
   ++ lib.optional (libmysqlclient != null) libmysqlclient
   ++ lib.optional (postgresql != null) postgresql;
 
-  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ninja ];
+  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ninja ]
+    ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
 
   propagatedNativeBuildInputs = [ lndir ];
 

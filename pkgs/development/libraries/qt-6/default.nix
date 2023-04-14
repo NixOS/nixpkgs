@@ -38,7 +38,8 @@ let
         withGtk3 = true;
         inherit (srcs.qtbase) src version;
         inherit developerBuild;
-        inherit (darwin.apple_sdk_11_0.frameworks) AGL AVFoundation AppKit GSS MetalKit;
+        inherit (darwin.apple_sdk_11_0.frameworks)
+          AGL AVFoundation AppKit Contacts CoreBluetooth EventKit GSS MetalKit;
         patches = [
           ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
           ./patches/0002-qtbase-qmake-fix-mkspecs-for-darwin.patch
@@ -46,12 +47,6 @@ let
           ./patches/0004-qtbase-fix-locating-tzdir-on-NixOS.patch
           ./patches/0005-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
           ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
-          # Remove symlink check causing build to bail out and fail.
-          # https://gitlab.kitware.com/cmake/cmake/-/issues/23251
-          (fetchpatch {
-            url = "https://github.com/Homebrew/formula-patches/raw/c363f0edf9e90598d54bc3f4f1bacf95abbda282/qt/qt_internal_check_if_path_has_symlinks.patch";
-            sha256 = "sha256-Gv2L8ymZSbJxcmUijKlT2NnkIB3bVH9D7YSsDX2noTU=";
-          })
         ];
       };
       env = callPackage ./qt-env.nix { };

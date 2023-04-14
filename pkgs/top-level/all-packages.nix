@@ -1173,6 +1173,10 @@ with pkgs;
     name = "keep-build-tree-hook";
   } ../build-support/setup-hooks/keep-build-tree.sh;
 
+  moveBuildTree = makeSetupHook {
+    name = "move-build-tree-hook";
+  } ../build-support/setup-hooks/move-build-tree.sh;
+
   enableGCOVInstrumentation = makeSetupHook {
     name = "enable-gcov-instrumentation-hook";
   } ../build-support/setup-hooks/enable-coverage-instrumentation.sh;
