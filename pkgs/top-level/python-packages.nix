@@ -11262,6 +11262,8 @@ self: super: with self; {
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
+  sqlalchemy-views = callPackage ../development/python-modules/sqlalchemy-views { };
+
   sqlglot = callPackage ../development/python-modules/sqlglot { };
 
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
