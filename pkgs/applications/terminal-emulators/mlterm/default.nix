@@ -95,10 +95,10 @@ stdenv.mkDerivation rec {
     exec = "mlterm %U";
     icon = "mlterm";
     type = "Application";
-    comment = "Terminal emulator";
+    comment = "Multi Lingual TERMinal emulator";
     desktopName = "mlterm";
     genericName = "Terminal emulator";
-    categories = [ "Application" "System" "TerminalEmulator" ];
+    categories = [ "System" "TerminalEmulator" ];
     startupNotify = false;
   };
 
