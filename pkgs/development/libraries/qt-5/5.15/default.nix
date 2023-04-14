@@ -54,6 +54,13 @@ let
     ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
+    qtsystems = [
+      # Enable building with udisks support
+      (fetchpatch {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtsystems/-/raw/a23fd92222c33479d7f3b59e48116def6b46894c/debian/patches/2001_build_with_udisk.patch";
+        hash = "sha256-B/z/+tai01RU/bAJSCp5a0/dGI8g36nwso8MiJv27YM=";
+      })
+    ];
     qtwebengine = [
       (fetchpatch {
         url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a6f16c6daea3b5a1f7bc9f175d1645922c131563/qt5/qt5-webengine-python3.patch";
@@ -166,6 +173,7 @@ let
       qtserialport = callPackage ../modules/qtserialport.nix {};
       qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};
+      qtsystems = callPackage ../modules/qtsystems.nix {};
       qtscxml = callPackage ../modules/qtscxml.nix {};
       qttools = callPackage ../modules/qttools.nix {};
       qttranslations = callPackage ../modules/qttranslations.nix {};
