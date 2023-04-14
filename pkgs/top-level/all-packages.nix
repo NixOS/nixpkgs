@@ -29469,6 +29469,8 @@ with pkgs;
     extraIntegrations = extras;
   };
 
+  dayon = callPackage ../applications/networking/remote/dayon { };
+
   ddgr = callPackage ../applications/misc/ddgr { };
 
   deadbeef = callPackage ../applications/audio/deadbeef { };
