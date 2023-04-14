@@ -5,7 +5,6 @@
 , libssh2 #build-in ssh
 , fcitx5, fcitx5-gtk, ibus, uim #IME
 , wrapGAppsHook #color picker in mlconfig
-, Cocoa #Darwin
 }:
 
 stdenv.mkDerivation rec {
