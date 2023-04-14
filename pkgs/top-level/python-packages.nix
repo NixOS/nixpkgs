@@ -4131,7 +4131,7 @@ self: super: with self; {
 
   gpgme = toPythonModule (pkgs.gpgme.override {
     pythonSupport = true;
-    inherit python;
+    python3 = python;
   });
 
   gphoto2 = callPackage ../development/python-modules/gphoto2 { };
