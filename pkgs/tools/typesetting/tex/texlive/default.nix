@@ -187,9 +187,9 @@ let
     let
       # a TeX package is an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
       # the derivations make up the TeX package and optionally (for backward compatibility) its dependencies
-      tlPkgToSets = { pkgs, ... }: map ({ pname, tlType, version, outputName ? "", ... }@pkg: {
+      tlPkgToSets = { pkgs, ... }: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
           # outputName required to distinguish among bin.core-big outputs
-          key = "${pname}.${tlType}-${version}-${outputName}";
+          key = "${pkg.pname or pkg.name}.${tlType}-${version}-${outputName}";
           inherit pkg;
         }) pkgs;
       pkgListToSets = lib.concatMap tlPkgToSets; in
