@@ -24,13 +24,12 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 // {
   # qtpim has no official releases
   qtpim = {
-    version = "unstable-2020-11-02";
+    version = "unstable-2021-04-09";
     src = fetchFromGitHub {
       owner = "qt";
       repo = "qtpim";
-      # Last commit before Qt5 support was broken
-      rev = "f9a8f0fc914c040d48bbd0ef52d7a68eea175a98";
-      hash = "sha256-/1g+vvHjuRLB1vsm41MrHbBZ+88Udca0iEcbz0Q1BNQ=";
+      rev = "713bb697fa24f6d6d4e2521ee3db2de237ea6f05";
+      hash = "sha256-rJ6DgkiozteQVDeTtbsmzgjzRsmKHKSJ9xehltvVRho=";
     };
   };
 
