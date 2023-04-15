@@ -11839,6 +11839,8 @@ with pkgs;
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
+  robo = callPackage ../development/tools/robo { };
+
   rosie = callPackage ../tools/text/rosie { };
 
   rounded-mgenplus = callPackage ../data/fonts/rounded-mgenplus { };
