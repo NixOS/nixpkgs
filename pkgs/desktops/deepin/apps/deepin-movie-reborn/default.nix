@@ -46,20 +46,30 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      name = "chore: dont use </usr/include/linux/cdrom.h>";
-      url = "https://github.com/linuxdeepin/deepin-movie-reborn/commit/2afc63541589adab8b0c8c48e290f03535ec2996.patch";
-      sha256 = "sha256-Q9dv5L5sUGeuvNxF8ypQlZuZVuU4NIR/8d8EyP/Q5wk=";
-    })
-    (fetchpatch {
-      name = "feat: rewrite libPath to read LD_LIBRARY_PATH";
+      name = "feat-rewrite-libPath-to-read-LD_LIBRARY_PATH.patch";
       url = "https://github.com/linuxdeepin/deepin-movie-reborn/commit/432bf452ed244c256e99ecaf80bb6a0eef9b4a74.patch";
       sha256 = "sha256-5hRQ8D9twBKgouVpIBa1pdAGk0lI/wEdQaHBBHFCZBA";
     })
   ];
 
   postPatch = ''
+    # https://github.com/linuxdeepin/deepin-movie-reborn/pull/198
+    substituteInPlace src/common/diskcheckthread.cpp \
+      --replace "/usr/include/linux/cdrom.h" "linux/cdrom.h"
     substituteInPlace src/widgets/toolbox_proxy.cpp \
       --replace "/bin/bash" "${runtimeShell}"
+
+    # libdmr always assume that these libraries exist
+    # otherwise it will lead to coredump
+    # This affects the preview plugin for dde-file-manager
+
+    substituteInPlace src/libdmr/{filefilter.cpp,playlist_model.cpp,gstutils.cpp} \
+      --replace 'LibraryLoader::libPath("libavcodec.so")' '"${lib.getLib ffmpeg}/lib/libavcodec.so"' \
+      --replace 'LibraryLoader::libPath("libavformat.so")' '"${lib.getLib ffmpeg}/lib/libavformat.so"' \
+      --replace 'LibraryLoader::libPath("libavutil.so")' '"${lib.getLib ffmpeg}/lib/libavutil.so"' \
+      --replace 'LibraryLoader::libPath("libffmpegthumbnailer.so")' '"${lib.getLib ffmpegthumbnailer}/lib/libffmpegthumbnailer.so"' \
+      --replace 'LibraryLoader::libPath("libgstreamer-1.0.so")' '"${lib.getLib gst_all_1.gstreamer}/lib/libgstreamer-1.0.so"' \
+      --replace 'LibraryLoader::libPath("libgstpbutils-1.0.so")' '"${lib.getLib gst_all_1.gst-plugins-base}/lib/libgstpbutils-1.0.so"'
   '';
 
   outputs = [ "out" "dev" ];
