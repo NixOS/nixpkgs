@@ -184,6 +184,7 @@ stdenv.mkDerivation rec {
     libinput
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     AppKit
+    CoreBluetooth
   ]
   ++ lib.optional withGtk3 gtk3
   ++ lib.optional developerBuild gdb

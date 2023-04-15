@@ -14,7 +14,7 @@
 , propagateDoc ? cc != null && cc ? man
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
 , nixSupport ? {}
-, isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
+, isGNU ? false, isClang ? cc.isClang or false, isCcache ? cc.isCcache or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
 , grossHackForStagingNext ? false
@@ -208,7 +208,7 @@ stdenv.mkDerivation {
         local dst="$1"
         local wrapper="$2"
         export prog="$3"
-        export use_response_file_by_default=${if isClang then "1" else "0"}
+        export use_response_file_by_default=${if isClang && !isCcache then "1" else "0"}
         substituteAll "$wrapper" "$out/bin/$dst"
         chmod +x "$out/bin/$dst"
       }
