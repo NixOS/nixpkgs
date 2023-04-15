@@ -86,18 +86,20 @@ let
         ${lib.optionalString (pubspecLockFile != null) "install -m644 ${pubspecLockFile} pubspec.lock"}
         if ! cp "pubspec.lock" "$out/pubspec"; then
           echo 1>&2 -e '\nThe pubspec.lock file is missing. This is a requirement for reproducible builds.' \
-                       '\nThe following should be done to fix this issue:' \
+                       '\nThe following steps should be taken to fix this issue:' \
                        '\n  1. If you are building an application, contact the developer(s).' \
                        '\n     The pubspec.lock file should be provided with the source code.' \
                        '\n     https://dart.dev/guides/libraries/private-files#pubspeclock' \
-                       '\n  2. An attempt to generate and print a pubspec.lock file will be made now.' \
-                       '\n     Save it to a file, and provide the path to that file in the pubspecLockFile argument.' \
+                       '\n  2. An attempt to generate and print a compressed pubspec.lock file will be made now.' \
+                       '\n     It is compressed with gzip and base64 encoded.' \
+                       '\n     Paste it to a file and extract it with `base64 -d pubspec.lock.in | gzip -d > pubspec.lock`.' \
+                       '\n     Provide the path to the pubspec.lock file in the pubspecLockFile argument.' \
                        '\n     This must be updated whenever the application is updated.' \
                        '\n'
           _pub_get
           echo ""
-          cat 1>&2 pubspec.lock
-          echo 1>&2 -e '\nA pubspec.lock file has been printed. Please see the informational message above.'
+          gzip --to-stdout --best pubspec.lock | base64 1>&2
+          echo 1>&2 -e '\nA gzipped pubspec.lock file has been printed. Please see the informational message above.'
           exit 1
         fi
 
