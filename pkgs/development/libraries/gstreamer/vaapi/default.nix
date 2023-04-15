@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    python3
     bzip2
 
     # documentation
@@ -62,7 +63,6 @@ stdenv.mkDerivation rec {
     libGLU
     nasm
     libvpx
-    python3
   ];
 
   mesonFlags = [

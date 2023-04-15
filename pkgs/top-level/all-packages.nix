@@ -26137,7 +26137,8 @@ with pkgs;
     alsa-ucm-conf
     alsa-utils;
 
-  inherit (callPackage ../misc/arm-trusted-firmware {})
+  arm-trusted-firmware = callPackage ../misc/arm-trusted-firmware { };
+  inherit (arm-trusted-firmware)
     buildArmTrustedFirmware
     armTrustedFirmwareTools
     armTrustedFirmwareAllwinner
