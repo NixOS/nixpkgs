@@ -107,7 +107,12 @@ let
 
         # Remove Git directories in the Git package cache - these are rarely used by Pub,
         # which instead maintains a corresponsing mirror and clones cached packages through it.
-        find "$PUB_CACHE" -name .git -type d -prune -exec rm -rf {} +
+        #
+        # An exception is made to keep .git/pub-packages files, which are important.
+        # https://github.com/dart-lang/pub/blob/c890afa1d65b340fa59308172029680c2f8b0fc6/lib/src/source/git.dart#L621
+        if [ -d "$PUB_CACHE"/git ]; then
+          find "$PUB_CACHE"/git -maxdepth 4 -path "*/.git/*" ! -name "pub-packages" -prune -exec rm -rf {} +
+        fi
 
         # Remove continuously updated package metadata caches
         rm -rf "$PUB_CACHE"/hosted/*/.cache # Not pinned by pubspec.lock
