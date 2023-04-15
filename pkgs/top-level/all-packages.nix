@@ -12289,6 +12289,8 @@ with pkgs;
 
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
 
+  sqlboiler = callPackage ../development/tools/sqlboiler { };
+
   ssh-askpass-fullscreen = callPackage ../tools/networking/ssh-askpass-fullscreen { };
 
   sshguard = callPackage ../tools/security/sshguard { };
