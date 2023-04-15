@@ -22,7 +22,7 @@ let
 in
 stdenv.mkDerivation {
   inherit version;
-  name = "fluffychat";
+  pname = "fluffychat";
 
   src = fetchzip {
     url = "https://gitlab.com/api/v4/projects/16112282/packages/generic/fluffychat/${version}/fluffychat-${platformMap.${stdenv.hostPlatform.system}}.tar.gz";
