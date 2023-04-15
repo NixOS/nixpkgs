@@ -22,7 +22,10 @@ stdenv.mkDerivation rec {
   pname = "libqmi";
   version = "1.32.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev"
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
