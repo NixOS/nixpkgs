@@ -2691,9 +2691,11 @@ self: super: with self; {
 
   django-q = callPackage ../development/python-modules/django-q { };
 
-  django-scopes = callPackage ../development/python-modules/django-scopes { };
+  django-scheduler = callPackage ../development/python-modules/django-scheduler { };
 
   django-scim2 = callPackage ../development/python-modules/django-scim2 { };
+
+  django-scopes = callPackage ../development/python-modules/django-scopes { };
 
   django-shortuuidfield = callPackage ../development/python-modules/django-shortuuidfield { };
 
