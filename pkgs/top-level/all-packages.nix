@@ -1639,6 +1639,8 @@ with pkgs;
 
   speedtest-rs = callPackage ../tools/networking/speedtest-rs { };
 
+  stargazer = callPackage ../servers/gemini/stargazer { };
+
   steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch { };
 
   supermin = callPackage ../tools/virtualization/supermin { };
