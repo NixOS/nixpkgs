@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zN9FI4emOAlz0pJzY+nLuTn6IGiRWm+Tf/nSRSICRoM=";
   };
 
+  outputs = [ "out" "dev" ];
+
   configureFlags = [
     "--enable-optional-progs"
     "--enable-libkeymap"
