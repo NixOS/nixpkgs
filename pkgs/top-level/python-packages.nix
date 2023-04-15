@@ -2574,7 +2574,9 @@ self: super: with self; {
 
   django-autocomplete-light = callPackage ../development/python-modules/django-autocomplete-light { };
 
-  django-bower = callPackage ../development/python-modules/django-bower { };
+  django-bower = callPackage ../development/python-modules/django-bower {
+    bower = pkgs.nodePackages.bower;
+  };
 
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
 
@@ -2695,9 +2697,11 @@ self: super: with self; {
 
   django-q = callPackage ../development/python-modules/django-q { };
 
-  django-scopes = callPackage ../development/python-modules/django-scopes { };
+  django-scheduler = callPackage ../development/python-modules/django-scheduler { };
 
   django-scim2 = callPackage ../development/python-modules/django-scim2 { };
+
+  django-scopes = callPackage ../development/python-modules/django-scopes { };
 
   djangoql = callPackage ../development/python-modules/djangoql { };
 
