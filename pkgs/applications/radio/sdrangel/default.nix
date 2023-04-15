@@ -23,7 +23,6 @@
 , limesuite
 , libbladeRF
 , mbelib
-, mkDerivation
 , ninja
 , ocl-icd
 , opencv3
@@ -45,10 +44,11 @@
 , sgp4
 , soapysdr-with-plugins
 , uhd
+, wrapQtAppsHook
 , zlib
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "sdrangel";
   version = "7.13.0";
 
@@ -59,7 +59,7 @@ mkDerivation rec {
     hash = "sha256-xG41FNlMfqH5MaGVFFENP0UFEkZYiWhtpNSPh2s4Irk=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
+  nativeBuildInputs = [ cmake ninja pkg-config wrapQtAppsHook ];
 
   buildInputs = [
     airspy
@@ -106,12 +106,10 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DAPT_DIR=${aptdec}"
-    "-DDAB_INCLUDE_DIR:PATH=${dab_lib}/include/dab_lib"
-    "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
-    "-DLIMESUITE_INCLUDE_DIR:PATH=${limesuite}/include"
-    "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DDAB_DIR=${dab_lib}"
     "-DSGP4_DIR=${sgp4}"
     "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
+    "-Wno-dev"
   ];
 
   LD_LIBRARY_PATH = "${ocl-icd}/lib";
