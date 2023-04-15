@@ -329,6 +329,16 @@ rec {
 
     # Other architectures should use ELF in embedded situations.
     elf          = {};
+    # Not really an ABI, rather an object format.
+    coff         = {
+      assertions = [
+        { assertion = platform: platform.isWindows || platform.isUefi;
+          message = ''
+            The "COFF" object file format is for Windows or UEFI targets.
+          '';
+        }
+      ];
+    };
 
     androideabi  = {};
     android      = {
@@ -377,11 +387,9 @@ rec {
     uclibceabihf = { float = "hard"; };
     uclibc       = {};
 
-    # object format, not an abi...
-    coff         = {}; # TODO: probably assert win32?
-
     unknown = {};
   };
+
 
   ################################################################################
 
