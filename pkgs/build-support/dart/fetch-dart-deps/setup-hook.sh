@@ -29,18 +29,13 @@ _setupPubCache() {
     done
 
     # ensure we're using a lockfile for the right package version
-    if [ -e pubspec.lock ]; then
-        # FIXME: currently this is broken. in theory this should not break, but flutter has it's own way of doing things.
-        # diff -u pubspec.lock "$deps/pubspec/pubspec.lock"
-        true
-    else
+    if [ ! -e pubspec.lock ]; then
         cp -v "$deps/pubspec/pubspec.lock" .
         # Sometimes the pubspec.lock will get opened in write mode, even when offline.
         chmod u+w pubspec.lock
-    fi
-    if ! diff -u pubspec.yaml "$deps/pubspec/pubspec.yaml"; then
-      echo 1>&2 -e   'The pubspec.yaml of the project derivation differs from the one in the dependency derivation.' \
+    elif [ ! { diff -u pubspec.lock "$deps/pubspec/pubspec.lock" && diff -u pubspec.yaml "$deps/pubspec/pubspec.yaml" } ]; then
+        echo 1>&2 -e 'The pubspec.lock or pubspec.yaml of the project derivation differs from the one in the dependency derivation.' \
                    '\nYou most likely forgot to update the vendorHash while updating the sources.'
-      exit 1
+        exit 1
     fi
 }
