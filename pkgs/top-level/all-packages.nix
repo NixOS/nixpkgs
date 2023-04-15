@@ -1425,7 +1425,7 @@ with pkgs;
 
   akku = callPackage ../tools/package-management/akku { };
 
-  albert = libsForQt5.callPackage ../applications/misc/albert { };
+  albert = qt6Packages.callPackage ../applications/misc/albert { };
 
   alice-tools = callPackage ../tools/games/alice-tools {
     withGUI = false;
