@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/indilib/indi/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ hjones2199 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    # error: use of undeclared identifier 'MSG_NOSIGNAL'
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

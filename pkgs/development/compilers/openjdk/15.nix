@@ -16,6 +16,9 @@ let
     __toString = self: "${self.major}${self.update}${self.build}";
   };
 
+  # when building a headless jdk, also bootstrap it with a headless jdk
+  openjdk-bootstrap = openjdk15-bootstrap.override { gtkSupport = !headless; };
+
   openjdk = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
     inherit version;
@@ -29,7 +32,7 @@ let
     buildInputs = [
       cpio perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk15-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -57,7 +60,7 @@ let
     '';
 
     configureFlags = [
-      "--with-boot-jdk=${openjdk15-bootstrap.home}"
+      "--with-boot-jdk=${openjdk-bootstrap.home}"
       "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
@@ -150,7 +153,7 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk15-bootstrap ];
+    disallowedReferences = [ openjdk-bootstrap ];
 
     pos = builtins.unsafeGetAttrPos "major" version;
     meta = import ./meta.nix lib version.major;
