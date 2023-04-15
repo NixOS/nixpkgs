@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, libpng, libsndfile
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libpng
+, libsndfile
 }:
 
 stdenv.mkDerivation {
