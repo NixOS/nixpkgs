@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "parsy";
     owner = "python-parsy";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-/Bu3xZUpXI4WiYJKKWTJTdSFq8pwC1PFDw0Kr8s3Fe8=";
   };
 
@@ -30,7 +30,8 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/python-parsy/parsy";
     description = "Easy-to-use parser combinators, for parsing in pure Python";
-    license = [ licenses.mit ];
+    changelog = "https://github.com/python-parsy/parsy/blob/v${version}/docs/history.rst";
+    license = licenses.mit;
     maintainers = with maintainers; [ milibopp ];
   };
 }
