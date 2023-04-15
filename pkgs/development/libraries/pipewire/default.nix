@@ -107,6 +107,11 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/a275e825c75c93775baaeb17479e38d035d9b79a.patch";
+        hash = "sha256-y1kDtMy5MgDPv/TgV8xZ8rmzQ12ZsZafKMqJ3+QIu8E=";
+      })
     ];
 
     strictDeps = true;
