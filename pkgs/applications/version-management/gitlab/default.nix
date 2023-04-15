@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
+, ruby_2_7, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
 , fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 }:
@@ -17,7 +17,8 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    inherit ruby;
+    # GitLab doesn't support Ruby 3 https://gitlab.com/groups/gitlab-org/-/epics/5149
+    ruby = ruby_2_7;
     gemdir = ./rubyEnv;
     gemset =
       let x = import (gemdir + "/gemset.nix") src;
