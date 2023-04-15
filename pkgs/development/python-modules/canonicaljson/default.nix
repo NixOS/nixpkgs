@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, frozendict
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -10,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "canonicaljson";
-  version = "1.6.4";
+  version = "2.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bAmyEZUR8w6xEmz82XOhCCTiDxz9JQOc3j0SGN2cjY8=";
+    hash = "sha256-4v2u8df63F2ctZvT0NQbBk3dppeAmsQyXc7XIdEvET8=";
   };
 
   nativeBuildInputs = [
@@ -28,18 +27,8 @@ buildPythonPackage rec {
     simplejson
   ];
 
-  passthru.optional-dependencies = {
-    frozendict = [
-      frozendict
-    ];
-  };
-
   checkInputs = [
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    "test_frozen_dict"
   ];
 
   pythonImportsCheck = [
