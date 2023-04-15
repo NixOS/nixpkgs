@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, SDL, SDL_image, libGLU, libGL} :
+{ lib, stdenv, fetchpatch, fetchurl, SDL, SDL_image, libGLU, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "kobodeluxe";
@@ -14,7 +14,16 @@ stdenv.mkDerivation rec {
     sed -e 's/char \*tok/const char \*tok/' -i graphics/window.cpp
   '';
 
-  patches = [ ./glibc29.patch ];
+  patches = [
+    (fetchpatch { # Fixes a build failure: error const enemy kind pipe2 redeclared as different kind of symbol
+      url = "https://sources.debian.org/data/main/k/${pname}/${version}-10/debian/patches/04_enemies-pipe-decl.patch";
+      sha256 = "sha256-myMhB7+7y6EeD+xIfeHTbJPLrulyQmzpTxuNX1azpSY=";
+    })
+    (fetchpatch { # Fixes the game being stuck in the pause state
+      url = "https://sources.debian.org/data/main/k/${pname}/${version}-10/debian/patches/ignore-appinputfocus.patch";
+      sha256 = "sha256-RTLeF2hvQJ4F9+dJvTL25VXD1RFrJsmcDsZSIYOhYYo=";
+    })
+  ];
 
   meta = {
     homepage = "http://olofson.net/kobodl/";
