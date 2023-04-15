@@ -1,6 +1,5 @@
 { lib
 , stdenvNoCC
-, nukeReferences
 , llvmPackages_13
 , cacert
 , flutter
@@ -19,12 +18,11 @@ let
   self =
 (self: llvmPackages_13.stdenv.mkDerivation (args // {
   deps = stdenvNoCC.mkDerivation (lib.recursiveUpdate (getAttrsOrNull fetchAttrs args) {
-    name = "${self.name}-deps-flutter-v${flutter.unwrapped.version}.tar.gz";
+    name = "${self.name}-deps-flutter";
 
     nativeBuildInputs = [
       flutter
       git
-      nukeReferences
     ];
 
     # avoid pub phase
@@ -36,42 +34,33 @@ let
       TMP=$(mktemp -d)
       export HOME="$TMP"
 
+      # Configure the package cache
+      export PUB_CACHE="$out/cache/.pub-cache"
+      mkdir -p "$PUB_CACHE"
+
       flutter config --no-analytics &>/dev/null # mute first-run
       flutter config --enable-linux-desktop
       flutter packages get
       ${lib.optionalString (args ? flutterExtraFetchCommands) args.flutterExtraFetchCommands}
 
-      RES="$TMP"
-
       # so we can use lock, diff yaml
-      cp "pubspec.yaml" "$RES"
-      cp "pubspec.lock" "$RES"
-
-      # replace paths with placeholders
-      find "$RES" -type f -exec sed -i \
-        -e s,$TMP,${placeholder_deps},g \
-        -e s,${flutter.unwrapped},${placeholder_flutter},g \
-        {} +
+      mkdir -p "$out/pubspec"
+      cp "pubspec.yaml" "$out/pubspec"
+      cp "pubspec.lock" "$out/pubspec"
 
       # nuke nondeterminism
 
       # deterministic git repos
-      find "$RES" -iname .git -type d | while read -r repoGit; do
+      find "$PUB_CACHE" -iname .git -type d | while read -r repoGit; do
         make_deterministic_repo "$(dirname "$repoGit")"
       done
 
-      # Impure Pub files
-      rm -rf "$RES"/.pub-cache/hosted/*/.cache # Not pinned by pubspec.lock
-      rm -f "$RES"/.pub-cache/README.md # May change with different Dart versions
-
-      # nuke refs
-      find "$RES" -type f -exec nuke-refs {} +
-
-      # Build a reproducible tar, per instructions at https://reproducible-builds.org/docs/archives/
-      tar --owner=0 --group=0 --numeric-owner --format=gnu \
-          --sort=name --mtime="@$SOURCE_DATE_EPOCH" \
-          -czf "$out" -C "$RES" \
-          pubspec.yaml pubspec.lock .pub-cache
+      # Impure package cache files
+      rm -rf "$PUB_CACHE"/hosted/*/.cache # Not pinned by pubspec.lock
+      rm -f "$PUB_CACHE"/README.md # May change with different Dart versions
+      rm -rf "$PUB_CACHE"/_temp # https://github.com/dart-lang/pub/blob/c890afa1d65b340fa59308172029680c2f8b0fc6/lib/src/system_cache.dart#L131
+      rm -rf "$PUB_CACHE"/log # https://github.com/dart-lang/pub/blob/c890afa1d65b340fa59308172029680c2f8b0fc6/lib/src/command.dart#L348
+      rm -rf "$PUB_CACHE"/git/cache/*/* # Recreate this on the other end. See: https://github.com/dart-lang/pub/blob/c890afa1d65b340fa59308172029680c2f8b0fc6/lib/src/source/git.dart#L531
     '';
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
@@ -84,26 +73,30 @@ let
     # unnecesarry
     dontFixup = true;
 
+    # Patching shebangs introduces input references to this fixed-output derivation.
+    # This triggers a bug in Nix, causing the output path to change unexpectedly.
+    # https://github.com/NixOS/nix/issues/6660
+    dontPatchShebangs = true;
+
     outputHashAlgo = if self ? vendorHash then null else "sha256";
-    # outputHashMode = "recursive";
+    outputHashMode = "recursive";
     outputHash = if self ? vendorHash then
       self.vendorHash
     else if self ? vendorSha256 then
       self.vendorSha256
     else
       lib.fakeSha256;
-
   });
 
-  nativeBuildInputs = [ flutter ] ++ lib.optionals (args ? nativeBuildInputs) args.nativeBuildInputs;
+  nativeBuildInputs = [
+    flutter
+    git
+  ] ++ lib.optionals (args ? nativeBuildInputs) args.nativeBuildInputs;
 
   buildInputs = lib.optionals (args ? buildInputs) args.buildInputs;
 
   configurePhase = ''
     runHook preConfigure
-
-    # for some reason fluffychat build breaks without this - seems file gets overriden by some tool
-    cp pubspec.yaml pubspec-backup
 
     TMP=$(mktemp -d)
     export HOME="$TMP"
@@ -111,24 +104,40 @@ let
     flutter config --no-analytics &>/dev/null # mute first-run
     flutter config --enable-linux-desktop
 
-    # extract deps
-    tar xzf "$deps" -C "$HOME"
+    # Configure the package cache
+    export PUB_CACHE="$TMP/.pub-cache"
+    mkdir -p "$PUB_CACHE"
 
-    # after extracting update paths to point to real paths
-    find "$HOME" -type f -exec sed -i \
-      -e s,${placeholder_deps},"$HOME",g \
-      -e s,${placeholder_flutter},${flutter},g \
-      {} +
+    # Link the Git package cache.
+    mkdir -p "$PUB_CACHE/git"
+    ln -s "$deps/cache/.pub-cache/git"/* "$PUB_CACHE/git"
+
+    # Recreate the internal Git cache subdirectory.
+    # See: https://github.com/dart-lang/pub/blob/c890afa1d65b340fa59308172029680c2f8b0fc6/lib/src/source/git.dart#L339)
+    # Blank repositories are created instead of attempting to match the cache mirrors to checkouts.
+    # This is not an issue, as pub does not need the mirrors in the Flutter build process.
+    rm "$PUB_CACHE/git/cache" && mkdir "$PUB_CACHE/git/cache"
+    for mirror in $(ls -A "$deps/cache/.pub-cache/git/cache"); do
+      git --git-dir="$PUB_CACHE/git/cache/$mirror" init --bare --quiet
+    done
+
+    # Link the remaining package cache directories.
+    # At this point, any subdirectories that must be writable must have been taken care of.
+    for file in $(comm -23 <(ls -A "$deps/cache/.pub-cache") <(ls -A "$PUB_CACHE")); do
+      ln -s "$deps/cache/.pub-cache/$file" "$PUB_CACHE/$file"
+    done
 
     # ensure we're using a lockfile for the right package version
     if [ -e pubspec.lock ]; then
       # FIXME: currently this is broken. in theory this should not break, but flutter has it's own way of doing things.
-      # diff -u pubspec.lock "$HOME/pubspec.lock"
+      # diff -u pubspec.lock "$deps/pubspec/pubspec.lock"
       true
     else
-      cp -v "$HOME/pubspec.lock" .
+      cp -v "$deps/pubspec/pubspec.lock" .
+      # Sometimes the pubspec.lock will get opened in write mode, even when offline.
+      chmod u+w pubspec.lock
     fi
-    diff -u pubspec.yaml "$HOME/pubspec.yaml"
+    diff -u pubspec.yaml "$deps/pubspec/pubspec.yaml"
 
     runHook postConfigure
   '';
@@ -136,8 +145,6 @@ let
   buildPhase = ''
     runHook preBuild
 
-    # for some reason fluffychat build breaks without this - seems file gets overriden by some tool
-    mv pubspec-backup pubspec.yaml
     mkdir -p build/flutter_assets/fonts
 
     flutter packages get --offline -v

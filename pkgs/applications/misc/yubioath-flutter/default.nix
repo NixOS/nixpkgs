@@ -21,7 +21,7 @@ flutter.mkFlutterApp rec {
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
-  vendorHash = "sha256-/WP6oN5avAILZd3SkC/jmsqNL+BxdQGUjNwsjLF9RB4=";
+  vendorHash = "sha256-OU433z6Cz+jNJAjIiPO6cxySyejQ4SpSvuUHJsdT8TA=";
 
   postPatch = ''
     substituteInPlace linux/CMakeLists.txt \
