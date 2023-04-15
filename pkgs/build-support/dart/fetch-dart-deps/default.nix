@@ -148,7 +148,7 @@ let
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
       outputHash = if vendorHash != "" then vendorHash else lib.fakeSha256;
-    } // drvArgs);
+    } // (removeAttrs drvArgs [ "name" "pname" ]));
 in
 (makeSetupHook {
   # The setup hook should not be part of the fixed-output derivation.
