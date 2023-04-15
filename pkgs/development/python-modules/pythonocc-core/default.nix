@@ -48,6 +48,12 @@ stdenv.mkDerivation rec {
     "-DPYTHONOCC_WRAP_SMESH=TRUE"
   ];
 
+  passthru = {
+    # `python3Packages.pythonocc-core` must be updated in tandem with
+    # `opencascade-occt`, and including it in the bulk updates often breaks it.
+    skipBulkUpdate = true;
+  };
+
   meta = with lib; {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
     homepage = "https://github.com/tpaviot/pythonocc-core";
