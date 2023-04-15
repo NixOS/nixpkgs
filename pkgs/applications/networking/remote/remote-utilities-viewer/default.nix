@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "Remote Utilities Viewer for Linux";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = [ pepzi ];
+    maintainers = [ ];
   };
 }
 
