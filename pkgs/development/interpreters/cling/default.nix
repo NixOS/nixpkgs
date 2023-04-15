@@ -15,6 +15,14 @@
 }:
 
 let
+  # The LLVM 9 headers have a couple bugs we need to patch
+  fixedLlvmDev = runCommand "llvm-dev-${llvmPackages_9.llvm.version}" { buildInputs = [git]; } ''
+    cp -r ${llvmPackages_9.llvm.dev} $out
+    cd $out
+    chmod -R u+w include
+    git apply ${./fix-llvm-include.patch}
+  '';
+
   unwrapped = stdenv.mkDerivation rec {
     pname = "cling-unwrapped";
     version = "0.9";
@@ -24,7 +32,6 @@ let
       rev = "cling-v0.9";
       sha256 = "sha256-ft1NUIclSiZ9lN3Z3DJCWA0U9q/K1M0TKkZr+PjsFYk=";
     };
-    # src = /home/tom/tools/clang;
 
     clingSrc = fetchFromGitHub {
       owner = "root-project";
@@ -32,40 +39,33 @@ let
       rev = "v0.9";
       sha256 = "0wx3fi19wfjcph5kclf8108i436y79ddwakrcf0lgxnnxhdjyd29";
     };
-    # clingSrc = /home/tom/tools/cling;
-
-    llvmSrc = fetchgit {
-      url = "http://root.cern/git/llvm.git";
-      rev = "cling-v0.9";
-      sha256 = "sha256-jts7DMnXwZF/pzUfWEQeJmj5XlOb51aXn6KExMbmcXg=";
-    };
-    # llvmSrc = /home/tom/tools/llvm;
 
     prePatch = ''
       echo "add_llvm_external_project(cling)" >> tools/CMakeLists.txt
 
       cp -r $clingSrc ./tools/cling
       chmod -R a+w ./tools/cling
-
-      mkdir ./interpreter
-      cp -r $llvmSrc ./interpreter/llvm
-      chmod -R a+w ./interpreter/llvm
     '';
 
     patches = [
       # Applied to clang src
       ./no-clang-cpp.patch
-
-      # Applied to cling src
-      ./use-patched-llvm.patch
     ];
 
-    nativeBuildInputs = [ python3 git cmake llvmPackages_9.llvm.dev ];
-    buildInputs = [ libffi llvmPackages_9.llvm zlib ncurses ];
+    nativeBuildInputs = [ python3 git cmake ];
+    buildInputs = [ libffi zlib ncurses ];
 
     strictDeps = true;
 
     cmakeFlags = [
+      "-DLLVM_BINARY_DIR=${llvmPackages_9.llvm.out}" # llvm_dir
+      "-DLLVM_CONFIG=${llvmPackages_9.llvm.dev}/bin/llvm-config" # llvm_config_path
+      "-DLLVM_LIBRARY_DIR=${llvmPackages_9.llvm.lib}/lib" # os.path.join(llvm_dir, 'lib')
+      "-DLLVM_MAIN_INCLUDE_DIR=${fixedLlvmDev}/include" # os.path.join(llvm_dir, 'include')
+      "-DLLVM_TABLEGEN_EXE=${llvmPackages_9.llvm.out}/bin/llvm-tblgen" # os.path.join(llvm_dir, 'bin', 'llvm-tblgen')
+      "-DLLVM_TOOLS_BINARY_DIR=${llvmPackages_9.llvm.out}/bin" # os.path.join(llvm_dir, 'bin')
+      "-DLLVM_TOOL_CLING_BUILD=ON"
+
       "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"
       "-DLLVM_ENABLE_RTTI=ON"
 
@@ -101,7 +101,7 @@ let
     "-nostdinc++"
     "-isystem" "${lib.getDev stdenv.cc.libc}/include"
     "-I" "${lib.getDev unwrapped}/include"
-    "-I" "${lib.getLib unwrapped}/lib/clang/5.0.2/include"
+    # "-I" "${lib.getLib unwrapped}/lib/clang/5.0.2/include"
   ];
 
   # Autodetect the include paths for the compiler used to build Cling, in the same way Cling does at
