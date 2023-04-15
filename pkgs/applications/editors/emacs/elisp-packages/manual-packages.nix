@@ -81,6 +81,8 @@ in
 
   voicemacs = callPackage ./manual-packages/voicemacs { };
 
+  wat-mode = callPackage ./manual-packages/wat-mode { };
+
   yes-no = callPackage ./manual-packages/yes-no { };
 
   youtube-dl = callPackage ./manual-packages/youtube-dl { };
