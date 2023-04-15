@@ -17,7 +17,6 @@
 , qtbase ? null
 , pythonSupport ? false
 , swig2 ? null
-, python ? null
 # only for passthru.tests
 , libsForQt5
 , python3
@@ -51,10 +50,14 @@ stdenv.mkDerivation rec {
     pkg-config
     texinfo
   ] ++ lib.optionals pythonSupport [
+    python3.pythonForBuild
     ncurses
-    python
     swig2
     which
+  ];
+
+  buildInputs = lib.optionals pythonSupport [
+    python3
   ];
 
   propagatedBuildInputs = [
