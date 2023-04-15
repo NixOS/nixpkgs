@@ -12293,6 +12293,8 @@ with pkgs;
 
   ssh-askpass-fullscreen = callPackage ../tools/networking/ssh-askpass-fullscreen { };
 
+  sshed = callPackage ../tools/networking/sshed { };
+
   sshguard = callPackage ../tools/security/sshguard { };
 
   sshping = callPackage ../tools/networking/sshping { };
