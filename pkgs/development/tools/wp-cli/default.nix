@@ -1,51 +1,34 @@
-{ stdenv
-, lib
-, fetchurl
-, formats
-, installShellFiles
-, makeWrapper
-, php
-}:
+{ lib, fetchFromGitHub, fetchpatch, php, makeBinaryWrapper }:
 
-let
-  version = "2.6.0";
-
-  completion = fetchurl {
-    url = "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
-    hash = "sha256-RDygYQzK6NLWrOug7EqnkpuH7Wz1T2Zq/tGNZjoYo5U=";
-  };
-
-  ini = (formats.ini { }).generate "php.ini" {
-    PHP.memory_limit = -1; # no limit as composer uses a lot of memory
-    Phar."phar.readonly" = "Off";
-  };
-
-in
-stdenv.mkDerivation rec {
+php.buildComposerProject (finalAttrs: {
   pname = "wp-cli";
-  inherit version;
+  version = "2.7.1";
 
-  src = fetchurl {
-    url = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${pname}-${version}.phar";
-    hash = "sha256-0WZSjKtgvIIpwGcp5wc4OPu6aNaytXRQTLAniDXIeIg=";
+  src = fetchFromGitHub {
+    owner = "wp-cli";
+    repo = "wp-cli";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dJSrXhTgtb7wHftXEui3HyiWC9NEgVx7n3f42V9xQl8=";
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  # TODO: Open a PR against https://github.com/wp-cli/wp-cli
+  # Missing `composer.lock` from the repository.
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-UzTOR0um5/9tjlCL35Z1BzPnf2vLwTzfTMnCQhm2iRI=";
 
-  buildCommand = ''
-    dir=$out/share/wp-cli
-    install -Dm444 ${src}        $dir/wp-cli
-    install -Dm444 ${ini}        $dir/php.ini
-    installShellCompletion --bash --name wp ${completion}
+  nativeBuildInputs = finalAttrs.buildInputs ++ [
+    makeBinaryWrapper
+  ];
 
-    mkdir -p $out/bin
-    makeWrapper ${lib.getBin php}/bin/php $out/bin/wp \
-      --add-flags "-c $dir/php.ini" \
-      --add-flags "-f $dir/wp-cli" \
-      --add-flags "--"
+  php = php.buildEnv {
+    extraConfig = ''
+      phar.readonly=0
+    '';
+  };
 
-    # this is a very basic run test
-    $out/bin/wp --info >/dev/null
+  postInstall = ''
+    wrapProgram $out/bin/wp \
+      --prefix PATH ":" ${lib.makeBinPath [ php ]}
   '';
 
   meta = with lib; {
@@ -53,7 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wp-cli.org";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.all;
     mainProgram = "wp";
   };
-}
+})

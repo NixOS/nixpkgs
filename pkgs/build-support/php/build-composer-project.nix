@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, writeTextDir, php }:
+{ stdenvNoCC, lib, writeTextDir, php, makeBinaryWrapper }:
 
 let
   buildComposerProjectOverride = finalAttrs: previousAttrs:
