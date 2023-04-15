@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchpatch
 , espeak-ng
 , tts
 }:
@@ -8,37 +9,12 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      # API breakage with 0.9.0
-      # TypeError: mel() takes 0 positional arguments but 2 positional arguments (and 3 keyword-only arguments) were given
-      librosa = super.librosa.overridePythonAttrs (oldAttrs: rec {
-        version = "0.8.1";
-        src = super.fetchPypi {
-          pname = "librosa";
-          inherit version;
-          hash = "sha256-xT0F52iuSj5VOuIcLlAVKT5e+/1cEtSX8RBMtRnMprM=";
-        };
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ (with super; [
-          resampy
-        ]);
-        doCheck = false;
-      });
-
-      numpy = super.numpy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.23.5";
-        src = super.fetchPypi {
-          pname = "numpy";
-          inherit version;
-          extension = "tar.gz";
-          hash = "sha256-Gxdm1vOXwYFT1AAV3fx53bcVyrrcBNLSKNTlqLxN7Ro=";
-        };
-        doCheck = false;
-      });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.12.0";
+  version = "0.13.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -47,6 +23,17 @@ python.pkgs.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-3t4JYEwQ+puGLhGl3nn93qsL8IeOwlYtHXTrnZ5Cf+w=";
   };
+
+  patches = [
+    (fetchpatch {
+      # upgrade librosa to 0.10.0
+      url = "https://github.com/coqui-ai/TTS/commit/4c829e74a1399ab083b566a70c1b7e879eda6e1e.patch";
+      hash = "sha256-QP9AnMbdEpGJywiZBreojHUjq29ihqy6HxvUtS5OKvQ=";
+      excludes = [
+        "requirements.txt"
+      ];
+    })
+  ];
 
   postPatch = let
     relaxedConstraints = [

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit (src.homepage);
+    inherit (src.meta) homepage;
     description = "A FUSE-based filesystem that uses the p7zip library";
     longDescription = ''
       fuse-7z-ng is a FUSE file system that uses the p7zip
