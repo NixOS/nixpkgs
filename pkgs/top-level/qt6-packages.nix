@@ -42,4 +42,6 @@ in
     qt6Support = true;
     suffix = "qt6";
   };
+
+  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
 })))

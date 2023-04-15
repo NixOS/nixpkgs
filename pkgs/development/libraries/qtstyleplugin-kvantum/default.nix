@@ -2,11 +2,12 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
+, cmake
 , qmake
 , qtbase
 , qtsvg
-, qtx11extras
-, kwindowsystem
+, qtx11extras ? null
+, kwindowsystem ? null
 , libX11
 , libXext
 , qttools
@@ -26,21 +27,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
     qttools
     wrapQtAppsHook
-  ];
+  ] ++ (lib.optionals (lib.versionOlder qtbase.version "6") [
+    qmake
+  ]) ++ (lib.optionals (lib.versionAtLeast qtbase.version "6") [
+    cmake
+  ]);
 
   buildInputs = [
     qtbase
     qtsvg
-    qtx11extras
-    kwindowsystem
     libX11
     libXext
-  ];
+  ] ++ (lib.optionals (lib.versionOlder qtbase.version "6") [
+    kwindowsystem
+    qtx11extras
+  ]);
 
   sourceRoot = "source/Kvantum";
+
+  cmakeFlags = lib.optional (lib.versionAtLeast qtbase.version "6") "-DENABLE_QT5=OFF";
 
   patches = [
     (fetchpatch {
@@ -55,6 +62,11 @@ stdenv.mkDerivation rec {
     # Fix plugin dir
     substituteInPlace style/style.pro \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
+    sed -i style/CMakeLists.txt -e "s#set(KVANTUM_STYLE_DIR .*)#set(KVANTUM_STYLE_DIR \"$out/$qtPluginPrefix/styles/\")#g"
+
+    # Install themes for Qt6
+    substituteInPlace CMakeLists.txt \
+      --replace 'if(ENABLE_QT5)' $'add_subdirectory(themes)\nif(ENABLE_QT5)'
   '';
 
   passthru.updateScript = gitUpdater {
