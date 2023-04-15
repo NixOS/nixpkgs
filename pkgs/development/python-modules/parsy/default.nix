@@ -7,16 +7,16 @@
 
 buildPythonPackage rec {
   pname = "parsy";
-  version = "1.4.0";
+  version = "2.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     repo = "parsy";
     owner = "python-parsy";
     rev = "v${version}";
-    hash = "sha256-FislrLb+u4T5m/eEER7kazZHJKEwPHe+Vg/YDJp4PyM=";
+    hash = "sha256-/Bu3xZUpXI4WiYJKKWTJTdSFq8pwC1PFDw0Kr8s3Fe8=";
   };
 
   nativeCheckInputs = [
