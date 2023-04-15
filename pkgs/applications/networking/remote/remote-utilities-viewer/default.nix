@@ -17,15 +17,18 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "dpkg-deb -x $src .";
 
+  dontStrip = true;
   dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
-    cp -R usr/share $out/
-    cp -R usr/bin $out/
+    mkdir -p $out/bin/
+    mv usr/share $out
+    mv usr/bin $out
+    rmdir usr
     # fix the path in the desktop file
     substituteInPlace \
-      $out/applications/r-viewer.desktop \
+      $out/share/applications/r-viewer.desktop \
       --replace /usr/ $out/
   '';
 
@@ -41,8 +44,7 @@ stdenv.mkDerivation rec {
       xorg.xcbutilrenderutil
       libxkbcommon
       libglvnd
-      stdenv.cc.cc.lib 
-    ];
+    ] + ":${stdenv.cc.cc.lib}/lib64";
   in ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -55,8 +57,7 @@ stdenv.mkDerivation rec {
     description = "Remote Utilities Viewer for Linux";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = [ pepzi ];
   };
 }
- 
 
