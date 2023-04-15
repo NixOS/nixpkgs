@@ -86,7 +86,8 @@ rec {
 
     isUefi         = { /* kernel = kernels.windows; replace with none? */ abi = abis.coff; vendor = vendors.pc; }; # this may not be restrictive enough? TODO
 
-    isEfi = [
+    # Those are platforms for known UEFI firmwares
+    hasUefi = [
       { cpu = { family = "arm"; version = "6"; }; }
       { cpu = { family = "arm"; version = "7"; }; }
       { cpu = { family = "arm"; version = "8"; }; }

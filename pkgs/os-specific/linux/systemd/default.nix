@@ -90,7 +90,7 @@
 , withCoredump ? true
 , withCryptsetup ? true
 , withDocumentation ? true
-, withEfi ? stdenv.hostPlatform.isEfi
+, withUefi ? stdenv.hostPlatform.hasUefi
 , withFido2 ? true
 , withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
@@ -402,7 +402,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
     ++ lib.optional withCoredump elfutils
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
-    ++ lib.optional withEfi gnu-efi
+    ++ lib.optional withUefi gnu-efi
     ++ lib.optional withKexectools kexec-tools
     ++ lib.optional withKmod kmod
     ++ lib.optional withLibidn2 libidn2
@@ -513,11 +513,11 @@ stdenv.mkDerivation (finalAttrs: {
     # more frequent development builds
     "-Dman=true"
 
-    "-Defi=${lib.boolToString withEfi}"
-    "-Dgnu-efi=${lib.boolToString withEfi}"
+    "-Defi=${lib.boolToString withUefi}"
+    "-Dgnu-efi=${lib.boolToString withUefi}"
 
     "-Dukify=${lib.boolToString withUkify}"
-  ] ++ lib.optionals withEfi [
+  ] ++ lib.optionals withUefi [
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
   ] ++ lib.optionals (withShellCompletions == false) [
@@ -705,7 +705,7 @@ stdenv.mkDerivation (finalAttrs: {
   #   https://github.com/NixOS/nixpkgs/issues/169693
   # The hack is to move EFI file out of lib/ before doStrip
   # run and return it after doStrip run.
-  preFixup = lib.optionalString withEfi ''
+  preFixup = lib.optionalString withUefi ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
 
@@ -715,7 +715,7 @@ stdenv.mkDerivation (finalAttrs: {
       # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
       wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
     done
-  '' + lib.optionalString withEfi ''
+  '' + lib.optionalString withUefi ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '';
 
