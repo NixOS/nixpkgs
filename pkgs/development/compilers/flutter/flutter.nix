@@ -159,7 +159,7 @@ let
         # When other derivations wrap this one, any unmodified files
         # found here should be included as-is, for tooling compatibility.
         sdk = unwrapped;
-        mkFlutterApp = callPackage ../../../build-support/flutter {
+        buildFlutterApplication = callPackage ../../../build-support/flutter {
           # Package a minimal version of Flutter that only uses Linux desktop release artifacts.
           flutter = callPackage ./wrapper.nix {
             flutter = callPackage ./flutter.nix (args // {

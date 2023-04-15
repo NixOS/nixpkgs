@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-flutter2.mkFlutterApp {
+flutter2.buildFlutterApplication {
   pname = "firmware-updater";
   version = "unstable";
 

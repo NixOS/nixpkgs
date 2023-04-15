@@ -8,7 +8,7 @@
 , removeReferencesTo
 }:
 
-flutter.mkFlutterApp rec {
+flutter.buildFlutterApplication rec {
   pname = "yubioath-flutter";
   version = "6.1.0";
 
