@@ -54,7 +54,6 @@ let
   name = (if drvArgs ? name then drvArgs.name else "${drvArgs.pname}-${drvArgs.version}");
 
   deps =
-    # This 
     stdenvNoCC.mkDerivation ({
       name = "${name}-dart-deps";
 
