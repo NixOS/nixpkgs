@@ -1559,6 +1559,8 @@ with pkgs;
 
   jobber = callPackage ../tools/system/jobber { };
 
+  kadena-chainweaver = callPackage ../applications/blockchains/kadena-chainweaver { };
+
   kanata = callPackage ../tools/system/kanata { };
 
   kanata-with-cmd = kanata.override { withCmd = true; };
