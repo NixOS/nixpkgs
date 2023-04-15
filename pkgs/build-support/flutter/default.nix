@@ -11,6 +11,7 @@
 
 { pubGetScript ? "flutter pub get"
 , vendorHash
+, pubspecLockFile ? null
 , nativeBuildInputs ? [ ]
 , ...
 }@args:
@@ -23,7 +24,7 @@ let
 
   deps = callPackage ../dart/fetch-dart-deps { dart = flutter; } {
     sdkSetupScript = flutterSetupScript;
-    inherit pubGetScript vendorHash;
+    inherit pubGetScript vendorHash pubspecLockFile;
     buildDrvArgs = args;
   };
   self =

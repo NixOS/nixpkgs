@@ -13,6 +13,8 @@
 , sdkSetupScript ? ""
   # Commands to run to populate the pub cache.
 , pubGetScript ? "dart pub get"
+  # A path to a pubspec.lock file to use instead of the one in the source directory.
+, pubspecLockFile ? null
   # Arguments used in the derivation that builds the Dart package.
   # Passing these is recommended to ensure that the same steps are made to prepare the sources in both this
   # derivation and the one that builds the Dart package.
@@ -74,12 +76,32 @@ let
       '';
 
       installPhase = ''
-        ${pubGetScript}
+        _pub_get() {
+          ${pubGetScript}
+        }
 
         # so we can use lock, diff yaml
         mkdir -p "$out/pubspec"
         cp "pubspec.yaml" "$out/pubspec"
-        cp "pubspec.lock" "$out/pubspec"
+        ${lib.optionalString (pubspecLockFile != null) "install -m644 ${pubspecLockFile} pubspec.lock"}
+        if ! cp "pubspec.lock" "$out/pubspec"; then
+          echo 1>&2 -e '\nThe pubspec.lock file is missing. This is a requirement for reproducible builds.' \
+                       '\nThe following should be done to fix this issue:' \
+                       '\n  1. If you are building an application, contact the developer(s).' \
+                       '\n     The pubspec.lock file should be provided with the source code.' \
+                       '\n     https://dart.dev/guides/libraries/private-files#pubspeclock' \
+                       '\n  2. An attempt to generate and print a pubspec.lock file will be made now.' \
+                       '\n     Save it to a file, and provide the path to that file in the pubspecLockFile argument.' \
+                       '\n     This must be updated whenever the application is updated.' \
+                       '\n'
+          _pub_get
+          echo ""
+          cat 1>&2 pubspec.lock
+          echo 1>&2 -e '\nA pubspec.lock file has been printed. Please see the informational message above.'
+          exit 1
+        fi
+
+        _pub_get
 
         # nuke nondeterminism
 
