@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TkqJGYgxYnGXT/TpWF7R73KaEj0iwIvUcxKRedyFf+s=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
