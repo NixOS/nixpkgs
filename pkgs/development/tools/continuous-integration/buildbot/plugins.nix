@@ -1,5 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, buildbot-pkg, mock, cairosvg, klein, jinja2 }:
-
+{ lib, buildPythonPackage, fetchPypi, callPackage, mock, cairosvg, klein, jinja2, buildbot-pkg }:
 {
   www = buildPythonPackage rec {
     pname = "buildbot-www";

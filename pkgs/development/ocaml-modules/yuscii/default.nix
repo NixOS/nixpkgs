@@ -13,6 +13,7 @@ buildDunePackage rec {
   version = "0.3.0";
 
   minimalOCamlVersion = "4.03";
+  duneVersion = "3";
 
   src = fetchzip {
     url = "https://github.com/mirage/yuscii/releases/download/v${version}/yuscii-v${version}.tbz";

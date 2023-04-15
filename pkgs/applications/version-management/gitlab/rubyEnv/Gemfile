@@ -546,7 +546,7 @@ gem 'lru_redux'
 # Locked as long as quoted-printable encoding issues are not resolved
 # Monkey-patched in `config/initializers/mail_encoding_patch.rb`
 # See https://gitlab.com/gitlab-org/gitlab/issues/197386
-gem 'mail', '= 2.7.1'
+gem 'mail', '= 2.8.1'
 gem 'mail-smtp_pool', '~> 0.1.0', path: 'vendor/gems/mail-smtp_pool', require: false
 
 gem 'microsoft_graph_mailer', '~> 0.1.0', path: 'vendor/gems/microsoft_graph_mailer'
@@ -593,12 +593,8 @@ gem 'app_store_connect'
 # For phone verification
 gem 'telesignenterprise', '~> 2.2'
 
-# Ruby 3 extracts net-protocol into a separate gem, while Ruby 2 has it built-in
-# This condition installs the gem only for Ruby 3 to avoid warnings on Ruby 2
-# Can be removed when support for Ruby 2 is dropped
-install_if -> { Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.0.0") } do
-  # BufferedIO patch
-  gem 'net-protocol', '~> 0.1.3'
-end
+# BufferedIO patch
+# Updating this version will require updating scripts/allowed_warnings.txt
+gem 'net-protocol', '~> 0.1.3'
 
 gem 'duo_api', '~> 1.3'

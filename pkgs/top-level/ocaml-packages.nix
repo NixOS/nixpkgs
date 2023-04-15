@@ -609,6 +609,8 @@ let
 
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
+    headache = callPackage ../development/ocaml-modules/headache { };
+
     hex = callPackage ../development/ocaml-modules/hex { };
 
     hidapi = callPackage ../development/ocaml-modules/hidapi { };

@@ -14,7 +14,7 @@ buildDunePackage (rec {
     tyxml
   ];
 
-  useDune2 = true;
+  duneVersion = "3";
   doCheck = true;
 
   meta = with lib; {

@@ -1,7 +1,15 @@
-{ lib, callPackage, runCommandLocal, writeShellScriptBin, glibc, pkgsi686Linux, coreutils, bubblewrap }:
+{ lib
+, callPackage
+, runCommandLocal
+, writeShellScript
+, glibc
+, pkgsi686Linux
+, coreutils
+, bubblewrap
+}:
 
-args @ {
-  name
+{ name ? null
+, pname ? null
 , version ? null
 , runScript ? "bash"
 , extraInstallCommands ? ""
@@ -16,16 +24,22 @@ args @ {
 , unshareCgroup ? true
 , dieWithParent ? true
 , ...
-}:
+} @ args:
+
+assert (pname != null || version != null) -> (name == null && pname != null); # You must declare either a name or pname + version (preferred).
 
 with builtins;
 let
+  pname = if args.name != null then args.name else args.pname;
+  versionStr = lib.optionalString (version != null) ("-" + version);
+  name = pname + versionStr;
+
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
-  fhsenv = buildFHSEnv (removeAttrs args [
+  fhsenv = buildFHSEnv (removeAttrs (args // { inherit name; }) [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
-    "version"
+    "pname" "version"
   ]);
 
   etcBindEntries = let
@@ -93,7 +107,7 @@ let
     EOF
     ldconfig &> /dev/null
   '';
-  init = run: writeShellScriptBin "${name}-init" ''
+  init = run: writeShellScript "${name}-init" ''
     source /etc/profile
     ${createLdConfCache}
     exec ${run} "$@"
@@ -198,18 +212,13 @@ let
       "''${auto_mounts[@]}"
       "''${x11_args[@]}"
       ${concatStringsSep "\n  " extraBwrapArgs}
-      ${init runScript}/bin/${name}-init ${initArgs}
+      ${init runScript} ${initArgs}
     )
     exec "''${cmd[@]}"
   '';
 
-  bin = writeShellScriptBin name (bwrapCmd { initArgs = ''"$@"''; });
-
-  versionStr = lib.optionalString (version != null) ("-" + version);
-
-  nameAndVersion = name + versionStr;
-
-in runCommandLocal nameAndVersion {
+  bin = writeShellScript "${name}-bwrap" (bwrapCmd { initArgs = ''"$@"''; });
+in runCommandLocal name {
   inherit meta;
 
   passthru = passthru // {
@@ -225,6 +234,7 @@ in runCommandLocal nameAndVersion {
   };
 } ''
   mkdir -p $out/bin
-  ln -s ${bin}/bin/${name} $out/bin/${name}
+  ln -s ${bin} $out/bin/${pname}
+
   ${extraInstallCommands}
 ''

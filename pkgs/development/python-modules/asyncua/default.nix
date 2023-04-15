@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "asyncua";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,13 +25,19 @@ buildPythonPackage rec {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6A4z+tiQ2oUlB9t44wlW64j5sjWFMAgqT3Xt0FdJCBs=";
+    hash = "sha256-DnBxR4nD3dBBhiElDuRgljHaoBPiakdjY/VFn3VsKEQ=";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
     # https://github.com/FreeOpcUa/opcua-asyncio/issues/1263
     substituteInPlace setup.py \
       --replace ", 'asynctest'" ""
+
+    # Workaround hardcoded paths in test
+    # "test_cli_tools_which_require_sigint"
+    substituteInPlace tests/test_tools.py \
+      --replace "tools/" "$out/bin/"
   '';
 
   propagatedBuildInputs = [
@@ -52,11 +58,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "asyncua"
-  ];
-
-  disabledTests = [
-    # Hard coded path only works from root of src
-    "test_cli_tools_which_require_sigint"
   ];
 
   meta = with lib; {

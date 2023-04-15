@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     # Drop unused pthread library. pthread_yield()
     # fails the configure.
     ./no-pthread.patch
+    # Zero-initialize unset fields of `struct fuse_operations` so that
+    # garbage values don't cause segfault.
+    # <https://github.com/kedazo/fuse-7z-ng/pull/8>
+    ./zero-init-fuse-operations.patch
   ];
 
   nativeBuildInputs = [ pkg-config makeWrapper autoconf automake ];

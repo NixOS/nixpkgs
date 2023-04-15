@@ -1114,6 +1114,7 @@ mapAliases ({
   nomad_1_1 = throw "nomad_1_1 has been removed because it's outdated. Use a a newer version instead"; # Added 2022-05-22
   nordic-polar = throw "nordic-polar was removed on 2021-05-27, now integrated in nordic"; # Added 2021-05-27
   noto-fonts-cjk = noto-fonts-cjk-sans; # Added 2021-12-16
+  noto-fonts-extra = noto-fonts; # Added 2023-04-08
   nottetris2 = throw "nottetris2 was removed because it is unmaintained by upstream and broken"; # Added 2022-01-15
   now-cli = throw "now-cli has been replaced with nodePackages.vercel"; # Added 2021-08-05
   ntdb = throw "ntdb has been removed: abandoned by upstream"; # Added 2022-04-21

@@ -9,16 +9,19 @@
 }:
 
 let
-  major = "15";
-  update = ".0.1";
-  build = "-ga";
+  version = {
+    major = "15";
+    update = ".0.1";
+    build = "-ga";
+    __toString = self: "${self.major}${self.update}${self.build}";
+  };
 
-  openjdk = stdenv.mkDerivation rec {
+  openjdk = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${major}${update}${build}";
+    inherit version;
 
     src = fetchurl {
-      url = "https://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
+      url = "https://hg.openjdk.java.net/jdk-updates/jdk${version.major}u/archive/jdk-${version}.tar.gz";
       sha256 = "1h8n5figc9q0k9p8b0qggyhvqagvxanfih1lj5j492c74cd1mx1l";
     };
 
@@ -149,8 +152,8 @@ let
 
     disallowedReferences = [ openjdk15-bootstrap ];
 
-    pos = builtins.unsafeGetAttrPos "feature" version;
-    meta = import ./meta.nix lib version;
+    pos = builtins.unsafeGetAttrPos "major" version;
+    meta = import ./meta.nix lib version.major;
 
     passthru = {
       architecture = "";

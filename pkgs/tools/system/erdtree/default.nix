@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "erdtree";
-  version = "1.7.1";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "solidiquis";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dSIq6PNkFkdYvAzNQ1qBEZWEdiYYZCb/7rNICuUJAsE=";
+    hash = "sha256-RKIQM5RJygVL15Q3B30DXnqTSbVPJZdb8YNitanzOEA=";
   };
 
-  cargoHash = "sha256-Dpg4AbDClqh6yzI/s5LQDP6QkyTMLP/IJIp2l2d+Ouw=";
+  cargoHash = "sha256-5bK+gJRBX0Xij5TUGD6BVWDDUJzUzHNPWoLwSXLF9iY=";
 
   meta = with lib; {
     description = "File-tree visualizer and disk usage analyzer";

@@ -233,7 +233,7 @@ in
       # nix-serve = 199; # unused, removed 2020-12-12
       #tvheadend = 200; # dynamically allocated as of 2021-09-18
       uwsgi = 201;
-      gitit = 202;
+      # gitit = 202; # unused, module was removed 2023-04-03
       riemanntools = 203;
       subsonic = 204;
       # riak = 205; # unused, remove 2022-07-22

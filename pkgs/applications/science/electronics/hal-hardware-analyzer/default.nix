@@ -41,7 +41,7 @@ let
   # no stable hal release yet with recent spdlog/fmt support, remove
   # once 4.0.0 is released - see https://github.com/emsec/hal/issues/452
   spdlog' = spdlog.override {
-    fmt_8 = fmt_8.overrideAttrs (_: rec {
+    fmt = fmt_8.overrideAttrs (_: rec {
       version = "8.0.1";
       src = fetchFromGitHub {
         owner = "fmtlib";

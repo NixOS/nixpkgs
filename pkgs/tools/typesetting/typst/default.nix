@@ -1,19 +1,20 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , stdenv
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typst";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     rev = "v${version}";
-    hash = "sha256-fPcQlgmpViDsvd9OmnP1wZoMTOtyL5pfH6plktNG0JQ=";
+    hash = "sha256-3vNJmLmbskAzXVXjiSVDLhRcX1j3ksOgPd53W31YZ0c=";
   };
 
   cargoLock = {
@@ -23,9 +24,24 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
+
+  env = {
+    GEN_ARTIFACTS = "artifacts";
+  };
+
+  postInstall = ''
+    installManPage cli/artifacts/*.1
+    installShellCompletion \
+      cli/artifacts/typst.{bash,fish} \
+      --zsh cli/artifacts/_typst
+  '';
 
   meta = with lib; {
     description = "A new markup-based typesetting system that is powerful and easy to learn";
