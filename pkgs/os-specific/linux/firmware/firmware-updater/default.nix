@@ -7,6 +7,7 @@ flutter2.buildFlutterApplication {
   pname = "firmware-updater";
   version = "unstable";
 
+  pubspecLockFile = ./pubspec.lock;
   vendorHash = "sha256-kKfe+7obb2fihrca+mjCM2+51wNkbPLEPFLpXzK5Wvc=";
 
   src = fetchFromGitHub {
