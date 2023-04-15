@@ -18191,7 +18191,7 @@ with pkgs;
 
   drm_info = callPackage ../development/tools/drm_info { };
 
-  drush = callPackage ../development/tools/misc/drush { };
+  drush-launcher = callPackage ../development/tools/misc/drush-launcher { };
 
   dura = callPackage ../development/tools/misc/dura {
     inherit (darwin.apple_sdk.frameworks) Security;
