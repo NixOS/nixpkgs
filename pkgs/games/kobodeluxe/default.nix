@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchurl, SDL, SDL_image, libGLU, libGL }:
+{ lib, stdenv, fetchpatch, fetchurl, SDL, SDL_image, libGLU, libGL, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "kobodeluxe";
@@ -9,9 +9,18 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ SDL SDL_image libGLU libGL ];
+  nativeBuildInputs = [ makeWrapper ];
 
   prePatch = ''
     sed -e 's/char \*tok/const char \*tok/' -i graphics/window.cpp
+  '';
+
+  # We wrap the program to give it the highscore directory, otherwise the scores can't be saved
+  # because the nix store directory where the game lives is read only
+  postInstall = ''
+    wrapProgram $out/bin/${meta.mainProgram} \
+      --run "mkdir -p ~/.config/${pname}" \
+      --add-flags "-scores ~/.config/${pname}"
   '';
 
   patches = [
@@ -26,6 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
+    mainProgram = "kobodl";
     homepage = "http://olofson.net/kobodl/";
     description = "Enhanced version of Akira Higuchi's game XKobo  for Un*x systems with X11";
     license = lib.licenses.gpl2Plus;
