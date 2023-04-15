@@ -11,19 +11,12 @@
 }:
 buildPythonPackage rec {
   pname = "pymilvus";
-  version = "2.2.4";
+  version = "2.2.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gj+psVoS6vcM4bNWzpwvKJJETTeCmZe6RwlzDkcvWo8=";
+    hash = "sha256-/i3WObwoY6Ffqw+Guij6+uGbKYKET2AJ+d708efmSx0=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "grpcio-tools>=1.47.0, <=1.48.0" "grpcio-tools>=1.47.0, <=1.52.0" \
-      --replace "grpcio>=1.47.0,<=1.48.0" "grpcio>=1.47.0,<=1.53.0" \
-      --replace "ujson>=2.0.0,<=5.4.0" "ujson>=2.0.0,<=5.7.0"
-    '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
