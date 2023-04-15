@@ -82,6 +82,7 @@ in
   nativeBuildInputs = [ makeWrapper ];
 
   passthru = flutter.passthru // {
+    inherit (flutter) version;
     unwrapped = flutter;
   };
 
