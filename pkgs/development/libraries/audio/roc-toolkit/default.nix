@@ -13,13 +13,15 @@
   libunwind,
   pulseaudioSupport ? true,
   libpulseaudio,
+  opensslSupport ? true,
+  openssl,
   soxSupport ? true,
   sox
 }:
 
 stdenv.mkDerivation rec {
   pname = "roc-toolkit";
-  version = "0.2.1";
+  version = "0.2.3";
 
   outputs = [ "out" "dev" ];
 
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "roc-streaming";
     repo = "roc-toolkit";
     rev = "v${version}";
-    sha256 = "sha256-W8PiI5W1T6pNaYzR4u6fPtkP8DKq/Z85Kq/WF5dXVxo=";
+    hash = "sha256-wwcc2r1hrM9zryMJp+DOifSh0g6T/gdZJMpVdhqhjR8=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +45,14 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional openfecSupport openfec
     ++ lib.optional libunwindSupport libunwind
     ++ lib.optional pulseaudioSupport libpulseaudio
+    ++ lib.optional opensslSupport openssl
     ++ lib.optional soxSupport sox;
 
   sconsFlags =
     [ "--build=${stdenv.buildPlatform.config}"
       "--host=${stdenv.hostPlatform.config}"
       "--prefix=${placeholder "out"}" ] ++
+    lib.optional (!opensslSupport) "--disable-openssl" ++
     lib.optional (!soxSupport) "--disable-sox" ++
     lib.optional (!libunwindSupport) "--disable-libunwind" ++
     lib.optional (!pulseaudioSupport) "--disable-pulseaudio" ++
@@ -56,13 +60,6 @@ stdenv.mkDerivation rec {
        then ["--disable-openfec"]
        else [ "--with-libraries=${openfec}/lib"
               "--with-openfec-includes=${openfec.dev}/include" ]);
-
-  prePatch = lib.optionalString stdenv.isAarch64
-    "sed -i 's/c++98/c++11/g' SConstruct";
-
-  patches = [
-    ./fix-pkgconfig-installation.patch
-  ];
 
   meta = with lib; {
     description = "Roc is a toolkit for real-time audio streaming over the network";

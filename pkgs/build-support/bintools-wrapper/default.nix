@@ -102,7 +102,7 @@ in
 stdenv.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${bintoolsName}-wrapper");
-  version = if bintools == null then null else bintoolsVersion;
+  version = if bintools == null then "" else bintoolsVersion;
 
   preferLocalBuild = true;
 

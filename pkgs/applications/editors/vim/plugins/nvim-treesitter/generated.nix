@@ -192,12 +192,12 @@
   };
   comment = buildGrammar {
     language = "comment";
-    version = "0.0.0+rev=a37ca37";
+    version = "0.0.0+rev=f08e7d4";
     src = fetchFromGitHub {
       owner = "stsewd";
       repo = "tree-sitter-comment";
-      rev = "a37ca370310ac6f89b6e0ebf2b86b2219780494e";
-      hash = "sha256-wiFY2uMNv8Wet3qKh0bSe8FSO1sjGu1uTOBxnt/HHHg=";
+      rev = "f08e7d44b2923e9da2bf487a2f365d08677d368e";
+      hash = "sha256-v3h4x3R+9xbCEFezZlWPPM2Hb4575mbRkkyw7oz7K+U=";
     };
     meta.homepage = "https://github.com/stsewd/tree-sitter-comment";
   };
@@ -579,12 +579,12 @@
   };
   gitcommit = buildGrammar {
     language = "gitcommit";
-    version = "0.0.0+rev=1723599";
+    version = "0.0.0+rev=04dcb2c";
     src = fetchFromGitHub {
       owner = "gbprod";
       repo = "tree-sitter-gitcommit";
-      rev = "17235998809be904892f14ee57730d96795e9323";
-      hash = "sha256-UhPlEanOBUpzqVPCqe8t5MIwdUwSeaoFJFsxpnUqwn8=";
+      rev = "04dcb2cb9a4cf638252b8bd4a829f9acadf2cc4c";
+      hash = "sha256-plu1qzMfvMfSqapQ4q+ZYNULDM8mBwlNeOzHoSSC3Hc=";
     };
     meta.homepage = "https://github.com/gbprod/tree-sitter-gitcommit";
   };
@@ -612,12 +612,12 @@
   };
   glimmer = buildGrammar {
     language = "glimmer";
-    version = "0.0.0+rev=16c3786";
+    version = "0.0.0+rev=21805f4";
     src = fetchFromGitHub {
       owner = "alexlafroscia";
       repo = "tree-sitter-glimmer";
-      rev = "16c3786e1a2c87a236c823d1a8859574778a3436";
-      hash = "sha256-fLRA4Rm92hVezbAdMxmrXPb5ax6wNaaBYIo+U64nD+8=";
+      rev = "21805f429c5b7536be9f5f61dcabb5d3a4173bec";
+      hash = "sha256-EMcPjnf0SPa8Jk0GkkLTsOEGqRVdjbUt/DklRmXOGUA=";
     };
     meta.homepage = "https://github.com/alexlafroscia/tree-sitter-glimmer";
   };
@@ -1878,12 +1878,12 @@
   };
   v = buildGrammar {
     language = "v";
-    version = "0.0.0+rev=4cd190d";
+    version = "0.0.0+rev=234c102";
     src = fetchFromGitHub {
       owner = "vlang";
       repo = "vls";
-      rev = "4cd190d1aaced458e8f1548e11b3beae5e4ea806";
-      hash = "sha256-rbIRx/LA5kvq7vI5WdR8be0WCyyTxsWB87ENNO7Qkao=";
+      rev = "234c1028883187c6b48e030780b7332229faefa3";
+      hash = "sha256-4DqMn9rPTxOtQOfy8fy6R7z/+z50XnCLV0J/4QFrRz4=";
     };
     location = "tree_sitter_v";
     meta.homepage = "https://github.com/vlang/vls";

@@ -149,6 +149,7 @@
   ./programs/cdemu.nix
   ./programs/cfs-zen-tweaks.nix
   ./programs/chromium.nix
+  ./programs/clash-verge.nix
   ./programs/cnping.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/criu.nix
@@ -279,6 +280,7 @@
   ./security/doas.nix
   ./security/duosec.nix
   ./security/google_oslogin.nix
+  ./security/ipa.nix
   ./security/lock-kernel-modules.nix
   ./security/misc.nix
   ./security/oath.nix

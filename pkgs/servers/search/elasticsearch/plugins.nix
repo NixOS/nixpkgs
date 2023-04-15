@@ -48,6 +48,23 @@ in
     };
   };
 
+  analysis-kuromoji = esPlugin rec {
+    pluginName = "analysis-kuromoji";
+    version = esVersion;
+    src = fetchurl {
+      url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
+      sha256 =
+        if version == "7.17.3" then "1pwirciqzz092a30rys2y97mh62pwhlnk4mvv1a8g4640qmql2jx"
+        else if version == "6.8.21" then "0ywvqicxwcd5bn1j6gsdqhiagjmpha373p76p4lc2ric3in4dz3p"
+        else throw "unsupported version ${version} for plugin ${pluginName}";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-kuromoji";
+      description = "The Japanese (kuromoji) Analysis plugin integrates Lucene kuromoji analysis module into Elasticsearch.";
+      license = licenses.asl20;
+    };
+  };
+
   analysis-lemmagen = esPlugin rec {
     pluginName = "analysis-lemmagen";
     version = esVersion;

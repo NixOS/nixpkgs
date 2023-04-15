@@ -22,14 +22,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
       services.xserver.desktopManager.gnome.enable = true;
       services.xserver.desktopManager.gnome.debug = true;
-      programs.gnome-terminal.enable = true;
-
-      environment.systemPackages = [
-        (pkgs.makeAutostartItem {
-          name = "org.gnome.Terminal";
-          package = pkgs.gnome.gnome-terminal;
-        })
-      ];
 
       systemd.user.services = {
         "org.gnome.Shell@wayland" = {
@@ -64,10 +56,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     # False when startup is done
     startingUp = su "${gdbus} ${eval} Main.layoutManager._startingUp";
 
-    # Start gnome-terminal
-    gnomeTerminalCommand = su "${bus} gnome-terminal";
+    # Start Console
+    launchConsole = su "${bus} gapplication launch org.gnome.Console";
 
-    # Hopefully gnome-terminal's wm class
+    # Hopefully Console's wm class
     wmClass = su "${gdbus} ${eval} global.display.focus_window.wm_class";
   in ''
       with subtest("Login to GNOME with GDM"):
@@ -86,10 +78,16 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
               "${startingUp} | grep -q 'true,..false'"
           )
 
-      with subtest("Open Gnome Terminal"):
-          # correct output should be (true, '"gnome-terminal-server"')
+      with subtest("Open Console"):
+          # Close the Activities view so that Shell can correctly track the focused window.
+          machine.send_key("esc")
+
+          machine.succeed(
+              "${launchConsole}"
+          )
+          # correct output should be (true, '"org.gnome.Console"')
           machine.wait_until_succeeds(
-              "${wmClass} | grep -q 'gnome-terminal-server'"
+              "${wmClass} | grep -q 'true,...org.gnome.Console'"
           )
           machine.sleep(20)
           machine.screenshot("screen")

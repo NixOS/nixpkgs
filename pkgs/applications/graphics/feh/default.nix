@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ makeWrapper xorg.libXt ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
+  buildInputs = [ xorg.libXt xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}" "exif=1"

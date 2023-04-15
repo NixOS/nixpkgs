@@ -53,6 +53,7 @@ buildPythonPackage rec {
     # https://github.com/zigpy/zigpy-znp/issues/209
     "--deselect=tests/application/test_joining.py::test_join_device"
     "--deselect=tests/application/test_joining.py::test_permit_join"
+    "--deselect=tests/application/test_requests.py::test_request_recovery_route_rediscovery_af"
     "--deselect=tests/application/test_requests.py::test_request_recovery_route_rediscovery_zdo"
     "--deselect=tests/application/test_requests.py::test_zigpy_request"
     "--deselect=tests/application/test_requests.py::test_zigpy_request_failure"

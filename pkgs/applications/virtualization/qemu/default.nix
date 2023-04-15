@@ -117,6 +117,15 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
+    # glibc >=2.37 compat, see https://lore.kernel.org/qemu-devel/20230110174901.2580297-1-berrange@redhat.com/
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/9f0246539ae84a5e21efd1cc4516fc343f08115a.patch";
+      sha256 = "sha256-1iWOWkLH0WP1Hk23fmrRVdX7YZWUXOvWRMTt8QM93BI=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/6003159ce18faad4e1bc7bf9c85669019cd4950e.patch";
+      sha256 = "sha256-DKGCbR+VDIFLp6FhER78gyJ3Rn1dD47pMtkcIIMd0B8=";
+    })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 

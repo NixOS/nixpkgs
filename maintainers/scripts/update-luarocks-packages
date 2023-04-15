@@ -203,11 +203,7 @@ def main():
         default_out = ROOT.joinpath(GENERATED_NIXFILE)
         )
 
-    parser = editor.create_parser()
-    args = parser.parse_args()
-
-    update_plugins(editor, args)
-
+	editor.run()
 
 if __name__ == "__main__":
 

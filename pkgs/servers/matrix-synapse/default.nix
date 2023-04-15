@@ -12,27 +12,26 @@ in
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.80.0";
+  version = "1.81.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-Lw6gmuI+ntOW54HQbmDoY9QYNDTu5vgtrJz6HMWWmMM=";
+    hash = "sha256-zOpjJSzQNgWQy52GjwR1zy3oaMRTxP92T3hNaYhmcCs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-KqPpaIJ8VuVV6f6n14/7wbA+Vtk7NvWm09bUBWuAAlY=";
+    hash = "sha256-s/zq8VGBdIQu/Q/2gJrLFtZJ+lsTyK+2fr9RYhBTbKA=";
   };
 
   postPatch = ''
     # Remove setuptools_rust from runtime dependencies
     # https://github.com/matrix-org/synapse/blob/v1.69.0/pyproject.toml#L177-L185
     sed -i '/^setuptools_rust =/d' pyproject.toml
-    sed -i 's/^frozendict = ">=1,!=2.1.2,<2.3.5"/frozendict = ">=1,!=2.1.2,<2.3.6"/g' pyproject.toml
   '';
 
   nativeBuildInputs = [
@@ -52,8 +51,8 @@ buildPythonApplication rec {
     bleach
     canonicaljson
     daemonize
-    frozendict
     ijson
+    immutabledict
     jinja2
     jsonschema
     lxml

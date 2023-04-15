@@ -1,8 +1,9 @@
 { lib
-, aiomisc
+, aiomisc-pytest
 , aiormq
 , buildPythonPackage
 , fetchFromGitHub
+, pamqp
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -39,11 +40,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiomisc-pytest
+    pamqp
     pytestCheckHook
-  ];
-
-  checkInputs = [
-    aiomisc
     shortuuid
   ];
 

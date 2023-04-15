@@ -5,7 +5,6 @@
 , cython
 , setuptools
 , substituteAll
-, numba
 , numpy
 , pandas
 , cramjam
@@ -14,6 +13,7 @@
 , python-lzo
 , pytestCheckHook
 , pythonOlder
+, packaging
 }:
 
 buildPythonPackage rec {
@@ -53,10 +53,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cramjam
     fsspec
-    numba
     numpy
     pandas
     thrift
+    packaging
   ];
 
   passthru.optional-dependencies = {

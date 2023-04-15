@@ -79,7 +79,8 @@
 }:
 
 let
-  inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer;
+  inherit (darwin.apple_sdk_11_0.frameworks)
+    AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer Accelerate;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 in stdenv.mkDerivation (self: {
   pname = "mpv";
@@ -182,7 +183,7 @@ in stdenv.mkDerivation (self: {
     ++ lib.optionals zimgSupport        [ zimg ]
     ++ lib.optionals stdenv.isLinux     [ nv-codec-headers ]
     ++ lib.optionals stdenv.isDarwin    [ libiconv ]
-    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer ]
+    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer Accelerate ]
     ++ lib.optionals (stdenv.isDarwin && swiftSupport) [ AVFoundation CoreMedia ];
 
   postBuild = lib.optionalString stdenv.isDarwin ''

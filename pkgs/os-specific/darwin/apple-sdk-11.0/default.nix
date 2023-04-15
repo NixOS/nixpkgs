@@ -31,10 +31,7 @@ let
     };
 
     installPhase = ''
-      cd Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
-
-      mkdir $out
-      cp -r System usr $out/
+      mv Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk $out
     '';
   };
 
@@ -49,10 +46,7 @@ let
     };
 
     installPhase = ''
-      cd Library/Developer/CommandLineTools
-
-      mkdir $out
-      cp -r Library usr $out/
+      mv Library/Developer/CommandLineTools $out
     '';
   };
 

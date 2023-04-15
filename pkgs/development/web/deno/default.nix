@@ -2,40 +2,25 @@
 , lib
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
 , installShellFiles
 , tinycc
 , libiconv
-, libobjc
-, Security
-, CoreServices
-, Metal
-, Foundation
-, QuartzCore
+, darwin
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.31.1";
+  version = "1.32.3";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-0S5BSXWnv4DMcc8cijRQx6NyDReg5aJJT65TeNFlkkw=";
+    hash = "sha256-zltMn8ped1Euia/zRCvkpSUzJwFTpbZgrnot21x5tSA=";
   };
-  cargoHash = "sha256-7Xfnc91yQiAwAF5fvtiwnELUDb7LJeye3GtXNzYkUo8=";
-
-  cargoPatches = [
-    # resolved in 1.31.2
-    (fetchpatch {
-      name = "CVE-2023-28446.patch";
-      url = "https://github.com/denoland/deno/commit/78d430103a8f6931154ddbbe19d36f3b8630286d.patch";
-      hash = "sha256-kXwr9wWxk1OaaubCr8pfmSp3TrJMQkbAg72nIHp/seA=";
-    })
-  ];
+  cargoHash = "sha256-XDs3f44ta9MaJlaMWRVkNZd9DaOfoSHJluUmL68DWOw=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -44,8 +29,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin
-    [ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ];
+  buildInputs = lib.optionals stdenv.isDarwin (
+    [ libiconv darwin.libobjc ] ++
+    (with darwin.apple_sdk.frameworks; [ Security CoreServices Metal Foundation QuartzCore ])
+  );
 
   buildAndTestSubdir = "cli";
 

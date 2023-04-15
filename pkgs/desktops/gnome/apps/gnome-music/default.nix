@@ -23,20 +23,20 @@
 , itstool
 , gnome
 , gst_all_1
-, libsoup
+, libsoup_3
 , libadwaita
 , gsettings-desktop-schemas
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "42.1";
+  version = "44.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "x3R/pqhrVrGK1v+VD/kB5Z7n+sEcaLKmcnr4bq7tgnA=";
+    sha256 = "m9GqyVcuYkcgJKaVDYOubyhr4zzZx3fz1E+hbQOPHVE=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication rec {
     grilo
     grilo-plugins
     libnotify
-    libsoup
+    libsoup_3
     libadwaita
     gsettings-desktop-schemas
     tracker

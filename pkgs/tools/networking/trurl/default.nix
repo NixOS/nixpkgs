@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "trurl";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "curl";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-z7Na7lXDzSmBTuSBaizyG892D3IfbN43ytPjOEQ9CAA=";
+    sha256 = "sha256-f9z0gPtHcn3iWFA6MT6ngok0nXBcd6zJ8Tjnb5Lzf6c=";
   };
 
   separateDebugInfo = stdenv.isLinux;
