@@ -33530,6 +33530,8 @@ with pkgs;
 
   shadowfox = callPackage ../tools/networking/shadowfox { };
 
+  shavee = callPackage ../applications/misc/shavee { };
+
   shell_gpt = callPackage ../tools/misc/shell_gpt { };
 
   shfmt = callPackage ../tools/text/shfmt { };
