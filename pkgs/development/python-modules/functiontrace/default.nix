@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, functiontrace-server
 , setuptools
 , toml
 }:
@@ -20,12 +21,16 @@ buildPythonPackage rec {
     toml
   ];
 
+  # `functiontrace` needs `functiontrace-server` in its PATH, both when run as
+  # a standalone application and when imported as a python module.
+  propagatedBuildInputs = [ functiontrace-server ];
+
   pythonImportsCheck = [ "functiontrace" ];
 
   meta = with lib; {
     homepage = "https://functiontrace.com";
     description = "The Python module for Functiontrace";
     license = licenses.prosperity30;
-    maintainers = with maintainers; [ mathiassven ];
+    maintainers = with maintainers; [ mathiassven tehmatt ];
   };
 }
