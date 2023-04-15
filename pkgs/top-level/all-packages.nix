@@ -28759,6 +28759,10 @@ with pkgs;
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
 
+  master_me = callPackage ../applications/audio/master_me {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
   pdfstudio2021 = callPackage ../applications/misc/pdfstudio {
     year = "2021";
   };
