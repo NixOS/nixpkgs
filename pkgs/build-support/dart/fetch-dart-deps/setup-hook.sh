@@ -38,5 +38,9 @@ _setupPubCache() {
         # Sometimes the pubspec.lock will get opened in write mode, even when offline.
         chmod u+w pubspec.lock
     fi
-    diff -u pubspec.yaml "$deps/pubspec/pubspec.yaml"
+    if ! diff -u pubspec.yaml "$deps/pubspec/pubspec.yaml"; then
+      echo 1>&2 -e   'The pubspec.yaml of the project derivation differs from the one in the dependency derivation.' \
+                   '\nYou most likely forgot to update the vendorHash while updating the sources.'
+      exit 1
+    fi
 }
