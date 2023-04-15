@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "05lr9f0q4x1kvgfa3xrfmagpwvijv9m1s316aa9figqlkcc5vv4k";
   };
 
+  outputs = [ "out" "dev" "man" ];
+
   nativeBuildInputs = [ buildPackages.stdenv.cc pkg-config cmake ];
 
   buildInputs = [ glib libsndfile libjack2 ]
