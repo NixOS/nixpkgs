@@ -29,8 +29,6 @@ let
     dontBuild = true;
 
     installPhase = ''
-      . ${../fetchgit/deterministic-git}
-
       TMP=$(mktemp -d)
       export HOME="$TMP"
 
@@ -50,17 +48,18 @@ let
 
       # nuke nondeterminism
 
-      # deterministic git repos
-      find "$PUB_CACHE" -iname .git -type d | while read -r repoGit; do
-        make_deterministic_repo "$(dirname "$repoGit")"
-      done
+      # Remove Git directories in the Git package cache - these are rarely used by Pub,
+      # which instead maintains a corresponsing mirror and clones cached packages through it.
+      find "$PUB_CACHE" -name .git -type d -prune -exec rm -rf {} +
 
-      # Impure package cache files
+      # Remove continuously updated package metadata caches
       rm -rf "$PUB_CACHE"/hosted/*/.cache # Not pinned by pubspec.lock
+      rm -rf "$PUB_CACHE"/git/cache/*/* # Recreate this on the other end. See: https://github.com/dart-lang/pub/blob/c890afa1d65b340fa59308172029680c2f8b0fc6/lib/src/source/git.dart#L531
+
+      # Miscelaneous transient package cache files
       rm -f "$PUB_CACHE"/README.md # May change with different Dart versions
       rm -rf "$PUB_CACHE"/_temp # https://github.com/dart-lang/pub/blob/c890afa1d65b340fa59308172029680c2f8b0fc6/lib/src/system_cache.dart#L131
       rm -rf "$PUB_CACHE"/log # https://github.com/dart-lang/pub/blob/c890afa1d65b340fa59308172029680c2f8b0fc6/lib/src/command.dart#L348
-      rm -rf "$PUB_CACHE"/git/cache/*/* # Recreate this on the other end. See: https://github.com/dart-lang/pub/blob/c890afa1d65b340fa59308172029680c2f8b0fc6/lib/src/source/git.dart#L531
     '';
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
