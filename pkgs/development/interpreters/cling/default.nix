@@ -58,12 +58,12 @@ let
     strictDeps = true;
 
     cmakeFlags = [
-      "-DLLVM_BINARY_DIR=${llvmPackages_9.llvm.out}" # llvm_dir
-      "-DLLVM_CONFIG=${llvmPackages_9.llvm.dev}/bin/llvm-config" # llvm_config_path
-      "-DLLVM_LIBRARY_DIR=${llvmPackages_9.llvm.lib}/lib" # os.path.join(llvm_dir, 'lib')
-      "-DLLVM_MAIN_INCLUDE_DIR=${fixedLlvmDev}/include" # os.path.join(llvm_dir, 'include')
-      "-DLLVM_TABLEGEN_EXE=${llvmPackages_9.llvm.out}/bin/llvm-tblgen" # os.path.join(llvm_dir, 'bin', 'llvm-tblgen')
-      "-DLLVM_TOOLS_BINARY_DIR=${llvmPackages_9.llvm.out}/bin" # os.path.join(llvm_dir, 'bin')
+      "-DLLVM_BINARY_DIR=${llvmPackages_9.llvm.out}"
+      "-DLLVM_CONFIG=${llvmPackages_9.llvm.dev}/bin/llvm-config"
+      "-DLLVM_LIBRARY_DIR=${llvmPackages_9.llvm.lib}/lib"
+      "-DLLVM_MAIN_INCLUDE_DIR=${fixedLlvmDev}/include"
+      "-DLLVM_TABLEGEN_EXE=${llvmPackages_9.llvm.out}/bin/llvm-tblgen"
+      "-DLLVM_TOOLS_BINARY_DIR=${llvmPackages_9.llvm.out}/bin"
       "-DLLVM_TOOL_CLING_BUILD=ON"
 
       "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"
@@ -101,7 +101,7 @@ let
     "-nostdinc++"
     "-isystem" "${lib.getDev stdenv.cc.libc}/include"
     "-I" "${lib.getDev unwrapped}/include"
-    # "-I" "${lib.getLib unwrapped}/lib/clang/5.0.2/include"
+    "-I" "${lib.getLib unwrapped}/lib/clang/9.0.1/include"
   ];
 
   # Autodetect the include paths for the compiler used to build Cling, in the same way Cling does at
