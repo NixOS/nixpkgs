@@ -1,0 +1,50 @@
+From 8880bc263a366aeb82056f0bf3f1b17b6ec26900 Mon Sep 17 00:00:00 2001
+From: Nick Cao <nickcao@nichi.co>
+Date: Thu, 13 Apr 2023 23:42:29 +0800
+Subject: [PATCH 1/6] qtbase: qmake: always use libname instead of absolute
+ path in qmake files
+
+In generated qmake files, absolute paths to qt libraries are embedded
+and then used in linker flags. However as the libraries can be provided
+by qt modules other than the one currently being built, the ebedded
+paths can be incorrect.
+---
+ cmake/QtFinishPrlFile.cmake      | 7 ++++---
+ cmake/QtGenerateLibHelpers.cmake | 3 ---
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/cmake/QtFinishPrlFile.cmake b/cmake/QtFinishPrlFile.cmake
+index 32169e418c..4e754af367 100644
+--- a/cmake/QtFinishPrlFile.cmake
++++ b/cmake/QtFinishPrlFile.cmake
+@@ -61,9 +61,10 @@ foreach(line ${lines})
+                         endif()
+                         list(APPEND adjusted_libs "-framework" "${CMAKE_MATCH_1}")
+                     else()
+-                        # Not a framework, transform the Qt module into relocatable relative path.
+-                        qt_strip_library_version_suffix(relative_lib "${relative_lib}")
+-                        list(APPEND adjusted_libs "$$[QT_INSTALL_LIBS]/${relative_lib}")
++                        # Not a framework, extract the library name and prepend an -l to make
++                        # it relocatable.
++                        qt_transform_absolute_library_paths_to_link_flags(lib_with_link_flag "${lib}")
++                        list(APPEND adjusted_libs "${lib_with_link_flag}")
+                     endif()
+                 endif()
+             else()
+diff --git a/cmake/QtGenerateLibHelpers.cmake b/cmake/QtGenerateLibHelpers.cmake
+index e3f4bbf881..f8bd26acc7 100644
+--- a/cmake/QtGenerateLibHelpers.cmake
++++ b/cmake/QtGenerateLibHelpers.cmake
+@@ -70,9 +70,6 @@ function(qt_transform_absolute_library_paths_to_link_flags out_var library_path_
+             string(TOLOWER "${dir}" dir_lower)
+             # If library_path isn't in default link directories, we should add it to link flags.
+             list(FIND IMPLICIT_LINK_DIRECTORIES_LOWER "${dir_lower}" index)
+-            if(${index} EQUAL -1)
+-                list(APPEND out_list "-L\"${dir}\"")
+-            endif()
+             list(APPEND out_list "${lib_name_with_link_flag}")
+         else()
+             list(APPEND out_list "${library_path}")
+-- 
+2.39.2
+
