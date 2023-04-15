@@ -17,15 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  ## v0.5.0 panics when trying to generate zsh completions due to a bug.
-  ## See https://github.com/rustic-rs/rustic/issues/533
-  ## and https://github.com/rustic-rs/rustic/pull/536
   postInstall = ''
-    for shell in {ba,fi}sh; do
+    for shell in {ba,fi,z}sh; do
       $out/bin/rustic completions $shell > rustic.$shell
     done
 
-    installShellCompletion rustic.{ba,fi}sh
+    installShellCompletion rustic.{ba,fi,z}sh
   '';
 
   passthru.updateScript = nix-update-script { };
