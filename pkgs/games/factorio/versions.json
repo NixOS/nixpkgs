@@ -10,12 +10,12 @@
         "version": "1.1.80"
       },
       "stable": {
-        "name": "factorio_alpha_x64-1.1.76.tar.xz",
+        "name": "factorio_alpha_x64-1.1.80.tar.xz",
         "needsAuth": true,
-        "sha256": "1kz93imyddivpp8zslggldm8zyb9j0zdj67pgkxazn8fd9avrq1p",
+        "sha256": "084j0vb3xp57c0i01jqfxnp8ky6c9rid5yx96l8jqg51071wai6g",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/1.1.76/alpha/linux64",
-        "version": "1.1.76"
+        "url": "https://factorio.com/get-download/1.1.80/alpha/linux64",
+        "version": "1.1.80"
       }
     },
     "demo": {
@@ -46,12 +46,12 @@
         "version": "1.1.80"
       },
       "stable": {
-        "name": "factorio_headless_x64-1.1.76.tar.xz",
+        "name": "factorio_headless_x64-1.1.80.tar.xz",
         "needsAuth": false,
-        "sha256": "19xx6sv382ijwv8nbqw3c3izckvqkpsf949bn4g09qmg7b663g94",
+        "sha256": "0db6g50gwcq2lwlgagc7in12wag6siwcldlq367x2h0d2q0rxj36",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/1.1.76/headless/linux64",
-        "version": "1.1.76"
+        "url": "https://factorio.com/get-download/1.1.80/headless/linux64",
+        "version": "1.1.80"
       }
     }
   }
