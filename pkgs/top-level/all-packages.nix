@@ -1593,6 +1593,8 @@ with pkgs;
     buildGoModule = buildGo119Module; # go 1.20 build failure
   };
 
+  monica = callPackage ../servers/web-apps/monica { };
+
   mprocs = callPackage ../tools/misc/mprocs { };
 
   mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
