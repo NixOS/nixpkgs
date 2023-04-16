@@ -20,6 +20,13 @@ let
   owner = "OpenSmalltalk";
   repo = "opensmalltalk-vm";
   version = "202206021410";
+  srcHash= "sha256-QqElPiJuqD5svFjWrLz1zL0Tf+pHxQ2fPvkVRn2lyBI=";
+
+  src = fetchFromGitHub {
+    inherit owner repo;
+    rev = version;
+    hash = srcHash;
+  };
 in
 { platformDir, vmName, configureFlagsArray, configureFlags }:
 stdenv.mkDerivation {
@@ -28,16 +35,11 @@ stdenv.mkDerivation {
     in "opensmalltalk-vm-${platformDir}-${vmNameNoDots}";
   inherit version;
 
-  src = fetchFromGitHub {
-    inherit owner repo;
-    rev = version;
-    hash = "sha256-QqElPiJuqD5svFjWrLz1zL0Tf+pHxQ2fPvkVRn2lyBI=";
-  };
+  inherit src;
 
   postPatch =
     let
       inherit (builtins) substring;
-      url = "https://github.com/${owner}/${repo}.git";
       year = substring 0 4 version;
       month = substring 4 2 version;
       day = substring 6 2 version;
@@ -57,7 +59,7 @@ stdenv.mkDerivation {
       for vmVersionFile in $vmVersionFiles; do
         substituteInPlace "$vmVersionFile" \
           --replace "\$Date\$" "\$Date: ''${vmVersionDate} \$" \
-          --replace "\$URL\$" "\$URL: ${url} \$" \
+          --replace "\$URL\$" "\$URL: ${src.url} \$" \
           --replace "\$Rev\$" "\$Rev: ${version} \$" \
           --replace "\$CommitHash\$" "\$CommitHash: ${abbrevHash} \$"
       done
