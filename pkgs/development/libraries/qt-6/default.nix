@@ -115,7 +115,16 @@ let
       qtvirtualkeyboard = callPackage ./modules/qtvirtualkeyboard.nix { };
       qtwayland = callPackage ./modules/qtwayland.nix { };
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
-      qtwebengine = callPackage ./modules/qtwebengine.nix { };
+      qtwebengine = callPackage ./modules/qtwebengine.nix {
+        inherit (darwin) bootstrap_cmds cctools xnu;
+        inherit (darwin.apple_sdk_11_0) libpm libunwind;
+        inherit (darwin.apple_sdk_11_0.libs) sandbox;
+        inherit (darwin.apple_sdk_11_0.frameworks)
+          AGL AVFoundation Accelerate Cocoa CoreLocation CoreML ForceFeedback
+          GameController ImageCaptureCore LocalAuthentication
+          MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
+          ReplayKit SecurityInterface Vision;
+      };
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
       qtwebview = callPackage ./modules/qtwebview.nix {
         inherit (darwin.apple_sdk_11_0.frameworks) WebKit;
