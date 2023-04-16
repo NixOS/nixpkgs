@@ -17,7 +17,7 @@
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , libucontext ? null
-, gnatboot ? null
+, gnat-bootstrap ? null
 , enableMultilib ? false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
@@ -39,7 +39,7 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
-assert langAda -> gnatboot != null;
+assert langAda -> gnat-bootstrap != null;
 
 # TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
 #   error: GDC is required to build d
@@ -159,7 +159,7 @@ let majorVersion = "12";
         fetchurl
         gettext
         gmp
-        gnatboot
+        gnat-bootstrap
         gnused
         isl
         langAda
