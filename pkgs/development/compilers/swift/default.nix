@@ -2,7 +2,8 @@
 , pkgs
 , newScope
 , darwin
-, llvmPackages_latest
+# See: https://github.com/NixOS/nixpkgs/pull/213202#issuecomment-1483644798
+, llvmPackages_14
 , overrideCC
 }:
 
@@ -23,12 +24,12 @@ let
     # currently closest to the official Swift builds.
     clang = if pkgs.stdenv.isDarwin
       then
-        llvmPackages_latest.clang.override rec {
+        llvmPackages_14.clang.override rec {
           libc = apple_sdk.Libsystem;
           bintools = pkgs.bintools.override { inherit libc; };
         }
       else
-        llvmPackages_latest.clang;
+        llvmPackages_14.clang;
 
     # Overrides that create a useful environment for swift packages, allowing
     # packaging with `swiftPackages.callPackage`. These are similar to
