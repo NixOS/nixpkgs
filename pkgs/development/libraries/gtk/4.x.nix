@@ -2,6 +2,7 @@
 , stdenv
 , substituteAll
 , fetchurl
+, fetchpatch
 , pkg-config
 , gettext
 , graphene
@@ -81,6 +82,11 @@ stdenv.mkDerivation rec {
   patches = [
     # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1501059486
     ./patches/4.0-fix-darwin-build.patch
+    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/5696
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/b2e8158c7a33e76c783fddb3d4f12c34f80b7646.patch";
+      hash = "sha256-NevtfxZuy34gm6+3Ony4OUmpl6IQTA515e3wDrCG6Do=";
+    })
   ];
 
   depsBuildBuild = [
