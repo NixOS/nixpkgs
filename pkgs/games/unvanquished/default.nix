@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , fetchpatch
 , SDL2
-, buildFHSUserEnv
+, buildFHSEnv
 , cmake
 , copyDesktopItems
 , curl
@@ -95,7 +95,7 @@ let
     '';
   };
 
-  fhsEnv = buildFHSUserEnv {
+  fhsEnv = buildFHSEnv {
     name = "unvanquished-fhs-wrapper";
 
     targetPkgs = pkgs: [ libstdcpp-preload-for-unvanquished-nacl ];

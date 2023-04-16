@@ -12745,6 +12745,13 @@
     githubId = 14829269;
     name = "Ram Kromberg";
   };
+  rampoina = {
+    email = "rampoina@protonmail.com";
+    matrix = "@rampoina:matrix.org";
+    github = "Rampoina";
+    githubId = 5653911;
+    name = "Rampoina";
+  };
   ranfdev = {
     email = "ranfdev@gmail.com";
     name = "Lorenzo Miglietta";

@@ -1,6 +1,6 @@
-# buildFHSUserEnv {#sec-fhs-environments}
+# buildFHSEnv {#sec-fhs-environments}
 
-`buildFHSUserEnv` provides a way to build and run FHS-compatible lightweight sandboxes. It creates an isolated root with bound `/nix/store`, so its footprint in terms of disk space needed is quite small. This allows one to run software which is hard or unfeasible to patch for NixOS -- 3rd-party source trees with FHS assumptions, games distributed as tarballs, software with integrity checking and/or external self-updated binaries. It uses Linux namespaces feature to create temporary lightweight environments which are destroyed after all child processes exit, without root user rights requirement. Accepted arguments are:
+`buildFHSEnv` provides a way to build and run FHS-compatible lightweight sandboxes. It creates an isolated root with bound `/nix/store`, so its footprint in terms of disk space needed is quite small. This allows one to run software which is hard or unfeasible to patch for NixOS -- 3rd-party source trees with FHS assumptions, games distributed as tarballs, software with integrity checking and/or external self-updated binaries. It uses Linux namespaces feature to create temporary lightweight environments which are destroyed after all child processes exit, without root user rights requirement. Accepted arguments are:
 
 - `name`
         Environment name.
@@ -26,7 +26,7 @@ One can create a simple environment using a `shell.nix` like that:
 ```nix
 { pkgs ? import <nixpkgs> {} }:
 
-(pkgs.buildFHSUserEnv {
+(pkgs.buildFHSEnv {
   name = "simple-x11-env";
   targetPkgs = pkgs: (with pkgs;
     [ udev

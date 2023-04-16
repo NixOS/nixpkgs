@@ -2278,7 +2278,9 @@ self: super: with self; {
 
   datadog = callPackage ../development/python-modules/datadog { };
 
-  datafusion = callPackage ../development/python-modules/datafusion { };
+  datafusion = callPackage ../development/python-modules/datafusion {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+  };
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
