@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg, zstd, commandLineArgs ? [] }:
+{ fetchurl, stdenv, lib, buildFHSEnv, appimageTools, writeShellScript, anki, undmg, zstd, commandLineArgs ? [] }:
 
 let
   pname = "anki-bin";
@@ -50,7 +50,7 @@ let
 
   passthru = { inherit sources; };
 
-  fhsUserEnvAnki = buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
+  fhsEnvAnki = buildFHSEnv (appimageTools.defaultFhsEnvArgs // {
     inherit pname version;
     name = null; # Appimage sets it to "appimage-env"
 
@@ -75,7 +75,7 @@ let
   });
 in
 
-if stdenv.isLinux then fhsUserEnvAnki
+if stdenv.isLinux then fhsEnvAnki
 else stdenv.mkDerivation {
   inherit pname version passthru;
 

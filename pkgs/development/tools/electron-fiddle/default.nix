@@ -1,4 +1,4 @@
-{ buildFHSUserEnv
+{ buildFHSEnv
 , electron_22
 , fetchFromGitHub
 , fetchYarnDeps
@@ -86,7 +86,7 @@ let
   };
 
 in
-buildFHSUserEnv {
+buildFHSEnv {
   name = "electron-fiddle";
   runScript = "${electron}/bin/electron ${unwrapped}/lib/electron-fiddle/resources/app.asar";
 
