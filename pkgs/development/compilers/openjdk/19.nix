@@ -80,6 +80,11 @@ let
       patchShebangs --build configure
     '';
 
+    # JDK's build system attempts to specifically detect
+    # and special-case WSL, and we don't want it to do that,
+    # so pass the correct platform names explicitly
+    configurePlatforms = ["build" "host"];
+
     configureFlags = [
       "--with-boot-jdk=${openjdk-bootstrap.home}"
       "--with-version-build=${version.build}"
