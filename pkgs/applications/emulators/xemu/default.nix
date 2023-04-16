@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.7.85";
+  version = "0.7.87";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sVUkB2KegdKlHlqMvSwB1nLdJGun2x2x9HxtNHnpp1s=";
+    hash = "sha256-NPvyXDrTKt7PIspLPrUBo7qs9hsHV+6u7dQlIqdlQtw=";
     fetchSubmodules = true;
   };
 
@@ -89,20 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  preConfigure = let
-    # When the data below can't be obtained through git, the build process tries
-    # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
-    branch = "master";
-    commit = "d8fa50e524c22f85ecb2e43108fd6a5501744351";
-    inherit (finalAttrs) version;
-  in ''
+  preConfigure = ''
     patchShebangs .
     configureFlagsArray+=("--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls")
     substituteInPlace ./scripts/xemu-version.sh \
       --replace 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
-    echo '${commit}' > XEMU_COMMIT
-    echo '${branch}' > XEMU_BRANCH
-    echo '${version}' > XEMU_VERSION
+    # When the data below can't be obtained through git, the build process tries
+    # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
+    echo '${finalAttrs.version}' > XEMU_VERSION
   '';
 
   preBuild = ''
