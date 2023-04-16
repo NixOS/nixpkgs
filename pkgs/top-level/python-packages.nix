@@ -2759,6 +2759,8 @@ self: super: with self; {
 
   django_treebeard = callPackage ../development/python-modules/django_treebeard { };
 
+  django-two-factor-auth = callPackage ../development/python-modules/django-two-factor-auth { };
+
   django-versatileimagefield = callPackage ../development/python-modules/django-versatileimagefield { };
 
   django-vite = callPackage ../development/python-modules/django-vite { };
