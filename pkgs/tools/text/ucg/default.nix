@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isAarch64; # cpuid.h: no such file or directory
+    broken = stdenv.isAarch64 || stdenv.isDarwin;
   };
 })
 # TODO: report upstream
