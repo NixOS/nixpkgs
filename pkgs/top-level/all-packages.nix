@@ -24258,6 +24258,8 @@ with pkgs;
 
   sdrplay = callPackage ../applications/radio/sdrplay { };
 
+  sdr-j-fm = libsForQt5.callPackage ../applications/radio/sdr-j-fm { };
+
   sdrpp = callPackage ../applications/radio/sdrpp {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
