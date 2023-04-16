@@ -158,4 +158,5 @@ in
   # work at all anyway due to https://github.com/NixOS/nix/issues/6660.
   name = "${name}-dart-deps-setup-hook";
   substitutions = { inherit deps; };
+  passthru.files = deps.outPath;
 }) ./setup-hook.sh
