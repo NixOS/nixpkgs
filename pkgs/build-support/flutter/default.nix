@@ -30,8 +30,11 @@ let
     inherit pubGetScript vendorHash pubspecLockFile;
     buildDrvArgs = args;
   };
-  self =
-(self: llvmPackages_13.stdenv.mkDerivation (args // {
+
+in
+llvmPackages_13.stdenv.mkDerivation (finalAttrs: args // {
+  inherit flutterBuildFlags runtimeDependencies;
+
   outputs = [ "out" "debug" ];
 
   nativeBuildInputs = [
@@ -54,7 +57,7 @@ let
     mkdir -p build/flutter_assets/fonts
 
     flutter packages get --offline -v
-    flutter build linux -v --release --split-debug-info="$debug" ${builtins.concatStringsSep " " (map (flag: "\"${flag}\"") flutterBuildFlags)}
+    flutter build linux -v --release --split-debug-info="$debug" ${builtins.concatStringsSep " " (map (flag: "\"${flag}\"") finalAttrs.flutterBuildFlags)}
 
     runHook postBuild
   '';
@@ -98,11 +101,9 @@ let
     # which is not what application authors expect.
     for f in "$out"/bin/*; do
       wrapProgram "$f" \
-        --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath runtimeDependencies}'
+        --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath finalAttrs.runtimeDependencies}'
     done
 
     ${postFixup}
   '';
-})) self;
-in
-  self
+})
