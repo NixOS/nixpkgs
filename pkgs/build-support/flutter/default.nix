@@ -10,6 +10,7 @@
 # absolutely no mac support for now
 
 { pubGetScript ? "flutter pub get"
+, flutterBuildFlags ? []
 , vendorHash
 , pubspecLockFile ? null
 , nativeBuildInputs ? [ ]
@@ -49,7 +50,7 @@ let
     mkdir -p build/flutter_assets/fonts
 
     flutter packages get --offline -v
-    flutter build linux --release -v
+    flutter build linux -v --release ${builtins.concatStringsSep " " (map (flag: "\"${flag}\"") flutterBuildFlags)}
 
     runHook postBuild
   '';
