@@ -86,6 +86,7 @@ edk2 = buildStdenv.mkDerivation {
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     license = licenses.bsd2;
     platforms = with platforms; aarch64 ++ arm ++ i686 ++ x86_64;
+    maintainers = [ maintainers.raitobezarius ];
   };
 
   passthru = {
