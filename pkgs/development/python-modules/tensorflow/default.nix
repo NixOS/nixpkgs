@@ -193,6 +193,95 @@ let
       hash = "sha256-AYHUtJEXYZdVDigKZo7mQnV+PDeQg8mi45YH18qXHZA=";
     };
 
+    patches = [
+      (fetchpatch {
+        name = "CVE-2023-27579.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/34f8368c535253f5c9cb3a303297743b62442aaa.patch";
+        sha256 = "sha256-oGTTRdELzK2hqcnCJD+9CqKNT0CnxHrXvr5n4V+dNNE=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25801.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/ee50d1e00f81f62a4517453f721c634bbb478307.patch";
+        sha256 = "sha256-OnaVG4xjnpX8NShVDsyUCxt/IUym4jh8pUyObxATIhA=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25676.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/da66bc6d5ff466aee084f9e7397980a24890cd15.patch";
+        sha256 = "sha256-U0j6qVCopTUIqoZgbEdBhIr3kgqqC1gJM6AJo08ycfs=";
+      })
+      ./2.10.1-CVE-2023-25675.patch
+      (fetchpatch {
+        name = "CVE-2023-25673.CVE-2023-25674.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/728113a3be690facad6ce436660a0bc1858017fa.patch";
+        sha256 = "sha256-b8PzCdLVNgHJ59z0qmet+X5Ta8WgO7xYZUAIuInncBE=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25671.part-1.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/760322a71ac9033e122ef1f4b1c62813021e5938.patch";
+        sha256 = "sha256-ClYGmQbYRwsDb3ng2Dmx+ajNeSLnajEkw11I6P2CyqM=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25671.part-2.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/2eedc8f676d2c3b8be9492e547b2bc814c10b367.patch";
+        sha256 = "sha256-C/4EKC471hJvWt9zmHGEKDHE9rPbK6IvqpyfeOuUREk=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25670.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/8a47a39d9697969206d23a523c977238717e8727.patch";
+        sha256 = "sha256-usCKeytvLNhcFk5HM6ktbWp1JFYuXfRBrTgsM4yLNC8=";
+      })
+      ./2.10.1-CVE-2023-25669.patch
+      # 2.10.1 already addressed CVE-2023-25668 in
+      # https://github.com/tensorflow/tensorflow/commit/1c2e7f425529ce166f597b512e3bf524f34cda1a
+      (fetchpatch {
+        name = "CVE-2023-25667.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/8dc723fcdd1a6127d6c970bd2ecb18b019a1a58d.patch";
+        sha256 = "sha256-U6M/Giz7x9jnMP3OuZPd8YidfsGqEdz2ki2XAVRN3Ew=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25665.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/5e0ecfb42f5f65629fd7a4edd6c4afe7ff0feb04.patch";
+        sha256 = "sha256-zAPsSZisrPs951UnXuWYiCjy7ehRuDdMRUevwVcrr0Q=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25666.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/d0d4e779da0d0f56499c6fa5ba09f0a576cc6b14.patch";
+        sha256 = "sha256-0K35pWWQ9Wy2wqur4vtWoOwOCokJxdbxGayIJjEuqAg=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25664.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/ddaac2bdd099bec5d7923dea45276a7558217e5b.patch";
+        sha256 = "sha256-AcJPp6akNMt8wPb/lf18Km1n8V0WnKSppT7udSQLDXw=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25663.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/239139d2ae6a81ae9ba499ad78b56d9b2931538a.patch";
+        sha256 = "sha256-qitBX8pSLCWov1zg+FpVQcFfzzS6crJFkBYUzeA/Ovc=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25662.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/08b8e18643d6dcde00890733b270ff8d9960c56c.patch";
+        sha256 = "sha256-dbukV9dTnp/eIcpqnrrrUtWlHX2WUOQtrN5wdXKy2cc=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25660.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/6d423b8bcc9aa9f5554dc988c1c16d038b508df1.patch";
+        sha256 = "sha256-Nys2HtI4jcngSEm/T9/H5yy6DcdsSr9rNj4pnBkwV7Y=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25659.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/ee004b18b976eeb5a758020af8880236cd707d05.patch";
+        sha256 = "sha256-dxxvK4vqCnk025nTwAiLt2mOgHOX6WHvidAl1GdHahA=";
+      })
+      (fetchpatch {
+        name = "CVE-2023-25658.patch";
+        # this is the more minimal fix applied to 2.11.1 as opposed to the large
+        # squashed commit indicated in the CVE announcement
+        url = "https://github.com/tensorflow/tensorflow/commit/73ed953f5171bade7a32fdcc331ff640c4ed099e.patch";
+        sha256 = "sha256-+e0SlrQj/Z+6zNnvnj5TRiPglm4C5BB14r4rFVINCDE=";
+      })
+    ];
+
     # On update, it can be useful to steal the changes from gentoo
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sci-libs/tensorflow
 
