@@ -196,6 +196,22 @@ merging is handled.
 
 Submodules are detailed in [Submodule](#section-option-types-submodule).
 
+Usually you want submodules, but this section describes all types that allow modules to be used.
+
+<!-- TODO: support markdown tables in NixOS docs, or move this to Nixpkgs. Unprettified it works in Nixpkgs docs! -->
+
+```
+   Type            | Type declaration       | Definition values          | Merged option value
+ .-----------------|------------------------|----------------------------|----------------------------.
+ | deferredModule  | some options, perhaps  | unevaluated modules        | unevaluated modules        |
+ |                 |                        |                            |                            |
+ | submodule       | all options, usually   | unevaluated modules        | evaluated config           |
+ |                 |                        |                            |                            |
+ | configuration   | nothing except class   | evaluated { config, ... }  | evaluated { config, ... }  |
+ |                 |                        | (only one)                 | (not merged)               |
+ '-----------------|------------------------|----------------------------|----------------------------'
+```
+
 `types.submodule` *`o`*
 
 :   A set of sub options *`o`*. *`o`* can be an attribute set, a function
@@ -262,6 +278,37 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
     user to affect all submodules in an `attrsOf submodule` at once. This is
     more convenient and discoverable than expecting the module user to
     type-merge with the `attrsOf submodule` option.
+
+`types.configuration {` *`class`*, *`allowUnknownClass`* `? false,` *`allowLegacyType`* ` ? false }`
+
+:   The result of a `lib.evalModules` invocation. While it is generally
+    preferable to use a `submodule` to represent configurations, it is possible
+    to accept the result of another, otherwise stand-alone module system
+    invocation.
+
+    This module system invocation may come from a different module system
+    application. NixOS and home-manager are examples of module system applications.
+
+    The type check of this module system result is influenced by the following
+    parameters.
+
+    -   *`class`*, an optional string. When set to non-null, it requires that
+        the configuration was created with the same `class`. Any module system
+        application should set the `class` argument in its main `evalModules`
+        invocation.
+
+        This **must not** be used before the `class` string is set in stone,
+        even if `allowUnknownClass == true`.
+
+    -   *`allowUnknownClass`*, an optional boolean that defaults to `false`.
+        When `true`, configurations without a `class` will be accepted. This is
+        allows for a migration period during which configurations of older
+        versions of the module system application.
+
+    -   *`allowLegacyType`*, an optional boolean that defaults to `false`.
+        When `true`, configurations without a `_type` attribute, are permitted.
+        These are returned by Nixpkgs `lib` versions before 23.05.
+
 
 ## Composed types {#sec-option-types-composed}
 

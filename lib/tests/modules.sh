@@ -380,6 +380,43 @@ checkConfigError 'Could not load a value as a module, because it is of type "fla
 checkConfigOutput '^true$' "$@" config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
 checkConfigError 'Could not load a value as a module, because it is of type "configuration", in file .*/import-configuration.nix.*please only import the modules that make up the configuration.*' config ./import-configuration.nix
 
+# types.configuration
+test_types_configuration() {
+    # It detects cases where a configuration of the wrong class is assigned.
+    checkConfigError 'error: A definition for option .example1. is not of type .configuration of class exampleFooClass..' \
+    config.result.example1.config ./types-configuration/mismatch.nix
+
+    # types.configuration can only be merged when both declarations expect the same class.
+    # We might want to relax this in the future, if a pattern of making an option
+    # heterogeneous proves useful, but for now it's a good sanity check.
+    checkConfigError 'error: A configuration option is declared multiple times with conflicting classes class...Example and class...Example' \
+    config.result.example1 ./types-configuration/type-merge-fail.nix
+
+    # By default, it rejects unclassed configurations. This is a good default for when
+    # the configurations can be expect to all have been created by a recent version
+    # that sets the class.
+    checkConfigError 'error: A definition for option .example1. is not of type .configuration of class exampleFooClass..' \
+    config.result.example1.config ./types-configuration/non-gradual-value.nix
+
+    # All good.
+    checkConfigOutput '"bar"' \
+    config.result.example1.config.foo ./types-configuration/type-merge-ok.nix
+
+    # We can permit unclassed configurations by setting the permitUnknowClass option.
+    # This makes the typing "gradual".
+    checkConfigOutput '"bar"' \
+    config.result.example1.config.foo ./types-configuration/gradual-value.nix
+
+    # If the type doesn't specify a class, no class is required of the configuration.
+    checkConfigOutput '"bar"' \
+    config.result.example1.config.foo ./types-configuration/gradual-type.nix
+
+    # Not only that; any class will do.
+    checkConfigOutput '"bar"' \
+    config.result.example1.config.foo ./types-configuration/gradual-type-arbitrary-class.nix
+}
+test_types_configuration
+
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
 # doRename adds a warning.

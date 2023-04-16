@@ -797,6 +797,46 @@ rec {
         };
       };
 
+    configuration = { class ? null, allowUnknownClass ? false, allowLegacyType ? false }:
+      let
+        checkType =
+          if allowLegacyType then
+            x: x._type or null == "configuration" || (x?config && x?options)
+          else
+            x: x._type or null == "configuration";
+      in
+      mkOptionType rec {
+        name = "configuration";
+        description = if class == null then "configuration" else "configuration of class ${class}";
+        descriptionClass = "noun";
+        check =
+          if class == null then checkType
+          else
+            x: checkType x && (
+              (x._module.class or null) == class
+              || (allowUnknownClass && (x._module.class or null) == null)
+            );
+        merge = mergeUniqueOption { message = "Merging is not supported for `configuration` values. Extend the modules that constructed this configuration instead."; };
+        functor = defaultFunctor name // {
+          payload = { inherit class allowUnknownClass allowLegacyType; };
+          binOp = lhs: rhs: {
+            class =
+              if lhs.class == null
+              then rhs.class
+              else if rhs.class == null
+              then lhs.class
+              else if lhs.class == rhs.class
+              then lhs.class
+              else throw "A configuration option is declared multiple times with conflicting classes ${lhs.class} and ${rhs.class}";
+            # Permissive merging, so that if either declaration wants to allow
+            # unknown classes, the result will allow unknown classes. This leads
+            # to fewer false class errors.
+            allowUnknownClass = lhs.allowUnknownClass || rhs.allowUnknownClass;
+            allowLegacyType = lhs.allowLegacyType || rhs.allowLegacyType;
+          };
+        };
+      };
+
     # A value from a set of allowed ones.
     enum = values:
       let
