@@ -132,5 +132,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ codyopel ] ++ teams.freedesktop.members;
+    changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
   };
 }
