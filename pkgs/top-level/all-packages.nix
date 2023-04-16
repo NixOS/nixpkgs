@@ -31265,6 +31265,7 @@ with pkgs;
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
   swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
   swayosd = callPackage ../applications/window-managers/sway/osd.nix { };
+  swaylock-fprintd = callPackage ../applications/window-managers/sway/lock-fprintd.nix { };
   swayws = callPackage ../applications/window-managers/sway/ws.nix { };
   swaywsr = callPackage ../applications/window-managers/sway/wsr.nix { };
   sway-contrib = recurseIntoAttrs (callPackages ../applications/window-managers/sway/contrib.nix { });
