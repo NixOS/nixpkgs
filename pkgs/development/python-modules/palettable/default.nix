@@ -28,6 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A library of color palettes";
     homepage = "https://jiffyclub.github.io/palettable/";
+    changelog = "https://github.com/jiffyclub/palettable/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };
