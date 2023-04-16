@@ -15,6 +15,8 @@ let
     "OvmfPkg/OvmfPkgX64.dsc"
   else if stdenv.hostPlatform.isAarch then
     "ArmVirtPkg/ArmVirtQemu.dsc"
+  else if stdenv.hostPlatform.isRiscV64 then
+    "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc"
   else
     throw "Unsupported architecture";
 
@@ -24,8 +26,11 @@ let
     i686 = "FV/OVMF";
     x86_64 = "FV/OVMF";
     aarch64 = "FV/AAVMF";
+    riscv64 = "FV/RISCV_VIRT";
   };
 
+  cpuName = stdenv.hostPlatform.parsed.cpu.name;
+  suffix = suffixes."${cpuName}" or (throw "Host cpu name `${cpuName}` is not supported in this OVMF derivation!");
 in
 
 edk2.mkDerivation projectDscPath (finalAttrs: {
@@ -52,30 +57,34 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
   '';
 
-  postFixup = if stdenv.hostPlatform.isAarch then ''
+  # FIXME: remove me when https://github.com/tianocore/edk2/pull/4275 lands in a stable release.
+  patches = [
+    ./0001-RiscVVirt-support-split-code-and-vars-binaries.patch
+  ];
+
+  postFixup =
+  let
+    shortName = builtins.elemAt (lib.splitString "/" suffix) 1;
+  in ''
     mkdir -vp $fd/FV
-    mkdir -vp $fd/AAVMF
+    mkdir -vp $fd/${suffix}
+    mkdir -vp $fd/${shortName}
     mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
 
     # Use Debian dir layout: https://salsa.debian.org/qemu-team/edk2/blob/debian/debian/rules
-    dd of=$fd/FV/AAVMF_CODE.fd  if=/dev/zero bs=1M    count=64
-    dd of=$fd/FV/AAVMF_CODE.fd  if=$fd/FV/QEMU_EFI.fd conv=notrunc
-    dd of=$fd/FV/AAVMF_VARS.fd  if=/dev/zero bs=1M    count=64
+    dd of=$fd/${suffix}_CODE.fd  if=/dev/zero bs=1M    count=64
+    dd of=$fd/${suffix}_CODE.fd  if=$fd/FV/QEMU_EFI.fd conv=notrunc
+    dd of=$fd/${suffix}_VARS.fd  if=/dev/zero bs=1M    count=64
 
     # Also add symlinks for Fedora dir layout: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
-    ln -s $fd/FV/AAVMF_CODE.fd $fd/AAVMF/QEMU_EFI-pflash.raw
-    ln -s $fd/FV/AAVMF_VARS.fd $fd/AAVMF/vars-template-pflash.raw
-  '' else ''
-    mkdir -vp $fd/FV
-    mv -v $out/FV/OVMF{,_CODE,_VARS}.fd $fd/FV
+    ln -sf $fd/${suffix}_CODE.fd $fd/${shortName}/QEMU_EFI-pflash.raw
+    ln -sf $fd/${suffix}_VARS.fd $fd/${shortName}/vars-template-pflash.raw
   '';
 
   dontPatchELF = true;
 
   passthru =
   let
-    cpuName = stdenv.hostPlatform.parsed.cpu.name;
-    suffix = suffixes."${cpuName}" or (throw "Host cpu name `${cpuName}` is not supported in this OVMF derivation!");
     prefix = "${finalAttrs.finalPackage.fd}/${suffix}";
   in {
     firmware  = "${prefix}_CODE.fd";
