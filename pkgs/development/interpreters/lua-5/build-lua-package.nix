@@ -93,9 +93,9 @@ let
     );
   externalDeps' = lib.filter (dep: !lib.isDerivation dep) externalDeps;
 
-  luarocksDrv = luaLib.toLuaModule ( lua.stdenv.mkDerivation (self: let
+  luarocksDrv = luaLib.toLuaModule ( lua.stdenv.mkDerivation (finalAttrs: let
 
-    rocksSubdir = "${self.pname}-${self.version}-rocks";
+    rocksSubdir = "${finalAttrs.pname}-${finalAttrs.version}-rocks";
     luarocks_content = let
       generatedConfig = luaLib.generateLuarocksConfig {
         externalDeps = externalDeps ++ externalDepsGenerated;
@@ -108,13 +108,13 @@ let
         '';
     in builtins.removeAttrs attrs ["disabled" "externalDeps" "extraVariables"] // {
 
-  name = namePrefix + pname + "-" + self.version;
+  name = namePrefix + pname + "-" + finalAttrs.version;
   inherit rockspecVersion;
 
   nativeBuildInputs = [
     wrapLua
     luarocks
-  ] ++ lib.optionals doCheck ([ luarocksCheckHook ] ++ self.nativeCheckInputs);
+  ] ++ lib.optionals doCheck ([ luarocksCheckHook ] ++ finalAttrs.nativeCheckInputs);
 
   buildInputs = buildInputs
     ++ (map (d: d.dep) externalDeps');
