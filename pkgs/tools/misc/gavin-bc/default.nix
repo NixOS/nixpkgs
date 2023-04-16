@@ -9,7 +9,7 @@
 
 assert lib.elem historyType [ "editline" "readline" "internal" ];
 assert lib.elem predefinedBuildType [ "BSD" "GNU" "GDH" "DBG" ];
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gavin-bc";
   version = "6.2.4";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (self: {
     domain = "git.gavinhoward.com";
     owner = "gavin";
     repo = "bc";
-    rev = self.version;
+    rev = finalAttrs.version;
     hash = "sha256-KQheSyBbxh2ROOvwt/gqhJM+qWc+gDS/x4fD6QIYUWw=";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (self: {
 
   configureFlags = [
     "--disable-nls"
-    "--predefined-build-type=${historyType}"
+    "--predefined-build-type=${predefinedBuildType}"
   ]
   ++ (lib.optional (historyType == "editline") "--enable-editline")
   ++ (lib.optional (historyType == "readline") "--enable-readline");
