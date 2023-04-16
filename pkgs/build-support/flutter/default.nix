@@ -30,6 +30,8 @@ let
   };
   self =
 (self: llvmPackages_13.stdenv.mkDerivation (args // {
+  outputs = [ "out" "debug" ];
+
   nativeBuildInputs = [
     deps
     flutter
@@ -50,7 +52,7 @@ let
     mkdir -p build/flutter_assets/fonts
 
     flutter packages get --offline -v
-    flutter build linux -v --release ${builtins.concatStringsSep " " (map (flag: "\"${flag}\"") flutterBuildFlags)}
+    flutter build linux -v --release --split-debug-info="$debug" ${builtins.concatStringsSep " " (map (flag: "\"${flag}\"") flutterBuildFlags)}
 
     runHook postBuild
   '';
