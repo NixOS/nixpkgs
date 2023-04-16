@@ -7,10 +7,6 @@
 , guiSupport ? stdenv.isDarwin, pinentry
 }:
 
-let
-  pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
-in
-
 assert guiSupport -> enableMinimal == false;
 
 stdenv.mkDerivation rec {
@@ -53,7 +49,7 @@ stdenv.mkDerivation rec {
     "--with-ksba-prefix=${libksba.dev}"
     "--with-npth-prefix=${npth}"
   ]
-  ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
+  ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentry.binaryPath or "bin/pinentry"}"
   ++ lib.optional stdenv.isDarwin "--disable-ccid-driver";
 
   postInstall = if enableMinimal
