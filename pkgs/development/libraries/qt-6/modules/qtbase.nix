@@ -178,7 +178,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional libGLSupported libGL;
 
   buildInputs = [
-    python3
     at-spi2-core
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libinput
@@ -196,6 +195,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
 
   propagatedNativeBuildInputs = [ lndir ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
