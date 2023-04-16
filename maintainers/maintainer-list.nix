@@ -15909,6 +15909,12 @@
     githubId = 15697697;
     name = "Kasper Gałkowski";
   };
+  utkarshgupta137 = {
+    email = "utkarshgupta137@gmail.com";
+    github = "utkarshgupta137";
+    githubId = 5155100;
+    name = "Utkarsh Gupta";
+  };
   uvnikita = {
     email = "uv.nikita@gmail.com";
     github = "uvNikita";
