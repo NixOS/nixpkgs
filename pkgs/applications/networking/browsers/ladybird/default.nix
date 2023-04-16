@@ -29,6 +29,9 @@ stdenv.mkDerivation {
     # https://github.com/SerenityOS/serenity/issues/17062
     substituteInPlace main.cpp \
       --replace "./SQLServer/SQLServer" "$out/bin/SQLServer"
+    # https://github.com/SerenityOS/serenity/issues/10055
+    substituteInPlace ../Meta/Lagom/CMakeLists.txt \
+      --replace "@rpath" "$out/lib"
   '';
 
   nativeBuildInputs = [
