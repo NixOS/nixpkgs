@@ -29,6 +29,9 @@ let
     procps
     usbutils
 
+    # It tries to execute xdg-user-dir and spams the log with command not founds
+    xdg-user-dirs
+
     # electron based launchers need newer versions of these libraries than what runtime provides
     mesa
     sqlite
