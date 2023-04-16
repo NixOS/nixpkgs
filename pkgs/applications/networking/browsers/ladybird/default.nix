@@ -52,13 +52,7 @@ stdenv.mkDerivation {
     "-DENABLE_UNICODE_DATABASE_DOWNLOAD=false"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-Wno-error"
-  ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0") [
-    # error: use of undeclared identifier 'aligned_alloc'
-    "-include mm_malloc.h"
-    "-Daligned_alloc=_mm_malloc"
-  ]);
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   # https://github.com/SerenityOS/serenity/issues/10055
   postInstall = lib.optionalString stdenv.isDarwin ''
