@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 }:
 
 stdenv.mkDerivation {
@@ -27,6 +28,10 @@ stdenv.mkDerivation {
     make -C mkapfs install DESTDIR="$out" $installFlags
     runHook postInstall
   '';
+
+  passthru.tests = {
+    apfs = nixosTests.apfs;
+  };
 
   meta = with lib; {
     description = "Experimental APFS tools for linux";
