@@ -131,6 +131,9 @@ in buildFHSUserEnv rec {
     tbb
     zlib
 
+    # SteamVR
+    udev
+
     # Other things from runtime
     glib
     gtk2
@@ -177,7 +180,6 @@ in buildFHSUserEnv rec {
     xorg.xkeyboardconfig
     xorg.libpciaccess
     xorg.libXScrnSaver # Dead Cells
-    udev # Shadow of the Tomb Raider
     icu # dotnet runtime, e.g. Stardew Valley
 
     # screeps dependencies
