@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libXi
     # libXext is a transitive dependency of libXi
     libXext
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemd) [
     # libsystemd is a needed for dbus-broker support
     systemd
   ];
