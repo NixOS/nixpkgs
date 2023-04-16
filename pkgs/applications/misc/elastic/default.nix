@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Design spring animations";
     homepage = "https://gitlab.gnome.org/World/elastic/";
     mainProgram = "app.drey.Elastic";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ _0xMRTT ];
   };
