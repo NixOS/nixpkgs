@@ -1,19 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "palettable";
   version = "3.3.2";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-aoZ8Qlov8ojqtDVr7ewA3gBt7jbJmmFHwuGwXeeJrJ8=";
   };
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    pytest
-  '';
+  pythonImportsCheck = [
+    "palettable"
+    "palettable.matplotlib"
+    "palettable.tableau"
+  ];
 
   meta = with lib; {
     description = "A library of color palettes";
