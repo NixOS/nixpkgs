@@ -5,6 +5,7 @@
 , django-otp
 , django-phonenumber-field
 , fetchFromGitHub
+, phonenumbers
 , pydantic
 , pythonOlder
 , pythonRelaxDepsHook
@@ -41,18 +42,38 @@ buildPythonPackage rec {
     django
     django-formtools
     django-otp
-    # django-otp-yubikey #Addtional Pkgs not in nixpkgs yet
     django-phonenumber-field
-    pydantic
     qrcode
-    twilio
-    webauthn
   ];
 
-  # require internet connection
+  passthru.optional-dependencies = {
+    call = [
+      twilio
+    ];
+    sms = [
+      twilio
+    ];
+    webauthn = [
+      pydantic
+      webauthn
+    ];
+    # yubikey = [
+    #   django-otp-yubikey
+    # ];
+    phonenumbers = [
+      phonenumbers
+    ];
+    # phonenumberslite = [
+    #   phonenumberslite
+    # ];
+  };
+
+  # Tests require internet connection
   doCheck = false;
 
-  pythonImportsCheck = [ "two_factor" ];
+  pythonImportsCheck = [
+    "two_factor"
+  ];
 
   meta = with lib; {
     description = "Complete Two-Factor Authentication for Django";
