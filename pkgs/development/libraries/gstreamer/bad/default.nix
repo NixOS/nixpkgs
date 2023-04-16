@@ -92,6 +92,7 @@
 , VideoToolbox
 , AudioToolbox
 , AVFoundation
+, Cocoa
 , CoreMedia
 , CoreVideo
 , Foundation
@@ -233,6 +234,7 @@ stdenv.mkDerivation rec {
     VideoToolbox
     AudioToolbox
     AVFoundation
+    Cocoa
     CoreMedia
     CoreVideo
     Foundation

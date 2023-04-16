@@ -24,7 +24,7 @@
 
   gst-plugins-good = callPackage ./good { inherit Cocoa; };
 
-  gst-plugins-bad = callPackage ./bad { inherit AudioToolbox AVFoundation CoreMedia CoreVideo Foundation MediaToolbox VideoToolbox; };
+  gst-plugins-bad = callPackage ./bad { inherit AudioToolbox AVFoundation Cocoa CoreMedia CoreVideo Foundation MediaToolbox VideoToolbox; };
 
   gst-plugins-ugly = callPackage ./ugly { inherit CoreFoundation DiskArbitration IOKit; };
 
