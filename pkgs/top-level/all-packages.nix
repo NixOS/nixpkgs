@@ -7646,6 +7646,8 @@ with pkgs;
     texinfo = texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
   };
 
+  elastic = callPackage ../applications/misc/elastic { };
+
   exfat = callPackage ../tools/filesystems/exfat { };
 
   exfatprogs = callPackage ../tools/filesystems/exfatprogs { };
