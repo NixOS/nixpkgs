@@ -140,6 +140,9 @@ let
     };
     gr-blocks = {
       cmakeEnableFlag = "GR_BLOCKS";
+      runtime = [
+        libsndfile
+      ];
     };
     gr-fec = {
       cmakeEnableFlag = "GR_FEC";
