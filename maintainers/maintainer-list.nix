@@ -5479,6 +5479,11 @@
     githubId = 2430469;
     name = "Gavin Rogers";
   };
+  gaykitty = {
+    github = "gaykitty";
+    githubId = 126119280;
+    name = "Kitty Pride";
+  };
   gazally = {
     email = "gazally@runbox.com";
     github = "gazally";
@@ -6901,6 +6906,12 @@
     github = "jasoncarr0";
     githubId = 6874204;
     name = "Jason Carr";
+  };
+  jasonodoom = {
+    email = "jasonodoom@riseup.net";
+    github = "jasonodoom";
+    githubId = 6789916;
+    name = "Jason Odoom";
   };
   javaguirre = {
     email = "contacto@javaguirre.net";
