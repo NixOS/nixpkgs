@@ -1503,6 +1503,8 @@ with pkgs;
 
   elkhound = callPackage ../development/tools/elkhound { };
 
+  ethq = callPackage ../os-specific/linux/ethq { };
+
   weidu = callPackage ../tools/games/weidu { };
 
   weylus = callPackage ../applications/graphics/weylus  {
