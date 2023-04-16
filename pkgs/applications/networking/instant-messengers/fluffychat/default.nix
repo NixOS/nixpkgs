@@ -13,15 +13,16 @@
 }:
 
 let
+  version = "1.10.0";
   # map of nix platform -> expected url platform
   platformMap = {
     x86_64-linux = "linux-x86";
     aarch64-linux = "linux-arm64";
   };
 in
-stdenv.mkDerivation rec {
-  version = "1.10.0";
-  name = "fluffychat";
+stdenv.mkDerivation {
+  inherit version;
+  pname = "fluffychat";
 
   src = fetchzip {
     url = "https://gitlab.com/api/v4/projects/16112282/packages/generic/fluffychat/${version}/fluffychat-${platformMap.${stdenv.hostPlatform.system}}.tar.gz";
