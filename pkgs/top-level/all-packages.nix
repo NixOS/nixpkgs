@@ -1558,6 +1558,8 @@ with pkgs;
 
   inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
+  ivpn-ui = callPackage ../tools/networking/ivpn-ui { };
+
   jobber = callPackage ../tools/system/jobber { };
 
   kanata = callPackage ../tools/system/kanata { };
