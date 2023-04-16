@@ -108,7 +108,6 @@
     githubId = 105598867;
     matrix = "@0xmrtt:envs.net";
   };
-  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
