@@ -74,6 +74,10 @@ buildPythonPackage rec {
   disabledTests = [
     # block devices access
     "test_is_block_device"
+    # regression in python 3.11.3 and 3.10.11
+    # https://github.com/agronholm/anyio/issues/550
+    "TestTLSStream"
+    "TestTLSListener"
   ];
 
   disabledTestPaths = [
