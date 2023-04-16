@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     mainProgram = "app.drey.Elastic";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ 0xMRTT ];
+    maintainers = with maintainers; [ _0xMRTT ];
   };
 }
