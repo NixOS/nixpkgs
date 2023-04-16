@@ -22560,27 +22560,17 @@ with pkgs;
   # Default libGLU
   libGLU = mesa_glu;
 
-  # When a new patch is out, add a new mesa attribute with the exact patch version
-  # Remove old mesa attributes when they're unused.
-  # Try to keep the previous version around for a bit in case there are new bugs.
-  mesa_22_3_7 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/22.3.7.nix {
+  # Keep Mesa 22.3 for now because 23.0 does not build on Darwin.
+  # FIXME: remove, also investigate why we even need Mesa on Darwin.
+  mesa_22_3 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/22.3.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
     inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
-  mesa_23_0_1 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/23.0.1.nix {
+  mesa_23_0 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/23.0.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
     inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
-  # Bump this immediately on patches; wait a bit for minor versions
-  mesa_22 = mesa_22_3_7;
-  mesa_23 = mesa_23_0_1;
-  # Bump on staging only, tonnes of packages depend on it.
-  # See https://github.com/NixOS/nixpkgs/issues/218232
-  # Major versions should be bumped when they have proven to be reasonably stable
-  # FIXME: split up libgbm properly
-  # darwin: deferred until stabilized; e.g. see around:
-  #   https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/21859
-  mesa = if stdenv.isDarwin then mesa_22_3_7 else mesa_23_0_1;
+  mesa = if stdenv.isDarwin then mesa_22_3 else mesa_23_0;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
