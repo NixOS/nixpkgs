@@ -29,17 +29,25 @@ let
         platforms = platforms.all;
         maintainers = with maintainers; [ nicoo ];
       };
+
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
     } p);
 
 in
 {
 
   # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
-  seekTo = script { n = "seek-to"; meta.description = "Mpv script for seeking to a specific position"; };
+  seekTo = script {
+    n = "seek-to";
+    meta.description = "Mpv script for seeking to a specific position";
+    outputHash = "sha256-3RlbtUivmeoR9TZ6rABiZSd5jd2lFv/8p/4irHMLshs=";
+  };
 
   blacklistExtensions = script {
     n = "blacklist-extensions";
     meta.description = "Automatically remove playlist entries based on their extension.";
+    outputHash = "sha256-qw9lz8ofmvvh23F9aWLxiU4YofY+YflRETu+nxMhvVE=";
   };
 
 }
