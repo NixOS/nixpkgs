@@ -75,11 +75,20 @@ A function similar to `evalModules` but building on top of the already passed [`
 
 If you're familiar with prototype inheritance, you can think of the current, actual `evalModules` invocation as the prototype, and the return value of `extendModules` as the instance.
 
+This functionality is also available to modules as the `extendModules` module argument.
+
+::: {.note}
+
+**Evaluation Performance**
+
+`extendModules` returns a configuration that shares very little with the original `evalModules` invocation, because the module arguments may be different.
+
+So if you have a configuration that has been (or will be) largely evaluated, almost none of the computation is shared with the configuration returned by `extendModules`.
+
 The real work of module evaluation happens while computing the values in `config` and `options`, so multiple invocations of `extendModules` have a particularly small cost, as long as only the final `config` and `options` are evaluated.
 
 If you do reference multiple `config` (or `options`) from before and after `extendModules`, evaluation performance is the same as with multiple `evalModules` invocations, because the new modules' ability to override existing configuration fundamentally requires constructing a new `config` and `options` fixpoint.
-
-This functionality is also available to modules as the `extendModules` module argument.
+:::
 
 #### `_module` {#module-system-lib-evalModules-return-value-_module}
 
