@@ -1314,6 +1314,8 @@ self: super: with self; {
 
   bitmath = callPackage ../development/python-modules/bitmath { };
 
+  bitsandbytes = callPackage ../development/python-modules/bitsandbytes { };
+
   bitstring = callPackage ../development/python-modules/bitstring { };
 
   bitstruct = callPackage ../development/python-modules/bitstruct { };
@@ -5642,6 +5644,8 @@ self: super: with self; {
   linode = callPackage ../development/python-modules/linode { };
 
   linuxfd = callPackage ../development/python-modules/linuxfd { };
+
+  lion-pytorch = callPackage ../development/python-modules/lion-pytorch { };
 
   liquidctl = callPackage ../development/python-modules/liquidctl { };
 
