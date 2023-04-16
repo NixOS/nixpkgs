@@ -1,0 +1,161 @@
+#!/usr/bin/env bash
+
+# Adapt from get_vsixpkg() of the original update_install_exts.sh
+
+set -eu -o pipefail
+
+declare -a NONFLAG_ARGS=()
+
+source nix-prefetch-vsix-lib.sh
+
+function prepare_vsix_url {
+    prepare_vsix_publisher
+    prepare_vsix_name
+    prepare_vsix_version_specified
+    VSIX_URL="https://$VSIX_PUBLISHER.gallery.vsassets.io/_apis/public/gallery/publisher/$VSIX_PUBLISHER/extension/$VSIX_NAME/$VSIX_VERSION_SPECIFIED/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
+}
+
+VSIX_PUBLISHER=""
+VSIX_NAME=""
+VSIX_VERSION=""
+VSIX_VERSION_SPECIFIED=""
+VSIX_VERSION_FETCHED=""
+COMPACT=0
+ADD_TO_STORE=0
+NO_HASH=0
+NO_META=0
+PRINT_CONFIGURATION=0
+
+(("$#")) || fail "Expect PUBLISHER and NAME"
+
+while (("$#")); do
+    case "$1" in
+    -h | --help)
+        # shellcheck disable=SC2028 # False positive, see https://github.com/koalaman/shellcheck/issues/2486
+        echo \
+            "Usage: nix-prefetch-vscode-marketplace [OPTIONS] PUBLISHER NAME VERSION=latest
+
+Fetch the vscode extension from the official marketplace
+and print the registryRef (previously \"mktplcRef\") attributes in JSON format
+
+Note:
+The VSCode Extension Gallery API is left undocumented,
+and we could only get the version, the hash, and the manifest (package.json)
+by downloading the VSIX file directly.
+
+Options:
+  -a, --add-to-store        Add the downloaded VSIX file to the Nix store.
+  --base16                  Print the hash in base-16 format.
+  --base32                  Print the hash in base-32 format.
+  --base64                  Print the hash in base-64 format.
+  -c, --compact             Use compact JSON output instead of multi-line output.
+  -h, --help                Print this help and exit.
+  -H, --no-hash             Do not print the nix-hash value of this extension.
+  -M, --no-meta             Do not print the meta attributes of this extension.
+      --print-configuration Print the configuration options of the extension.
+  --sri                     Print the hash in SRI format.
+                            This is the default behavior
+  -t, --tmpdir TMPDIR       Specify the directory
+                            to create temporary directories in.
+                            Default to \`\"\${TMPDIR:-/tmp}\"\` by \`mktemp\`
+                            from the environment.
+  --type HASH_ALGO          Specify the hash algorithm.
+                            Default to sha256
+
+If non-flag arguments (PUBLISHER, NAME, VERSION, etc.) happen to start with '-',
+they should be escaped with a '\\' prefix or be added after '--'."
+        exit 0
+        ;;
+    -a | --add-to-store)
+        ADD_TO_STORE=1
+        shift
+        ;;
+    --base16)
+        HASH_FORMAT="base16"
+        shift
+        ;;
+    --base32)
+        HASH_FORMAT="base32"
+        shift
+        ;;
+    --base64)
+        HASH_FORMAT="base64"
+        shift
+        ;;
+    -c | --compact)
+        COMPACT=1
+        shift
+        ;;
+    -H | --no-hash)
+        NO_HASH=1
+        shift
+        ;;
+    -M | --no-meta)
+        NO_META=1
+        shift
+        ;;
+    --print-configuration)
+        PRINT_CONFIGURATION=1
+        shift
+        ;;
+    --sri)
+        HASH_FORMAT="sri"
+        shift
+        ;;
+    -t | --tmpdir)
+        (("$#" >= 2)) || fail "Expect $1 TMPDIR"
+        export TMPDIR="$2"
+        shift 2
+        ;;
+    --type)
+        (("$#" >= 2)) || fail "Expect $1 HASH_ALGO."
+        HASH_ALGO="$2"
+        shift 2
+        ;;
+    -)
+        fail "Unexpected argument $1"
+        ;;
+    --)
+        shift
+        NONFLAG_ARGS+=("$@")
+        set --
+        ;;
+    --?*)
+        fail "Unexpected argument $1"
+        ;;
+    -?*)
+        manage_shorthands
+        ;;
+    \\-*)
+        # If an argument begins with '\-',
+        # strip the prefixing backslash
+        # and put into NONFLAG_ARGS
+        NONFLAG_ARGS+=("${1:1}")
+        shift
+        ;;
+    *)
+        NONFLAG_ARGS+=("$1")
+        shift
+        ;;
+    esac
+done
+
+if [[ "${#NONFLAG_ARGS[@]}" -lt 2 ]]; then
+    fail "Expect PUBLISHER and NAME"
+fi
+VSIX_PUBLISHER="${NONFLAG_ARGS[0]}"
+VSIX_NAME="${NONFLAG_ARGS[1]}"
+if [[ "${#NONFLAG_ARGS[@]}" -lt 3 || -z "${NONFLAG_ARGS[2]}" ]]; then
+    VSIX_VERSION_SPECIFIED="latest"
+else
+    VSIX_VERSION_SPECIFIED="${NONFLAG_ARGS[2]}"
+fi
+
+create_exttmp
+trap cleanup EXIT
+
+if ((ADD_TO_STORE)); then
+    add_vsix_to_store
+fi
+
+print_output
