@@ -51,7 +51,6 @@
 
 # the derivation at which the `-B` and `-L` flags added by `useCcForLibs` will point
 , gccForLibs ? if useCcForLibs then cc else null
-, tmpDropB ? false # temporary hack; see PR #225846
 }:
 
 with lib;
@@ -335,7 +334,7 @@ stdenv.mkDerivation {
     ##
     ## GCC libs for non-GCC support
     ##
-    + optionalString (useGccForLibs && !tmpDropB) ''
+    + optionalString (useGccForLibs && isClang) ''
 
       echo "-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-cflags
     ''

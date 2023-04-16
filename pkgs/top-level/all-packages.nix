@@ -15563,9 +15563,6 @@ with pkgs;
 
   llvmPackages_rocm = recurseIntoAttrs (callPackage ../development/compilers/llvm/rocm { });
 
-  # temporary hack; see PR #225846
-  stdenv-tmpDropB = overrideCC stdenv (wrapCCWith { tmpDropB = true; inherit (stdenv.cc) cc; });
-
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
