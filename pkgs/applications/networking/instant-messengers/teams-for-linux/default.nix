@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3zjmVIPQ+F2jPQ2xkAv5hQUjr8k5jIHTsa73J+IMayw=";
   };
 
+  patches = [
+    # Can be removed once Electron upstream resolves https://github.com/electron/electron/issues/36660
+    ./screensharing-wayland-hack-fix.patch
+  ];
+
   nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
