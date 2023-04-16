@@ -8469,6 +8469,8 @@ with pkgs;
 
   hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
 
+  hybrid-bar = callPackage ../applications/misc/hybrid-bar { };
+
   hybridreverb2 = callPackage ../applications/audio/hybridreverb2 {
     stdenv = gcc8Stdenv;
   };
