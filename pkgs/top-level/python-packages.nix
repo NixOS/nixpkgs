@@ -2677,6 +2677,8 @@ self: super: with self; {
 
   django-paintstore = callPackage ../development/python-modules/django-paintstore { };
 
+  django-parler = callPackage ../development/python-modules/django-parler { };
+
   django-pattern-library = callPackage ../development/python-modules/django-pattern-library { };
 
   django-payments = callPackage ../development/python-modules/django-payments { };
@@ -2716,6 +2718,8 @@ self: super: with self; {
   django-rest-polymorphic = callPackage ../development/python-modules/django-rest-polymorphic { };
 
   django-rest-registration = callPackage ../development/python-modules/django-rest-registration { };
+
+  django-rosetta = callPackage ../development/python-modules/django-rosetta { };
 
   django-rq = callPackage ../development/python-modules/django-rq { };
 
