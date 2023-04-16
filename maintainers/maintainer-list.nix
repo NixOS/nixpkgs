@@ -100,6 +100,7 @@
     name = "Daniel Glinka";
     github = "0xd61";
     githubId = 8351869;
+  };
   _0xMRTT = {
     email = "0xMRTT@proton.me";
     name = "0xMRTT";
