@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/linux-can/can-utils";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor Luflosi ];
   };
 }
