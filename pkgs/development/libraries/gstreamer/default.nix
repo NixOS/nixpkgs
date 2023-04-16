@@ -16,7 +16,7 @@
 }:
 
 {
-  gstreamer = callPackage ./core { inherit CoreServices; };
+  gstreamer = callPackage ./core { inherit Cocoa CoreServices; };
 
   gstreamermm = callPackage ./gstreamermm { };
 
