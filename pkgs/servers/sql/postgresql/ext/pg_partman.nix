@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Partition management extension for PostgreSQL";
     homepage    = "https://github.com/pgpartman/pg_partman";
+    changelog   = "https://github.com/pgpartman/pg_partman/raw/v${version}/CHANGELOG.txt";
     maintainers = with maintainers; [ ggpeti ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.postgresql;
