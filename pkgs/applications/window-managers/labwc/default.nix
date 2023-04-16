@@ -23,14 +23,14 @@
 let
   wlroots = wlroots_0_16;
 in
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
-    rev = self.version;
+    rev = finalAttrs.version;
     hash = "sha256-yZ1tXx7AA9pFc5C6c/J3B03/TfXw1PsAunNNiee3BGU=";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (self: {
   meta = with lib; {
     homepage = "https://github.com/labwc/labwc";
     description = "A Wayland stacking compositor, similar to Openbox";
-    changelog = "https://raw.githubusercontent.com/labwc/labwc/${self.version}/NEWS.md";
+    changelog = "https://raw.githubusercontent.com/labwc/labwc/${finalAttrs.version}/NEWS.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
