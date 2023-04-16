@@ -73,7 +73,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.68";
+    version = "0.3.69";
 
     outputs = [
       "out"
@@ -91,7 +91,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-dm+mgtvXJEBjCYMBbiBHZq42ikfsEDaybMzLMPLxBcE=";
+      sha256 = "sha256-1eUyRkXfcvV0scWYPnDSpqJBWJNOYEZX0aVQSQeMwyE=";
     };
 
     patches = [
@@ -108,11 +108,9 @@ let
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
 
-      # backport patch fixing no sound in some cases
-      # FIXME: remove for next release
       (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/8748c77451ce332dd24549b414200499ede4f184.diff";
-        hash = "sha256-nxWszqLUbO1XS/DWIBYrGpVZFy2c5+E2V9dlBMekShM=";
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/a275e825c75c93775baaeb17479e38d035d9b79a.patch";
+        hash = "sha256-y1kDtMy5MgDPv/TgV8xZ8rmzQ12ZsZafKMqJ3+QIu8E=";
       })
     ];
 
