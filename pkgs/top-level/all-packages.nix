@@ -31867,6 +31867,8 @@ with pkgs;
 
   matrix-recorder = callPackage ../applications/networking/instant-messengers/matrix-recorder { };
 
+  iamb = callPackage ../applications/networking/instant-messengers/iamb { };
+
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
 
   mbrola = callPackage ../applications/audio/mbrola { };
