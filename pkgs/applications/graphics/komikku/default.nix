@@ -19,7 +19,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.17.0";
+  version = "1.18.0";
 
   format = "other";
 
@@ -27,20 +27,8 @@ python3.pkgs.buildPythonApplication rec {
     owner = "valos";
     repo = "Komikku";
     rev = "v${version}";
-    hash = "sha256-DxW9uefY6Fks3qSUeLMp3BB85SfLgzwBr4KO9do2y2o=";
+    hash = "sha256-suqoYV+YsbCB7sUNzds6OoEMH9KO3bt2udok6oXXyls=";
   };
-
-  patches = [
-    # https://gitlab.com/valos/Komikku/-/merge_requests/208
-    (fetchpatch {
-      url = "https://gitlab.com/valos/Komikku/-/commit/c9a09817acd767a7cb4ceea9b212fffd798eae61.patch";
-      hash = "sha256-McjQApLY7OKbdelrTeh3aRw90B6T9V5FtLL5Y62BmGA=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/valos/Komikku/-/commit/bda93631420f6a69a50be0068f259d60b9558930.patch";
-      hash = "sha256-Xu+IaQKf0I99a2uh97j8xSlGYSJHuNPMy/zZtWRxLaM=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson

@@ -15,6 +15,7 @@
 , nixosTests
 , python3
 , makeWrapper
+, runtimeShell
 , symlinkJoin
 , extraPackages ? [ ]
 , runc
@@ -61,13 +62,13 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "4.4.4";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-rLXq+sveSxeoD3gyXSnfgGFx6alOBKSRCdDHGwwvPm4=";
+    hash = "sha256-udvvTdkpL8xvY0iIMBgBFQk5sybpn9vCFFXP0ZqOajM=";
   };
 
   patches = [
@@ -99,6 +100,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
+    substituteInPlace Makefile --replace "/bin/bash" "${runtimeShell}"
     ${if stdenv.isDarwin then ''
       make podman-remote # podman-mac-helper uses FHS paths
     '' else ''

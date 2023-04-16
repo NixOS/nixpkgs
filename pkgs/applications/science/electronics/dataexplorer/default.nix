@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dataexplorer";
-  version = "3.7.4";
+  version = "3.7.6";
 
   src = fetchurl {
     url = "mirror://savannah/dataexplorer/dataexplorer-${version}-src.tar.gz";
-    sha256 = "sha256-bghI7Hun7ZKUVEj7T58K0oaclnhUGd4z+eIqZF3eXHQ=";
+    sha256 = "sha256-mwz4o1m2ldjyD4pbwMQxeaI8a8JXzis+s0I+6GW8WaY=";
   };
 
   nativeBuildInputs = [ ant makeWrapper ];
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
       --set SWT_GTK3 0 \
       --set LIBOVERLAY_SCROLLBAR 0
 
-    install -Dvm644 build/misc/GNU_LINUX_JUNSI_ICHARER_DUO_UDEV_RULE/50-Junsi-iCharger-DUO.rules \
-      $out/etc/udev/rules.d/50-Junsi-iCharger-DUO.rules
+    install -Dvm644 build/misc/GNU_LINUX_JUNSI_ICHARER_USB_UDEV_RULE/50-Junsi-iCharger-USB.rules \
+      $out/etc/udev/rules.d/50-Junsi-iCharger-USB.rules
     install -Dvm644 build/misc/GNU_LINUX_SKYRC_UDEV_RULE/50-SkyRC-Charger.rules \
       $out/etc/udev/rules.d/50-SkyRC-Charger.rules
   '';

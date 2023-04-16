@@ -10,13 +10,13 @@
 # gcc only supports objc on darwin
 buildGoModule.override { stdenv = clangStdenv; } rec {
   pname = "go-musicfox";
-  version = "4.0.2";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "anhoder";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZxyW/NUKSCcx/KGgFV2pt5ucTBP7BE7qFeTvBoRmUvQ=";
+    hash = "sha256-6JOD0RsZY79jLYJqPrzc43jgR03XQEfa8B0mGvlIkF4=";
   };
 
   deleteVendor = true;
