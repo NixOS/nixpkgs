@@ -1437,7 +1437,7 @@ self: super: {
           sed -i 's/bytestring.*0.11/bytestring/' jsaddle-webkit2gtk.cabal
         '';
       }))
-    ]; 
+    ];
 
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
