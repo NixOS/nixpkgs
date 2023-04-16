@@ -47,8 +47,12 @@
   "panel-date-format@keiii.github.com" = "panel-date-format";
   "panel-date-format@atareao.es" = "panel-date-format-2";
 
+  "true-color-invert@jackkenney" = "true-color-invert";
+  "true-color-window-invert@lynet101" = "true-color-invert-2";
+
   "volume_scroller@trflynn89.pm.me" = "volume-scroller";
   "volume_scroller@noskoski" = "volume-scroller-2";
+  "volume_scroller@francislavoie.github.io" = "volume-scroller-3";
 
   "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
   "wireguard-indicator@atareao.es" = "wireguard-indicator";
