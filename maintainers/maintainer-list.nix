@@ -5049,6 +5049,12 @@
     github = "fkautz";
     githubId = 135706;
   };
+  FlafyDev = {
+    name = "Flafy Arazi";
+    email = "flafyarazi@gmail.com";
+    github = "FlafyDev";
+    githubId = 44374434;
+  };
   Flakebi = {
     email = "flakebi@t-online.de";
     github = "Flakebi";
@@ -11095,6 +11101,12 @@
     github = "NorfairKing";
     githubId = 3521180;
     name = "Tom Sydney Kerckhove";
+  };
+  NotAShelf = {
+    name = "NotAShelf";
+    email = "itsashelf@gmail.com";
+    github = "NotAShelf";
+    githubId = 62766066;
   };
   notbandali = {
     name = "Amin Bandali";
