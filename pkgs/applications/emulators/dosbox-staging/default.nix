@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , SDL2
 , SDL2_image
 , SDL2_net
@@ -39,6 +40,25 @@ stdenv.mkDerivation (self: {
     hash = "sha256-I90poBeLSq1c8PXyjrx7/UcbfqFNnnNiXfJdWhLPGMc=";
   };
 
+  patches = [
+    # Pull missind SDL2_net dependency:
+    #   https://github.com/dosbox-staging/dosbox-staging/pull/2358
+    (fetchpatch {
+      name = "sdl2-net.patch";
+      url = "https://github.com/dosbox-staging/dosbox-staging/commit/1b02f187a39263f4b0285323dcfe184bccd749c2.patch";
+      hash = "sha256-Ev97xApInu6r5wvI9Q7FhkSXqtMW/rwJj48fExvqnT0=";
+    })
+
+    # Pull missing SDL2_image dependency:
+    #   https://github.com/dosbox-staging/dosbox-staging/pull/2239
+    (fetchpatch {
+      name = "sdl2-image.patch";
+      url = "https://github.com/dosbox-staging/dosbox-staging/commit/ca8b7a906d29a3f8ce956c4af7dc829a6ac3e229.patch";
+      hash = "sha256-WtTVSWWSlfXrdPVsnlDe4P5K/Fnj4QsOzx3Wo/Kusmg=";
+      includes = [ "src/gui/meson.build" ];
+    })
+  ];
+
   nativeBuildInputs = [
     copyDesktopItems
     gtest
@@ -67,11 +87,6 @@ stdenv.mkDerivation (self: {
     SDL2_image
     SDL2_net
     speexdsp
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-I${SDL2_image}/include/SDL2"
-    "-I${SDL2_net}/include/SDL2"
   ];
 
   desktopItems = [
