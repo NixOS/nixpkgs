@@ -1,40 +1,52 @@
-{ lib, python3Packages, fetchFromGitHub, substituteAll }:
+{ lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "1.7.1";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r27ydv258c6pc82za0wq8q8fj0j3r50c8wxc6r7dwr6wx8q3asx";
+    sha256 = "sha256-SOkPQmKf4OLZnfwR36PG9t74gIip+QvTzb5LQC5b9ZY=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ click distro psutil ];
+  propagatedBuildInputs = with python3Packages; [
+    click
+    distro
+    psutil
+    setuptools
+  ];
 
   doCheck = false;
   pythonImportsCheck = [ "auto_cpufreq" ];
 
-  patches = [
-    # hardcodes version output
-    (substituteAll {
-      src = ./fix-version-output.patch;
-      inherit version;
-    })
+  postPatch = ''
+    sed -i setup.py \
+      -e 's|"setuptools-git-versioning"||'
 
-    # patch to prevent script copying and to disable install
-    ./prevent-install-and-copy.patch
-  ];
+    sed -i auto_cpufreq/core.py \
+      -e 's|/usr/local/share/auto-cpufreq/scripts/|/run/current-system/sw/bin/|' \
+      -e 's|def cpufreqctl():|def cpufreqctl():\n    pass\n    return|' \
+      -e 's|def cpufreqctl_restore():|def cpufreqctl_restore():\n    pass\n    return|' \
+      -e 's|def deploy_daemon():|def deploy_daemon():\n    pass\n    return|' \
+      -e 's|def deploy_daemon_performance():|def deploy_daemon_performance():\n    pass\n    return|' \
+      -e 's|def remove():|def remove():\n    pass\n    return|' \
+      -e 's|def app_version():|def app_version():\n    print("auto-cpufreq version: @version@")\n    print("Git commit: v@version@")\n    pass\n    return|'
+
+    sed -i scripts/auto-cpufreq.service \
+      -e '/^WorkingDirectory=/d' \
+      -e '/^Environment=/d' \
+      -e 's|ExecStart=.*/bin|ExecStart='$out'/bin|'
+  '';
 
   postInstall = ''
     # copy script manually
-    cp ${src}/scripts/cpufreqctl.sh $out/bin/cpufreqctl.auto-cpufreq
+    cp scripts/cpufreqctl.sh $out/bin/cpufreqctl.auto-cpufreq
 
     # systemd service
     mkdir -p $out/lib/systemd/system
-    cp ${src}/scripts/auto-cpufreq.service $out/lib/systemd/system
-    substituteInPlace $out/lib/systemd/system/auto-cpufreq.service --replace "/usr/local" $out
+    cp scripts/auto-cpufreq.service $out/lib/systemd/system/auto-cpufreq.service
   '';
 
   meta = with lib; {
