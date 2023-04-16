@@ -16,15 +16,16 @@
 , openimajgrabber
 , hwi
 , imagemagick
+, gzip
 }:
 
 let
   pname = "sparrow";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
-    sha256 = "sha256-/tKct73v0zWAjY4kTllnb/+SB/8ENgVl8Yh/LErKTxY=";
+    sha256 = "08ircrc93gsf3vgqn07gjwmy4bs3jds9rg184pihyymm7g9girfb";
   };
 
   launcher = writeScript "sparrow" ''
@@ -93,7 +94,7 @@ let
   sparrow-modules = stdenv.mkDerivation {
     pname = "sparrow-modules";
     inherit version src;
-    nativeBuildInputs = [ makeWrapper gnugrep openjdk autoPatchelfHook stdenv.cc.cc.lib zlib ];
+    nativeBuildInputs = [ makeWrapper gzip gnugrep openjdk autoPatchelfHook stdenv.cc.cc.lib zlib ];
 
     buildPhase = ''
       # Extract Sparrow's JIMAGE and generate a list of them.
@@ -143,9 +144,9 @@ let
 
       # Replace the embedded Tor binary (which is in a Tar archive)
       # with one from Nixpkgs.
-      cp ${torWrapper} ./tor
-      tar -cJf tor.tar.xz tor
-      cp tor.tar.xz modules/netlayer.jpms/native/linux/x64/tor.tar.xz
+      gzip -c ${torWrapper}  > tor.gz
+      cp tor.gz modules/kmp.tor.binary.linuxx64/kmptor/linux/x64/tor.gz
+      find modules
     '';
 
     installPhase = ''
@@ -158,7 +159,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  inherit pname version src;
+  inherit version src;
+  pname = "sparrow-unwrapped";
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
   desktopItems = [
