@@ -5,7 +5,6 @@
 , llvmPackages_13
 , cacert
 , flutter
-, git
 }:
 
 # absolutely no mac support for now
@@ -39,7 +38,6 @@ let
     makeWrapper
     deps
     flutter
-    git
   ] ++ nativeBuildInputs;
 
   configurePhase = ''
