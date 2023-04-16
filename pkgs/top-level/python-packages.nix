@@ -2576,6 +2576,8 @@ self: super: with self; {
 
   django-autocomplete-light = callPackage ../development/python-modules/django-autocomplete-light { };
 
+  django-bootstrap3 = callPackage ../development/python-modules/django-bootstrap3 { };
+
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
 
   django-cacheops = callPackage ../development/python-modules/django-cacheops { };
@@ -2606,6 +2608,8 @@ self: super: with self; {
 
   django-cors-headers = callPackage ../development/python-modules/django-cors-headers { };
 
+  django-countries = callPackage ../development/python-modules/django-countries { };
+
   django-crispy-forms = callPackage ../development/python-modules/django-crispy-forms { };
 
   django-cryptography = callPackage ../development/python-modules/django-cryptography { };
@@ -2626,6 +2630,8 @@ self: super: with self; {
 
   django-formtools = callPackage ../development/python-modules/django-formtools { };
 
+  django-formset-js-improved = callPackage ../development/python-modules/django-formset-js-improved { };
+
   django-graphiql-debug-toolbar = callPackage ../development/python-modules/django-graphiql-debug-toolbar { };
 
   django-gravatar2 = callPackage ../development/python-modules/django-gravatar2 { };
@@ -2638,6 +2644,8 @@ self: super: with self; {
 
   django-health-check = callPackage ../development/python-modules/django-health-check { };
 
+  django-hierarkey = callPackage ../development/python-modules/django-hierarkey { };
+
   django_hijack_admin = callPackage ../development/python-modules/django-hijack-admin { };
 
   django_hijack = callPackage ../development/python-modules/django-hijack { };
@@ -2649,6 +2657,8 @@ self: super: with self; {
 
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
 
+  django-jquery-js = callPackage ../development/python-modules/django-jquery-js { };
+
   django-js-asset = callPackage ../development/python-modules/django-js-asset { };
 
   django-js-reverse = callPackage ../development/python-modules/django-js-reverse { };
@@ -2658,6 +2668,8 @@ self: super: with self; {
   django-login-required-middleware = callPackage ../development/python-modules/django-login-required-middleware { };
 
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
+
+  django-markup = callPackage ../development/python-modules/django-markup { };
 
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
 
@@ -2758,6 +2770,8 @@ self: super: with self; {
   django-timezone-field = callPackage ../development/python-modules/django-timezone-field { };
 
   django_treebeard = callPackage ../development/python-modules/django_treebeard { };
+
+  django-two-factor-auth = callPackage ../development/python-modules/django-two-factor-auth { };
 
   django-versatileimagefield = callPackage ../development/python-modules/django-versatileimagefield { };
 
@@ -7492,6 +7506,8 @@ self: super: with self; {
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
+  python-creole = callPackage ../development/python-modules/python-creole { };
+
   python-crfsuite = callPackage ../development/python-modules/python-crfsuite { };
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
@@ -8125,6 +8141,8 @@ self: super: with self; {
   pydantic = callPackage ../development/python-modules/pydantic { };
 
   pydash = callPackage ../development/python-modules/pydash { };
+
+  pydata-google-auth = callPackage ../development/python-modules/pydata-google-auth { };
 
   pydata-sphinx-theme = callPackage ../development/python-modules/pydata-sphinx-theme { };
 
