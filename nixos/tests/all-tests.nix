@@ -135,6 +135,7 @@ in {
   cinnamon = handleTest ./cinnamon.nix {};
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
+  clipmon = handleTest ./clipmon.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
   cloud-init-hostname = handleTest ./cloud-init-hostname.nix {};
   cloudlog = handleTest ./cloudlog.nix {};

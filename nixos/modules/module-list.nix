@@ -1135,6 +1135,7 @@
   ./services/video/unifi-video.nix
   ./services/video/v4l2-relayd.nix
   ./services/wayland/cage.nix
+  ./services/wayland/clipmon.nix
   ./services/web-apps/akkoma.nix
   ./services/web-apps/alps.nix
   ./services/web-apps/atlassian/confluence.nix

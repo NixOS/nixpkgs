@@ -4220,6 +4220,8 @@ with pkgs;
 
   clipman = callPackage ../tools/wayland/clipman { };
 
+  clipmon = callPackage ../tools/wayland/clipmon { };
+
   kabeljau = callPackage ../games/kabeljau { };
 
   kanshi = callPackage ../tools/wayland/kanshi { };
