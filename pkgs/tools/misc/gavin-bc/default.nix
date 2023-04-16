@@ -8,17 +8,17 @@
 }:
 
 assert lib.elem historyType [ "editline" "readline" "internal" ];
-assert lib.elem predefinedBuildType [ "BSD" "GNU" "GDH" "DBG" ];
+assert lib.elem predefinedBuildType [ "BSD" "GNU" "GDH" "DBG" "" ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "gavin-bc";
-  version = "6.2.4";
+  version = "6.5.0";
 
   src = fetchFromGitea {
     domain = "git.gavinhoward.com";
     owner = "gavin";
     repo = "bc";
     rev = finalAttrs.version;
-    hash = "sha256-KQheSyBbxh2ROOvwt/gqhJM+qWc+gDS/x4fD6QIYUWw=";
+    hash = "sha256-V0L5OmpcI0Zu5JvESjuhp4wEs5Bu/CvjF6B5WllTEqo=";
   };
 
   buildInputs =
@@ -27,10 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--disable-nls"
-    "--predefined-build-type=${predefinedBuildType}"
   ]
+  ++ (lib.optional (predefinedBuildType != "") "--predefined-build-type=${predefinedBuildType}")
   ++ (lib.optional (historyType == "editline") "--enable-editline")
-  ++ (lib.optional (historyType == "readline") "--enable-readline");
+  ++ (lib.optional (historyType == "readline") "--enable-readline")
+  ++ (lib.optional (historyType == "internal") "--enable-internal-history");
 
   meta = {
     homepage = "https://git.gavinhoward.com/gavin/bc";
@@ -42,3 +43,4 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.isDarwin;
   };
 })
+# TODO: cover most of configure settings
