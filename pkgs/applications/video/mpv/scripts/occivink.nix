@@ -4,10 +4,10 @@
 }:
 
 let
-  script = { name, ... }@p:
-    stdenvNoCC.mkDerivation (lib.attrsets.recursiveUpdate p {
-      pname = "mpv_${name}";
-      passthru.scriptName = "${name}.lua";
+  script = { n, ... }@p:
+    stdenvNoCC.mkDerivation (lib.attrsets.recursiveUpdate {
+      pname = "mpv_${n}";
+      passthru.scriptName = "${n}.lua";
 
       src = fetchFromGitHub {
         owner = "occivink";
@@ -20,7 +20,7 @@ let
       dontBuild = true;
       installPhase = ''
         mkdir -p $out/share/mpv/scripts
-        cp -r scripts/${name}.lua $out/share/mpv/scripts/
+        cp -r scripts/${n}.lua $out/share/mpv/scripts/
       '';
 
       meta = with lib; {
@@ -29,16 +29,16 @@ let
         platforms = platforms.all;
         maintainers = with maintainers; [ nicoo ];
       };
-    });
+    } p);
 
 in
 {
 
   # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
-  seekTo = script { name = "seek-to"; meta.description = "Mpv script for seeking to a specific position"; };
+  seekTo = script { n = "seek-to"; meta.description = "Mpv script for seeking to a specific position"; };
 
   blacklistExtensions = script {
-    name = "blacklist-extensions";
+    n = "blacklist-extensions";
     meta.description = "Automatically remove playlist entries based on their extension.";
   };
 
