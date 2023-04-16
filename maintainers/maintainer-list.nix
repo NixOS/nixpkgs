@@ -102,7 +102,7 @@
     githubId = 8351869;
   _0xMRTT = {
     email = "0xMRTT@proton.me";
-    name = "0xMRTT"
+    name = "0xMRTT";
     gitthub = "0xMRTT";
     githubId = 105598867;
     matrix = "@0xmrtt:envs.net";
