@@ -7,6 +7,7 @@
 , writeText
 , makeDesktopItem
 , xvfb-run
+, qt5
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -77,6 +78,8 @@ python3Packages.buildPythonApplication rec {
     pyside2
     streamdeck
     xlib
+  ] ++ lib.optionals stdenv.isLinux [
+    qt5.qtwayland
   ];
 
   nativeCheckInputs = [
