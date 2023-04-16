@@ -64,11 +64,16 @@ The option definitions that are typed with this type will extend the current set
 
 However, the value returned from the type is just the [`config`](#module-system-lib-evalModules-return-value-config), like any submodule.
 
+If you're familiar with prototype inheritance, you can think of this `evalModules` invocation as the prototype, and usages of this type as the instances.
+
 This type is also available to the [`modules`](#module-system-lib-evalModules-param-modules) as the module argument `moduleType`.
+<!-- TODO: document the module arguments. Using moduleType is like saying: suppose this configuration was extended. -->
 
 #### `extendModules` {#module-system-lib-evalModules-return-value-extendModules}
 
 A function similar to `evalModules` but building on top of the already passed [`modules`](#module-system-lib-evalModules-param-modules). Its arguments, `modules` and `specialArgs` are added to the existing values.
+
+If you're familiar with prototype inheritance, you can think of the current, actual `evalModules` invocation as the prototype, and the return value of `extendModules` as the instance.
 
 The real work of module evaluation happens while computing the values in `config` and `options`, so multiple invocations of `extendModules` have a particularly small cost, as long as only the final `config` and `options` are evaluated.
 
