@@ -29,6 +29,7 @@
 , AVFoundation
 , AVKit
 , WebKit
+, System
 }:
 
 stdenv.mkDerivation rec {
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
     AVFoundation
     AVKit
     WebKit
+    System
   ];
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin AGL;
@@ -109,8 +111,6 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace \
       'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' \
       'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
-    substituteInPlace configure --replace \
-      "-framework System" "-lSystem"
   '';
 
   postInstall = "
