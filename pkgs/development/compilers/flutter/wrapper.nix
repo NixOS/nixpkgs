@@ -3,6 +3,12 @@
 , callPackage
 , flutter
 , supportsLinuxDesktop ? stdenv.isLinux
+, extraPkgConfigPackages ? [ ]
+, extraLibraries ? [ ]
+, extraIncludes ? [ ]
+, extraCxxFlags ? [ ]
+, extraCFlags ? [ ]
+, extraLinkerFlags ? [ ]
 , makeWrapper
 , runCommandLocal
 , writeShellScript
@@ -62,7 +68,7 @@ let
 
   # Some header files and libraries are not properly located by the Flutter SDK.
   # They must be manually included.
-  appStaticBuildDeps = lib.optionals supportsLinuxDesktop [ libX11 xorgproto zlib ];
+  appStaticBuildDeps = (lib.optionals supportsLinuxDesktop [ libX11 xorgproto zlib ]) ++ extraLibraries;
 
   # Tools used by the Flutter SDK to compile applications.
   buildTools = lib.optionals supportsLinuxDesktop [
@@ -73,9 +79,9 @@ let
   ];
 
   # Nix-specific compiler configuration.
-  pkgConfigDirectories = builtins.filter builtins.pathExists (builtins.concatMap (pkg: map (dir: "${lib.getOutput "dev" pkg}/${dir}/pkgconfig") [ "lib" "share" ]) appBuildDeps);
-  cppFlags = map (pkg: "-isystem ${lib.getOutput "dev" pkg}/include") appStaticBuildDeps;
-  linkerFlags = map (pkg: "-rpath,${lib.getOutput "lib" pkg}/lib") appRuntimeDeps;
+  pkgConfigDirectories = builtins.filter builtins.pathExists (builtins.concatMap (pkg: map (dir: "${lib.getOutput "dev" pkg}/${dir}/pkgconfig") [ "lib" "share" ]) (appBuildDeps ++ extraPkgConfigPackages));
+  includeFlags = map (pkg: "-isystem ${lib.getOutput "dev" pkg}/include") (appStaticBuildDeps ++ extraIncludes);
+  linkerFlags = (map (pkg: "-rpath,${lib.getOutput "lib" pkg}/lib") appRuntimeDeps) ++ extraLinkerFlags;
 in
 (callPackage ./sdk-symlink.nix { }) (runCommandLocal "flutter-wrapped"
 {
@@ -94,6 +100,7 @@ in
     --prefix PATH : '${lib.makeBinPath (tools ++ buildTools)}' \
     --prefix PKG_CONFIG_PATH : '${builtins.concatStringsSep ":" pkgConfigDirectories}' \
     --prefix LIBRARY_PATH : '${lib.makeLibraryPath appStaticBuildDeps}' \
-    --prefix CXXFLAGS "''\t" '${builtins.concatStringsSep " " cppFlags}' \
+    --prefix CXXFLAGS "''\t" '${builtins.concatStringsSep " " (includeFlags ++ extraCxxFlags)}' \
+    --prefix CFLAGS "''\t" '${builtins.concatStringsSep " " (includeFlags ++ extraCFlags)}' \
     --prefix LDFLAGS "''\t" '${builtins.concatStringsSep " " (map (flag: "-Wl,${flag}") linkerFlags)}'
 '')
