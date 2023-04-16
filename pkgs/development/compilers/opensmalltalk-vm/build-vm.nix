@@ -20,6 +20,7 @@ let
   owner = "OpenSmalltalk";
   repo = "opensmalltalk-vm";
   version = "202206021410";
+  commitHash = "c9fd36530d2c4030649e33020b7b91272a465e31";
   srcHash= "sha256-QqElPiJuqD5svFjWrLz1zL0Tf+pHxQ2fPvkVRn2lyBI=";
 
   src = fetchFromGitHub {
@@ -46,12 +47,7 @@ stdenv.mkDerivation {
       hour = substring 8 2 version;
       minute = substring 10 2 version;
       date = "${year}-${month}-${day}T${hour}:${minute}+0000";
-      commitHash = fetchurl {
-        url = "https://api.github.com/repos/${owner}/${repo}/commits/${version}";
-        curlOpts = "--header Accept:application/vnd.github.v3.sha";
-        hash = "sha256-jhj+bngESaWC69T/fz9rMSFIvcqn7h001QMShMDrnkc=";
-      };
-      abbrevHash = substring 0 12 (builtins.readFile commitHash);
+      abbrevHash = substring 0 12 commitHash;
     in
     ''
       vmVersionDate=$(date -u '+%a %b %-d %T %Y %z' -d "${date}")
