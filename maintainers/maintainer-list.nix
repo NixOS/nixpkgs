@@ -8797,6 +8797,12 @@
     githubId = 3696783;
     name = "Leroy Hopson";
   };
+  lillycham = {
+    email = "lillycat332@gmail.com";
+    github = "lillycat332";
+    githubId = 54189319;
+    name = "Lilly Cham";
+  };
   lilyball = {
     email = "lily@sb.org";
     github = "lilyball";
