@@ -1,4 +1,4 @@
-{ lib, mkFranzDerivation, fetchurl, xorg }:
+{ lib, mkFranzDerivation, fetchurl, xorg, nix-update-script }:
 
 mkFranzDerivation rec {
   pname = "ferdium";
@@ -10,6 +10,12 @@ mkFranzDerivation rec {
   };
 
   extraBuildInputs = [ xorg.libxshmfence ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--override-filename" ./default.nix  ];
+    };
+  };
 
   meta = with lib; {
     description = "All your services in one place built by the community";
