@@ -17330,6 +17330,8 @@ with pkgs;
 
   protege-distribution = callPackage ../development/web/protege-distribution { };
 
+  publii = callPackage ../development/web/publii {};
+
   umr = callPackage ../development/misc/umr {
     llvmPackages = llvmPackages_latest;
   };
