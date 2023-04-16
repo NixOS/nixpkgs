@@ -3870,6 +3870,8 @@ with pkgs;
 
   bless = callPackage ../applications/editors/bless { };
 
+  blink = callPackage ../applications/emulators/blink { };
+
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
   blis = callPackage ../development/libraries/science/math/blis { };
