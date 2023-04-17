@@ -38,8 +38,8 @@ let
           modules = [ {
             _module.check = false;
           } ] ++ docModules.eager;
+          class = "nixos";
           specialArgs = specialArgs // {
-            class = "nixos";
             pkgs = scrubDerivations "pkgs" pkgs;
             # allow access to arbitrary options for eager modules, eg for getting
             # option types from lazy modules

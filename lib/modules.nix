@@ -78,13 +78,13 @@ let
                   # when resolving module structure (like in imports). For everything else,
                   # there's _module.args. If specialArgs.modulesPath is defined it will be
                   # used as the base path for disabledModules.
-                  #
-                  # `specialArgs.class`:
+                  specialArgs ? {}
+                , # `class`:
                   # A nominal type for modules. When set and non-null, this adds a check to
                   # make sure that only compatible modules are imported.
-                  specialArgs ? {}
-                , # This would be remove in the future, Prefer _module.args option instead.
-                  args ? {}
+                  # This would be remove in the future, Prefer _module.args option instead.
+                  class ? null
+                , args ? {}
                 , # This would be remove in the future, Prefer _module.check option instead.
                   check ? true
                 }:
@@ -220,6 +220,16 @@ let
               within a configuration, but can be used in module imports.
             '';
           };
+
+          _module.class = mkOption {
+            readOnly = true;
+            internal = true;
+            description = lib.mdDoc ''
+              If the `class` attribute is set and non-`null`, the module system will reject `imports` with a different `class`.
+
+              This option contains the expected `class` attribute of the current module evaluation.
+            '';
+          };
         };
 
         config = {
@@ -227,13 +237,14 @@ let
             inherit extendModules;
             moduleType = type;
           };
+          _module.class = class;
           _module.specialArgs = specialArgs;
         };
       };
 
       merged =
         let collected = collectModules
-          (specialArgs.class or null)
+          class
           (specialArgs.modulesPath or "")
           (regularModules ++ [ internalModule ])
           ({ inherit lib options config specialArgs; } // specialArgs);
@@ -310,13 +321,14 @@ let
         prefix ? [],
         }:
           evalModules (evalModulesArgs // {
+            inherit class;
             modules = regularModules ++ modules;
             specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
             prefix = extendArgs.prefix or evalModulesArgs.prefix or [];
           });
 
       type = lib.types.submoduleWith {
-        inherit modules specialArgs;
+        inherit modules specialArgs class;
       };
 
       result = withWarnings {

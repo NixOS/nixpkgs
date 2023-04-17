@@ -28,11 +28,11 @@ An attribute set of module arguments that can be used in `imports`.
 
 This is in contrast to `config._module.args`, which is only available after all `imports` have been resolved.
 
-#### `specialArgs.class` {#module-system-lib-evalModules-param-specialArgs-class}
+#### `class` {#module-system-lib-evalModules-param-class}
 
-If the `class` attribute is set in `specialArgs`, the module system will reject modules with a different `class`.
+If the `class` attribute is set and non-`null`, the module system will reject `imports` with a different `class`.
 
-The `class` value should be in lower [camel case](https://en.wikipedia.org/wiki/Camel_case).
+The `class` value should be a string in lower [camel case](https://en.wikipedia.org/wiki/Camel_case).
 
 If applicable, the `class` should match the "prefix" of the attributes used in (experimental) [flakes](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-flake.html#description). Some examples are:
 

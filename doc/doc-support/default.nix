@@ -47,7 +47,7 @@ let
   optionsDoc = pkgs.nixosOptionsDoc {
     inherit (pkgs.lib.evalModules {
       modules = [ ../../pkgs/top-level/config.nix ];
-      specialArgs.class = "nixpkgsConfig";
+      class = "nixpkgsConfig";
     }) options;
     documentType = "none";
     transformOptions = opt:
