@@ -4,6 +4,7 @@
 , ninja
 , pkg-config
 , python3
+, hotdoc
 , gst-plugins-base
 , orc
 , gettext
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-ugly";
-  version = "1.20.3";
+  version = "1.22.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-jKogeJoJwwS0nPVj0zzKlCGxh1uE/MGH5KOF+gHWrv0=";
+    hash = "sha256-jzD0TbC9BjcJv2++VROOOpivCry2HDYPNVgrvhDoBpE=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,9 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     python3
+
+    # documentation
+    hotdoc
   ];
 
   buildInputs = [
@@ -60,7 +64,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
     "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
   ] ++ (if enableGplPlugins then [
     "-Dgpl=enabled"

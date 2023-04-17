@@ -8,13 +8,14 @@
 , flex
 , python3
 , glib
+, hotdoc
 , makeWrapper
 , libcap
 , libunwind
-, darwin
 , elfutils # for libdw
 , bash-completion
 , lib
+, Cocoa
 , CoreServices
 , gobject-introspection
 , testers
@@ -22,22 +23,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.20.3";
+  version = "1.22.2";
 
   outputs = [
     "bin"
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs, see:
-    # - https://github.com/NixOS/nixpkgs/pull/98767
-    # - https://github.com/NixOS/nixpkgs/issues/98769#issuecomment-702296551
   ];
 
   src = let
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-YH2vZLu9X7GK+dF+IcDSLE1wL//oOyPLItGxryyiOio=";
+    hash = "sha256-sq/nNgOSHGCLpIlp27fXQ3dnRL/l2AWeziQRN7f4jiE=";
   };
 
   depsBuildBuild = [
@@ -59,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
 
     # documentation
-    # TODO add hotdoc here
+    hotdoc
   ] ++ lib.optionals stdenv.isLinux [
     libcap # for setcap binary
   ];
@@ -72,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     libunwind
     elfutils
   ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
     CoreServices
   ];
 
@@ -82,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ] ++ lib.optionals stdenv.isDarwin [
     # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
     "-Dlibunwind=disabled"

@@ -8418,6 +8418,8 @@ with pkgs;
 
   hostname-debian = callPackage ../tools/networking/hostname-debian { };
 
+  hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };
+
   hotpatch = callPackage ../development/libraries/hotpatch { };
 
   hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };

@@ -10,22 +10,22 @@
 , gst-rtsp-server
 , python3
 , gobject-introspection
+, hotdoc
 , json-glib
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-devtools";
-  version = "1.20.3";
+  version = "1.22.2";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-u71F6tcDNn6o9L6bPAgte2K+9HskCjkIPyeETih1jEc=";
+    hash = "sha256-62JybT4nqHgjaaJP1jZKiIXtJGKzu9qwkd/8gTnuBtg=";
   };
 
   outputs = [
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
   ];
 
   depsBuildBuild = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
 
     # documentation
-    # TODO add hotdoc here
+    hotdoc
   ];
 
   buildInputs = [
@@ -54,10 +54,6 @@ stdenv.mkDerivation rec {
     gst-plugins-base
     gst-plugins-bad
     gst-rtsp-server
-  ];
-
-  mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ];
 
   meta = with lib; {
