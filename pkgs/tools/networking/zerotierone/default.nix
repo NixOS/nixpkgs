@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, fetchurl
 
 , buildPackages
 , iproute2
@@ -15,18 +14,32 @@
 
 let
   pname = "zerotierone";
-  version = "1.10.3";
+  version = "1.10.6";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "sha256-MhkGcmt1YPvlePF54XsLVFUX+P979uUqhtJjudRx69g=";
+    sha256 = "sha256-mapFKeF+8jMGkxSuHaw5oUdTdSQgAdxEwF/S6iyVLbY=";
   };
+
 in stdenv.mkDerivation {
   inherit pname version src;
 
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "jwt-0.16.0" = "sha256-P5aJnNlcLe9sBtXZzfqHdRvxNfm6DPBcfcKOVeLZxcM=";
+    };
+  };
+  postPatch = "cp ${./Cargo.lock} Cargo.lock";
+
   preConfigure = ''
+    cmp ./Cargo.lock ./zeroidc/Cargo.lock || {
+      echo 1>&2 "Please make sure that the derivation's Cargo.lock is identical to ./zeroidc/Cargo.lock!"
+      exit 1
+    }
+
     patchShebangs ./doc/build.sh
     substituteInPlace ./doc/build.sh \
       --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
@@ -34,17 +47,12 @@ in stdenv.mkDerivation {
     substituteInPlace ./make-linux.mk \
       --replace '-march=armv6zk' "" \
       --replace '-mcpu=arm1176jzf-s' ""
-
-    # Upstream does not define the cargo settings necessary to use the vendorized rust-jwt version, so it has to be added manually.
-    # Can be removed once ZeroTierOne's zeroidc no longer uses a git url in Cargo.toml for jwt
-    echo '[source."https://github.com/glimberg/rust-jwt"]
-git = "https://github.com/glimberg/rust-jwt"
-replace-with = "vendored-sources"' >> ./zeroidc/.cargo/config.toml
   '';
 
   nativeBuildInputs = [
     pkg-config
     ronn
+    rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
   ];
@@ -78,6 +86,8 @@ replace-with = "vendored-sources"' >> ./zeroidc/.cargo/config.toml
   '';
 
   outputs = [ "out" "man" ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
