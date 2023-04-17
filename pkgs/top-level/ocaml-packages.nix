@@ -1496,6 +1496,8 @@ let
 
     simple-diff = callPackage ../development/ocaml-modules/simple-diff { };
 
+    slug = callPackage ../development/ocaml-modules/slug {  };
+
     sodium = callPackage ../development/ocaml-modules/sodium { };
 
     sosa = callPackage ../development/ocaml-modules/sosa { };
