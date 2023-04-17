@@ -371,10 +371,10 @@ let
         if class != null
         then
           m:
-            if m.class != null -> m.class == class
+            if m._class != null -> m._class == class
             then m
             else
-              throw "The module ${m._file or m.key} was imported into ${class} instead of ${m.class}."
+              throw "The module ${m._file or m.key} was imported into ${class} instead of ${m._class}."
         else
           m: m;
 
@@ -475,28 +475,28 @@ let
         else config;
     in
     if m ? config || m ? options then
-      let badAttrs = removeAttrs m ["_file" "key" "disabledModules" "imports" "options" "config" "meta" "freeformType" "class"]; in
+      let badAttrs = removeAttrs m ["_class" "_file" "key" "disabledModules" "imports" "options" "config" "meta" "freeformType"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
       else
         { _file = toString m._file or file;
+          _class = m._class or null;
           key = toString m.key or key;
           disabledModules = m.disabledModules or [];
           imports = m.imports or [];
           options = m.options or {};
           config = addFreeformType (addMeta (m.config or {}));
-          class = m.class or null;
         }
     else
       # shorthand syntax
       lib.throwIfNot (isAttrs m) "module ${file} (${key}) does not look like a module."
       { _file = toString m._file or file;
+        _class = m._class or null;
         key = toString m.key or key;
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = addFreeformType (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]);
-        class = null;
+        config = addFreeformType (removeAttrs m ["_class" "_file" "key" "disabledModules" "require" "imports" "freeformType"]);
       };
 
   applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }:

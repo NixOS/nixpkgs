@@ -63,14 +63,14 @@
         modules = [
           ./module-class-is-nixos.nix
           { _file = "foo.nix#darwinModules.default";
-            class = "darwin";
+            _class = "darwin";
             config = {};
             imports = [];
           }
         ];
       };
 
-    sub.nixosOk = { config = {}; class = "nixos"; };
+    sub.nixosOk = { _class = "nixos"; };
     sub.nixosFail = { imports = [ ./module-class-is-darwin.nix ]; };
   };
 }
