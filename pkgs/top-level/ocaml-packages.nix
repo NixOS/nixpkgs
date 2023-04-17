@@ -289,6 +289,8 @@ let
 
     data-encoding = callPackage ../development/ocaml-modules/data-encoding { };
 
+    dates_calc = callPackage ../development/ocaml-modules/dates_calc {  };
+
     dbf =  callPackage ../development/ocaml-modules/dbf { };
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
