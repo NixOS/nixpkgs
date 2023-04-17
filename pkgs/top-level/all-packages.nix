@@ -19102,6 +19102,8 @@ with pkgs;
     guile = null;
   };
 
+  gdbHostCpuOnly = gdb.override { hostCpuOnly = true; };
+
   gf = callPackage ../development/tools/misc/gf { };
 
   java-language-server = callPackage ../development/tools/java/java-language-server { };
