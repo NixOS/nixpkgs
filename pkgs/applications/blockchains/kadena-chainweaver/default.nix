@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       icon = "kadena-logo";
       desktopName = "Kadena Chainweaver ${version}";
       genericName = "Kadena Chainweaver Blockchain Wallet";
-      categories = [ "Finance"];
+      categories = [ "Finance" ];
     })
   ];
 
