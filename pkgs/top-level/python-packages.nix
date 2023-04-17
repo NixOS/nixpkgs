@@ -7094,6 +7094,8 @@ self: super: with self; {
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
+  opentelemetry-semantic-conventions = callPackage ../development/python-modules/opentelemetry-semantic-conventions { };
+
   openturns = toPythonModule (pkgs.openturns.override {
     python3Packages = self;
     enablePython = true;
