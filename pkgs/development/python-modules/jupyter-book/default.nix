@@ -65,6 +65,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "docutils"
+    "sphinx-design"
   ];
 
   pythonImportsCheck = [

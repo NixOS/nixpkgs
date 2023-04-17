@@ -143,7 +143,7 @@ python3.pkgs.buildPythonApplication {
 
   buildInputs = [
     qt6.qtbase
-  ];
+  ] ++ lib.optional stdenv.isLinux qt6.qtwayland;
   propagatedBuildInputs = with python3.pkgs; [
     # This rather long list came from running:
     #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_4.txt} | \

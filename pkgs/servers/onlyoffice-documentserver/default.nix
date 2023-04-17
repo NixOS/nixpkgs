@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, buildFHSUserEnvBubblewrap
+, buildFHSEnv
 , corefonts
 , dejavu_fonts
 , dpkg
@@ -57,7 +57,7 @@ let
     dontStrip = true;
 
     passthru = {
-      fhs = buildFHSUserEnvBubblewrap {
+      fhs = buildFHSEnv {
         name = "onlyoffice-wrapper";
 
         targetPkgs = pkgs: [

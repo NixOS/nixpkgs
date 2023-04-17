@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  enableParallelBuilding = true;
+
   # autoreconfHook fails hard if these two files do not exist
   postPatch = ''
     touch AUTHORS ChangeLog

@@ -8,7 +8,7 @@
 , addOpenGLRunpath
 , libGLU
 , xorg
-, buildFHSUserEnv
+, buildFHSEnv
 , bash
 , writeText
 , ocl-icd
@@ -133,7 +133,7 @@ let
     }
   );
 in
-buildFHSUserEnv {
+buildFHSEnv {
   name = "davinci-resolve";
   targetPkgs = pkgs: with pkgs; [
     librsvg

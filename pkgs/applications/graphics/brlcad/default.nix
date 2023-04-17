@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "brlcad";
-  version = "7.34.0";
+  version = "7.34.2";
 
   src = fetchFromGitHub {
     owner = "BRL-CAD";
     repo = pname;
     rev = "refs/tags/rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    hash = "sha256-Re5gEXlqdPxniaEP13Q0v0O9rt40V5NrxoUpcNBwn7s=";
+    hash = "sha256-oafu255xElEIk8p4yvNyR2maykUfxQui/L5MkicA+JA=";
   };
 
   nativeBuildInputs = [

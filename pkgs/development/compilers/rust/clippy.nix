@@ -4,6 +4,8 @@ rustPlatform.buildRustPackage {
   pname = "clippy";
   inherit (rustPlatform.rust.rustc) version src;
 
+  separateDebugInfo = true;
+
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
   buildAndTestSubdir = "src/tools/clippy";

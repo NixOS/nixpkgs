@@ -98,7 +98,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.11.0";
+  version = "2.11.1";
   variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
 
@@ -207,7 +207,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "refs/tags/v${version}";
-      hash = "sha256-OYh61/83yv+ycivylfdS8yFUIUAk8euAPvmfjPzldGs=";
+      hash = "sha256-q59cUW6613byHk4LGl+sefO5czLSWxOrSyLbJ1pkNEY=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -394,11 +394,11 @@ let
     fetchAttrs = {
       sha256 = {
       x86_64-linux = if cudaSupport
-        then "sha256-/wB9EpaDPg3TrD9qggdA4vPgzvmaKc6dDnLjoYTJC5o="
-        else "sha256-QgOaUaq0V5HG9BOv9nEw8OTSlzINNFvbnyP8Vx+r9Xw=";
-      aarch64-linux = "sha256-zjnRtTG1j9cZTbP0Xnk2o/zWTNsP8T0n4Ai8IiAT3PE=";
-      x86_64-darwin = "sha256-RBLox9rzBKcZMm4NwnT7vQ/EjapWQJkqxuQ0LIdaM1E=";
-      aarch64-darwin = "sha256-tTk2KPFK4+0wA22xzb2C6qODgAbSxVbue0xk9JOjU04=";
+        then "sha256-rcTPOMoBfmKFuuCanMlhmtFtOQzOICfEXTZey/rQEdM="
+        else "sha256-JGLH64F81xwSUl9RCWJhBLNRBQandImsVafEF5s+ap0=";
+      aarch64-linux = "sha256-g6JUZQQalCTSjvAarkI7+gq13cPhFg/O9LPQDGNvrII=";
+      x86_64-darwin = "sha256-phmJ71l0DvJUVx1sHGS3nkDqJ18yOO7I3N1ODnfrrYc=";
+      aarch64-darwin = "sha256-qZvqXi6pvIrZpZdR4BcbOh2C/A4ZHJgXgFINhVJmmcs=";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
@@ -448,27 +448,6 @@ let
       maintainers = with maintainers; [ abbradar ];
       platforms = with platforms; linux ++ darwin;
       broken = !(xlaSupport -> cudaSupport);
-      knownVulnerabilities = [
-        "CVE-2023-27579"
-        "CVE-2023-25801"
-        "CVE-2023-25676"
-        "CVE-2023-25675"
-        "CVE-2023-25674"
-        "CVE-2023-25673"
-        "CVE-2023-25671"
-        "CVE-2023-25670"
-        "CVE-2023-25669"
-        "CVE-2023-25668"
-        "CVE-2023-25667"
-        "CVE-2023-25665"
-        "CVE-2023-25666"
-        "CVE-2023-25664"
-        "CVE-2023-25663"
-        "CVE-2023-25662"
-        "CVE-2023-25660"
-        "CVE-2023-25659"
-        "CVE-2023-25658"
-      ];
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s
