@@ -30,7 +30,7 @@ This is in contrast to `config._module.args`, which is only available after all 
 
 #### `class` {#module-system-lib-evalModules-param-class}
 
-If the `class` attribute is set and non-`null`, the module system will reject `imports` with a different `class`.
+If the `class` attribute is set and non-`null`, the module system will reject `imports` with a different `_class` declaration.
 
 The `class` value should be a string in lower [camel case](https://en.wikipedia.org/wiki/Camel_case).
 
