@@ -92,6 +92,6 @@ If you do reference multiple `config` (or `options`) from before and after `exte
 
 #### `_module` {#module-system-lib-evalModules-return-value-_module}
 
-A portion of the configuration tree which is elided from `config`. It contains some values that are mostly internal to the module system implementation.
+A portion of the configuration tree which is elided from `config`.
 
 <!-- TODO: when markdown migration is complete, make _module docs visible again and reference _module docs. Maybe move those docs into this chapter? -->
