@@ -5337,6 +5337,8 @@ self: super: with self; {
 
   korean-lunar-calendar = callPackage ../development/python-modules/korean-lunar-calendar { };
 
+  kornia = callPackage ../development/python-modules/kornia { };
+
   krakenex = callPackage ../development/python-modules/krakenex { };
 
   kubernetes = callPackage ../development/python-modules/kubernetes { };
