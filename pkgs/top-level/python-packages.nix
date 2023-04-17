@@ -7108,6 +7108,8 @@ self: super: with self; {
 
   opentelemetry-instrumentation = callPackage ../development/python-modules/opentelemetry-instrumentation { };
 
+  opentelemetry-instrumentation-wsgi = callPackage ../development/python-modules/opentelemetry-instrumentation-wsgi { };
+
   opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
 
   opentelemetry-semantic-conventions = callPackage ../development/python-modules/opentelemetry-semantic-conventions { };
