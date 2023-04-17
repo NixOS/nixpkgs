@@ -2,12 +2,17 @@
 , buildPythonPackage
 , callPackage
 , flit
+, python
 }:
 
-buildPythonPackage rec {
+# This package uses a bootstrapping process, to escape cyclic
+# dependency chains. See
+# https://flit.pypa.io/en/latest/bootstrap.html
+
+buildPythonPackage {
   pname = "flit-core";
   inherit (flit) version;
-  format = "pyproject";
+  format = "other";
 
   outputs = [
     "out"
@@ -20,10 +25,26 @@ buildPythonPackage rec {
     cd flit_core
   '';
 
+  buildPhase = ''
+    runHook preBuild
+    ${python.interpreter} -m flit_core.wheel
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    ${python.interpreter} bootstrap_install.py --installdir $out/${python.sitePackages} dist/*.whl
+    runHook postInstall
+  '';
+
   postInstall = ''
     mkdir $testsout
-    cp -R ../tests $testsout/tests
+    mv ../tests $testsout/tests
   '';
+
+  pythonImportsCheck = [
+    "flit_core"
+  ];
 
   # check in passthru.tests.pytest to escape infinite recursion with setuptools-scm
   doCheck = false;
