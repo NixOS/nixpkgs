@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
        --replace " icule iculx" "" \
        --replace "tidy/tidy.h" "tidy.h" \
-       --replace "/usr/include/tidy" "${html-tidy}/include" \
-       --replace "/usr/include/libxml2" "${libxml2.dev}/include/libxml2"
+       --replace "/usr/include/tidy" "${lib.getDev html-tidy}/include" \
+       --replace "/usr/include/libxml2" "${lib.getDev libxml2}/include/libxml2"
     substituteInPlace src/core/basetypes/MCHTMLCleaner.cpp \
       --replace buffio.h tidybuffio.h
   '';

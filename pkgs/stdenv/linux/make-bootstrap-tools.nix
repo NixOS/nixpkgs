@@ -78,7 +78,7 @@ in with pkgs; rec {
         # Hacky compat with our current unpack-bootstrap-tools.sh
         ln -s librt.so "$out"/lib/librt-dummy.so
 
-        cp -rL ${libc.dev}/include $out
+        cp -rL ${lib.getDev libc}/include $out
         chmod -R u+w "$out"
 
         # libc can contain linker scripts: find them, copy their deps,
@@ -97,7 +97,7 @@ in with pkgs; rec {
     '' else if (stdenv.hostPlatform.libc == "musl") then ''
         # Copy what we need from musl
         cp ${libc.out}/lib/* $out/lib
-        cp -rL ${libc.dev}/include $out
+        cp -rL ${lib.getDev libc}/include $out
         chmod -R u+w "$out"
 
         rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
@@ -147,7 +147,7 @@ in with pkgs; rec {
         chmod -R u+w $out/libexec
         rm -rf $out/libexec/gcc/*/*/plugin
         mkdir -p $out/include
-        cp -rd ${bootGCC.out}/include/c++ $out/include
+        cp -rd ${lib.getDev bootGCC.out}/include/c++ $out/include
         chmod -R u+w $out/include
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
@@ -278,10 +278,10 @@ in with pkgs; rec {
 
     '' + lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
       rtld=$(echo ${bootstrapTools}/lib/${builtins.unsafeDiscardStringContext /* only basename */ (builtins.baseNameOf binutils.dynamicLinker)})
-      libc_includes=${bootstrapTools}/include-glibc
+      libc_includes=${lib.getDev bootstrapTools}/include-glibc
     '' + lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
       rtld=$(echo ${bootstrapTools}/lib/ld-musl*.so.?)
-      libc_includes=${bootstrapTools}/include-libc
+      libc_includes=${lib.getDev bootstrapTools}/include-libc
     '' + ''
       # path to version-specific libraries, like libstdc++.so
       cxx_libs=$(echo ${bootstrapTools}/lib/gcc/*/*)

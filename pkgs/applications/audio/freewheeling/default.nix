@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     }))
   ];
   env.NIX_CFLAGS_COMPILE = toString
-    (makeSDLFlags [ SDL SDL_ttf SDL_gfx ] ++ [ "-I${libxml2.dev}/include/libxml2" ]);
+    (makeSDLFlags [ SDL SDL_ttf SDL_gfx ] ++ [ "-I${lib.getDev libxml2}/include/libxml2" ]);
 
   hardeningDisable = [ "format" ];
 

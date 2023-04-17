@@ -41,7 +41,7 @@ else stdenv.mkDerivation rec {
     # like arm64(e).
     PATH=${bintools-unwrapped}/bin:${llvmPackages_13.clang-unwrapped}/bin:$PATH \
       clang -arch x86_64 -arch arm64 -arch arm64e \
-      -isystem ${llvmPackages_13.clang.libc}/include \
+      -isystem ${lib.getDev llvmPackages_13.clang.libc}/include \
       -isystem ${llvmPackages_13.libclang.lib}/lib/clang/*/include \
       -L${llvmPackages_13.clang.libc}/lib \
       -Wl,-install_name,$libName \

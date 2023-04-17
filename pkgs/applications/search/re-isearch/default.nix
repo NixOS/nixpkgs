@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     cd build
     makeFlagsArray+=(
-      EXTRA_INC="-I${db.dev}/include -I${file}/include"
+      EXTRA_INC="-I${lib.getDev db}/include -I${lib.getDev file}/include"
       LD_PATH="-L../lib -L${db.out}/lib -L${file}/lib -L${libnsl}/lib"
     )
   '';

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex bison ];
   buildInputs = [ libxml2 ncurses ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev libxml2}/include/libxml2";
 
   meta = with lib; {
     description = "Performance monitoring tool for Linux";

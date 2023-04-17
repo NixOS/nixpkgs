@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withNcurses ncurses;
 
   postPatch = ''
-    cp -r ${imgui}/include/imgui third-party/imgui
+    cp -r ${lib.getDev imgui}/include/imgui third-party/imgui
   '';
 
   cmakeFlags = [

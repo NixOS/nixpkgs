@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withEditor wxGTK;
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-I${xorgproto}/include"
-    "-I${libX11.dev}/include"
-    "-I${libXcursor.dev}/include"
-    "-I${SDL2}/include/SDL2"
-    "-I${fmt.dev}/include"
-    "-I${nvidia-texture-tools.dev}/include"
+    "-I${lib.getDev xorgproto}/include"
+    "-I${lib.getDev libX11}/include"
+    "-I${lib.getDev libXcursor}/include"
+    "-I${lib.getDev SDL2}/include/SDL2"
+    "-I${lib.getDev fmt}/include"
+    "-I${lib.getDev nvidia-texture-tools}/include"
   ];
 
   NIX_CFLAGS_LINK = toString [

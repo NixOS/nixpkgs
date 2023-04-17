@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   x11env = buildEnv { name = "x11env"; paths = x11deps; };
   x11lib = "${x11env}/lib";
-  x11inc = "${x11env}/include";
+  x11inc = "${lib.getDev x11env}/include";
 
   prefixKey = "-prefix ";
   configureFlags = optionals useX11 [ "--enable-flambda" ];

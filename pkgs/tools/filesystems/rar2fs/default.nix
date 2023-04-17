@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse unrar ];
 
   configureFlags = [
-    "--with-unrar=${unrar.dev}/include/unrar"
+    "--with-unrar=${lib.getDev unrar}/include/unrar"
     "--disable-static-unrar"
   ];
 

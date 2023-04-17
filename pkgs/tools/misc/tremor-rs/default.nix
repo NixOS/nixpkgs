@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
+  PROTOC_INCLUDE = "${lib.getDev protobuf}/include";
 
   checkFlags = [
     # all try to make a network access

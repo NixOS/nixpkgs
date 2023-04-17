@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    export EIGEN_CFLAGS="-isystem ${eigen}/include/eigen3"
+    export EIGEN_CFLAGS="-isystem ${lib.getDev eigen}/include/eigen3"
     unset LD  # similar to https://github.com/MRtrix3/mrtrix3/issues/1519
     ./configure ${lib.optionalString (!withGui) "-nogui"};
   '';

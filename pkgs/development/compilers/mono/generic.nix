@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [ Foundation libobjc ];
 
   configureFlags = [
-    "--x-includes=${libX11.dev}/include"
+    "--x-includes=${lib.getDev libX11}/include"
     "--x-libraries=${libX11.out}/lib"
     "--with-libgdiplus=${libgdiplus}/lib/libgdiplus.so"
   ] ++ lib.optionals withLLVM [

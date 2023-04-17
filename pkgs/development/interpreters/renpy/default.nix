@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  env.NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${pygame_sdl2}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${lib.getDev pygame_sdl2}/include/${python.libPrefix}";
 
   meta = with lib; {
     description = "Visual Novel Engine";

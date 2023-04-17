@@ -249,9 +249,9 @@ in
           mkdir -p $out
           ln -s ${bootstrapTools}/lib $out/lib
         '' + lib.optionalString (localSystem.libc == "glibc") ''
-          ln -s ${bootstrapTools}/include-glibc $out/include
+          ln -s ${lib.getDev bootstrapTools}/include-glibc $out/include
         '' + lib.optionalString (localSystem.libc == "musl") ''
-          ln -s ${bootstrapTools}/include-libc $out/include
+          ln -s ${lib.getDev bootstrapTools}/include-libc $out/include
         '';
         passthru.isFromBootstrapFiles = true;
       };

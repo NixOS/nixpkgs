@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/melt --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1
 
     # Remove an unnecessary reference to movit.dev.
-    s=${movit.dev}/include
+    s=${lib.getDev movit}/include
     t=$(for ((i = 0; i < ''${#s}; i++)); do echo -n X; done)
     sed -i $out/lib/mlt/libmltopengl.so -e "s|$s|$t|g"
   '' + lib.optionalString enablePython ''

@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "qcs.pro" "CONFIG+=rtmidi" "CONFIG+=pythonqt"
                  "CONFIG+=record_support" "CONFIG+=html_webengine"
-                 "CSOUND_INCLUDE_DIR=${csound}/include/csound"
+                 "CSOUND_INCLUDE_DIR=${lib.getDev csound}/include/csound"
                  "CSOUND_LIBRARY_DIR=${csound}/lib"
                  "RTMIDI_DIR=${rtmidi.src}"
-                 "PYTHONQT_SRC_DIR=${python-qt}/include/PythonQt"
+                 "PYTHONQT_SRC_DIR=${lib.getDev python-qt}/include/PythonQt"
                  "PYTHONQT_LIB_DIR=${python-qt}/lib"
                  "LIBS+=-L${python-qt}/lib"
-                 "INCLUDEPATH+=${python-qt}/include/PythonQt"
-                 "INCLUDEPATH+=${python}/include/python${python.pythonVersion}"
+                 "INCLUDEPATH+=${lib.getDev python-qt}/include/PythonQt"
+                 "INCLUDEPATH+=${lib.getDev python}/include/python${python.pythonVersion}"
                  "INSTALL_DIR=${placeholder "out"}"
                  "SHARE_DIR=${placeholder "out"}/share"
                  ];

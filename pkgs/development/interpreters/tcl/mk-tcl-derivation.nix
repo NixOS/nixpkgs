@@ -32,7 +32,7 @@ let
 
   defaultTclPkgConfigureFlags = [
     "--with-tcl=${tcl}/lib"
-    "--with-tclinclude=${tcl}/include"
+    "--with-tclinclude=${lib.getDev tcl}/include"
     "--exec-prefix=${placeholder "out"}"
   ];
 

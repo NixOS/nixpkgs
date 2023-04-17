@@ -24,9 +24,9 @@ buildPythonPackage rec {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-I${qtbase.dev}/include/QtCore"
-    "-I${qtbase.dev}/include/QtGui"
-    "-I${qtbase.dev}/include/QtOpenGL"
+    "-I${lib.getDev qtbase}/include/QtCore"
+    "-I${lib.getDev qtbase}/include/QtGui"
+    "-I${lib.getDev qtbase}/include/QtOpenGL"
     "-I${qtbase.dev}/include/QtWidgets"
   ];
 

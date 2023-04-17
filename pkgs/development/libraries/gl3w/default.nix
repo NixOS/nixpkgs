@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   # outputs for the custom command, and CMake expects to be able to touch them
   preConfigure = ''
     mkdir -p include/{GL,KHR}
-    cp ${libglvnd.dev}/include/GL/glcorearb.h include/GL/glcorearb.h
-    cp ${libglvnd.dev}/include/KHR/khrplatform.h include/KHR/khrplatform.h
+    cp ${lib.getDev libglvnd}/include/GL/glcorearb.h include/GL/glcorearb.h
+    cp ${lib.getDev libglvnd}/include/KHR/khrplatform.h include/KHR/khrplatform.h
   '';
 
   passthru.updateScript = unstableGitUpdater { };

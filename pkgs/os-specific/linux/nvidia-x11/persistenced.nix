@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       $out/bin/nvidia-persistenced
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev libtirpc}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
   meta = with lib; {

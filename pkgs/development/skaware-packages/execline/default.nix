@@ -30,9 +30,9 @@ in buildPackage {
     "--libdir=\${lib}/lib"
     "--dynlibdir=\${lib}/lib"
     "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
+    "--includedir=\${lib.getDev dev}/include"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
+    "--with-include=${lib.getDev skalibs}/include"
     "--with-lib=${skalibs.lib}/lib"
     "--with-dynlib=${skalibs.lib}/lib"
   ];
@@ -57,7 +57,7 @@ in buildPackage {
       -Wall -Wpedantic \
       -D "EXECLINEB_PATH()=\"$bin/bin/.execlineb-wrapped\"" \
       -D "EXECLINE_BIN_PATH()=\"$bin/bin\"" \
-      -I "${skalibs.dev}/include" \
+      -I "${lib.getDev skalibs}/include" \
       -L "${skalibs.lib}/lib" \
       -o "$bin/bin/execlineb" \
       ${./execlineb-wrapper.c} \

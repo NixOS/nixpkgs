@@ -18,7 +18,7 @@ buildPecl {
   configureFlags = [ "--with-oci8=shared,instantclient,${oracle-instantclient.lib}/lib" ];
 
   postPatch = ''
-    sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${oracle-instantclient.dev}/include"|' config.m4
+    sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${lib.getDev oracle-instantclient}/include"|' config.m4
   '';
 
   meta = with lib; {

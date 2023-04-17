@@ -42,8 +42,8 @@ mkYarnPackage rec {
     runHook preBuild
 
     pushd node_modules/sqlite3
-    export CPPFLAGS="-I${nodejs}/include/node"
-    npm run install --build-from-source --nodedir=${nodejs}/include/node
+    export CPPFLAGS="-I${lib.getDev nodejs}/include/node"
+    npm run install --build-from-source --nodedir=${lib.getDev nodejs}/include/node
     popd
 
     patchShebangs bin/*

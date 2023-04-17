@@ -64,13 +64,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
-    "--with-ltdl-include=${libtool}/include"
+    "--with-ltdl-include=${lib.getDev libtool}/include"
   ] ++ optional (xorg == null) "--without-x";
 
   enableParallelBuilding = true;
 
   CPPFLAGS = optionalString (withXorg && stdenv.isDarwin)
-    "-I${cairo.dev}/include/cairo";
+    "-I${lib.getDev cairo}/include/cairo";
 
   doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
 

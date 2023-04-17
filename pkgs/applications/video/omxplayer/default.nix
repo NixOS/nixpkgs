@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i 1d Makefile
-    export INCLUDES="-I${raspberrypifw}/include/interface/vcos/pthreads -I${raspberrypifw}/include/interface/vmcs_host/linux/"
+    export INCLUDES="-I${lib.getDev raspberrypifw}/include/interface/vcos/pthreads -I${lib.getDev raspberrypifw}/include/interface/vmcs_host/linux/"
   '';
 
   installPhase = ''

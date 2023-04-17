@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-F1qhq0SEChWw/EBodXKWTqMNmGoTwP2JgkmfANUFD9I=";
   };
 
-  configureFlags = [ "--with-extrainclude=${pam}/include/security" ];
+  configureFlags = [ "--with-extrainclude=${lib.getDev pam}/include/security" ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ erlang pam perl ];

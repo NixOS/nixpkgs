@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
 
-    cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
+    cp ${lib.getDev catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
   '';
 
   NIX_LDFLAGS = "-lgcc_s";

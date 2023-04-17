@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   autoreconfPhase = "./autogen.sh";
 
   configureFlags = [
-    "--with-pcap-includes=${libpcap}/include"
-    "--with-libnet-includes=${libnet}/include"
+    "--with-pcap-includes=${lib.getDev libpcap}/include"
+    "--with-libnet-includes=${lib.getDev libnet}/include"
   ]
   ++ lib.optional (!enableAdmin) "--disable-admin"
   ++ lib.optional (!withGtk) "--disable-gtk";

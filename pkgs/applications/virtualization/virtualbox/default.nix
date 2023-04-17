@@ -133,9 +133,9 @@ in stdenv.mkDerivation {
     ${optionalString (!headless) ''
     VBOX_WITH_VBOXSDL              := 1
     PATH_QT5_X11_EXTRAS_LIB        := ${getLib qtx11extras}/lib
-    PATH_QT5_X11_EXTRAS_INC        := ${getDev qtx11extras}/include
+    PATH_QT5_X11_EXTRAS_INC        := ${lib.getDev getDev qtx11extras}/include
     PATH_QT5_TOOLS_LIB             := ${getLib qttools}/lib
-    PATH_QT5_TOOLS_INC             := ${getDev qttools}/include
+    PATH_QT5_TOOLS_INC             := ${lib.getDev getDev qttools}/include
     ''}
     ${optionalString enableWebService ''
     # fix gsoap missing zlib include and produce errors with --as-needed

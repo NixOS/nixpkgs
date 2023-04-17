@@ -26,7 +26,7 @@ in runCommandCC "sdnotify-wrapper" {
   # the -lskarnet has to come at the end to support static builds
   $CC \
     -o $bin/bin/sdnotify-wrapper \
-    -I${skalibs.dev}/include \
+    -I${lib.getDev skalibs}/include \
     -L${skalibs.lib}/lib \
     ${src} \
     -lskarnet

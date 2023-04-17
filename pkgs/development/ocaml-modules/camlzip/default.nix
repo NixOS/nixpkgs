@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   postPatch = param.postPatchInit + ''
     substituteInPlace Makefile \
       --subst-var-by ZLIB_LIBDIR "${zlib.out}/lib" \
-      --subst-var-by ZLIB_INCLUDE "${zlib.dev}/include"
+      --subst-var-by ZLIB_INCLUDE "${lib.getDev zlib}/include"
   '';
 
   buildFlags = [ "all" "allopt" ];

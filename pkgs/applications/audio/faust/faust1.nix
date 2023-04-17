@@ -169,7 +169,7 @@ let
         for script in "$out"/bin/*; do
           wrapProgram "$script" \
             --set FAUSTLIB "${faust}/lib/faust" \
-            --set FAUSTINC "${faust}/include/faust" \
+            --set FAUSTINC "${lib.getDev faust}/include/faust" \
             --prefix PATH : "$PATH" \
             --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH" \
             --set NIX_CFLAGS_COMPILE "$NIX_CFLAGS_COMPILE" \

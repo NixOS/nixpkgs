@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     "--enable-ipv6"
     "--enable-pcre"
     "--disable-pcap-restart"
-    "--with-pcap-includes=${libpcap}/include"
+    "--with-pcap-includes=${lib.getDev libpcap}/include"
   ];
 
   preConfigure = ''
-    sed -i "s|BPF=.*|BPF=${libpcap}/include/pcap/bpf.h|" configure
+    sed -i "s|BPF=.*|BPF=${lib.getDev libpcap}/include/pcap/bpf.h|" configure
   '';
 
   meta = with lib; {

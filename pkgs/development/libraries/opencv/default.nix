@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${lib.getDev ilmbase}/include/OpenEXR";
 
   cmakeFlags = [
     (opencvFlag "TIFF" enableTIFF)

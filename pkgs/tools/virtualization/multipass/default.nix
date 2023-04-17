@@ -64,20 +64,20 @@ stdenv.mkDerivation {
 
     cat >> tests/CMakeLists.txt <<'EOF'
       add_library(gtest INTERFACE)
-      target_include_directories(gtest INTERFACE ${gtest.dev}/include)
+      target_include_directories(gtest INTERFACE ${lib.getDev gtest}/include)
       target_link_libraries(gtest INTERFACE ${gtest}/lib/libgtest.so ''${CMAKE_THREAD_LIBS_INIT})
       add_dependencies(gtest GMock)
 
       add_library(gtest_main INTERFACE)
-      target_include_directories(gtest_main INTERFACE ${gtest.dev}/include)
+      target_include_directories(gtest_main INTERFACE ${lib.getDev gtest}/include)
       target_link_libraries(gtest_main INTERFACE ${gtest}/lib/libgtest_main.so gtest)
 
       add_library(gmock INTERFACE)
-      target_include_directories(gmock INTERFACE ${gtest.dev}/include)
+      target_include_directories(gmock INTERFACE ${lib.getDev gtest}/include)
       target_link_libraries(gmock INTERFACE ${gtest}/lib/libgmock.so gtest)
 
       add_library(gmock_main INTERFACE)
-      target_include_directories(gmock_main INTERFACE ${gtest.dev}/include)
+      target_include_directories(gmock_main INTERFACE ${lib.getDev gtest}/include)
       target_link_libraries(gmock_main INTERFACE ${gtest}/lib/libgmock_main.so gmock gtest_main)
     EOF
   '';

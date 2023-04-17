@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace '# Fetch "JSON for Modern C++"' "include_directories(${nlohmann_json}/include)"
+      --replace '# Fetch "JSON for Modern C++"' "include_directories(${lib.getDev nlohmann_json}/include)"
   '';
 
   nativeBuildInputs = [ cmake ];

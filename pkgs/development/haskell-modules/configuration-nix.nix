@@ -192,7 +192,7 @@ self: super: builtins.intersectAttrs super {
     extraLibraries = (drv.extraLibraries or []) ++ [pkgs.linuxPackages.nvidia_x11];
     configureFlags = (drv.configureFlags or []) ++ [
       "--extra-lib-dirs=${pkgs.cudatoolkit.lib}/lib"
-      "--extra-include-dirs=${pkgs.cudatoolkit}/include"
+      "--extra-include-dirs=${lib.getDev pkgs.cudatoolkit}/include"
     ];
     preConfigure = ''
       export CUDA_PATH=${pkgs.cudatoolkit}
@@ -220,7 +220,7 @@ self: super: builtins.intersectAttrs super {
   }) super.jni;
 
   # Won't find it's header files without help.
-  sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;
+  sfml-audio = appendConfigureFlag "--extra-include-dirs=${lib.getDev pkgs.openal}/include/AL" super.sfml-audio;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
   niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
@@ -243,7 +243,7 @@ self: super: builtins.intersectAttrs super {
     ];
   }) super.arbtt;
 
-  hzk = appendConfigureFlag "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper" super.hzk;
+  hzk = appendConfigureFlag "--extra-include-dirs=${lib.getDev pkgs.zookeeper_mt}/include/zookeeper" super.hzk;
 
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
@@ -442,7 +442,7 @@ self: super: builtins.intersectAttrs super {
   SDL-gfx = addExtraLibrary pkgs.SDL super.SDL-gfx;
   SDL-mpeg = appendConfigureFlags [
     "--extra-lib-dirs=${pkgs.smpeg}/lib"
-    "--extra-include-dirs=${pkgs.smpeg.dev}/include/smpeg"
+    "--extra-include-dirs=${lib.getDev pkgs.smpeg}/include/smpeg"
   ] super.SDL-mpeg;
 
   # https://github.com/ivanperez-keera/hcwiid/pull/4
@@ -450,8 +450,8 @@ self: super: builtins.intersectAttrs super {
     configureFlags = (drv.configureFlags or []) ++ [
       "--extra-lib-dirs=${pkgs.bluez.out}/lib"
       "--extra-lib-dirs=${pkgs.cwiid}/lib"
-      "--extra-include-dirs=${pkgs.cwiid}/include"
-      "--extra-include-dirs=${pkgs.bluez.dev}/include"
+      "--extra-include-dirs=${lib.getDev pkgs.cwiid}/include"
+      "--extra-include-dirs=${lib.getDev pkgs.bluez}/include"
     ];
     prePatch = '' sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal" '';
   }) super.hcwiid;

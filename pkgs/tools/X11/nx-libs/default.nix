@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     xorg.xkbcomp xorg.xkeyboardconfig libtirpc
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev libtirpc}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
   postPatch = ''

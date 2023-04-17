@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     chmod -R +w driver-src
     cmakeFlagsArray+=(
       "-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs"
-      "-DVALIJSON_INCLUDE=${valijson}/include"
+      "-DVALIJSON_INCLUDE=${lib.getDev valijson}/include"
       "-DDRIVER_SOURCE_DIR=$(pwd)/driver-src/driver"
     )
   '';

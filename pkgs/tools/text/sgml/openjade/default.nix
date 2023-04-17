@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ opensp perl ];
 
   configureFlags = [
-    "--enable-spincludedir=${opensp}/include/OpenSP"
+    "--enable-spincludedir=${lib.getDev opensp}/include/OpenSP"
     "--enable-splibdir=${opensp}/lib"
   ];
 

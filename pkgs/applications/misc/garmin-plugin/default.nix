@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
-    "--with-garmintools-incdir=${garmintools}/include"
+    "--with-garmintools-incdir=${lib.getDev garmintools}/include"
     "--with-garmintools-libdir=${garmintools}/lib"
   ];
 

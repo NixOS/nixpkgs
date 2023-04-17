@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = with stdenv; [
     "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
+    "-DLLVM_BINUTILS_INCDIR=${lib.getDev libbfd}/include"
   ] ++ lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
 
   meta = {

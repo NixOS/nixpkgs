@@ -82,7 +82,7 @@ stdenvNoCC.mkDerivation rec {
           echo 9 > "$HOME/.cache/node-gyp/${nodejs.version}/installVersion"
 
           # Link node headers so that node-gyp does not try to download them.
-          ln -sfv "${nodejs}/include" "$HOME/.cache/node-gyp/${nodejs.version}"
+          ln -sfv "${lib.getDev nodejs}/include" "$HOME/.cache/node-gyp/${nodejs.version}"
         '';
 
         packageJSON = "${src}/package.json";

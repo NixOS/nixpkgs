@@ -138,13 +138,13 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     export HOME=$TMPDIR/fakehome
-    export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
+    export POPPLER_INC_DIR=${lib.getDev poppler_utils}/include/poppler
     export POPPLER_LIB_DIR=${poppler_utils.out}/lib
-    export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
+    export MAGICK_INC=${lib.getDev imagemagick}/include/ImageMagick
     export MAGICK_LIB=${imagemagick.out}/lib
-    export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
+    export FC_INC_DIR=${lib.getDev fontconfig}/include/fontconfig
     export FC_LIB_DIR=${fontconfig.lib}/lib
-    export PODOFO_INC_DIR=${podofo.dev}/include/podofo
+    export PODOFO_INC_DIR=${lib.getDev podofo}/include/podofo
     export PODOFO_LIB_DIR=${podofo.lib}/lib
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"

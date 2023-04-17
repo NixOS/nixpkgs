@@ -35,16 +35,16 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace build/lmdb.m4 \
-      --replace "\''${path}/include/lmdb.h" "${lmdb.dev}/include/lmdb.h" \
-      --replace "lmdb_inc_path=\"\''${path}/include\"" "lmdb_inc_path=\"${lmdb.dev}/include\""
+      --replace "\''${lib.getDev path}/include/lmdb.h" "${lib.getDev lmdb}/include/lmdb.h" \
+      --replace "lmdb_inc_path=\"\''${lib.getDev path}/include\"" "lmdb_inc_path=\"${lib.getDev lmdb}/include\""
     substituteInPlace build/pcre2.m4 \
       --replace "/usr/local/pcre2" "${pcre2.out}/lib" \
-      --replace "\''${path}/include/pcre2.h" "${pcre2.dev}/include/pcre2.h" \
-      --replace "pcre2_inc_path=\"\''${path}/include\"" "pcre2_inc_path=\"${pcre2.dev}/include\""
+      --replace "\''${lib.getDev path}/include/pcre2.h" "${lib.getDev pcre2}/include/pcre2.h" \
+      --replace "pcre2_inc_path=\"\''${lib.getDev path}/include\"" "pcre2_inc_path=\"${lib.getDev pcre2}/include\""
     substituteInPlace build/ssdeep.m4 \
       --replace "/usr/local/libfuzzy" "${ssdeep}/lib" \
-      --replace "\''${path}/include/fuzzy.h" "${ssdeep}/include/fuzzy.h" \
-      --replace "ssdeep_inc_path=\"\''${path}/include\"" "ssdeep_inc_path=\"${ssdeep}/include\""
+      --replace "\''${lib.getDev path}/include/fuzzy.h" "${lib.getDev ssdeep}/include/fuzzy.h" \
+      --replace "ssdeep_inc_path=\"\''${lib.getDev path}/include\"" "ssdeep_inc_path=\"${lib.getDev ssdeep}/include\""
     substituteInPlace modsecurity.conf-recommended \
       --replace "SecUnicodeMapFile unicode.mapping 20127" "SecUnicodeMapFile $out/share/modsecurity/unicode.mapping 20127"
   '';

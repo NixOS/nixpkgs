@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i "s@/usr/local@$out@g" config.mk
-    sed -i "s@/usr/X11R6/include@${libX11}/include@g" config.mk
+    sed -i "s@/usr/X11R6/include@${lib.getDev libX11}/include@g" config.mk
     sed -i "s@/usr/X11R6/lib@${libX11}/lib@g" config.mk
   '';
 

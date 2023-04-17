@@ -58,7 +58,7 @@ mkDerivation (args // {
             sed -i "$pc" \
                 -e "/^prefix=/ c prefix=''${!outputLib}" \
                 -e "/^exec_prefix=/ c exec_prefix=''${!outputBin}" \
-                -e "/^includedir=/ c includedir=''${!outputDev}/include"
+                -e "/^includedir=/ c includedir=''${lib.getDev !outputDev}/include"
         done
     fi
 

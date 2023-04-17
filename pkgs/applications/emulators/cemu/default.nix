@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     rm -rf dependencies/imgui
-    ln -s ${imgui}/include/imgui dependencies/imgui
+    ln -s ${lib.getDev imgui}/include/imgui dependencies/imgui
   '';
 
   installPhase = ''

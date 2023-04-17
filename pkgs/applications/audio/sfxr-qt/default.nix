@@ -26,7 +26,7 @@ mkDerivation rec {
   };
 
   postPatch = ''
-    cp ${catch2}/include/catch2/catch.hpp 3rdparty/catch2/single_include/catch2/catch.hpp
+    cp ${lib.getDev catch2}/include/catch2/catch.hpp 3rdparty/catch2/single_include/catch2/catch.hpp
   '';
 
   # Remove on next release

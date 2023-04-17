@@ -53,7 +53,7 @@ stdenv.mkDerivation (self: {
             configureFlags="$configureFlags --lua-suffix=$LUA_SUFFIX"
         }
     }
-    lua_inc="$(echo "${lua}/include"/*/)"
+    lua_inc="$(echo "${lib.getDev lua}/include"/*/)"
     if test -n "$lua_inc"; then
         configureFlags="$configureFlags --with-lua-include=$lua_inc"
     fi

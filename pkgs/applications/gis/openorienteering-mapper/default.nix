@@ -69,7 +69,7 @@ mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # FindGDAL is broken and always finds /Library/Framework unless this is
     # specified
-    "-DGDAL_INCLUDE_DIR=${gdal}/include"
+    "-DGDAL_INCLUDE_DIR=${lib.getDev gdal}/include"
     "-DGDAL_CONFIG=${gdal}/bin/gdal-config"
     "-DGDAL_LIBRARY=${gdal}/lib/libgdal.dylib"
     # Don't bundle libraries

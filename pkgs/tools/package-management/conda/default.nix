@@ -70,7 +70,7 @@ in
       # Add conda to PATH
       export PATH=${installationPath}/bin:$PATH
       # Paths for gcc if compiling some C sources with pip
-      export NIX_CFLAGS_COMPILE="-I${installationPath}/include"
+      export NIX_CFLAGS_COMPILE="-I${lib.getDev installationPath}/include"
       export NIX_CFLAGS_LINK="-L${installationPath}lib"
       # Some other required environment variables
       export FONTCONFIG_FILE=/etc/fonts/fonts.conf

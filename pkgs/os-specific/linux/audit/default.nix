@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     sed -i 's,#include <sys/poll.h>,#include <poll.h>\n#include <limits.h>,' audisp/audispd.c
     substituteInPlace bindings/swig/src/auditswig.i \
       --replace "/usr/include/linux/audit.h" \
-                "${linuxHeaders}/include/linux/audit.h"
+                "${lib.getDev linuxHeaders}/include/linux/audit.h"
   ''
   # According to https://stackoverflow.com/questions/13089166
   # --whole-archive linker flag is required to be sure that linker

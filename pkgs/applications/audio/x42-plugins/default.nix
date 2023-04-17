@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./stepseq.lv2/gridgen.sh
     patchShebangs ./matrixmixer.lv2/genttl.sh
     patchShebangs ./matrixmixer.lv2/genhead.sh
-    sed -i 's|/usr/include/zita-convolver.h|${zita-convolver}/include/zita-convolver.h|g' ./convoLV2/Makefile
+    sed -i 's|/usr/include/zita-convolver.h|${lib.getDev zita-convolver}/include/zita-convolver.h|g' ./convoLV2/Makefile
   '';
 
   enableParallelBuilding = true;

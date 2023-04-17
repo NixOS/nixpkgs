@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   preConfigure = ''
-    export ODPIC_INC_DIR="${odpic}/include"
+    export ODPIC_INC_DIR="${lib.getDev odpic}/include"
     export ODPIC_LIB_DIR="${odpic}/lib"
   '';
 

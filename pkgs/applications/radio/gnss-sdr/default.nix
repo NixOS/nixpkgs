@@ -78,8 +78,8 @@ gnuradio.pkgs.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DGFlags_INCLUDE_DIRS=${gflags}/include"
-    "-DGLOG_INCLUDE_DIR=${glog}/include"
+    "-DGFlags_INCLUDE_DIRS=${lib.getDev gflags}/include"
+    "-DGLOG_INCLUDE_DIR=${lib.getDev glog}/include"
     # Should use .dylib if darwin support is requested
     "-DGFlags_LIBS=${gflags}/lib/libgflags.so"
     "-DGLOG_LIBRARIES=${glog}/lib/libglog.so"

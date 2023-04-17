@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "CPPFLAGS=-I${glee}/include/GL"
+    "CPPFLAGS=-I${lib.getDev glee}/include/GL"
   ];
 
   makeFlags = [

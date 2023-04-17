@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost libiconv libjpeg libpng libwebp openssl zlib ];
 
   postPatch = ''
-    cp ${catch2}/include/catch2/catch.hpp tests/test_support/catch.h
+    cp ${lib.getDev catch2}/include/catch2/catch.hpp tests/test_support/catch.h
     sed '1i#include <limits>' -i src/dec/eagls/pak_archive_decoder.cc # gcc12
   '';
 

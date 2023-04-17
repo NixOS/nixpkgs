@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${ocaml}/include";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev ocaml}/include";
 
   buildPhase = "omake all";
 

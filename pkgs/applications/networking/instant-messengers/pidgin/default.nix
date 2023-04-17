@@ -18,7 +18,7 @@ let unwrapped = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper intltool ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0";
 
   buildInputs = let
     python-with-dbus = python3.withPackages (pp: with pp; [ dbus-python ]);
@@ -45,11 +45,11 @@ let unwrapped = stdenv.mkDerivation rec {
   patches = [ ./pidgin-makefile.patch ./add-search-path.patch ];
 
   configureFlags = [
-    "--with-nspr-includes=${nspr.dev}/include/nspr"
+    "--with-nspr-includes=${lib.getDev nspr}/include/nspr"
     "--with-nspr-libs=${nspr.out}/lib"
-    "--with-nss-includes=${nss.dev}/include/nss"
+    "--with-nss-includes=${lib.getDev nss}/include/nss"
     "--with-nss-libs=${nss.out}/lib"
-    "--with-ncurses-headers=${ncurses.dev}/include"
+    "--with-ncurses-headers=${lib.getDev ncurses}/include"
     "--with-system-ssl-certs=${cacert}/etc/ssl/certs"
     "--disable-meanwhile"
     "--disable-nm"

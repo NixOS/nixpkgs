@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     (if (!openfecSupport)
        then ["--disable-openfec"]
        else [ "--with-libraries=${openfec}/lib"
-              "--with-openfec-includes=${openfec.dev}/include" ]);
+              "--with-openfec-includes=${lib.getDev openfec}/include" ]);
 
   meta = with lib; {
     description = "Roc is a toolkit for real-time audio streaming over the network";

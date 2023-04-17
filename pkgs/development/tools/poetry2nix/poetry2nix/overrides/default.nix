@@ -619,7 +619,7 @@ lib.composeManyExtensions [
 
       evdev = super.evdev.overridePythonAttrs (old: {
         preConfigure = ''
-          substituteInPlace setup.py --replace /usr/include/linux ${pkgs.linuxHeaders}/include/linux
+          substituteInPlace setup.py --replace /usr/include/linux ${lib.getDev pkgs.linuxHeaders}/include/linux
         '';
       });
 
@@ -859,7 +859,7 @@ lib.composeManyExtensions [
           patchPhase = ''
             substituteInPlace setup.py \
               --replace "/usr/include/openjpeg-2.3" \
-                        "${pkgs.openjpeg.dev}/include/${pkgs.openjpeg.dev.incDir}
+                        "${lib.getDev pkgs.openjpeg}/include/${pkgs.openjpeg.dev.incDir}
             substituteInPlace setup.py \
               --replace "/usr/include/jxrlib" \
                         "$out/include/libjxr"
@@ -876,7 +876,7 @@ lib.composeManyExtensions [
 
           preBuild = ''
             mkdir -p $out/include/libjxr
-            ln -s ${pkgs.jxrlib}/include/libjxr/**/* $out/include/libjxr
+            ln -s ${lib.getDev pkgs.jxrlib}/include/libjxr/**/* $out/include/libjxr
 
           '';
 
@@ -1392,7 +1392,7 @@ lib.composeManyExtensions [
                 { }
                 {
                   ${blasImplementation} = {
-                    include_dirs = "${blas}/include";
+                    include_dirs = "${lib.getDev blas}/include";
                     library_dirs = "${blas}/lib";
                   } // lib.optionalAttrs (blasImplementation == "mkl") {
                     mkl_libs = "mkl_rt";
@@ -1491,7 +1491,7 @@ lib.composeManyExtensions [
       openexr = super.openexr.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.openexr pkgs.ilmbase ];
-          NIX_CFLAGS_COMPILE = [ "-I${pkgs.openexr.dev}/include/OpenEXR" "-I${pkgs.ilmbase.dev}/include/OpenEXR" ];
+          NIX_CFLAGS_COMPILE = [ "-I${lib.getDev pkgs.openexr.dev}/include/OpenEXR" "-I${lib.getDev pkgs.ilmbase}/include/OpenEXR" ];
         }
       );
 
@@ -1933,7 +1933,7 @@ lib.composeManyExtensions [
         old: {
           PROJ_DIR = "${pkgs.proj}";
           PROJ_LIBDIR = "${pkgs.proj}/lib";
-          PROJ_INCDIR = "${pkgs.proj.dev}/include";
+          PROJ_INCDIR = "${lib.getDev pkgs.proj}/include";
         }
       );
 
@@ -2859,7 +2859,7 @@ lib.composeManyExtensions [
         propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ pkgs.sqlite ];
         patchPhase = ''
           substituteInPlace "setup.cfg"                                     \
-                  --replace "/usr/local/include" "${pkgs.sqlite.dev}/include"   \
+                  --replace "/usr/local/include" "${lib.getDev pkgs.sqlite}/include"   \
                   --replace "/usr/local/lib" "${pkgs.sqlite.out}/lib"
           ${lib.optionalString (!stdenv.isDarwin) ''export LDSHARED="$CC -pthread -shared"''}
         '';

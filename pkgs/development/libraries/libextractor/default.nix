@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-ltdl-install"
-    "--with-ltdl-include=${libtool}/include"
+    "--with-ltdl-include=${lib.getDev libtool}/include"
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--enable-xpdf"
   ];

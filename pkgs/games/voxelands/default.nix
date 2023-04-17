@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DIRRLICHT_INCLUDE_DIR=${irrlicht}/include/irrlicht"
+    "-DIRRLICHT_INCLUDE_DIR=${lib.getDev irrlicht}/include/irrlicht"
     "-DCMAKE_C_FLAGS_RELEASE=-DNDEBUG"
     "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG"
   ];

@@ -21,14 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $dev/lib/pkgconfig $dev/nix-support
     echo "$out" > $dev/nix-support/propagated-build-inputs
-    ln -s ${mesa.dev}/include $dev/include
+    ln -s ${lib.getDev mesa}/include $dev/include
 
     cat <<EOF >$dev/lib/pkgconfig/gl.pc
   Name: gl
   Description: gl library
   Version: ${mesa.version}
   Libs: -L${mesa.out}/lib -lGL
-  Cflags: -I${mesa.dev}/include
+  Cflags: -I${lib.getDev mesa}/include
   EOF
 
     cat <<EOF >$dev/lib/pkgconfig/glesv1_cm.pc
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   Description: glesv1_cm library
   Version: ${mesa.version}
   Libs: -L${mesa.out}/lib -lGLESv1_CM
-  Cflags: -I${mesa.dev}/include
+  Cflags: -I${lib.getDev mesa}/include
   EOF
 
     cat <<EOF >$dev/lib/pkgconfig/glesv2.pc
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   Description: glesv2 library
   Version: ${mesa.version}
   Libs: -L${mesa.out}/lib -lGLESv2
-  Cflags: -I${mesa.dev}/include
+  Cflags: -I${lib.getDev mesa}/include
   EOF
   ''
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $dev/{,lib/pkgconfig,nix-support}
     echo "$out ${libglvnd} ${libglvnd.dev}" > $dev/nix-support/propagated-build-inputs
-    ln -s ${libglvnd.dev}/include $dev/include
+    ln -s ${lib.getDev libglvnd}/include $dev/include
 
     genPkgConfig() {
       local name="$1"
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     Description: $lib library
     Version: ${libglvnd.version}
     Libs: -L${libglvnd.out}/lib -l$lib
-    Cflags: -I${libglvnd.dev}/include
+    Cflags: -I${lib.getDev libglvnd}/include
     EOF
     }
 

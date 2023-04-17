@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ vulkan-headers ]
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libxcb libXrandr wayland ];
 
-  cmakeFlags = [ "-DCMAKE_INSTALL_INCLUDEDIR=${vulkan-headers}/include" ]
+  cmakeFlags = [ "-DCMAKE_INSTALL_INCLUDEDIR=${lib.getDev vulkan-headers}/include" ]
     ++ lib.optional stdenv.isDarwin "-DSYSCONFDIR=${moltenvk}/share"
     ++ lib.optional stdenv.isLinux "-DSYSCONFDIR=${addOpenGLRunpath.driverLink}/share"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DUSE_GAS=OFF";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
-    grep -q "${vulkan-headers}/include" $dev/lib/pkgconfig/vulkan.pc || {
+    grep -q "${lib.getDev vulkan-headers}/include" $dev/lib/pkgconfig/vulkan.pc || {
       echo vulkan-headers include directory not found in pkg-config file
       exit 1
     }

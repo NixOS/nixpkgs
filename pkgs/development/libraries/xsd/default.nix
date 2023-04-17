@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildFlags = [
     "LDFLAGS=-L${xercesc}/lib"
-    "CPPFLAGS=-I${xercesc}/include"
+    "CPPFLAGS=-I${lib.getDev xercesc}/include"
   ];
   installFlags = buildFlags ++ [
     "install_prefix=${placeholder "out"}"

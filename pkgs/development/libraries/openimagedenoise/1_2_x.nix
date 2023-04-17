@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DTBB_ROOT=${tbb}"
-    "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
+    "-DTBB_INCLUDE_DIR=${lib.getDev tbb}/include"
   ];
 
   meta = with lib; {

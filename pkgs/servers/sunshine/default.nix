@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # fix hardcoded libevdev and icon path
     substituteInPlace CMakeLists.txt \
-      --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0' \
+      --replace '/usr/include/libevdev-1.0' '${lib.getDev libevdev}/include/libevdev-1.0' \
       --replace '/usr/share' "$out/share"
 
     substituteInPlace packaging/linux/sunshine.desktop \

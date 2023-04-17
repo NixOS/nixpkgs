@@ -136,7 +136,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
         ${lib.concatMapStringsSep
           "\n"
-          (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
+          (dep: "mkdir -p ext; ln -s ${lib.getDev dep}/include ext/${dep.extensionName}")
           internalDeps
         }
       '';
@@ -266,7 +266,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       internalDeps = [ php.extensions.pdo ];
 
       postPatch = ''
-        sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+        sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${lib.getDev pkgs.oracle-instantclient}/include"|' config.m4
       '';
 
       meta.maintainers = lib.teams.php.members;
@@ -374,7 +374,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           configureFlags = [
             "--with-ldap"
             "LDAP_DIR=${openldap.dev}"
-            "LDAP_INCDIR=${openldap.dev}/include"
+            "LDAP_INCDIR=${lib.getDev openldap}/include"
             "LDAP_LIBDIR=${openldap.out}/lib"
           ] ++ lib.optionals stdenv.isLinux [
             "--with-ldap-sasl=${cyrus_sasl.dev}"

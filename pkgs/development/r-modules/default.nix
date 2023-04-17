@@ -946,7 +946,7 @@ let
 
     xml2 = old.xml2.overrideAttrs (attrs: {
       preConfigure = ''
-        export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
+        export LIBXML_INCDIR=${lib.getDev pkgs.libxml2}/include/libxml2
         patchShebangs configure
         '';
     });
@@ -998,14 +998,14 @@ let
 
     rJava = old.rJava.overrideAttrs (attrs: {
       preConfigure = ''
-        export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
+        export JAVA_CPPFLAGS=-I${lib.getDev pkgs.jdk}/include/
         export JAVA_HOME=${pkgs.jdk}
       '';
     });
 
     JavaGD = old.JavaGD.overrideAttrs (attrs: {
       preConfigure = ''
-        export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
+        export JAVA_CPPFLAGS=-I${lib.getDev pkgs.jdk}/include/
         export JAVA_HOME=${pkgs.jdk}
       '';
     });
@@ -1032,7 +1032,7 @@ let
     });
 
     s2 = old.s2.overrideAttrs (attrs: {
-      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_CFLAGS = "-I${lib.getDev pkgs.openssl}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
     });
 
@@ -1044,7 +1044,7 @@ let
 
     Rmpfr = old.Rmpfr.overrideAttrs (attrs: {
       configureFlags = [
-        "--with-mpfr-include=${pkgs.mpfr.dev}/include"
+        "--with-mpfr-include=${lib.getDev pkgs.mpfr}/include"
       ];
     });
 
@@ -1061,7 +1061,7 @@ let
 
     RMySQL = old.RMySQL.overrideAttrs (attrs: {
       MYSQL_DIR = "${pkgs.libmysqlclient}";
-      PKGCONFIG_CFLAGS = "-I${pkgs.libmysqlclient.dev}/include/mysql";
+      PKGCONFIG_CFLAGS = "-I${lib.getDev pkgs.libmysqlclient}/include/mysql";
       NIX_CFLAGS_LINK = "-L${pkgs.libmysqlclient}/lib/mysql -lmysqlclient";
       preConfigure = ''
         patchShebangs configure
@@ -1089,12 +1089,12 @@ let
       preConfigure = ''
         patchShebangs configure
       '';
-      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_CFLAGS = "-I${lib.getDev pkgs.openssl}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
     });
 
     websocket = old.websocket.overrideAttrs (attrs: {
-      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_CFLAGS = "-I${lib.getDev pkgs.openssl}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
     });
 
@@ -1112,7 +1112,7 @@ let
       '';
 
       preConfigure = ''
-        export INCLUDE_DIR=${pkgs.v8}/include
+        export INCLUDE_DIR=${lib.getDev pkgs.v8}/include
         export LIB_DIR=${pkgs.v8}/lib
         patchShebangs configure
       '';
@@ -1163,7 +1163,7 @@ let
 
     RPostgres = old.RPostgres.overrideAttrs (attrs: {
       preConfigure = ''
-        export INCLUDE_DIR=${pkgs.postgresql}/include
+        export INCLUDE_DIR=${lib.getDev pkgs.postgresql}/include
         export LIB_DIR=${pkgs.postgresql.lib}/lib
         patchShebangs configure
         '';
@@ -1201,7 +1201,7 @@ let
       preConfigure = ''
         patchShebangs configure
         '';
-      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include -I${pkgs.cyrus_sasl.dev}/include -I${pkgs.zlib.dev}/include";
+      PKGCONFIG_CFLAGS = "-I${lib.getDev pkgs.openssl.dev}/include -I${lib.getDev pkgs.cyrus_sasl.dev}/include -I${lib.getDev pkgs.zlib}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
     });
 

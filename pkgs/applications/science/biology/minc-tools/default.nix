@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ perl TextFormat ];
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake"
-                 "-DZNZ_INCLUDE_DIR=${nifticlib}/include/nifti"
-                 "-DNIFTI_INCLUDE_DIR=${nifticlib}/include/nifti" ];
+                 "-DZNZ_INCLUDE_DIR=${lib.getDev nifticlib}/include/nifti"
+                 "-DNIFTI_INCLUDE_DIR=${lib.getDev nifticlib}/include/nifti" ];
 
   postFixup = ''
     for prog in minccomplete minchistory mincpik; do

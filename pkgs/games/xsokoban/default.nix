@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 xorgproto libXpm libXt ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${libXpm.dev}/include/X11";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev libXpm}/include/X11";
 
   hardeningDisable = [ "format" ];
 

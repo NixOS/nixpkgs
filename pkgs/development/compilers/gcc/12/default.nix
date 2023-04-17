@@ -276,7 +276,7 @@ lib.pipe (stdenv.mkDerivation ({
 
 
   preConfigure = (callFile ../common/pre-configure.nix { }) + ''
-    ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
+    ln -sf ${lib.getDev libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
   '';
 
   dontDisableStatic = true;

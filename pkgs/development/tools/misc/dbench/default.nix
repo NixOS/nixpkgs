@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf rpcsvc-proto ];
   buildInputs = [ popt zlib libtirpc ];
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev libtirpc}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
   patches = [

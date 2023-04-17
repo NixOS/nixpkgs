@@ -133,7 +133,7 @@ stdenv.mkDerivation ({
       "--sysconfdir=/etc"
       "--enable-stack-protector=strong"
       "--enable-bind-now"
-      (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
+      (lib.withFeatureAs withLinuxHeaders "headers" "${lib.getDev linuxHeaders}/include")
       (lib.enableFeature profilingLibraries "profile")
     ] ++ lib.optionals (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64) [
       # This feature is currently supported on

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   MYSQL_DIR = libmysqlclient;
-  MYSQL_INCLUDE_DIR = "${MYSQL_DIR}/include/mysql";
+  MYSQL_INCLUDE_DIR = "${lib.getDev MYSQL_DIR}/include/mysql";
 
   cmakeFlags = [
     "-DPOCO_UNBUNDLED=ON"

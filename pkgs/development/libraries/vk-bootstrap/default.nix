@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ vulkan-headers glfw catch2 ];
 
   cmakeFlags = [
-    "-DVK_BOOTSTRAP_VULKAN_HEADER_DIR=${vulkan-headers}/include"
+    "-DVK_BOOTSTRAP_VULKAN_HEADER_DIR=${lib.getDev vulkan-headers}/include"
   ];
 
   meta = with lib; {

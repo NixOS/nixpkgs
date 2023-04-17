@@ -83,7 +83,7 @@ in {
       "BINDIR=/bin"
       "MANDIR=/share/man"
       "APIVERSION=${vdr.version}"
-      "VDRDIR=${vdr.dev}/include/vdr"
+      "VDRDIR=${lib.getDev vdr}/include/vdr"
       "LOCDIR=/share/locale"
     ];
 
@@ -189,7 +189,7 @@ in {
     buildFlags = [
       "DESTDIR=$(out)"
       "IMAGELIB=graphicsmagic"
-      "VDRDIR=${vdr.dev}/include/vdr"
+      "VDRDIR=${lib.getDev vdr}/include/vdr"
       "LOCALEDIR=$(DESTDIR)/share/locale"
       "LIBDIR=$(DESTDIR)/lib/vdr"
     ];

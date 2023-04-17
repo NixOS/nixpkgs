@@ -36,7 +36,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
-    substituteInPlace scc/uinput.py --replace /usr/include ${linuxHeaders}/include
+    substituteInPlace scc/uinput.py --replace /usr/include ${lib.getDev linuxHeaders}/include
     substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
   '';
 

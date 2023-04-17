@@ -44,11 +44,11 @@ let
   # which has $out/include/ containing just some disjunct directories.
   flattenInclude = ''
     for dir in "''${!outputInclude}"/include/*; do
-      cp -r "$dir"/* "''${!outputInclude}/include/"
+      cp -r "$dir"/* "''${lib.getDev !outputInclude}/include/"
       rm -r "$dir"
       ln -s . "$dir"
     done
-    ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
+    ln -sr -t "''${lib.getDev !outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
   buildDocs = stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isStatic;
@@ -207,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
 
     # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
-    sed '1i#line 1 "glib-${finalAttrs.version}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
+    sed '1i#line 1 "glib-${lib.getDev finalAttrs.version}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
     for i in $bin/bin/*; do
       moveToOutput "share/bash-completion/completions/''${i##*/}" "$bin"

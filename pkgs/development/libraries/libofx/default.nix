@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = "./autogen.sh";
-  configureFlags = [ "--with-opensp-includes=${opensp}/include/OpenSP" ];
+  configureFlags = [ "--with-opensp-includes=${lib.getDev opensp}/include/OpenSP" ];
   nativeBuildInputs = [ pkg-config libtool autoconf automake gengetopt ];
   buildInputs = [ opensp libxml2 curl ] ++ lib.optional stdenv.isDarwin libiconv;
 

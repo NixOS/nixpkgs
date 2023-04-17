@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 libhdhomerun ];
 
-  configureFlags = [ "CPPFLAGS=-I${libhdhomerun}/include/hdhomerun" ];
+  configureFlags = [ "CPPFLAGS=-I${lib.getDev libhdhomerun}/include/hdhomerun" ];
   makeFlags = [ "SUBDIRS=src" ];
 
   installPhase = ''

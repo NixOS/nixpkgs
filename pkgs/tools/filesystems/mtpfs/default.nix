@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   # adding LIBS is a hack, duno why it does not find libid3tag.so by adding buildInputs
   preConfigure = ''
-    export MAD_CFLAGS=${libmad}/include
+    export MAD_CFLAGS=${lib.getDev libmad}/include
     export MAD_LIBS=${libmad}/lib/libmad.so
     export LIBS=${libid3tag}/lib/libid3tag.so
   '';

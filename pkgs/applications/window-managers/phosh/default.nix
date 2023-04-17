@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     "-Dsystemd=true"
     "-Dcompositor=${phoc}/bin/phoc"
     # https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+    "-Dc_args=-I${lib.getDev glib}/include/gio-unix-2.0"
   ];
 
   checkPhase = ''

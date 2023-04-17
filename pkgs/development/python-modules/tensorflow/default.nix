@@ -301,12 +301,12 @@ let
       "nsync" # fails to build on darwin
     ]);
 
-    INCLUDEDIR = "${includes_joined}/include";
+    INCLUDEDIR = "${lib.getDev includes_joined}/include";
 
     # This is needed for the Nix-provided protobuf dependency to work,
     # as otherwise the rule `link_proto_files` tries to create the links
     # to `/usr/include/...` which results in build failures.
-    PROTOBUF_INCLUDE_PATH = "${protobuf-core}/include";
+    PROTOBUF_INCLUDE_PATH = "${lib.getDev protobuf-core}/include";
 
     PYTHON_BIN_PATH = pythonEnv.interpreter;
 

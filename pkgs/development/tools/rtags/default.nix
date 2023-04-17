@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   })];
 
   preConfigure = ''
-    export LIBCLANG_CXXFLAGS="-isystem ${llvmPackages.clang.cc}/include $(llvm-config --cxxflags) -fexceptions" \
+    export LIBCLANG_CXXFLAGS="-isystem ${lib.getDev llvmPackages.clang.cc}/include $(llvm-config --cxxflags) -fexceptions" \
            LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib"
   '';
 

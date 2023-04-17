@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       RAIBLOCKS_TEST = "ON";
       Qt5_DIR = "${qtbase.dev}/lib/cmake/Qt5";
       Qt5Core_DIR = "${qtbase.dev}/lib/cmake/Qt5Core";
-      Qt5Gui_INCLUDE_DIRS = "${qtbase.dev}/include/QtGui";
+      Qt5Gui_INCLUDE_DIRS = "${lib.getDev qtbase}/include/QtGui";
       Qt5Widgets_INCLUDE_DIRS = "${qtbase.dev}/include/QtWidgets";
     };
     optionToFlag = name: value: "-D${name}=${value}";

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ eigen boost libnabo ];
 
   cmakeFlags = [
-    "-DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3"
+    "-DEIGEN_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
   ];
 
   doCheck = true;

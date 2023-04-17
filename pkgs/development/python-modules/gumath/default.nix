@@ -22,7 +22,7 @@ buildPythonPackage {
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'add_include_dirs = [".", "libgumath", "ndtypes/python/ndtypes", "xnd/python/xnd"] + INCLUDES' \
-                'add_include_dirs = [".", "${libndtypes}/include", "${libxnd}/include", "${libgumath}/include"]' \
+                'add_include_dirs = [".", "${lib.getDev libndtypes}/include", "${lib.getDev libxnd}/include", "${lib.getDev libgumath}/include"]' \
       --replace 'add_library_dirs = ["libgumath", "ndtypes/libndtypes", "xnd/libxnd"] + LIBS' \
                 'add_library_dirs = ["${libndtypes}/lib", "${libxnd}/lib", "${libgumath}/lib"]' \
       --replace 'add_runtime_library_dirs = ["$ORIGIN"]' \

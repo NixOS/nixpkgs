@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace libraries/lib-files/FileNames.cpp \
          --replace /usr/include/linux/magic.h \
-                   ${linuxHeaders}/include/linux/magic.h
+                   ${lib.getDev linuxHeaders}/include/linux/magic.h
   '';
 
   postFixup = ''

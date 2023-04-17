@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   preConfigure = lib.optionalString stdenv.isLinux ''
-    export OPENSSL_INCLUDE_DIR="${openssl.dev}/include"
+    export OPENSSL_INCLUDE_DIR="${lib.getDev openssl}/include"
     export OPENSSL_LIB_DIR="${lib.getLib openssl}/lib"
   '';
 

@@ -29,7 +29,7 @@ mkDerivation rec {
 
   patches = [ ./drone_ini.patch ];
   prePatch = ''
-    sed -i 's|/usr/include/libnl3|${libnl.dev}/include/libnl3|' server/drone.pro
+    sed -i 's|/usr/include/libnl3|${lib.getDev libnl}/include/libnl3|' server/drone.pro
   '';
 
   desktopItems = lib.singleton (makeDesktopItem {

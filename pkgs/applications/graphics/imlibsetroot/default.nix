@@ -14,8 +14,8 @@ stdenv.mkDerivation {
     runHook preBuild
 
     gcc -g imlibsetroot.c -o imlibsetroot              \
-      -I${imlib2.dev}/include -L${imlib2}/lib -lImlib2 \
-      -I${libX11.dev}/include -lXinerama -lX11
+      -I${lib.getDev imlib2}/include -L${imlib2}/lib -lImlib2 \
+      -I${lib.getDev libX11}/include -lXinerama -lX11
 
     runHook postBuild
   '';

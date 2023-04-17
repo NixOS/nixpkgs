@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       --replace '$'''{SPIRV-Tools_DIR}../../..' \
                 '${spirv-tools}' \
       --replace 'SPIRV-Headers_INCLUDE_DIR "/usr/include"' \
-                'SPIRV-Headers_INCLUDE_DIR "${spirv-headers}/include"' \
+                'SPIRV-Headers_INCLUDE_DIR "${lib.getDev spirv-headers}/include"' \
       --replace 'set_target_properties(SPIRV-Tools' \
                 'set_target_properties(SPIRV-Tools-shared' \
       --replace 'IGC_BUILD__PROJ__SPIRV-Tools SPIRV-Tools' \

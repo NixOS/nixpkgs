@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
 
   makeFlags = [
     "World"
-    "BOOTSTRAPCFLAGS=-I${xorgproto}/include/X11"
+    "BOOTSTRAPCFLAGS=-I${lib.getDev xorgproto}/include/X11"
     "IMAKECPP=cpp"
     "LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive"
   ];
@@ -86,7 +86,7 @@ in stdenv.mkDerivation rec {
 #define M4Cmd ${gnum4}/bin/m4
 #define X11ProjectRoot ${x11ProjectRoot}
 #define CppCmd ${gcc}/bin/cpp
-TIRPCINC = -I${libtirpc.dev}/include/tirpc
+TIRPCINC = -I${lib.getDev libtirpc}/include/tirpc
 EOF
 
     patchShebangs .

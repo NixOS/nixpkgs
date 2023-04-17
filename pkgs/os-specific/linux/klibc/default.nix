@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     mkdir $dir
     cp $(find $(find . -name static) -type f ! -name "*.g" -a ! -name ".*") $dir/
 
-    for file in ${linuxHeaders}/include/*; do
+    for file in ${lib.getDev linuxHeaders}/include/*; do
       ln -sv $file $out/lib/klibc/include
     done
   '';

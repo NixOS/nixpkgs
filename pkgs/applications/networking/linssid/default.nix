@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   patches = [ ./0001-unbundled-qwt.patch ];
 
   postPatch = ''
-    sed -e "s|/usr/include/qt5.*$|& ${qwt6_1}/include|" -i linssid-app/linssid-app.pro
+    sed -e "s|/usr/include/qt5.*$|& ${lib.getDev qwt6_1}/include|" -i linssid-app/linssid-app.pro
     sed -e "s|/usr/include/|/nonexistent/|g" -i linssid-app/*.pro
     sed -e 's|^LIBS .*= .*libboost_regex.a|LIBS += -lboost_regex|' \
         -e "s|/usr|$out|g" \

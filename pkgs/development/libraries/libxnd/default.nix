@@ -24,7 +24,7 @@ stdenv.mkDerivation {
       # Library expects to use cc for linking
       "LD=${stdenv.cc.targetPrefix}cc"
       # needed for tests
-      "--with-includes=${libndtypes}/include"
+      "--with-includes=${lib.getDev libndtypes}/include"
       "--with-libs=${libndtypes}/lib"
   ];
 

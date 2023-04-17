@@ -175,7 +175,7 @@ let
       done
     '' + lib.optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
       for i in Lib/plat-*/regen; do
-        substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
+        substituteInPlace $i --replace /usr/include/ ${lib.getDev stdenv.cc.libc}/include/
       done
     '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    cp ${catch}/include/catch/catch.hpp symengine/utilities/catch/catch.hpp
+    cp ${lib.getDev catch}/include/catch/catch.hpp symengine/utilities/catch/catch.hpp
   '';
 
   nativeBuildInputs = [ cmake ];

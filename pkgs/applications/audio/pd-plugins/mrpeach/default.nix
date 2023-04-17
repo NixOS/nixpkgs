@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     for D in net osc
     do
       sed -i "s@prefix = /usr/local@prefix = $out@g" $D/Makefile
-      for i in ${puredata}/include/pd/*; do
+      for i in ${lib.getDev puredata}/include/pd/*; do
         ln -s $i $D/
       done
     done

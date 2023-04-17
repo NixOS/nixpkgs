@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   # Make sure includes are fixed for callers who don't use libassuan-config
   postInstall = ''
-    sed -i 's,#include <gpg-error.h>,#include "${libgpg-error.dev}/include/gpg-error.h",g' $dev/include/assuan.h
+    sed -i 's,#include <gpg-error.h>,#include "${lib.getDev libgpg-error}/include/gpg-error.h",g' $dev/include/assuan.h
   '';
 
   meta = with lib; {

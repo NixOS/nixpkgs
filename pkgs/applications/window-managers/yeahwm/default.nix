@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     makeFlagsArray+=( CC="${stdenv.cc}/bin/cc" \
                       XROOT="${libX11}" \
-                      INCLUDES="-I${libX11.dev}/include -I${libXext.dev}/include -I${libXinerama.dev}/include -I${libXmu.dev}/include" \
+                      INCLUDES="-I${lib.getDev libX11.dev}/include -I${lib.getDev libXext.dev}/include -I${lib.getDev libXinerama.dev}/include -I${lib.getDev libXmu}/include" \
                       LDPATH="-L${libX11}/lib -L${libXext}/lib -L${libXinerama}/lib -L${libXmu}/lib" \
                       prefix="${placeholder "out"}" )
   '';

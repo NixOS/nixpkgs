@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     done
     cp -r ${libcef}/lib/libcef.so cef/Release/
     cp -r ${libcef}/lib/libcef_dll_wrapper.a cef/libcef_dll_wrapper/
-    cp -r ${libcef}/include cef/
+    cp -r ${lib.getDev libcef}/include cef/
   '';
 
   # obs attempts to dlopen libobs-opengl, it fails unless we make sure

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ cffi ];
 
   LDFLAGS = "-L${crc32c}/lib";
-  CFLAGS = "-I${crc32c}/include";
+  CFLAGS = "-I${lib.getDev crc32c}/include";
 
   nativeCheckInputs = [ pytestCheckHook crc32c ];
 

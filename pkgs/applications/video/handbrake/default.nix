@@ -172,7 +172,7 @@ let
       # Use the Nix-provided libxml2 instead of the patched version available on
       # the Handbrake website.
       substituteInPlace libhb/module.defs \
-        --replace '$(CONTRIB.build/)include/libxml2' ${libxml2.dev}/include/libxml2
+        --replace '$(CONTRIB.build/)include/libxml2' ${lib.getDev libxml2}/include/libxml2
 
       # Prevent the configure script from failing if xcodebuild isn't available,
       # which it isn't in the Nix context. (The actual build goes fine without
@@ -181,7 +181,7 @@ let
     '' + optionalString stdenv.isLinux ''
       # Use the Nix-provided libxml2 instead of the system-provided one.
       substituteInPlace libhb/module.defs \
-        --replace /usr/include/libxml2 ${libxml2.dev}/include/libxml2
+        --replace /usr/include/libxml2 ${lib.getDev libxml2}/include/libxml2
     '';
 
     nativeBuildInputs = [

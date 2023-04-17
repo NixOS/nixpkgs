@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "libdir=\${out}/lib"
     "libexecdir=\${out}/lib"
-    "includedir=\${out}/include"
+    "includedir=\${lib.getDev out}/include"
     "mandir=\${out}/share/man"
   ];
 

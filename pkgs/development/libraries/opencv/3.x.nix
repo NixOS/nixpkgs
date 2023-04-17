@@ -221,7 +221,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${lib.getDev ilmbase}/include/OpenEXR";
 
   # Configure can't find the library without this.
   OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;
@@ -256,7 +256,7 @@ stdenv.mkDerivation {
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
   ] ++ lib.optionals enableEigen [
     # Autodetection broken by https://github.com/opencv/opencv/pull/13337
-    "-DEIGEN_INCLUDE_PATH=${eigen}/include/eigen3"
+    "-DEIGEN_INCLUDE_PATH=${lib.getDev eigen}/include/eigen3"
   ];
 
   postBuild = lib.optionalString enableDocs ''

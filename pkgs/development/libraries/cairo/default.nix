@@ -125,7 +125,7 @@ in {
     # Work around broken `Requires.private' that prevents Freetype
     # `-I' flags to be propagated.
     sed -i "src/cairo.pc.in" \
-        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype.dev}/include/freetype2 -I${freetype.dev}/include|g'
+        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${lib.getDev freetype.dev}/include/freetype2 -I${lib.getDev freetype}/include|g'
     substituteInPlace configure --replace strings $STRINGS
     '';
 

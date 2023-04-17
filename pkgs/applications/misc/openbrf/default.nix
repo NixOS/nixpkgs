@@ -19,7 +19,7 @@ mkDerivation {
   qmakeFlags = [ "openBrf.pro" ];
 
   postPatch = ''
-    sed -i 's,^VCGLIB .*,VCGLIB = ${vcg}/include,' openBrf.pro
+    sed -i 's,^VCGLIB .*,VCGLIB = ${lib.getDev vcg}/include,' openBrf.pro
   '';
 
   installPhase = ''

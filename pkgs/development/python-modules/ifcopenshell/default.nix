@@ -41,12 +41,12 @@ buildPythonPackage rec {
   PYTHONUSERBASE=".";
   cmakeFlags = [
     "-DUSERSPACE_PYTHON_PREFIX=ON"
-    "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
+    "-DOCC_INCLUDE_DIR=${lib.getDev opencascade-occt}/include/opencascade"
     "-DOCC_LIBRARY_DIR=${opencascade-occt}/lib"
-    "-DOPENCOLLADA_INCLUDE_DIR=${opencollada}/include/opencollada"
+    "-DOPENCOLLADA_INCLUDE_DIR=${lib.getDev opencollada}/include/opencollada"
     "-DOPENCOLLADA_LIBRARY_DIR=${opencollada}/lib/opencollada"
     "-DSWIG_EXECUTABLE=${swig}/bin/swig"
-    "-DLIBXML2_INCLUDE_DIR=${libxml2.dev}/include/libxml2"
+    "-DLIBXML2_INCLUDE_DIR=${lib.getDev libxml2}/include/libxml2"
     "-DLIBXML2_LIBRARIES=${libxml2.out}/lib/libxml2${stdenv.hostPlatform.extensions.sharedLibrary}"
   ];
 

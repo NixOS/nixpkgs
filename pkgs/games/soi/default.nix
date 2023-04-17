@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost lua luabind libGLU libGL SDL ];
 
   cmakeFlags = [
-    "-DEIGEN_INCLUDE_DIR=${eigen2}/include/eigen2"
+    "-DEIGEN_INCLUDE_DIR=${lib.getDev eigen2}/include/eigen2"
   ];
 
   meta = with lib; {

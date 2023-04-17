@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  ROCKSDB_INCLUDE_DIR = "${rocksdb_6_23}/include";
+  ROCKSDB_INCLUDE_DIR = "${lib.getDev rocksdb_6_23}/include";
   ROCKSDB_LIB_DIR = "${rocksdb_6_23}/lib";
 
   # tests failed on x86_64-darwin with SIGILL: illegal instruction

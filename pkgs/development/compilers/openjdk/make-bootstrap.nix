@@ -7,7 +7,7 @@ runCommand "${openjdk.name}-bootstrap.tar.xz" {} ''
   cp -vrL ${openjdk.home} openjdk-bootstrap/lib
 
   # Includes are needed for building the native jvm
-  cp -vrL ${openjdk}/include openjdk-bootstrap
+  cp -vrL ${lib.getDev openjdk}/include openjdk-bootstrap
 
   # The binaries are actually stored in the openjdk lib
   ln -sv lib/openjdk/bin openjdk-bootstrap/bin

@@ -76,7 +76,7 @@ let
 
     cmakeFlags = oldAttrs.cmakeFlags ++ [
       "-DBUILD_OPENCS=OFF"
-      "-DRakNet_INCLUDES=${raknet.src}/include"
+      "-DRakNet_INCLUDES=${lib.getDev raknet.src}/include"
       "-DRakNet_LIBRARY_RELEASE=${raknet}/lib/libRakNetLibStatic.a"
       "-DRakNet_LIBRARY_DEBUG=${raknet}/lib/libRakNetLibStatic.a"
     ];

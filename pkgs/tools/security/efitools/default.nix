@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    sed -i -e 's#/usr/include/efi#${gnu-efi}/include/efi/#g' Make.rules
+    sed -i -e 's#/usr/include/efi#${lib.getDev gnu-efi}/include/efi/#g' Make.rules
     sed -i -e 's#/usr/lib64/gnuefi#${gnu-efi}/lib/#g' Make.rules
     sed -i -e 's#$(DESTDIR)/usr#$(out)#g' Make.rules
     substituteInPlace lib/console.c --replace "EFI_WARN_UNKOWN_GLYPH" "EFI_WARN_UNKNOWN_GLYPH"

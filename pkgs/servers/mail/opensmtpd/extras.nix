@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableRedis
-      "-I${hiredis}/include/hiredis -lhiredis"
+      "-I${lib.getDev hiredis}/include/hiredis -lhiredis"
     + lib.optionalString enableMysql
       " -L${libmysqlclient}/lib/mysql";
 

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "-DUSE_DEVICE_TREZOR=ON"
     "-DBUILD_GUI_DEPS=ON"
     "-DReadline_ROOT_DIR=${readline.dev}"
-    "-DReadline_INCLUDE_DIR=${readline.dev}/include/readline"
+    "-DReadline_INCLUDE_DIR=${lib.getDev readline}/include/readline"
     "-DRandomX_ROOT_DIR=${randomx}"
   ] ++ lib.optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF";
 

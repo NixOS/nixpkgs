@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     substituteInPlace checkinstallrc-dist --replace /usr/local $out
 
     substituteInPlace installwatch/create-localdecls \
-      --replace /usr/include/unistd.h ${stdenv.cc.libc.dev}/include/unistd.h
+      --replace /usr/include/unistd.h ${lib.getDev stdenv.cc.libc}/include/unistd.h
   '';
 
   postInstall =

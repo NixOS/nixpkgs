@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   configureFlags = [
-    "--with-ssl-include-dir=${openssl.dev}/include/openssl"
+    "--with-ssl-include-dir=${lib.getDev openssl}/include/openssl"
     "--with-passfile=.pine-passfile"
     "--with-c-client-target=slx"
   ];

@@ -102,7 +102,7 @@ rec {
       mkExtraBuildCommands = cc: ''
         rsrc="$out/resource-root"
         mkdir "$rsrc"
-        ln -s "${cc.lib or cc}/lib/clang/${cc.version}/include" "$rsrc"
+        ln -s "${lib.getDev cc.lib or cc}/lib/clang/${cc.version}/include" "$rsrc"
         ln -s "${last.pkgs."${finalLlvmPackages}".compiler-rt.out}/lib" "$rsrc/lib"
         echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
       '';
@@ -241,7 +241,7 @@ rec {
           buildCommand = ''
             mkdir -p $out
             ln -s ${bootstrapTools}/lib     $out/lib
-            ln -s ${bootstrapTools}/include $out/include
+            ln -s ${lib.getDev bootstrapTools}/include $out/include
           '';
         };
 
@@ -311,7 +311,7 @@ rec {
             ln -s ${bootstrapTools}/lib/libresolv.9.dylib $out/lib
             ln -s libresolv.9.dylib $out/lib/libresolv.dylib
 
-            ln -s ${bootstrapTools}/include-Libsystem $out/include
+            ln -s ${lib.getDev bootstrapTools}/include-Libsystem $out/include
           '';
         };
       });
@@ -324,7 +324,7 @@ rec {
             mkdir -p $out/lib
             ln -s ${bootstrapTools}/bin $out/bin
             ln -s ${bootstrapTools}/lib/clang $out/lib/clang
-            ln -s ${bootstrapTools}/include $out/include
+            ln -s ${lib.getDev bootstrapTools}/include $out/include
           '';
         };
 
@@ -334,7 +334,7 @@ rec {
           installPhase = ''
             mkdir -p $out/lib $out/include
             ln -s ${bootstrapTools}/lib/libc++.dylib $out/lib/libc++.dylib
-            ln -s ${bootstrapTools}/include/c++      $out/include/c++
+            ln -s ${lib.getDev bootstrapTools}/include/c++      $out/include/c++
           '';
           passthru = {
             isLLVM = true;

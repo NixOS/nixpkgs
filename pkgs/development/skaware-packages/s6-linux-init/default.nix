@@ -14,11 +14,11 @@ buildPackage {
 
   configureFlags = [
     "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
+    "--includedir=\${lib.getDev dev}/include"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-include=${execline.dev}/include"
-    "--with-include=${s6.dev}/include"
+    "--with-include=${lib.getDev skalibs}/include"
+    "--with-include=${lib.getDev execline}/include"
+    "--with-include=${lib.getDev s6}/include"
     "--with-lib=${skalibs.lib}/lib"
     "--with-lib=${s6.out}/lib"
     "--with-lib=${execline.lib}/lib"

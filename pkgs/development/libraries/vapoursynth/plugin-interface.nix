@@ -100,7 +100,7 @@ runCommand "${vapoursynth.name}-with-plugins" {
   ln -s \
       ${pluginLoader}/lib/libvapoursynth-nix-plugins${ext} \
       $out/lib/libvapoursynth-nix-plugins${ext}
-  ln -s ${vapoursynth}/include $out/include
+  ln -s ${lib.getDev vapoursynth}/include $out/include
   ln -s ${vapoursynth}/lib/vapoursynth/* $out/lib/vapoursynth
   ln -s \
       libvapoursynth-script${ext}.0.0.0 \

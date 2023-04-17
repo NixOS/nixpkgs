@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   patches = [
     (substituteAll {
       src = ./system-libsodium.patch;
-      libsodium_include_dir = "${libsodium.dev}/include";
+      libsodium_include_dir = "${lib.getDev libsodium}/include";
     })
   ];
 

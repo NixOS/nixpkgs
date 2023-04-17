@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-libxml2=${libxml2.dev}"
-    "--with-libxml2-cflags=-I${libxml2.dev}/include/libxml2"
+    "--with-libxml2-cflags=-I${lib.getDev libxml2}/include/libxml2"
     # Make sure to use a static value for the timeout. If we do not set a value
     # here autogen will select one based on the execution time of the configure
     # phase which is not really reproducible.

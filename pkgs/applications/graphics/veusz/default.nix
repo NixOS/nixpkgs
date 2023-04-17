@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
   # https://github.com/veusz/veusz/blob/53b99dffa999f2bc41fdc5335d7797ae857c761f/pyqtdistutils.py#L71
   # --sip-dir cannot be used here for the reasons explained above
   setupPyBuildFlags = [
-    "--qt-include-dir=${qtbase.dev}/include"
+    "--qt-include-dir=${lib.getDev qtbase}/include"
     # veusz tries to find a libinfix and fails without one
     # but we simply don't need a libinfix, so set it to empty here
     "--qt-libinfix="

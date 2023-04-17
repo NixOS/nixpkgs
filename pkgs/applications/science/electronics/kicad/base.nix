@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DKICAD_USE_EGL=ON"
-    "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
+    "-DOCC_INCLUDE_DIR=${lib.getDev opencascade-occt}/include/opencascade"
   ]
   ++ optionals (stable) [
     # https://gitlab.com/kicad/code/kicad/-/issues/12491

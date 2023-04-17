@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap ndn-cxx openssl ];
 
   wafConfigureFlags = [
-    "--boost-includes=${boost.dev}/include"
+    "--boost-includes=${lib.getDev boost}/include"
     "--boost-libs=${boost.out}/lib"
     "--with-tests"
   ];

@@ -83,7 +83,7 @@ stdenv.mkDerivation {
   ] ++ optional emojiSupport "--enable-wide-glyphs";
 
   LDFLAGS = [ "-lfontconfig" "-lXrender" "-lpthread" ];
-  CFLAGS = [ "-I${freetype.dev}/include/freetype2" ];
+  CFLAGS = [ "-I${lib.getDev freetype}/include/freetype2" ];
 
   preConfigure =
     ''

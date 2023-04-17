@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   makeFlags =
     [ "prefix="
-      "EFIINC=${gnu-efi}/include/efi"
+      "EFIINC=${lib.getDev gnu-efi}/include/efi"
       "EFILIB=${gnu-efi}/lib"
       "GNUEFILIB=${gnu-efi}/lib"
       "EFICRT0=${gnu-efi}/lib"

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, tcl, tk, libX11, glibc, which, bison, flex, imake, xorgproto, gccmakedep }:
 
 let
-  libiconvInc = lib.optionalString stdenv.isLinux "${glibc.dev}/include";
+  libiconvInc = lib.optionalString stdenv.isLinux "${lib.getDev glibc}/include";
   libiconvLib = lib.optionalString stdenv.isLinux "${glibc.out}/lib";
 in
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -i config.h \
       -e 's|.*#define.*TKGATE_TCLTK_VERSIONS.*|#define TKGATE_TCLTK_VERSIONS "${tcl.release}"|' \
-      -e 's|.*#define.*TKGATE_INCDIRS.*|#define TKGATE_INCDIRS "${tcl}/include ${tk}/include ${libiconvInc} ${libX11.dev}/include"|' \
+      -e 's|.*#define.*TKGATE_INCDIRS.*|#define TKGATE_INCDIRS "${lib.getDev tcl}/include ${lib.getDev tk}/include ${lib.getDev libiconvInc} ${libX11}/include"|' \
       -e 's|.*#define.*TKGATE_LIBDIRS.*|#define TKGATE_LIBDIRS "${tcl}/lib ${tk}/lib ${libiconvLib} ${libX11.out}/lib"|' \
       \
       -e '20 i #define TCL_LIBRARY "${tcl}/lib"' \

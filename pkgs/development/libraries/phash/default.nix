@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = ["--enable-video-hash=no" "--enable-audio-hash=no"];
   postInstall = ''
-    cp ${cimg}/include/CImg.h $out/include/
+    cp ${lib.getDev cimg}/include/CImg.h $out/include/
   '';
 
   src = fetchFromGitHub {

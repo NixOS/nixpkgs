@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     "LIB=lib"
     "prefix=$(out)"
     "systemd_prefix=$(out)"
-    "kernel_incdir=${linuxHeaders}/include/"
+    "kernel_incdir=${lib.getDev linuxHeaders}/include/"
     "man8dir=$(out)/share/man/man8"
     "man5dir=$(out)/share/man/man5"
     "man3dir=$(out)/share/man/man3"

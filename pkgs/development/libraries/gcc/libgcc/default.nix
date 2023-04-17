@@ -146,9 +146,9 @@ stdenvNoLibs.mkDerivation rec {
   makeFlags = [ "MULTIBUILDTOP:=../" ];
 
   postInstall = ''
-    moveToOutput "lib/gcc/${stdenvNoLibs.hostPlatform.config}/${version}/include" "$dev"
+    moveToOutput "lib/gcc/${lib.getDev stdenvNoLibs.hostPlatform.config}/${version}/include" "$dev"
     mkdir -p "$out/lib" "$dev/include"
     ln -s "$out/lib/gcc/${stdenvNoLibs.hostPlatform.config}/${version}"/* "$out/lib"
-    ln -s "$dev/lib/gcc/${stdenvNoLibs.hostPlatform.config}/${version}/include"/* "$dev/include/"
+    ln -s "$dev/lib/gcc/${lib.getDev stdenvNoLibs.hostPlatform.config}/${version}/include"/* "$dev/include/"
   '';
 }

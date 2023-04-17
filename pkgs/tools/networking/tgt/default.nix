@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile
-    sed -i 's|/usr/include/libaio.h|${libaio}/include/libaio.h|' usr/Makefile
-    sed -i 's|/usr/include/sys/|${stdenv.cc.libc.dev}/include/sys/|' usr/Makefile
-    sed -i 's|/usr/include/linux/|${stdenv.cc.libc.dev}/include/linux/|' usr/Makefile
+    sed -i 's|/usr/include/libaio.h|${lib.getDev libaio}/include/libaio.h|' usr/Makefile
+    sed -i 's|/usr/include/sys/|${lib.getDev stdenv.cc.libc}/include/sys/|' usr/Makefile
+    sed -i 's|/usr/include/linux/|${lib.getDev stdenv.cc.libc}/include/linux/|' usr/Makefile
   '';
 
   postInstall = ''

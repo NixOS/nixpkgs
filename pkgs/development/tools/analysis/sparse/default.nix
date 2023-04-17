@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    sed -i 's|"/usr/include"|"${stdenv.cc.libc.dev}/include"|' pre-process.c
+    sed -i 's|"/usr/include"|"${lib.getDev stdenv.cc.libc}/include"|' pre-process.c
     sed -i 's|qx(\$ccom -print-file-name=)|"${GCC_BASE}"|' cgcc
     makeFlags+=" PREFIX=$out"
   '';

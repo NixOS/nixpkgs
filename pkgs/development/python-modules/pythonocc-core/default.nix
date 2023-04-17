@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DPYTHONOCC_INSTALL_DIRECTORY=${placeholder "out"}/${python.sitePackages}/OCC"
 
-    "-DSMESH_INCLUDE_PATH=${smesh}/include/smesh"
+    "-DSMESH_INCLUDE_PATH=${lib.getDev smesh}/include/smesh"
     "-DSMESH_LIB_PATH=${smesh}/lib"
     "-DPYTHONOCC_WRAP_SMESH=TRUE"
   ];

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=(
       -C ./src
       CC=cc
-      USEZ="-DZLIB_CAPABLE -I${zlib}/include"
+      USEZ="-DZLIB_CAPABLE -I${lib.getDev zlib}/include"
       ZLIB="-L${zlib}/lib -lz"
       UNIX="-DUNIX"
     )

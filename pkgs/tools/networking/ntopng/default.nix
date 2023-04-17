@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   autoreconfPhase = "bash autogen.sh";
 
   configureFlags = [
-    "--with-ndpi-includes=${ndpi}/include/ndpi"
+    "--with-ndpi-includes=${lib.getDev ndpi}/include/ndpi"
     "--with-ndpi-static-lib=${ndpi}/lib/"
   ];
 

@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
   buildInputs = [ python3Packages.numpy python3Packages.pyqt5 glew glm libpng libxml2 freetype msgpack netcdf ];
-  env.NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = "-I ${lib.getDev libxml2}/include/libxml2";
   hardeningDisable = [ "format" ];
 
   installPhase = ''

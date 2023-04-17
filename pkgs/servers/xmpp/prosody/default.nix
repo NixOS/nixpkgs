@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--ostype=linux"
-    "--with-lua-include=${luaEnv}/include"
+    "--with-lua-include=${lib.getDev luaEnv}/include"
     "--with-lua=${luaEnv}"
   ];
 

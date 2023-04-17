@@ -77,7 +77,7 @@ let
     "variant=${variant}"
     "threading=${threading}"
     "link=${link}"
-    "-sEXPAT_INCLUDE=${expat.dev}/include"
+    "-sEXPAT_INCLUDE=${lib.getDev expat}/include"
     "-sEXPAT_LIBPATH=${expat.out}/lib"
 
     # TODO: make this unconditional
@@ -212,7 +212,7 @@ stdenv.mkDerivation {
   + lib.optionalString enablePython ''
     cat << EOF >> user-config.jam
     using python : : ${python.interpreter}
-      : ${python}/include/python${python.pythonVersion}
+      : ${lib.getDev python}/include/python${python.pythonVersion}
       : ${python}/lib
       ;
     EOF

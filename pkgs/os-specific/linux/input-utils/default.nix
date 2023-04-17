@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # Use proper include path for kernel include files.
-    substituteInPlace ./name.sh --replace "/usr/include/linux/" "${linuxHeaders}/include/linux/"
-    substituteInPlace ./lirc.sh --replace "/usr/include/linux/" "${linuxHeaders}/include/linux/"
+    substituteInPlace ./name.sh --replace "/usr/include/linux/" "${lib.getDev linuxHeaders}/include/linux/"
+    substituteInPlace ./lirc.sh --replace "/usr/include/linux/" "${lib.getDev linuxHeaders}/include/linux/"
   '';
 
   makeFlags = [

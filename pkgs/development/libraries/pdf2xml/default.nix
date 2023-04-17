@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   preBuild = ''
     cp Makefile.linux Makefile
 
-    sed -i 's|/usr/include/libxml2|${libxml2.dev}/include/libxml2|' Makefile
+    sed -i 's|/usr/include/libxml2|${lib.getDev libxml2}/include/libxml2|' Makefile
     sed -i 's|-lxml2|-lxml2 -L${libxml2.out}/lib|' Makefile
     sed -i 's|XPDF = xpdf_3.01|XPDF = ${libxpdf}/lib|' Makefile
 

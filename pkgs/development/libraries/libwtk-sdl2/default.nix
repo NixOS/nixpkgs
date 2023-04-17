@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     SDL2_image
   ];
   # From some reason, this is needed as otherwise SDL.h is not found
-  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
+  NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2}/include/SDL2";
 
   outputs = [ "out" "dev" "lib" ];
 

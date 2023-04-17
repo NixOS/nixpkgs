@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     mkdir openssl
     ln -s ${lib.getLib openssl}/lib openssl
     ln -s ${openssl.bin}/bin openssl
-    ln -s ${openssl.dev}/include openssl
+    ln -s ${lib.getDev openssl}/include openssl
     export SSL_PREFIX=$(realpath openssl)
     substituteInPlace plugins_tools/eid-viewer/Makefile.in \
       --replace "c_rehash" "openssl rehash"

@@ -15,7 +15,7 @@ tcl.mkTclDerivation rec {
   configureFlags = [
     "--with-tk=${tk}/lib"
     "--with-itcl=${incrtcl}/lib"
-    "--with-tkinclude=${tk.dev}/include"
+    "--with-tkinclude=${lib.getDev tk}/include"
   ];
 
   postInstall = ''

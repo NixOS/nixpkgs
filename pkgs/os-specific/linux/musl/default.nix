@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
     # Apparently glibc provides scsi itself?
-    (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
+    (cd $dev/include && ln -s $(ls -d ${lib.getDev linuxHeaders}/include/* | grep -v "scsi$") .)
 
     ${lib.optionalString (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32)
       "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a"

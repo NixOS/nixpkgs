@@ -111,7 +111,7 @@ in
     #
     # patchPhase = ''
     #   substituteInPlace ./foundationdb-sys/build.rs \
-    #     --replace /usr/local/include ${foundationdb.dev}/include
+    #     --replace /usr/local/include ${lib.getDev foundationdb}/include
     # '';
   };
 

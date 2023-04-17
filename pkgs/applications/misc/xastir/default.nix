@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     libax25
   ];
 
-  configureFlags = [ "--with-motif-includes=${motif}/include" ];
+  configureFlags = [ "--with-motif-includes=${lib.getDev motif}/include" ];
 
   postPatch = "patchShebangs .";
 

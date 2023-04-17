@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     makeFlagsArray+=(
       CC="cc"
-      INCDIR="-I${libX11.dev}/include -I${libXext.dev}/include -I${libXpm.dev}/include"
+      INCDIR="-I${lib.getDev libX11.dev}/include -I${lib.getDev libXext.dev}/include -I${lib.getDev libXpm}/include"
       LIBDIR="-I${libX11}/lib -I${libXext}/lib -I${libXpm}/lib"
     )
   '';

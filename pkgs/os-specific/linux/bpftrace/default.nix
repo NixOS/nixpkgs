@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   #
   cmakeFlags =
     [ "-DBUILD_TESTING=FALSE"
-      "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
+      "-DLIBBCC_INCLUDE_DIRS=${lib.getDev bcc}/include"
       "-DINSTALL_TOOL_DOCS=off"
     ];
 

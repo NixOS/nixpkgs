@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     mkdir -p ./build/third_party/clBLAS/src
     cp -R --no-preserve=mode,ownership ${clblas.src}/ ./build/third_party/clBLAS/src/clBLAS-ext/
     mkdir -p ./build/include/CL
-    cp -R --no-preserve=mode,ownership ${opencl-clhpp}/include/CL/cl2.hpp ./build/include/CL/cl2.hpp
+    cp -R --no-preserve=mode,ownership ${lib.getDev opencl-clhpp}/include/CL/cl2.hpp ./build/include/CL/cl2.hpp
   '';
 
   preBuild = lib.optionalString cudaSupport ''

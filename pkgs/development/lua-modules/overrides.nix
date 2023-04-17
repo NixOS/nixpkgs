@@ -142,7 +142,7 @@ with prev;
     extraVariables = {
       DBUS_DIR = "${dbus.lib}";
       DBUS_ARCH_INCDIR = "${dbus.lib}/lib/dbus-1.0/include";
-      DBUS_INCDIR = "${dbus.dev}/include/dbus-1.0";
+      DBUS_INCDIR = "${lib.getDev dbus}/include/dbus-1.0";
     };
     buildInputs = [
       dbus
@@ -286,7 +286,7 @@ with prev;
   luadbi-mysql = prev.luaLib.overrideLuarocks prev.luadbi-mysql (drv: {
     extraVariables = {
       # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
+      MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/mysql";
       MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
     };
     buildInputs = [
@@ -492,7 +492,7 @@ with prev;
     '';
     propagatedBuildInputs = prev.readline.propagatedBuildInputs ++ [ readline.out ];
     extraVariables = rec {
-      READLINE_INCDIR = "${readline.dev}/include";
+      READLINE_INCDIR = "${lib.getDev readline}/include";
       HISTORY_INCDIR = READLINE_INCDIR;
     };
   })).overrideAttrs (old: {

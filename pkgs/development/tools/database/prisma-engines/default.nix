@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     export OPENSSL_LIB_DIR=${lib.getLib openssl}/lib
 
     export PROTOC=${protobuf}/bin/protoc
-    export PROTOC_INCLUDE="${protobuf}/include";
+    export PROTOC_INCLUDE="${lib.getDev protobuf}/include";
 
     export SQLITE_MAX_VARIABLE_NUMBER=250000
     export SQLITE_MAX_EXPR_DEPTH=10000

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cd src
 
     sed s,lSDL2main,lSDL2, -i GNUmakefile
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL2.dev}/include/SDL2"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${lib.getDev SDL2}/include/SDL2"
     export makeFlags="$makeFlags prefix=$out"
   '';
 

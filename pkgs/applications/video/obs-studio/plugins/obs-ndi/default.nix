@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     # Replace bundled NDI SDK with the upstream version
     # (This fixes soname issues)
     rm -rf lib/ndi
-    ln -s ${ndi}/include lib/ndi
+    ln -s ${lib.getDev ndi}/include lib/ndi
   '';
 
   postInstall = ''

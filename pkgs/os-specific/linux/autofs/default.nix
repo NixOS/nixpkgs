@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   # configure script is not finding the right path
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev libtirpc}/include/tirpc" ];
 
   installPhase = ''
     make install SUBDIRS="lib daemon modules man" # all but samples

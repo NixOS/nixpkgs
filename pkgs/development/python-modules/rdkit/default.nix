@@ -105,11 +105,11 @@ buildPythonPackage rec {
   '';
 
   cmakeFlags = [
-    "-DCATCH_DIR=${catch2}/include/catch2"
+    "-DCATCH_DIR=${lib.getDev catch2}/include/catch2"
     "-DINCHI_LIBRARY=${inchi}/lib/libinchi.so"
     "-DINCHI_LIBRARIES=${inchi}/lib/libinchi.so"
-    "-DINCHI_INCLUDE_DIR=${inchi}/include/inchi"
-    "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3"
+    "-DINCHI_INCLUDE_DIR=${lib.getDev inchi}/include/inchi"
+    "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
     "-DRDK_INSTALL_INTREE=OFF"
     "-DRDK_INSTALL_STATIC_LIBS=OFF"
     "-DRDK_BUILD_INCHI_SUPPORT=ON"

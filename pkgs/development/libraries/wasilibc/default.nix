@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   preBuild = ''
     export SYSROOT_LIB=${builtins.placeholder "out"}/lib
-    export SYSROOT_INC=${builtins.placeholder "dev"}/include
+    export SYSROOT_INC=${lib.getDev builtins.placeholder "dev"}/include
     export SYSROOT_SHARE=${builtins.placeholder "share"}/share
     mkdir -p "$SYSROOT_LIB" "$SYSROOT_INC" "$SYSROOT_SHARE"
     makeFlagsArray+=(

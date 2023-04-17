@@ -71,7 +71,7 @@ mkDerivation rec {
   qmakeFlags = [ "VERSION=${version}" ] ++
     lib.optionals spacenavSupport [
       "ENABLE_SPNAV=1"
-      "SPNAV_INCLUDEPATH=${libspnav}/include"
+      "SPNAV_INCLUDEPATH=${lib.getDev libspnav}/include"
       "SPNAV_LIBPATH=${libspnav}/lib"
     ];
 

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       ];
       variables = rec {
         prefix = "${placeholder "out"}";
-        includedir = "${prefix}/include";
+        includedir = "${lib.getDev prefix}/include";
         libdir = "${prefix}/lib";
       };
       description = "Tiny C compiler backend";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     "--cc=$CC"
     "--ar=$AR"
     "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
-    "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
+    "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{lib.getDev B}/include"
     "--libpaths=${lib.getLib stdenv.cc.libc}/lib"
     # build cross compilers
     "--enable-cross"

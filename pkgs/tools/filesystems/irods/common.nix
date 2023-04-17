@@ -35,7 +35,7 @@
       --replace "DESTINATION usr/bin" "DESTINATION bin" \
       --replace "INCLUDE_DIRS usr/include/" "INCLUDE_DIRS include/" \
       --replace "DESTINATION usr/lib/" "DESTINATION lib/" \
-      --replace "{IRODS_EXTERNALS_FULLPATH_JSON}/include" "{IRODS_EXTERNALS_FULLPATH_JSON}/include/nlohmann"
+      --replace "{lib.getDev IRODS_EXTERNALS_FULLPATH_JSON}/include" "{lib.getDev IRODS_EXTERNALS_FULLPATH_JSON}/include/nlohmann"
     export cmakeFlags="$cmakeFlags
       -DCMAKE_INSTALL_PREFIX=$out
     "

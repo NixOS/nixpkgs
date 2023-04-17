@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [ python2 pam xorg.libX11 ];
 
   configurePhase = ''
-    substituteInPlace .config/options.py --replace /usr/include/security/pam_appl.h ${pam}/include/security/pam_appl.h
+    substituteInPlace .config/options.py --replace /usr/include/security/pam_appl.h ${lib.getDev pam}/include/security/pam_appl.h
     substituteInPlace src/xtrlock.c --replace system-local-login xscreensaver
     python configure --prefix=$out
   '';

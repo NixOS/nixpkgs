@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' \
-      -e 's@/usr/include/mt/support@${libmtsupport}/include/mt/support@' \
-      -e 's@/usr/include/btree@${libbtree}/include/btree@' \
-      -e 's@/usr/include/facet@${libfacet}/include/facet@' \
+      -e 's@/usr/include/mt/support@${lib.getDev libmtsupport}/include/mt/support@' \
+      -e 's@/usr/include/btree@${lib.getDev libbtree}/include/btree@' \
+      -e 's@/usr/include/facet@${lib.getDev libfacet}/include/facet@' \
       src/Makefile testsuite/Makefile;
     sed -i -e 's@/usr/share/multitran@${multitrandata}/share/multitran@' src/config.cc
   '';

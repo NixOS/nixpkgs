@@ -16,7 +16,7 @@ mkDerivation rec {
 
   prePatch = ''
     substituteInPlace cmake/HTTRAQTFindHttrack.cmake \
-      --replace /usr/include/httrack/ ${httrack}/include/httrack/
+      --replace /usr/include/httrack/ ${lib.getDev httrack}/include/httrack/
 
     substituteInPlace distribution/posix/CMakeLists.txt \
       --replace /usr/share $out/share

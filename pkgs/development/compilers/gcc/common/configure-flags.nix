@@ -103,9 +103,9 @@ let
   configureFlags =
     # Basic dependencies
     [
-      "--with-gmp-include=${gmp.dev}/include"
+      "--with-gmp-include=${lib.getDev gmp}/include"
       "--with-gmp-lib=${gmp.out}/lib"
-      "--with-mpfr-include=${mpfr.dev}/include"
+      "--with-mpfr-include=${lib.getDev mpfr}/include"
       "--with-mpfr-lib=${mpfr.out}/lib"
       "--with-mpc=${libmpc}"
     ]

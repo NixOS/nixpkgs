@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   CXXDEFS = [ "-DHAVE_RAND" "-DHAVE_CSTRING" "-DHAVE_CSTDIO" ];
 
   configureFlags = [
-    "--with-asl-cflags=-I${libamplsolver}/include"
+    "--with-asl-cflags=-I${lib.getDev libamplsolver}/include"
     "--with-asl-lflags=-lamplsolver"
   ];
 

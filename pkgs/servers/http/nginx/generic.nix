@@ -117,7 +117,7 @@ stdenv.mkDerivation {
     ++ map (mod: "--add-module=${mod.src}") modules;
 
   env.NIX_CFLAGS_COMPILE = toString ([
-    "-I${libxml2.dev}/include/libxml2"
+    "-I${lib.getDev libxml2}/include/libxml2"
     "-Wno-error=implicit-fallthrough"
   ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
     # fix build vts module on gcc11

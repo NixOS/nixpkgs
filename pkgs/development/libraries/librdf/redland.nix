@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--with-threads" ]
     ++ lib.optionals withBdb [
-      "--with-bdb-include=${db.dev}/include"
+      "--with-bdb-include=${lib.getDev db}/include"
       "--with-bdb-lib=${db.out}/lib"
     ];
 

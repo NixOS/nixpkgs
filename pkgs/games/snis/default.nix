@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "OPUSARCHIVE=libopus.a" "OPUSARCHIVE=" \
-      --replace "-I./opus-1.3.1/include" "-I${libopus.dev}/include/opus"
+      --replace "-I./opus-1.3.1/include" "-I${lib.getDev libopus}/include/opus"
     substituteInPlace snis_launcher \
       --replace "PREFIX=." "PREFIX=$out"
     substituteInPlace snis_text_to_speech.sh \

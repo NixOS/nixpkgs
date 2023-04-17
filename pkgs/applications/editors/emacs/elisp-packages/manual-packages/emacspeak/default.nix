@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   postBuild = ''
-    make -C servers/native-espeak PREFIX=$out "TCL_INCLUDE=${tcl}/include"
+    make -C servers/native-espeak PREFIX=$out "TCL_INCLUDE=${lib.getDev tcl}/include"
   '';
 
   postInstall = ''

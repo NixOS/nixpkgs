@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ arpack spooles blas lapack ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-I${spooles}/include/spooles"
+    "-I${lib.getDev spooles}/include/spooles"
     "-std=legacy"
   ];
 

@@ -16,7 +16,7 @@ buildPythonApplication {
 
   postPatch = ''
     substituteInPlace src/uinput.py --replace \
-      "/usr/include" "${linuxHeaders}/include"
+      "/usr/include" "${lib.getDev linuxHeaders}/include"
   '';
 
   buildInputs = [ libusb1 ];

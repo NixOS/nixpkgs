@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace incdefs.sh --replace \
-       '/usr/include/linux/' "${linuxHeaders}/include/linux/"
+       '/usr/include/linux/' "${lib.getDev linuxHeaders}/include/linux/"
   '';
 
   makeFlags = [ "prefix=" ];

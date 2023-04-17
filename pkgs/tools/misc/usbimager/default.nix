@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i \
       -e 's|install -m 2755 -g disk|install |g' \
-      -e 's|-I/usr/include/gio-unix-2.0|-I${glib.dev}/include/gio-unix-2.0|g' \
+      -e 's|-I/usr/include/gio-unix-2.0|-I${lib.getDev glib}/include/gio-unix-2.0|g' \
       -e 's|install -m 2755 -g $(GRP)|install |g' Makefile
   '';
 

@@ -26,5 +26,5 @@ mkDerivation {
       --replace Exec=$out Exec=${kio}
   '';
 
-  CXXFLAGS = [ "-I${ilmbase.dev}/include/OpenEXR" ];
+  CXXFLAGS = [ "-I${lib.getDev ilmbase}/include/OpenEXR" ];
 }

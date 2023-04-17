@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
    };
 
   postPatch = ''
-    cp ${catch2}/include/catch2/catch.hpp libclingcon/tests/catch.hpp
+    cp ${lib.getDev catch2}/include/catch2/catch.hpp libclingcon/tests/catch.hpp
   '';
 
   nativeBuildInputs = [ cmake clingo ];

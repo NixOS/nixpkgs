@@ -288,7 +288,7 @@ in stdenv.mkDerivation {
       inherit (builtins) storeDir;
     }}
     substituteInPlace swift/cmake/modules/SwiftConfigureSDK.cmake \
-      --replace '/usr/include' "${stdenv.cc.libc_dev}/include"
+      --replace '/usr/include' "${lib.getDev stdenv.cc.libc_dev}/include"
 
     # This patch needs to know the lib output location, so must be substituted
     # in the same derivation as the compiler.
@@ -316,7 +316,7 @@ in stdenv.mkDerivation {
       --replace 'LibDir = X32 ? "libx32" : "lib64";' 'LibDir = "${glibc}/lib";'
 
     # uuid.h is not part of glibc, but of libuuid.
-    sed -i 's|''${GLIBC_INCLUDE_PATH}/uuid/uuid.h|${libuuid.dev}/include/uuid/uuid.h|' \
+    sed -i 's|''${lib.getDev GLIBC_INCLUDE_PATH}/uuid/uuid.h|${libuuid}/include/uuid/uuid.h|' \
       swift/stdlib/public/Platform/glibc.modulemap.gyb
     ''}
 
@@ -487,9 +487,9 @@ in stdenv.mkDerivation {
       ${lib.optionalString stdenv.isDarwin ''
       -DLLDB_USE_SYSTEM_DEBUGSERVER=ON
       ''}
-      -DLibEdit_INCLUDE_DIRS=${libedit.dev}/include
+      -DLibEdit_INCLUDE_DIRS=${lib.getDev libedit}/include
       -DLibEdit_LIBRARIES=${libedit}/lib/libedit${stdenv.hostPlatform.extensions.sharedLibrary}
-      -DCURSES_INCLUDE_DIRS=${if stdenv.isDarwin then "/var/empty" else ncurses.dev}/include
+      -DCURSES_INCLUDE_DIRS=${lib.getDev if stdenv.isDarwin then "/var/empty" else ncurses}/include
       -DCURSES_LIBRARIES=${ncurses}/lib/libncurses${stdenv.hostPlatform.extensions.sharedLibrary}
       -DPANEL_LIBRARIES=${ncurses}/lib/libpanel${stdenv.hostPlatform.extensions.sharedLibrary}
     ";

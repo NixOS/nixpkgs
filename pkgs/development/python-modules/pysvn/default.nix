@@ -39,10 +39,10 @@ buildPythonPackage rec {
     cd Source
     ${python.pythonForBuild.interpreter} setup.py backport
     ${python.pythonForBuild.interpreter} setup.py configure \
-      --apr-inc-dir=${apr.dev}/include \
-      --apu-inc-dir=${aprutil.dev}/include \
-      --pycxx-dir=${pycxx.dev}/include \
-      --svn-inc-dir=${subversion.dev}/include/subversion-1 \
+      --apr-inc-dir=${lib.getDev apr}/include \
+      --apu-inc-dir=${lib.getDev aprutil}/include \
+      --pycxx-dir=${lib.getDev pycxx}/include \
+      --svn-inc-dir=${lib.getDev subversion}/include/subversion-1 \
       --pycxx-src-dir=${pycxx.dev}/src \
       --apr-lib-dir=${apr.out}/lib \
       --svn-lib-dir=${subversion.out}/lib \

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-openssl-libdir=${lib.getLib openssl}/lib"
-    "--with-openssl-incdir=${openssl.dev}/include"
+    "--with-openssl-incdir=${lib.getDev openssl}/include"
     "--enable-ignore-dns-errors"
     "--with-yielding-select=yes"
   ] ++ lib.optional stdenv.isLinux "--enable-linuxcaps";

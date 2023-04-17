@@ -47,7 +47,7 @@ mkDerivation rec {
     qtgraphicaleffects
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev mlt.dev}/include/mlt++ -I${lib.getDev mlt}/include/mlt";
   qmakeFlags = [
     "QMAKE_LRELEASE=${lib.getDev qttools}/bin/lrelease"
     "SHOTCUT_VERSION=${version}"

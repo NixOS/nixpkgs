@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   };
 
   preConfigure = "patchShebangs autogen.sh && ./autogen.sh";
-  configureFlagsArray = ("CFLAGS=-include ${zlib.dev}/include/zlib.h");
+  configureFlagsArray = ("CFLAGS=-include ${lib.getDev zlib}/include/zlib.h");
 
   nativeBuildInputs = [
     autoconf automake gettext intltool libtool pkg-config

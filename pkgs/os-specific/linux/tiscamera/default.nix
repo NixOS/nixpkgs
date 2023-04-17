@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    cp ${catch2}/include/catch2/catch.hpp external/catch/catch.hpp
+    cp ${lib.getDev catch2}/include/catch2/catch.hpp external/catch/catch.hpp
 
     substituteInPlace ./data/udev/80-theimagingsource-cameras.rules.in \
       --replace "/bin/sh" "${runtimeShell}/bin/sh" \

@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   # LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
   # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
   # try to build RocksDB from source.
-  # ROCKSDB_INCLUDE_DIR="${rocksdb}/include";
+  # ROCKSDB_INCLUDE_DIR="${lib.getDev rocksdb}/include";
   # ROCKSDB_LIB_DIR="${rocksdb}/lib";
 
   meta = with lib; {

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # Define _XOPEN_SOURCE to enable, e.g., getaddrinfo.
     configureFlagsArray+=(
-      "CFLAGS=-D_XOPEN_SOURCE=600 -I${librdf_raptor2}/include/raptor2 -I${librdf_rasqal}/include/rasqal"
+      "CFLAGS=-D_XOPEN_SOURCE=600 -I${lib.getDev librdf_raptor2}/include/raptor2 -I${lib.getDev librdf_rasqal}/include/rasqal"
     )
   '';
 

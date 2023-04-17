@@ -32,12 +32,12 @@ buildPackage {
     "--libexecdir=\${lib}/libexec"
     "--dynlibdir=\${lib}/lib"
     "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
+    "--includedir=\${lib.getDev dev}/include"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-include=${execline.dev}/include"
-    "--with-include=${s6.dev}/include"
-    "--with-include=${s6-dns.dev}/include"
+    "--with-include=${lib.getDev skalibs}/include"
+    "--with-include=${lib.getDev execline}/include"
+    "--with-include=${lib.getDev s6}/include"
+    "--with-include=${lib.getDev s6-dns}/include"
     "--with-lib=${skalibs.lib}/lib"
     "--with-lib=${execline.lib}/lib"
     "--with-lib=${s6.out}/lib"
@@ -49,7 +49,7 @@ buildPackage {
   ]
   ++ (lib.optionals sslSupportEnabled [
        "--enable-ssl=${sslSupport}"
-       "--with-include=${lib.getDev sslLibs.${sslSupport}}/include"
+       "--with-include=${lib.getDev sslLibs.${lib.getDev sslSupport}}/include"
        "--with-lib=${lib.getLib sslLibs.${sslSupport}}/lib"
        "--with-dynlib=${lib.getLib sslLibs.${sslSupport}}/lib"
      ]);

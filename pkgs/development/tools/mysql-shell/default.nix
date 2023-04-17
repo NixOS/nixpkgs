@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     "-DWITH_ZLIB=system"
     "-DWITH_PROTOBUF=${protobuf}"
     "-DHAVE_V8=1"
-    "-DV8_INCLUDE_DIR=${v8}/include"
+    "-DV8_INCLUDE_DIR=${lib.getDev v8}/include"
     "-DV8_LIB_DIR=${v8}/lib"
     "-DHAVE_PYTHON=1"
   ];

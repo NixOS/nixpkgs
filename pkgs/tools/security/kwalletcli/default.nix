@@ -14,9 +14,9 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace GNUmakefile \
-      --replace -I/usr/include/KF5/KCoreAddons -I${kcoreaddons.dev}/include/KF5/KCoreAddons \
-      --replace -I/usr/include/KF5/KI18n       -I${ki18n.dev}/include/KF5/KI18n \
-      --replace -I/usr/include/KF5/KWallet     -I${kwallet.dev}/include/KF5/KWallet \
+      --replace -I/usr/include/KF5/KCoreAddons -I${lib.getDev kcoreaddons}/include/KF5/KCoreAddons \
+      --replace -I/usr/include/KF5/KI18n       -I${lib.getDev ki18n}/include/KF5/KI18n \
+      --replace -I/usr/include/KF5/KWallet     -I${lib.getDev kwallet}/include/KF5/KWallet \
       --replace /usr/bin                       $out/bin \
       --replace /usr/share/man                 $out/share/man
 

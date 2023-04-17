@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ pygments ];
 
   configureFlags = [
-    "--with-ltdl-include=${libtool}/include"
+    "--with-ltdl-include=${lib.getDev libtool}/include"
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ncurses=${ncurses.dev}"
     "--with-sqlite3=${sqlite.dev}"

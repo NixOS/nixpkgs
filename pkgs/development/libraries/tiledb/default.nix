@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   # emulate the process of pulling catch down
   postPatch = ''
     mkdir -p build/externals/src/ep_catch
-    ln -sf ${catch2}/include/catch2 build/externals/src/ep_catch/single_include
+    ln -sf ${lib.getDev catch2}/include/catch2 build/externals/src/ep_catch/single_include
   '';
 
   doCheck = true;

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "-DEMBREE_TUTORIALS=OFF"
     "-DEMBREE_RAY_MASK=ON"
     "-DTBB_ROOT=${tbb}"
-    "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
+    "-DTBB_INCLUDE_DIR=${lib.getDev tbb}/include"
   ];
 
 

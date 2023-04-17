@@ -47,7 +47,7 @@ mkDerivation rec {
     "COPPER=${copper}/bin/copper-elf64"
     "with-local-libs"
   ]
-  ++ lib.optionals withQt [ "QINC=${qtbase.dev}/include"
+  ++ lib.optionals withQt [ "QINC=${lib.getDev qtbase}/include"
                             "UI=qt"
                           ]
   ++ lib.optionals withGtk2 [ "UI=gtk2" ]

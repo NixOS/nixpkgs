@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace config.mk.def \
-      --replace "/usr/include/freetype2" "${freetype.dev}/include/freetype2" \
+      --replace "/usr/include/freetype2" "${lib.getDev freetype}/include/freetype2" \
       --replace "CC=gcc" "CC=${stdenv.cc.targetPrefix}cc" \
       --replace "RXPATH=/usr/bin/ssh" "RXPATH=ssh"
   '';

@@ -82,7 +82,7 @@ callPackage (import ./generic.nix (rec {
       ];
       postPatch = ''
         substituteInPlace xen-hooks.mak \
-          --replace /usr/include/pci ${pciutils}/include/pci
+          --replace /usr/include/pci ${lib.getDev pciutils}/include/pci
       '';
       meta.description = "Xen's fork of upstream Qemu that uses old device model";
     };

@@ -32,10 +32,10 @@ stdenv.mkDerivation {
     cp ${aflplusplus.src.name}/types.h $sourceRoot/afl-types.h
     substitute ${aflplusplus.src.name}/config.h $sourceRoot/afl-config.h \
       --replace "types.h" "afl-types.h"
-    substitute ${aflplusplus.src.name}/include/cmplog.h $sourceRoot/afl-cmplog.h \
+    substitute ${lib.getDev aflplusplus.src.name}/include/cmplog.h $sourceRoot/afl-cmplog.h \
       --replace "config.h" "afl-config.h" \
       --replace "forkserver.h" "afl-forkserver.h"
-    substitute ${aflplusplus.src.name}/include/forkserver.h $sourceRoot/afl-forkserver.h \
+    substitute ${lib.getDev aflplusplus.src.name}/include/forkserver.h $sourceRoot/afl-forkserver.h \
       --replace "types.h" "afl-types.h"
 
     cat ${aflplusplus.src.name}/qemu_mode/patches/*.diff > all.patch

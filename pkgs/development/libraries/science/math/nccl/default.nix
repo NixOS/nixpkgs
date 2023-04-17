@@ -47,7 +47,7 @@ backendStdenv.mkDerivation rec {
   makeFlags = [
     "CUDA_HOME=${cuda_nvcc}"
     "CUDA_LIB=${cuda_cudart}/lib64"
-    "CUDA_INC=${cuda_cudart}/include"
+    "CUDA_INC=${lib.getDev cuda_cudart}/include"
     "PREFIX=$(out)"
   ];
 

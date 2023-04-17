@@ -24,7 +24,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace ./setup.py \
       --replace "[\"/usr/include/igraph\", \"/usr/local/include/igraph\"]" \
-                "[\"${igraph-c.dev}/include/igraph\"]"
+                "[\"${lib.getDev igraph-c}/include/igraph\"]"
 
     rm -r vendor
   '';

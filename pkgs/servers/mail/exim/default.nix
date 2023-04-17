@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
         s:^# \(LOOKUP_MYSQL_PC=libmysqlclient\)$:\1:
         s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -lm -lpthread -lz:
         s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -lm -lpthread -lz:
-        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${libmysqlclient.dev}/include/mysql/:
+        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${lib.getDev libmysqlclient}/include/mysql/:
       ''}
       ${lib.optionalString enableAuthDovecot ''
         s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
@@ -88,8 +88,8 @@ stdenv.mkDerivation rec {
         s:^# \(LOOKUP_REDIS=yes\)$:\1:
         s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lhiredis -L${hiredis}/lib/hiredis:
         s:^# \(LOOKUP_LIBS\)=.*:\1=-lhiredis -L${hiredis}/lib/hiredis:
-        s:^\(LOOKUP_INCLUDE\)=\(.*\):\1=\2 -I${hiredis}/include/hiredis/:
-        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${hiredis}/include/hiredis/:
+        s:^\(LOOKUP_INCLUDE\)=\(.*\):\1=\2 -I${lib.getDev hiredis}/include/hiredis/:
+        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${lib.getDev hiredis}/include/hiredis/:
       ''}
       #/^\s*#.*/d
       #/^\s*$/d

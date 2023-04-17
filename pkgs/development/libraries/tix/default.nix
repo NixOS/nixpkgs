@@ -38,14 +38,14 @@ tcl.mkTclDerivation {
     mkdir -p private_headers/generic
     < ${tcl}/lib/tclConfig.sh sed "s@TCL_SRC_DIR=.*@TCL_SRC_DIR=private_headers@" > tclConfig.sh
     < ${tk}/lib/tkConfig.sh sed "s@TK_SRC_DIR=.*@TK_SRC_DIR=private_headers@" > tkConfig.sh
-    for i in ${tcl}/include/* ${tk.dev}/include/*; do
+    for i in ${lib.getDev tcl}/include/* ${lib.getDev tk}/include/*; do
       ln -s $i private_headers/generic;
     done;
     '';
   addTclConfigureFlags = false;
   configureFlags = [
     "--with-tclconfig=."
-    "--with-tkinclude=${tk.dev}/include"
+    "--with-tkinclude=${lib.getDev tk}/include"
     "--with-tkconfig=."
     "--libdir=\${prefix}/lib"
   ];

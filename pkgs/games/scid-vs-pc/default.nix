@@ -13,7 +13,7 @@ tcl.mkTclDerivation rec {
   buildInputs = [ tk libX11 zlib ];
 
   prePatch = ''
-    sed -i -e '/^ *set headerPath *{/a ${tcl}/include ${tk}/include' \
+    sed -i -e '/^ *set headerPath *{lib.getDev /a ${tcl}/include ${lib.getDev tk}/include' \
            -e '/^ *set libraryPath *{/a ${tcl}/lib ${tk}/lib' \
            -e '/^ *set x11Path *{/a ${libX11}/lib/' \
            configure

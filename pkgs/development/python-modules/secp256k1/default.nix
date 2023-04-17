@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     cp -r ${secp256k1.src} libsecp256k1
-    export INCLUDE_DIR=${secp256k1}/include
+    export INCLUDE_DIR=${lib.getDev secp256k1}/include
     export LIB_DIR=${secp256k1}/lib
   '';
 

@@ -343,7 +343,7 @@ stdenv.mkDerivation {
     pythonPackages.setuptools
   ] ++ lib.optionals enableCuda [ cuda-native-redist ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${lib.getDev ilmbase}/include/OpenEXR";
 
   # Configure can't find the library without this.
   OpenBLAS_HOME = lib.optionalString withOpenblas openblas_.dev;

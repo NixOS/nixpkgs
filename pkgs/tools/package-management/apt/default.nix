@@ -68,9 +68,9 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DBERKELEY_INCLUDE_DIRS=${db.dev}/include"
+    "-DBERKELEY_INCLUDE_DIRS=${lib.getDev db}/include"
     "-DDOCBOOK_XSL=${docbook_xsl}/share/xml/docbook-xsl"
-    "-DGNUTLS_INCLUDE_DIR=${gnutls.dev}/include"
+    "-DGNUTLS_INCLUDE_DIR=${lib.getDev gnutls}/include"
     "-DROOT_GROUP=root"
     "-DUSE_NLS=${if withNLS then "ON" else "OFF"}"
     "-DWITH_DOC=${if withDocs then "ON" else "OFF"}"

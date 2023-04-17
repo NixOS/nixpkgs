@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   patches = [ ./fix-build.patch ];
   sconsFlags = [
     "RacketPrefix=${racket}"
-    "RacketInclude=${racket}/include/racket"
+    "RacketInclude=${lib.getDev racket}/include/racket"
     "RacketLib=${racket}/lib/racket"
     "DESTDIR=build"
   ];

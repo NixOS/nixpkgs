@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     export HELP2MAN=true
   '';
 
-  configureFlags = [ "--with-ncurses-include-dir=${ncurses.dev}/include" ]
+  configureFlags = [ "--with-ncurses-include-dir=${lib.getDev ncurses}/include" ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [ # Musl doesn't define rcmd
     "--disable-rcp"
     "--disable-rsh"

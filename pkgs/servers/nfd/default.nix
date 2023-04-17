@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
 
   wafConfigureFlags = [
-    "--boost-includes=${boost.dev}/include"
+    "--boost-includes=${lib.getDev boost}/include"
     "--boost-libs=${boost.out}/lib"
     "--with-tests"
   ] ++ lib.optional (!withWebSocket) "--without-websocket";

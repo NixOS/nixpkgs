@@ -106,11 +106,11 @@ stdenv.mkDerivation rec {
     "--enable-unix-socket"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    "--with-libnet-includes=${libnet}/include"
+    "--with-libnet-includes=${lib.getDev libnet}/include"
     "--with-libnet-libraries=${libnet}/lib"
   ]
   ++ lib.optionals hyperscanSupport [
-    "--with-libhs-includes=${hyperscan.dev}/include/hs"
+    "--with-libhs-includes=${lib.getDev hyperscan}/include/hs"
     "--with-libhs-libraries=${hyperscan}/lib"
   ]
   ++ lib.optional redisSupport "--enable-hiredis"

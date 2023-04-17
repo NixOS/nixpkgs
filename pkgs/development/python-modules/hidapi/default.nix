@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   # Fix the USB backend library lookup
   postPatch = lib.optionalString stdenv.isLinux ''
-    libusb=${libusb1.dev}/include/libusb-1.0
+    libusb=${lib.getDev libusb1}/include/libusb-1.0
     test -d $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
     sed -i -e "s|/usr/include/libusb-1.0|$libusb|" setup.py
   '';

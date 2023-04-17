@@ -25,7 +25,7 @@ buildPythonPackage rec {
     substituteInPlace configure \
       --replace \
         'CFLAGS="-DCYTHON_FALLTHROUGH"' \
-        'CFLAGS="-DCYTHON_FALLTHROUGH -I${zfs.dev}/include/libzfs -I${zfs.dev}/include/libspl"' \
+        'CFLAGS="-DCYTHON_FALLTHROUGH -I${lib.getDev zfs.dev}/include/libzfs -I${lib.getDev zfs}/include/libspl"' \
       --replace 'zof=false' 'zof=true'
   '';
 

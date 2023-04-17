@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       cflags = [ "-I${variables.includedir}/stb" ];
       variables = rec {
         prefix = "${placeholder "out"}";
-        includedir = "${prefix}/include";
+        includedir = "${lib.getDev prefix}/include";
       };
       inherit (meta) description;
     })

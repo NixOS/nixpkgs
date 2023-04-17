@@ -26,7 +26,7 @@ mkDerivation rec {
   ];
 
   preConfigure = ''
-    export MAGICK_LOCATION="${graphicsmagick}/include/GraphicsMagick"
+    export MAGICK_LOCATION="${lib.getDev graphicsmagick}/include/GraphicsMagick"
   '';
 
   meta = {

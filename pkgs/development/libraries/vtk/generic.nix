@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_CXX_FLAGS=-fPIC"
     "-D${if lib.versionOlder version "9.0" then "VTK_USE_SYSTEM_PNG" else "VTK_MODULE_USE_EXTERNAL_vtkpng"}=ON"
     "-D${if lib.versionOlder version "9.0" then "VTK_USE_SYSTEM_TIFF" else "VTK_MODULE_USE_EXTERNAL_vtktiff"}=1"
-    "-DOPENGL_INCLUDE_DIR=${libGL}/include"
+    "-DOPENGL_INCLUDE_DIR=${lib.getDev libGL}/include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"

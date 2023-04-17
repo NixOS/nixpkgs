@@ -140,7 +140,7 @@ in stdenv.mkDerivation rec {
     # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
     mkdir -p $HOME/.node-gyp/${nodejs.version}
     echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    ln -sfv ${lib.getDev nodejs}/include $HOME/.node-gyp/${nodejs.version}
     export npm_config_nodedir=${nodejs}
 
     # use updated node-gyp. fixes the following error on Darwin:

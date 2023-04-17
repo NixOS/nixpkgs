@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
         -e "/^set(PHONON_BUILDSYSTEM_DIR/ s|\''${rootDir}|''${!outputDev}|"
 
     sed -i cmake/FindPhononInternal.cmake \
-        -e "/set(INCLUDE_INSTALL_DIR/ c set(INCLUDE_INSTALL_DIR \"''${!outputDev}/include\")"
+        -e "/set(INCLUDE_INSTALL_DIR/ c set(INCLUDE_INSTALL_DIR \"''${lib.getDev !outputDev}/include\")"
 
     sed -i cmake/FindPhononInternal.cmake \
         -e "/set(PLUGIN_INSTALL_DIR/ c set(PLUGIN_INSTALL_DIR \"$qtPluginPrefix/..\")"

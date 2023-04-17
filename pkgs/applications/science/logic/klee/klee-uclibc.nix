@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
   ];
 
   # Some uClibc sources depend on Linux headers.
-  UCLIBC_KERNEL_HEADERS = "${linuxHeaders}/include";
+  UCLIBC_KERNEL_HEADERS = "${lib.getDev linuxHeaders}/include";
 
   # HACK: needed for cross-compile.
   # See https://www.mail-archive.com/klee-dev@imperial.ac.uk/msg03141.html

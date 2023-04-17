@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
       sed -i 's|nss_dist_dir="$dist_dir"|nss_dist_dir="'$out'"|;s|nss_dist_obj_dir="$obj_dir"|nss_dist_obj_dir="'$out'"|' build.sh
       ./build.sh -v --opt \
-        --with-nspr=${nspr.dev}/include:${nspr.out}/lib \
+        --with-nspr=${lib.getDev nspr}/include:${nspr.out}/lib \
         --system-sqlite \
         --enable-legacy-db \
         --target ${target} \

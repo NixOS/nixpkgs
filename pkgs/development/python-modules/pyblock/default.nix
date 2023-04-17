@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    sed -i -e 's|/usr/include/python|${python}/include/python|' \
+    sed -i -e 's|/usr/include/python|${lib.getDev python}/include/python|' \
            -e 's/-Werror *//' -e 's|/usr/|'"$out"'/|' Makefile
   '';
 

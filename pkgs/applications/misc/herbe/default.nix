@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   inherit patches;
 
   postPatch = ''
-    sed -i 's_/usr/include/freetype2_${freetype.dev}/include/freetype2_' Makefile
+    sed -i 's_/usr/include/freetype2_${lib.getDev freetype}/include/freetype2_' Makefile
   '';
 
   buildInputs = [ libX11 libXft freetype ] ++ extraLibs;

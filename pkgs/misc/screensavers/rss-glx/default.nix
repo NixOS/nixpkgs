@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ./cstddef.patch
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${imagemagick6.dev}/include/ImageMagick";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev imagemagick6}/include/ImageMagick";
 
   meta = {
     description = "Really Slick Screensavers Port to GLX";

@@ -46,7 +46,7 @@ in buildPythonPackage rec {
 
   build = ''
     sip-install --qsci-features-dir ${qscintilla}/mkspecs/features \
-    --qsci-include-dir ${qscintilla}/include \
+    --qsci-include-dir ${lib.getDev qscintilla}/include \
     --qsci-library-dir ${qscintilla}/lib --api-dir ${qscintilla}/share";
   '';
   postInstall = ''

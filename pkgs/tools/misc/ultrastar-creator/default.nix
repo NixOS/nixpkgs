@@ -23,9 +23,9 @@ mkDerivation {
     sed -e "s|DESTDIR =.*$|DESTDIR = $out/bin|" \
         -e 's|-L".*unix"||' \
         -e "/QMAKE_POST_LINK/d" \
-        -e "s|../include/bass|${getLib libbass}/include|g" \
-        -e "s|../include/bass_fx|${getLib libbass_fx}/include|g" \
-        -e "s|../include/taglib|${getLib taglib}/include|g" \
+        -e "s|../include/bass|${lib.getDev getLib libbass}/include|g" \
+        -e "s|../include/bass_fx|${lib.getDev getLib libbass_fx}/include|g" \
+        -e "s|../include/taglib|${lib.getDev getLib taglib}/include|g" \
         -i src/UltraStar-Creator.pro
   '';
 

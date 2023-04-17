@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   ]);
 
   # TODO: add jbmc support
-  cmakeFlags = [ "-DWITH_JBMC=OFF" "-Dsat_impl=cadical" "-Dcadical_INCLUDE_DIR=${cadical.dev}/include" ];
+  cmakeFlags = [ "-DWITH_JBMC=OFF" "-Dsat_impl=cadical" "-Dcadical_INCLUDE_DIR=${lib.getDev cadical}/include" ];
 
   passthru.tests.version = testers.testVersion {
     package = cbmc;

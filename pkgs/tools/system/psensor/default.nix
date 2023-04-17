@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libXNVCtrl}/include -Wno-error"
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${lib.getDev libXNVCtrl}/include -Wno-error"
     NIX_LDFLAGS="$NIX_LDFLAGS -L${libXNVCtrl}/lib"
   '';
 

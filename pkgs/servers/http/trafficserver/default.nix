@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace '/usr/bin/file' '${file}/bin/file'
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace configure \
-      --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
+      --replace '/usr/include/linux' '${lib.getDev linuxHeaders}/include/linux'
   '' + lib.optionalString stdenv.isDarwin ''
     # 'xcrun leaks' probably requires non-free XCode
     substituteInPlace iocore/net/test_certlookup.cc \

@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   # link rocksdb dynamically
-  ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+  ROCKSDB_INCLUDE_DIR = "${lib.getDev rocksdb}/include";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LOCALSTATEDIR=/var"
     "-DCMAKE_INSTALL_FULL_SBINDIR=bin"
     "-DICINGA2_RUNDIR=/run"
-    "-DMYSQL_INCLUDE_DIR=${mariadb-connector-c.dev}/include/mariadb"
+    "-DMYSQL_INCLUDE_DIR=${lib.getDev mariadb-connector-c}/include/mariadb"
     "-DMYSQL_LIB=${mariadb-connector-c.out}/lib/mariadb/libmysqlclient.a"
     "-DICINGA2_PLUGINDIR=bin"
     "-DICINGA2_LTO_BUILD=yes"

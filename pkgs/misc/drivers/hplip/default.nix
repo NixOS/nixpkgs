@@ -118,7 +118,7 @@ python3Packages.buildPythonApplication {
     find . -type f -exec sed -i \
       -e s,/etc/hp,$out/etc/hp,g \
       -e s,/etc/sane.d,$out/etc/sane.d,g \
-      -e s,/usr/include/libusb-1.0,${libusb1.dev}/include/libusb-1.0,g \
+      -e s,/usr/include/libusb-1.0,${lib.getDev libusb1}/include/libusb-1.0,g \
       -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor,g \
       -e s,/usr/lib/systemd/system,$out/lib/systemd/system,g \
       -e s,/var/lib/hp,$out/var/lib/hp,g \

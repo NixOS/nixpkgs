@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    "--x-includes=${libX11.dev}/include"
+    "--x-includes=${lib.getDev libX11}/include"
     "--x-libraries=${libX11.out}/lib"
   ];
 

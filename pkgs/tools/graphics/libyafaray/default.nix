@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    NIX_CFLAGS_COMPILE+=" -isystem ${ilmbase.dev}/include/OpenEXR"
+    NIX_CFLAGS_COMPILE+=" -isystem ${lib.getDev ilmbase}/include/OpenEXR"
   '';
 
   nativeBuildInputs = [

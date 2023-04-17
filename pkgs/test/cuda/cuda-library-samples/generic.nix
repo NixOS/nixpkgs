@@ -63,7 +63,7 @@ in
     # CUTENSOR_ROOT is double escaped
     postPatch = ''
       substituteInPlace CMakeLists.txt \
-        --replace "\''${CUTENSOR_ROOT}/include" "${cutensor.dev}/include"
+        --replace "\''${lib.getDev CUTENSOR_ROOT}/include" "${lib.getDev cutensor}/include"
     '';
 
     CUTENSOR_ROOT = cutensor;

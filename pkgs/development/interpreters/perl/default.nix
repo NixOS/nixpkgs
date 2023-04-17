@@ -88,7 +88,7 @@ let
         "-Uinstallusrbinperl"
         "-Dinstallstyle=lib/perl5"
       ] ++ lib.optional (!crossCompiling) "-Duseshrplib" ++ [
-        "-Dlocincpth=${libcInc}/include"
+        "-Dlocincpth=${lib.getDev libcInc}/include"
         "-Dloclibpth=${libcLib}/lib"
       ]
       ++ lib.optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
@@ -131,7 +131,7 @@ let
         # included with the distribution
         cat > ./cpan/Compress-Raw-Zlib/config.in <<EOF
         BUILD_ZLIB   = False
-        INCLUDE      = ${zlib.dev}/include
+        INCLUDE      = ${lib.getDev zlib}/include
         LIB          = ${zlib.out}/lib
         OLD_ZLIB     = False
         GZIP_OS_CODE = AUTO_DETECT

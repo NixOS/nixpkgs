@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    cp ${catch}/include/catch/catch.hpp Tests/catch.hpp
+    cp ${lib.getDev catch}/include/catch/catch.hpp Tests/catch.hpp
 
     # https://github.com/recastnavigation/recastnavigation/issues/524
     substituteInPlace CMakeLists.txt \
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     # Expects SDL2.framework in specific location, which we don't have
     # Change where SDL2 headers are searched for to match what we do have
     substituteInPlace RecastDemo/CMakeLists.txt \
-      --replace 'include_directories(''${SDL2_LIBRARY}/Headers)' 'include_directories(${SDL2.dev}/include/SDL2)'
+      --replace 'include_directories(''${lib.getDev SDL2_LIBRARY}/Headers)' 'include_directories(${SDL2}/include/SDL2)'
   '';
 
   doCheck = true;

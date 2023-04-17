@@ -18,7 +18,7 @@ buildGoModule rec {
       --replace '"/etc/sensors3.conf"' '"${lm_sensors}/etc/sensors3.conf"'
   '';
 
-  CGO_CFLAGS = "-I ${lm_sensors}/include";
+  CGO_CFLAGS = "-I ${lib.getDev lm_sensors}/include";
   CGO_LDFLAGS = "-L ${lm_sensors}/lib";
 
   meta = with lib; {

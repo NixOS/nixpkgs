@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   configureFlags = [
-    "ILBC_LIBS=ilbc" "ILBC_CFLAGS=-I${ilbc}/include"
-    "MEDIASTREAMER_LIBS=mediastreamer" "MEDIASTREAMER_CFLAGS=-I${mediastreamer}/include"
+    "ILBC_LIBS=ilbc" "ILBC_CFLAGS=-I${lib.getDev ilbc}/include"
+    "MEDIASTREAMER_LIBS=mediastreamer" "MEDIASTREAMER_CFLAGS=-I${lib.getDev mediastreamer}/include"
   ];
 
   meta = with lib; {

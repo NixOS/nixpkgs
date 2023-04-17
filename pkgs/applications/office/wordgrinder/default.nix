@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "LUA_INCLUDE=${lua52Packages.lua}/include"
+    "LUA_INCLUDE=${lib.getDev lua52Packages.lua}/include"
     "LUA_LIB=${lua52Packages.lua}/lib/liblua.so"
     "OBJDIR=$TMP/wg-build"
   ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   # To be able to find <Xft.h>
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isLinux "-I${libXft.dev}/include/X11";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isLinux "-I${lib.getDev libXft}/include/X11";
 
   # Binaries look for LuaFileSystem library (lfs.so) at runtime
   postInstall = ''

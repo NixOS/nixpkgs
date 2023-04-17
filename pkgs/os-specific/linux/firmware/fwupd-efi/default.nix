@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
-    "-Defi-includedir=${gnu-efi}/include/efi"
+    "-Defi-includedir=${lib.getDev gnu-efi}/include/efi"
     "-Defi-libdir=${gnu-efi}/lib"
     "-Defi-ldsdir=${gnu-efi}/lib"
     "-Defi_sbat_distro_id=nixos"

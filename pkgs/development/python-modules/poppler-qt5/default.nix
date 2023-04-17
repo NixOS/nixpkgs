@@ -42,7 +42,7 @@ buildPythonPackage rec {
   postPatch = ''
     cat <<EOF >> pyproject.toml
     [tool.sip.bindings.Poppler-Qt5]
-    include-dirs = ["${poppler.dev}/include/poppler"]
+    include-dirs = ["${lib.getDev poppler}/include/poppler"]
     EOF
   '';
 

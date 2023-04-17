@@ -108,7 +108,7 @@ in rec {
 
       installPhase = ''
         mkdir -p $out/include $out/lib
-        ln -s "${MacOSX-SDK}/include/Xplugin.h" $out/include/Xplugin.h
+        ln -s "${lib.getDev MacOSX-SDK}/include/Xplugin.h" $out/include/Xplugin.h
         cp ${MacOSX-SDK}/usr/lib/libXplugin.1.tbd $out/lib
         ln -s libXplugin.1.tbd $out/lib/libXplugin.tbd
       '';
@@ -121,8 +121,8 @@ in rec {
       installPhase = ''
         mkdir -p $out/include
         pushd $out/include >/dev/null
-        ln -s "${MacOSX-SDK}/include/utmp.h"
-        ln -s "${MacOSX-SDK}/include/utmpx.h"
+        ln -s "${lib.getDev MacOSX-SDK}/include/utmp.h"
+        ln -s "${lib.getDev MacOSX-SDK}/include/utmpx.h"
         popd >/dev/null
       '';
     };

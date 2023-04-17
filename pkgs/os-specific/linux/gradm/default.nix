@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     substituteInPlace Makefile \
       --replace "/usr/bin/" "" \
-      --replace "/usr/include/security/pam_" "${pam}/include/security/pam_"
+      --replace "/usr/include/security/pam_" "${lib.getDev pam}/include/security/pam_"
 
     substituteInPlace gradm_defs.h \
       --replace "/sbin/grlearn" "$out/bin/grlearn" \

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    cp ${catch2}/include/catch2/catch.hpp libcudf/tests/catch.hpp
+    cp ${lib.getDev catch2}/include/catch2/catch.hpp libcudf/tests/catch.hpp
   '';
 
   nativeBuildInputs = [ cmake ];

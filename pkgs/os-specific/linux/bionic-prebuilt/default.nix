@@ -95,7 +95,7 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/include/support $out/include/android
     cp -vr libc/include/* $out/include
     # copy the kernel headers
-    cp -vr ${kernelHeaders}/include/*  $out/include/
+    cp -vr ${lib.getDev kernelHeaders}/include/*  $out/include/
 
     chmod -R +w $out/include/linux
 

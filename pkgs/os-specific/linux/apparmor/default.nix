@@ -53,7 +53,7 @@ let
       --replace "/usr/bin/pod2html" "${buildPackages.perl}/bin/pod2html" \
       --replace "/usr/share/man" "share/man"
     substituteInPlace ./utils/Makefile \
-      --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
+      --replace "/usr/include/linux/capability.h" "${lib.getDev linuxHeaders}/include/linux/capability.h"
   '';
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
@@ -228,7 +228,7 @@ let
       substituteInPlace ./parser/Makefile \
         --replace "/usr/bin/bison" "${bison}/bin/bison" \
         --replace "/usr/bin/flex" "${flex}/bin/flex" \
-        --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h" \
+        --replace "/usr/include/linux/capability.h" "${lib.getDev linuxHeaders}/include/linux/capability.h" \
         --replace "manpages htmlmanpages pdf" "manpages htmlmanpages"
       substituteInPlace parser/rc.apparmor.functions \
        --replace "/sbin/apparmor_parser" "$out/bin/apparmor_parser"
@@ -239,7 +239,7 @@ let
       cd ./parser
     '';
     makeFlags = [
-      "LANGS=" "USE_SYSTEM=1" "INCLUDEDIR=${libapparmor}/include"
+      "LANGS=" "USE_SYSTEM=1" "INCLUDEDIR=${lib.getDev libapparmor}/include"
       "AR=${stdenv.cc.bintools.targetPrefix}ar"
     ];
     installFlags = [ "DESTDIR=$(out)" "DISTRO=unknown" ];

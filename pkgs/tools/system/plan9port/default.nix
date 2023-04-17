@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     CC9='$(command -v $CC)'
     CFLAGS='$NIX_CFLAGS_COMPILE'
     LDFLAGS='$(for f in $NIX_LDFLAGS; do echo "-Wl,$f"; done | xargs echo)'
-    ${lib.optionalString (!stdenv.isDarwin) "X11='${libXt.dev}/include'"}
+    ${lib.getDev lib.optionalString (!stdenv.isDarwin) "X11='${libXt}/include'"}
     EOF
 
     # make '9' available in the path so there's some way to find out $PLAN9

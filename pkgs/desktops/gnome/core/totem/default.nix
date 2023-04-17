@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+    "-Dc_args=-I${lib.getDev glib}/include/gio-unix-2.0"
   ];
 
   # Tests do not work with GStreamer 1.18.

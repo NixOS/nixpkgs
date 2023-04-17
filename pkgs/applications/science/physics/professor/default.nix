@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 eigen ];
   propagatedBuildInputs = with python3.pkgs; [ iminuit numpy matplotlib yoda ];
 
-  CPPFLAGS = [ "-I${eigen}/include/eigen3" ];
+  CPPFLAGS = [ "-I${lib.getDev eigen}/include/eigen3" ];
   PREFIX = placeholder "out";
 
   postInstall = ''

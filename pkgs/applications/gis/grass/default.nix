@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-proj-share=${proj}/share/proj"
-    "--with-proj-includes=${proj.dev}/include"
+    "--with-proj-includes=${lib.getDev proj}/include"
     "--with-proj-libs=${proj}/lib"
     "--without-opengl"
     "--with-readline"

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib openssl ];
 
-  cmakeFlags = [ "-DIRSSI_INCLUDE_PATH:PATH=${irssi}/include" ];
+  cmakeFlags = [ "-DIRSSI_INCLUDE_PATH:PATH=${lib.getDev irssi}/include" ];
 
   meta = with lib; {
     homepage = "https://github.com/falsovsky/FiSH-irssi";

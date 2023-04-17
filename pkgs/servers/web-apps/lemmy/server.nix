@@ -36,10 +36,10 @@ rustPlatform.buildRustPackage rec {
   # with a hardcoded path to /usr/lib/libssl.x.x.x.dylib
   # https://github.com/sfackler/rust-openssl/blob/master/openssl-sys/build/find_normal.rs#L115
   OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
-  OPENSSL_INCLUDE_DIR = "${openssl.dev}/include";
+  OPENSSL_INCLUDE_DIR = "${lib.getDev openssl}/include";
 
   PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
+  PROTOC_INCLUDE = "${lib.getDev protobuf}/include";
   nativeBuildInputs = [ protobuf rustfmt ];
 
   passthru.updateScript = ./update.sh;

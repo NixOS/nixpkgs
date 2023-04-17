@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace lib/0xtools/proc.py \
-      --replace /usr/include/asm/unistd_64.h ${glibc.dev}/include/asm/unistd_64.h
+      --replace /usr/include/asm/unistd_64.h ${lib.getDev glibc}/include/asm/unistd_64.h
   '';
 
   buildInputs = [ python3 ];

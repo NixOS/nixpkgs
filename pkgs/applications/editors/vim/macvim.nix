@@ -86,7 +86,7 @@ stdenv.mkDerivation {
     configureFlagsArray+=(
       --with-developer-dir="$DEV_DIR"
       LDFLAGS="-L${ncurses}/lib"
-      CPPFLAGS="-isystem ${ncurses.dev}/include"
+      CPPFLAGS="-isystem ${lib.getDev ncurses}/include"
       CFLAGS="-Wno-error=implicit-function-declaration"
     )
   ''
@@ -123,7 +123,7 @@ stdenv.mkDerivation {
   # Xcode project or pass it as a flag to xcodebuild as well.
   postConfigure = ''
     substituteInPlace src/auto/config.mk \
-      --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include" \
+      --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${lib.getDev darwin.libutil}/include" \
       --replace " -L${stdenv.cc.libc}/lib" "" \
       --replace " -L${darwin.libobjc}/lib" "" \
       --replace " -L${darwin.libunwind}/lib" "" \

@@ -15,7 +15,7 @@ else
 
       makeFlags = [
         "PREFIX=$(out)"
-        "LUA_INC=-I${lua}/include"
+        "LUA_INC=-I${lib.getDev lua}/include"
         "LUA_LIBDIR=$(out)/lib/lua/${lua.luaversion}"
         "LUA_VERSION=${lua.luaversion}"
       ] ++ makeFlags;

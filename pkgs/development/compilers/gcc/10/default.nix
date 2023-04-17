@@ -226,7 +226,7 @@ stdenv.mkDerivation ({
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 
   preConfigure = (callFile ../common/pre-configure.nix { }) + ''
-    ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
+    ln -sf ${lib.getDev libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
   '';
 
   dontDisableStatic = true;

@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $bin/bin $dev $out
     cp bin.unix/p4 $bin/bin
-    cp -r bin.unix/p4api-${version}/include $dev
+    cp -r bin.unix/p4api-${lib.getDev version}/include $dev
     cp -r bin.unix/p4api-${version}/lib $out
     runHook postInstall
   '';

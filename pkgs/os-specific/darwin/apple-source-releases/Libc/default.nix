@@ -17,21 +17,21 @@ appleDerivation' stdenvNoCC {
 
     cp ${./CrashReporterClient.h} $out/include/CrashReporterClient.h
 
-    cp ${Libc_10-9}/include/NSSystemDirectories.h $out/include
+    cp ${lib.getDev Libc_10-9}/include/NSSystemDirectories.h $out/include
 
     # Ugh Apple stopped releasing this stuff so we need an older one...
-    cp    ${Libc_old}/include/spawn.h    $out/include
-    cp    ${Libc_old}/include/setjmp.h   $out/include
-    cp    ${Libc_old}/include/ucontext.h $out/include
-    cp    ${Libc_old}/include/pthread*.h $out/include
-    cp    ${Libc_old}/include/sched.h    $out/include
-    cp -R ${Libc_old}/include/malloc     $out/include
+    cp    ${lib.getDev Libc_old}/include/spawn.h    $out/include
+    cp    ${lib.getDev Libc_old}/include/setjmp.h   $out/include
+    cp    ${lib.getDev Libc_old}/include/ucontext.h $out/include
+    cp    ${lib.getDev Libc_old}/include/pthread*.h $out/include
+    cp    ${lib.getDev Libc_old}/include/sched.h    $out/include
+    cp -R ${lib.getDev Libc_old}/include/malloc     $out/include
 
     mkdir -p $out/include/libkern
-    cp ${Libc_old}/include/asl.h                    $out/include
-    cp ${Libc_old}/include/libproc.h                $out/include
-    cp ${Libc_old}/include/libkern/OSAtomic.h       $out/include/libkern
-    cp ${Libc_old}/include/libkern/OSCacheControl.h $out/include/libkern
+    cp ${lib.getDev Libc_old}/include/asl.h                    $out/include
+    cp ${lib.getDev Libc_old}/include/libproc.h                $out/include
+    cp ${lib.getDev Libc_old}/include/libkern/OSAtomic.h       $out/include/libkern
+    cp ${lib.getDev Libc_old}/include/libkern/OSCacheControl.h $out/include/libkern
   '';
 
   appleHeaders = builtins.readFile ./headers.txt;

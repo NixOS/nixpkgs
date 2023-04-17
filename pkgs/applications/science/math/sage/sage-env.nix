@@ -170,7 +170,7 @@ writeTextFile rec {
       ])
     }'
     export CFLAGS='${
-      lib.concatStringsSep " " (map (pkg: "-isystem ${pkg}/include") [
+      lib.concatStringsSep " " (map (pkg: "-isystem ${lib.getDev pkg}/include") [
         singular
         gmp.dev
         glpk

@@ -72,7 +72,7 @@ let
 
       chmod -w externals_cache
       ${lib.optionalString withOpus ''
-        cp ${asterisk-opus}/include/asterisk/* ./include/asterisk
+        cp ${lib.getDev asterisk-opus}/include/asterisk/* ./include/asterisk
         cp ${asterisk-opus}/codecs/* ./codecs
         cp ${asterisk-opus}/formats/* ./formats
       ''}

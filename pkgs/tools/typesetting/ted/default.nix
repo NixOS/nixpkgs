@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cat > libpaper.pc << EOF
     prefix=${libpaper}
     libdir=${libpaper}/lib
-    includedir=${libpaper}/include
+    includedir=${lib.getDev libpaper}/include
     exec_prefix=\''${prefix}
 
     Name: libpaper

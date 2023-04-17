@@ -15,9 +15,9 @@ buildPackage {
   # TODO: nsss support
   configureFlags = [
     "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
+    "--includedir=\${lib.getDev dev}/include"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
+    "--with-include=${lib.getDev skalibs}/include"
     "--with-lib=${skalibs.lib}/lib"
     "--with-dynlib=${skalibs.lib}/lib"
   ];

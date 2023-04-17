@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       variables = rec {
         prefix = "@dev@";
         exec_prefix = "@out@";
-        includedir = "${prefix}/include";
+        includedir = "${lib.getDev prefix}/include";
         libdir = "${exec_prefix}/lib";
       };
     })

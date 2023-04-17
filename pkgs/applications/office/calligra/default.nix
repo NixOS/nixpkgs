@@ -69,7 +69,7 @@ mkDerivation rec {
 
   propagatedUserEnvPkgs = [ kproperty ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev ilmbase}/include/OpenEXR";
 
   qtWrapperArgs = [
     "--prefix PATH : ${lib.getBin pstoedit}/bin"

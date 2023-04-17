@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "-DFREERDP_LIBRARY=${freerdp}/lib/libfreerdp2.so"
     "-DFREERDP_CLIENT_LIBRARY=${freerdp}/lib/libfreerdp-client2.so"
     "-DFREERDP_WINPR_LIBRARY=${freerdp}/lib/libwinpr2.so"
-    "-DWINPR_INCLUDE_DIR=${freerdp}/include/winpr2"
+    "-DWINPR_INCLUDE_DIR=${lib.getDev freerdp}/include/winpr2"
   ];
 
   dontWrapQtApps = true;

@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     "--with-sqlite3=${sqlite.dev}"
 
   # ugly, --with-libedit is not enought, it fall back to bundled libedit
-    "--with-libedit-include=${libedit.dev}/include"
+    "--with-libedit-include=${lib.getDev libedit}/include"
     "--with-libedit-lib=${libedit}/lib"
     "--with-openssl=${openssl.dev}"
     "--without-x"
     "--with-berkeley-db"
-    "--with-berkeley-db-include=${db.dev}/include"
+    "--with-berkeley-db-include=${lib.getDev db}/include"
     "--with-openldap=${openldap.dev}"
   ] ++ lib.optionals (stdenv.isLinux) [
     "--with-capng"

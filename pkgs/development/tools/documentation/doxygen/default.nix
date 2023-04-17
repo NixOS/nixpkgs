@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   cmakeFlags =
-    [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ] ++
+    [ "-DICONV_INCLUDE_DIR=${lib.getDev libiconv}/include" ] ++
     lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
   env.NIX_CFLAGS_COMPILE =

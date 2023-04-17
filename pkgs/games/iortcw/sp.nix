@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-I${SDL2.dev}/include/SDL2"
-    "-I${opusfile.dev}/include/opus"
+    "-I${lib.getDev SDL2}/include/SDL2"
+    "-I${lib.getDev opusfile}/include/opus"
   ];
   NIX_CFLAGS_LINK = [ "-lSDL2" ];
 

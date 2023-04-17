@@ -31,7 +31,7 @@ stdenv.mkDerivation (args // {
     phpize
     ${postPhpize}
     ${lib.concatMapStringsSep "\n"
-      (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
+      (dep: "mkdir -p ext; ln -s ${lib.getDev dep}/include ext/${dep.extensionName}")
       internalDeps}
   '';
   checkPhase = "NO_INTERACTON=yes make test";

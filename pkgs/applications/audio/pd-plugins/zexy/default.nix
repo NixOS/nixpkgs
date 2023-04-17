@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     export LD=$CXX
     cd src/
-    for i in ${puredata}/include/pd/*; do
+    for i in ${lib.getDev puredata}/include/pd/*; do
       ln -s $i .
     done
     ./bootstrap.sh

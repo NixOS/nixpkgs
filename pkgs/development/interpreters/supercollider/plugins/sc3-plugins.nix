@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DSC_PATH=${supercollider}/include/SuperCollider"
+    "-DSC_PATH=${lib.getDev supercollider}/include/SuperCollider"
     "-DSUPERNOVA=ON"
   ];
 

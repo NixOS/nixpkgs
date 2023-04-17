@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "CXX=${stdenv.cc.targetPrefix}c++"
-    "BOOST_DIR=${boost.dev}/include"
+    "BOOST_DIR=${lib.getDev boost}/include"
   ];
 
   preBuild = ''

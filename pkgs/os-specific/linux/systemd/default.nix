@@ -519,7 +519,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dukify=${lib.boolToString withUkify}"
   ] ++ lib.optionals withEfi [
     "-Defi-libdir=${toString gnu-efi}/lib"
-    "-Defi-includedir=${toString gnu-efi}/include/efi"
+    "-Defi-includedir=${lib.getDev gnu-efi}/include/efi"
   ] ++ lib.optionals (withShellCompletions == false) [
     "-Dbashcompletiondir=no"
     "-Dzshcompletiondir=no"

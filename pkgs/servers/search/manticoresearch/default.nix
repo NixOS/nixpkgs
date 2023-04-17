@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DWITH_GALERA=0"
     "-DWITH_MYSQL=1"
-    "-DMYSQL_INCLUDE_DIR=${mariadb-connector-c.dev}/include/mariadb"
+    "-DMYSQL_INCLUDE_DIR=${lib.getDev mariadb-connector-c}/include/mariadb"
     "-DMYSQL_LIB=${mariadb-connector-c.out}/lib/mariadb/libmysqlclient.a"
   ];
 

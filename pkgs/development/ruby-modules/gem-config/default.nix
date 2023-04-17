@@ -159,7 +159,7 @@ in
   };
 
   exiv2 = attrs: {
-    buildFlags = [ "--with-exiv2-lib=${exiv2}/lib" "--with-exiv2-include=${exiv2.dev}/include" ];
+    buildFlags = [ "--with-exiv2-lib=${lib.getDev exiv2}/lib" "--with-exiv2-include=${exiv2}/include" ];
   };
 
   fog-dnsimple = attrs:
@@ -406,10 +406,10 @@ in
   libxml-ruby = attrs: {
     buildFlags = [
       "--with-xml2-lib=${libxml2.out}/lib"
-      "--with-xml2-include=${libxml2.dev}/include/libxml2"
+      "--with-xml2-include=${lib.getDev libxml2}/include/libxml2"
     ] ++ lib.optionals stdenv.isDarwin [
       "--with-iconv-dir=${libiconv}"
-      "--with-opt-include=${libiconv}/include"
+      "--with-opt-include=${lib.getDev libiconv}/include"
     ];
   };
 
@@ -465,7 +465,7 @@ in
   };
 
   maxmind_geoip2 = attrs: {
-    buildFlags = [ "--with-maxminddb-lib=${libmaxminddb}/lib" "--with-maxminddb-include=${libmaxminddb}/include" ];
+    buildFlags = [ "--with-maxminddb-lib=${lib.getDev libmaxminddb}/lib" "--with-maxminddb-include=${libmaxminddb}/include" ];
   };
 
   metasploit-framework = attrs: {
@@ -489,7 +489,7 @@ in
   ncursesw = attrs: {
     buildInputs = [ ncurses ];
     buildFlags = [
-      "--with-cflags=-I${ncurses.dev}/include"
+      "--with-cflags=-I${lib.getDev ncurses}/include"
       "--with-ldflags=-L${ncurses.out}/lib"
     ];
   };
@@ -498,16 +498,16 @@ in
     buildFlags = [
       "--use-system-libraries"
       "--with-zlib-lib=${zlib.out}/lib"
-      "--with-zlib-include=${zlib.dev}/include"
+      "--with-zlib-include=${lib.getDev zlib}/include"
       "--with-xml2-lib=${libxml2.out}/lib"
-      "--with-xml2-include=${libxml2.dev}/include/libxml2"
+      "--with-xml2-include=${lib.getDev libxml2}/include/libxml2"
       "--with-xslt-lib=${libxslt.out}/lib"
-      "--with-xslt-include=${libxslt.dev}/include"
+      "--with-xslt-include=${lib.getDev libxslt}/include"
       "--with-exslt-lib=${libxslt.out}/lib"
-      "--with-exslt-include=${libxslt.dev}/include"
+      "--with-exslt-include=${lib.getDev libxslt}/include"
     ] ++ lib.optionals stdenv.isDarwin [
       "--with-iconv-dir=${libiconv}"
-      "--with-opt-include=${libiconv}/include"
+      "--with-opt-include=${lib.getDev libiconv}/include"
     ];
   };
 
@@ -631,7 +631,7 @@ in
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libvirt ];
     buildFlags = [
-      "--with-libvirt-include=${libvirt}/include"
+      "--with-libvirt-include=${lib.getDev libvirt}/include"
       "--with-libvirt-lib=${libvirt}/lib"
     ];
   };
@@ -643,7 +643,7 @@ in
   ruby-terminfo = attrs: {
     buildInputs = [ ncurses ];
     buildFlags = [
-      "--with-cflags=-I${ncurses.dev}/include"
+      "--with-cflags=-I${lib.getDev ncurses}/include"
       "--with-ldflags=-L${ncurses.out}/lib"
     ];
   };
@@ -707,7 +707,7 @@ in
   }
   else {
     buildFlags = [
-      "--with-sqlite3-include=${sqlite.dev}/include"
+      "--with-sqlite3-include=${lib.getDev sqlite}/include"
       "--with-sqlite3-lib=${sqlite.out}/lib"
     ];
   };

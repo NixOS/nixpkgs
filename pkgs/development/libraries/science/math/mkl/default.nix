@@ -138,7 +138,7 @@ in stdenvNoCC.mkDerivation ({
     cp -a opt/intel/oneapi/tbb/${tbbVersion}/lib/intel64/gcc4.8/*.so* $out/lib
 
     # Headers
-    cp -r opt/intel/oneapi/mkl/${mklVersion}/include $out/
+    cp -r opt/intel/oneapi/mkl/${lib.getDev mklVersion}/include $out/
 
     # CMake config
     cp -r opt/intel/oneapi/mkl/${mklVersion}/lib/cmake $out/lib

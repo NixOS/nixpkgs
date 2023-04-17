@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [
-      "--with-pngincludedir=${libpng.dev}/include"
+      "--with-pngincludedir=${lib.getDev libpng}/include"
       "--with-pnglibdir=${libpng.out}/lib"
-      "--with-jpegincludedir=${libjpeg.dev}/include"
+      "--with-jpegincludedir=${lib.getDev libjpeg}/include"
       "--with-jpeglibdir=${libjpeg.out}/lib"
-      "--with-expatincludedir=${expat.dev}/include"
+      "--with-expatincludedir=${lib.getDev expat}/include"
       "--with-expatlibdir=${expat.out}/lib"
-      "--with-ltdl-include=${libtool}/include"
+      "--with-ltdl-include=${lib.getDev libtool}/include"
       "--with-ltdl-lib=${libtool.lib}/lib"
     ]
     ++ lib.optional (libX11 == null) "--without-x";

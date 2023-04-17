@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
       "-DWITH_OPENSUBDIV=ON"
       "-DPYTHON_LIBRARY=${python.libPrefix}"
       "-DPYTHON_LIBPATH=${python}/lib"
-      "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
+      "-DPYTHON_INCLUDE_DIR=${lib.getDev python}/include/${python.libPrefix}"
       "-DPYTHON_VERSION=${python.pythonVersion}"
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
       "-DOPTIX_ROOT_DIR=${optix}"
     ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev ilmbase}/include/OpenEXR -I${lib.getDev python}/include/${python.libPrefix}";
 
   # Since some dependencies are built with gcc 6, we need gcc 6's
   # libstdc++ in our RPATH. Sigh.

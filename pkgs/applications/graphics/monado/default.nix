@@ -111,8 +111,8 @@ stdenv.mkDerivation rec {
   # "/nix/store/2v95aps14hj3jy4ryp86vl7yymv10mh0-librealsense-2.41.0/include"
   # in its INTERFACE_INCLUDE_DIRECTORIES.
   #
-  # for some reason cmake is trying to use ${librealsense}/include
-  # instead of ${librealsense.dev}/include as an include directory
+  # for some reason cmake is trying to use ${lib.getDev librealsense}/include
+  # instead of ${lib.getDev librealsense}/include as an include directory
 
   # Help openxr-loader find this runtime
   setupHook = writeText "setup-hook" ''

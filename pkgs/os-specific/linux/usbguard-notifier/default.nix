@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config asciidoc ];
   buildInputs = [ libqb usbguard librsvg libnotify ];
 
-  configureFlags = [ "CPPFLAGS=-I${catch2}/include/catch2" ];
+  configureFlags = [ "CPPFLAGS=-I${lib.getDev catch2}/include/catch2" ];
 
   prePatch = ''
     substituteInPlace configure.ac \

@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     tar -C "$DISTDIR/evdev-proto" \
         -xf ${linuxHeaders.src} \
         --strip-components 4 \
-        linux-${linuxHeaders.version}/include/uapi/linux
+        linux-${lib.getDev linuxHeaders.version}/include/uapi/linux
   '';
 
   makeFlags = [ "DIST_SUBDIR=evdev-proto" ];

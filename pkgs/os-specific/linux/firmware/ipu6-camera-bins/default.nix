@@ -51,7 +51,7 @@ stdenv.mkDerivation {
         --replace 'exec_prefix=/usr' 'exec_prefix=''${prefix}' \
         --replace 'prefix=/usr' "prefix=$out" \
         --replace 'libdir=/usr/lib' 'libdir=''${prefix}/lib' \
-        --replace 'includedir=/usr/include' 'includedir=''${prefix}/include'
+        --replace 'includedir=/usr/include' 'includedir=''${lib.getDev prefix}/include'
     done
   '';
 

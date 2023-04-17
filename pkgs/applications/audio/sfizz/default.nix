@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   postPatch = ''
-    cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
+    cp ${lib.getDev catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
 
     substituteInPlace plugins/editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
       --replace 'zenitypath = "zenity"' 'zenitypath = "${gnome.zenity}/bin/zenity"'

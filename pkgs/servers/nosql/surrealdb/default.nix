@@ -28,9 +28,9 @@ rustPlatform.buildRustPackage rec {
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
+  PROTOC_INCLUDE = "${lib.getDev protobuf}/include";
 
-  ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+  ROCKSDB_INCLUDE_DIR = "${lib.getDev rocksdb}/include";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   nativeBuildInputs = [

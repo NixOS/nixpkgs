@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
   buildInputs = [ bzip2 qtbase libnova proj_7 openjpeg libpng ];
-  cmakeFlags = [ "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-${lib.versions.majorMinor openjpeg.version}" ]
+  cmakeFlags = [ "-DOPENJPEG_INCLUDE_DIR=${lib.getDev openjpeg}/include/openjpeg-${lib.versions.majorMinor openjpeg.version}" ]
     ++ lib.optionals stdenv.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
 
   postInstall =

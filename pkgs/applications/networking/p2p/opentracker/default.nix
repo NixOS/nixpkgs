@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [ libowfat zlib ];
 
   makeFlags = [
-    "LIBOWFAT_HEADERS=${libowfat}/include/libowfat"
+    "LIBOWFAT_HEADERS=${lib.getDev libowfat}/include/libowfat"
     "LIBOWFAT_LIBRARY=${libowfat}/lib"
   ];
 

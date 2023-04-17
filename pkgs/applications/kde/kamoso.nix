@@ -30,7 +30,7 @@ mkDerivation {
 
   cmakeFlags = [
     "-DOpenGL_GL_PREFERENCE=GLVND"
-    "-DGSTREAMER_VIDEO_INCLUDE_DIR=${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0"
+    "-DGSTREAMER_VIDEO_INCLUDE_DIR=${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0"
   ];
 
   qtWrapperArgs = [

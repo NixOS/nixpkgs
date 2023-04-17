@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DNO_GTEST=ON"
-    "-DCMAKE_CXX_FLAGS=-I${yubikey-personalization}/include/ykpers-1"
+    "-DCMAKE_CXX_FLAGS=-I${lib.getDev yubikey-personalization}/include/ykpers-1"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DNO_YUBI=ON"
   ];

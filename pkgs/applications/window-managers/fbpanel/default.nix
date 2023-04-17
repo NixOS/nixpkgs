@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     substituteInPlace config.mk \
-      --replace "CFLAGSX =" "CFLAGSX = -I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
+      --replace "CFLAGSX =" "CFLAGSX = -I${lib.getDev gdk-pixbuf-xlib}/include/gdk-pixbuf-2.0"
   '';
 
   # Workaround build failure on -fno-common toolchains like upstream

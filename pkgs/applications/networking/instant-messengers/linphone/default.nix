@@ -81,7 +81,7 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DMINIZIP_INCLUDE_DIRS=${minizip-ng}/include"
+    "-DMINIZIP_INCLUDE_DIRS=${lib.getDev minizip-ng}/include"
     "-DMINIZIP_LIBRARIES=minizip"
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/

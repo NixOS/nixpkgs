@@ -271,11 +271,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (hasFeature "gr-vocoder") [
       "-DLIBCODEC2_FOUND=TRUE"
       "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2${stdenv.hostPlatform.extensions.sharedLibrary}"
-      "-DLIBCODEC2_INCLUDE_DIRS=${codec2}/include"
+      "-DLIBCODEC2_INCLUDE_DIRS=${lib.getDev codec2}/include"
       "-DLIBCODEC2_HAS_FREEDV_API=ON"
       "-DLIBGSM_FOUND=TRUE"
       "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm${stdenv.hostPlatform.extensions.sharedLibrary}"
-      "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
+      "-DLIBGSM_INCLUDE_DIRS=${lib.getDev gsm}/include/gsm"
     ]
     ++ lib.optionals (hasFeature "volk" && volk != null) [
       "-DENABLE_INTERNAL_VOLK=OFF"

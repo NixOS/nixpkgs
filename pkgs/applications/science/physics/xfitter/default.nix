@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc
     ;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-I${libtirpc.dev}/include/tirpc";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-I${lib.getDev libtirpc}/include/tirpc";
   NIX_LDFLAGS = lib.optional (stdenv.hostPlatform.libc == "glibc") "-ltirpc";
 
   # workaround wrong library IDs

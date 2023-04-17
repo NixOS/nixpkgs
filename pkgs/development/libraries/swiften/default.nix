@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   sconsFlags = [
     "openssl=${openssl.dev}"
-    "boost_includedir=${boost.dev}/include"
+    "boost_includedir=${lib.getDev boost}/include"
     "boost_libdir=${boost.out}/lib"
     "boost_bundled_enable=false"
     "max_jobs=1"

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
   configureFlags = [
-    "--with-gmp-include=${gmp.dev}/include"
+    "--with-gmp-include=${lib.getDev gmp}/include"
     "--with-gmp-lib=${gmp}/lib"
     "--with-cblas=-lblas"
   ];

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     find -L '${headers}' -type f -exec ln -s {} src/Linux/ext/intel \;
 
     substitute src/Linux/Makefile{.in,} \
-      --replace '##CURLINC##' '${curl.dev}/include/curl/' \
+      --replace '##CURLINC##' '${lib.getDev curl}/include/curl/' \
       --replace '$(TEST_SUITE): $(PROVIDER_LIB) $(TEST_SUITE_OBJ)' '$(TEST_SUITE): $(TEST_SUITE_OBJ)'
   '';
 

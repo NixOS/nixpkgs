@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' \
-      -e 's@/usr/include/mt/support@${libmtsupport}/include/mt/support@' \
-      -e 's@/usr/include/btree@${libbtree}/include/btree@' \
-      -e 's@/usr/include/facet@${libfacet}/include/facet@' \
-      -e 's@/usr/include/mt/query@${libmtquery}/include/mt/query@' \
+      -e 's@/usr/include/mt/support@${lib.getDev libmtsupport}/include/mt/support@' \
+      -e 's@/usr/include/btree@${lib.getDev libbtree}/include/btree@' \
+      -e 's@/usr/include/facet@${lib.getDev libfacet}/include/facet@' \
+      -e 's@/usr/include/mt/query@${lib.getDev libmtquery}/include/mt/query@' \
       -e 's@-lmtquery@-lmtquery -lmtsupport -lfacet@' \
       src/Makefile;
     # Fixing multibyte locale output

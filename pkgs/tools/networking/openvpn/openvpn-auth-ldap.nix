@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-objc-runtime=GNU"
-    "--with-openvpn=${openvpn}/include"
+    "--with-openvpn=${lib.getDev openvpn}/include"
     "--libdir=$(out)/lib/openvpn"
   ];
 

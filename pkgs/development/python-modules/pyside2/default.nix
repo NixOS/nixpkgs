@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     "-DPYTHON_EXECUTABLE=${python.interpreter}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${qt5.qtdeclarative.dev}/include/QtQuick/${qt5.qtdeclarative.version}/QtQuick";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev qt5.qtdeclarative}/include/QtQuick/${qt5.qtdeclarative.version}/QtQuick";
 
   nativeBuildInputs = [ cmake ninja qt5.qmake python ];
 

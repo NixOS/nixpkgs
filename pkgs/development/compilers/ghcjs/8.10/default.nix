@@ -105,7 +105,7 @@ in stdenv.mkDerivation {
       wrapProgram $out/bin/ghcjs --add-flags "-B$out/lib/${bootGhcjs.name}"
       wrapProgram $out/bin/haddock --add-flags "-B$out/lib/${bootGhcjs.name}"
       wrapProgram $out/bin/ghcjs-pkg --add-flags "--global-package-db=$out/lib/${bootGhcjs.name}/package.conf.d"
-      wrapProgram $out/bin/ghcjs-hsc2hs --add-flags "-I$out/lib/${bootGhcjs.name}/include --template=$out/lib/${bootGhcjs.name}/include/template-hsc.h"
+      wrapProgram $out/bin/ghcjs-hsc2hs --add-flags "-I$out/lib/${lib.getDev bootGhcjs.name}/include --template=$out/lib/${lib.getDev bootGhcjs.name}/include/template-hsc.h"
 
       env PATH=$out/bin:$PATH $out/bin/ghcjs-boot --with-emsdk=${emsdk} --no-haddock
     '';

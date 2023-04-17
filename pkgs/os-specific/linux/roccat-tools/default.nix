@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-I${harfbuzz.dev}/include/harfbuzz"
+    "-I${lib.getDev harfbuzz}/include/harfbuzz"
 
     # Workaround build failure on -fno-common toolchains:
     #   ld: ryos_talk.c.o:(.bss+0x0): multiple definition of `RyosWriteCheckWait';

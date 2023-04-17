@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
-  env.NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev kitemmodels}/include/KF5";
 
   nativeBuildInputs = [
     doxygen extra-cmake-modules graphviz kdoctools

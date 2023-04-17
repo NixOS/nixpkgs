@@ -101,7 +101,7 @@ stdenv.mkDerivation {
     "-DFAISS_OPT_LEVEL=${optLevel}"
   ] ++ lib.optionals cudaSupport [
     "-DCMAKE_CUDA_ARCHITECTURES=${builtins.concatStringsSep ";" (map dropDot cudaCapabilities)}"
-    "-DCUDAToolkit_INCLUDE_DIR=${cudaJoined}/include"
+    "-DCUDAToolkit_INCLUDE_DIR=${lib.getDev cudaJoined}/include"
   ];
 
 

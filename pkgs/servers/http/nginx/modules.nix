@@ -276,7 +276,7 @@ let self = {
       };
     in ''
       export LUAJIT_LIB="${luajit}/lib"
-      export LUAJIT_INC="$(realpath ${luajit}/include/luajit-*)"
+      export LUAJIT_INC="$(realpath ${lib.getDev luajit}/include/luajit-*)"
 
       # make source directory writable to allow generating src/ngx_http_lua_autoconf.h
       lua_src=$TMPDIR/lua-src

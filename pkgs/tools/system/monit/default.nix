@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (lib.withFeature usePAM "pam")
   ] ++ (if useSSL then [
-    "--with-ssl-incl-dir=${openssl.dev}/include"
+    "--with-ssl-incl-dir=${lib.getDev openssl}/include"
     "--with-ssl-lib-dir=${lib.getLib openssl}/lib"
   ] else [
     "--without-ssl"

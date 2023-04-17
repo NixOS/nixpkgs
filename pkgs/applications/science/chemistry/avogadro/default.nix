@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config doxygen ];
 
-  env.NIX_CFLAGS_COMPILE = "-include ${libGLU.dev}/include/GL/glu.h";
+  env.NIX_CFLAGS_COMPILE = "-include ${lib.getDev libGLU}/include/GL/glu.h";
 
   patches = [
     (fetchurl {

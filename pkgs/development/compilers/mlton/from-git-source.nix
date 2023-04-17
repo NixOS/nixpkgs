@@ -32,7 +32,7 @@ stdenv.mkDerivation {
       MLTON_VERSION="${version} ${rev}"
       CC="$(type -p cc)"
       PREFIX="$out"
-      WITH_GMP_INC_DIR="${gmp.dev}/include"
+      WITH_GMP_INC_DIR="${lib.getDev gmp}/include"
       WITH_GMP_LIB_DIR="${gmp}/lib"
       )
   '';

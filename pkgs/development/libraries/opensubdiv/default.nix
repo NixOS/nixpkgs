@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       "-DNO_EXAMPLES=1"
       "-DNO_METAL=1" # don’t have metal in apple sdk
     ] ++ lib.optionals (!stdenv.isDarwin) [
-      "-DGLEW_INCLUDE_DIR=${glew.dev}/include"
+      "-DGLEW_INCLUDE_DIR=${lib.getDev glew}/include"
       "-DGLEW_LIBRARY=${glew.dev}/lib"
     ] ++ lib.optionals cudaSupport [
       "-DOSD_CUDA_NVCC_FLAGS=--gpu-architecture=${cudaArch}"

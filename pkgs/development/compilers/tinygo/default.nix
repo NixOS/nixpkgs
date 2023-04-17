@@ -45,7 +45,7 @@ buildGoModule rec {
 
     (substituteAll {
       src = ./0002-Add-clang-header-path.patch;
-      clang_include = "${clang.cc.lib}/lib/clang/${clang.cc.version}/include";
+      clang_include = "${lib.getDev clang.cc.lib}/lib/clang/${clang.cc.version}/include";
     })
 
     #TODO(muscaln): Find a better way to fix build ID on darwin
@@ -80,7 +80,7 @@ buildGoModule rec {
     rm -rf lib/wasi-libc/*
     mkdir -p lib/wasi-libc/sysroot/lib/wasm32-wasi lib/wasi-libc/sysroot/include
     cp -a ${wasi-libc}/lib/* lib/wasi-libc/sysroot/lib/wasm32-wasi/
-    cp -a ${wasi-libc.dev}/include/* lib/wasi-libc/sysroot/include/
+    cp -a ${lib.getDev wasi-libc}/include/* lib/wasi-libc/sysroot/include/
 
     # Borrow compiler-rt builtins from our source
     # See https://github.com/tinygo-org/tinygo/pull/2471

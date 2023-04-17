@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libICE libXext libXi libXrandr libXxf86vm libGL libGLU ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
-                 "-DOPENGL_INCLUDE_DIR=${libGL}/include"
+                 "-DOPENGL_INCLUDE_DIR=${lib.getDev libGL}/include"
                  "-DOPENGL_gl_LIBRARY:FILEPATH=${libGL}/lib/libGL.dylib"
                  "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
                  "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"

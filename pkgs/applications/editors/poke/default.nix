@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
     "--enable-gui"
     "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
-    "--with-tkinclude=${tk.dev}/include"
+    "--with-tkinclude=${lib.getDev tk}/include"
   ];
 
   enableParallelBuilding = true;

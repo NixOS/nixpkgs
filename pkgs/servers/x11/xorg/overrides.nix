@@ -32,7 +32,7 @@ self: super:
         paths=(
           "$out/share/X11/%T/%N"
           "$out/include/X11/%T/%N"
-          "${xorg.xbitmaps}/include/X11/%T/%N"
+          "${lib.getDev xorg.xbitmaps}/include/X11/%T/%N"
         )
         for exe in $out/bin/*; do
           wrapProgram "$exe" \

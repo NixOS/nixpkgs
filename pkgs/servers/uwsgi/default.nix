@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
                  ++ lib.optional withSystemd "systemd_logger"
                  );
 
-  UWSGI_INCLUDES = lib.optionalString withCap "${libcap.dev}/include";
+  UWSGI_INCLUDES = lib.optionalString withCap "${lib.getDev libcap}/include";
 
   passthru = {
     inherit python2 python3;

@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
   postFixup = ''
-    sed -i 's,#include <gpg-error.h>,#include "${libgpg-error.dev}/include/gpg-error.h",g' "$dev/include/gcrypt.h"
+    sed -i 's,#include <gpg-error.h>,#include "${lib.getDev libgpg-error}/include/gpg-error.h",g' "$dev/include/gcrypt.h"
   '' + lib.optionalString enableCapabilities ''
     sed -i 's,\(-lcap\),-L${libcap.lib}/lib \1,' $out/lib/libgcrypt.la
   '';

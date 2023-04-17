@@ -64,7 +64,7 @@ let
     inherit nvidia_x11;
   } ''
     mkdir -p $out/include $out/lib/pkgconfig
-    cp ${nv-codec-headers-10}/include/ffnvcodec/nvEncodeAPI.h $out/include
+    cp ${lib.getDev nv-codec-headers-10}/include/ffnvcodec/nvEncodeAPI.h $out/include
     substituteAll ${./nvenc.pc} $out/lib/pkgconfig/nvenc.pc
   '';
 in buildPythonApplication rec {
@@ -85,7 +85,7 @@ in buildPythonApplication rec {
     ./fix-122159.patch # https://github.com/NixOS/nixpkgs/issues/122159
   ];
 
-  INCLUDE_DIRS = "${pam}/include";
+  INCLUDE_DIRS = "${lib.getDev pam}/include";
 
   nativeBuildInputs = [
     gobject-introspection

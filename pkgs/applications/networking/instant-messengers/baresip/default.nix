@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
-    "-Dre_DIR=${libre}/include/re"
+    "-Dre_DIR=${lib.getDev libre}/include/re"
   ];
 
   makeFlags = [
@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = '' -I${librem}/include/rem -I${gsm}/include/gsm
+  env.NIX_CFLAGS_COMPILE = '' -I${lib.getDev librem}/include/rem -I${lib.getDev gsm}/include/gsm
     -DHAVE_INTTYPES_H -D__GLIBC__
     -D__need_timeval -D__need_timespec -D__need_time_t '';
 

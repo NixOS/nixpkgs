@@ -41,7 +41,7 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config which yasm libtool autoconf automake file ];
 
   configureFlags =
-    [ "--dvb-path=${linuxHeaders}/include" ];
+    [ "--dvb-path=${lib.getDev linuxHeaders}/include" ];
 
   meta = with lib; {
     homepage = "https://www.mythtv.org/";

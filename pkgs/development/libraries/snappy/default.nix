@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace "$out"/lib/cmake/Snappy/SnappyTargets.cmake \
-      --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES "'$dev'"'
+      --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${lib.getDev _IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES "'$dev'"'
 
     mkdir -p $dev/lib/pkgconfig
     cat <<EOF > $dev/lib/pkgconfig/snappy.pc

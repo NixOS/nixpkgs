@@ -200,7 +200,7 @@ let
       build --action_env=PYENV_ROOT
       build --python_path="${python}/bin/python"
       build --distinct_host_configuration=false
-      build --define PROTOBUF_INCLUDE_PATH="${protobuf}/include"
+      build --define PROTOBUF_INCLUDE_PATH="${lib.getDev protobuf}/include"
     '' + lib.optionalString cudaSupport ''
       build --action_env CUDA_TOOLKIT_PATH="${cudatoolkit_joined}"
       build --action_env CUDNN_INSTALL_PATH="${cudnn}"

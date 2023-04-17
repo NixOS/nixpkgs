@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DDO_INSTALL_CHOWN=NO"
     "-DRTLSDR_LIBRARIES=${rtl-sdr}/lib/librtlsdr.so"
-    "-DRTLSDR_INCLUDE_DIRS=${rtl-sdr}/include"
+    "-DRTLSDR_INCLUDE_DIRS=${lib.getDev rtl-sdr}/include"
     "../src"
   ];
   dontWrapQtApps = true;

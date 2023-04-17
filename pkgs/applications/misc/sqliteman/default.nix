@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cd Sqliteman
-    sed -i 's,/usr/include/Qsci,${qscintilla-qt4}/include/Qsci,' cmake/modules/FindQScintilla.cmake
+    sed -i 's,/usr/include/Qsci,${lib.getDev qscintilla-qt4}/include/Qsci,' cmake/modules/FindQScintilla.cmake
     sed -i 's,PATHS ''${QT_LIBRARY_DIR},PATHS ${qscintilla-qt4}/libs,' cmake/modules/FindQScintilla.cmake
   '';
 

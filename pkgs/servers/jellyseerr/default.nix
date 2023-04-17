@@ -44,8 +44,8 @@ mkYarnPackage rec {
   pkgConfig.sqlite3 = {
     nativeBuildInputs = [ nodejs.pkgs.node-pre-gyp python3 ];
     postInstall = ''
-      export CPPFLAGS="-I${nodejs}/include/node"
-      node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node
+      export CPPFLAGS="-I${lib.getDev nodejs}/include/node"
+      node-pre-gyp install --prefer-offline --build-from-source --nodedir=${lib.getDev nodejs}/include/node
       rm -r build-tmp-napi-v6
     '';
   };
@@ -53,8 +53,8 @@ mkYarnPackage rec {
   pkgConfig.bcrypt = {
     nativeBuildInputs = [ nodejs.pkgs.node-pre-gyp python3 ];
     postInstall = ''
-      export CPPFLAGS="-I${nodejs}/include/node"
-      node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node
+      export CPPFLAGS="-I${lib.getDev nodejs}/include/node"
+      node-pre-gyp install --prefer-offline --build-from-source --nodedir=${lib.getDev nodejs}/include/node
     '';
   };
 

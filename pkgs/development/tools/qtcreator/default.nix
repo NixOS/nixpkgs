@@ -59,7 +59,7 @@ mkDerivation rec {
     '' + lib.optionalString withClangPlugins ''
     # Fix paths for llvm/clang includes directories.
     substituteInPlace src/shared/clang/clang_defines.pri \
-      --replace '$$clean_path($${LLVM_LIBDIR}/clang/$${LLVM_VERSION}/include)' '${clang_qt_vendor}/lib/clang/8.0.0/include' \
+      --replace '$$clean_path($${lib.getDev LLVM_LIBDIR}/clang/$${LLVM_VERSION}/include)' '${clang_qt_vendor}/lib/clang/8.0.0/include' \
       --replace '$$clean_path($${LLVM_BINDIR})' '${clang_qt_vendor}/bin'
 
     # Fix paths to libclang library.

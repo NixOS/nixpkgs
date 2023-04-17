@@ -83,7 +83,7 @@ mkDerivation rec {
     "-DPLUGIN_STANDARD_QCSF=ON"
     "-DPLUGIN_STANDARD_QFACETS=ON"
     "-DPLUGIN_STANDARD_QHOUGH_NORMALS=ON"
-    "-DEIGEN_ROOT_DIR=${eigen}/include/eigen3" # needed for hough normals
+    "-DEIGEN_ROOT_DIR=${lib.getDev eigen}/include/eigen3" # needed for hough normals
     "-DPLUGIN_STANDARD_QHPR=ON"
     "-DPLUGIN_STANDARD_QM3C2=ON"
     "-DPLUGIN_STANDARD_QMPLANE=ON"

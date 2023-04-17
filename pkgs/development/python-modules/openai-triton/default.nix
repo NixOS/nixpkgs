@@ -143,7 +143,7 @@ buildPythonPackage {
   )
   # Triton seems to be looking up cuda.h
   + ''
-    sed -i 's|cu_include_dir = os.path.join.*$|cu_include_dir = "${cuda_cudart}/include"|' python/triton/compiler.py
+    sed -i 's|cu_include_dir = os.path.join.*$|cu_include_dir = "${lib.getDev cuda_cudart}/include"|' python/triton/compiler.py
   '';
 
   nativeBuildInputs = [

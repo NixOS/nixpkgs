@@ -188,7 +188,7 @@ let
           wrapProgram "$script" \
             --set FAUSTLDDIR "${faust}/lib" \
             --set FAUSTLIB "${faust}/share/faust" \
-            --set FAUSTINC "${faust}/include/faust" \
+            --set FAUSTINC "${lib.getDev faust}/include/faust" \
             --set FAUSTARCH "${faust}/share/faust" \
             --prefix PATH : "$PATH" \
             --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH" \

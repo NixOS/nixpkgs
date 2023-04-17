@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export PATH=$PATH:${xfsprogs}/bin
-    export CFLAGS=-I${jfsutils}/include
+    export CFLAGS=-I${lib.getDev jfsutils}/include
     export LDFLAGS="-L${jfsutils}/lib -L${reiser4progs}/lib"
   '';
 

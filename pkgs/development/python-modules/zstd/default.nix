@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = [
     "--external"
-    "--include-dirs=${zstd}/include"
+    "--include-dirs=${lib.getDev zstd}/include"
     "--libraries=zstd"
     "--library-dirs=${zstd}/lib"
   ];

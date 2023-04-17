@@ -195,12 +195,12 @@ in buildPythonPackage rec {
     export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
-    export CUDNN_INCLUDE_DIR=${cudnn}/include
+    export CUDNN_INCLUDE_DIR=${lib.getDev cudnn}/include
   '' + lib.optionalString rocmSupport ''
     export ROCM_PATH=${rocmtoolkit_joined}
     export ROCM_SOURCE_DIR=${rocmtoolkit_joined}
     export PYTORCH_ROCM_ARCH="${gpuTargetString}"
-    export CMAKE_CXX_FLAGS="-I${rocmtoolkit_joined}/include -I${rocmtoolkit_joined}/include/rocblas"
+    export CMAKE_CXX_FLAGS="-I${lib.getDev rocmtoolkit_joined}/include -I${lib.getDev rocmtoolkit_joined}/include/rocblas"
     python tools/amd_build/build_amd.py
   '';
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   buildInputs = [ codecserver pycsdr ];
   # make pycsdr header files available
   preBuild = ''
-    ln -s ${pycsdr}/include/${python.libPrefix}/pycsdr src/pycsdr
+    ln -s ${lib.getDev pycsdr}/include/${python.libPrefix}/pycsdr src/pycsdr
   '';
 
   # has no tests

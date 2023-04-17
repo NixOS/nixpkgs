@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--disable-docs"
     "--enable-libdbi"
-    "--with-dbi-incdir=${libdbi}/include"
+    "--with-dbi-incdir=${lib.getDev libdbi}/include"
     "--with-dbi-libdir=${libdbi}/lib"
   ] ++ lib.optionals (libmysqlclient != null) [
     "--with-mysql"
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     "--with-mysql-libdir=${libmysqlclient}/lib/mysql"
   ] ++ lib.optionals (sqlite != null) [
     "--with-sqlite3"
-    "--with-sqlite3-incdir=${sqlite.dev}/include/sqlite"
+    "--with-sqlite3-incdir=${lib.getDev sqlite}/include/sqlite"
     "--with-sqlite3-libdir=${sqlite.out}/lib/sqlite"
   ] ++ lib.optionals (postgresql != null) [
     "--with-pgsql"
-    "--with-pgsql_incdir=${postgresql}/include"
+    "--with-pgsql_incdir=${lib.getDev postgresql}/include"
     "--with-pgsql_libdir=${postgresql.lib}/lib"
   ];
 

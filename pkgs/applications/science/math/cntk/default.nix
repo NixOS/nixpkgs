@@ -78,7 +78,7 @@ in stdenv.mkDerivation rec {
     "--asgd=no"
   ] ++ lib.optionals cudaSupport [
     "--with-cuda=${cudatoolkit}"
-    "--with-gdk-include=${cudatoolkit}/include"
+    "--with-gdk-include=${lib.getDev cudatoolkit}/include"
     "--with-gdk-nvml-lib=${nvidia_x11}/lib"
     "--with-cub=${cub}"
   ] ++ lib.optional onebitSGDSupport "--1bitsgd=yes";
@@ -99,7 +99,7 @@ in stdenv.mkDerivation rec {
     cd build
     ${lib.optionalString cudnnSupport ''
       mkdir cuda
-      ln -s ${cudnn}/include cuda
+      ln -s ${lib.getDev cudnn}/include cuda
       export configureFlags="$configureFlags --with-cudnn=$PWD"
     ''}
 

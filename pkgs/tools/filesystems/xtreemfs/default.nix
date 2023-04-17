@@ -62,9 +62,9 @@ stdenv.mkDerivation {
     export JAVA_HOME=${jdk8}
     export ANT_HOME=${ant}
 
-    export BOOST_INCLUDEDIR=${boost.dev}/include
+    export BOOST_INCLUDEDIR=${lib.getDev boost}/include
     export BOOST_LIBRARYDIR=${boost.out}/lib
-    export CMAKE_INCLUDE_PATH=${openssl.dev}/include
+    export CMAKE_INCLUDE_PATH=${lib.getDev openssl}/include
     export CMAKE_LIBRARY_PATH=${lib.getLib openssl}/lib
 
     substituteInPlace cpp/cmake/FindValgrind.cmake \
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
     substituteInPlace cpp/CMakeLists.txt \
       --replace '"/lib64" "/usr/lib64"' '"${attr.out}/lib" "${fuse}/lib"'
 
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${fuse}/include"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${lib.getDev fuse}/include"
     export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L${fuse}/lib"
 
     export DESTDIR=$out

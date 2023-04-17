@@ -20,9 +20,9 @@ stdenv.mkDerivation {
         --replace g++ c++
   '';
 
-  env.NIX_CFLAGS_COMPILE = ''-I${ilmbase.dev}/include/OpenEXR
-                       -I${openexr.dev}/include/OpenEXR
-                       -I${openfx.dev}/include/OpenFX
+  env.NIX_CFLAGS_COMPILE = ''-I${lib.getDev ilmbase}/include/OpenEXR
+                       -I${lib.getDev openexr}/include/OpenEXR
+                       -I${lib.getDev openfx}/include/OpenFX
                       '';
 
   buildInputs = [ re2 openfx zlib ilmbase libGLU libGL openexr ];

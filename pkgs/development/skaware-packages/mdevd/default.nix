@@ -14,7 +14,7 @@ buildPackage {
 
   configureFlags = [
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
+    "--with-include=${lib.getDev skalibs}/include"
     "--with-lib=${skalibs.lib}/lib"
   ];
 

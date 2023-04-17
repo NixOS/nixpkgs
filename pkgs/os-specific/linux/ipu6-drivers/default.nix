@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     cp --no-preserve=mode --recursive --verbose \
       ${ivsc-driver.src}/backport-include \
       ${ivsc-driver.src}/drivers \
-      ${ivsc-driver.src}/include \
+      ${lib.getDev ivsc-driver.src}/include \
       .
   '';
 

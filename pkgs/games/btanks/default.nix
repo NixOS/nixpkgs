@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = "-I${SDL_image}/include/SDL";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL_image}/include/SDL";
 
   patches = [
     (fetchpatch {

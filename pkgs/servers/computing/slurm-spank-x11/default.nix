@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
       gcc -DX11_LIBEXEC_PROG="\"$out/bin/slurm-spank-x11\"" \
           -g -o slurm-spank-x11 slurm-spank-x11.c
-      gcc -I${slurm.dev}/include -DX11_LIBEXEC_PROG="\"$out/bin/slurm-spank-x11\"" -shared -fPIC \
+      gcc -I${lib.getDev slurm}/include -DX11_LIBEXEC_PROG="\"$out/bin/slurm-spank-x11\"" -shared -fPIC \
           -g -o x11.so slurm-spank-x11-plug.c
     '';
 

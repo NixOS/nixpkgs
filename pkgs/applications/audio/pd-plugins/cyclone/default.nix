@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ puredata ];
 
   makeFlags = [
-    "pdincludepath=${puredata}/include/pd"
+    "pdincludepath=${lib.getDev puredata}/include/pd"
     "prefix=$(out)"
   ];
 

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-svn-include=${subversion.dev}/include"
+    "--with-svn-include=${lib.getDev subversion}/include"
     "--with-svn-lib=${subversion.out}/lib"
   ];
 

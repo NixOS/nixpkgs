@@ -50,10 +50,10 @@ in rec {
         cp -L ${lib.getLib darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
       ''}
 
-      cp -rL ${darwin.Libsystem}/include $out
+      cp -rL ${lib.getDev darwin.Libsystem}/include $out
       chmod -R u+w $out/include
-      cp -rL ${darwin.ICU}/include* $out/include
-      cp -rL ${libiconv}/include/* $out/include
+      cp -rL ${lib.getDev darwin.ICU}/include* $out/include
+      cp -rL ${lib.getDev libiconv}/include/* $out/include
       cp -rL ${lib.getDev gnugrep.pcre}/include/* $out/include
       mv $out/include $out/include-Libsystem
 
@@ -105,7 +105,7 @@ in rec {
       cp -d ${lib.getLib libffi}/lib/libffi*.dylib $out/lib
 
       mkdir $out/include
-      cp -rd ${llvmPackages.libcxx.dev}/include/c++     $out/include
+      cp -rd ${lib.getDev llvmPackages.libcxx}/include/c++     $out/include
 
       # copy .tbd assembly utils
       cp -d ${pkgs.darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin

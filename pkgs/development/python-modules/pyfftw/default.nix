@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     export LDFLAGS="-L${fftw.out}/lib -L${fftwFloat.out}/lib -L${fftwLongDouble.out}/lib"
-    export CFLAGS="-I${fftw.dev}/include -I${fftwFloat.dev}/include -I${fftwLongDouble.dev}/include"
+    export CFLAGS="-I${lib.getDev fftw.dev}/include -I${lib.getDev fftwFloat.dev}/include -I${lib.getDev fftwLongDouble}/include"
   '';
 
   buildInputs = [ fftw fftwFloat fftwLongDouble];

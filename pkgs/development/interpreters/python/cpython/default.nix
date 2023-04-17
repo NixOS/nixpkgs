@@ -301,7 +301,7 @@ in with passthru; stdenv.mkDerivation {
   '';
 
   env = {
-    CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
+    CPPFLAGS = concatStringsSep " " (map (p: "-I${lib.getDev getDev p}/include") buildInputs);
     LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
     LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"}";
     NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) ({
@@ -332,7 +332,7 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals (openssl' != null) [
     "--with-openssl=${openssl'.dev}"
   ] ++ optionals (libxcrypt != null) [
-    "CFLAGS=-I${libxcrypt}/include"
+    "CFLAGS=-I${lib.getDev libxcrypt}/include"
     "LIBS=-L${libxcrypt}/lib"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"

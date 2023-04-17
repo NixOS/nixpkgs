@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ guile_1_8.dev qt4 freetype CoreFoundation Cocoa gettext libiconv ghostscript ];
 
-  GUILE_CPPFLAGS="-D_THREAD_SAFE -I${guile_1_8.dev}/include -I${guile_1_8.dev}/include/guile ";
+  GUILE_CPPFLAGS="-D_THREAD_SAFE -I${lib.getDev guile_1_8.dev}/include -I${lib.getDev guile_1_8}/include/guile ";
 
   NIX_LDFLAGS="${zlib}/lib/libz.dylib";
 

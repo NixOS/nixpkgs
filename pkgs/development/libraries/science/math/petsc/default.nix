@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       ''}
       ${lib.optionalString withp4est ''
         "--with-p4est=1"
-        "--with-zlib-include=${zlib.dev}/include"
+        "--with-zlib-include=${lib.getDev zlib}/include"
         "--with-zlib-lib=-L${zlib}/lib -lz"
       ''}
       "--with-blas=1"

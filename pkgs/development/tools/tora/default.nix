@@ -30,7 +30,7 @@ mkDerivation {
     "-DWANT_INTERNAL_LOKI=0"
     "-DWANT_INTERNAL_QSCINTILLA=0"
     # cmake/modules/FindQScintilla.cmake looks in qtbase and for the wrong library name
-    "-DQSCINTILLA_INCLUDE_DIR=${qscintilla}/include"
+    "-DQSCINTILLA_INCLUDE_DIR=${lib.getDev qscintilla}/include"
     "-DQSCINTILLA_LIBRARY=${qscintilla}/lib/libqscintilla2.so"
     "-DENABLE_DB2=0"
     "-DENABLE_ORACLE=0"
@@ -42,7 +42,7 @@ mkDerivation {
   # these libraries are only searched for at runtime so we need to force-link them
   NIX_LDFLAGS = "-lgvc -lmysqlclient -lecpg -lssl";
 
-  env.NIX_CFLAGS_COMPILE = "-L${libmysqlclient}/lib/mysql -I${libmysqlclient}/include/mysql";
+  env.NIX_CFLAGS_COMPILE = "-L${lib.getDev libmysqlclient}/lib/mysql -I${libmysqlclient}/include/mysql";
 
   qtWrapperArgs = [
     ''--prefix PATH : ${lib.getBin graphviz}/bin''

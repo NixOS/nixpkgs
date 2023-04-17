@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     "-DLAPACK_LIBRARIES=${lapack}/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}"
   ] ++ lib.optionals (kluSupport) [
     "-DENABLE_KLU=ON"
-    "-DKLU_INCLUDE_DIR=${suitesparse.dev}/include"
+    "-DKLU_INCLUDE_DIR=${lib.getDev suitesparse}/include"
     "-DKLU_LIBRARY_DIR=${suitesparse}/lib"
   ] ++ [(
     # Use the correct index type according to lapack and blas used. They are

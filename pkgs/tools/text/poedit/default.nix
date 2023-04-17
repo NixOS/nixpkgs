@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "--without-cld2"
     "--without-cpprest"
     "--with-boost-libdir=${boost.out}/lib"
-    "CPPFLAGS=-I${nlohmann_json}/include/nlohmann/"
+    "CPPFLAGS=-I${lib.getDev nlohmann_json}/include/nlohmann/"
     "LDFLAGS=-llucene++"
   ];
 

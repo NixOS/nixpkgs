@@ -36,7 +36,7 @@ let
 
   copyLibHeaders =
     map
-      (name: "${lib.getDev sharedLibDeps.${name}}/include/*")
+      (name: "${lib.getDev sharedLibDeps.${lib.getDev name}}/include/*")
       (builtins.attrNames sharedLibDeps);
 
   extraConfigFlags = lib.optionals (!enableNpm) [ "--without-npm" ];

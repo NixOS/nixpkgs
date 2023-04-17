@@ -25,7 +25,7 @@ appleDerivation' stdenv {
     }
 
     # Set up our include directories
-    (cd ${xnu}/include && find . -name '*.h' -or -name '*.defs' | copyHierarchy $out/include)
+    (cd ${lib.getDev xnu}/include && find . -name '*.h' -or -name '*.defs' | copyHierarchy $out/include)
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/Availability*.h $out/include
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/stdarg.h        $out/include
 
@@ -37,7 +37,7 @@ appleDerivation' stdenv {
       (cd $dep/include && find . -name '*.h' | copyHierarchy $out/include)
     done
 
-    (cd ${buildPackages.darwin.cctools.dev}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
+    (cd ${lib.getDev buildPackages.darwin.cctools}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
 
     mkdir -p $out/include/os
 

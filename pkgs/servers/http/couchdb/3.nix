@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ icu openssl spidermonkey_91 (python3.withPackages(ps: with ps; [ requests ]))];
   postPatch = ''
-    substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${spidermonkey_91.dev}/include/mozjs-91"
+    substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${lib.getDev spidermonkey_91}/include/mozjs-91"
     patchShebangs bin/rebar
   '';
 

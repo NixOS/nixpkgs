@@ -35,7 +35,7 @@ tcl.mkTclDerivation rec {
     "--enable-tclshrl"
     "--enable-wishrl"
     "--with-tk=${tk}/lib"
-    "--with-readline-includes=${readline.dev}/include/readline"
+    "--with-readline-includes=${lib.getDev readline}/include/readline"
     "--with-libtool=${libtool}"
   ];
 

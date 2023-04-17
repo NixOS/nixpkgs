@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    cp ${catch2}/include/catch2/catch.hpp test/catch/catch.hpp
+    cp ${lib.getDev catch2}/include/catch2/catch.hpp test/catch/catch.hpp
   '';
 
   nativeBuildInputs = [ cmake ];

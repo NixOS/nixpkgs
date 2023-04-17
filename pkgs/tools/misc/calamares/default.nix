@@ -49,7 +49,7 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DPYTHON_LIBRARY=${python}/lib/lib${python.libPrefix}.so"
-    "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
+    "-DPYTHON_INCLUDE_DIR=${lib.getDev python}/include/${python.libPrefix}"
     "-DCMAKE_VERBOSE_MAKEFILE=True"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_PYTHONQT:BOOL=ON"

@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
     "--enable-long-usernames"
     "--enable-external-lookup"
   ] ++ lib.optionals withMySQL [
-    "--with-mysql-includes=${mariadb-connector-c.dev}/include/mysql"
+    "--with-mysql-includes=${lib.getDev mariadb-connector-c}/include/mysql"
     "--with-mysql-libraries=${mariadb-connector-c.out}/lib/mysql"
   ]
     ++ lib.optional withPgSQL "--with-pgsql-libraries=${postgresql.lib}/lib";

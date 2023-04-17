@@ -1149,7 +1149,7 @@ let
       hash = "sha256-gxJyAnHHrdxLvuwzEs3divS5kKxjYgSllsB5M61sY0o=";
     };
     buildInputs = [ pkgs.zlib TestWarn ];
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.zlib}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
     meta = {
       description = "Fast C metadata and tag reader for all common audio file formats";
@@ -1221,7 +1221,7 @@ let
     perlPreHook = ''
       export KRB5_CONFTOOL=${pkgs.krb5.dev}/bin/krb5-config
       export KRB5_BINDIR=${pkgs.krb5.dev}/bin
-      export KRB5_INCDIR=${pkgs.krb5.dev}/include
+      export KRB5_INCDIR=${lib.getDev pkgs.krb5}/include
     '';
     # Tests require working Kerberos infrastructure so replace with a
     # simple attempt to exercise the module.
@@ -1553,7 +1553,7 @@ let
 
     preConfigure = ''
       echo "LIB = ${pkgs.db.out}/lib" > config.in
-      echo "INCLUDE = ${pkgs.db.dev}/include" >> config.in
+      echo "INCLUDE = ${lib.getDev pkgs.db}/include" >> config.in
     '';
     meta = {
       description = "Perl extension for Berkeley DB version 2, 3, 4, 5 or 6";
@@ -1568,7 +1568,7 @@ let
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
       hash = "sha256-o/LKnSuu/BqqQJCLL5y5KS/aPn15fji7146rudna62s=";
     };
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.db4.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.db4}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.db4.out}/lib -ldb";
     buildInputs = [ pkgs.db4 ];
     propagatedBuildInputs = [ commonsense ];
@@ -3873,7 +3873,7 @@ let
     # Don't build a private copy of bzip2.
     BUILD_BZIP2 = false;
     BZIP2_LIB = "${pkgs.bzip2.out}/lib";
-    BZIP2_INCLUDE = "${pkgs.bzip2.dev}/include";
+    BZIP2_INCLUDE = "${lib.getDev pkgs.bzip2}/include";
 
     meta = {
       description = "Low-Level Interface to bzip2 compression library";
@@ -3891,7 +3891,7 @@ let
     };
     preConfigure = ''
       cat > config.in <<EOF
-        INCLUDE      = ${pkgs.xz.dev}/include
+        INCLUDE      = ${lib.getDev pkgs.xz}/include
         LIB          = ${pkgs.xz.out}/lib
       EOF
     '';
@@ -3914,7 +3914,7 @@ let
     preConfigure = ''
       cat > config.in <<EOF
         BUILD_ZLIB   = False
-        INCLUDE      = ${pkgs.zlib.dev}/include
+        INCLUDE      = ${lib.getDev pkgs.zlib}/include
         LIB          = ${pkgs.zlib.out}/lib
         OLD_ZLIB     = False
         GZIP_OS_CODE = AUTO_DETECT
@@ -4753,7 +4753,7 @@ let
       hash = "sha256-UeekeuWUz1X2bAdi9mkhVIbn2LNGC9rf55NQzPJtrzg=";
     };
     buildInputs = [ pkgs.gmp DevelChecklib TestRequires ];
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.gmp}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     meta = {
       description = "Crypt::DH Using GMP Directly";
@@ -5111,7 +5111,7 @@ let
       url = "mirror://cpan/authors/id/M/MG/MGREGORO/Crypt-Sodium-0.11.tar.gz";
       hash = "sha256-kHxzoQVs6gV9qYGa6kipKreG5qqq858c3ZZHsj8RbHg=";
     };
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.libsodium.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.libsodium}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.libsodium.out}/lib -lsodium";
     meta = {
       description = "Perl bindings for libsodium (NaCL)";
@@ -5171,7 +5171,7 @@ let
       url = "mirror://cpan/authors/id/T/TT/TTAR/Crypt-OpenSSL-AES-0.02.tar.gz";
       hash = "sha256-tm+rUU7fl/wy9Y2iV1gnBKIQwrNeKX1cMbf6L/0I6Qg=";
     };
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.openssl}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     meta = {
       description = "Perl wrapper around OpenSSL's AES library";
@@ -5186,7 +5186,7 @@ let
       url = "mirror://cpan/authors/id/K/KM/KMX/Crypt-OpenSSL-Bignum-0.09.tar.gz";
       hash = "sha256-I05y+4OW1FUn5v1F5DdZxcPzogjPjynmoiFhqZb9Qtw=";
     };
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.openssl}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     meta = {
       description = "OpenSSL's multiprecision integer arithmetic";
@@ -5215,7 +5215,7 @@ let
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Crypt-OpenSSL-Random-0.15.tar.gz";
       hash = "sha256-8IdvqhujER45uGqnMMYDIR7/KQXkYMcqV7YejPR1zvQ=";
     };
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.openssl}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     OPENSSL_PREFIX = pkgs.openssl;
     buildInputs = [ CryptOpenSSLGuess ];
@@ -5233,7 +5233,7 @@ let
       hash = "sha256-vb5jD21vVAMldGrZmXcnKshmT/gb0Z8K2rptb0Xv2GQ=";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.openssl}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     OPENSSL_PREFIX = pkgs.openssl;
     buildInputs = [ CryptOpenSSLGuess ];
@@ -5250,7 +5250,7 @@ let
       url = "mirror://cpan/authors/id/J/JO/JONASBN/Crypt-OpenSSL-X509-1.914.tar.gz";
       hash = "sha256-ScV1JX5kCK1aiQEeW1gA1Zj5zK/fQucQBO2Byy9E7no=";
     };
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.openssl}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     OPENSSL_PREFIX = pkgs.openssl;
     buildInputs = [ CryptOpenSSLGuess ];
@@ -5323,7 +5323,7 @@ let
       hash = "sha256-+OzKRch+uRMlmSsT8FlPgI5vG8TDuafxQbmoODhNJSw=";
     };
 
-    makeMakerFlags = [ "--libpath=${lib.getLib pkgs.openssl}/lib" "--incpath=${pkgs.openssl.dev}/include" ];
+    makeMakerFlags = [ "--libpath=${lib.getLib pkgs.openssl}/lib" "--incpath=${lib.getDev pkgs.openssl}/include" ];
     buildInputs = [ PathClass ];
     propagatedBuildInputs = [ BytesRandomSecure LWPProtocolHttps ];
     meta = {
@@ -6731,7 +6731,7 @@ let
       })
     ];
 
-    makeMakerFlags = [ "SQLITE_INC=${pkgs.sqlite.dev}/include" "SQLITE_LIB=${pkgs.sqlite.out}/lib" ];
+    makeMakerFlags = [ "SQLITE_INC=${lib.getDev pkgs.sqlite}/include" "SQLITE_LIB=${pkgs.sqlite.out}/lib" ];
 
     postInstall = ''
       # Get rid of a pointless copy of the SQLite sources.
@@ -6870,7 +6870,7 @@ let
       PREFIX = size_t
       HASH = u_int32_t
       LIB = ${pkgs.db.out}/lib
-      INCLUDE = ${pkgs.db.dev}/include
+      INCLUDE = ${lib.getDev pkgs.db}/include
       EOF
     '';
     meta = {
@@ -10081,7 +10081,7 @@ let
       url = "mirror://cpan/authors/id/M/MA/MAXMIND/Geo-IP-1.51.tar.gz";
       hash = "sha256-FjAgMV1cVEGDaseeCKd7Qo8nf9CQvqT6gNpwd7JDaro=";
     };
-    makeMakerFlags = [ "LIBS=-L${pkgs.geoip}/lib" "INC=-I${pkgs.geoip}/include" ];
+    makeMakerFlags = [ "LIBS=-L${lib.getDev pkgs.geoip}/lib" "INC=-I${pkgs.geoip}/include" ];
     doCheck = false; # seems to access the network
     meta = {
       description = "Look up location and network information by IP Address";
@@ -11329,7 +11329,7 @@ let
     };
 
     patchPhase = ''
-      sed -i "s#/usr/include/tidyp#${pkgs.tidyp}/include/tidyp#" Makefile.PL
+      sed -i "s#/usr/include/tidyp#${lib.getDev pkgs.tidyp}/include/tidyp#" Makefile.PL
       sed -i "s#/usr/lib#${pkgs.tidyp}/lib#" Makefile.PL
     '';
     buildInputs = [ TestException ];
@@ -11847,7 +11847,7 @@ let
       hash = "sha256-dNRNcBwfFPxLmE+toelVcmtQTC2LBtJl56hh+llDy0g=";
     };
     buildInputs = [ pkgs.freetype pkgs.fontconfig pkgs.libjpeg pkgs.libpng ];
-    makeMakerFlags = [ "--incpath ${pkgs.libjpeg.dev}/include" "--libpath ${pkgs.libjpeg.out}/lib" "--incpath" "${pkgs.libpng.dev}/include" "--libpath" "${pkgs.libpng.out}/lib" ];
+    makeMakerFlags = [ "--incpath ${lib.getDev pkgs.libjpeg.dev}/include" "--libpath ${lib.getDev pkgs.libjpeg.out}/lib" "--incpath" "${pkgs.libpng}/include" "--libpath" "${pkgs.libpng.out}/lib" ];
     meta = {
       description = "Perl extension for Generating 24 bit Images";
       homepage = "http://imager.perl.org";
@@ -11908,7 +11908,7 @@ let
     };
     buildInputs = [ pkgs.libpng pkgs.libjpeg TestNoWarnings ];
     propagatedBuildInputs = [ pkgs.zlib ];
-    makeMakerFlags = [ "--with-jpeg-includes=${pkgs.libjpeg.dev}/include" "--with-jpeg-libs=${pkgs.libjpeg.out}/lib" "--with-png-includes=${pkgs.libpng.dev}/include" "--with-png-libs=${pkgs.libpng.out}/lib" ];
+    makeMakerFlags = [ "--with-jpeg-includes=${lib.getDev pkgs.libjpeg.dev}/include" "--with-jpeg-libs=${lib.getDev pkgs.libjpeg.out}/lib" "--with-png-includes=${pkgs.libpng}/include" "--with-png-libs=${pkgs.libpng.out}/lib" ];
     meta = {
       description = "Fast, high-quality fixed-point image resizing";
       license = with lib.licenses; [ gpl2Plus ];
@@ -14480,7 +14480,7 @@ let
     };
     buildInputs = [ pkgs.gmp ];
     doCheck = false;
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.gmp}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     propagatedBuildInputs = [ MathBigInt ];
     meta = {
@@ -14552,7 +14552,7 @@ let
       hash = "sha256-Ftpfge9SdChiuzyHhASq/bJM2rT4rL/KEoAzJIe8VV8=";
     };
     buildInputs = [ pkgs.gmp AlienGMP ];
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.gmp}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     meta = {
       description = "High speed arbitrary size integer math";
@@ -14686,7 +14686,7 @@ let
       hash = "sha256-JpfH/Vx+Nf3sf1DtVqZ76Aei8iZXWJ5jfa01knRAA74=";
     };
     buildInputs = [ pkgs.gmp ];
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.gmp}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     meta = {
       description = "Utilities related to prime numbers, using GMP";
@@ -18227,7 +18227,7 @@ let
       mkdir openssl
       ln -s ${lib.getLib pkgs.openssl}/lib openssl
       ln -s ${pkgs.openssl.bin}/bin openssl
-      ln -s ${pkgs.openssl.dev}/include openssl
+      ln -s ${lib.getDev pkgs.openssl}/include openssl
       export OPENSSL_PREFIX=$(realpath openssl)
     '';
     meta = {
@@ -19223,7 +19223,7 @@ let
     patchPhase = ''
       substituteInPlace perldl.conf \
         --replace 'POSIX_THREADS_LIBS => undef' 'POSIX_THREADS_LIBS => "-L${pkgs.glibc.dev}/lib"' \
-        --replace 'POSIX_THREADS_INC  => undef' 'POSIX_THREADS_INC  => "-I${pkgs.glibc.dev}/include"' \
+        --replace 'POSIX_THREADS_INC  => undef' 'POSIX_THREADS_INC  => "-I${lib.getDev pkgs.glibc}/include"' \
         --replace 'WITH_MINUIT => undef' 'WITH_MINUIT => 0' \
         --replace 'WITH_SLATEC => undef' 'WITH_SLATEC => 0' \
         --replace 'WITH_HDF => undef' 'WITH_HDF => 0' \
@@ -19536,7 +19536,7 @@ let
     buildInputs = [ pkgs.imagemagick ];
     preConfigure =
       ''
-        sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${pkgs.imagemagick.dev}/include/ImageMagick";|' Makefile.PL
+        sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${lib.getDev pkgs.imagemagick}/include/ImageMagick";|' Makefile.PL
       '';
     meta = {
       description = "Objected-oriented Perl interface to ImageMagick. Use it to read, manipulate, or write an image or image sequence from within a Perl script";
@@ -25053,7 +25053,7 @@ let
     };
     propagatedBuildInputs = [ pkgs.aspell ];
     ASPELL_CONF = "dict-dir ${pkgs.aspellDicts.en}/lib/aspell";
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.aspell}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.aspell}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.aspell}/lib -laspell";
     meta = {
       description = "Perl interface to the GNU Aspell library";
@@ -26253,7 +26253,7 @@ let
       url = "mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.036.tar.gz";
       hash = "sha256-Mqpycaa9/twzMBGbOCXa3dCqS1yTb4StdOq7kyogCl4=";
     };
-    makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
+    makeMakerFlags = [ "X11INC=${lib.getDev pkgs.xorg.libX11}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
     buildInputs = [ pkgs.xorg.libX11 pkgs.libpng ];
     doCheck = false;            # Expects working X11.
     meta = {
@@ -26269,7 +26269,7 @@ let
       url = "mirror://cpan/authors/id/A/AS/ASB/Tk-ToolBar-0.12.tar.gz";
       hash = "sha256-Rj4oTsRxN+fEJclpGwKo3sXOJytY6h9jWa6AQaI53Q8=";
     };
-    makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
+    makeMakerFlags = [ "X11INC=${lib.getDev pkgs.xorg.libX11}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
     buildInputs = [ Tk ];
     doCheck = false;            # Expects working X11.
     meta = {
@@ -27395,7 +27395,7 @@ let
     '' + lib.optionalString stdenv.isCygwin ''
       sed -i"" -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm
     '';
-    makeMakerFlags = [ "EXPATLIBPATH=${pkgs.expat.out}/lib" "EXPATINCPATH=${pkgs.expat.dev}/include" ];
+    makeMakerFlags = [ "EXPATLIBPATH=${lib.getDev pkgs.expat.out}/lib" "EXPATINCPATH=${pkgs.expat}/include" ];
     propagatedBuildInputs = [ LWP ];
     meta = {
       description = "A perl module for parsing XML documents";
@@ -27914,7 +27914,7 @@ let
       url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-3.1.0.tar.gz";
       hash = "sha256-Rr4uoQg5g9/ZLVnFQiLAz5MB+Uj39U24YWEa+o2+9HE=";
     };
-    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getDev pkgs.openssl.dev}/include -I${lib.getDev pkgs.libidn2}}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
 
     makeMakerFlags = [ "--prefix-openssl=${pkgs.openssl.dev}" ];

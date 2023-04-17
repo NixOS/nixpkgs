@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     export LDFLAGS="-L${cmigemo}/lib"
-    export CPPFLAGS="-I${cmigemo}/include"
+    export CPPFLAGS="-I${lib.getDev cmigemo}/include"
     export LD_LIBRARY_PATH="${cmigemo}/lib"
   '';
 

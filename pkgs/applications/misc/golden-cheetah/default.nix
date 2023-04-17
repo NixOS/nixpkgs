@@ -57,7 +57,7 @@ in mkDerivation rec {
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri
     sed -i 's,^#QMAKE_LRELEASE.*,QMAKE_LRELEASE = ${qttools.dev}/bin/lrelease,' src/gcconfig.pri
     sed -i 's,^#LIBUSB_INSTALL.*,LIBUSB_INSTALL = ${libusb-compat-0_1},' src/gcconfig.pri
-    sed -i 's,^#LIBUSB_INCLUDE.*,LIBUSB_INCLUDE = ${libusb-compat-0_1.dev}/include,' src/gcconfig.pri
+    sed -i 's,^#LIBUSB_INCLUDE.*,LIBUSB_INCLUDE = ${lib.getDev libusb-compat-0_1}/include,' src/gcconfig.pri
     sed -i 's,^#LIBUSB_LIBS.*,LIBUSB_LIBS = -L${libusb-compat-0_1}/lib -lusb,' src/gcconfig.pri
   '';
 

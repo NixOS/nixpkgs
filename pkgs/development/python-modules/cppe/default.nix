@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # Using the nixpkgs version instead.
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "external/eigen3" "${eigen}/include/eigen3"
+      --replace "external/eigen3" "${lib.getDev eigen}/include/eigen3"
   '';
 
   nativeBuildInputs = [

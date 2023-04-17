@@ -266,7 +266,7 @@ in makeScopeWithSplicing
       "sys/sys/elf64.h"
       "sys/sys/elf_common.h"
       "sys/sys/elf_generic.h"
-      "sys/${mkBsdArch stdenv}/include"
+      "sys/${lib.getDev mkBsdArch stdenv}/include"
     ] ++ lib.optionals stdenv.hostPlatform.isx86 [
       "sys/x86/include"
     ] ++ [
@@ -300,8 +300,8 @@ in makeScopeWithSplicing
     preBuild = ''
       NIX_CFLAGS_COMPILE+=' -I../../include -I../../sys'
 
-      cp ../../sys/${mkBsdArch stdenv}/include/elf.h ../../sys/sys
-      cp ../../sys/${mkBsdArch stdenv}/include/elf.h ../../sys/sys/${mkBsdArch stdenv}
+      cp ../../sys/${lib.getDev mkBsdArch stdenv}/include/elf.h ../../sys/sys
+      cp ../../sys/${lib.getDev mkBsdArch stdenv}/include/elf.h ../../sys/sys/${mkBsdArch stdenv}
     '' + lib.optionalString stdenv.hostPlatform.isx86 ''
       cp ../../sys/x86/include/elf.h ../../sys/x86
     '';

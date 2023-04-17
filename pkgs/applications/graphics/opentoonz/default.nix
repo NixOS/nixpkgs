@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
   cmakeDir = "../sources";
   cmakeFlags = [
-    "-DTIFF_INCLUDE_DIR=${libtiff.dev}/include"
+    "-DTIFF_INCLUDE_DIR=${lib.getDev libtiff}/include"
     "-DTIFF_LIBRARY=${libtiff.out}/lib/libtiff.so"
   ];
 

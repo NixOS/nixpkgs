@@ -33,7 +33,7 @@ mkDerivation rec {
     xsimd
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([ "-I${ilmbase.dev}/include/OpenEXR" ]
+  env.NIX_CFLAGS_COMPILE = toString ([ "-I${lib.getDev ilmbase}/include/OpenEXR" ]
     ++ lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy");
 
   # Krita runs custom python scripts in CMake with custom PYTHONPATH which krita determined in their CMake script.

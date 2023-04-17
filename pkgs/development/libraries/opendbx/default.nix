@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    export CPPFLAGS="-I${getDev libmysqlclient}/include/mysql"
+    export CPPFLAGS="-I${lib.getDev getDev libmysqlclient}/include/mysql"
     export LDFLAGS="-L${libmysqlclient}/lib/mysql -L${postgresql}/lib"
     configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
   '';

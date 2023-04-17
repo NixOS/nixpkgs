@@ -44,7 +44,7 @@ let
     UCLIBC_HAS_RESOLVER_SUPPORT y
     UCLIBC_SUSV4_LEGACY y
     UCLIBC_HAS_THREADS_NATIVE y
-    KERNEL_HEADERS "${linuxHeaders}/include"
+    KERNEL_HEADERS "${lib.getDev linuxHeaders}/include"
   '' + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
     UCLIBC_HAS_FPU n
   '' + lib.optionalString (stdenv.isAarch32 && isCross) ''
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out
     make $makeFlags PREFIX=$out VERBOSE=1 install
-    (cd $out/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
+    (cd $out/include && ln -s $(ls -d ${lib.getDev linuxHeaders}/include/* | grep -v "scsi$") .)
     # libpthread.so may not exist, so I do || true
     sed -i s@/lib/@$out/lib/@g $out/lib/libc.so $out/lib/libpthread.so || true
 

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ./configure --cc=cc \
       --elfinterp=$(< $NIX_CC/nix-support/dynamic-linker) \
       --crtprefix=${lib.getLib stdenv.cc.libc}/lib \
-      --sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include \
+      --sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{lib.getDev B}/include \
       --libpaths=${lib.getLib stdenv.cc.libc}/lib
   )'';
 

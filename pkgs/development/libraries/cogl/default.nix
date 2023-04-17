@@ -83,9 +83,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ OpenGL ];
 
   COGL_PANGO_DEP_CFLAGS = toString (lib.optionals (stdenv.isDarwin && pangoSupport) [
-    "-I${pango.dev}/include/pango-1.0"
-    "-I${cairo.dev}/include/cairo"
-    "-I${harfbuzz.dev}/include/harfbuzz"
+    "-I${lib.getDev pango}/include/pango-1.0"
+    "-I${lib.getDev cairo}/include/cairo"
+    "-I${lib.getDev harfbuzz}/include/harfbuzz"
   ]);
 
   #doCheck = true; # all tests fail (no idea why)

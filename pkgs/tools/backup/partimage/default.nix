@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "0db6xiphk6xnlpbxraiy31c5xzj0ql6k4rfkmqzh665yyj0nqfkm";
   };
 
-  configureFlags = [ "--with-ssl-headers=${openssl.dev}/include/openssl" ];
+  configureFlags = [ "--with-ssl-headers=${lib.getDev openssl}/include/openssl" ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ bzip2 zlib newt newt openssl slang libxcrypt ];

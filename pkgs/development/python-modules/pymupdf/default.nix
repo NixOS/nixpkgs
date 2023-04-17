@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-        --replace '/usr/include/mupdf' ${mupdf.dev}/include/mupdf
+        --replace '/usr/include/mupdf' ${lib.getDev mupdf}/include/mupdf
   '';
   nativeBuildInputs = [
     swig

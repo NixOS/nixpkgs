@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals qtClient [
       "--enable-client=qt"
-      "--with-qt5-includes=${qt5.qtbase.dev}/include"
+      "--with-qt5-includes=${lib.getDev qt5.qtbase}/include"
     ] ++ lib.optionals gtkClient [ "--enable-client=gtk3.22" ]
     ++ lib.optional enableSqlite "--enable-fcdb=sqlite3"
     ++ lib.optional (!gtkClient) "--enable-fcmp=cli"

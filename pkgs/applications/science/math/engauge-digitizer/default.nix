@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     "CONFIG+=log4cpp_null"
   ];
 
-  POPPLER_INCLUDE = "${poppler.dev}/include/poppler/qt5";
+  POPPLER_INCLUDE = "${lib.getDev poppler}/include/poppler/qt5";
 
   POPPLER_LIB = "${poppler}/lib";
 
-  OPENJPEG_INCLUDE = "${openjpeg.dev}/include/${openjpeg.pname}-${lib.versions.majorMinor openjpeg.version}";
+  OPENJPEG_INCLUDE = "${lib.getDev openjpeg}/include/${openjpeg.pname}-${lib.versions.majorMinor openjpeg.version}";
 
   OPENJPEG_LIB = "${openjpeg}/lib";
 

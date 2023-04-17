@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DFORCE_INTERNAL_GME=OFF"
-    "-DGME_INCLUDE_DIR=${game-music-emu}/include"
+    "-DGME_INCLUDE_DIR=${lib.getDev game-music-emu}/include"
     "-DGME_LIBRARIES=${game-music-emu}/lib/libgme.so"
   ];
 

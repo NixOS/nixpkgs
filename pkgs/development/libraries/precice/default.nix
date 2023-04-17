@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     "-DPRECICE_PETScMapping=OFF"
     "-DBUILD_SHARED_LIBS=ON"
     "-DPYTHON_LIBRARIES=${python3.libPrefix}"
-    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
+    "-DPYTHON_INCLUDE_DIR=${lib.getDev python3}/include/${python3.libPrefix}"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-D_GNU_SOURCE" ]);

@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   postConfigure = ''
    substituteInPlace setup.py \
-     --replace "/usr/include/eigen3/" "${eigen}/include/eigen3/"
+     --replace "/usr/include/eigen3/" "${lib.getDev eigen}/include/eigen3/"
   '';
 
   preBuild = ''

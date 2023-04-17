@@ -43,7 +43,7 @@ buildPythonPackage rec {
   preBuild = ''
     export HTSLIB_MODE=shared
     export HTSLIB_LIBRARY_DIR=${htslib}/lib
-    export HTSLIB_INCLUDE_DIR=${htslib}/include
+    export HTSLIB_INCLUDE_DIR=${lib.getDev htslib}/include
   '';
 
   nativeCheckInputs = [

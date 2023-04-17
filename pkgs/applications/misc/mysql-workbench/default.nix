@@ -158,7 +158,7 @@ in stdenv.mkDerivation rec {
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.
     "-DWITH_ANTLR_JAR=${antlr4_9.jarLocation}"
-    "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
+    "-DMySQLCppConn_INCLUDE_DIR=${lib.getDev libmysqlconnectorcpp}/include/jdbc"
   ];
 
   # There is already an executable and a wrapper in bindir

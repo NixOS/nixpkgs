@@ -7,7 +7,7 @@ let
      else glibc;
    headerPath =
      if stdenvNoCC.targetPlatform.isMusl
-     then "musl-${libc.version}/include/elf.h"
+     then "musl-${lib.getDev libc.version}/include/elf.h"
      else "glibc-${libc.version}/elf/elf.h";
 in
 

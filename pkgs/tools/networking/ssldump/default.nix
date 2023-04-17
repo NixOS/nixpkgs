@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-pcap-lib=${libpcap}/lib"
-    "--with-pcap-inc=${libpcap}/include"
+    "--with-pcap-inc=${lib.getDev libpcap}/include"
     "--with-openssl-lib=${openssl}/lib"
-    "--with-openssl-inc=${openssl}/include"
+    "--with-openssl-inc=${lib.getDev openssl}/include"
   ];
 
   meta = with lib; {

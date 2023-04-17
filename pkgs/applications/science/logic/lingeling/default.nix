@@ -23,8 +23,8 @@ stdenv.mkDerivation {
     substituteInPlace ./makefile \
       --replace 'targets: liblgl.a' 'targets: liblgl.a blimc'      \
       --replace '$(AIGER)/aiger.o'  '${aiger.lib}/lib/aiger.o'     \
-      --replace '$(AIGER)/aiger.h'  '${aiger.dev}/include/aiger.h' \
-      --replace '-I$(AIGER)'        '-I${aiger.dev}/include'
+      --replace '$(AIGER)/aiger.h'  '${lib.getDev aiger}/include/aiger.h' \
+      --replace '-I$(AIGER)'        '-I${lib.getDev aiger}/include'
   '';
 
   installPhase = ''

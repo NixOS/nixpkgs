@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buidInputs = [ libubox ];
 
   preConfigure = ''
-    sed -e 's|ubox_include_dir libubox/ustream-ssl.h|ubox_include_dir libubox/ustream-ssl.h HINTS ${libubox}/include|g' \
+    sed -e 's|ubox_include_dir libubox/ustream-ssl.h|ubox_include_dir libubox/ustream-ssl.h HINTS ${lib.getDev libubox}/include|g' \
         -e 's|ubox_library NAMES ubox|ubox_library NAMES ubox HINTS ${libubox}/lib|g' \
         -i CMakeLists.txt
   '';

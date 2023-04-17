@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DNCINE_DOWNLOAD_DEPENDENCIES=OFF"
-    "-DGLFW_INCLUDE_DIR=${glfw}/include/GLFW"
-    "-DLIBOPENMPT_INCLUDE_DIR=${libopenmpt.dev}/include/libopenmpt"
+    "-DGLFW_INCLUDE_DIR=${lib.getDev glfw}/include/GLFW"
+    "-DLIBOPENMPT_INCLUDE_DIR=${lib.getDev libopenmpt}/include/libopenmpt"
     "-DNCINE_OVERRIDE_CONTENT_PATH=${jazz2-content}"
   ];
 

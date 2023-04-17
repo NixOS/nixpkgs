@@ -14,7 +14,7 @@ skawarePackages.buildPackage {
     "--enable-force-devr"
     "--libdir=\${lib}/lib"
     "--dynlibdir=\${lib}/lib"
-    "--includedir=\${dev}/include"
+    "--includedir=\${lib.getDev dev}/include"
     "--sysdepdir=\${lib}/lib/skalibs/sysdeps"
     # Empty the default path, which would be "/usr/bin:bin".
     # It would be set when PATH is empty. This hurts hermeticity.

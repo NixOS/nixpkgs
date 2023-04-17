@@ -42,7 +42,7 @@ stdenv.mkDerivation {
       cd lgmon3
       substituteInPlace src/Makefile.am \
         --replace /usr/include/libusb-1.0 \
-                  ${libusb1.dev}/include/libusb-1.0
+                  ${lib.getDev libusb1}/include/libusb-1.0
       ./autogen.sh --prefix=$out --enable-progpath=$out/bin \
                    --datadir=$out/share \
                    --enable-libdir=/var/cache/cups

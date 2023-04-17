@@ -127,7 +127,7 @@ buildGoModule rec {
     cp -r ${webassets} webassets
   '' + lib.optionalString withRdpClient ''
     ln -s ${rdpClient}/lib/* lib/
-    ln -s ${rdpClient}/include/* lib/srv/desktop/rdp/rdpclient/
+    ln -s ${lib.getDev rdpClient}/include/* lib/srv/desktop/rdp/rdpclient/
   '';
 
   # Multiple tests fail in the build sandbox

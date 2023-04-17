@@ -76,7 +76,7 @@ in
     propagatedBuildInputs = with pkgs; [libmysqlclient postgresql sqlite zlib];
     overrides = y: (x.overrides y) // {
       preConfigure = ((x.overrides y).preConfigure or "") + ''
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.libmysqlclient}/include/mysql"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${lib.getDev pkgs.libmysqlclient}/include/mysql"
         export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.libmysqlclient}/lib/mysql"
       '';};})
     (ifLispIn ["ecl" "clisp"] (x: {

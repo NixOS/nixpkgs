@@ -60,7 +60,7 @@ mkDerivation rec {
   cmakeFlags = [
     "-DQK_QT5_PORT=ON"
     "-DEXIF_LIBRARIES=${libexif}/lib/libexif.so"
-    "-DEXIF_INCLUDE_DIRS=${libexif}/include"
+    "-DEXIF_INCLUDE_DIRS=${lib.getDev libexif}/include"
   ];
 
   postPatch = ''

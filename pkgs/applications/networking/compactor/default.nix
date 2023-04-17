@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs test-scripts/
-    cp ${catch2}/include/catch2/catch.hpp tests/catch.hpp
+    cp ${lib.getDev catch2}/include/catch2/catch.hpp tests/catch.hpp
   '';
 
   preConfigure = ''

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' \
-      -e 's@/usr/include/mt/support@${libmtsupport}/include/mt/support@' \
+      -e 's@/usr/include/mt/support@${lib.getDev libmtsupport}/include/mt/support@' \
       src/Makefile;
   '';
 

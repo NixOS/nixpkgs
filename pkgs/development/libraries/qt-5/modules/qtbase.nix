@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
                 --replace "/System/Library/Frameworks/AGL.framework/" "${AGL}/Library/Frameworks/AGL.framework/"
     '' else lib.optionalString libGLSupported ''
       sed -i mkspecs/common/linux.conf \
-          -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
+          -e "/^QMAKE_INCDIR_OPENGL/ s|$|${lib.getDev libGL.dev or libGL}/include|" \
           -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${libGL.out}/lib|"
     '' + lib.optionalString (stdenv.hostPlatform.isx86_32 && stdenv.cc.isGNU) ''
       sed -i mkspecs/common/gcc-base-unix.conf \
@@ -226,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-opengl desktop"
     "-icu"
     "-L" "${icu.out}/lib"
-    "-I" "${icu.dev}/include"
+    "-I" "${lib.getDev icu}/include"
     "-pch"
   ]
   ++ lib.optional debugSymbols "-debug"
@@ -250,17 +250,17 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ [
     "-system-zlib"
     "-L" "${zlib.out}/lib"
-    "-I" "${zlib.dev}/include"
+    "-I" "${lib.getDev zlib}/include"
     "-system-libjpeg"
     "-L" "${libjpeg.out}/lib"
-    "-I" "${libjpeg.dev}/include"
+    "-I" "${lib.getDev libjpeg}/include"
     "-system-harfbuzz"
     "-L" "${harfbuzz.out}/lib"
-    "-I" "${harfbuzz.dev}/include"
+    "-I" "${lib.getDev harfbuzz}/include"
     "-system-pcre"
     "-openssl-linked"
     "-L" "${lib.getLib openssl}/lib"
-    "-I" "${openssl.dev}/include"
+    "-I" "${lib.getDev openssl}/include"
     "-system-sqlite"
     ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
     ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
@@ -282,11 +282,11 @@ stdenv.mkDerivation (finalAttrs: {
       "-xcb"
       "-qpa xcb"
       "-L" "${libX11.out}/lib"
-      "-I" "${libX11.out}/include"
+      "-I" "${lib.getDev libX11.out}/include"
       "-L" "${libXext.out}/lib"
-      "-I" "${libXext.out}/include"
+      "-I" "${lib.getDev libXext.out}/include"
       "-L" "${libXrender.out}/lib"
-      "-I" "${libXrender.out}/include"
+      "-I" "${lib.getDev libXrender.out}/include"
 
       "-libinput"
 
@@ -300,10 +300,10 @@ stdenv.mkDerivation (finalAttrs: {
         "-inotify"
     ] ++ lib.optionals (cups != null) [
       "-L" "${cups.lib}/lib"
-      "-I" "${cups.dev}/include"
+      "-I" "${lib.getDev cups}/include"
     ] ++ lib.optionals (mysqlSupport) [
       "-L" "${libmysqlclient}/lib"
-      "-I" "${libmysqlclient}/include"
+      "-I" "${lib.getDev libmysqlclient}/include"
     ]
   );
 

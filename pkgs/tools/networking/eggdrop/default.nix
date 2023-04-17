@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-tcllib=${tcl}/lib/lib${tcl.libPrefix}${stdenv.hostPlatform.extensions.sharedLibrary}"
-    "--with-tclinc=${tcl}/include/tcl.h"
+    "--with-tclinc=${lib.getDev tcl}/include/tcl.h"
   ];
 
   meta = with lib; {

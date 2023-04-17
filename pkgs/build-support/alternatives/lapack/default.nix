@@ -108,6 +108,6 @@ EOF
   mkdir -p $out/nix-support
   echo 'export MKL_INTERFACE_LAYER=${lib.optionalString isILP64 "I"}LP64,GNU' > $out/nix-support/setup-hook
   ln -s $out/lib/liblapack${canonicalExtension} $out/lib/libmkl_rt${stdenv.hostPlatform.extensions.sharedLibrary}
-  ln -sf ${lapackProvider'}/include/* $dev/include
+  ln -sf ${lib.getDev lapackProvider'}/include/* $dev/include
 '');
 }

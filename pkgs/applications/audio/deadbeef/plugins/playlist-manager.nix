@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   '';
 
   buildFlags = [
-    "CFLAGS=-I${deadbeef}/include/deadbeef"
+    "CFLAGS=-I${lib.getDev deadbeef}/include/deadbeef"
     "gtk3"
   ];
 

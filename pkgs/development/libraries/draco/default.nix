@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=${cmakeBool true}"
     "-DDRACO_TRANSCODER_SUPPORTED=${cmakeBool withTranscoder}"
   ] ++ lib.optionals withTranscoder [
-    "-DDRACO_EIGEN_PATH=${eigen}/include/eigen3"
+    "-DDRACO_EIGEN_PATH=${lib.getDev eigen}/include/eigen3"
     "-DDRACO_FILESYSTEM_PATH=${ghc_filesystem}"
     "-DDRACO_TINYGLTF_PATH=${tinygltf}"
   ];

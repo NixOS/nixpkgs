@@ -19,7 +19,7 @@ buildPythonPackage rec {
   postPatch = ''
     # replace bundled bwa
     rm -r bwa/*
-    cp ${bwa}/lib/*.a ${bwa}/include/*.h bwa/
+    cp ${lib.getDev bwa}/lib/*.a ${bwa}/include/*.h bwa/
 
     substituteInPlace setup.py \
       --replace 'setuptools>=49.2.0' 'setuptools'

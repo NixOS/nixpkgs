@@ -174,7 +174,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DLIBJAMI_INCLUDE_DIR=${daemon}/include/jami"
+    "-DLIBJAMI_INCLUDE_DIR=${lib.getDev daemon}/include/jami"
     "-DLIBJAMI_XML_INTERFACES_DIR=${daemon}/share/dbus-1/interfaces"
   ] ++ lib.optionals (!withWebengine) [
     "-DWITH_WEBENGINE=false"

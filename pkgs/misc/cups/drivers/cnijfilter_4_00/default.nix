@@ -87,7 +87,7 @@ in stdenv.mkDerivation {
     cd ../lgmon2
     substituteInPlace src/Makefile.am \
         --replace /usr/include/libusb-1.0 \
-                  ${libusb1.dev}/include/libusb-1.0
+                  ${lib.getDev libusb1}/include/libusb-1.0
     ./autogen.sh --prefix=$out --enable-libpath=$out/lib/bjlib --enable-progpath=$out/bin
 
     cd ..;

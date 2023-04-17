@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "-DWITH_LASZIP=ON"
     # libLAS is currently not compatible with LASzip 3,
     # see https://github.com/libLAS/libLAS/issues/144.
-    "-DLASZIP_INCLUDE_DIR=${LASzip2}/include"
+    "-DLASZIP_INCLUDE_DIR=${lib.getDev LASzip2}/include"
     "-DCMAKE_EXE_LINKER_FLAGS=-pthread"
   ];
 

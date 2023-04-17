@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     "-DALSOFT_DLOPEN=OFF"
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     # https://github.com/NixOS/nixpkgs/issues/183774
-    "-DOSS_INCLUDE_DIR=${stdenv.cc.libc}/include"
+    "-DOSS_INCLUDE_DIR=${lib.getDev stdenv.cc.libc}/include"
   ];
 
   postInstall = lib.optional pipewireSupport ''

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/music-player/CMakeLists.txt \
-      --replace "/usr/include/vlc" "${libvlc}/include/vlc" \
+      --replace "/usr/include/vlc" "${lib.getDev libvlc}/include/vlc" \
       --replace "/usr/share" "$out/share"
     substituteInPlace src/libmusic-plugin/CMakeLists.txt \
       --replace "/usr/lib/deepin-aiassistant" "$out/lib/deepin-aiassistant"

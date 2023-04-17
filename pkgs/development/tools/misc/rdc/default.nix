@@ -81,7 +81,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_VERBOSE_MAKEFILE=OFF"
     "-DRDC_INSTALL_PREFIX=${placeholder "out"}"
     "-DBUILD_ROCRTEST=ON"
-    "-DRSMI_INC_DIR=${rocm-smi}/include"
+    "-DRSMI_INC_DIR=${lib.getDev rocm-smi}/include"
     "-DRSMI_LIB_DIR=${rocm-smi}/lib"
     "-DGRPC_ROOT=${grpc}"
     # Manually define CMAKE_INSTALL_<DIR>

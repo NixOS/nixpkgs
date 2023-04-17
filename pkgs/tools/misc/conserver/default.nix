@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals opensslSupport [ openssl ];
 
   configureFlags = [ "--with-ccffile=/dev/null" "--with-cffile=/dev/null" ]
-    ++ lib.optionals freeipmiSupport [ "--with-freeipmi=${freeipmi}/include" ]
-    ++ lib.optionals gssapiSupport [ "--with-gssapi=${libkrb5.dev}/include" ]
+    ++ lib.optionals freeipmiSupport [ "--with-freeipmi=${lib.getDev freeipmi}/include" ]
+    ++ lib.optionals gssapiSupport [ "--with-gssapi=${lib.getDev libkrb5}/include" ]
     ++ lib.optionals ipv6Support [ "--with-ipv6" ]
-    ++ lib.optionals opensslSupport [ "--with-openssl=${openssl.dev}/include" ]
+    ++ lib.optionals opensslSupport [ "--with-openssl=${lib.getDev openssl}/include" ]
     ++ lib.optionals trustUdsCredSupport [ "--with-trust-uds-cred" ]
     ++ lib.optionals udsSupport [ "--with-uds" ];
 

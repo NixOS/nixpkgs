@@ -73,8 +73,8 @@ in stdenv.mkDerivation rec {
                  -ftree-vectorize -funroll-loops -msse2 \
                  -std=f2008 \
                  -fopenmp -ftree-vectorize -funroll-loops \
-                 -I${libxc}/include -I${libxsmm}/include \
-                 -I${libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"}
+                 -I${lib.getDev libxc}/include -I${lib.getDev libxsmm}/include \
+                 -I${lib.getDev libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"}
     LIBS       = -lfftw3 -lfftw3_threads \
                  -lscalapack -lblas -llapack \
                  -lxcf03 -lxc -lxsmmf -lxsmm -lsymspg \

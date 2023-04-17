@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlagsArray+=(
       "--libdir=''${!outputLib}/lib"
-      "--includedir=''${!outputInclude}/include"
+      "--includedir=''${lib.getDev !outputInclude}/include"
     )
   '';
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   # Header files get installed with executable bit for some reason; get rid of it.
   postInstall = ''
-    chmod -x ''${!outputInclude}/include/libserdes/*.h
+    chmod -x ''${lib.getDev !outputInclude}/include/libserdes/*.h
   '';
 
   meta = with lib; {

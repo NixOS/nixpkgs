@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace setup.py \
-      --replace /usr/include/linux ${linuxHeaders}/include/linux
+      --replace /usr/include/linux ${lib.getDev linuxHeaders}/include/linux
   '';
 
   doCheck = false;

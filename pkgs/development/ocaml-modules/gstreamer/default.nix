@@ -16,10 +16,10 @@ buildDunePackage rec {
   propagatedBuildInputs = [ glib.dev gst_all_1.gstreamer.dev gst_all_1.gst-plugins-base ];
 
   CFLAGS_COMPILE = [
-    "-I${glib.dev}/include/glib-2.0"
+    "-I${lib.getDev glib}/include/glib-2.0"
     "-I${glib.out}/lib/glib-2.0/include"
-    "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0"
-    "-I${gst_all_1.gstreamer.dev}/include/gstreamer-1.0"
+    "-I${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0"
+    "-I${lib.getDev gst_all_1.gstreamer}/include/gstreamer-1.0"
   ];
 
   meta = with lib; {

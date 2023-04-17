@@ -32,7 +32,7 @@ mkDerivation rec {
   postPatch = ''
     for f in *.pro; do
       substituteInPlace $f \
-        --replace '$$'{PREFIX}/include/libircclient ${libircclient.dev}/include/libircclient \
+        --replace '$$'{lib.getDev PREFIX}/include/libircclient ${lib.getDev libircclient}/include/libircclient \
         --replace 'LIB_DIRS =' 'LIB_DIRS = ${boost.out}/lib' \
         --replace /opt/gsasl ${gsasl}
     done

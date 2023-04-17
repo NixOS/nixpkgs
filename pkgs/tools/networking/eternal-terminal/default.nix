@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    cp ${catch2}/include/catch2/catch.hpp ../external_imported/Catch2/single_include/catch2/catch.hpp
+    cp ${lib.getDev catch2}/include/catch2/catch.hpp ../external_imported/Catch2/single_include/catch2/catch.hpp
   '';
 
   cmakeFlags = [

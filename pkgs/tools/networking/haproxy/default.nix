@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     "USE_LUA=yes"
     "LUA_LIB_NAME=lua"
     "LUA_LIB=${lua5_3}/lib"
-    "LUA_INC=${lua5_3}/include"
+    "LUA_INC=${lib.getDev lua5_3}/include"
   ] ++ lib.optionals stdenv.isLinux [
     "USE_SYSTEMD=yes"
     "USE_GETADDRINFO=1"

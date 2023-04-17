@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     opencl-headers
   ];
 
-  LIBLEPT_HEADERSDIR = "${leptonica}/include";
+  LIBLEPT_HEADERSDIR = "${lib.getDev leptonica}/include";
 
   meta = {
     description = "OCR engine";

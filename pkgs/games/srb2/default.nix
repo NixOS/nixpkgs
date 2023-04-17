@@ -58,8 +58,8 @@ in stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DSRB2_ASSET_DIRECTORY=/build/source/assets"
-    "-DGME_INCLUDE_DIR=${game-music-emu}/include"
-    "-DOPENMPT_INCLUDE_DIR=${libopenmpt.dev}/include"
+    "-DGME_INCLUDE_DIR=${lib.getDev game-music-emu}/include"
+    "-DOPENMPT_INCLUDE_DIR=${lib.getDev libopenmpt}/include"
     "-DSDL2_MIXER_INCLUDE_DIR=${lib.getDev SDL2_mixer}/include/SDL2"
     "-DSDL2_INCLUDE_DIR=${lib.getDev SDL2}/include/SDL2"
   ];

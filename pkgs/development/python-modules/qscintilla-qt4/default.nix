@@ -28,7 +28,7 @@ buildPythonPackage {
     ${python.executable} ./configure-old.py \
         --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
         --apidir $out/api/${python.libPrefix} \
-        -n ${pkgs.qscintilla-qt4}/include \
+        -n ${lib.getDev pkgs.qscintilla-qt4}/include \
         -o ${pkgs.qscintilla-qt4}/lib \
         --sipdir $out/share/sip
   '';

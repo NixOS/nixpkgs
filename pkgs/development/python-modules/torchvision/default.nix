@@ -59,7 +59,7 @@ buildPythonPackage {
   propagatedBuildInputs = [ numpy pillow torch scipy ];
 
   preConfigure = ''
-    export TORCHVISION_INCLUDE="${libjpeg_turbo.dev}/include/"
+    export TORCHVISION_INCLUDE="${lib.getDev libjpeg_turbo}/include/"
     export TORCHVISION_LIBRARY="${libjpeg_turbo}/lib/"
   ''
   # NOTE: We essentially override the compilers provided by stdenv because we don't have a hook

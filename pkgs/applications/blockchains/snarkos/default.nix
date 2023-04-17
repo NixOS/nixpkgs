@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   # TODO check why rust compilation fails by including the rocksdb from nixpkgs
   # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
   # try to build RocksDB from source.
-  # ROCKSDB_INCLUDE_DIR="${rocksdb}/include";
+  # ROCKSDB_INCLUDE_DIR="${lib.getDev rocksdb}/include";
   # ROCKSDB_LIB_DIR="${rocksdb}/lib";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security curl ];

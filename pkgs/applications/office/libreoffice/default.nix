@@ -193,7 +193,7 @@ in
   inherit (primary-src) src;
 
   env.NIX_CFLAGS_COMPILE = toString ([
-    "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
+    "-I${lib.getDev librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
     "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
   ] ++ optionals (stdenv.isLinux && stdenv.isAarch64 && variant == "still") [
     "-O2" # https://bugs.gentoo.org/727188
@@ -241,12 +241,12 @@ in
     # Fix this path to point to where the headers can actually be found instead.
     substituteInPlace configure.ac --replace \
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
-      'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
+      'GPGMEPP_CFLAGS=-I${lib.getDev gpgme}/include/gpgme++'
   '' + optionalString kdeIntegration ''
     substituteInPlace configure.ac \
-      --replace '$QT5INC ' '$QT5INC ${kdeDeps}/include ' \
+      --replace '$QT5INC ' '$QT5INC ${lib.getDev kdeDeps}/include ' \
       --replace '$QT5LIB ' '$QT5LIB ${kdeDeps}/lib ' \
-      --replace '$KF5INC ' '$KF5INC ${kdeDeps}/include ${kdeDeps}/include/KF5 '\
+      --replace '$KF5INC ' '$KF5INC ${lib.getDev kdeDeps}/include ${lib.getDev kdeDeps}/include/KF5 '\
       --replace '$KF5LIB ' '$KF5LIB ${kdeDeps}/lib '
   '';
 

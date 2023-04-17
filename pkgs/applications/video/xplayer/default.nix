@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     makeFlagsArray+=(
-      "INCLUDES=-I${glib.dev}/include/gio-unix-2.0"
+      "INCLUDES=-I${lib.getDev glib}/include/gio-unix-2.0"
       "CFLAGS=-Wno-error" # Otherwise a lot of deprecated warnings are treated as error
     )
   '';

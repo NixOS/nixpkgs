@@ -86,7 +86,7 @@ let
       (mkWeechat "weechat-headless")
       (runCommand "weechat-out-except-bin" { } ''
         mkdir $out
-        ln -sf ${weechat}/include $out/include
+        ln -sf ${lib.getDev weechat}/include $out/include
         ln -sf ${weechat}/lib $out/lib
         ln -sf ${weechat}/share $out/share
       '')

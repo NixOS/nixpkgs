@@ -18,7 +18,7 @@ buildPythonPackage {
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'include_dirs = ["libxnd", "ndtypes/python/ndtypes"] + INCLUDES' \
-                'include_dirs = ["${libndtypes}/include", "${ndtypes}/include", "${libxnd}/include"]' \
+                'include_dirs = ["${lib.getDev libndtypes}/include", "${lib.getDev ndtypes}/include", "${lib.getDev libxnd}/include"]' \
       --replace 'library_dirs = ["libxnd", "ndtypes/libndtypes"] + LIBS' \
                 'library_dirs = ["${libndtypes}/lib", "${libxnd}/lib"]' \
       --replace 'runtime_library_dirs = ["$ORIGIN"]' \

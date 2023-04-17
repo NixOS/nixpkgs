@@ -61,7 +61,7 @@ in gcc9Stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook rpcsvc-proto ];
   buildInputs = [ glib pcap libtirpc libnsl libnl ];
   NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ltirpc -lnl-3 -lnl-genl-3";
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev libtirpc}/include/tirpc" ];
   postPatch = ''
     for patch in debian/patches/*.patch; do
       patch < $patch

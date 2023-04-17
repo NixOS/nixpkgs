@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
 
       pushd 'external/ippcp_internal'
 
-      cp -r ${ipp-crypto-no_mitigation}/include/. inc/
+      cp -r ${lib.getDev ipp-crypto-no_mitigation}/include/. inc/
 
       install -D -m a+rw ${ipp-crypto-no_mitigation}/lib/intel64/libippcp.a \
         lib/linux/intel64/no_mitigation/libippcp.a
@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
         lib/linux/intel64/cve_2020_0551_cf/libippcp.a
 
       rm inc/ippcp.h
-      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i inc/ippcp21u3.patch -o inc/ippcp.h
+      patch ${lib.getDev ipp-crypto-no_mitigation}/include/ippcp.h -i inc/ippcp21u3.patch -o inc/ippcp.h
 
       install -D ${ipp-crypto-no_mitigation.src}/LICENSE license/LICENSE
 

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_CSOUND_AC=0" ] # fails to find Score.hpp
     ++ lib.optional stdenv.isDarwin "-DCS_FRAMEWORK_DEST=${placeholder "out"}/lib"
-    ++ lib.optional (libjack2 != null) "-DJACK_HEADER=${libjack2}/include/jack/jack.h";
+    ++ lib.optional (libjack2 != null) "-DJACK_HEADER=${lib.getDev libjack2}/include/jack/jack.h";
 
   nativeBuildInputs = [ cmake flex bison gettext ];
   buildInputs = [ libsndfile libsamplerate boost ]
