@@ -7102,6 +7102,8 @@ self: super: with self; {
 
   opentelemetry-sdk = callPackage ../development/python-modules/opentelemetry-sdk { };
 
+  opentelemetry-test-utils = callPackage ../development/python-modules/opentelemetry-test-utils { };
+
   openturns = toPythonModule (pkgs.openturns.override {
     python3Packages = self;
     enablePython = true;
