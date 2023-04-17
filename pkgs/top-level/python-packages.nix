@@ -8202,6 +8202,8 @@ self: super: with self; {
 
   pydroid-ipcam = callPackage ../development/python-modules/pydroid-ipcam  { };
 
+  pydruid = callPackage ../development/python-modules/pydruid { };
+
   pydsdl = callPackage ../development/python-modules/pydsdl { };
 
   pydub = callPackage ../development/python-modules/pydub { };
