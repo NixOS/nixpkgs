@@ -1,21 +1,45 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub
-, makeDesktopItem, copyDesktopItems, cmake
-, boost, libvorbis, libsndfile, minizip, gtest, qtwebkit }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, copyDesktopItems
+, boost
+, gtest
+, libvorbis
+, libsndfile
+, minizip
+, withGUI ? true
+, qtwebengine ? null
+, wrapQtAppsHook ? null
+, makeDesktopItem
+}:
 
-mkDerivation rec {
+assert withGUI -> qtwebengine != null && wrapQtAppsHook != null;
+
+stdenv.mkDerivation rec {
   pname = "lsd2dsl";
-  version = "0.5.4";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "nongeneric";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PLgfsVVrNBTxI4J0ukEOFRoBkbmB55/sLNn5KyiHeAc=";
+    hash = "sha256-lzw4WwCguPVStdf2gbphPVqBABfALSCrv/RasbKHhkI=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isLinux copyDesktopItems;
+  nativeBuildInputs = [ cmake ]
+    ++ lib.optional stdenv.isLinux copyDesktopItems
+    ++ lib.optional withGUI wrapQtAppsHook;
 
-  buildInputs = [ boost libvorbis libsndfile minizip gtest qtwebkit ];
+  buildInputs = [
+    boost
+    libvorbis
+    libsndfile
+    minizip
+    gtest
+  ] ++ lib.optional withGUI qtwebengine;
+
+  dontWrapQtApps = true;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=missing-braces";
 
@@ -34,10 +58,8 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://rcebits.com/lsd2dsl/";
-    description = "Lingvo dictionaries decompiler";
-    longDescription = ''
-      A decompiler for ABBYY Lingvo’s proprietary dictionaries.
-    '';
+    downloadPage = "https://github.com/nongeneric/lsd2dsl/releases";
+    description = "Decompiler for ABBYY Lingvo’s and Duden proprietary dictionaries";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
