@@ -215,6 +215,8 @@ let
 
     cohttp-mirage = callPackage ../development/ocaml-modules/cohttp/mirage.nix { };
 
+    cohttp-top = callPackage ../development/ocaml-modules/cohttp/top.nix { };
+
     coin =  callPackage ../development/ocaml-modules/coin { };
 
     color = callPackage ../development/ocaml-modules/color { };
