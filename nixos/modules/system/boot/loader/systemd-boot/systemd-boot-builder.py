@@ -302,8 +302,12 @@ def main() -> None:
             if is_default:
                 write_loader_conf(*gen)
         except OSError as e:
-            profile = f"profile '{gen.profile}'" if gen.profile else "default profile"
-            print("ignoring {} in the list of boot entries because of the following error:\n{}".format(profile, e), file=sys.stderr)
+            # See https://github.com/NixOS/nixpkgs/issues/114552
+            if e.errno == errno.EINVAL:
+                profile = f"profile '{gen.profile}'" if gen.profile else "default profile"
+                print("ignoring {} in the list of boot entries because of the following error:\n{}".format(profile, e), file=sys.stderr)
+            else:
+                raise e
 
     for root, _, files in os.walk('@efiSysMountPoint@/efi/nixos/.extra-files', topdown=False):
         relative_root = root.removeprefix("@efiSysMountPoint@/efi/nixos/.extra-files").removeprefix("/")

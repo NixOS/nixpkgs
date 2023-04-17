@@ -56,9 +56,14 @@
       "gnome-trash@gnome-trash.b00f.gitlab.com",
       "gnome-trash@b00f.github.io"
     ],
+    "true-color-invert": [
+      "true-color-invert@jackkenney",
+      "true-color-window-invert@lynet101"
+    ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@noskoski"
+      "volume_scroller@noskoski",
+      "volume_scroller@francislavoie.github.io"
     ]
   },
   "40": {
@@ -81,6 +86,10 @@
     "hide-activities-button": [
       "Hide_Activities@shay.shayel.org",
       "hide-activities-button@nmingori.gnome-shell-extensions.org"
+    ],
+    "clipboard-indicator": [
+      "clipboard-indicator@tudmotu.com",
+      "clipboard-indicator@Dieg0Js.github.io"
     ],
     "shutdowntimer": [
       "ShutdownTimer@neumann",
@@ -123,9 +132,14 @@
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
     ],
+    "true-color-invert": [
+      "true-color-invert@jackkenney",
+      "true-color-window-invert@lynet101"
+    ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@noskoski"
+      "volume_scroller@noskoski",
+      "volume_scroller@francislavoie.github.io"
     ],
     "floating-panel": [
       "floating-panel@aylur",
@@ -177,9 +191,14 @@
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
     ],
+    "true-color-invert": [
+      "true-color-invert@jackkenney",
+      "true-color-window-invert@lynet101"
+    ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@noskoski"
+      "volume_scroller@noskoski",
+      "volume_scroller@francislavoie.github.io"
     ],
     "floating-panel": [
       "floating-panel@aylur",
@@ -219,9 +238,14 @@
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
     ],
+    "true-color-invert": [
+      "true-color-invert@jackkenney",
+      "true-color-window-invert@lynet101"
+    ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@noskoski"
+      "volume_scroller@noskoski",
+      "volume_scroller@francislavoie.github.io"
     ],
     "auto-activities": [
       "auto-activities@acedron.github.io",
@@ -265,9 +289,14 @@
       "batime@martin.zurowietz.de",
       "batterytime@typeof.pw"
     ],
+    "volume-scroller": [
+      "volume_scroller@trflynn89.pm.me",
+      "volume_scroller@francislavoie.github.io"
+    ],
     "floating-panel": [
       "floating-panel@aylur",
       "floating-panel-usedbymyself@wpism"
     ]
-  }
+  },
+  "44": {}
 }

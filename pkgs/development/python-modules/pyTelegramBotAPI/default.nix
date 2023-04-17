@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pytelegrambotapi";
-  version = "4.10.0";
+  version = "4.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
     rev = "refs/tags/${version}";
-    hash = "sha256-uzdhNCMl5NdOSHVMZe4BcpCjHQCyaTqlTdWTtzPqj04=";
+    hash = "sha256-K81B8cNQ5Vvu8nH8kiroeffwRaUIKpwnpX2Jq7xPjB0=";
   };
 
   passthru.optional-dependencies = {

@@ -1624,6 +1624,8 @@ let
 
     uri-sexp = callPackage ../development/ocaml-modules/uri/sexp.nix { };
 
+    uring = callPackage ../development/ocaml-modules/uring { };
+
     utop = callPackage ../development/tools/ocaml/utop { };
 
     uucd = callPackage ../development/ocaml-modules/uucd { };

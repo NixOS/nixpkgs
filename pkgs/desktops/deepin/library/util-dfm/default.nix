@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , qtbase
@@ -14,22 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "util-dfm";
-  version = "1.2.7";
+  version = "1.2.8";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-+qqirRkvVyKvt+Pu/ghQjMe+O6a7/7IoJL8AWL4QlvE=";
+    sha256 = "sha256-Mc3x0nTnEyMnruZotiT1J4BGOeNAQlCXGbO0yVJtqYM=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-use-pkgconfig-to-check-mount.patch";
-      url = "https://github.com/linuxdeepin/util-dfm/commit/fb8425a8c13f16e86db38ff84f43347fdc8ea468.diff";
-      sha256 = "sha256-PGSRfnQ1MGmq0V3NBCoMk4p/T2x19VA04u9C+WcBKow=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

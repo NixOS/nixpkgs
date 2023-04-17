@@ -38,7 +38,7 @@ let
 in with versionMap.${majorVersion};
 
 stdenv.mkDerivation rec {
-  pname = "gnatboot";
+  pname = "gnat-bootstrap";
   inherit gccVersion alireRevision;
 
   version = "${gccVersion}-${alireRevision}";
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     cp -ar * $out/
   ''
 
-  # So far with the Darwin gnatboot binary packages, there have been two
+  # So far with the Darwin gnat-bootstrap binary packages, there have been two
   # types of dylib path references to other dylibs that need fixups:
   #
   # 1.  Dylibs in $out/lib with paths starting with

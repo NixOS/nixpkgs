@@ -1,0 +1,22 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4977,8 +4977,3 @@ dependencies = [
+  "libc",
+  "pkg-config",
+ ]
+-
+-[[patch.unused]]
+-name = "bevy_simple_tilemap"
+-version = "0.11.0"
+-source = "git+https://github.com/forbjok/bevy_simple_tilemap.git#9a1d4332e961327443adb16aca306f837b6f4da5"
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -94,8 +94,6 @@ codegen-units = 1    # Improved rapier physics perf, so it might help other stuf
+ lto           = true
+ 
+ [patch.crates-io]
+-bevy_simple_tilemap = { git = "https://github.com/forbjok/bevy_simple_tilemap.git" }
+-
+ bones_lib = { git = "https://github.com/fishfolk/bones" }
+ bones_bevy_asset = { git = "https://github.com/fishfolk/bones" }
+ type_ulid = { git = "https://github.com/fishfolk/bones" }
