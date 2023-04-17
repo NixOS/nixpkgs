@@ -20,11 +20,6 @@ buildOctavePackage rec {
     sha256 = "sha256-8AqEDEfgYwftKUj8ynFQzBa3G3zTdhNtsZ2bW16DV7Q=";
   };
 
-  patches = [
-    # Fixes a syntax error with performing multiplication.
-    ./syntax-error.patch
-  ];
-
   buildInputs = [
     fftw
     fftwSinglePrec
