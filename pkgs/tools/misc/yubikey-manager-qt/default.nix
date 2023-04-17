@@ -80,6 +80,7 @@ mkDerivation rec {
     homepage = "https://developers.yubico.com/yubikey-manager-qt/";
     license = licenses.bsd2;
     maintainers = [ maintainers.cbley ];
+    mainProgram = "ykman-gui";
     platforms = platforms.linux;
   };
 }
