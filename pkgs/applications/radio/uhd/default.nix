@@ -13,7 +13,6 @@
 , python3
 , enableExamples ? false
 , enableUtils ? false
-, enableSim ? false
 , libusb1
 , enableDpdk ? false
 , dpdk
