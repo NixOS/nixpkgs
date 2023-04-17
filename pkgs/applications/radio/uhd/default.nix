@@ -11,6 +11,7 @@
 # requires numpy
 , enablePythonApi ? false
 , python3
+, buildPackages
 , enableExamples ? false
 , enableUtils ? false
 , libusb1
@@ -33,6 +34,11 @@
 let
   onOffBool = b: if b then "ON" else "OFF";
   inherit (lib) optionals;
+  # Later used in pythonEnv generation. Python + mako are always required for the build itself but not necessary for runtime.
+  pythonEnvArg = (ps: with ps; [ mako ]
+    ++ optionals (enablePythonApi) [ numpy setuptools ]
+    ++ optionals (enableUtils) [ requests six ]
+  );
 in
 
 stdenv.mkDerivation rec {
@@ -83,21 +89,14 @@ stdenv.mkDerivation rec {
     ++ [ (lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
   ;
 
-  # Python + mako are always required for the build itself but not necessary for runtime.
-  pythonEnv = python3.withPackages (ps: with ps; [ mako ]
-    ++ optionals (enablePythonApi) [ numpy setuptools ]
-    ++ optionals (enableUtils) [ requests six ]
-  );
+  pythonEnv = python3.withPackages pythonEnvArg;
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ]
-    # If both enableLibuhd_Python_api and enableUtils are off, we don't need
-    # pythonEnv in buildInputs as it's a 'build' dependency and not a runtime
-    # dependency
-    ++ optionals (!enablePythonApi && !enableUtils) [ pythonEnv ]
-  ;
+    # Present both here and in buildInputs for cross compilation.
+    (buildPackages.python3.withPackages pythonEnvArg)
+  ];
   buildInputs = [
     boost
     libusb1
