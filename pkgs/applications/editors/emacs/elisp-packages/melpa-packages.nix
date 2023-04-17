@@ -341,6 +341,28 @@ let
           };
         });
 
+        sqlite3 = super.sqlite3.overrideAttrs (old: {
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.sqlite ];
+
+          postBuild = ''
+            pushd working/sqlite3
+            make
+            popd
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            pushd source
+            outd=$out/share/emacs/site-lisp/elpa/sqlite3-*
+            install -m444 -t $outd sqlite3-api.so
+            rm $outd/*.c $outd/*.h
+            popd
+          '';
+
+          meta = old.meta // {
+            maintainers = [ lib.maintainers.DamienCassou ];
+          };
+        });
+
         libgit = super.libgit.overrideAttrs(attrs: {
           nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [ pkgs.cmake ];
           buildInputs = attrs.buildInputs ++ [ pkgs.libgit2 ];
