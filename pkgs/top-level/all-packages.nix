@@ -30981,6 +30981,8 @@ with pkgs;
 
   swaycons = callPackage ../applications/window-managers/sway/swaycons.nix { };
 
+  swayfx = callPackage ../applications/window-managers/sway/fx.nix { };
+
   swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
 
   swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };

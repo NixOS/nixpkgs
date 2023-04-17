@@ -13028,6 +13028,12 @@
     github = "ribose-jeffreylau";
     githubId = 2649467;
   };
+  ricarch97 = {
+    email = "ricardo.steijn97@gmail.com";
+    github = "RicArch97";
+    githubId = 61013287;
+    name = "Ricardo Steijn";
+  };
   richardipsum = {
     email = "richardipsum@fastmail.co.uk";
     github = "richardipsum";
