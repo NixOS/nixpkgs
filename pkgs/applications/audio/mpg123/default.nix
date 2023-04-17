@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sX8ikF4x9DtrQB399qce0Ru30Fb2jbRJ1wufmug5x94=";
   };
 
-  outputs = [ "out" ] ++ lib.optional withConplay "conplay";
+  outputs = [ "out" "dev" "man" ] ++ lib.optional withConplay "conplay";
 
   nativeBuildInputs = lib.optionals (!libOnly) (
     lib.optionals withConplay [ makeWrapper ]
