@@ -79,6 +79,13 @@ in
         '';
       };
 
+      bantime = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        example = "10m";
+        description = lib.mdDoc "Number of seconds that a host is banned.";
+      };
+
       maxretry = mkOption {
         default = 3;
         type = types.ints.unsigned;
@@ -331,6 +338,9 @@ in
       ''}
       # Miscellaneous options
       ignoreip    = 127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}
+      ${optionalString (cfg.bantime != null) ''
+        bantime     = ${cfg.bantime}
+      ''}
       maxretry    = ${toString cfg.maxretry}
       backend     = systemd
       # Actions
