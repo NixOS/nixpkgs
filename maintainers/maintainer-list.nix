@@ -10945,6 +10945,16 @@
     githubId = 34162313;
     name = "Jason Wing";
   };
+  netfox = {
+    name = "netfox";
+    email = "say-hi@netfox.rip";
+    matrix = "@netfox:catgirl.cloud";
+    github = "0xnetfox";
+    githubId = 97521402;
+    keys = [{
+      fingerprint = "E8E9 43D7 EB83 DB77 E41C  D87F 9C77 CB70 F2E6 3EF7";
+    }];
+  };
   netixx = {
     email = "dev.espinetfrancois@gmail.com";
     github = "netixx";
