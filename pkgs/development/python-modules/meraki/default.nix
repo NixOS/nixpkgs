@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "meraki";
-  version = "1.30.0";
+  version = "1.32.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s26xGwWSWB+qpOTUe8IYo53ywYOaaUWjDznFqpmRlak=";
+    hash = "sha256-3iZ9/d78nAnK2+Kv0+0tuvZcfSV6ZF6QRF3xYL3NqV4=";
   };
 
   propagatedBuildInputs = [
