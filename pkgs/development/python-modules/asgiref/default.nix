@@ -35,6 +35,8 @@ buildPythonPackage rec {
     "test_multiprocessing"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "asgiref" ];
 
   meta = with lib; {
