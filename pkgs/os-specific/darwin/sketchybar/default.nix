@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, DisplayServices, SkyLight }:
+{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, CoreWLAN, DisplayServices, SkyLight }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-TTpOFupLyCko5+EZJ3kJWu6OD35qfLpM8N7zq+eMvMM=";
   };
 
-  buildInputs = [ Carbon Cocoa DisplayServices SkyLight ];
+  buildInputs = [ Carbon Cocoa CoreWLAN DisplayServices SkyLight ];
 
   makeFlags = [
     target
