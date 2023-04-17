@@ -182,12 +182,7 @@ rec {
     nativeBuildInputs = [
       makeWrapper pkg-config go-md2man go libtool installShellFiles
     ];
-    buildInputs = lib.optional (!clientOnly) sqlite
-      ++ lib.optional withLvm lvm2
-      ++ lib.optional withBtrfs btrfs-progs
-      ++ lib.optional withSystemd systemd
-      ++ lib.optional withSeccomp libseccomp
-      ++ plugins;
+    buildInputs = plugins;
 
     patches = lib.optionals (lib.versionOlder version "23.0.5") [
       (fetchpatch {
