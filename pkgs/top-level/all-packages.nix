@@ -13477,6 +13477,8 @@ with pkgs;
 
   wolfebin = callPackage ../tools/networking/wolfebin { };
 
+  wthrr = callPackage ../applications/misc/wthrr { };
+
   xautoclick = callPackage ../applications/misc/xautoclick { };
 
   xl2tpd = callPackage ../tools/networking/xl2tpd { };
