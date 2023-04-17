@@ -82,7 +82,7 @@ in let
         config = config1;
       })
     ];
-    specialArgs.class = "nixpkgsConfig";
+    class = "nixpkgsConfig";
   };
 
   # take all the rest as-is

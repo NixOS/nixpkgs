@@ -3,7 +3,7 @@ let
 
   evalTest = module: lib.evalModules {
     modules = testModules ++ [ module ];
-    specialArgs.class = "nixosTest";
+    class = "nixosTest";
   };
   runTest = module: (evalTest ({ config, ... }: { imports = [ module ]; result = config.test; })).config.result;
 
