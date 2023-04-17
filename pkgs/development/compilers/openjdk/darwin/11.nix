@@ -11,20 +11,20 @@ let
   dist = {
     x86_64-darwin = {
       arch = "x64";
-      zuluVersion = "11.48.21";
-      jdkVersion = "11.0.11";
+      zuluVersion = "11.62.17";
+      jdkVersion = "11.0.18";
       sha256 =
-        if enableJavaFX then "18bd9cd66d6abc6f8c627bc70278dc8fd4860e138e1dc9e170eddb89727ccc7b"
-        else "0v0n7h7i04pvna41wpdq2k9qiy70sbbqzqzvazfdvgm3gb22asw6";
+        if enableJavaFX then "0s4ylx650kcd6kc03dmkrn7swmknwrlha21givr6yhbwasvynd32"
+        else "1qqlg3q5fkmhki48ylf6gh0lwwgqaj0bh9ph6v8x8r3h31j1c5xx";
     };
 
     aarch64-darwin = {
       arch = "aarch64";
-      zuluVersion = "11.48.21";
-      jdkVersion = "11.0.11";
+      zuluVersion = "11.62.17";
+      jdkVersion = "11.0.18";
       sha256 =
-        if enableJavaFX then "ef0de2705c6c2d586812f7f3736b70e22b069545b38034816016f9f264ad43f9"
-        else "066whglrxx81c95grv2kxdbvyh32728ixhml2v44ildh549n4lhc";
+        if enableJavaFX then "0mda5s5ydyjxglfknzjydjgs2zyv9gwbh5pi02rhy6y3vwmvkky1"
+        else "011pfxnyh1xnpp9qxhf7fy5ddfrb54d7fvjxrvgq1lgrhfpmcgra";
     };
   }."${stdenv.hostPlatform.system}";
 

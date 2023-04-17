@@ -5,16 +5,16 @@ let
   dist = {
     x86_64-darwin = {
       arch = "x64";
-      zuluVersion = "17.34.19";
-      jdkVersion = "17.0.3";
-      sha256 = "sha256-qImyxVC2y2QhxuVZwamKPyo46+n+7ytIFXpYI0e6w2c=";
+      zuluVersion = "17.40.19";
+      jdkVersion = "17.0.6";
+      sha256 = "sha256-FxDIsvU9eHYMT0RuKRGaMvQK+wo4MPaMAtw3sReZq28=";
     };
 
     aarch64-darwin = {
       arch = "aarch64";
-      zuluVersion = "17.34.19";
-      jdkVersion = "17.0.3";
-      sha256 = "sha256-eaRX8Qa/Mqr9JhpHSEcf0Q9c4qmqLMgWqRhkEEwAjf8=";
+      zuluVersion = "17.40.19";
+      jdkVersion = "17.0.6";
+      sha256 = "sha256-917j+8F0TmYbphBYxMDDchf2/7JHEJh7ovvN+AGqRi4=";
     };
   }."${stdenv.hostPlatform.system}";
 
