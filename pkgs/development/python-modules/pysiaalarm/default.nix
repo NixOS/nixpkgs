@@ -2,8 +2,8 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, dataclasses-json
 , pycryptodome
+, pytz
 , setuptools-scm
 , pytest-asyncio
 , pytest-cases
@@ -12,18 +12,18 @@
 
 buildPythonPackage rec {
   pname = "pysiaalarm";
-  version = "3.0.2";
+  version = "3.1.0";
 
   disabled = pythonOlder "3.8";
 
+  format = "setuptools";
+
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hS0OaafYjRdPVSCOHfb2zKp0tEOl1LyMJpwnpvsvALs=";
+    hash = "sha256-ToNoPGg0dfLlkzzXf3jHR0JA2WSAWsRrS0HyU1qvzwk=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "==" ">="
     substituteInPlace pytest.ini \
       --replace "--cov pysiaalarm --cov-report term-missing" ""
   '';
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    dataclasses-json
     pycryptodome
+    pytz
   ];
 
   nativeCheckInputs = [
