@@ -8797,6 +8797,12 @@
     githubId = 3696783;
     name = "Leroy Hopson";
   };
+  lillycham = {
+    email = "lillycat332@gmail.com";
+    github = "lillycat332";
+    githubId = 54189319;
+    name = "Lilly Cham";
+  };
   lilyball = {
     email = "lily@sb.org";
     github = "lilyball";
@@ -12738,6 +12744,13 @@
     github = "RamKromberg";
     githubId = 14829269;
     name = "Ram Kromberg";
+  };
+  rampoina = {
+    email = "rampoina@protonmail.com";
+    matrix = "@rampoina:matrix.org";
+    github = "Rampoina";
+    githubId = 5653911;
+    name = "Rampoina";
   };
   ranfdev = {
     email = "ranfdev@gmail.com";

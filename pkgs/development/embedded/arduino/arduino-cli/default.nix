@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, buildFHSUserEnv, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, buildFHSEnv, installShellFiles }:
 
 let
 
@@ -48,10 +48,10 @@ let
 
 in
 if stdenv.isLinux then
-# buildFHSUserEnv is needed because the arduino-cli downloads compiler
+# buildFHSEnv is needed because the arduino-cli downloads compiler
 # toolchains from the internet that have their interpreters pointed at
 # /lib64/ld-linux-x86-64.so.2
-  buildFHSUserEnv
+  buildFHSEnv
   {
     inherit (pkg) name meta;
 

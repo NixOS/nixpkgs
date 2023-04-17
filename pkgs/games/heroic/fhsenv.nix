@@ -1,11 +1,11 @@
 { lib
-, buildFHSUserEnv
+, buildFHSEnv
 , heroic-unwrapped
 , extraPkgs ? pkgs: [ ]
 , extraLibraries ? pkgs: [ ]
 }:
 
-buildFHSUserEnv {
+buildFHSEnv {
   name = "heroic";
 
   runScript = "heroic";

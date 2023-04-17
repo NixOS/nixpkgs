@@ -8,7 +8,7 @@
 , gnused
 , gawk
 , coreutils
-, buildFHSUserEnv
+, buildFHSEnv
 }:
 
 let
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 };
 in
 if stdenv.isLinux then
-  buildFHSUserEnv
+  buildFHSEnv
   {
     name = "nextflow";
     targetPkgs = pkgs: [ nextflow ];

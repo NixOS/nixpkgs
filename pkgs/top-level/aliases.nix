@@ -163,6 +163,10 @@ mapAliases ({
   bud = throw "bud has been removed: abandoned by upstream"; # Added 2022-03-14
   inherit (libsForQt5.mauiPackages) buho; # added 2022-05-17
   buttersink = throw "buttersink has been removed: abandoned by upstream"; # Added 2022-04-05
+  # Shorter names; keep the longer name for back-compat. Added 2023-04-11
+  buildFHSUserEnv = buildFHSEnv;
+  buildFHSUserEnvChroot = buildFHSEnvChroot;
+  buildFHSUserEnvBubblewrap = buildFHSEnvBubblewrap;
 
   # bitwarden_rs renamed to vaultwarden with release 1.21.0 (2021-04-30)
   bitwarden_rs = vaultwarden;
@@ -566,6 +570,9 @@ mapAliases ({
   gmic-qt-krita = throw "gmic-qt-krita was removed as it's no longer supported upstream."; # Converted to throw 2023-02-02
   gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # Added 2021-03-08
   gnash = throw "gnash has been removed; broken and abandoned upstream"; # added 2022-02-06
+  gnatboot11 = gnat-bootstrap11;
+  gnatboot12 = gnat-bootstrap12;
+  gnatboot = gnat-bootstrap;
   gnome-breeze = throw "gnome-breeze has been removed, use libsForQt5.breeze-gtk instead"; # Added 2022-04-22
   gnome-firmware-updater = gnome-firmware; # added 2022-04-14
   gnome-passwordsafe = gnome-secrets; # added 2022-01-30
@@ -1667,6 +1674,8 @@ mapAliases ({
   vaultwarden-vault = vaultwarden.webvault; # Added 2022-12-13
   varnish71 = throw "varnish71 was removed from nixpkgs, because it was superseded upstream. Please switch to a different release"; # Added 2022-11-08
   vdirsyncerStable  = vdirsyncer; # Added 2020-11-08, see https://github.com/NixOS/nixpkgs/issues/103026#issuecomment-723428168
+  ventoy-bin = throw "ventoy-bin has been renamed to ventoy"; # Added 2023-04-12
+  ventoy-bin-full = throw "ventoy-bin-full has been renamed to ventoy-full"; # Added 2023-04-12
   venus = throw "venus has been removed from nixpkgs, as it's unmaintained"; # Added 2021-02-05
   vgo2nix = throw "vgo2nix has been removed, because it was deprecated. Consider using gomod2nix instead"; # added 2022-08-24
   vimHugeX = vim-full; # Added 2022-12-04
