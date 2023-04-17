@@ -1,4 +1,43 @@
 { lib, ... }: {
+  options = {
+    sub = {
+      nixosOk = lib.mkOption {
+        type = lib.types.submoduleWith {
+          class = "nixos";
+          modules = [ ];
+        };
+      };
+      # Same but will have bad definition
+      nixosFail = lib.mkOption {
+        type = lib.types.submoduleWith {
+          class = "nixos";
+          modules = [ ];
+        };
+      };
+
+      mergeFail = lib.mkOption {
+        type = lib.types.submoduleWith {
+          class = "nixos";
+          modules = [ ];
+        };
+        default = { };
+      };
+    };
+  };
+  imports = [
+    {
+      options = {
+        sub = {
+          mergeFail = lib.mkOption {
+            type = lib.types.submoduleWith {
+              class = "darwin";
+              modules = [ ];
+            };
+          };
+        };
+      };
+    }
+  ];
   config = {
     _module.freeformType = lib.types.anything;
     ok =
@@ -31,5 +70,7 @@
         ];
       };
 
+    sub.nixosOk = { config = {}; class = "nixos"; };
+    sub.nixosFail = { imports = [ ./module-class-is-darwin.nix ]; };
   };
 }
