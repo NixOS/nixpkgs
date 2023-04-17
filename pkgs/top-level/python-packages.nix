@@ -7106,6 +7106,8 @@ self: super: with self; {
 
   opentelemetry-exporter-prometheus = callPackage ../development/python-modules/opentelemetry-exporter-prometheus { };
 
+  opentelemetry-instrumentation = callPackage ../development/python-modules/opentelemetry-instrumentation { };
+
   opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
 
   opentelemetry-semantic-conventions = callPackage ../development/python-modules/opentelemetry-semantic-conventions { };
