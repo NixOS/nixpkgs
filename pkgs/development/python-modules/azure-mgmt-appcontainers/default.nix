@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , azure-common
 , azure-mgmt-core
 , msrest
@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   version = "2.0.0";
   pname = "azure-mgmt-appcontainers";
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,12 +29,12 @@ buildPythonPackage rec {
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.common" "azure.mgmt.appcontainers" ];
+  pythonImportsCheck = [ "azure.mgmt.appcontainers" ];
 
   meta = with lib; {
     description = "Microsoft Azure Appcontainers Management Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/appcontainers/azure-mgmt-appcontainers";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ jfroche ];
   };
 }
