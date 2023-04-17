@@ -271,7 +271,10 @@ package-maintainers:
     - clay
     - ema
     - emanote
+    - eventlog2html
     - generic-optics
+    - ghc-debug-brick
+    - ghc-debug-stub
     - ghcid
     - graphql-client
     - haskell-language-server
