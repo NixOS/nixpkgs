@@ -4,23 +4,23 @@
 }:
 
 buildGoModule rec {
-  pname = "rtsp-simple-server";
-  version = "0.21.6";
+  pname = "mediamtx";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "aler9";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-b9sb5XU+wE14N4N7NELE26gSntu7wJgpneIF+T2w6WY=";
+    hash = "sha256-x+4dU+SHkkF0E/NoVvK0aNBCyAIL3Nfbh1tBVe//nx0=";
   };
 
-  vendorHash = "sha256-rKmaxsDQ6+cLp6eaw8TRjpPsNcQlPauqmX6hcslc2Wo=";
+  vendorHash = "sha256-pcHtmkYV3hqb6QQ7O6WQSHqwuYWFq3Xx6vhPAIyuFEI=";
 
   # Tests need docker
   doCheck = false;
 
   ldflags = [
-    "-X github.com/aler9/rtsp-simple-server/internal/core.version=v${version}"
+    "-X github.com/aler9/mediamtx/internal/core.version=v${version}"
   ];
 
   meta = with lib; {
@@ -29,7 +29,7 @@ buildGoModule rec {
     ;
     inherit (src.meta) homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [ ];
   };
 
 }

@@ -1131,7 +1131,7 @@
   ./services/video/epgstation/default.nix
   ./services/video/mirakurun.nix
   ./services/video/replay-sorcery.nix
-  ./services/video/rtsp-simple-server.nix
+  ./services/video/mediamtx.nix
   ./services/video/unifi-video.nix
   ./services/video/v4l2-relayd.nix
   ./services/wayland/cage.nix
