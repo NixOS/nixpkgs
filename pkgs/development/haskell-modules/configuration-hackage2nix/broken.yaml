@@ -1744,7 +1744,6 @@ broken-packages:
   - ghc-clippy-plugin
   - ghc-core-smallstep
   - ghc-datasize
-  - ghc-debug-client
   - ghc-dump-tree
   - ghc-dup
   - ghc-events-analyze
