@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook
+    perl
   ];
 
   buildInputs = [
@@ -44,7 +45,6 @@ stdenv.mkDerivation rec {
     enchant
     wv
     libjpeg
-    perl
     boost
     libxslt
     goffice
