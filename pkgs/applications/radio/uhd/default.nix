@@ -121,8 +121,6 @@ stdenv.mkDerivation rec {
   patches = [
     # Disable tests that fail in the sandbox
     ./no-adapter-tests.patch
-  ] ++ lib.optionals stdenv.isAarch32 [
-    ./neon.patch
   ];
 
   postPhases = [ "installFirmware" "removeInstalledTests" ]
