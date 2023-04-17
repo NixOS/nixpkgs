@@ -53,6 +53,8 @@ let
 
       # https://github.com/root-project/root/commit/286d96b12aad8688b9d8e4b3b5df843dcfb716a8
       ./fix-llvm-dylib-usage.patch
+
+      ./force-install-cling-targets.patch
     ];
 
     nativeBuildInputs = [ python3 git cmake ];
