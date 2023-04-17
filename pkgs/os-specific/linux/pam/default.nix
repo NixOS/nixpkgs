@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./suid-wrapper-path.patch ];
 
-  outputs = [ "out" "doc" "man" /* "modules" */ ];
+  outputs = [ "out" "dev" "doc" "man" /* "modules" */ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ flex ]
