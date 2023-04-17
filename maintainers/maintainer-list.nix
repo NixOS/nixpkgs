@@ -6667,6 +6667,12 @@
     githubId = 54999;
     name = "Ariel Nunez";
   };
+  ionutnechita = {
+    email = "ionut_n2001@yahoo.com";
+    github = "ionutnechita";
+    githubId = 9405900;
+    name = "Ionut Nechita";
+  };
   iopq = {
     email = "iop_jr@yahoo.com";
     github = "iopq";
@@ -13021,6 +13027,12 @@
     email = "jeffrey.lau@ribose.com";
     github = "ribose-jeffreylau";
     githubId = 2649467;
+  };
+  ricarch97 = {
+    email = "ricardo.steijn97@gmail.com";
+    github = "RicArch97";
+    githubId = 61013287;
+    name = "Ricardo Steijn";
   };
   richardipsum = {
     email = "richardipsum@fastmail.co.uk";

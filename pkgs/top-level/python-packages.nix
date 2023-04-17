@@ -5337,6 +5337,8 @@ self: super: with self; {
 
   korean-lunar-calendar = callPackage ../development/python-modules/korean-lunar-calendar { };
 
+  kornia = callPackage ../development/python-modules/kornia { };
+
   krakenex = callPackage ../development/python-modules/krakenex { };
 
   kubernetes = callPackage ../development/python-modules/kubernetes { };
@@ -8197,6 +8199,8 @@ self: super: with self; {
   pydrive2 = callPackage ../development/python-modules/pydrive2 { };
 
   pydroid-ipcam = callPackage ../development/python-modules/pydroid-ipcam  { };
+
+  pydruid = callPackage ../development/python-modules/pydruid { };
 
   pydsdl = callPackage ../development/python-modules/pydsdl { };
 
