@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://honggfuzz.dev/";
     license = lib.licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ cpu chivay ];
   };
 }
