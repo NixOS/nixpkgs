@@ -198,5 +198,27 @@ in buildPythonPackage {
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    knownVulnerabilities = optionals (versionOlder packages.version "2.12.0") [
+      "CVE-2023-27579"
+      "CVE-2023-25801"
+      "CVE-2023-25676"
+      "CVE-2023-25675"
+      "CVE-2023-25674"
+      "CVE-2023-25673"
+      "CVE-2023-25671"
+      "CVE-2023-25670"
+      "CVE-2023-25669"
+      # already fixed in 2.10.1 https://github.com/tensorflow/tensorflow/commit/1c2e7f425529ce166f597b512e3bf524f34cda1a
+      #"CVE-2023-25668"
+      "CVE-2023-25667"
+      "CVE-2023-25665"
+      "CVE-2023-25666"
+      "CVE-2023-25664"
+      "CVE-2023-25663"
+      "CVE-2023-25662"
+      "CVE-2023-25660"
+      "CVE-2023-25659"
+      "CVE-2023-25658"
+    ];
   };
 }
