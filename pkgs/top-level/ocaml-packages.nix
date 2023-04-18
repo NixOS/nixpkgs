@@ -1211,6 +1211,8 @@ let
 
     omd = callPackage ../development/ocaml-modules/omd { };
 
+    opam-client = callPackage ../development/ocaml-modules/opam-client { };
+
     opam-core = callPackage ../development/ocaml-modules/opam-core {
       inherit (pkgs) opam unzip;
     };
