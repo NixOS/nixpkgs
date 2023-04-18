@@ -79,6 +79,11 @@ runCommand
           local var="$1"; shift
           local propagatedBuildInputsFiles=("$@")
 
+          # Emacs isn't an Emacs package:
+          if [ "$pkg" = "$emacs" ]; then
+            return
+          fi
+
           # TODO(@Ericson2314): Restore using associative array once Darwin
           # nix-shell doesn't use impure bash. This should replace the O(n)
           # case with an O(1) hash map lookup, assuming bash is implemented
