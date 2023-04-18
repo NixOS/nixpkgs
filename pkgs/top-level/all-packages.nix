@@ -1592,6 +1592,8 @@ with pkgs;
     buildGoModule = buildGo119Module; # go 1.20 build failure
   };
 
+  monica = callPackage ../servers/web-apps/monica { };
+
   mprocs = callPackage ../tools/misc/mprocs { };
 
   mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
@@ -7428,6 +7430,8 @@ with pkgs;
     zig = zig_0_9;
   };
 
+  fingerprintx = callPackage ../tools/security/fingerprintx { };
+
   bsd-finger = callPackage ../tools/networking/bsd-finger { };
   bsd-fingerd = bsd-finger.override({ buildClient = false; });
 
@@ -8585,6 +8589,8 @@ with pkgs;
   inetutils = callPackage ../tools/networking/inetutils { };
 
   inferno = callPackage ../development/tools/inferno { };
+
+  infisical = callPackage ../development/tools/infisical { };
 
   inform6 = callPackage ../development/compilers/inform6 { };
 
@@ -11845,6 +11851,8 @@ with pkgs;
   rss2email = callPackage ../applications/networking/feedreaders/rss2email {
     pythonPackages = python3Packages;
   };
+
+  feed2imap-go = callPackage ../applications/networking/feedreaders/feed2imap-go { };
 
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
 
@@ -21656,6 +21664,8 @@ with pkgs;
 
   libmaxminddb = callPackage ../development/libraries/libmaxminddb { };
 
+  libmcfp = callPackage ../development/libraries/libmcfp { };
+
   libmcrypt = callPackage ../development/libraries/libmcrypt { };
 
   libmediaart = callPackage ../development/libraries/libmediaart { };
@@ -23418,6 +23428,8 @@ with pkgs;
   round = callPackage ../applications/graphics/round { };
 
   ronn = callPackage ../development/tools/ronn { };
+
+  router = callPackage ../servers/http/router { };
 
   rover = callPackage ../development/tools/rover { };
 
@@ -38275,6 +38287,8 @@ with pkgs;
   cups-brother-hl3140cw = pkgsi686Linux.callPackage ../misc/cups/drivers/hl3140cw { };
 
   cups-brother-hll2340dw = pkgsi686Linux.callPackage  ../misc/cups/drivers/hll2340dw { };
+
+  cups-brother-hll3230cdw = pkgsi686Linux.callPackage  ../misc/cups/drivers/hll3230cdw { };
 
   cups-brother-hll2350dw = callPackage  ../misc/cups/drivers/hll2350dw { };
 

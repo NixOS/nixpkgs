@@ -1535,6 +1535,8 @@ self: super: with self; {
 
   bytecode = callPackage ../development/python-modules/bytecode { };
 
+  bytewax = callPackage ../development/python-modules/bytewax { };
+
   bz2file = callPackage ../development/python-modules/bz2file { };
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
@@ -2693,6 +2695,8 @@ self: super: with self; {
 
   django-paintstore = callPackage ../development/python-modules/django-paintstore { };
 
+  django-parler = callPackage ../development/python-modules/django-parler { };
+
   django-pattern-library = callPackage ../development/python-modules/django-pattern-library { };
 
   django-payments = callPackage ../development/python-modules/django-payments { };
@@ -2711,9 +2715,11 @@ self: super: with self; {
 
   django-q = callPackage ../development/python-modules/django-q { };
 
-  django-scopes = callPackage ../development/python-modules/django-scopes { };
+  django-scheduler = callPackage ../development/python-modules/django-scheduler { };
 
   django-scim2 = callPackage ../development/python-modules/django-scim2 { };
+
+  django-scopes = callPackage ../development/python-modules/django-scopes { };
 
   djangoql = callPackage ../development/python-modules/djangoql { };
 
