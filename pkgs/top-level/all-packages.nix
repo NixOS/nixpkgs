@@ -21665,6 +21665,8 @@ with pkgs;
 
   libmaxminddb = callPackage ../development/libraries/libmaxminddb { };
 
+  libmcfp = callPackage ../development/libraries/libmcfp { };
+
   libmcrypt = callPackage ../development/libraries/libmcrypt { };
 
   libmediaart = callPackage ../development/libraries/libmediaart { };
