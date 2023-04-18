@@ -8,6 +8,12 @@ let
   {
     inherit ocaml;
 
+    ### 0 ###
+
+    "0install" = callPackage ../development/ocaml-modules/0install {
+        inherit (self) "0install-solver";
+    };
+
     ### A ###
 
     afl-persistent = callPackage ../development/ocaml-modules/afl-persistent { };
