@@ -49,24 +49,51 @@ in {
         When set to `server` or `both`, IP forwarding will be enabled.
       '';
     };
+
+    extraFlags = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "--no-logs-no-support" ];
+      description = lib.mdDoc "Extra command line arguments passed to tailscaled";
+    };
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
-      wantedBy = [ "multi-user.target" ];
+      description = "Tailscale node agent";
+      documentation = [ "https://tailscale.com/kb/" ];
+      wants = [ "network-pre.target" ];
+      after = [ "network-pre.target" "NetworkManager.service" "systemd-resolved.service" ];
+
       path = [
         config.networking.resolvconf.package # for configuring DNS in some configs
         pkgs.procps     # for collecting running services (opt-in feature)
         pkgs.glibc      # for `getent` to look up user shells
       ];
-      serviceConfig.Environment = [
-        "PORT=${toString cfg.port}"
-        ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''
-      ] ++ (lib.optionals (cfg.permitCertUid != null) [
-        "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
-      ]);
+
+      environment = lib.optionalAttrs (cfg.permitCertUid != null) {
+       TS_PERMIT_CERT_UID = cfg.permitCertUid;
+      };
+
+      serviceConfig = {
+        ExecStartPre = "${cfg.package}/bin/tailscaled --cleanup ${toString cfg.extraFlags}";
+        ExecStart = "${cfg.package}/bin/tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/run/tailscale/tailscaled.sock --port=${toString cfg.port} --tun=${lib.escapeShellArg cfg.interfaceName} ${toString cfg.extraFlags}";
+        ExecStopPost = "${cfg.package}/bin/tailscaled --cleanup ${toString cfg.extraFlags}";
+
+        Restart = "on-failure";
+        RuntimeDirectory = "tailscale";
+        RuntimeDirectoryMode = "0755";
+        StateDirectory = "tailscale";
+        StateDirectoryMode = "0700";
+        CacheDirectory = "tailscale";
+        CacheDirectoryMode = "0750";
+        Type = "notify";
+      };
+
+      wantedBy = [ "multi-user.target" ];
+
       # Restart tailscaled with a single `systemctl restart` at the
       # end of activation, rather than a `stop` followed by a later
       # `start`. Activation over Tailscale can hang for tens of
