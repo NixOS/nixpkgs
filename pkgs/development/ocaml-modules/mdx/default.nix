@@ -6,14 +6,14 @@
 
 buildDunePackage rec {
   pname = "mdx";
-  version = "2.2.1";
+  version = "2.3.0";
 
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/realworldocaml/mdx/releases/download/${version}/mdx-${version}.tbz";
-    hash = "sha256-8J7XM/5EYWBfApdzdIpjU9Ablb5l65hrzOF9bdr1Cdg=";
+    hash = "sha256-MqCDmBAK/S0ueYi8O0XJtplxJx96twiFHe04Q8lHBmE=";
   };
 
   nativeBuildInputs = [ cppo ];
