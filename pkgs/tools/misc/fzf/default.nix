@@ -82,6 +82,12 @@ buildGoModule rec {
     echo $out/share/fzf
     SCRIPT
     chmod +x $out/bin/fzf-share
+
+    # Use full path of output in the scripts.
+    substituteInPlace $out/share/fzf/completion.* $out/share/fzf/key-bindings.* \
+      --replace "\"fzf\"" "\"$out/bin/fzf\"" \
+      --replace "fzf-tmux " "$out/bin/fzf-tmux " \
+      --replace "fzf " "$out/bin/fzf "
   '';
 
   passthru.tests.version = testers.testVersion {
