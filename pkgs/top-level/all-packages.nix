@@ -14550,7 +14550,13 @@ with pkgs;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   })
     crystal_1_2
-    crystal_1_7
+    crystal_1_7;
+
+  inherit (callPackages ../development/compilers/crystal {
+    llvmPackages = llvmPackages_15;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  })
+    crystal_1_8
     crystal;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
