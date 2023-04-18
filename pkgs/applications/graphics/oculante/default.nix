@@ -17,6 +17,7 @@
 , gtk3
 , darwin
 , perl
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,6 +34,17 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
   };
+
+  patches = [
+    # The commit below removes a hack that had been forcing X11,
+    # even if the user explicitly set `WINIT_UNIX_BACKEND=wayland`!
+    # The commit, which is merged upstream but unreleased, removes
+    # that hack.
+    (fetchpatch {
+      url = "https://github.com/woelper/oculante/commit/6ee60dec0bd430970b3dee9508b4cbaa325c5892.patch";
+      hash = "sha256-gvZ3ILsJqAA9x3f39sK7qltGbsu6/3XD8t8/QApJdRI=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
