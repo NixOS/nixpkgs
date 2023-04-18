@@ -361,6 +361,6 @@ stdenv.mkDerivation rec {
     '';
     license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
   };
 }
