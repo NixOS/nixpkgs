@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     homepage = "https://phpunit.de";
     changelog = "https://github.com/sebastianbergmann/phpunit/blob/${version}/ChangeLog-${lib.versions.majorMinor version}.md";
     maintainers = with maintainers; [ onny ] ++ teams.php.members;
+    platforms = platforms.all;
   };
 }
