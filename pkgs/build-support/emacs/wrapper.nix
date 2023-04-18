@@ -59,7 +59,7 @@ runCommand
   (appendToName "with-packages" emacs).name
   {
     nativeBuildInputs = [ emacs lndir makeWrapper ];
-    inherit emacs explicitRequires;
+    inherit emacs explicitRequires lndir;
 
     preferLocalBuild = true;
     allowSubstitutes = false;
@@ -114,6 +114,7 @@ runCommand
           done
         }
         mkdir -p $out/bin
+        mkdir -p $out/share/info
         mkdir -p $out/share/emacs/site-lisp
         ${optionalString nativeComp ''
           mkdir -p $out/share/emacs/native-lisp
@@ -141,6 +142,7 @@ runCommand
 
         linkEmacsPackage() {
           linkPath "$1" "bin" "bin"
+          linkPath "$1" "share/info" "share/info"
           linkPath "$1" "share/emacs/site-lisp" "share/emacs/site-lisp"
           ${optionalString nativeComp ''
             linkPath "$1" "share/emacs/native-lisp" "share/emacs/native-lisp"
@@ -240,7 +242,13 @@ runCommand
 
     mkdir -p $out/share
     # Link icons and desktop files into place
-    for dir in applications icons info man emacs; do
+    for dir in applications icons man emacs; do
       ln -s $emacs/share/$dir $out/share/$dir
     done
+
+    # Link info files from both Emacs and its packages:
+    mkdir $out/share/info
+    $lndir/bin/lndir -silent "$emacs/share/info" "$out/share/info"
+    $lndir/bin/lndir -silent "$deps/share/info" "$out/share/info"
+    unlink "$out/share/info/dir"
   ''

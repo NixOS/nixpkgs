@@ -14,7 +14,7 @@
 , sigtool, jansson, harfbuzz, sqlite, nixosTests
 , recurseIntoAttrs, emacsPackagesFor
 , libgccjit, makeWrapper # native-comp params
-, fetchFromSavannah, fetchFromBitbucket
+, fetchFromSavannah, fetchFromBitbucket, callPackage
 
   # macOS dependencies for NS and macPort
 , AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
@@ -253,7 +253,10 @@ in
     inherit nativeComp;
     treeSitter = withTreeSitter;
     pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
-    tests = { inherit (nixosTests) emacs-daemon; };
+    tests = {
+      inherit (nixosTests) emacs-daemon;
+      with-packages = callPackage ./test/with-packages.nix { };
+    };
   };
 
   meta = with lib; {
