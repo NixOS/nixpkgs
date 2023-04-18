@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "radian";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
     rev = "v${version}";
-    sha256 = "QEHVdyVgsZxvs+d+xeeJqwx531+6e0uPi1J3t+hJ0d0=";
+    sha256 = "iuD4EkGZ1GwNxR8Gpg9ANe3lMHJYZ/Q/RyuN6vZZWME=";
   };
 
   postPatch = ''
