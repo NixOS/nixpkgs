@@ -55,9 +55,14 @@ let
         qt5compat
         qtcharts
         qtconnectivity
+        qtdatavis3d
         qtdeclarative
         qtdoc
+        qtgrpc
+        qthttpserver
         qtimageformats
+        qtlanguageserver
+        qtlocation
         qtlottie
         qtmultimedia
         qtnetworkauth
@@ -66,7 +71,12 @@ let
         qtserialbus
         qtserialport
         qtshadertools
+        qtspeech
         qtquick3d
+        qtquick3dphysics
+        qtquickeffectmaker
+        qtquicktimeline
+        qtremoteobjects
         qtsvg
         qtscxml
         qttools
@@ -87,9 +97,11 @@ let
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
+      qtgrpc = callPackage ./modules/qtgrpc.nix { };
       qthttpserver = callPackage ./modules/qthttpserver.nix { };
       qtimageformats = callPackage ./modules/qtimageformats.nix { };
       qtlanguageserver = callPackage ./modules/qtlanguageserver.nix { };
+      qtlocation = callPackage ./modules/qtlocation.nix { };
       qtlottie = callPackage ./modules/qtlottie.nix { };
       qtmultimedia = callPackage ./modules/qtmultimedia.nix {
         inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
@@ -106,6 +118,7 @@ let
       };
       qtquick3d = callPackage ./modules/qtquick3d.nix { };
       qtquick3dphysics = callPackage ./modules/qtquick3dphysics.nix { };
+      qtquickeffectmaker = callPackage ./modules/qtquickeffectmaker.nix { };
       qtquicktimeline = callPackage ./modules/qtquicktimeline.nix { };
       qtremoteobjects = callPackage ./modules/qtremoteobjects.nix { };
       qtsvg = callPackage ./modules/qtsvg.nix { };

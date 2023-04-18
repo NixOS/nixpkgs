@@ -515,6 +515,7 @@
   ./services/hardware/usbrelayd.nix
   ./services/hardware/vdr.nix
   ./services/hardware/keyd.nix
+  ./services/home-automation/esphome.nix
   ./services/home-automation/evcc.nix
   ./services/home-automation/home-assistant.nix
   ./services/home-automation/zigbee2mqtt.nix
