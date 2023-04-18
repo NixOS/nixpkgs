@@ -73,7 +73,7 @@ with python3.pkgs; buildPythonApplication rec {
   # Install udev rules into a separate output so all of platformio-core is not a dependency if
   # you want to use the udev rules on NixOS but not install platformio in your system packages.
   postInstall = ''
-    mkdir -p $udev/lib/udev/rules.d/99-platformio-udev.rules
+    mkdir -p $udev/lib/udev/rules.d
     cp platformio/assets/system/99-platformio-udev.rules $udev/lib/udev/rules.d/99-platformio-udev.rules
   '';
 
