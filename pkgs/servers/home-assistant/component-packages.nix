@@ -671,6 +671,7 @@
       pyserial
       pyudev
       scapy
+      securetar
       sqlalchemy
       zeroconf
     ];
