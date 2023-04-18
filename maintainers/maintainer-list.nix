@@ -11652,6 +11652,12 @@
     githubId = 11016164;
     name = "Fedor Pakhomov";
   };
+  pallix = {
+    email = "pierre.allix.work@gmail.com";
+    github = "pallix";
+    githubId = 676838;
+    name = "Pierre Allix";
+  };
   paluh = {
     email = "paluho@gmail.com";
     github = "paluh";
