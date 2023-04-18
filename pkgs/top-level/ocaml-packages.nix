@@ -14,6 +14,10 @@ let
         inherit (self) "0install-solver";
     };
 
+    "0install-solver" = callPackage ../development/ocaml-modules/0install/solver.nix {
+        inherit (self) "0install";
+    };
+
     ### A ###
 
     afl-persistent = callPackage ../development/ocaml-modules/afl-persistent { };
