@@ -4,7 +4,6 @@
 , ninja
 , pkg-config
 , python3
-, hotdoc
 , gst-plugins-base
 , orc
 , gettext
@@ -21,6 +20,8 @@
 , CoreFoundation
 , DiskArbitration
 , enableGplPlugins ? true
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {
@@ -40,8 +41,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     python3
-
-    # documentation
+  ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
   ] ++ (if enableGplPlugins then [
     "-Dgpl=enabled"
   ] else [

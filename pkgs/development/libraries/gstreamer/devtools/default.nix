@@ -10,8 +10,9 @@
 , gst-rtsp-server
 , python3
 , gobject-introspection
-, hotdoc
 , json-glib
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {
@@ -37,8 +38,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gobject-introspection
-
-    # documentation
+  ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     gst-plugins-base
     gst-plugins-bad
     gst-rtsp-server
+  ];
+
+  mesonFlags = [
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   meta = with lib; {

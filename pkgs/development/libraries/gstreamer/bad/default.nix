@@ -11,7 +11,6 @@
 , orc
 , gstreamer
 , gobject-introspection
-, hotdoc
 , enableZbar ? false
 , faacSupport ? false
 , faac
@@ -101,6 +100,8 @@
 , MediaToolbox
 , enableGplPlugins ? true
 , bluezSupport ? stdenv.isLinux
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {
@@ -131,8 +132,7 @@ stdenv.mkDerivation rec {
     gettext
     gstreamer # for gst-tester-1.0
     gobject-introspection
-
-    # documentation
+  ] ++ lib.optionals enableDocumentation [
     hotdoc
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
@@ -287,6 +287,7 @@ stdenv.mkDerivation rec {
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
+    (lib.mesonEnable "doc" enableDocumentation)
   ]
   ++ lib.optionals (!stdenv.isLinux) [
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
