@@ -1221,6 +1221,10 @@ let
 
     omd = callPackage ../development/ocaml-modules/omd { };
 
+    opam-0install = callPackage ../development/ocaml-modules/opam-0install {
+        inherit (self) "0install-solver";
+    };
+
     opam-client = callPackage ../development/ocaml-modules/opam-client { };
 
     opam-core = callPackage ../development/ocaml-modules/opam-core {
