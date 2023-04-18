@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library that wraps the Orthanc REST API";
     homepage = "https://github.com/gacou54/pyorthanc";
+    changelog = "https://github.com/gacou54/pyorthanc/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };
