@@ -23438,6 +23438,8 @@ with pkgs;
 
   ronn = callPackage ../development/tools/ronn { };
 
+  router = callPackage ../servers/http/router { };
+
   rover = callPackage ../development/tools/rover { };
 
   rqlite = callPackage ../servers/sql/rqlite { };
