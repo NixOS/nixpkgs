@@ -12,10 +12,14 @@
 , help2man
 , glib
 , python3
+, mesonEmulatorHook
 , libgudev
 , bash-completion
 , libmbim
 , libqrtr-glib
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +27,7 @@ stdenv.mkDerivation rec {
   version = "1.32.2";
 
   outputs = [ "out" "dev" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+    ++ lib.optional withIntrospection "devdoc";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -46,31 +50,38 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    gobject-introspection
     python3
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+  ] ++ lib.optionals withMan [
+    help2man
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-    help2man
+  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
-    libgudev
     bash-completion
     libmbim
+  ] ++ lib.optionals withIntrospection [
+    libgudev
   ];
 
   propagatedBuildInputs = [
     glib
+  ] ++ lib.optionals withIntrospection [
     libqrtr-glib
   ];
 
   mesonFlags = [
     "-Dudevdir=${placeholder "out"}/lib/udev"
-    (lib.mesonBool "gtk_doc" (stdenv.buildPlatform == stdenv.hostPlatform))
-    (lib.mesonBool "introspection" (stdenv.buildPlatform == stdenv.hostPlatform))
-    (lib.mesonBool "man" (stdenv.buildPlatform == stdenv.hostPlatform))
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonBool "introspection" withIntrospection)
+    (lib.mesonBool "man" withMan)
+    (lib.mesonBool "qrtr" withIntrospection)
+    (lib.mesonBool "udev" withIntrospection)
   ];
 
   doCheck = true;
