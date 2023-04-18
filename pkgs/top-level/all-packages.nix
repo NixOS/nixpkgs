@@ -11839,6 +11839,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  feed2imap-go = callPackage ../applications/networking/feedreaders/feed2imap-go { };
+
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
