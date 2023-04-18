@@ -421,6 +421,8 @@ with pkgs;
 
   circt = callPackage ../development/compilers/circt { };
 
+  cinc-client = callPackage ../tools/misc/cinc-client { };
+
   classicube = callPackage ../games/classicube { };
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
