@@ -59,7 +59,7 @@ appimageTools.wrapType2 {
     alsa-lib
     at-spi2-core
     cups
-    libxcrypt
+    libxcrypt-legacy
   ];
 
   meta = with lib; {
