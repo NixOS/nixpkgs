@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     goffice
   ];
 
+  strictDeps = true;
   enableParallelBuilding = true;
 
   meta = with lib; {
