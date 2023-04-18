@@ -532,6 +532,11 @@ with prev;
       make all
     '';
   });
+
+  vstruct = prev.vstruct.overrideAttrs (_: {
+    meta.broken = (luaOlder "5.1" || luaAtLeast "5.3");
+  });
+
   vusted = prev.vusted.overrideAttrs (_: {
     # make sure vusted_entry.vim doesn't get wrapped
     postInstall = ''
