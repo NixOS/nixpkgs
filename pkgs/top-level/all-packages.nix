@@ -2572,6 +2572,9 @@ with pkgs;
   microcom = callPackage ../applications/terminal-emulators/microcom { };
 
   mlterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/mlterm { };
+  mlterm-wayland = mlterm.override {
+    enableX11 = false;
+  };
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
 
