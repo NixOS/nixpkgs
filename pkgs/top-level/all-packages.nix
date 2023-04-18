@@ -22000,7 +22000,7 @@ with pkgs;
 
   libosmium = callPackage ../development/libraries/libosmium { };
 
-  libosmocore = callPackage ../applications/misc/libosmocore { };
+  libosmocore = callPackage ../servers/osmocom/libosmocore { };
 
   libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
 
