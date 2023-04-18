@@ -1,4 +1,4 @@
-From 5bd3672c7870b2e46e2a734dc9a9cb1837375a1c Mon Sep 17 00:00:00 2001
+From 4e8c14f1af9c332826e0454f4fd63e541edbaf5c Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Tue, 21 Mar 2023 15:48:49 +0800
 Subject: [PATCH 5/6] qtbase: deal with a font face at index 0 as Regular for
@@ -10,10 +10,10 @@ Reference: https://bugreports.qt.io/browse/QTBUG-111994
  1 file changed, 1 insertion(+)
 
 diff --git a/src/gui/text/unix/qfontconfigdatabase.cpp b/src/gui/text/unix/qfontconfigdatabase.cpp
-index 9b60cf2963..5a42ef6a68 100644
+index 474644b871f..c7a117fd134 100644
 --- a/src/gui/text/unix/qfontconfigdatabase.cpp
 +++ b/src/gui/text/unix/qfontconfigdatabase.cpp
-@@ -554,6 +554,7 @@ void QFontconfigDatabase::populateFontDatabase()
+@@ -556,6 +556,7 @@ void QFontconfigDatabase::populateFontDatabase()
              FcObjectSetAdd(os, *p);
              ++p;
          }
