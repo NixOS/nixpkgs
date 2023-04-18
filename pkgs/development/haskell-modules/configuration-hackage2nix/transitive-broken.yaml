@@ -933,6 +933,7 @@ dont-distribute-packages:
  - categorical-algebra
  - category
  - category-extras
+ - cattrap
  - cctools-workqueue
  - cef3-simple
  - ceilometer-common
