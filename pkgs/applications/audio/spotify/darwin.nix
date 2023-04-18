@@ -3,10 +3,11 @@
 , meta
 , fetchurl
 , undmg
+, lib
 }:
 
 stdenv.mkDerivation {
-  inherit pname meta;
+  inherit pname;
 
   version = "1.1.97.962.g24733a46";
 
@@ -29,4 +30,8 @@ stdenv.mkDerivation {
     mkdir -p $out/Applications
     cp -r *.app $out/Applications
   '';
+
+  meta = meta // {
+    maintainers = with lib.maintainers; [ Enzime ];
+  };
 }

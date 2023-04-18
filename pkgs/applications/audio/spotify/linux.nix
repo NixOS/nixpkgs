@@ -71,7 +71,7 @@ let
 in
 
 stdenv.mkDerivation {
-  inherit pname version meta;
+  inherit pname version;
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
   # That is a bit more cumbersome. But the debian repository only keeps the last
@@ -170,4 +170,8 @@ stdenv.mkDerivation {
 
       runHook postInstall
     '';
+
+  meta = meta // {
+    maintainers = with lib.maintainers; [ eelco ftrvxmtrx sheenobu timokau ma27 ];
+  };
 }
