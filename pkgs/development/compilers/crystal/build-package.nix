@@ -150,6 +150,9 @@ stdenv.mkDerivation (mkDerivationArgs // {
 
   installCheckPhase = args.installCheckPhase or ''
     for f in $out/bin/*; do
+      if [ $f == $out/bin/*.dwarf ]; then
+        continue
+      fi
       $f --help > /dev/null
     done
   '';
