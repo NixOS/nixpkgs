@@ -1225,6 +1225,10 @@ let
         inherit (self) "0install-solver";
     };
 
+    opam-0install-cudf = callPackage ../development/ocaml-modules/opam-0install/cudf.nix {
+        inherit (self) "0install-solver";
+    };
+
     opam-client = callPackage ../development/ocaml-modules/opam-client { };
 
     opam-core = callPackage ../development/ocaml-modules/opam-core {
