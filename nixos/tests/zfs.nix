@@ -80,6 +80,11 @@ let
             fsType = "zfs";
             options = [ "noauto" ];
           };
+          virtualisation.fileSystems."/manual/httpkey" = {
+            device = "manual/httpkey";
+            fsType = "zfs";
+            options = [ "noauto" ];
+          };
         };
 
         specialisation.forcepool.configuration = {
@@ -90,6 +95,19 @@ let
             device = "forcepool";
             fsType = "zfs";
             options = [ "noauto" ];
+          };
+        };
+
+        services.nginx = {
+          enable = true;
+          virtualHosts = {
+            localhost = {
+              locations = {
+                "/zfskey" = {
+                  return = ''200 "httpkeyabc"'';
+                };
+              };
+            };
           };
         };
       };
@@ -130,6 +148,8 @@ let
                 "zpool create -O mountpoint=legacy manual /dev/vdd1",
                 "echo otherpass | zfs create "
                 + "-o encryption=aes-256-gcm -o keyformat=passphrase manual/encrypted",
+                "zfs create -o encryption=aes-256-gcm -o keyformat=passphrase "
+                + "-o keylocation=http://localhost/zfskey manual/httpkey",
                 "bootctl set-default nixos-generation-1-specialisation-encryption.conf",
                 "sync",
                 "zpool export automatic",
@@ -141,10 +161,12 @@ let
             machine.send_console("password\n")
             machine.wait_for_unit("multi-user.target")
             machine.succeed(
-                "zfs get keystatus manual/encrypted | grep unavailable",
+                "zfs get -Ho value keystatus manual/encrypted | grep -Fx unavailable",
                 "echo otherpass | zfs load-key manual/encrypted",
                 "systemctl start manual-encrypted.mount",
-                "umount /automatic /manual/encrypted /manual",
+                "zfs load-key manual/httpkey",
+                "systemctl start manual-httpkey.mount",
+                "umount /automatic /manual/encrypted /manual/httpkey /manual",
                 "zpool destroy automatic",
                 "zpool destroy manual",
             )
