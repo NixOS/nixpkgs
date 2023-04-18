@@ -467,7 +467,6 @@ dont-distribute-packages:
  - algorithmic-composition-basic
  - algorithmic-composition-frequency-shift
  - algorithmic-composition-overtones
- - align-audio
  - alms
  - alpha
  - alsa-gui
@@ -698,7 +697,6 @@ dont-distribute-packages:
  - attoparsec-iteratee
  - attoparsec-text-enumerator
  - atuin
- - audacity
  - audiovisual
  - aura
  - authoring
@@ -762,7 +760,6 @@ dont-distribute-packages:
  - batching
  - battlenet-yesod
  - battleplace-api
- - battleship-combinatorics
  - battleships
  - bayes-stack
  - bbi
@@ -821,7 +818,6 @@ dont-distribute-packages:
  - bittorrent
  - bla
  - blakesum-demo
- - blas-comfort-array
  - blastxml
  - blatex
  - blaze-builder-enumerator
@@ -837,7 +833,6 @@ dont-distribute-packages:
  - bluetile
  - blunt
  - bno055-haskell
- - board-games
  - bogre-banana
  - boilerplate
  - bond
@@ -1032,10 +1027,6 @@ dont-distribute-packages:
  - columbia
  - columnar
  - comark
- - comfort-array
- - comfort-array-shape
- - comfort-fftw
- - comfort-glpk
  - commsec
  - commsec-keyexchange
  - comonad-random
@@ -2567,9 +2558,6 @@ dont-distribute-packages:
  - language-python-colour
  - language-qux
  - language-spelling
- - lapack
- - lapack-comfort-array
- - lapack-hmatrix
  - large-anon
  - lat
  - latex-formulae-hakyll
@@ -2618,7 +2606,6 @@ dont-distribute-packages:
  - lighttpd-conf
  - lighttpd-conf-qq
  - linear-accelerate
- - linear-circuit
  - linear-code
  - linearEqSolver
  - linearmap-category
@@ -2661,7 +2648,6 @@ dont-distribute-packages:
  - llvm-hs-pretty
  - llvm-pretty-bc-parser
  - llvm-tf
- - llvm-tools
  - lmonad-yesod
  - lnd-client
  - lnurl-authenticator
@@ -2714,7 +2700,6 @@ dont-distribute-packages:
  - macosx-make-standalone
  - magic-wormhole
  - magicbane
- - magico
  - mahoro
  - maid
  - mailgun
@@ -2774,7 +2759,6 @@ dont-distribute-packages:
  - metronome
  - micro-gateway
  - microformats2-types
- - midi-alsa
  - midimory
  - midisurface
  - mighttpd
@@ -2805,7 +2789,6 @@ dont-distribute-packages:
  - modulo
  - mole
  - monad-exception
- - monad-http
  - monad-metrics-extensible
  - monad-state
  - monad-stlike-stm
@@ -3405,7 +3388,6 @@ dont-distribute-packages:
  - representable-tries
  - reserve
  - resin
- - resistor-cube
  - resource-simple
  - rest-client
  - rest-core
@@ -3707,9 +3689,7 @@ dont-distribute-packages:
  - solr
  - sonic-visualiser
  - souffle-dsl
- - sound-collage
  - source-code-server
- - soxlib
  - sparkle
  - sparrow
  - sparsebit
@@ -3727,7 +3707,6 @@ dont-distribute-packages:
  - spice
  - spike
  - splines
- - split-record
  - sprinkles
  - sproxy
  - sproxy-web
@@ -3858,12 +3837,8 @@ dont-distribute-packages:
  - syntax-printer
  - syntaxnet-haskell
  - synthesizer
- - synthesizer-alsa
- - synthesizer-core
- - synthesizer-dimensional
  - synthesizer-filter
  - synthesizer-llvm
- - synthesizer-midi
  - sys-process
  - systemstats
  - t3-client
@@ -4216,7 +4191,6 @@ dont-distribute-packages:
  - wsjtx-udp
  - wtk-gtk
  - wu-wei
- - wuerfelschlange
  - wumpus-basic
  - wumpus-drawing
  - wumpus-microprint
