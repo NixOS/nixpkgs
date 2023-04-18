@@ -7892,8 +7892,13 @@ with pkgs;
   gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat;    # use config.packageOverrides if you prefer original gnupg1
+
+  gnupg22 = callPackage ../tools/security/gnupg/22.nix {
+    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry-gtk2;
+    libgcrypt = libgcrypt_1_8;
+  };
+
   gnupg24 = callPackage ../tools/security/gnupg/24.nix {
-    guiSupport = stdenv.isDarwin;
     pinentry = if stdenv.isDarwin then pinentry_mac else pinentry-gtk2;
   };
   gnupg = gnupg24;
@@ -21534,7 +21539,7 @@ with pkgs;
 
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
-  libgcrypt_1_5 = callPackage ../development/libraries/libgcrypt/1.5.nix { };
+  libgcrypt_1_8 = callPackage ../development/libraries/libgcrypt/1.8.nix { };
 
   libgdiplus = callPackage ../development/libraries/libgdiplus {
       inherit (darwin.apple_sdk.frameworks) Carbon;

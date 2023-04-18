@@ -5,18 +5,17 @@
 , enableMinimal ? false
 , withPcsc ? !enableMinimal, pcsclite
 , guiSupport ? stdenv.isDarwin, pinentry
-, withTpm2Tss ? !stdenv.isDarwin && !enableMinimal, tpm2-tss
 }:
 
 assert guiSupport -> enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.4.0";
+  version = "2.2.41";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    hash = "sha256-HXkVjdAdmSQx3S4/rLif2slxJ/iXhOosthDGAPsMFIM=";
+    hash = "sha256-E/MpEAel6FRvy3vAxmEM5EqqmzmVBZ1PgUW6Cf1b4+E=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -25,25 +24,25 @@ stdenv.mkDerivation rec {
     gettext libassuan libgcrypt libgpg-error libiconv libksba npth
   ] ++ lib.optionals (!enableMinimal) [
     adns bzip2 gnutls libusb1 openldap readline sqlite zlib
-  ] ++ lib.optionals withTpm2Tss [ tpm2-tss ];
+  ];
 
   patches = [
     ./fix-libusb-include-path.patch
     ./tests-add-test-cases-for-import-without-uid.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
-    ./24-allow-import-of-previously-known-keys-even-without-UI.patch
-    # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
-    ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
+    ./22-allow-import-of-previously-known-keys-even-without-UI.patch
   ];
 
   postPatch = ''
-    sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
+    sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' configure doc/dirmngr.texi doc/gnupg.info-1
+    # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
+    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
+    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
     '' + lib.optionalString (stdenv.isLinux && withPcsc) ''
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
     '';
 
   configureFlags = [
-    "--sysconfdir=/etc"
     "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
@@ -51,7 +50,6 @@ stdenv.mkDerivation rec {
     "--with-npth-prefix=${npth}"
   ]
   ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentry.binaryPath or "bin/pinentry"}"
-  ++ lib.optional withTpm2Tss "--with-tss=intel"
   ++ lib.optional stdenv.isDarwin "--disable-ccid-driver";
 
   postInstall = if enableMinimal
@@ -77,10 +75,7 @@ stdenv.mkDerivation rec {
       ln -s $f $out/bin/$(basename $f)
     done
 
-    for f in $out/libexec/; do
-      if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
-      ln -s $f $out/bin/$(basename $f)
-    done
+    ln -s -t $out/bin $out/libexec/*
   '';
 
   enableParallelBuilding = true;
@@ -89,7 +84,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gnupg.org";
-    description = "Modern release of the GNU Privacy Guard, a GPL OpenPGP implementation";
+    description = "LTS release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;
     longDescription = ''
       The GNU Privacy Guard is the GNU project's complete and free
