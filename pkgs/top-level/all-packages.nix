@@ -13757,6 +13757,8 @@ with pkgs;
 
   wdfs = callPackage ../tools/filesystems/wdfs { };
 
+  web-eid-app = libsForQt5.callPackage ../tools/security/web-eid-app { };
+
   wdiff = callPackage ../tools/text/wdiff { };
 
   wdisplays = callPackage ../tools/graphics/wdisplays { };
