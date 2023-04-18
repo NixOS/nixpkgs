@@ -1,4 +1,4 @@
-From f0017e872297168ab616096180891c7f312ef1a1 Mon Sep 17 00:00:00 2001
+From 61ae6e04388dd40e11c214d56f22f8f2007bf35f Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Wed, 12 Apr 2023 10:13:50 +0800
 Subject: [PATCH 6/6] qtbase: qt-cmake: always use cmake from path
@@ -10,7 +10,7 @@ during the build of qtbase, bloating the runtime closure of qtbase.
  1 file changed, 1 insertion(+), 6 deletions(-)
 
 diff --git a/bin/qt-cmake.in b/bin/qt-cmake.in
-index f719257f60..571ffe788f 100755
+index f719257f602..571ffe788fa 100755
 --- a/bin/qt-cmake.in
 +++ b/bin/qt-cmake.in
 @@ -4,12 +4,7 @@
