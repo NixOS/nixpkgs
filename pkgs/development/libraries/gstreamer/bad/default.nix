@@ -11,6 +11,7 @@
 , orc
 , gstreamer
 , gobject-introspection
+, hotdoc
 , enableZbar ? false
 , faacSupport ? false
 , faac
@@ -57,7 +58,7 @@
 , neon
 , openal
 , opencv4
-, openexr
+, openexr_3
 , openh264
 , libopenmpt
 , pango
@@ -80,6 +81,7 @@
 , libGLU
 , libGL
 , addOpenGLRunpath
+, gtk3
 , libintl
 , game-music-emu
 , openssl
@@ -92,6 +94,7 @@
 , VideoToolbox
 , AudioToolbox
 , AVFoundation
+, Cocoa
 , CoreMedia
 , CoreVideo
 , Foundation
@@ -102,13 +105,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.20.3";
+  version = "1.22.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-ehHBO1XdHSOG3ZAiGeQcv83ajh4Ko+c4GGyVB0s12k8=";
+    hash = "sha256-PY+vHONALIU1zjqMThpslg5LVlXb2mtVlD25rHkCLQ8=";
   };
 
   patches = [
@@ -128,6 +131,9 @@ stdenv.mkDerivation rec {
     gettext
     gstreamer # for gst-tester-1.0
     gobject-introspection
+
+    # documentation
+    hotdoc
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
   ];
@@ -164,7 +170,7 @@ stdenv.mkDerivation rec {
     neon
     openal
     opencv4
-    openexr
+    openexr_3
     openh264
     rtmpdump
     pango
@@ -177,6 +183,7 @@ stdenv.mkDerivation rec {
     gnutls
     libGL
     libGLU
+    gtk3
     game-music-emu
     openssl
     libxml2
@@ -233,6 +240,7 @@ stdenv.mkDerivation rec {
     VideoToolbox
     AudioToolbox
     AVFoundation
+    Cocoa
     CoreMedia
     CoreVideo
     Foundation
@@ -241,10 +249,11 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
     "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
 
+    "-Damfcodec=disabled" # Windows-only
     "-Davtp=disabled"
+    "-Ddirectshow=disabled" # Windows-only
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
@@ -280,6 +289,8 @@ stdenv.mkDerivation rec {
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
   ]
   ++ lib.optionals (!stdenv.isLinux) [
+    "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
+    "-Dnvcodec=disabled" # Linux-only
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
   ]
   ++ lib.optionals stdenv.isDarwin [
@@ -297,9 +308,12 @@ stdenv.mkDerivation rec {
     "-Dladspa=disabled" # requires lrdf
     "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
     "-Dwildmidi=disabled" # see dependencies above
+  ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64) [
+    "-Dqsv=disabled" # Linux (and Windows) x86 only
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
     "-Dgl=disabled"
   ] ++ lib.optionals (!gst-plugins-base.waylandEnabled) [
+    "-Dgtk3=disabled" # Wayland-based GTK sink
     "-Dwayland=disabled"
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
     # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
@@ -323,11 +337,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs \
       scripts/extract-release-date-from-doap-file.py
-
-    # upstream bumps this version check one minor version at a time
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/main/subprojects/gst-plugins-bad/ext/opencv/meson.build#L74
-    substituteInPlace ext/opencv/meson.build \
-      --replace '< 4.7.0' '< 5.0.0'
   '';
 
   # This package has some `_("string literal")` string formats

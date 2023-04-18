@@ -74,7 +74,8 @@ let
     # flask-sqlalchemy 2.5.1 is incompatible with sqlalchemy > 1.4.45
     sqlalchemy = prev.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
       version = "1.4.45";
-      src = oldAttrs.src.override {
+      src = prev.fetchPypi {
+        inherit (oldAttrs) pname;
         inherit version;
         hash = "sha256-/WmFCGAJOj9p/v4KtW0EHt/f4YUQtT2aLq7LovFfp5U=";
       };

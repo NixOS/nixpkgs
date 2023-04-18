@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, isPyPy
 , fetchFromGitHub
 , attrs
 , exceptiongroup
@@ -13,6 +14,7 @@
 , sphinx-rtd-theme
 , sphinx-hoverxref
 , sphinx-codeautolink
+, tzdata
 # Used to break internal dependency loop.
 , enableDocumentation ? true
 }:
@@ -65,6 +67,8 @@ buildPythonPackage rec {
     pexpect
     pytest-xdist
     pytestCheckHook
+  ] ++ lib.optionals (isPyPy) [
+    tzdata
   ];
 
   inherit doCheck;

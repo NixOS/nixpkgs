@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , python3
+, hotdoc
 , gstreamer
 , gst-plugins-base
 , gettext
@@ -16,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-libav";
-  version = "1.20.3";
+  version = "1.22.2";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-P+3RBWD836obZGLL95o4xOe1fX85A1k5P8DO9tvyff4=";
+    hash = "sha256-/Kr5h4/o87yCMX7xOhVYgky2jfH4loxnl/VWxeM7z/0=";
   };
 
   outputs = [ "out" "dev" ];
@@ -31,16 +32,15 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     python3
+
+    # documentation
+    hotdoc
   ];
 
   buildInputs = [
     gstreamer
     gst-plugins-base
     libav
-  ];
-
-  mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ];
 
   postPatch = ''

@@ -5,8 +5,10 @@
 , pkg-config
 , gst-plugins-base
 , bzip2
+, hotdoc
 , libva
 , wayland
+, wayland-protocols
 , libdrm
 , udev
 , xorg
@@ -21,17 +23,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gstreamer-vaapi";
-  version = "1.20.3";
+  version = "1.22.2";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-bumesxar3emtNwApFb2MOGeRj2/cdLfPKsTBrg1pC0U=";
+    hash = "sha256-0uZC+XRfl9n3On9Qhedlmpox/iCbd05uRdrgQbQ13wY=";
   };
 
   outputs = [
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
   ];
 
   nativeBuildInputs = [
@@ -40,9 +41,10 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     bzip2
+    wayland
 
     # documentation
-    # TODO add hotdoc here
+    hotdoc
   ];
 
   buildInputs = [
@@ -51,6 +53,7 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
     libva
     wayland
+    wayland-protocols
     libdrm
     udev
     xorg.libX11
@@ -65,9 +68,10 @@ stdenv.mkDerivation rec {
     libvpx
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ];
 
   postPatch = ''

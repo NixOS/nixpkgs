@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , python3
+, hotdoc
 , gettext
 , gobject-introspection
 , gst-plugins-base
@@ -13,17 +14,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.20.3";
+  version = "1.22.2";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-7kAnGL6bEn8OXmbKTBtPQuSSbsk7owe3zMpdxsyXlMo=";
+    hash = "sha256-K+Suz7iHEBAOpxFe0CFkA+gJQ0Tr8UYJQnG41Nc4KL8=";
   };
 
   outputs = [
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
   ];
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     python3
 
     # documentation
-    # TODO add hotdoc here
+    hotdoc
   ];
 
   buildInputs = [
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ];
 
   postPatch = ''

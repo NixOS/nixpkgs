@@ -44,6 +44,9 @@ let
   inherit (stdenv)
     buildPlatform hostPlatform targetPlatform;
 
+  # See https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903
+  disableBootstrap' = disableBootstrap && !langFortran;
+
   crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
 
@@ -217,7 +220,7 @@ let
     # TODO: aarch64-darwin has clang stdenv and its arch and cpu flag values are incompatible with gcc
     ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
-    ++ lib.optional disableBootstrap "--disable-bootstrap"
+    ++ lib.optional disableBootstrap' "--disable-bootstrap"
 
     # Platform-specific flags
     ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"

@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 , setuptools
 , setuptools-scm
@@ -13,6 +12,7 @@
 , hypothesis
 , mock
 , pytest-mock
+, pytest-xdist
 , pytestCheckHook
 , trio
 , trustme
@@ -55,6 +55,7 @@ buildPythonPackage rec {
     curio
     hypothesis
     pytest-mock
+    pytest-xdist
     pytestCheckHook
     trio
     trustme

@@ -11,6 +11,7 @@
 , six
 , isPyPy
 , cffi
+, pkg-config
 , pytestCheckHook
 , pytest-benchmark
 , pytest-subtests
@@ -28,26 +29,27 @@ let
 in
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "39.0.1"; # Also update the hash in vectors.nix
+  version = "40.0.1"; # Also update the hash in vectors.nix
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0fYZjubZFIQF5JiHgDkH/olioj5sb4PqfZjxwN43VpU=";
+    hash = "sha256-KAPy+LHpX2FEGZJsfm9V2CivxhTKXtYVQ4d65mjMNHI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-0x+KIqJznDEyIUqVuYfIESKmHBWfzirPeX2R/cWlngc=";
+    hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
   };
 
   cargoRoot = "src/rust";
 
   nativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
+    pkg-config
   ] ++ [
     rustPlatform.cargoSetupHook
     setuptools-rust

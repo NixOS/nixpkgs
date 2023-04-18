@@ -133,7 +133,7 @@ let
       wrapQtAppsHook = makeSetupHook
         {
           name = "wrap-qt6-apps-hook";
-          propagatedBuildInputs = [ buildPackages.makeWrapper ];
+          propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
         } ./hooks/wrap-qt-apps-hook.sh;
 
       qmake = makeSetupHook

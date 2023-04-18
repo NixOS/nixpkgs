@@ -168,7 +168,7 @@ stdenv.mkDerivation rec {
     "-Dvulkan=enabled"
   ] ++ lib.optionals (!cupsSupport) [
     "-Dprint-cups=disabled"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
   ] ++ lib.optionals (!x11Support) [
     "-Dx11-backend=false"
