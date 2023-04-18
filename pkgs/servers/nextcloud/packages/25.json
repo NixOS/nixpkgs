@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "0hda62j3n2rs59d1rlnd20y20dahhkcs3zlhly7nw3s8csyd1whl",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.3.2/calendar-v4.3.2.tar.gz",
-    "version": "4.3.2",
+    "sha256": "0xhrpadzz73rdjyk4y1xm5hwc6k104rlpp9nmw08pq8phpfs12qa",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.3.3/calendar-v4.3.3.tar.gz",
+    "version": "4.3.3",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -60,9 +60,9 @@
     ]
   },
   "groupfolders": {
-    "sha256": "1khzwqlzndkcpmwcv841l0fl3bg469ify0kcdgz9i5x2l2m5b5l9",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v13.1.1/groupfolders-v13.1.1.tar.gz",
-    "version": "13.1.1",
+    "sha256": "1qvzlqislzzpz6knhdd8xnpd3psrq6xf61j25rnpsn7jd5qg5za7",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v13.1.2/groupfolders-v13.1.2.tar.gz",
+    "version": "13.1.2",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -100,9 +100,9 @@
     ]
   },
   "news": {
-    "sha256": "0l8ps13y00hq3xh1w874f3zx73gpmi4jxd3gzwhggx1r495gxqbh",
-    "url": "https://github.com/nextcloud/news/releases/download/21.2.0-beta2/news.tar.gz",
-    "version": "21.2.0-beta2",
+    "sha256": "1zyn6rs24f5dsb4z65dzx2mdkw8gy8n3adk9dgyyd4cjjhhixhsm",
+    "url": "https://github.com/nextcloud/news/releases/download/21.2.0-beta3/news.tar.gz",
+    "version": "21.2.0-beta3",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
@@ -140,9 +140,9 @@
     ]
   },
   "polls": {
-    "sha256": "0g5fq9ls7fvcgh0nhpsc8b6ca5vnsisqzpnyq5bcw8bmhnznzj7g",
-    "url": "https://github.com/nextcloud/polls/releases/download/v5.0.0-rc2/polls.tar.gz",
-    "version": "5.0.0-rc2",
+    "sha256": "0aqm4wq10py8s6l36yqaa5zsqk7n3wr663zw521ckir5877md86w",
+    "url": "https://github.com/nextcloud/polls/releases/download/v5.0.0/polls.tar.gz",
+    "version": "5.0.0",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
