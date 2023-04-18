@@ -5336,6 +5336,8 @@ self: super: with self; {
 
   jaxopt = callPackage ../development/python-modules/jaxopt { };
 
+  jaxtyping = callPackage ../development/python-modules/jaxtyping { };
+
   jaydebeapi = callPackage ../development/python-modules/jaydebeapi { };
 
   jc = callPackage ../development/python-modules/jc { };
