@@ -7425,6 +7425,8 @@ with pkgs;
     zig = zig_0_9;
   };
 
+  fingerprintx = callPackage ../tools/security/fingerprintx { };
+
   bsd-finger = callPackage ../tools/networking/bsd-finger { };
   bsd-fingerd = bsd-finger.override({ buildClient = false; });
 
