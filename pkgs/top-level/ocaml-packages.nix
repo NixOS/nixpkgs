@@ -66,6 +66,8 @@ let
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
+    bdd = callPackage ../development/ocaml-modules/bdd { };
+
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
     bheap = callPackage ../development/ocaml-modules/bheap { };
