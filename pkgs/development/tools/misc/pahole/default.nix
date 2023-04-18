@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchzip, pkg-config, libbpf, cmake, elfutils, zlib, argp-standalone, musl-obstack }:
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, libbpf
+, cmake
+, elfutils
+, zlib
+, argp-standalone
+, musl-obstack
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "pahole";
@@ -17,6 +28,10 @@ stdenv.mkDerivation rec {
 
   # Put libraries in "lib" subdirectory, not top level of $out
   cmakeFlags = [ "-D__LIB=lib" "-DLIBBPF_EMBEDDED=OFF" ];
+
+  passthru.tests = {
+    inherit (nixosTests) bpf;
+  };
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/";
