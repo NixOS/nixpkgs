@@ -28,16 +28,16 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.27.1";
+  version = "0.28.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/K/5T15kULTQP1FCLnyrKfhlQjIStayutaxLjmHjHes=";
+    hash = "sha256-XailVHvXY9hteyTkNwmg+b2fUZPo8YPksljMa4lAk4Q=";
   };
-  vendorHash = "sha256-JLPPNOsoq+ErLhELsX3z3YehYfgp7OGXEXlP3IVcM5k=";
+  vendorHash = "sha256-2fbFSFDK80uTp+3Y8zp0UrB1EsFYdaVLOskvQ2481m4=";
 
   buildInputs = [
     harfbuzz
@@ -215,18 +215,6 @@ buildPythonApplication rec {
 
     runHook postInstall
   '';
-
-  # Patch shebangs that Nix can't automatically patch
-  preFixup =
-    let
-      pathComponent = if stdenv.isDarwin then "Applications/kitty.app/Contents/Resources" else "lib";
-    in
-    ''
-      substituteInPlace $out/${pathComponent}/kitty/shell-integration/ssh/askpass.py \
-        --replace '/usr/bin/env -S ' $out/bin/
-      substituteInPlace $shell_integration/ssh/askpass.py \
-        --replace '/usr/bin/env -S ' $out/bin/
-    '';
 
   passthru.tests.test = nixosTests.terminal-emulators.kitty;
 
