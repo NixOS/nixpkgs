@@ -1227,6 +1227,8 @@ let
       inherit (pkgs) unzip;
     };
 
+    opam-solver = callPackage ../development/ocaml-modules/opam-solver { };
+
     opam-state = callPackage ../development/ocaml-modules/opam-state {
       inherit (pkgs) unzip;
     };
