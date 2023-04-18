@@ -101,6 +101,11 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
         -f elpa2nix-install-package \
         "$archive" "$out/share/emacs/site-lisp/elpa"
 
+    mkdir -p $out/share/info
+    find $out/share/emacs/site-lisp/elpa \
+      \( -name '*.info' -or -name 'dir' \) \
+      -exec mv '{}' $out/share/info \;
+
     runHook postInstall
   '';
 
