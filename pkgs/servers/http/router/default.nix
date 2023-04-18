@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "router";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TA0HE5zbSSPTq5Z/NP6/s1yqXyCicDmSAgqulmKbQeM=";
+    sha256 = "sha256-xekMw0StdCSI3tls0D2I5rqRV8fVtecGSEzlB3ao6zY=";
   };
 
-  cargoSha256 = "sha256-binpEhtq5tQhSDD2mRKYMdwg9VZlBQZR3xZpOeZNYyY=";
+  cargoSha256 = "sha256-F9MomJQShJUE9QIJJmdFxSs/FVctig17ZclndFl1SUY=";
 
   nativeBuildInputs = [
     pkg-config
