@@ -1347,6 +1347,8 @@ let
 
     ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix { };
 
+    ppx_monad = callPackage ../development/ocaml-modules/ppx_monad { };
+
     ppx_repr = callPackage ../development/ocaml-modules/repr/ppx.nix { };
 
     ppx_tools =
