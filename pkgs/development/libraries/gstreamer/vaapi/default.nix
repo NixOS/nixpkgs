@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     description = "Set of VAAPI GStreamer Plug-ins";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    maintainers = with maintainers; [ lilyinstarlight ];
   };
 }
