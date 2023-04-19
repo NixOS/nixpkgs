@@ -32860,6 +32860,8 @@ with pkgs;
 
   osmo-bsc = callPackage ../servers/osmocom/osmo-bsc { };
 
+  osmo-bts = callPackage ../servers/osmocom/osmo-bts { };
+
   osmo-ggsn = callPackage ../servers/osmocom/osmo-ggsn { };
 
   osmo-hlr = callPackage ../servers/osmocom/osmo-hlr { };
