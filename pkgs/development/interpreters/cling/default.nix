@@ -81,6 +81,11 @@ let
       # "--trace-expand"
     ];
 
+    postInstall = ''
+      mkdir -p $out/share/Jupyter
+      cp -r /build/clang/tools/cling/tools/Jupyter/kernel $out/share/Jupyter
+    '';
+
     meta = with lib; {
       description = "The Interactive C++ Interpreter";
       homepage = "https://root.cern/cling/";
