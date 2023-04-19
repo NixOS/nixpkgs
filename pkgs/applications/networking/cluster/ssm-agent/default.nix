@@ -28,7 +28,7 @@ let
 in
 buildGoPackage rec {
   pname = "amazon-ssm-agent";
-  version = "3.0.755.0";
+  version = "3.2.815.0";
 
   goPackagePath = "github.com/aws/${pname}";
 
@@ -38,7 +38,7 @@ buildGoPackage rec {
     rev = version;
     owner = "aws";
     repo = "amazon-ssm-agent";
-    hash = "sha256-yVQJL1MJ1JlAndlrXfEbNLQihlbLhSoQXTKzJMRzhao=";
+    hash = "sha256-YNq6F7nF2CfI+DRM5MJGV1o6kGANFQ2vctjes861fHY=";
   };
 
   patches = [
@@ -48,16 +48,9 @@ buildGoPackage rec {
     # They used constants from another package that I couldn't figure
     # out how to resolve, so hardcoded the constants.
     ./0002-version-gen-don-t-use-unnecessary-constants.patch
-
-    (fetchpatch {
-      name = "CVE-2022-29527.patch";
-      url = "https://github.com/aws/amazon-ssm-agent/commit/0fe8ae99b2ff25649c7b86d3bc05fc037400aca7.patch";
-      sha256 = "sha256-5g14CxhsHLIgs1Vkfw8FCKEJ4AebNqZKf3ZzoAN/T9U=";
-    })
   ];
 
   preConfigure = ''
-    rm -r ./Tools/src/goreportcard
     printf "#!/bin/sh\ntrue" > ./Tools/src/checkstyle.sh
 
     substituteInPlace agent/platform/platform_unix.go \
@@ -78,8 +71,7 @@ buildGoPackage rec {
   '';
 
   preBuild = ''
-    cp -r go/src/${goPackagePath}/vendor/src go
-
+    cp -r go/src/${goPackagePath}/vendor/* go
     pushd go/src/${goPackagePath}
 
     # Note: if this step fails, please patch the code to fix it! Please only skip
@@ -130,6 +122,6 @@ buildGoPackage rec {
     homepage = "https://github.com/aws/amazon-ssm-agent";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ copumpkin manveru ];
+    maintainers = with maintainers; [ copumpkin manveru dylanmtaylor ];
   };
 }
