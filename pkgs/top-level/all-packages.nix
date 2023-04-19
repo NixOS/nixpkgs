@@ -4726,6 +4726,8 @@ with pkgs;
 
   frawk = callPackage ../tools/text/frawk { };
 
+  fre = callPackage ../tools/misc/fre { };
+
   frei = callPackage ../tools/misc/frei { };
 
   fselect = callPackage ../tools/misc/fselect { };
