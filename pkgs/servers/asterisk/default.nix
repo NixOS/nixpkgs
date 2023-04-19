@@ -199,8 +199,7 @@ let
     exec ${updateScript_python}/bin/python ${toString ./update.py}
   '';
 
-in
-{
+in {
   # Supported releases (as of 2023-04-19).
   # v16 and v19 have been dropped because they go EOL before the NixOS 23.11 release.
   # Source: https://wiki.asterisk.org/wiki/display/AST/Asterisk+Versions
@@ -215,7 +214,7 @@ in
   asterisk-lts = versions.asterisk_18;
   asterisk-stable = versions.asterisk_20;
   asterisk = versions.asterisk_20.overrideAttrs (o: {
-    passthru = (o.passthru or { }) // { inherit updateScript; };
+    passthru = (o.passthru or {}) // { inherit updateScript; };
   });
 
 } // versions
