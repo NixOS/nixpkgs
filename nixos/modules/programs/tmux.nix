@@ -160,7 +160,10 @@ in {
         default = defaultTerminal;
         example = "screen-256color";
         type = types.str;
-        description = lib.mdDoc "Set the $TERM variable.";
+        description = lib.mdDoc ''
+          Set the $TERM variable. Use tmux-direct if italics or 24bit true color
+          support is needed.
+        '';
       };
 
       secureSocket = mkOption {

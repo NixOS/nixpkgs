@@ -20,6 +20,7 @@
 , llvmPackages
 , makeWrapper
 , openssl
+, pcre2
 , pcre
 , pkg-config
 , readline
@@ -74,6 +75,7 @@ let
   commonBuildInputs = extraBuildInputs: [
     boehmgc
     pcre
+    pcre2
     libevent
     libyaml
     zlib
@@ -274,5 +276,11 @@ rec {
     binary = binaryCrystal_1_2;
   };
 
-  crystal = crystal_1_7;
+  crystal_1_8 = generic {
+    version = "1.8.0";
+    sha256 = "sha256-oTvBKrfDkrpJg4gaOVrrKWfsqZC+Z9Lp/jt4ye+Iw/M=";
+    binary = binaryCrystal_1_2;
+  };
+
+  crystal = crystal_1_8;
 }

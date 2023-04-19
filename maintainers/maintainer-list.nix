@@ -1124,6 +1124,16 @@
     githubId = 73002165;
     name = "apfelkuchen6";
   };
+  aplund = {
+    email = "austin.lund@gmail.com";
+    matrix = "@aplund:matrix.org";
+    github = "aplund";
+    githubId = 1369436;
+    name = "Austin Lund";
+    keys = [{
+      fingerprint = "7083 E268 4BFD 845F 2B84  9E74 B695 8918 ED23 32CE";
+    }];
+  };
   applePrincess = {
     email = "appleprincess@appleprincess.io";
     github = "applePrincess";
@@ -6740,6 +6750,12 @@
       fingerprint = "6BD3 7248 30BD 941E 9180  C1A3 3A33 FA4C 82ED 674F";
     }];
   };
+  ivanmoreau = {
+    email = "Iván Molina Rebolledo";
+    github = "ivanmoreau";
+    githubId = 10843250;
+    name = "ivan@ivmoreau.com";
+  };
   ivan-timokhin = {
     email = "nixpkgs@ivan.timokhin.name";
     name = "Ivan Timokhin";
@@ -10572,6 +10588,12 @@
     githubId = 133448;
     name = "Mikołaj Siedlarek";
   };
+  mslingsby = {
+    email = "morten.slingsby@eviny.no";
+    github = "MortenSlingsby";
+    githubId = 111859550;
+    name = "Morten Slingsby";
+  };
   msm = {
     email = "msm@tailcall.net";
     github = "msm-code";
@@ -11526,6 +11548,12 @@
     github = "OmnipotentEntity";
     githubId = 1538622;
     name = "Michael Reilly";
+  };
+  onedragon = {
+    name = "YiLong Liu";
+    email = "18922251299@163.com";
+    github = "jackyliu16";
+    githubId = 50787361;
   };
   onixie = {
     email = "onixie@gmail.com";

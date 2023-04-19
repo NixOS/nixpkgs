@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     itstool
     vala
     gperf
-  ] ++ lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
