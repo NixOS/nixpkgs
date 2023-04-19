@@ -12656,9 +12656,9 @@
     githubId = 17690377;
   };
   ppom = {
-    name = "Paco Pompeani";
-    email = "paco@ecomail.io";
-    github = "aopom";
+    name = "ppom";
+    email = "ppom@ecomail.fr";
+    github = "ppom0";
     githubId = 38916722;
   };
   pradeepchhetri = {
