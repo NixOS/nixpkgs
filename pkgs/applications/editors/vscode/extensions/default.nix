@@ -19,6 +19,9 @@
 , alejandra
 , millet
 , shfmt
+, autoPatchelfHook
+, zlib
+, stdenv
 }:
 
 let
@@ -818,12 +821,44 @@ let
       };
 
       devsense.phptools-vscode = buildVscodeMarketplaceExtension {
-        mktplcRef = {
+        mktplcRef = let
+          sources = {
+            "x86_64-linux" = {
+              arch = "linux-x64";
+              sha256 = "sha256-ccMkaXppkgdsN2XtSFaw85xLUCFMDF1z+XidP0KAHCA=";
+            };
+            "x86_64-darwin" = {
+              arch = "darwin-x64";
+              sha256 = "17lsf736jagw2q6dwxvpj2dspiqrlyvmmhv6p6cf81vxijpgmq9d";
+            };
+            "aarch64-linux" = {
+              arch = "linux-arm64";
+              sha256 = "1cnfzzpikcsp1l1a8amim0fz5r1pkszn231cfl745ggiksbjyhsp";
+            };
+            "aarch64-darwin" = {
+              arch = "darwin-arm64";
+              sha256 = "0jli6l9qrssnpm5a3m1g7g1dw2i5bv9wxd0gqg6vda7dwfs2f494";
+            };
+          };
+        in {
           name = "phptools-vscode";
           publisher = "devsense";
-          version = "1.33.12924";
-          sha256 = "sha256-ImaGkIe+MTO/utfVh3Giu0+jTSN0mmhgg6LvOod1suE=";
-        };
+          version = "1.33.13032";
+        } // sources.${stdenv.system};
+
+        nativeBuildInputs = [
+          autoPatchelfHook
+        ];
+
+        buildInputs = [
+          zlib
+          stdenv.cc.cc.lib
+        ];
+
+        postInstall = ''
+          chmod +x $out/share/vscode/extensions/devsense.phptools-vscode/out/server/devsense.php.ls
+        '';
+
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.phptools-vscode/changelog";
           description = "A visual studio code extension for full development integration for the PHP language.";
