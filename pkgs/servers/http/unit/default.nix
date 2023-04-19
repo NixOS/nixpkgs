@@ -2,6 +2,7 @@
 , pcre2
 , withPython3 ? true, python3, ncurses
 , withPHP81 ? true, php81
+, withPHP82 ? false, php82
 , withPerl534 ? false, perl534
 , withPerl536 ? true, perl536
 , withPerldevel ? false, perldevel
@@ -26,6 +27,7 @@ let
   };
 
   php81-unit = php81.override phpConfig;
+  php82-unit = php82.override phpConfig;
 
 in stdenv.mkDerivation rec {
   version = "1.29.1";
@@ -43,6 +45,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ pcre2.dev ]
     ++ optionals withPython3 [ python3 ncurses ]
     ++ optional withPHP81 php81-unit
+    ++ optional withPHP82 php82-unit
     ++ optional withPerl534 perl534
     ++ optional withPerl536 perl536
     ++ optional withPerldevel perldevel
@@ -66,6 +69,7 @@ in stdenv.mkDerivation rec {
   postConfigure = ''
     ${optionalString withPython3    "./configure python --module=python3  --config=python3-config  --lib-path=${python3}/lib"}
     ${optionalString withPHP81      "./configure php    --module=php81    --config=${php81-unit.unwrapped.dev}/bin/php-config --lib-path=${php81-unit}/lib"}
+    ${optionalString withPHP82      "./configure php    --module=php81    --config=${php82-unit.unwrapped.dev}/bin/php-config --lib-path=${php82-unit}/lib"}
     ${optionalString withPerl534    "./configure perl   --module=perl534  --perl=${perl534}/bin/perl"}
     ${optionalString withPerl536    "./configure perl   --module=perl536  --perl=${perl536}/bin/perl"}
     ${optionalString withPerldevel  "./configure perl   --module=perldev  --perl=${perldevel}/bin/perl"}
