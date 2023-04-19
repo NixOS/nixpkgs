@@ -32860,6 +32860,8 @@ with pkgs;
 
   osmo-hlr = callPackage ../servers/osmocom/osmo-hlr { };
 
+  osmo-mgw = callPackage ../servers/osmocom/osmo-mgw { };
+
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
   palemoon = callPackage ../applications/networking/browsers/palemoon { };
