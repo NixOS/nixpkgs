@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchurl, cpio, xar, undmg, ... }:
+{ lib
+, stdenvNoCC
+, fetchurl
+, undmg
+, gitUpdater
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "rectangle";
   version = "0.67";
 
@@ -9,14 +14,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-tvxGDfpHu86tZt7M055ehEG/lDdmdPmZwrDc2F/yUjk=";
   };
 
-  sourceRoot = "Rectangle.app";
+  sourceRoot = ".";
 
   nativeBuildInputs = [ undmg ];
 
   installPhase = ''
-    mkdir -p $out/Applications/Rectangle.app
-    cp -R . $out/Applications/Rectangle.app
+    runHook preInstall
+
+    mkdir -p $out/Applications
+    mv Rectangle.app $out/Applications
+
+    runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/rxhanson/Rectangle";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Move and resize windows in macOS using keyboard shortcuts or snap areas";
