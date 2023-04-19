@@ -4,12 +4,14 @@ with lib;
 
 let
   cfg = config.services.flakeAutoUpgrade;
+  nixCommand =
+    "${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes'";
   mkBuilds = attrs:
     if length attrs == 0 then
       ""
     else ''
-      ${pkgs.nix}/bin/nix build .#${head attrs}
-      if [ "$?" -neq 0 ]; then
+      if ! ${nixCommand} build .#${head attrs};
+      then
         echo ${head attrs} >> fail.log
         ${mkBuilds (tail attrs)}
       fi
@@ -59,8 +61,12 @@ in {
             };
             hostKey = mkOption {
               type = types.str;
-              description =
-                "path to ssh key with access to the remote repository";
+              description = "name of host and its public key for fingerprint";
+              example = pkgs.lib.concatStrings [
+                "snakeoil ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHA"
+                "yNTYAAABBBChdA2BmwcG49OrQN33f/sj+OHL5sJhwVl2Qim0vkUJQCry1zFpKTa"
+                "9ZcDMiWaEhoAR6FGoaGI04ff7CS+1yybQ="
+              ];
             };
           };
         });
@@ -80,20 +86,21 @@ in {
           "Attributes to build. This will build until one of them succeeds";
       };
       updateScript = mkOption {
-        default = "${pkgs.nix}/bin/nix flake update --commit-lock-file";
+        default = "${nixCommand} flake update --commit-lock-file";
         type = types.str;
         description = "Command to update the config";
       };
 
       postCommands = mkOption {
         default = ''
-          ${pkgs.git}/bin/git commit --amend -m '$(${pkgs.git}/bin/git log -n1 --pretty=%B)
-          $(cat fail.log)'
+          oldmessage=$(${pkgs.git}/bin/git log -n1 --pretty=%B)
+          faillog=$(cat fail.log | ${pkgs.gawk}/bin/awk '{print $0 " failed"}')
+          ${pkgs.git}/bin/git commit --amend -m "$(echo $oldmessage; printf "\n\n"; echo $faillog)"
         '';
         type = types.str;
         description = ''
           Commands to be executed after the update
-          This can use failed.log, which stores a list of the failed `buildAttributes`, to see which builds faild
+          This can use fail.log, which stores a list of the failed `buildAttributes`, to see which builds failed
         '';
       };
 
@@ -151,16 +158,22 @@ in {
             "${pkgs.openssh}/bin/ssh -i $CREDENTIALS_DIRECTORY/sshKey -o GlobalKnownHostsFile=${knownHostsFile}";
         })
         (mkIf (cfg.credentials != null) {
-          GIT_ASKPASS = ''
+          GIT_ASKPASS = pkgs.writeShellScript "askpass" ''
             case "$1" in
-                Username*) exec echo ${cfg.credentials.user}" ;;
-                Password*) exec cat $CREDENTIALS_DIRECTORY/passwordFile" ;;
+                Username*)
+                  echo ${cfg.credentials.user}
+                  ;;
+                Password*)
+                  cat $CREDENTIALS_DIRECTORY/passwordFile
+                  ;;
             esac
           '';
         })
+        { EMAIL = "<>"; }
       ];
       serviceConfig = mkMerge [
         {
+          type = "oneshot";
           CapabilityBoundingSet = "";
           LockPersonality = true;
           ProtectHostname = true;
@@ -168,8 +181,8 @@ in {
           ProtectKernelModules = true;
           ProtectKernelTunables = true;
           PrivateDevices = true;
-          WorkingDirectory = "/var/lib/updater";
-          StateDirectory = "updater";
+          WorkingDirectory = "/var/lib/flake-auto-upgrade";
+          StateDirectory = "flake-auto-upgrade";
           RestrictNamespaces = true;
           RestrictRealtime = true;
           DynamicUser = true;
@@ -182,26 +195,26 @@ in {
       script = ''
         if [ ! -d repo ]; then
           ${pkgs.git}/bin/git clone ${cfg.remote} repo
-          cd repo
+          cd repo || exit
         else
-          cd repo
+          cd repo || exit
           ${pkgs.git}/bin/git fetch
         fi
         ${pkgs.git}/bin/git checkout ${cfg.updateBranch} || ${pkgs.git}/bin/git checkout -b ${cfg.updateBranch}
         ${pkgs.git}/bin/git pull || true
         ${pkgs.git}/bin/git merge origin/${cfg.mainBranch} || true
-        rm -f *.log
+        rm -f ./*.log
         ${cfg.updateScript}
         ${mkBuilds cfg.buildAttributes}
         ${cfg.postCommands}
-        ${pkgs.git}/bin/git push || ${pkgs.git}/bin/git push --set-upstream
+        ${pkgs.git}/bin/git push || ${pkgs.git}/bin/git push --set-upstream origin ${cfg.updateBranch}
       '';
 
       startAt = cfg.dates;
 
     };
 
-    systemd.timers.nixos-upgrade = {
+    systemd.timers.flake-auto-upgrade = {
       timerConfig = {
         RandomizedDelaySec = cfg.randomizedDelaySec;
         Persistent = cfg.persistent;
