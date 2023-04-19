@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "amazon-ec2-utils";
-  version = "2.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ec2-utils";
     rev = "v${version}";
-    hash = "sha256-u1rHBV8uVcCywvQNYagtDleYB12tmhyqDbXTBzt45dk=";
+    hash = "sha256-Yr6pVwyvyVGV4xrjL7VFSkRH8d1w8VLPMTVjXfneJUM=";
   };
 
   outputs = [ "out" "man" ];
