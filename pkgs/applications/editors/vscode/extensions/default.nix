@@ -583,18 +583,34 @@ let
         };
       };
 
-      catppuccin.catppuccin-vsc = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "catppuccin-vsc";
-          publisher = "catppuccin";
-          version = "2.6.1";
-          sha256 = "sha256-B56b7PeuVnkxEqvd4vL9TYO7s8fuA+LOCTbJQD9e7wY=";
+      catppuccin = {
+        catppuccin-vsc = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            name = "catppuccin-vsc";
+            publisher = "catppuccin";
+            version = "2.6.1";
+            sha256 = "sha256-B56b7PeuVnkxEqvd4vL9TYO7s8fuA+LOCTbJQD9e7wY=";
+          };
+          meta = {
+            description = "Soothing pastel theme for VSCode";
+            license = lib.licenses.mit;
+            downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc";
+            maintainers = [ lib.maintainers.nullx76 ];
+          };
         };
-        meta = {
-          description = "Soothing pastel theme for VSCode";
-          license = lib.licenses.mit;
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc";
-          maintainers = [ lib.maintainers.nullx76 ];
+        catppuccin-vsc-icons = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            name = "catppuccin-vsc-icons";
+            publisher = "catppuccin";
+            version = "0.8.0";
+            sha256 = "sha256-yAiFlQZxVsYq7/TnLkvaknLA/szq8z1+zH8pCg9cs2w=";
+          };
+          meta = {
+            description = "Soothing pastel icon theme for VSCode";
+            license = lib.licenses.mit;
+            downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc-icons";
+            maintainers = [ lib.maintainers.laurent-f1z1 ];
+          };
         };
       };
 
