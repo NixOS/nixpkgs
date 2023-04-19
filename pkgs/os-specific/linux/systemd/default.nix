@@ -736,7 +736,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       inherit (nixosTests) switchTest;
-      cross = pkgsCross.aarch64-multiplatform.systemd;
+      cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
     };
   };
 
