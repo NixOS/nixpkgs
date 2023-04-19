@@ -12894,6 +12894,8 @@ with pkgs;
 
   toml2nix = callPackage ../development/tools/toml2nix { };
 
+  topfew-rs = callPackage ../tools/text/topfew-rs { };
+
   topgrade = callPackage ../tools/misc/topgrade {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
   };
