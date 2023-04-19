@@ -77,6 +77,14 @@ let
       type = types.path;
       apply = s: "<" + toString s;
     };
+    api-origin = mkOption {
+      description = lib.mdDoc "Origin URL for API, 100 more than web.";
+      type = types.str;
+      default = "http://${cfg.listenAddress}:${toString (cfg.${srv}.port + 100)}";
+      defaultText = lib.literalMD ''
+        `"http://''${`[](#opt-services.sourcehut.listenAddress)`}:''${toString (`[](#opt-services.sourcehut.${srv}.port)` + 100)}"`
+      '';
+    };
   };
 
   # Specialized python containing all the modules
@@ -501,12 +509,6 @@ in
         options."meta.sr.ht" =
           removeAttrs (commonServiceSettings "meta")
             ["oauth-client-id" "oauth-client-secret"] // {
-          api-origin = mkOption {
-            description = lib.mdDoc "Origin URL for API, 100 more than web.";
-            type = types.str;
-            default = "http://${cfg.listenAddress}:${toString (cfg.meta.port + 100)}";
-            defaultText = lib.literalMD ''`"http://''${`[](#opt-services.sourcehut.listenAddress)`}:''${toString (`[](#opt-services.sourcehut.meta.port)` + 100)}"`'';
-          };
           webhooks = mkOption {
             description = lib.mdDoc "The Redis connection used for the webhooks worker.";
             type = types.str;
@@ -1252,55 +1254,30 @@ in
           ) cfg.settings));
         serviceConfig.ExecStart = "${pkgs.sourcehut.metasrht}/bin/metasrht-api -b ${cfg.listenAddress}:${toString (cfg.meta.port + 100)}";
       };
-      extraConfig = mkMerge [
-        {
-          assertions = [
-            { assertion = let s = cfg.settings."meta.sr.ht::billing"; in
-                          s.enabled == "yes" -> (s.stripe-public-key != null && s.stripe-secret-key != null);
-              message = "If meta.sr.ht::billing is enabled, the keys must be defined.";
-            }
-          ];
-          environment.systemPackages = optional cfg.meta.enable
-            (pkgs.writeShellScriptBin "metasrht-manageuser" ''
-              set -eux
-              if test "$(${pkgs.coreutils}/bin/id -n -u)" != '${cfg.meta.user}'
-              then exec sudo -u '${cfg.meta.user}' "$0" "$@"
-              else
-                # In order to load config.ini
-                if cd /run/sourcehut/metasrht
-                then exec ${cfg.python}/bin/metasrht-manageuser "$@"
-                else cat <<EOF
-                  Please run: sudo systemctl start metasrht
-              EOF
-                  exit 1
-                fi
+      extraConfig = {
+        assertions = [
+          { assertion = let s = cfg.settings."meta.sr.ht::billing"; in
+                        s.enabled == "yes" -> (s.stripe-public-key != null && s.stripe-secret-key != null);
+            message = "If meta.sr.ht::billing is enabled, the keys must be defined.";
+          }
+        ];
+        environment.systemPackages = optional cfg.meta.enable
+          (pkgs.writeShellScriptBin "metasrht-manageuser" ''
+            set -eux
+            if test "$(${pkgs.coreutils}/bin/id -n -u)" != '${cfg.meta.user}'
+            then exec sudo -u '${cfg.meta.user}' "$0" "$@"
+            else
+              # In order to load config.ini
+              if cd /run/sourcehut/metasrht
+              then exec ${cfg.python}/bin/metasrht-manageuser "$@"
+              else cat <<EOF
+                Please run: sudo systemctl start metasrht
+            EOF
+                exit 1
               fi
-            '');
-        }
-        (mkIf cfg.nginx.enable {
-          services.nginx.virtualHosts."meta.${domain}" = {
-            locations."/query" = {
-              proxyPass = cfg.settings."meta.sr.ht".api-origin;
-              extraConfig = ''
-                if ($request_method = 'OPTIONS') {
-                  add_header 'Access-Control-Allow-Origin' '*';
-                  add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-                  add_header 'Access-Control-Allow-Headers' 'User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
-                  add_header 'Access-Control-Max-Age' 1728000;
-                  add_header 'Content-Type' 'text/plain; charset=utf-8';
-                  add_header 'Content-Length' 0;
-                  return 204;
-                }
-
-                add_header 'Access-Control-Allow-Origin' '*';
-                add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-                add_header 'Access-Control-Allow-Headers' 'User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
-                add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
-              '';
-            };
-          };
-        })
-      ];
+            fi
+          '');
+      };
     })
 
     (import ./service.nix "pages" {
