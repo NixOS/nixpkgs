@@ -2270,8 +2270,8 @@ let
         mktplcRef = {
           name = "typst-lsp";
           publisher = "nvarner";
-          version = "0.3.0";
-          sha256 = "sha256-ek5zXK4ecXwSPMJ4Ihy2l3PMxCdHwJN7dbwZfQVjNG8=";
+          version = "0.4.1";
+          sha256 = "sha256-NZejUb99JDcnqjihLTPkNzVCgpqDkbiwAySbBVZ0esY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/nvarner.typst-lsp/changelog";
