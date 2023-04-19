@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zbar";
-  version = "0.23.90";
+  version = "0.23.92";
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "mchehab";
     repo = "zbar";
     rev = version;
-    sha256 = "sha256-FvV7TMc4JbOiRjWLka0IhtpGGqGm5fis7h870OmJw2U=";
+    sha256 = "sha256-VhVrngAX7pXZp+szqv95R6RGAJojp3svdbaRKigGb0w=";
   };
 
   nativeBuildInputs = [
