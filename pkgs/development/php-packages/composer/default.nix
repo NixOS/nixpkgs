@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "composer";
-  version = "2.5.4";
+  version = "2.5.5";
 
   src = fetchurl {
     url = "https://github.com/composer/composer/releases/download/${version}/composer.phar";
-    sha256 = "sha256-kc5sv5Rj6uhq6dXCHUL6pgGlGfP7srYjpV7iRngHm9M=";
+    sha256 = "sha256-VmptHPS+HMOsiC0qKhOBf/rlTmD1qnyRN0NIEKWAn/w=";
   };
 
   dontUnpack = true;
