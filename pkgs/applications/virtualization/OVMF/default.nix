@@ -48,6 +48,8 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Qunused-arguments";
 
+  env.PYTHON_COMMAND = "python3";
+
   postPatch = lib.optionalString csmSupport ''
     cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
   '';

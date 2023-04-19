@@ -4,15 +4,13 @@
 */
 
 import { promises as fs } from 'node:fs';
-import { promisify } from 'node:util';
-import { exec as _exec } from 'node:child_process';
-const exec = promisify(_exec);
 
 const constants = {
     githubUrl: "https://api.github.com/repos/pulsar-edit/pulsar/releases",
     sha256FileURL: (newVersion) => `https://github.com/pulsar-edit/pulsar/releases/download/v${newVersion}/SHA256SUMS.txt`,
     x86_64FileName: (newVersion) => `Linux.pulsar-${newVersion}.tar.gz`,
     aarch64FileName: (newVersion) => `ARM.Linux.pulsar-${newVersion}-arm64.tar.gz`,
+    targetFile: new URL("default.nix", import.meta.url).pathname,
 };
 
 async function getLatestVersion() {
@@ -69,10 +67,10 @@ async function updateFile(newVersion, sha256Sums, currentFile) {
     newFile = newFile.replace(/x86_64-linux\.hash = "(.*)";/, `x86_64-linux.hash = "${sha256Sums.x86_64}";`);
     newFile = newFile.replace(/aarch64-linux\.hash = "(.*)";/, `aarch64-linux.hash = "${sha256Sums.aarch64}";`);
 
-    await fs.writeFile('default.nix', newFile);
+    await fs.writeFile(constants.targetFile, newFile);
 };
 
-let currentFile = await fs.readFile('default.nix', 'utf8');
+let currentFile = await fs.readFile(constants.targetFile, 'utf8');
 let currentVersion = currentFile.match(/version = "(.*)";/)[1];
 const newVersion = await getLatestVersion();
 if (currentVersion === newVersion) {
