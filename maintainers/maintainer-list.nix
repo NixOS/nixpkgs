@@ -3522,6 +3522,12 @@
     githubId = 10701143;
     name = "David Crompton";
   };
+  david-hamelin = {
+    email = "david.hamelin@outlook.fr";
+    github = "HamelinDavid";
+    githubId = 118536343;
+    name = "David Hamelin";
+  };
   davidrusu = {
     email = "davidrusu.me@gmail.com";
     github = "davidrusu";
