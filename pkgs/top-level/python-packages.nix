@@ -12830,6 +12830,8 @@ self: super: with self; {
 
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 
+  xmlunittest = callPackage ../development/python-modules/xmlunittest { };
+
   xml-marshaller = callPackage ../development/python-modules/xml-marshaller { };
 
   xmodem = callPackage ../development/python-modules/xmodem { };
