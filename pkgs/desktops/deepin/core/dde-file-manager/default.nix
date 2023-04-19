@@ -8,7 +8,6 @@
 , dde-qt-dbus-factory
 , docparser
 , dde-dock
-, deepin-movie-reborn
 , cmake
 , qttools
 , qtx11extras
@@ -43,13 +42,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-file-manager";
-  version = "6.0.14";
+  version = "6.0.15";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-88Ddc3986hyFMA0bYCxiupASI+pGLqjb3igOHLA8Q/g=";
+    sha256 = "sha256-tG3Wl1AvwWhHmIIHgexv3mVVrmOwNrwn8k/sD4+WZzk=";
   };
 
   nativeBuildInputs = [
@@ -91,14 +90,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dtkwidget
     qt5platform-plugins
-    qt5integration
     deepin-pdfium
     util-dfm
     dde-qt-dbus-factory
     glibmm
     docparser
     dde-dock
-    deepin-movie-reborn
     qtx11extras
     qtmultimedia
     kcodecs
@@ -126,6 +123,11 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
+  qtWrapperArgs = [
+    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
+  ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
