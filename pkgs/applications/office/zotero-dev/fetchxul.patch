@@ -1,0 +1,142 @@
+diff --git a/build.sh b/build.sh
+index a86a4d3..b96ec91 100755
+--- a/build.sh
++++ b/build.sh
+@@ -50,6 +50,7 @@ DONE
+ 
+ BUILD_DIR=`mktemp -d`
+ function cleanup {
++	chmod -R +w .
+ 	rm -rf $BUILD_DIR
+ }
+ trap cleanup EXIT
+@@ -138,7 +139,7 @@ BUILD_ID=`date +%Y%m%d%H%M%S`
+ # Paths to Gecko runtimes
+ MAC_RUNTIME_PATH="$CALLDIR/xulrunner/Firefox.app"
+ WIN_RUNTIME_PATH_PREFIX="$CALLDIR/xulrunner/firefox-"
+-LINUX_RUNTIME_PATH_PREFIX="$CALLDIR/xulrunner/firefox-"
++LINUX_RUNTIME_PATH_PREFIX="$CALLDIR/xulrunner/firefox"
+ 
+ base_dir="$BUILD_DIR/base"
+ app_dir="$BUILD_DIR/base/app"
+@@ -167,10 +168,11 @@ elif [ $BUILD_WIN == 1 ]; then
+ 	cp -Rp "${WIN_RUNTIME_PATH_PREFIX}win64"/browser/omni "$app_dir"
+ elif [ $BUILD_LINUX == 1 ]; then
+ 	# Non-arch-specific files, so just use 64-bit version
+-	cp -Rp "${LINUX_RUNTIME_PATH_PREFIX}x86_64"/browser/omni "$app_dir"
++	cp -Rp "${LINUX_RUNTIME_PATH_PREFIX}"/browser/omni "$app_dir"
+ fi
+ set -e
+ cd $omni_dir
++chmod -R +w .
+ # Move some Firefox files that would be overwritten out of the way
+ mv chrome.manifest chrome.manifest-fx
+ mv components components-fx
+@@ -372,7 +374,6 @@ fi
+ 
+ mv omni.ja ..
+ cd "$CALLDIR"
+-rm -rf "$omni_dir"
+ 
+ # Copy updater.ini
+ cp "$CALLDIR/assets/updater.ini" "$base_dir"
+@@ -794,12 +795,12 @@ fi
+ 
+ # Linux
+ if [ $BUILD_LINUX == 1 ]; then
+-	for arch in "i686" "x86_64"; do
++	for arch in ""; do
+ 		runtime_path="${LINUX_RUNTIME_PATH_PREFIX}${arch}"
+ 		
+ 		# Set up directory
+-		echo 'Building Zotero_linux-'$arch
+-		APPDIR="$STAGE_DIR/Zotero_linux-$arch"
++		echo 'Building Zotero_linux'
++		APPDIR="$STAGE_DIR/Zotero_linux"
+ 		rm -rf "$APPDIR"
+ 		mkdir "$APPDIR"
+ 		
+@@ -814,12 +815,7 @@ if [ $BUILD_LINUX == 1 ]; then
+ 		cp "$CALLDIR/linux/zotero.desktop" "$APPDIR"
+ 		cp "$CALLDIR/linux/set_launcher_icon" "$APPDIR"
+ 		
+-		# Use our own updater, because Mozilla's requires updates signed by Mozilla
+-		cp "$CALLDIR/linux/updater-$arch" "$APPDIR"/updater
+-
+ 		# Copy PDF tools and data
+-		cp "$CALLDIR/pdftools/pdftotext-linux-$arch" "$APPDIR/pdftotext"
+-		cp "$CALLDIR/pdftools/pdfinfo-linux-$arch" "$APPDIR/pdfinfo"
+ 		cp -R "$CALLDIR/pdftools/poppler-data" "$APPDIR/"
+ 		
+ 		# Copy app files
+@@ -828,7 +824,8 @@ if [ $BUILD_LINUX == 1 ]; then
+ 		# Add word processor plug-ins
+ 		mkdir "$APPDIR/integration"
+ 		cp -RH "$CALLDIR/modules/zotero-libreoffice-integration/install" "$APPDIR/integration/libreoffice"
+-		
++		chmod -R +w "$APPDIR"
++
+ 		# Delete extraneous files
+ 		find "$APPDIR" -depth -type d -name .git -exec rm -rf {} \;
+ 		find "$APPDIR" \( -name .DS_Store -or -name update.rdf \) -exec rm -f {} \;
+@@ -841,5 +838,5 @@ if [ $BUILD_LINUX == 1 ]; then
+ 		fi
+ 	done
+ fi
+-
++chmod -R +w $BUILD_DIR
+ rm -rf $BUILD_DIR
+diff --git a/fetch_xulrunner.sh b/fetch_xulrunner.sh
+index bbaf7b4..5da8a9b 100755
+--- a/fetch_xulrunner.sh
++++ b/fetch_xulrunner.sh
+@@ -115,14 +115,6 @@ function modify_omni {
+ 	replace_line 'MOZ_UPDATE_CHANNEL:.+' 'MOZ_UPDATE_CHANNEL: "none",' modules/AppConstants.jsm
+ 	replace_line '"https:\/\/[^\/]+mozilla.com.+"' '""' modules/AppConstants.jsm
+ 	
+-	replace_line 'if \(!updateAuto\) \{' 'if (update.type == "major") {
+-      LOG("UpdateService:_selectAndInstallUpdate - prompting because it is a major update");
+-      AUSTLMY.pingCheckCode(this._pingSuffix, AUSTLMY.CHK_SHOWPROMPT_PREF);
+-      Services.obs.notifyObservers(update, "update-available", "show-prompt");
+-      return;
+-    }
+-    if (!updateAuto) {' modules/UpdateService.jsm
+-	
+ 	replace_line 'pref\("network.captive-portal-service.enabled".+' 'pref("network.captive-portal-service.enabled", false);' greprefs.js
+ 	replace_line 'pref\("network.connectivity-service.enabled".+' 'pref("network.connectivity-service.enabled", false);' greprefs.js
+ 	replace_line 'pref\("toolkit.telemetry.server".+' 'pref("toolkit.telemetry.server", "");' greprefs.js
+@@ -363,32 +355,11 @@ if [ $BUILD_WIN == 1 ]; then
+ fi
+ 
+ if [ $BUILD_LINUX == 1 ]; then
+-	GECKO_VERSION="$GECKO_VERSION_LINUX"
+-	DOWNLOAD_URL="https://ftp.mozilla.org/pub/firefox/releases/$GECKO_VERSION"
+-	
+-	rm -rf firefox
+-	
+-	curl -O "$DOWNLOAD_URL/linux-i686/en-US/firefox-$GECKO_VERSION.tar.bz2"
+-	rm -rf firefox-i686
+-	tar xvf firefox-$GECKO_VERSION.tar.bz2
+-	mv firefox firefox-i686
+-	
+-	pushd firefox-i686
+-	modify_omni linux32
+-	popd
+-	
+-	rm "firefox-$GECKO_VERSION.tar.bz2"
+-	
+-	curl -O "$DOWNLOAD_URL/linux-x86_64/en-US/firefox-$GECKO_VERSION.tar.bz2"
+-	rm -rf firefox-x86_64
+-	tar xvf firefox-$GECKO_VERSION.tar.bz2
+-	mv firefox firefox-x86_64
+ 	
+-	pushd firefox-x86_64
+-	modify_omni linux64
++	pushd firefox
++	modify_omni linux
+ 	popd
+ 	
+-	rm "firefox-$GECKO_VERSION.tar.bz2"
+ fi
+ 
+ echo Done

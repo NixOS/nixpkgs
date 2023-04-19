@@ -35171,6 +35171,8 @@ with pkgs;
 
   zotero = callPackage ../applications/office/zotero { };
 
+  zotero-dev = callPackage ../applications/office/zotero-dev { };
+
   zscroll = callPackage ../applications/misc/zscroll { };
 
   zsteg = callPackage ../tools/security/zsteg { };
