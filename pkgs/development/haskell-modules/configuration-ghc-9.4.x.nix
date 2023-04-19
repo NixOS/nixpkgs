@@ -62,8 +62,6 @@ in {
 
   ghc-source-gen = checkAgainAfter super.ghc-source-gen "0.4.3.0" "fails to build" (markBroken super.ghc-source-gen);
 
-  lucid = jailbreakForCurrentVersion super.lucid "2.11.1";
-
   haskell-src-meta = doJailbreak super.haskell-src-meta;
 
   # Tests fail in GHC 9.2
