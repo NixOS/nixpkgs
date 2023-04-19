@@ -4,6 +4,8 @@
 , unibilium, gperf
 , libvterm-neovim
 , tree-sitter
+, fetchurl
+, treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
 , glibcLocales ? null, procps ? null
 
@@ -119,7 +121,18 @@ in
       )
     '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
-    '';
+    '' + ''
+      mkdir -p $out/lib/nvim/parser
+    '' + lib.concatStrings (lib.mapAttrsToList
+      (language: src: ''
+        ln -s \
+          ${tree-sitter.buildGrammar {
+            inherit language src;
+            version = "neovim-${version}";
+          }}/parser \
+          $out/lib/nvim/parser/${language}.so
+      '')
+      treesitter-parsers);
 
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
