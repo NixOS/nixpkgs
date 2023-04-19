@@ -803,6 +803,9 @@ in
       systemd.services.sshd = {
         #path = optional cfg.git.enable [ cfg.git.package ];
         serviceConfig = {
+          BindPaths = optionals cfg.git.enable [
+            "/var/log:/var/log"
+          ];
           BindReadOnlyPaths =
             # Note that those /usr/bin/* paths are hardcoded in multiple places in *.sr.ht,
             # for instance to get the user from the [git.sr.ht::dispatch] settings.
@@ -834,14 +837,13 @@ in
                 set -e
                 cd /run/sourcehut/gitsrht/subdir
                 set -x
+                export PATH="${cfg.git.package}/bin:$PATH"
+                export SRHT_CONFIG=/run/sourcehut/gitsrht/config.ini
                 exec -a "$0" ${pkgs.sourcehut.gitsrht}/bin/gitsrht-shell "$@"
               ''}:/usr/bin/gitsrht-shell"
               "${pkgs.writeShellScript "gitsrht-update-hook" ''
                 set -e
-                test -e "''${PWD%/*}"/config.ini ||
-                # Git hooks are run relative to their repository's directory,
-                # but gitsrht-update-hook looks up ../config.ini
-                ln -s /run/sourcehut/gitsrht/config.ini "''${PWD%/*}"/config.ini
+                export SRHT_CONFIG=/run/sourcehut/gitsrht/config.ini
                 # hooks/post-update calls /usr/bin/gitsrht-update-hook as hooks/stage-3
                 # but this wrapper being a bash script, it overrides $0 with /usr/bin/gitsrht-update-hook
                 # hence this hack to put hooks/stage-3 back into gitsrht-update-hook's $0
@@ -1068,10 +1070,11 @@ in
           };
         })
       ];
-      extraServices.gitsrht-api = {
-        serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = "5s";
-        serviceConfig.ExecStart = "${pkgs.sourcehut.gitsrht}/bin/gitsrht-api -b ${cfg.listenAddress}:${toString (cfg.git.port + 100)}";
+      extraServices.gitsrht-api.serviceConfig = {
+        Restart = "always";
+        RestartSec = "5s";
+        ExecStart = "${pkgs.sourcehut.gitsrht}/bin/gitsrht-api -b ${cfg.listenAddress}:${toString (cfg.git.port + 100)}";
+        BindPaths = [ "${cfg.settings."git.sr.ht".repos}:/var/lib/sourcehut/gitsrht/repos" ];
       };
       extraServices.gitsrht-fcgiwrap = mkIf cfg.nginx.enable {
         serviceConfig = {

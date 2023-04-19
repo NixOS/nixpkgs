@@ -4,32 +4,33 @@
 , buildPythonPackage
 , python
 , srht
-, pygit2
 , scmsrht
+, pygit2
+, minio
 , unzip
 }:
 let
-  version = "0.78.20";
+  version = "0.84.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "git.sr.ht";
     rev = version;
-    sha256 = "sha256-rZsTtHobsgRVmMOjPa1fiKrPsNyFu/gOsmO0cTl5MqQ=";
+    sha256 = "sha256-sAkTsQlWtNDQ5vAhA2EeOvuJcj9A6AG8pgDyIKtr65s=";
   };
 
   gitApi = buildGoModule ({
     inherit src version;
     pname = "gitsrht-api";
     modRoot = "api";
-    vendorHash = "sha256-cCs9FUBusaAou9w4TDOg8GKxhRcsPbSNcQpxvFH/+so=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+    vendorHash = "sha256-LAYp0zgosZnFEbtxzjuTH9++0lbxhACr705HqXJz3D0=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; });
 
   gitDispatch = buildGoModule {
     inherit src version;
     pname = "gitsrht-dispatch";
     modRoot = "gitsrht-dispatch";
-    vendorHash = "sha256-qWXPHo86s6iuRBhRMtmD5jxnAWKdrWHtA/iSUkdw89M=";
+    vendorHash = "sha256-EDvSZ3/g0xDSohrsAIpNhk+F0yy8tbnTW/3tURTonMc=";
   };
 
   gitKeys = buildGoModule {
@@ -65,8 +66,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     srht
-    pygit2
     scmsrht
+    pygit2
+    minio
   ];
 
   preBuild = ''
