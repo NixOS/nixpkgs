@@ -4736,6 +4736,8 @@ with pkgs;
 
   fsql = callPackage ../tools/misc/fsql { };
 
+  kitty-img = callPackage ../tools/misc/kitty-img { };
+
   ### TOOLS/TYPESETTING/TEX
 
   advi = callPackage ../tools/typesetting/tex/advi { };
