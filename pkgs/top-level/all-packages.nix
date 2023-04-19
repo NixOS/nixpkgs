@@ -32880,6 +32880,8 @@ with pkgs;
 
   osmo-sgsn = callPackage ../servers/osmocom/osmo-sgsn { };
 
+  osmo-sip-connector = callPackage ../servers/osmocom/osmo-sip-connector { };
+
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
   palemoon = callPackage ../applications/networking/browsers/palemoon { };
