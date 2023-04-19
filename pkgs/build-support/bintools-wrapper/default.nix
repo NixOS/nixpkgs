@@ -102,7 +102,7 @@ in
 stdenv.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${bintoolsName}-wrapper");
-  version = if bintools == null then null else bintoolsVersion;
+  version = if bintools == null then "" else bintoolsVersion;
 
   preferLocalBuild = true;
 
@@ -166,7 +166,7 @@ stdenv.mkDerivation {
 
     # If we are asked to wrap `gas` and this bintools has it,
     # then symlink it (`as` will be symlinked next).
-    # This is mainly for the wrapped gnatboot on x86-64 Darwin,
+    # This is mainly for the wrapped gnat-bootstrap on x86-64 Darwin,
     # as it must have both the GNU assembler from cctools (installed as `gas`)
     # and the Clang integrated assembler (installed as `as`).
     # See pkgs/os-specific/darwin/binutils/default.nix for details.

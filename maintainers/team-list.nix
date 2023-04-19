@@ -431,6 +431,7 @@ with lib.maintainers; {
       lukego
       nagy
       uthar
+      hraban
     ];
     githubTeams = [
       "lisp"

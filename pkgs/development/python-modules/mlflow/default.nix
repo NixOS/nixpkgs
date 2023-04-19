@@ -24,6 +24,7 @@
 , pythonOlder
 , pythonRelaxDepsHook
 , pyarrow
+, pytz
 , pyyaml
 , querystring_parser
 , requests
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   # but not mlflow has a 'skinny' install option which does not require `shap`.
   nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRemoveDeps = [ "shap" ];
+  pythonRelaxDeps = [ "pytz" ];
 
   propagatedBuildInputs = [
     alembic
@@ -74,6 +76,7 @@ buildPythonPackage rec {
     protobuf
     python-dateutil
     pyarrow
+    pytz
     pyyaml
     querystring_parser
     requests
@@ -91,7 +94,7 @@ buildPythonPackage rec {
 
   # no tests in PyPI dist
   # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
-  # also, tests use conda so can't run on NixOS without buildFHSUserEnv
+  # also, tests use conda so can't run on NixOS without buildFHSEnv
   doCheck = false;
 
   meta = with lib; {

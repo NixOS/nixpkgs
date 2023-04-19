@@ -14,7 +14,7 @@
 , propagateDoc ? cc != null && cc ? man
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
 , nixSupport ? {}
-, isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
+, isGNU ? false, isClang ? cc.isClang or false, isCcache ? cc.isCcache or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
 , grossHackForStagingNext ? false
@@ -161,7 +161,7 @@ assert nativePrefix == bintools.nativePrefix;
 stdenv.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${ccName}-wrapper");
-  version = if cc == null then null else ccVersion;
+  version = if cc == null then "" else ccVersion;
 
   preferLocalBuild = true;
 
@@ -208,7 +208,7 @@ stdenv.mkDerivation {
         local dst="$1"
         local wrapper="$2"
         export prog="$3"
-        export use_response_file_by_default=${if isClang then "1" else "0"}
+        export use_response_file_by_default=${if isClang && !isCcache then "1" else "0"}
         substituteAll "$wrapper" "$out/bin/$dst"
         chmod +x "$out/bin/$dst"
       }
@@ -598,8 +598,11 @@ stdenv.mkDerivation {
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     shell = getBin shell + shell.shellPath or "";
     gnugrep_bin = if nativeTools then "" else gnugrep;
+    # stdenv.cc.cc should not be null and we have nothing better for now.
+    # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
+    cc = if nativeTools then "" else cc;
     wrapperName = "CC_WRAPPER";
-    inherit suffixSalt coreutils_bin bintools cc;
+    inherit suffixSalt coreutils_bin bintools;
     inherit libc_bin libc_dev libc_lib;
     inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
   };

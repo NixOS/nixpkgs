@@ -28,6 +28,8 @@ buildGoModule rec {
     "cmd/logcli"
   ];
 
+  tags = ["promtail_journal_enabled"];
+
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
 

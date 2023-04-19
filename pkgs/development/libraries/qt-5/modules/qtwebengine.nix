@@ -17,7 +17,7 @@
 , cctools, libobjc, libpm, libunwind, sandbox, xnu
 , ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
-, MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML
+, MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML, OpenDirectory, Accelerate
 , cups, openbsm, runCommand, xcbuild, writeScriptBin
 , ffmpeg_4 ? null
 , lib, stdenv, fetchpatch
@@ -186,6 +186,8 @@ qtModule {
     SecurityInterface
     Vision
     CoreML
+    OpenDirectory
+    Accelerate
 
     openbsm
     libunwind

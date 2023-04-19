@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: e9260dd4f856af83dd3827254576a4b01a8702ae
-  ref: refs/tags/6.3.11
+  revision: a78862340cacb90e2d27b6f7ae670387081a0276
+  ref: refs/tags/6.3.12
   specs:
-    metasploit-framework (6.3.11)
+    metasploit-framework (6.3.12)
       actionpack (~> 7.0)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
@@ -32,7 +32,7 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.122)
+      metasploit-payloads (= 2.0.123)
       metasploit_data_models
       metasploit_payloads-mettle (= 1.0.20)
       mqtt
@@ -129,7 +129,7 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.744.0)
+    aws-partitions (1.748.0)
     aws-sdk-core (3.171.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
@@ -175,7 +175,7 @@ GEM
       eventmachine (>= 1.0.0.beta.4)
     erubi (1.12.0)
     eventmachine (1.2.7)
-    faker (3.1.1)
+    faker (3.2.0)
       i18n (>= 1.8.11, < 2)
     faraday (2.7.4)
       faraday-net_http (>= 2.0, < 3.1)
@@ -238,7 +238,7 @@ GEM
       activemodel (~> 7.0)
       activesupport (~> 7.0)
       railties (~> 7.0)
-    metasploit-payloads (2.0.122)
+    metasploit-payloads (2.0.123)
     metasploit_data_models (6.0.2)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
@@ -442,4 +442,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.4.8
+   2.4.10

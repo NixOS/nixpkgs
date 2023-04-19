@@ -15,12 +15,12 @@ interface Replacer {
 
 const log = logger("src");
 
-const prefetchSha256 = (nixpkgs: string, version: string) =>
+const prefetchHash = (nixpkgs: string, version: string) =>
   run("nix-prefetch", ["-f", nixpkgs, "deno.src", "--rev", version]);
-const prefetchCargoSha256 = (nixpkgs: string) =>
+const prefetchCargoHash = (nixpkgs: string) =>
   run(
     "nix-prefetch",
-    [`{ sha256 }: (import ${nixpkgs} {}).deno.cargoDeps.overrideAttrs (_: { inherit sha256; })`],
+    [`{ sha256 }: (import ${nixpkgs} {}).deno.cargoDeps.overrideAttrs (_: { hash = sha256; })`],
   );
 
 const replace = (str: string, replacers: Replacer[]) =>
@@ -45,23 +45,23 @@ export async function updateSrc(
   denoVersion: string,
 ) {
   log("Starting src update");
-  const trimVersion = denoVersion.substr(1);
-  log("Fetching sha256 for:", trimVersion);
-  const sha256 = await prefetchSha256(nixpkgs, denoVersion);
+  const trimVersion = denoVersion.substring(1);
+  log("Fetching hash for:", trimVersion);
+  const sha256 = await prefetchHash(nixpkgs, denoVersion);
   log("sha256 to update:", sha256);
   await updateNix(
     filePath,
     [
       genVerReplacer("version", trimVersion),
-      genShaReplacer("sha256", sha256),
+      genShaReplacer("hash", sha256),
     ],
   );
-  log("Fetching cargoSha256 for:", sha256);
-  const cargoSha256 = await prefetchCargoSha256(nixpkgs);
-  log("cargoSha256 to update:", cargoSha256);
+  log("Fetching cargoHash for:", sha256);
+  const cargoHash = await prefetchCargoHash(nixpkgs);
+  log("cargoHash to update:", cargoHash);
   await updateNix(
     filePath,
-    [genShaReplacer("cargoSha256", cargoSha256)],
+    [genShaReplacer("cargoHash", cargoHash)],
   );
   log("Finished src update");
 }
