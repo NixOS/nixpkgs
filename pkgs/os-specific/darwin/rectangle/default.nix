@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rectangle";
-  version = "0.59";
+  version = "0.67";
 
   src = fetchurl {
     url = "https://github.com/rxhanson/Rectangle/releases/download/v${version}/Rectangle${version}.dmg";
-    sha256 = "sha256-6K4HJ4qWjf/BsoxmSWyO/Km3BZujCnMJ2/xCMkH3TaI=";
+    hash = "sha256-tvxGDfpHu86tZt7M055ehEG/lDdmdPmZwrDc2F/yUjk=";
   };
 
   sourceRoot = "Rectangle.app";
