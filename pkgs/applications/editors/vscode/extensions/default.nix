@@ -874,8 +874,8 @@ let
         mktplcRef = {
           name = "profiler-php-vscode";
           publisher = "devsense";
-          version = "1.33.12924";
-          sha256 = "sha256-6+spMS+oypq8KFW5vsoy0Cmn7RD5L1JQnHSyJAvYhTk=";
+          version = "1.33.13032";
+          sha256 = "sha256-P0lzZkCHtLHJI/gwB+wbrZPR3OOia5VxTMCC2ZQULBg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.profiler-php-vscode/changelog";
