@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonApplication
 , fetchPypi
 , pytestCheckHook
@@ -80,6 +81,9 @@ buildPythonApplication rec {
   disabledTests = [
     # Test does not correctly handle path normalization for test comparison
     "test_cli_overrides"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
+    "test_index"
   ];
 
   # Hardcode libclang paths
