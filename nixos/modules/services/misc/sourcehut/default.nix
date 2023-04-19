@@ -38,9 +38,9 @@ let
       # for services needing access to them.
       "builds.sr.ht::worker".buildlogs = "/var/log/sourcehut/buildsrht-worker";
       "git.sr.ht".post-update-script = "/usr/bin/gitsrht-update-hook";
-      "git.sr.ht".repos = "/var/lib/sourcehut/gitsrht/repos";
+      "git.sr.ht".repos = cfg.settings."git.sr.ht".repos;
       "hg.sr.ht".changegroup-script = "/usr/bin/hgsrht-hook-changegroup";
-      "hg.sr.ht".repos = "/var/lib/sourcehut/hgsrht/repos";
+      "hg.sr.ht".repos = cfg.settings."hg.sr.ht".repos;
       # Making this a per service option despite being in a global section,
       # so that it uses the redis-server used by the service.
       "sr.ht".redis-host = cfg.${srv}.redis.host;
