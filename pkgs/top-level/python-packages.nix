@@ -20,6 +20,8 @@ self: super: with self; {
 
   absl-py = callPackage ../development/python-modules/absl-py { };
 
+  accelerate = callPackage ../development/python-modules/accelerate { };
+
   accessible-pygments = callPackage ../development/python-modules/accessible-pygments { };
 
   accuweather = callPackage ../development/python-modules/accuweather { };
