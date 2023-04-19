@@ -40,6 +40,12 @@ in
       example = 8192;
       description = "The runner's memory in MB";
     };
+    cores = mkOption {
+      default = 1;
+      type = types.int;
+      example = 4;
+      description = "The runner's number of CPU cores";
+    };
     min-free = mkOption {
       default = 1024 * 1024 * 1024;
       type = types.int;
@@ -66,6 +72,14 @@ in
          The working directory to use to run the script. When running
          as part of a flake will need to be set to a non read-only filesystem.
        '';
+    };
+    hostAddress = mkOption {
+      default = "";
+      type = types.str;
+      example = "127.0.0.1";
+      description = ''
+        The localhost host IPv4 address to bind to and forward TCP to the guest.
+      '';
     };
     hostPort = mkOption {
       default = 31022;
@@ -222,8 +236,10 @@ in
 
       memorySize = cfg.memorySize;
 
+      cores = cfg.cores;
+
       forwardPorts = [
-        { from = "host"; guest.port = 22; host.port = cfg.hostPort; }
+        { from = "host"; guest.port = 22; host.address = cfg.hostAddress; host.port = cfg.hostPort; }
       ];
 
       # Disable graphics for the builder since users will likely want to run it
