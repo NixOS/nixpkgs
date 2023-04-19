@@ -11180,6 +11180,7 @@ with pkgs;
   playwright = with python3Packages; toPythonApplication playwright;
 
   playwright-driver = callPackage ../development/web/playwright/driver.nix { };
+  playwright-test = callPackage ../development/web/playwright-test/wrapped.nix { };
 
   please = callPackage ../tools/security/please { };
 
