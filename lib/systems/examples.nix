@@ -135,6 +135,11 @@ rec {
     libc = "newlib";
   };
 
+  tillitis = {
+    config = "riscv32-none-elf";
+    isStatic = true;
+  };
+
   mmix = {
     config = "mmix-unknown-mmixware";
     libc = "newlib";
