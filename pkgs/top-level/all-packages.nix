@@ -32858,6 +32858,8 @@ with pkgs;
 
   osmo = callPackage ../applications/office/osmo { };
 
+  osmo-bsc = callPackage ../servers/osmocom/osmo-bsc { };
+
   osmo-hlr = callPackage ../servers/osmocom/osmo-hlr { };
 
   osmo-mgw = callPackage ../servers/osmocom/osmo-mgw { };
