@@ -664,6 +664,7 @@ in {
   seafile = handleTest ./seafile.nix {};
   searx = handleTest ./searx.nix {};
   service-runner = handleTest ./service-runner.nix {};
+  sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = handleTest ./sfxr-qt.nix {};
   sgtpuzzles = handleTest ./sgtpuzzles.nix {};
   shadow = handleTest ./shadow.nix {};
