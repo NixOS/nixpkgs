@@ -5280,6 +5280,8 @@ with pkgs;
   maple-mono = (callPackage ../data/fonts/maple-font { }).Mono;
   maple-mono-NF = (callPackage ../data/fonts/maple-font { }).NF;
   maple-mono-SC-NF = (callPackage ../data/fonts/maple-font { }).SC-NF;
+  maple-mono-otf = (callPackage ../data/fonts/maple-font { }).opentype;
+  maple-mono-woff2 = (callPackage ../data/fonts/maple-font { }).woff2;
 
   marl = callPackage ../development/libraries/marl { };
 
