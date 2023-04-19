@@ -14,6 +14,7 @@ let
 
     # FreeBSD
     "i686-freebsd13" "x86_64-freebsd13"
+    "i686-freebsd14" "x86_64-freebsd14"
 
     # Genode
     "aarch64-genode" "i686-genode" "x86_64-genode"

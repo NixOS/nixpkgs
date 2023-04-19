@@ -109,6 +109,17 @@ let inherit (localSystem) system;
                         "--without-libintl-prefix"
                         "--without-libiconv-prefix"
                       ];
+      patches = [{
+        url = "https://git.savannah.gnu.org/cgit/cpio.git/patch/src/global.c?id=641d3f489cf6238bb916368d4ba0d9325a235afb";
+        sha256 = "ftJs4vYkybaIxqtfLy0NfpBnHZ2HGCRbAUHQLHm6cVs=";
+      }];
+    };
+    tar = trivialBuilder rec {
+      inherit (localSystem) system;
+      name = "tar";
+      ver = "1.34";
+      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.gz";
+      sha256 = "A9kIz1doz+a3rViMkhxu0hrKv7K3m3iNEzBFNQdkeu0=";
     };
     sed = trivialBuilder rec {
       inherit (localSystem) system;
@@ -163,6 +174,13 @@ let inherit (localSystem) system;
                         "--with-ca-bundle=${cacert}"
                       ];
     };
+    zlib = trivialBuilder rec {
+      inherit (localSystem) system;
+      name = "zlib";
+      ver = "1.2.13";
+      url = "https://github.com/madler/zlib/releases/download/v${ver}/zlib-${ver}.tar.gz";
+      sha256 = "s6JN6XqP28g1uYMxaVAQMLiXcDG8tUs7OsE3QPhGqzA=";
+    };
     bashExe = "${bash}/bin/bash";
 in
 [
@@ -173,15 +191,17 @@ in
     bootstrapTools = derivation ({
       inherit system;
       inherit make bash coreutils findutils
-        diffutils grep patch gawk cpio sed
-        curl;
+        diffutils grep patch gawk cpio tar sed
+        curl zlib;
 
       name = "trivial-bootstrap-tools";
+      version = "9.9.9";
       builder = bashExe;
       args = [ ./trivial-bootstrap.sh ];
       buildInputs = [ make ];
       mkdir = "/bin/mkdir";
       ln = "/bin/ln";
+      outputs = [ "out" ];
     } // lib.optionalAttrs config.contentAddressedByDefault {
       __contentAddressed = true;
       outputHashAlgo = "sha256";
@@ -208,7 +228,7 @@ in
       inherit config;
       initialPath = [ "/" "/usr" ];
       shell = "${bootstrapTools}/bin/bash";
-      fetchurlBoot = null;
+      fetchurlBoot = fetchurl;
       cc = null;
       overrides = self: super: {
       };
@@ -251,11 +271,8 @@ in
         buildPackages = {
           inherit (prevStage) stdenv;
         };
-        cc           = {
-          name    = "clang-9.9.9";
-          cc      = "/usr";
-          outPath = prevStage.bootstrapTools;
-        };
+        cc = prevStage.bootstrapTools;
+        zlib = prevStage.bootstrapTools;
         isClang      = true;
         bintools = import ../../build-support/bintools-wrapper {
           inherit lib;

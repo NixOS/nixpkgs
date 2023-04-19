@@ -1081,7 +1081,9 @@ rec {
        getOutput :: String -> Derivation -> String
   */
   getOutput = output: pkg:
-    if ! pkg ? outputSpecified || ! pkg.outputSpecified
+    if pkg == null
+      then "null"
+      else if ! pkg ? outputSpecified || ! pkg.outputSpecified
       then pkg.${output} or pkg.out or pkg
       else pkg;
 

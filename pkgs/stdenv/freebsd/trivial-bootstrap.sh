@@ -17,7 +17,7 @@ ln () {
     fi
   fi
   if test ! -f "$1"; then
-    echo Target "$2" does not exist
+    echo Source "$1" does not exist
     exit 1
   fi
   # TODO: check that destination directory exists
@@ -78,7 +78,7 @@ ln /bin/ps
 ln /bin/hostname
 ln /usr/bin/cmp
 ln $sed/bin/sed
-ln /usr/bin/tar tar
+ln $tar/bin/tar tar
 ln $gawk/bin/gawk
 ln $gawk/bin/gawk awk
 ln $cpio/bin/cpio
@@ -94,7 +94,7 @@ ln /usr/bin/which which
 # pkg info -l binutils | grep usr/local/bin
 ln /usr/bin/addr2line
 ln /usr/bin/ar
-ln /usr/bin/as
+#ln /usr/bin/as
 ln /usr/bin/c++filt
 #ln /usr/bin/dwp
 #ln /usr/bin/elfedit

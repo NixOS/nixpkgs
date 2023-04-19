@@ -40,10 +40,10 @@ in
   else if config ? replaceStdenv then stagesCustom
   else if localSystem.isLinux then stagesLinux
   else if localSystem.isDarwin then stagesDarwin
+  else if localSystem.isFreeBSD then stagesFreeBSD
   else # misc special cases
   { # switch
     x86_64-solaris = stagesNix;
     i686-cygwin = stagesNative;
     x86_64-cygwin = stagesNative;
-    x86_64-freebsd = stagesFreeBSD;
   }.${localSystem.system} or stagesNative

@@ -194,7 +194,7 @@ with pkgs;
       pythonInterpreter = "${python3.withPackages (ps: [ ps.pyelftools ])}/bin/python";
       autoPatchelfScript = ../build-support/setup-hooks/auto-patchelf.py;
     };
-    meta.platforms = lib.platforms.linux;
+    meta.platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   } ../build-support/setup-hooks/auto-patchelf.sh;
 
   tomato-c = callPackage ../applications/misc/tomato-c { };
@@ -1192,7 +1192,7 @@ with pkgs;
             fetchurl = stdenv.fetchurlBoot;
           };
         });
-        perl = buildPackages.perl.override { fetchurl = stdenv.fetchurlBoot; };
+        perl = buildPackages.perl.override { inherit zlib; fetchurl = stdenv.fetchurlBoot; };
         openssl = buildPackages.openssl.override {
           fetchurl = stdenv.fetchurlBoot;
           buildPackages = {
@@ -1203,6 +1203,7 @@ with pkgs;
               gmp = null;
               aclSupport = false;
               attrSupport = false;
+              autoreconfHook = null;
             };
             inherit perl;
           };
@@ -17444,11 +17445,12 @@ with pkgs;
     , nixSupport ? {}
     , ...
     } @ extraArgs:
-      callPackage ../build-support/cc-wrapper (let self = {
+      callPackage ../build-support/cc-wrapper (let self = rec {
     nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
     noLibc = !self.nativeLibc && (self.libc == null);
+    propagateDoc = if nativeTools then false else stdenv.cc.propagateDoc;
 
     isGNU = cc.isGNU or false;
     isClang = cc.isClang or false;
@@ -17465,12 +17467,12 @@ with pkgs;
     , libc ? if stdenv.targetPlatform != stdenv.hostPlatform then libcCross else stdenv.cc.libc
     , ...
     } @ extraArgs:
-      callPackage ../build-support/bintools-wrapper (let self = {
+      callPackage ../build-support/bintools-wrapper (let self = rec {
     nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
-
-    noLibc = (self.libc == null);
+    propagateDoc = if nativeTools then false else stdenv.cc.propagateDoc;
+    noLibc = !self.nativeLibc && (self.libc == null);
 
     inherit bintools libc;
     inherit (darwin) postLinkSignHook signingUtils;
@@ -23184,9 +23186,15 @@ with pkgs;
   # We also provide `libiconvReal`, which will always be a standalone libiconv,
   # just in case you want it regardless of platform.
   libiconv =
-    if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" "nblibc" "wasilibc" ]
+    if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" "nblibc" "wasilibc" "fblibc" ]
       then libcIconv (if stdenv.hostPlatform != stdenv.buildPlatform
-        then libcCross
+          then libcCross
+        else if stdenv.cc.nativeLibc
+          then {
+            pname = "libc-${stdenv.hostPlatform.system}";
+            version = "native";
+            dev = stdenv.cc.nativePrefix;
+          }
         else stdenv.cc.libc)
     else if stdenv.hostPlatform.isDarwin
       then darwin.libiconv

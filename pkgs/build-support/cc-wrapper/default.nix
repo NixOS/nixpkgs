@@ -103,6 +103,7 @@ let
   useGccForLibs = useCcForLibs
     && libcxx == null
     && !stdenv.targetPlatform.isDarwin
+    && !stdenv.targetPlatform.isFreeBSD
     && !(stdenv.targetPlatform.useLLVM or false)
     && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
     && !(stdenv.targetPlatform.isiOS or false)

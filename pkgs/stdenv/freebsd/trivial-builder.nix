@@ -1,4 +1,4 @@
-{ system, name, ver, url, sha256, configureArgs ? [], executable ? false } :
+{ system, name, ver, url, sha256, configureArgs ? [], executable ? false, patches ? [] } :
 
 let fetchURL = import <nix/fetchurl.nix>;
 
@@ -10,4 +10,5 @@ in derivation {
     inherit url sha256 executable;
   };
   builder = ./trivial-builder.sh;
+  patches = builtins.map (patch: fetchURL ({ executable = false; } // patch)) patches;
 }

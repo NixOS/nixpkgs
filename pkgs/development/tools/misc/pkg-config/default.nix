@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-internal-glib" ]
     ++ lib.optionals (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ]
+    ++ lib.optionals (stdenv.cc.isClang) [ "CFLAGS=-Wno-int-conversion" ]
        # Can't run these tests while cross-compiling
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
        [ "glib_cv_stack_grows=no"
