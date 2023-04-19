@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     rdma-core
     zlib
   ] ++ lib.optional enableCuda cudatoolkit
-  ++ lib.optional enableRocm [ rocm-core rocm-runtime rocm-device-libs hip ];
+  ++ lib.optionals enableRocm [ rocm-core rocm-runtime rocm-device-libs hip ];
 
   configureFlags = [
     "--with-rdmacm=${rdma-core}"

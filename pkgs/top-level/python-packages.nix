@@ -7408,9 +7408,7 @@ self: super: with self; {
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
-  playwright = callPackage ../development/python-modules/playwright {
-    inherit (pkgs) jq;
-  };
+  playwright = callPackage ../development/python-modules/playwright { };
 
   pmsensor = callPackage ../development/python-modules/pmsensor { };
 

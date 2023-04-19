@@ -137,6 +137,9 @@ let
           GameController ImageCaptureCore LocalAuthentication
           MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
           ReplayKit SecurityInterface Vision;
+        xcbuild = buildPackages.xcbuild.override {
+          productBuildVer = "20A2408";
+        };
       };
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
       qtwebview = callPackage ./modules/qtwebview.nix {
