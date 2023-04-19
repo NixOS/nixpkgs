@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchurl
+, fetchpatch
 , zlib
 , mkYarnModules
 , sphinx
@@ -111,6 +112,12 @@ pythonPackages.buildPythonApplication rec {
     # Expose setup.py for later use
     ./expose-setup.py.patch
     ./CVE-2022-4223.patch
+    (fetchpatch {
+      name = "CVE-2023-0241.patch";
+      url = "https://github.com/pgadmin-org/pgadmin4/commit/8b236e7bc8238a2b90ae1524eef2ce120f53ad9d.patch";
+      excludes = [ "web/yarn.lock" ];
+      sha256 = "sha256-W1p3SlStGan1VN6/NgG6PQ0l4lweyvux23fuKBHxt7A=";
+    })
   ];
 
   postPatch = ''
