@@ -24,6 +24,8 @@
 , libintl
 , libiconv
 , Foundation
+, bash
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -66,6 +68,18 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
+  nativeCheckInputs = [
+    bash
+    python3
+  ];
+
+  # Note: postConfigure instead of postPatch in order to include some
+  # autoconf-generated files. The template files for the autogen'd scripts are
+  # not chmod +x, so patchShebangs misses them.
+  postConfigure = ''
+    patchShebangs test
+  '';
+
   # Disable assertions which include -dev QtBase file paths.
   env.NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
@@ -82,6 +96,8 @@ stdenv.mkDerivation rec {
     "--without-gtk"
     "--without-qt"
   ]);
+
+  doCheck = !stdenv.isDarwin;
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
