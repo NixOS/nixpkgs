@@ -38,6 +38,10 @@ buildGoModule rec {
       --bash <($out/bin/sftpgo gen completion bash) \
       --zsh <($out/bin/sftpgo gen completion zsh) \
       --fish <($out/bin/sftpgo gen completion fish)
+
+    shareDirectory="$out/share/sftpgo"
+    mkdir -p "$shareDirectory"
+    cp -r ./{openapi,static,templates} "$shareDirectory"
   '';
 
   meta = with lib; {
