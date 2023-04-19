@@ -5,6 +5,7 @@
 , gsettings-desktop-schemas
 , makeDesktopItem
 , makeWrapper
+, opensc
 , writeTextDir
 , configText ? ""
 }:
@@ -52,6 +53,11 @@ let
 
       # This library causes the program to core-dump occasionally. Use ours instead.
       rm -r $out/lib/vmware/view/crtbora
+
+      # This opensc library is required to support smartcard authentication during the
+      # initial connection to Horizon.
+      mkdir $out/lib/vmware/view/pkcs11
+      ln -s ${opensc}/lib/pkcs11/opensc-pkcs11.so $out/lib/vmware/view/pkcs11/libopenscpkcs11.so
 
       ${lib.concatMapStrings wrapBinCommands bins}
     '';
