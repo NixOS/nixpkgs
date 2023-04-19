@@ -247,6 +247,9 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
+  # 2023-04-17: https://gitlab.haskell.org/ghc/ghc-debug/-/issues/20
+  ghc-debug-brick = doJailbreak super.ghc-debug-brick;
+
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
@@ -1423,12 +1426,21 @@ self: super: {
     });
   };
 
-  jsaddle-webkit2gtk = overrideCabal (old: {
-    postPatch = old.postPatch or "" + ''
-      sed -i 's/bytestring.*0.11/bytestring/' jsaddle-webkit2gtk.cabal
-    '';
-  }) super.jsaddle-webkit2gtk;
 
+  # 2023-04-16: https://github.com/ghcjs/jsaddle/pull/137
+  jsaddle-webkit2gtk = lib.pipe super.jsaddle-webkit2gtk
+    [
+      (appendPatch (fetchpatch {
+        url = "https://github.com/ghcjs/jsaddle/commit/f990366f19d23a8008d482572d52351c1a6f7215.patch";
+        hash = "sha256-IbkJrlyG6q5rqMIhn//Dt3u6T314Pug+mQMwwe0LK5w=";
+        relative = "jsaddle-webkit2gtk";
+      }))
+      (overrideCabal (old: {
+        postPatch = old.postPatch or "" + ''
+          sed -i 's/bytestring.*0.11/bytestring/' jsaddle-webkit2gtk.cabal
+        '';
+      }))
+    ];
 
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {

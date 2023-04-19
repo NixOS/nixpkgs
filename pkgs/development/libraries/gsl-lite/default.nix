@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gsl-lite";
-  version = "0.40.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "gsl-lite";
     repo = "gsl-lite";
     rev = "v${version}";
-    hash = "sha256-80ksT8XFn2LLMr63gKGZD/0+FDLnAtFyMpuuSjtoBlk=";
+    hash = "sha256-cuuix302bVA7dWa7EJoxJ+otf1rSzjWQK8DHJsVkQio=";
   };
 
   nativeBuildInputs = [ cmake ninja ];

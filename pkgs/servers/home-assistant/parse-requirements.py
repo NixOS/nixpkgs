@@ -46,6 +46,17 @@ PKG_PREFERENCES = {
     "youtube_dl": "youtube-dl-light",
 }
 
+# Some dependencies are loaded dynamically at runtime, and are not
+# mentioned in the manifest files.
+EXTRA_COMPONENT_DEPS = {
+    "conversation": [
+        "intent"
+    ],
+    "default_config": [
+        "backup",
+    ],
+}
+
 
 
 def run_sync(cmd: List[str]) -> None:
@@ -88,6 +99,8 @@ def parse_components(version: str = "master"):
         )
         for domain in sorted(integrations):
             integration = integrations[domain]
+            if extra_deps := EXTRA_COMPONENT_DEPS.get(integration.domain):
+                integration.dependencies.extend(extra_deps)
             if not integration.disabled:
                 components[domain] = integration.manifest
 
