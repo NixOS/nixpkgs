@@ -1,8 +1,6 @@
 { lib, fetchFromGitHub, rustPlatform, pkg-config, openssl }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "cfdyndns";
   version = "0.0.3";
   src = fetchFromGitHub {
