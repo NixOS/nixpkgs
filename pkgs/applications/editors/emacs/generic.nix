@@ -62,9 +62,17 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
 assert withTreeSitter -> tree-sitter != null;
 
 
+let
+  libGccJitLibraryPaths = [
+    "${lib.getLib libgccjit}/lib/gcc"
+    "${lib.getLib stdenv.cc.libc}/lib"
+  ] ++ lib.optionals (stdenv.cc?cc.libgcc) [
+    "${lib.getLib stdenv.cc.cc.libgcc}/lib"
+  ];
+in
 (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
   NATIVE_FULL_AOT = "1";
-  LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
+  LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
 } // {
   pname = pname + lib.optionalString ( !withX && !withNS && !withMacport && !withGTK2 && !withGTK3 ) "-nox";
   inherit version;
@@ -75,17 +83,15 @@ assert withTreeSitter -> tree-sitter != null;
             then ./native-comp-driver-options-28.patch
             else ./native-comp-driver-options.patch;
       backendPath = (lib.concatStringsSep " "
-        (builtins.map (x: ''"-B${x}"'') [
+        (builtins.map (x: ''"-B${x}"'') ([
           # Paths necessary so the JIT compiler finds its libraries:
           "${lib.getLib libgccjit}/lib"
-          "${lib.getLib libgccjit}/lib/gcc"
-          "${lib.getLib stdenv.cc.libc}/lib"
-
+        ] ++ libGccJitLibraryPaths ++ [
           # Executable paths necessary for compilation (ld, as):
           "${lib.getBin stdenv.cc.cc}/bin"
           "${lib.getBin stdenv.cc.bintools}/bin"
           "${lib.getBin stdenv.cc.bintools.bintools}/bin"
-        ]));
+        ])));
     })
   ];
 
@@ -138,7 +144,7 @@ assert withTreeSitter -> tree-sitter != null;
   nativeBuildInputs = [ pkg-config makeWrapper ]
     ++ lib.optionals (srcRepo || withMacport) [ texinfo ]
     ++ lib.optionals srcRepo [ autoreconfHook ]
-    ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
+    ++ lib.optional (withPgtk || withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls gettext jansson harfbuzz.dev ]
@@ -256,6 +262,7 @@ assert withTreeSitter -> tree-sitter != null;
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 jwiegley adisbladis matthewbauer atemu ];
     platforms   = if withMacport then platforms.darwin else platforms.all;
+    broken      = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
 
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more.  At its

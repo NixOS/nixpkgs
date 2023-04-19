@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3Packages, makeWrapper, gettext, installShellFiles
+{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
 , rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
 , fullBuild ? false
@@ -21,11 +21,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.3.3";
+    version = "6.4.2";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-E8l/9YnHYF6ApIjzNoUs4dU4xdQUPPszvmm9rd2RV70=";
+      sha256 = "sha256-W59qPDX05GlchU73FCjPlGHKGlKfaRwG3G97SOe7MzU=";
     };
 
     format = "other";
@@ -35,7 +35,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-ZQYNFEbvSwiJ/BSQ0ZxpjFrmyXkKjVJciwz45Br7Rl8=";
+      sha256 = "sha256-dRajIqM91fESEm4EEa9qvS8h6/HlLZIJZztVGoS/G+M=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -149,17 +149,9 @@ let
     # doesn't like the extra setlocale warnings emitted by our bash wrappers
     test-locale.t
 
-    # Python 3.10-3.12 deprecation warning: distutils
-    # https://bz.mercurial-scm.org/show_bug.cgi?id=6729
-    test-hghave.t
-
     # Python 3.10-3.12 deprecation warning: asyncore
     # https://bz.mercurial-scm.org/show_bug.cgi?id=6727
     test-patchbomb-tls.t
-
-    # Test wanting TLS 1.0 and 1.1, not available with OpenSSL v3.
-    # https://bz.mercurial-scm.org/show_bug.cgi?id=6760
-    test-https.t
     EOF
 
     export HGTEST_REAL_HG="${mercurial}/bin/hg"

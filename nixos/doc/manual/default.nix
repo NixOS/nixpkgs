@@ -168,7 +168,7 @@ let
         ./manual.md \
         ./manual-combined-pre.xml
 
-      ${pkgs.libxslt.bin}/bin/xsltproc \
+      xsltproc \
         -o manual-combined.xml ${./../../lib/make-options-doc/postprocess-option-descriptions.xsl} \
         manual-combined-pre.xml
 

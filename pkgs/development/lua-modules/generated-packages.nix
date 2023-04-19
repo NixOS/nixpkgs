@@ -1121,6 +1121,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+lua-curl = callPackage({ lua, buildLuarocksPackage, fetchzip, luaOlder, luaAtLeast }:
+buildLuarocksPackage {
+  pname = "lua-curl";
+  version = "0.3.13-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lua-curl-0.3.13-1.rockspec";
+    sha256 = "0lz534sm35hxazf1w71hagiyfplhsvzr94i6qyv5chjfabrgbhjn";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/Lua-cURL/Lua-cURLv3/archive/v0.3.13.zip";
+    sha256 = "0gn59bwrnb2mvl8i0ycr6m3jmlgx86xlr9mwnc85zfhj7zhi5anp";
+  };
+
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/Lua-cURL";
+    description = "Lua binding to libcurl";
+    license.fullName = "MIT/X11";
+  };
+}) {};
+
 lua-iconv = callPackage({ fetchurl, lua, buildLuarocksPackage, luaOlder }:
 buildLuarocksPackage {
   pname = "lua-iconv";
@@ -2346,17 +2369,17 @@ buildLuarocksPackage {
   };
 }) {};
 
-luv = callPackage({ buildLuarocksPackage, lua, fetchurl, luaOlder }:
+luv = callPackage({ luaOlder, buildLuarocksPackage, fetchurl, lua }:
 buildLuarocksPackage {
   pname = "luv";
-  version = "1.43.0-0";
+  version = "1.44.2-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luv-1.43.0-0.rockspec";
-    sha256 = "0z5a7yp20xbb3f9w73skm9fj89gxxqv72nrxjq3kycsc6c2v3m8f";
+    url    = "mirror://luarocks/luv-1.44.2-1.rockspec";
+    sha256 = "07jwi50i16rv7sj914k1q3l9dy9wldbw2skmsdrzlkc57mqvg348";
   }).outPath;
   src = fetchurl {
-    url    = "https://github.com/luvit/luv/releases/download/1.43.0-0/luv-1.43.0-0.tar.gz";
-    sha256 = "1qlx1r79sfn8r20yx19bhdr0v58ykpwgwzy5vma9p2ngrlynyyjn";
+    url    = "https://github.com/luvit/luv/releases/download/1.44.2-1/luv-1.44.2-1.tar.gz";
+    sha256 = "0c2wkszxw6gwa4l6g1d2zzh660j13lif6c7a910vq7zn8jycgd9y";
   };
 
   disabled = (luaOlder "5.1");

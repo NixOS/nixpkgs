@@ -4,9 +4,10 @@
 , dtkwidget
 , qt5integration
 , qt5platform-plugins
+, qtbase
+, qtsvg
 , dde-qt-dbus-factory
 , cmake
-, qtbase
 , qttools
 , pkg-config
 , wrapQtAppsHook
@@ -33,14 +34,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dtkwidget
+    qt5integration
+    qt5platform-plugins
+    qtbase
+    qtsvg
     dde-qt-dbus-factory
     gtest
   ];
 
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-    "--prefix QT_QPA_PLATFORM_PLUGIN_PATH : ${qt5platform-plugins}/${qtbase.qtPluginPrefix}"
-  ];
+  strictDeps = true;
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 

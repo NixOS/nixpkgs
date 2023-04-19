@@ -1,43 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, glib
-, zlib
-, pcre
-, libmysqlclient
-, libressl
+{ lib, stdenv, fetchFromGitHub
+, cmake, pkg-config, sphinx
+, glib , pcre
+, libmysqlclient, libressl
+, zlib, zstd
 }:
-
-let inherit (lib) getDev; in
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.13.1-1";
+  version = "0.14.3-1";
 
   src = fetchFromGitHub {
-    owner  = "maxbube";
+    owner  = "mydumper";
     repo = "mydumper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Oknivkyr3wOfjnDccEeFVt7D2l1CkeWgXahsQCtAc0I=";
+    hash = "sha256-qyJGnrBOElQ3s2VoOWfW1luacd33haanmzKidMBgCpc=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  outputs = [ "out" "doc" "man" ];
+
+  nativeBuildInputs = [ cmake pkg-config sphinx ];
 
   buildInputs = [
-    glib
-    zlib
-    pcre
-    libmysqlclient
-    libressl
+    glib pcre
+    libmysqlclient libressl
+    zlib zstd
   ];
 
   cmakeFlags = [
-    "-DMYSQL_INCLUDE_DIR=${getDev libmysqlclient}/include/mysql"
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
+    "-DWITH_ZSTD=ON"
   ];
 
   meta = with lib; {

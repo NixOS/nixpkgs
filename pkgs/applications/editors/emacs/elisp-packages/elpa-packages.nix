@@ -106,6 +106,31 @@ self: let
         };
       });
 
+      jinx = super.jinx.overrideAttrs (old: {
+        dontUnpack = false;
+
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+            pkgs.pkg-config
+        ];
+
+        buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
+
+        postBuild = ''
+          NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
+          $CC -shared -o jinx-mod.so jinx-mod.c -lenchant-2
+        '';
+
+        postInstall = (old.postInstall or "") + "\n" + ''
+          outd=$out/share/emacs/site-lisp/elpa/jinx-*
+          install -m444 -t $outd jinx-mod.so
+          rm $outd/jinx-mod.c $outd/emacs-module.h
+        '';
+
+        meta = old.meta // {
+          maintainers = [ lib.maintainers.DamienCassou ];
+        };
+      });
+
       plz = super.plz.overrideAttrs (
         old: {
           dontUnpack = false;

@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
   name = "ramfetch";
-  version = "1.1.0";
+  version = "1.1.0a";
 
   src = fetchgit {
-    url = "https://codeberg.org/o69mar/ramfetch.git";
-    rev = "v${version}";
-    hash = "sha256-XUph+rTbw5LXWRq+OSKl0EjFac+MQAx3NBu4rWdWR3w=";
+    url = "https://codeberg.org/jahway603/ramfetch.git";
+    rev = version;
+    hash = "sha256-sUreZ6zm+a1N77OZszjnpS4mmo5wL1dhNGVldJCGoag=";
   };
 
   dontBuild = true;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A tool which displays memory information";
-    homepage = "https://codeberg.org/o69mar/ramfetch";
+    homepage = "https://codeberg.org/jahway603/ramfetch";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.markbeep ];

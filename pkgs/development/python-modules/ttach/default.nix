@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ torch ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "ttach" ];
 
   meta = with lib; {

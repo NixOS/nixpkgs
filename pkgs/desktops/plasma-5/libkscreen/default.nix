@@ -1,8 +1,6 @@
 { mkDerivation
-, lib
 , propagate
 , extra-cmake-modules
-, qtbase
 , wayland-scanner
 , kconfig
 , kwayland

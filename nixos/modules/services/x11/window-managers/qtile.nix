@@ -27,8 +27,7 @@ in
       type = types.enum [ "x11" "wayland" ];
       default = "x11";
       description = lib.mdDoc ''
-          Backend to use in qtile:
-          <option>x11</option> or <option>wayland</option>.
+          Backend to use in qtile: `x11` or `wayland`.
       '';
     };
 

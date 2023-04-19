@@ -49,6 +49,8 @@ let
       sha256 = "sha256:1xb754fha4s0bgjfqjxzqljvalmkfdwdn5y4ycsp51wiah235bsy";
     };
 
+    duneVersion = "3";
+
     propagatedBuildInputs = [ bwd ];
 
     doCheck = true;

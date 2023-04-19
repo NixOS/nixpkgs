@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, unbound, openssl, boost
-, lmdb, miniupnpc, readline, git, zeromq, libsodium, rapidjson, cppzmq }:
+, lmdb, miniupnpc, readline, git, libsodium, rapidjson, cppzmq }:
 
 stdenv.mkDerivation rec {
   pname = "masari";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost miniupnpc openssl unbound
-    zeromq  readline libsodium
+    readline libsodium
     rapidjson cppzmq
   ];
 

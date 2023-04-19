@@ -1,4 +1,5 @@
 { lib
+, aiomisc-pytest
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiormq";
-  version = "6.7.2";
+  version = "6.7.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ujRw+trXOZaCRsZdkE3WoomOSdYoQkHmtlyFg1mp3Sg=";
+    hash = "sha256-vORo5Kqy+Rg8WCyFU5lyQHS4EALYkycY4XxYhABV/4A=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    aiomisc
+    aiomisc-pytest
   ];
 
   # Tests attempt to connect to a RabbitMQ server

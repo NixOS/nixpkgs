@@ -1,10 +1,12 @@
-{ buildDunePackage, mirage-block, io-page, logs }:
+{ buildDunePackage, mirage-block, logs }:
 
 buildDunePackage rec {
   pname = "mirage-block-combinators";
   inherit (mirage-block) version src;
 
-  propagatedBuildInputs = [ mirage-block io-page logs ];
+  duneVersion = "3";
+
+  propagatedBuildInputs = [ mirage-block logs ];
 
   meta = mirage-block.meta // {
     description = "Block signatures and implementations for MirageOS using Lwt";

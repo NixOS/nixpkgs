@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-relocatable" # needed for tests
+    "--with-aspell"
+    "--with-hspell"
+    "--with-hunspell"
+    "--with-nuspell"
   ];
 
   meta = with lib; {

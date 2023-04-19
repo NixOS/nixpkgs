@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bzip3";
-  version = "1.2.2";
+  version = "1.3.0";
 
   outputs = [ "bin" "dev" "out" ];
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kspalaiologos";
     repo = "bzip3";
     rev = finalAttrs.version;
-    hash = "sha256-B59Z7+5SFjt/UgppNtdUtzw96y+EVglHoKzq9Il9ud8=";
+    hash = "sha256-g6+NdgbmbumNs6xt+D9F/yNclrUqOk6CJLCcjjSrzk4=";
   };
 
   postPatch = ''

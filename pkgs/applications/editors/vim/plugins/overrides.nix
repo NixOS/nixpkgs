@@ -90,9 +90,7 @@
 , makeWrapper
 , procps
 
-  # vim-clap dependencies
-, libgit2
-, libiconv
+  # sg-nvim dependencies
 , openssl
 , pkg-config
 
@@ -120,6 +118,10 @@
 }:
 
 self: super: {
+
+  autosave-nvim = super.autosave-nvim.overrideAttrs(old: {
+    dependencies = with super; [ plenary-nvim ];
+  });
 
   barbecue-nvim = super.barbecue-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
@@ -299,6 +301,14 @@ self: super: {
 
   completion-treesitter = super.completion-treesitter.overrideAttrs (old: {
     dependencies = with self; [ completion-nvim nvim-treesitter ];
+  });
+
+  copilot-vim = super.copilot-vim.overrideAttrs (old: {
+    postInstall = ''
+      substituteInPlace $out/autoload/copilot/agent.vim \
+        --replace "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
+                  "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
+    '';
   });
 
   cpsm = super.cpsm.overrideAttrs (old: {
@@ -694,7 +704,7 @@ self: super: {
   });
 
   noice-nvim = super.noice-nvim.overrideAttrs(old: {
-    dependencies = with self; [ nui-nvim nvim-notify ];
+    dependencies = with self; [ nui-nvim ];
   });
 
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
@@ -806,7 +816,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-GN7KM3fkeOcqmyUwsPMw499kS/eYqh8pbyPgMv4/NN4=";
+        cargoHash = "sha256-gnQNQlW/c1vzyR+HbYn7rpxZ1C6WXFcqpylIOTUMZ6g=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -840,18 +850,18 @@ self: super: {
 
   sniprun =
     let
-      version = "1.2.13";
+      version = "1.3.0";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        hash = "sha256-VDLBktZChRgorJt/V/wuFQn/SL4yOZIElmntEQEi8Tc=";
+        hash = "sha256-6UDjrrEtOuB+lrCZVBO4BcZm78qwq8YbQcXAdjNbicY=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoSha256 = "sha256-cJwmuwsC81fSH36TRU7xGzlR4pVdjsw73uRaH1uWY+0=";
+        cargoSha256 = "sha256-ghXYUgXqXvK9RySG/hQR5zpLsyk6L9Htb/UYgMPyWUk=";
 
         nativeBuildInputs = [ makeWrapper ];
 
@@ -870,6 +880,11 @@ self: super: {
       patches = [ ./patches/sniprun/fix-paths.patch ];
       postPatch = ''
         substituteInPlace lua/sniprun.lua --replace '@sniprun_bin@' ${sniprun-bin}
+      '';
+
+      postInstall = ''
+        mkdir $out/doc
+        ln -s $out/docs/sniprun.txt $out/doc/sniprun.txt
       '';
 
       propagatedBuildInputs = [ sniprun-bin ];
@@ -1142,35 +1157,7 @@ self: super: {
     passthru.python3Dependencies = ps: with ps; [ beancount ];
   });
 
-  vim-clap = super.vim-clap.overrideAttrs (old: {
-    preFixup =
-      let
-        maple-bin = rustPlatform.buildRustPackage {
-          name = "maple";
-          inherit (old) src;
-
-          nativeBuildInputs = [
-            pkg-config
-          ];
-
-          buildInputs = [
-            openssl
-          ] ++ lib.optionals stdenv.isDarwin [
-            CoreServices
-            curl
-            libgit2
-            libiconv
-          ];
-
-          cargoHash = "sha256-BFUC6fQ5LpTKx2ztCuFVzXTWzSDl03VYsmVcxBXbiT4=";
-        };
-      in
-      ''
-        ln -s ${maple-bin}/bin/maple $target/bin/maple
-      '';
-
-    meta.platforms = lib.platforms.all;
-  });
+  vim-clap = callPackage ./vim-clap { };
 
   vim-codefmt = super.vim-codefmt.overrideAttrs (old: {
     dependencies = with self; [ vim-maktaba ];
@@ -1346,6 +1333,13 @@ self: super: {
 
   vim-wakatime = super.vim-wakatime.overrideAttrs (old: {
     buildInputs = [ python3 ];
+    patchPhase = ''
+      substituteInPlace plugin/wakatime.vim \
+        --replace 'autocmd BufEnter,VimEnter' \
+                  'autocmd VimEnter' \
+        --replace 'autocmd CursorMoved,CursorMovedI' \
+                  'autocmd CursorMoved,CursorMovedI,BufEnter'
+    '';
   });
 
   vim-xdebug = super.vim-xdebug.overrideAttrs (old: {

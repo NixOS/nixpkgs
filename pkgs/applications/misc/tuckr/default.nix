@@ -2,21 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tuckr";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "RaphGL";
     repo = "Tuckr";
     rev = version;
-    sha256 = "sha256-47qnBGCiPWJGF4QcqjzmDIZWlCO3xE3QyIF6nSPGWAc=";
+    sha256 = "sha256-S4mHNCyK7WGYRBckxQkwA3+eu7QhUyKkOZ/KqhMJf+s=";
   };
 
-  cargoHash = "sha256-IX7ZX4fKBK0wS7nlSdf/bVGzXl2GU7qwwmtPMoOe/m8=";
-
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo update --offline
-  '';
+ cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   doCheck = false; # test result: FAILED. 5 passed; 3 failed;
 

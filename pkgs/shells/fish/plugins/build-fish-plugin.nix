@@ -45,9 +45,11 @@ stdenv.mkDerivation (drvAttrs // {
         source="$1"
         target="$out/share/fish/vendor_$2.d"
 
-        [ -d $source ] || return 0
+        # Check if any .fish file exists in $source
+        [ -n "$(shopt -s nullglob; echo $source/*.fish)" ] || return 0
+
         mkdir -p $target
-        cp -r $source/*.fish "$target/"
+        cp $source/*.fish "$target/"
       }
 
       install_vendor_files completions completions

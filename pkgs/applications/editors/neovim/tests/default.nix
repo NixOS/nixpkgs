@@ -58,12 +58,12 @@ let
   };
 
   # this plugin checks that it's ftplugin/vim.tex is loaded before $VIMRUNTIME/ftplugin/vim.tex
-  # the answer is store in `plugin_was_loaded_too_late` in the cwd
+  # $VIMRUNTIME/ftplugin/vim.tex sources $VIMRUNTIME/ftplugin/initex.vim which sets b:did_ftplugin
+  # we save b:did_ftplugin's value in a `plugin_was_loaded_too_late` file
   texFtplugin = (pkgs.runCommandLocal "tex-ftplugin" {} ''
     mkdir -p $out/ftplugin
-    echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' > $out/ftplugin/tex.vim
+    echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' >> $out/ftplugin/tex.vim
     echo ':q!' >> $out/ftplugin/tex.vim
-    echo '\documentclass{article}' > $out/main.tex
   '') // { pname = "test-ftplugin"; };
 
   # neovim-drv must be a wrapped neovim
@@ -141,10 +141,12 @@ rec {
   # files from $VIMRUNTIME
   run_nvim_with_ftplugin = runTest nvim_with_ftplugin ''
     export HOME=$TMPDIR
-    ${nvim_with_ftplugin}/bin/nvim ${texFtplugin}/main.tex
-    result="$(cat plugin_was_loaded_too_late)"
-    echo $result
-    [ "$result" = 0 ]
+    echo '\documentclass{article}' > main.tex
+
+    ${nvim_with_ftplugin}/bin/nvim main.tex -c "set ft?" -c quit
+    ls -l $TMPDIR
+    # if the file exists, then our plugin has been loaded instead of neovim's
+    [ ! -f plugin_was_loaded_too_late ]
   '';
 
 
@@ -260,13 +262,12 @@ rec {
       packadd dashboard-nvim-unique-for-tests-please-dont-use-opt
 
       " Try to run Dashboard again, and throw if it fails
-      try
-        Dashboard
-        echo "Dashboard found"
-      catch /^Vim\%((\a\+)\)\=:E492/
+      let res = exists(':Dashboard')
+      if res == 0
         echo "Dashboard not found, throwing error"
         cquit 1
-      endtry
+      endif
+      cquit 0
     '';
   };
 

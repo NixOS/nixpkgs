@@ -13,6 +13,7 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   propagatedBuildInputs = [ cstruct-lwt logs mirage-block rresult uri ];
 

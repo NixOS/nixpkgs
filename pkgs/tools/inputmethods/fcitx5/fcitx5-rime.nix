@@ -6,6 +6,9 @@
 , gettext
 , fcitx5
 , librime
+, rime-data
+, symlinkJoin
+, rimeDataPkgs ? [ rime-data ]
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +38,14 @@ stdenv.mkDerivation rec {
     librime
   ];
 
-  patches = [ ./fcitx5-rime-with-nix-env-variable.patch ];
+  rimeDataDrv = symlinkJoin {
+    name = "fcitx5-rime-data";
+    paths = rimeDataPkgs;
+  };
+
+  postInstall = ''
+    cp -r "${rimeDataDrv}/share/rime-data/." $out/share/rime-data/
+  '';
 
   meta = with lib; {
     description = "RIME support for Fcitx5";

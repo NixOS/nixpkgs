@@ -17,7 +17,7 @@
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , libucontext ? null
-, gnatboot ? null
+, gnat-bootstrap ? null
 , enableMultilib ? false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
@@ -29,6 +29,9 @@
 , buildPackages
 , libxcrypt
 , disableGdbPlugin ? !enablePlugin
+, disableBootstrap ? !stdenv.hostPlatform.isDarwin
+, nukeReferences
+, callPackage
 }:
 
 # Make sure we get GNU sed.
@@ -36,7 +39,7 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
-assert langAda -> gnatboot != null;
+assert langAda -> gnat-bootstrap != null;
 
 # TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
 #   error: GDC is required to build d
@@ -54,7 +57,6 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
-    disableBootstrap = !(with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -157,7 +159,7 @@ let majorVersion = "12";
         fetchurl
         gettext
         gmp
-        gnatboot
+        gnat-bootstrap
         gnused
         isl
         langAda
@@ -177,6 +179,7 @@ let majorVersion = "12";
         mpfr
         name
         noSysDirs
+        nukeReferences
         patchelf
         perl
         profiledCompiler
@@ -194,7 +197,7 @@ let majorVersion = "12";
 
 in
 
-stdenv.mkDerivation ({
+lib.pipe (stdenv.mkDerivation ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -344,4 +347,9 @@ stdenv.mkDerivation ({
 }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
-)
+))
+[
+  (callPackage ../common/libgcc.nix   { inherit langC langCC langJit; })
+  (callPackage ../common/checksum.nix { inherit langC langCC; })
+]
+

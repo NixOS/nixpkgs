@@ -12,14 +12,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-run";
-  version = "0.3.6";
+  version = "0.3.8";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-HYFVdj1kASu+VKnDJA35zblPsgUeYC9YVlS84Hkx1Sk=";
+    hash = "sha256-e5HXqqnRnz+6RHOZnZ4VTJhiYKeBSHEjdKBAPKLXf5Q=";
   };
 
-  cargoSha256 = "sha256-nhs9qNFd1GK70sL5sPPeMazuPUP67epHayXnw3aXTfk=";
+  cargoHash = "sha256-8Hpjrjd+dCu9eaFxJ3SRHNBuRaNmvt42vkN2ls3hskA=";
 
   nativeBuildInputs = [
     pkg-config

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ icu ];
+  propagatedBuildInputs = [ icu ];
 
   outputs = [ "out" "lib" "dev" ];
 

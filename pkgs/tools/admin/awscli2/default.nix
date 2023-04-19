@@ -9,8 +9,8 @@
 }:
 
 let
-  py = python3.override {
-    packageOverrides = self: super: {
+  py = python3 // {
+    pkgs = python3.pkgs.overrideScope (self: super: {
       ipython = super.ipython.overridePythonAttrs (oldAttrs: rec {
         pname = "ipython";
         version = "8.5.0";
@@ -31,20 +31,20 @@ let
           hash = "sha256-nxzRax6GwpaPJRnX+zHdnWaZFvUVYSwmnRTp7VK1FlA=";
         };
       });
-    };
+    });
   };
 
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.11.4"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.11.6"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-vue0daG+s7DdIWXZIRS7pjbQKlnxT3xZxGLTmwWWNpQ=";
+    hash = "sha256-6VEDGakOx2LJcDbBKicxxfOt0t2tf2iaRXkx1Em0Ieg=";
   };
 
   postPatch = ''

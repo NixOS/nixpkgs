@@ -902,4 +902,16 @@ rec {
       platforms = platforms.all;
     };
   };
+
+  /* POLISH */
+
+  pl_PL = pl-pl;
+  pl-pl = mkDictFromLibreOffice {
+    shortName = "pl-pl";
+    dictFileName = "pl_PL";
+    shortDescription = "Polish (Poland)";
+    readmeFile = "README_en.txt";
+    # the README doesn't specify versions of licenses :/
+    license = with lib.licenses; [ gpl2Plus lgpl2Plus mpl10 asl20 cc-by-sa-25 ];
+  };
 }

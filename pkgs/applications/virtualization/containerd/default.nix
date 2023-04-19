@@ -6,17 +6,18 @@
 , installShellFiles
 , util-linux
 , nixosTests
+, kubernetes
 }:
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.6.19";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    hash = "sha256-Us7NEv2BngV1Q/Bkuv4XOjVjpqThL0LnIH+yciPG3L8=";
+    hash = "sha256-OHgakSNqIbXYDC7cTw2fy0HlElQMilDbSD5SSjbYJhc=";
   };
 
   vendorHash = null;
@@ -42,7 +43,7 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) docker; };
+  passthru.tests = { inherit (nixosTests) docker; } // kubernetes.tests;
 
   meta = with lib; {
     changelog = "https://github.com/containerd/containerd/releases/tag/${src.rev}";

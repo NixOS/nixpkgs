@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , backendStdenv
 , fetchurl
 , autoPatchelfHook
@@ -30,11 +31,11 @@ backendStdenv.mkDerivation {
   ];
 
   buildInputs = [
-    # autoPatchelfHook will search for a libstdc++ and we're giving it a
-    # "compatible" libstdc++ from the same toolchain that NVCC uses.
-    #
+    # autoPatchelfHook will search for a libstdc++ and we're giving it
+    # one that is compatible with the rest of nixpkgs, even when
+    # nvcc forces us to use an older gcc
     # NB: We don't actually know if this is the right thing to do
-    backendStdenv.cc.cc.lib
+    stdenv.cc.cc.lib
   ];
 
   dontBuild = true;

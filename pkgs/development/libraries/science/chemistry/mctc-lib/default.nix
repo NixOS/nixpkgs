@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/pkgconfig/${pname}.pc \
-      --replace "''${prefix}" ""
+      --replace "''${prefix}/" ""
   '';
 
   doCheck = true;

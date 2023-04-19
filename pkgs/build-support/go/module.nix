@@ -105,9 +105,9 @@ let
       runHook postConfigure
     '';
 
-    buildPhase = args.modBuildPhase or ''
+    buildPhase = args.modBuildPhase or (''
       runHook preBuild
-    '' + lib.optionalString (deleteVendor == true) ''
+    '' + lib.optionalString deleteVendor ''
       if [ ! -d vendor ]; then
         echo "vendor folder does not exist, 'deleteVendor' is not needed"
         exit 10
@@ -133,7 +133,7 @@ let
       mkdir -p vendor
 
       runHook postBuild
-    '';
+    '');
 
     installPhase = args.modInstallPhase or ''
       runHook preInstall
@@ -174,9 +174,9 @@ let
 
     GO111MODULE = "on";
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
-    inherit CGO_ENABLED;
+    inherit CGO_ENABLED enableParallelBuilding;
 
-    configurePhase = args.configurePhase or ''
+    configurePhase = args.configurePhase or (''
       runHook preConfigure
 
       export GOCACHE=$TMPDIR/go-cache
@@ -200,9 +200,9 @@ let
       fi
 
       runHook postConfigure
-    '';
+    '');
 
-    buildPhase = args.buildPhase or ''
+    buildPhase = args.buildPhase or (''
       runHook preBuild
 
       exclude='\(/_\|examples\|Godeps\|testdata'
@@ -282,7 +282,7 @@ let
       )
     '' + ''
       runHook postBuild
-    '';
+    '');
 
     doCheck = args.doCheck or true;
     checkPhase = args.checkPhase or ''
@@ -312,8 +312,6 @@ let
     disallowedReferences = lib.optional (!allowGoReference) go;
 
     passthru = passthru // { inherit go go-modules vendorSha256 vendorHash; };
-
-    enableParallelBuilding = enableParallelBuilding;
 
     meta = {
       # Add default meta information

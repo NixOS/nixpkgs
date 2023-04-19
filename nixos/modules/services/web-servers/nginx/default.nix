@@ -31,6 +31,7 @@ let
 
   # Mime.types values are taken from brotli sample configuration - https://github.com/google/ngx_brotli
   # and Nginx Server Configs - https://github.com/h5bp/server-configs-nginx
+  # "text/html" is implicitly included in {brotli,gzip,zstd}_types
   compressMimeTypes = [
     "application/atom+xml"
     "application/geo+json"
@@ -55,7 +56,6 @@ let
     "text/calendar"
     "text/css"
     "text/csv"
-    "text/html"
     "text/javascript"
     "text/markdown"
     "text/plain"
@@ -101,6 +101,17 @@ let
     proxy_set_header        X-Forwarded-Host $host;
     proxy_set_header        X-Forwarded-Server $host;
   '';
+
+  proxyCachePathConfig = concatStringsSep "\n" (mapAttrsToList (name: proxyCachePath: ''
+    proxy_cache_path ${concatStringsSep " " [
+      "/var/cache/nginx/${name}"
+      "keys_zone=${proxyCachePath.keysZoneName}:${proxyCachePath.keysZoneSize}"
+      "levels=${proxyCachePath.levels}"
+      "use_temp_path=${if proxyCachePath.useTempPath then "on" else "off"}"
+      "inactive=${proxyCachePath.inactive}"
+      "max_size=${proxyCachePath.maxSize}"
+    ]};
+  '') (filterAttrs (name: conf: conf.enable) cfg.proxyCachePath));
 
   upstreamConfig = toString (flip mapAttrsToList cfg.upstreams (name: upstream: ''
     upstream ${name} {
@@ -184,8 +195,9 @@ let
         brotli_types ${lib.concatStringsSep " " compressMimeTypes};
       ''}
 
-      ${optionalString cfg.recommendedGzipSettings ''
+      ${optionalString cfg.recommendedGzipSettings
         # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
+      ''
         gzip on;
         gzip_static on;
         gzip_vary on;
@@ -240,15 +252,9 @@ let
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
 
-      ${optionalString cfg.proxyCache.enable ''
-        proxy_cache_path /var/cache/nginx keys_zone=${cfg.proxyCache.keysZoneName}:${cfg.proxyCache.keysZoneSize}
-                                          levels=${cfg.proxyCache.levels}
-                                          use_temp_path=${if cfg.proxyCache.useTempPath then "on" else "off"}
-                                          inactive=${cfg.proxyCache.inactive}
-                                          max_size=${cfg.proxyCache.maxSize};
-      ''}
-
       ${cfg.commonHttpConfig}
+
+      ${proxyCachePathConfig}
 
       ${vhosts}
 
@@ -311,12 +317,15 @@ let
             else defaultListen;
 
         listenString = { addr, port, ssl, extraParameters ? [], ... }:
-          (if ssl && vhost.http3 then "
-          # UDP listener for **QUIC+HTTP/3
-          listen ${addr}:${toString port} http3 "
+          # UDP listener for QUIC transport protocol.
+          (if ssl && vhost.quic then "
+            listen ${addr}:${toString port} quic "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
-          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
+          + optionalString (extraParameters != []) (concatStringsSep " " (
+            let inCompatibleParameters = [ "ssl" "proxy_protocol" "http2" ];
+                isCompatibleParameter = param: !(any (p: p == param) inCompatibleParameters);
+            in filter isCompatibleParameter extraParameters))
           + ";" else "")
           + "
 
@@ -363,6 +372,10 @@ let
         server {
           ${concatMapStringsSep "\n" listenString hostListen}
           server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+          ${optionalString (hasSSL && vhost.quic) ''
+            http3 ${if vhost.http3 then "on" else "off"};
+            http3_hq ${if vhost.http3_hq then "on" else "off"};
+          ''}
           ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
@@ -384,9 +397,10 @@ let
             ssl_conf_command Options KTLS;
           ''}
 
-          ${optionalString (hasSSL && vhost.http3) ''
+          ${optionalString (hasSSL && vhost.quic && vhost.http3)
             # Advertise that HTTP/3 is available
-            add_header Alt-Svc 'h3=":443"; ma=86400' always;
+          ''
+            add_header Alt-Svc 'h3=":$server_port"; ma=86400';
           ''}
 
           ${mkBasicAuth vhostName vhost}
@@ -476,7 +490,8 @@ in
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Enable recommended brotli settings. Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/blob/master/README.md).
+          Enable recommended brotli settings.
+          Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/).
 
           This adds `pkgs.nginxModules.brotli` to `services.nginx.additionalModules`.
         '';
@@ -487,6 +502,18 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Enable recommended gzip settings.
+          Learn more about compression in Gzip format [here](https://docs.nginx.com/nginx/admin-guide/web-server/compression/).
+        '';
+      };
+
+      recommendedZstdSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable recommended zstd settings.
+          Learn more about compression in Zstd format [here](https://github.com/tokers/zstd-nginx-module).
+
+          This adds `pkgs.nginxModules.zstd` to `services.nginx.additionalModules`.
         '';
       };
 
@@ -495,16 +522,6 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Whether to enable recommended proxy settings if a vhost does not specify the option manually.
-        '';
-      };
-
-      recommendedZstdSettings = mkOption {
-        default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
-          Enable recommended zstd settings. Learn more about compression in Zstd format [here](https://github.com/tokers/zstd-nginx-module).
-
-          This adds `pkgs.nginxModules.zstd` to `services.nginx.additionalModules`.
         '';
       };
 
@@ -796,10 +813,10 @@ in
           '';
       };
 
-      proxyCache = mkOption {
-        type = types.submodule {
+      proxyCachePath = mkOption {
+        type = types.attrsOf (types.submodule ({ ... }: {
           options = {
-            enable = mkEnableOption (lib.mdDoc "Enable proxy cache");
+            enable = mkEnableOption (lib.mdDoc "this proxy cache path entry");
 
             keysZoneName = mkOption {
               type = types.str;
@@ -857,9 +874,12 @@ in
               description = lib.mdDoc "Set maximum cache size";
             };
           };
-        };
+        }));
         default = {};
-        description = lib.mdDoc "Configure proxy cache";
+        description = lib.mdDoc ''
+          Configure a proxy cache path entry.
+          See <http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_path> for documentation.
+        '';
       };
 
       resolver = mkOption {
@@ -970,6 +990,12 @@ in
       The Nginx log directory has been moved to /var/log/nginx, the cache directory
       to /var/cache/nginx. The option services.nginx.stateDir has been removed.
     '')
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "inactive" ] [ "services" "nginx" "proxyCachePath" "" "inactive" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "useTempPath" ] [ "services" "nginx" "proxyCachePath" "" "useTempPath" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "levels" ] [ "services" "nginx" "proxyCachePath" "" "levels" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "keysZoneSize" ] [ "services" "nginx" "proxyCachePath" "" "keysZoneSize" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "keysZoneName" ] [ "services" "nginx" "proxyCachePath" "" "keysZoneName" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "enable" ] [ "services" "nginx" "proxyCachePath" "" "enable" ])
   ];
 
   config = mkIf cfg.enable {
@@ -1025,6 +1051,14 @@ in
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
+        '';
+      }
+
+      {
+        assertion = cfg.package.pname != "nginxQuic" -> all (host: !host.quic) (attrValues virtualHosts);
+        message = ''
+          services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic package,
+          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
         '';
       }
     ] ++ map (name: mkCertOwnershipAssertion {

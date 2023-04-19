@@ -17,7 +17,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "rwightman";
+    owner = "huggingface";
     repo = "pytorch-image-models";
     rev = "refs/tags/v${version}";
     hash = "sha256-RNjCcCnNhtr5a+29Bx+k427a03MSooqvnuiDQ8cT8FA=";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "PyTorch image models, scripts, and pretrained weights";
     homepage = "https://huggingface.co/docs/timm/index";
-    changelog = "https://github.com/rwightman/pytorch-image-models/blob/v${version}/README.md#whats-new";
+    changelog = "https://github.com/huggingface/pytorch-image-models/blob/v${version}/README.md#whats-new";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
   };

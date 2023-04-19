@@ -19,9 +19,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screensaver";
-  version = "4.18.0";
+  version = "4.18.1";
 
-  sha256 = "sha256-W9rEssR6jHMBM2m1lCBvj7YMOGOTaqBAOP7grQ01880=";
+  sha256 = "sha256-d72m2dW8jvM/EjgNSVaKsP5Ip7ioguB61/hy2cWw+dw=";
 
   buildInputs = [
     dbus-glib

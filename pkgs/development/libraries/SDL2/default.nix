@@ -170,6 +170,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.libsdl.org/";
     license = licenses.zlib;
     platforms = platforms.all;
-    maintainers = with maintainers; [ cpages superherointj ];
+    maintainers = with maintainers; [ cpages ];
   };
 }

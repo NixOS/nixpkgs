@@ -19,6 +19,11 @@
 }:
 
 let
+  name-zero = "librocfft-device-0.so.0.1";
+  name-one = "librocfft-device-1.so.0.1";
+  name-two = "librocfft-device-2.so.0.1";
+  name-three = "librocfft-device-3.so.0.1";
+
   # This is over 3GB, to allow hydra caching we separate it
   rf = stdenv.mkDerivation (finalAttrs: {
     pname = "rocfft";
@@ -26,6 +31,10 @@ let
 
     outputs = [
       "out"
+      "libzero"
+      "libone"
+      "libtwo"
+      "libthree"
     ] ++ lib.optionals buildTests [
       "test"
     ] ++ lib.optionals buildBenchmarks [
@@ -58,7 +67,7 @@ let
       openmp
     ];
 
-    propogatedBuildInputs = lib.optionals buildTests [
+    propagatedBuildInputs = lib.optionals buildTests [
       fftw
       fftwFloat
     ];
@@ -80,7 +89,16 @@ let
       "-DBUILD_CLIENTS_SAMPLES=ON"
     ];
 
-    postInstall = lib.optionalString buildTests ''
+    postInstall = ''
+      mv $out/lib/${name-zero} $libzero
+      mv $out/lib/${name-one} $libone
+      mv $out/lib/${name-two} $libtwo
+      mv $out/lib/${name-three} $libthree
+      ln -s $libzero $out/lib/${name-zero}
+      ln -s $libone $out/lib/${name-one}
+      ln -s $libtwo $out/lib/${name-two}
+      ln -s $libthree $out/lib/${name-three}
+    '' + lib.optionalString buildTests ''
       mkdir -p $test/{bin,lib/fftw}
       cp -a $out/bin/* $test/bin
       ln -s ${fftw}/lib/libfftw*.so $test/lib/fftw
@@ -113,23 +131,31 @@ let
     };
   });
 
-  rf-zero = runCommand "librocfft-device-0.so.0.1" { preferLocalBuild = true; } ''
-    cp -a ${rf}/lib/$name $out
+  rf-zero = runCommand name-zero { preferLocalBuild = true; } ''
+    cp -a ${rf.libzero} $out
   '';
 
-  rf-one = runCommand "librocfft-device-1.so.0.1" { preferLocalBuild = true; } ''
-    cp -a ${rf}/lib/$name $out
+  rf-one = runCommand name-one { preferLocalBuild = true; } ''
+    cp -a ${rf.libone} $out
   '';
 
-  rf-two = runCommand "librocfft-device-2.so.0.1" { preferLocalBuild = true; } ''
-    cp -a ${rf}/lib/$name $out
+  rf-two = runCommand name-two { preferLocalBuild = true; } ''
+    cp -a ${rf.libtwo} $out
   '';
 
-  rf-three = runCommand "librocfft-device-3.so.0.1" { preferLocalBuild = true; } ''
-    cp -a ${rf}/lib/$name $out
+  rf-three = runCommand name-three { preferLocalBuild = true; } ''
+    cp -a ${rf.libthree} $out
   '';
 in stdenv.mkDerivation {
-  inherit (rf) pname version outputs src passthru meta;
+  inherit (rf) pname version src passthru meta;
+
+  outputs = [
+    "out"
+  ] ++ lib.optionals buildTests [
+    "test"
+  ] ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ];
 
   dontUnpack = true;
   dontPatch = true;
@@ -140,10 +166,10 @@ in stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/lib
-    cp -as ${rf-zero} $out/lib/${rf-zero.name}
-    cp -as ${rf-one} $out/lib/${rf-one.name}
-    cp -as ${rf-two} $out/lib/${rf-two.name}
-    cp -as ${rf-three} $out/lib/${rf-three.name}
+    ln -sf ${rf-zero} $out/lib/${name-zero}
+    ln -sf ${rf-one} $out/lib/${name-one}
+    ln -sf ${rf-two} $out/lib/${name-two}
+    ln -sf ${rf-three} $out/lib/${name-three}
     cp -an ${rf}/* $out
   '' + lib.optionalString buildTests ''
     cp -a ${rf.test} $test

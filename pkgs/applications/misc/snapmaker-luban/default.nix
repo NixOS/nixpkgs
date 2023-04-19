@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snapmaker-luban";
-  version = "4.4.0";
+  version = "4.7.0";
 
   src = fetchurl {
     url = "https://github.com/Snapmaker/Luban/releases/download/v${version}/snapmaker-luban-${version}-linux-x64.tar.gz";
-    sha256 = "sha256-cXFnFWa6IDGuC6M46Ybnr9/LM8hG0KTUlkzcyuje5SI=";
+    sha256 = "sha256-iIAK4XqxtdV+3FZHhzerMLcpfniKhNMGnfGA+W2inZc=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,13 @@ stdenv.mkDerivation rec {
     libXtst nspr nss libxcb pango libXScrnSaver udev
   ];
 
+  autoPatchelfIgnoreMissingDeps = [
+    "libc.musl-x86_64.so.1"
+  ];
+
   dontWrapGApps = true;
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall

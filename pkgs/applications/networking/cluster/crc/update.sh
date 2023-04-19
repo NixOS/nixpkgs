@@ -25,6 +25,9 @@ CRC_COMMIT=$(curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     https://api.github.com/repos/crc-org/crc/tags |
     jq -r "map(select(.name == \"${LATEST_TAG_NAME}\")) | .[0] | .commit.sha")
 
+CRC_GIT_PREFETCH=$(nix-prefetch-url --unpack https://github.com/crc-org/crc/archive/${CRC_COMMIT}.tar.gz)
+CRC_GIT_HASH=$(nix hash to-sri --type sha256 ${CRC_GIT_PREFETCH})
+
 FILE_MAKEFILE=${WORKDIR}/Makefile
 curl --silent https://raw.githubusercontent.com/crc-org/crc/${CRC_COMMIT}/Makefile >$FILE_MAKEFILE
 
@@ -44,6 +47,9 @@ sed -i "s|version = \".*\"|version = \"${CRC_VERSION:-}\"|" \
     ${NIXPKGS_CRC_FOLDER}/default.nix
 
 sed -i "s|gitCommit = \".*\"|gitCommit = \"${CRC_COMMIT:-}\"|" \
+    ${NIXPKGS_CRC_FOLDER}/default.nix
+
+sed -i "s|gitHash = \".*\"|gitHash = \"${CRC_GIT_HASH}\"|" \
     ${NIXPKGS_CRC_FOLDER}/default.nix
 
 sed -i "s|openShiftVersion = \".*\"|openShiftVersion = \"${OPENSHIFT_VERSION:-}\"|" \

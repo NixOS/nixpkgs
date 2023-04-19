@@ -42,7 +42,7 @@ let
   configPath = pkgs.writeText "smokeping.conf" configFile;
   cgiHome = pkgs.writeScript "smokeping.fcgi" ''
     #!${pkgs.bash}/bin/bash
-    ${cfg.package}/bin/smokeping_cgi ${configPath}
+    ${cfg.package}/bin/smokeping_cgi /etc/smokeping.conf
   '';
 in
 
@@ -307,6 +307,7 @@ in
           source = "${pkgs.fping}/bin/fping";
         };
     };
+    environment.etc."smokeping.conf".source = configPath;
     environment.systemPackages = [ pkgs.fping ];
     users.users.${cfg.user} = {
       isNormalUser = false;
@@ -327,20 +328,20 @@ in
       # Thus, we need to make `smokepingHome` (which is given to `thttpd -d` below) `755`.
       homeMode = "755";
     };
-    users.groups.${cfg.user} = {};
+    users.groups.${cfg.user} = { };
     systemd.services.smokeping = {
-      requiredBy = [ "multi-user.target"];
+      reloadTriggers = [ configPath ];
+      requiredBy = [ "multi-user.target" ];
       serviceConfig = {
         User = cfg.user;
         Restart = "on-failure";
-        ExecStart = "${cfg.package}/bin/smokeping --config=${configPath} --nodaemon";
+        ExecStart = "${cfg.package}/bin/smokeping --config=/etc/smokeping.conf --nodaemon";
       };
       preStart = ''
         mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
-        rm -f ${smokepingHome}/cropper
-        ln -s ${cfg.package}/htdocs/cropper ${smokepingHome}/cropper
-        rm -f ${smokepingHome}/smokeping.fcgi
-        ln -s ${cgiHome} ${smokepingHome}/smokeping.fcgi
+        ln -sf ${cfg.package}/htdocs/css ${smokepingHome}/css
+        ln -sf ${cfg.package}/htdocs/js ${smokepingHome}/js
+        ln -sf ${cgiHome} ${smokepingHome}/smokeping.fcgi
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
       '';

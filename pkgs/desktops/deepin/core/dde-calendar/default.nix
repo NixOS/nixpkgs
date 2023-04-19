@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      name = "chore: use GNUInstallDirs in CmakeLists";
+      name = "chore-use-GNUInstallDirs-in-CmakeLists.patch";
       url = "https://github.com/linuxdeepin/dde-calendar/commit/b9d9555d90a36318eeee62ece49250b4bf8acd10.patch";
       sha256 = "sha256-pvgxZPczs/lkwNjysNuVu+1AY69VZlxOn7hR9A02/3M=";
     })
@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/dde-calendar" "$out/bin/dde-calendar"
     substituteInPlace calendar-service/{src/{csystemdtimercontrol.cpp,jobremindmanager.cpp},assets/{data/com.dde.calendarserver.calendar.service,dde-calendar-service.desktop}} \
       --replace "/bin/bash" "${runtimeShell}"
+
+    substituteInPlace CMakeLists.txt \
+      --replace "ADD_SUBDIRECTORY(tests)" " "
   '';
 
   nativeBuildInputs = [

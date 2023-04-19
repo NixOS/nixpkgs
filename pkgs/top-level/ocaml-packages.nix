@@ -18,6 +18,8 @@ let
 
     alcotest-mirage = callPackage ../development/ocaml-modules/alcotest/mirage.nix {};
 
+    algaeff = callPackage ../development/ocaml-modules/algaeff { };
+
     alsa = callPackage ../development/ocaml-modules/alsa { };
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
@@ -63,6 +65,8 @@ let
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
+
+    bdd = callPackage ../development/ocaml-modules/bdd { };
 
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
@@ -205,9 +209,13 @@ let
 
     cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
 
+    cohttp-lwt-jsoo = callPackage ../development/ocaml-modules/cohttp/lwt-jsoo.nix { };
+
     cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
 
     cohttp-mirage = callPackage ../development/ocaml-modules/cohttp/mirage.nix { };
+
+    cohttp-top = callPackage ../development/ocaml-modules/cohttp/top.nix { };
 
     coin =  callPackage ../development/ocaml-modules/coin { };
 
@@ -286,6 +294,8 @@ let
     dap =  callPackage ../development/ocaml-modules/dap { };
 
     data-encoding = callPackage ../development/ocaml-modules/data-encoding { };
+
+    dates_calc = callPackage ../development/ocaml-modules/dates_calc {  };
 
     dbf =  callPackage ../development/ocaml-modules/dbf { };
 
@@ -606,6 +616,8 @@ let
     happy-eyeballs-mirage = callPackage ../development/ocaml-modules/happy-eyeballs/mirage.nix { };
 
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
+
+    headache = callPackage ../development/ocaml-modules/headache { };
 
     hex = callPackage ../development/ocaml-modules/hex { };
 
@@ -1038,6 +1050,8 @@ let
 
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
+    morbig = callPackage ../development/ocaml-modules/morbig { };
+
     mparser =  callPackage ../development/ocaml-modules/mparser { };
 
     mparser-pcre =  callPackage ../development/ocaml-modules/mparser/pcre.nix { };
@@ -1257,8 +1271,6 @@ let
 
     paf-cohttp = callPackage ../development/ocaml-modules/paf/cohttp.nix { };
 
-    paf-le = callPackage ../development/ocaml-modules/paf/le.nix { };
-
     parany = callPackage ../development/ocaml-modules/parany { };
 
     parmap = callPackage ../development/ocaml-modules/parmap { };
@@ -1340,6 +1352,8 @@ let
     ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
 
     ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix { };
+
+    ppx_monad = callPackage ../development/ocaml-modules/ppx_monad { };
 
     ppx_repr = callPackage ../development/ocaml-modules/repr/ppx.nix { };
 
@@ -1492,6 +1506,8 @@ let
 
     simple-diff = callPackage ../development/ocaml-modules/simple-diff { };
 
+    slug = callPackage ../development/ocaml-modules/slug {  };
+
     sodium = callPackage ../development/ocaml-modules/sodium { };
 
     sosa = callPackage ../development/ocaml-modules/sosa { };
@@ -1619,6 +1635,8 @@ let
     uri = callPackage ../development/ocaml-modules/uri { };
 
     uri-sexp = callPackage ../development/ocaml-modules/uri/sexp.nix { };
+
+    uring = callPackage ../development/ocaml-modules/uring { };
 
     utop = callPackage ../development/tools/ocaml/utop { };
 

@@ -49,6 +49,8 @@ lib.makeScope newScope (self:
 
     illwill = callPackage ../development/nim-packages/illwill { };
 
+    illwillwidgets = callPackage ../development/nim-packages/illwillwidgets { };
+
     jester = callPackage ../development/nim-packages/jester { };
 
     jsonschema = callPackage ../development/nim-packages/jsonschema { };
@@ -101,6 +103,8 @@ lib.makeScope newScope (self:
 
     snappy =
       callPackage ../development/nim-packages/snappy { inherit (pkgs) snappy; };
+
+    nimraylib-now = callPackage ../development/nim-packages/nimraylib-now { };
 
     spry = callPackage ../development/nim-packages/spry { };
 

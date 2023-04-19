@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "https://cista.rocks";
     description = "A simple, high-performance, zero-copy C++ serialization & reflection library";
     license = licenses.mit;
-    maintainers = with maintainers; [ candyc1oud ];
+    maintainers = [];
     platforms = platforms.all;
   };
 }

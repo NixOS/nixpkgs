@@ -1,5 +1,5 @@
 { stdenv
-, buildFHSUserEnv
+, buildFHSEnv
 , fetchurl
 , lib
 , zlib
@@ -16,6 +16,7 @@
 , vulkan-loader
 , alsa-lib
 , libpulseaudio
+, libxcrypt-legacy
 , libGL
 , numactl
 , libX11
@@ -63,7 +64,7 @@ let
     '';
   });
 
-  vmware-unpack-env = buildFHSUserEnv rec {
+  vmware-unpack-env = buildFHSEnv rec {
     name = "vmware-unpack-env";
     targetPkgs = pkgs: [ zlib ];
   };
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
     vulkan-loader
     alsa-lib
     libpulseaudio
+    libxcrypt-legacy
     libGL
     numactl
     libX11

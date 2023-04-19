@@ -1,4 +1,5 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, makeBinaryWrapper, lndir, config
+, buildPackages
 , jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
@@ -275,7 +276,7 @@ let
           # Symbolic link: wrap the link's target.
           oldExe="$(readlink -v --canonicalize-existing "$executablePath")"
           rm "$executablePath"
-        elif wrapperCmd=$(${makeBinaryWrapper.extractCmd} "$executablePath"); [[ $wrapperCmd ]]; then
+        elif wrapperCmd=$(${buildPackages.makeBinaryWrapper.extractCmd} "$executablePath"); [[ $wrapperCmd ]]; then
           # If the executable is a binary wrapper, we need to update its target to
           # point to $out, but we can't just edit the binary in-place because of length
           # issues. So we extract the command used to create the wrapper and add the

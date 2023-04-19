@@ -19,7 +19,6 @@
 , python3
 , sqlite
 , wrapGAppsHook
-, zeromq
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
     podofo
     python3
     sqlite
-    zeromq
   ];
 
   nativeBuildInputs = [

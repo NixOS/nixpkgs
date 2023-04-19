@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/pkgconfig/s-dftd3.pc \
-      --replace "''${prefix}" ""
+      --replace "''${prefix}/" ""
   '';
 
   doCheck = true;
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Reimplementation of the DFT-D3 program";
-    license = with licenses; [lgpl3Only gpl3Only];
+    license = with licenses; [ lgpl3Only gpl3Only ];
     homepage = "https://github.com/dftd3/simple-dftd3";
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.sheepforce ];

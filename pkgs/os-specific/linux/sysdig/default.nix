@@ -19,25 +19,20 @@ let
   driver = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "libs";
-    rev = "3.0.1+driver";
-    sha256 = "sha256-bK9wv17bVl93rOqw7JICnMOM0fDtPIErfMmUmNKOD5c=";
-  };
-  # Workaround for scap-driver compilation error on kernel 6.2: https://github.com/falcosecurity/libs/issues/918
-  driverPatch = fetchpatch {
-    url = "https://github.com/falcosecurity/libs/commit/b8ec3e8637c850066d01543616fe413e8deb9e1f.patch";
-    hash = "sha256-s7iHbOjVqHSWRY4gktZldgrU5OClqRmbqmDtUgFIeh0=";
+    rev = libsRev;
+    sha256 = libsSha256;
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "sysdig";
-  version = "0.31.3";
+  version = "0.31.4";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "sha256-TMh2gw/vw6DbhKGwbqU2+c0DTpRaMZqUM83KE18NDmI=";
+    sha256 = "sha256-9WzvO17Q4fLwJNoDLk8xN8mqIcrBhcMyxfRhUXkQ5vI=";
   };
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
@@ -73,7 +68,6 @@ stdenv.mkDerivation rec {
     chmod -R +w libs
     cp -r ${driver} driver-src
     chmod -R +w driver-src
-    patch -p1 -d driver-src < ${driverPatch}
     cmakeFlagsArray+=(
       "-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs"
       "-DVALIJSON_INCLUDE=${valijson}/include"

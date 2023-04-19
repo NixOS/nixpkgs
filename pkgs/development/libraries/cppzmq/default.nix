@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zeromq ];
+  propagatedBuildInputs = [ zeromq ];
 
   cmakeFlags = [
     # Tests try to download googletest at compile time; there is no option

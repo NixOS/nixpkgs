@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.21";
+  version = "0.21.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -46,3 +46,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ jluttine ];
   };
 }
+

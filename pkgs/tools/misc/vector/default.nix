@@ -118,9 +118,9 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "A high-performance logs, metrics, and events router";
-    homepage = "https://github.com/timberio/vector";
-    license = with licenses; [ asl20 ];
+    description = "A high-performance observability data pipeline";
+    homepage = "https://github.com/vectordotdev/vector";
+    license = licenses.mpl20;
     maintainers = with maintainers; [ thoughtpolice happysalada ];
     platforms = with platforms; all;
   };

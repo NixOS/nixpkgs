@@ -19,13 +19,13 @@ lib.checkListOfEnum "${pname}: theme variants" [ "aliz" "azul" "sea" "pueril" "a
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-11-15";
+  version = "2023-04-03";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "Rx22O8C7kbYADxqJF8u6kdcQnXNA5aS+NWOnx/X4urY=";
+    sha256 = "mr9X7p/H8H2QKZxAQC9j/8OLK4D3EnWLxriFlh16diE=";
   };
 
   nativeBuildInputs = [

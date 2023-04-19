@@ -2,9 +2,6 @@
 , lib
 , extra-cmake-modules
 , kdoctools
-, coreutils
-, gnugrep
-, gnused
 , isocodes
 , libdbusmenu
 , libSM

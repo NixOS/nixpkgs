@@ -909,6 +909,13 @@ in mkLicense lset) ({
     url = "https://github.com/thestk/stk/blob/master/LICENSE";
   };
 
+  tsl = {
+    shortName = "TSL";
+    fullName = "Timescale License Agreegment";
+    url = "https://github.com/timescale/timescaledb/blob/main/tsl/LICENSE-TIMESCALE";
+    unfree = true;
+  };
+
   tcltk = {
     spdxId = "TCL";
     fullName = "TCL/TK License";

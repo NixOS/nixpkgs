@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "wakatime";
-  version = "1.68.3";
+  version = "1.70.1";
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "wakatime-cli";
     rev = "v${version}";
-    hash = "sha256-LifMxov7j2yRDtwh74RjjwfcHfFc/zWrzX96vb2hI9o=";
+    hash = "sha256-PZIO8ULvSdsOeRLGPrsRyoql8Z4Xq7z4q/AErw239BI=";
   };
 
   vendorHash = "sha256-SlYYrlRDBvhNm2BxemK9HzzsqM/RGH/sDQXpoGEY8rw=";
@@ -22,15 +22,19 @@ buildGoModule rec {
   preCheck =
     let
       skippedTests = [
+        # Tests requiring network
         "TestFileExperts"
         "TestSendHeartbeats"
         "TestSendHeartbeats_ExtraHeartbeats"
         "TestSendHeartbeats_IsUnsavedEntity"
         "TestSendHeartbeats_NonExistingExtraHeartbeatsEntity"
+
+        # Flaky tests
+        "TestLoadParams_ApiKey_FromVault_Err_Darwin"
       ];
     in
     ''
-      # Disable tests requiring network
+      # Disable tests
       buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
     '';
 

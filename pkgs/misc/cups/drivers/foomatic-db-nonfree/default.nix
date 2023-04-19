@@ -6,7 +6,7 @@
 , perl
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "foomatic-db-nonfree";
   version = "unstable-2015-06-05";
 
@@ -60,6 +60,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    changelog = "https://github.com/OpenPrinting/foomatic-db-nonfree/blob/${src.rev}/ChangeLog";
     description = "OpenPrinting printer support database (unfree content)";
     downloadPage = "https://www.openprinting.org/download/foomatic/";
     homepage = "https://openprinting.github.io/projects/02-foomatic/";

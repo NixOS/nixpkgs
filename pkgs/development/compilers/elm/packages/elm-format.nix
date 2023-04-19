@@ -1,29 +1,28 @@
-{ mkDerivation, aeson, ansi-wl-pprint, avh4-lib, base, bimap
-, bytestring, containers, elm-format-lib, elm-format-test-lib
-, fetchgit, hspec, lib, mtl, optparse-applicative, QuickCheck
-, quickcheck-io, relude, tasty, tasty-hspec, tasty-hunit
-, tasty-quickcheck, text
+{ mkDerivation, aeson, ansi-wl-pprint, avh4-lib, base, bytestring
+, elm-format-lib, elm-format-test-lib, fetchgit, hspec, lib
+, optparse-applicative, QuickCheck, quickcheck-io, relude, tasty
+, tasty-hspec, tasty-hunit, tasty-quickcheck, text
 }:
 mkDerivation rec {
   pname = "elm-format";
-  version = "0.8.6";
+  version = "0.8.7";
   src = fetchgit {
     url = "https://github.com/avh4/elm-format";
-    sha256 = "1aiq3mv2ycv6bal5hnz6k33bzmnnidzxxs5b6z9y6lvmr0lbf3j4";
-    rev = "7e80dd48dd9b30994e43f4804b2ea7118664e8e0";
+    sha256 = "04l1bn4w8q3ifd6mc4mfrqxfbihmqnpfjdn6gr0x2jqcasjbk0bi";
+    rev = "b5cca4c26b473dab06e5d73b98148637e4770d45";
     fetchSubmodules = true;
   };
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    aeson ansi-wl-pprint avh4-lib base bytestring containers
-    elm-format-lib optparse-applicative relude text
+    aeson ansi-wl-pprint avh4-lib base bytestring elm-format-lib
+    optparse-applicative relude text
   ];
   testHaskellDepends = [
-    aeson ansi-wl-pprint avh4-lib base bimap bytestring containers
-    elm-format-lib elm-format-test-lib hspec mtl optparse-applicative
-    QuickCheck quickcheck-io relude tasty tasty-hspec tasty-hunit
-    tasty-quickcheck text
+    aeson ansi-wl-pprint avh4-lib base bytestring elm-format-lib
+    elm-format-test-lib hspec optparse-applicative QuickCheck
+    quickcheck-io relude tasty tasty-hspec tasty-hunit tasty-quickcheck
+    text
   ];
   doHaddock = false;
   homepage = "https://elm-lang.org";

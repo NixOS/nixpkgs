@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "mmh3";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1ec578c09a07d3518ec9be540b87546397fa3455de73c166fcce51eaa5c41c5";
+    sha256 = "sha256-mw8rKrSpFTM8nRCJVy4pCgIeu1uQC7f3EU3MwDmV1zI=";
   };
 
   pythonImportsCheck = [ "mmh3" ];

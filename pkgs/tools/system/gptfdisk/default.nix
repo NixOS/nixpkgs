@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     # issues with popt 1.19 (from upstream but not yet released):
-    # https://sourceforge.net/p/gptfdisk/code/ci/5d5e76d369a412bfb3d2cebb5fc0a7509cef878d/
     # https://github.com/rpm-software-management/popt/issues/80
     ./popt-1-19.patch
 

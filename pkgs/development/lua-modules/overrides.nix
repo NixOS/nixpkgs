@@ -1,6 +1,7 @@
 # do not add pkgs, it messes up splicing
 { stdenv
 , cmake
+, curl
 , cyrus_sasl
 , dbus
 , expat
@@ -252,6 +253,12 @@ with prev;
   lrexlib-posix = prev.luaLib.overrideLuarocks prev.lrexlib-posix (drv: {
     buildInputs = [
       glibc.dev
+    ];
+  });
+
+  lua-curl = prev.luaLib.overrideLuarocks prev.lua-curl (drv: {
+    buildInputs = [
+      curl
     ];
   });
 

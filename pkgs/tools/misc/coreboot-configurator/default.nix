@@ -3,24 +3,31 @@
 , fetchFromGitHub
 , inkscape
 , meson
+, mkDerivation
 , ninja
+  # We will resolve pkexec from the path because it has a setuid wrapper on
+  # NixOS meaning that we cannot just use the path from the nix store.
+  # Using the path to the wrapper here would make the package incompatible
+  # with non-NixOS systems.
+, pkexecPath ? "pkexec"
 , pkg-config
 , yaml-cpp
 , nvramtool
+, systemd
 , qtbase
 , qtsvg
 , wrapQtAppsHook
 }:
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "coreboot-configurator";
-  version = "unstable-2022-08-22";
+  version = "unstable-2023-01-17";
 
   src = fetchFromGitHub {
     owner = "StarLabsLtd";
     repo = "coreboot-configurator";
-    rev = "37c93e7e101a20f85be309904177b9404875cfd8";
-    sha256 = "2pk+uJk1EnVNO2vO1zF9Q6TLpij69iRdr5DFiNcZlM0=";
+    rev = "944b575dc873c78627c352f9c1a1493981431a58";
+    sha256 = "sha256-ReWQNzeoyTF66hVnevf6Kkrnt0/PqRHd3oyyPYtx+0M=";
   };
 
   nativeBuildInputs = [ inkscape meson ninja pkg-config wrapQtAppsHook ];
@@ -28,9 +35,15 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace src/application/*.cpp \
-      --replace '/usr/bin/pkexec' 'sudo' \
-      --replace '/usr/bin/systemctl' 'systemctl' \
-      --replace '/usr/sbin/nvramtool' '${nvramtool}/bin/nvramtool'
+      --replace '/usr/bin/pkexec' '${pkexecPath}' \
+      --replace '/usr/bin/systemctl' '${lib.getBin systemd}/systemctl' \
+      --replace '/usr/sbin/nvramtool' '${lib.getExe nvramtool}'
+
+    substituteInPlace src/resources/org.coreboot.nvramtool.policy \
+      --replace '/usr/sbin/nvramtool' '${lib.getExe nvramtool}'
+
+    substituteInPlace src/resources/org.coreboot.reboot.policy \
+      --replace '/usr/sbin/reboot' '${lib.getBin systemd}/reboot'
   '';
 
   postFixup = ''

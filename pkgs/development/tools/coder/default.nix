@@ -29,18 +29,17 @@ buildGoModule rec {
     hash = "sha256-nRmEXR9fjDxvpbnT+qpGeM0Cc/qW/kN53sKOXwZiBXY=";
   };
 
-  subPackages = [ "cmd/..." ];
-
   vendorHash = "sha256-+AvmJkZCFovE2+5Lg98tUvA7f2kBHUMzhl5IyrEGuy8=";
 
-  # integration tests require network access
-  doCheck = false;
+  tags = [ "embed" ];
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/coder/coder/buildinfo.tag=${version}"
   ];
+
+  subPackages = [ "cmd/..." ];
 
   preBuild = ''
     export HOME=$TEMPDIR
@@ -56,8 +55,6 @@ buildGoModule rec {
 
     popd
   '';
-
-  tags = [ "embed" ];
 
   nativeBuildInputs = [
     fixup_yarn_lock
@@ -79,10 +76,15 @@ buildGoModule rec {
     wrapProgram $out/bin/coder --prefix PATH : ${lib.makeBinPath [ terraform ]}
   '';
 
-  meta = with lib; {
+  # integration tests require network access
+  doCheck = false;
+
+  meta = {
     description = "Provision software development environments via Terraform on Linux, macOS, Windows, X86, ARM, and of course, Kubernetes";
     homepage = "https://coder.com";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ ghuntley urandom ];
+    license = lib.licenses.agpl3;
+    maintainers = [ lib.maintainers.ghuntley lib.maintainers.urandom ];
+    # Failed to download Chromium 109.0.5414.46
+    broken = true; # At 2023-03-30
   };
 }

@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "Plagman";
+    owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${version}";
     hash = "sha256-2gn6VQfmwwl86mmnRh+J1uxSIpA5x/Papq578seJ3n8=";
@@ -133,7 +133,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "SteamOS session compositing window manager";
-    homepage = "https://github.com/Plagman/gamescope";
+    homepage = "https://github.com/ValveSoftware/gamescope";
     license = licenses.bsd2;
     maintainers = with maintainers; [ nrdxp pedrohlc Scrumplex zhaofengli ];
     platforms = platforms.linux;

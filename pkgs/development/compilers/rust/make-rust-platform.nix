@@ -1,8 +1,8 @@
-{ buildPackages, callPackage, stdenv, runCommand }@prev:
+{ buildPackages, callPackage, cargo-auditable, stdenv, runCommand }@prev:
 
 { rustc
 , cargo
-, cargo-auditable ? null
+, cargo-auditable ? prev.cargo-auditable
 , stdenv ? prev.stdenv
 , ...
 }:

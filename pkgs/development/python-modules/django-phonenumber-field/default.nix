@@ -32,11 +32,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     django
-    phonenumbers
-    babel
-  ];
+  ] ++ passthru.optional-dependencies.phonenumbers;
 
   nativeCheckInputs = [
+    babel
     djangorestframework
   ];
 
@@ -47,6 +46,10 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} -m django test --settings tests.settings
   '';
+
+  passthru.optional-dependencies = {
+    phonenumbers = [ phonenumbers ];
+  };
 
   meta = with lib; {
     description = "A django model and form field for normalised phone numbers using python-phonenumbers";

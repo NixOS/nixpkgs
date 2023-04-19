@@ -1,22 +1,22 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
-, withSimd ? true
-, stdenv
+, withSimd ? stdenv.isx86_64
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rsonpath";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "v0ldek";
     repo = "rsonpath";
     rev = "v${version}";
-    hash = "sha256-ip8+Wy9rmTzFccmjYWb3Nk+gkq3g4e1ty/5+ldIOO10=";
+    hash = "sha256-kbtw8PhUecxIAxBdklbXtzS3P9o2aw8DCCJaC+vkNT0=";
   };
 
-  cargoHash = "sha256-5V0H2FeHI1SByzLsviOR+qHwYhZGiNmMawCTYjk2P24=";
+  cargoHash = "sha256-ZcnMpGgs/3VLdFsPPYzt2EkHNU26dvLnuOHy8OOtp0k=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -31,7 +31,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/v0ldek/rsonpath/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    # build fails on platforms without simd support, even when withSimd = false
-    broken = !stdenv.isx86_64;
   };
 }

@@ -16,7 +16,7 @@
 , Security
 , callPackage
 , linkFarm
-
+, CoreServices
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 , webUISupport ? false
@@ -29,9 +29,9 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.7";
-  sha256 = "sha256-5ILiN5EfJ7WpeYBiXynfcLucdp8zmxVOj4gLkaFQYts=";
-  cargoSha256 = "sha256-V4frCaU5QzTx3ujdaplw7vNkosbzyXHQvE+T7ntVOtU=";
+  version = "0.20.8";
+  sha256 = "sha256-278zU5CLNOwphGBUa4cGwjBqRJ87dhHMzFirZB09gYM=";
+  cargoSha256 = "sha256-0avy53pmR7CztDrL+5WAmlqpZwd/EA3Fh10hfPXyXZc=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage {
   inherit src version cargoSha256;
 
   buildInputs =
-    lib.optionals stdenv.isDarwin [ Security ];
+    lib.optionals stdenv.isDarwin [ Security CoreServices];
   nativeBuildInputs =
     [ which ]
     ++ lib.optionals webUISupport [ emscripten ];

@@ -5,6 +5,7 @@
 # propagates
 , pycryptodome
 , requests
+, rtp
 , urllib3
 }:
 
@@ -21,6 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pycryptodome
     requests
+    rtp
     urllib3
   ];
 

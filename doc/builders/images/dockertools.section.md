@@ -410,7 +410,7 @@ If the derivation is fully buildable (i.e. `nix-build` can be used on it), runni
 The behavior doesn't match `nix-shell` or `nix-build` exactly and this function is known not to work correctly for e.g. fixed-output derivations, content-addressed derivations, impure derivations and other special types of derivations.
 :::
 
-### Arguments
+### Arguments {#ssec-pkgs-dockerTools-buildNixShellImage-arguments}
 
 `drv`
 
@@ -473,7 +473,7 @@ The behavior doesn't match `nix-shell` or `nix-build` exactly and this function 
 
     *Default:* (none)
 
-### Example
+### Example {#ssec-pkgs-dockerTools-buildNixShellImage-example}
 
 The following shows how to build the `pkgs.hello` package inside a Docker container built with `buildNixShellImage`.
 

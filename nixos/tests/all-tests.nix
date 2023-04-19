@@ -112,6 +112,7 @@ in {
   btrbk-doas = handleTest ./btrbk-doas.nix {};
   btrbk-no-timer = handleTest ./btrbk-no-timer.nix {};
   btrbk-section-order = handleTest ./btrbk-section-order.nix {};
+  budgie = handleTest ./budgie.nix {};
   buildbot = handleTest ./buildbot.nix {};
   buildkite-agents = handleTest ./buildkite-agents.nix {};
   caddy = handleTest ./caddy.nix {};
@@ -122,9 +123,9 @@ in {
   cassandra_3_0 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_0; };
   cassandra_3_11 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_11; };
   cassandra_4 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_4; };
-  ceph-multi-node = handleTestOn ["x86_64-linux"] ./ceph-multi-node.nix {};
-  ceph-single-node = handleTestOn ["x86_64-linux"] ./ceph-single-node.nix {};
-  ceph-single-node-bluestore = handleTestOn ["x86_64-linux"] ./ceph-single-node-bluestore.nix {};
+  ceph-multi-node = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-multi-node.nix {};
+  ceph-single-node = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-single-node.nix {};
+  ceph-single-node-bluestore = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-single-node-bluestore.nix {};
   certmgr = handleTest ./certmgr.nix {};
   cfssl = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cfssl.nix {};
   cgit = handleTest ./cgit.nix {};
@@ -209,6 +210,7 @@ in {
   envoy = handleTest ./envoy.nix {};
   ergo = handleTest ./ergo.nix {};
   ergochat = handleTest ./ergochat.nix {};
+  esphome = handleTest ./esphome.nix {};
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
@@ -309,7 +311,6 @@ in {
   i3wm = handleTest ./i3wm.nix {};
   icingaweb2 = handleTest ./icingaweb2.nix {};
   iftop = handleTest ./iftop.nix {};
-  ihatemoney = handleTest ./ihatemoney {};
   incron = handleTest ./incron.nix {};
   influxdb = handleTest ./influxdb.nix {};
   initrd-network-openvpn = handleTest ./initrd-network-openvpn {};
@@ -358,7 +359,7 @@ in {
   ksm = handleTest ./ksm.nix {};
   kthxbye = handleTest ./kthxbye.nix {};
   kubernetes = handleTestOn ["x86_64-linux"] ./kubernetes {};
-  kubo = handleTest ./kubo.nix {};
+  kubo = runTest ./kubo.nix;
   ladybird = handleTest ./ladybird.nix {};
   languagetool = handleTest ./languagetool.nix {};
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
@@ -420,6 +421,7 @@ in {
   mjolnir = handleTest ./matrix/mjolnir.nix {};
   mod_perl = handleTest ./mod_perl.nix {};
   molly-brown = handleTest ./molly-brown.nix {};
+  monica = handleTest ./web-apps/monica.nix {};
   mongodb = handleTest ./mongodb.nix {};
   moodle = handleTest ./moodle.nix {};
   moonraker = handleTest ./moonraker.nix {};
@@ -459,7 +461,8 @@ in {
   netdata = handleTest ./netdata.nix {};
   networking.networkd = handleTest ./networking.nix { networkd = true; };
   networking.scripted = handleTest ./networking.nix { networkd = false; };
-  netbox = handleTest ./web-apps/netbox.nix {};
+  netbox = handleTest ./web-apps/netbox.nix { inherit (pkgs) netbox; };
+  netbox_3_3 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_3_3; };
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = handleTest ./networking-proxy.nix {};
   nextcloud = handleTest ./nextcloud {};
@@ -565,6 +568,7 @@ in {
   postfixadmin = handleTest ./postfixadmin.nix {};
   postgis = handleTest ./postgis.nix {};
   postgresql = handleTest ./postgresql.nix {};
+  postgresql-jit = handleTest ./postgresql-jit.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
   powerdns = handleTest ./powerdns.nix {};
   powerdns-admin = handleTest ./powerdns-admin.nix {};
@@ -584,6 +588,7 @@ in {
   pt2-clone = handleTest ./pt2-clone.nix {};
   pykms = handleTest ./pykms.nix {};
   public-inbox = handleTest ./public-inbox.nix {};
+  pufferpanel = handleTest ./pufferpanel.nix {};
   pulseaudio = discoverTests (import ./pulseaudio.nix);
   qboot = handleTestOn ["x86_64-linux" "i686-linux"] ./qboot.nix {};
   qemu-vm-restrictnetwork = handleTest ./qemu-vm-restrictnetwork.nix {};

@@ -132,13 +132,12 @@ rec {
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
     , checkPhase ? ""    # syntax checks, e.g. for scripts
     , meta ? { }
+    , allowSubstitutes ? false
+    , preferLocalBuild ? true
     }:
     runCommand name
-      { inherit text executable checkPhase meta;
+      { inherit text executable checkPhase meta allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ];
-        # Pointless to do this on a remote machine.
-        preferLocalBuild = true;
-        allowSubstitutes = false;
       }
       ''
         target=$out${lib.escapeShellArg destination}
@@ -150,9 +149,11 @@ rec {
           echo -n "$text" > "$target"
         fi
 
-        eval "$checkPhase"
+        if [ -n "$executable" ]; then
+          chmod +x "$target"
+        fi
 
-        (test -n "$executable" && chmod +x "$target") || true
+        eval "$checkPhase"
       '';
 
   /*
@@ -324,6 +325,8 @@ rec {
       inherit name;
       executable = true;
       destination = "/bin/${name}";
+      allowSubstitutes = true;
+      preferLocalBuild = false;
       text = ''
         #!${runtimeShell}
         set -o errexit
@@ -411,7 +414,10 @@ rec {
         mkdir -p "$(dirname "$file")"
         cat $files > "$file"
 
-        (test -n "$executable" && chmod +x "$file") || true
+        if [ -n "$executable" ]; then
+          chmod +x "$file"
+        fi
+
         eval "$checkPhase"
       '';
 
@@ -511,8 +517,8 @@ rec {
       ''
         mkdir -p $out
         for i in $(cat $pathsPath); do
-          ${lndir}/bin/lndir $i $out
-        done 2>&1 | sed 's/^/symlinkJoin: warning: keeping existing file: /'
+          ${lndir}/bin/lndir -silent $i $out
+        done
         ${postBuild}
       '';
 

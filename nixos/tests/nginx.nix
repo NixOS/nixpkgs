@@ -67,10 +67,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   };
 
   testScript = { nodes, ... }: let
-    etagSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/etagSystem";
-    justReloadSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/justReloadSystem";
-    reloadRestartSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/reloadRestartSystem";
-    reloadWithErrorsSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/reloadWithErrorsSystem";
+    etagSystem = "${nodes.webserver.system.build.toplevel}/specialisation/etagSystem";
+    justReloadSystem = "${nodes.webserver.system.build.toplevel}/specialisation/justReloadSystem";
+    reloadRestartSystem = "${nodes.webserver.system.build.toplevel}/specialisation/reloadRestartSystem";
+    reloadWithErrorsSystem = "${nodes.webserver.system.build.toplevel}/specialisation/reloadWithErrorsSystem";
   in ''
     url = "http://localhost/index.html"
 

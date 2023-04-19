@@ -5,8 +5,7 @@
 , fetchurl
 , autoPatchelfHook
 , rpmextract
-, libxcrypt
-, openssl
+, libxcrypt-legacy
 , zlib
 , lvm2  # LVM image backup and restore functions (optional)
 , acl  # EXT2/EXT3/XFS ACL support (optional)
@@ -117,8 +116,7 @@ let
       rpmextract
     ];
     buildInputs = [
-      libxcrypt
-      openssl
+      libxcrypt-legacy
       stdenv.cc.cc
       zlib
     ];
@@ -146,7 +144,8 @@ let
       runHook postInstall
     '';
 
-    # Fix relative symlinks after `/usr` was moved up one level
+    # fix relative symlinks after `/usr` was moved up one level,
+    # fix absolute symlinks pointing to `/opt`
     preFixup = ''
       for link in $out/lib{,64}/* $out/bin/*
       do
@@ -157,6 +156,10 @@ let
           exit 1
         fi
         ln --symbolic --force --no-target-directory "$out/$(cut -b 7- <<< "$target")" "$link"
+      done
+      for link in $(find $out -type l -lname '/opt/*')
+      do
+        ln --symbolic --force --no-target-directory "$out$(readlink "$link")" "$link"
       done
     '';
   };

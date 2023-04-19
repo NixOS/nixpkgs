@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5 }:
+{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, enableUnfree ? true }:
 
 # # To enable on NixOS:
 # config.services.postgresql = let
@@ -12,7 +12,7 @@
 # }
 
 stdenv.mkDerivation rec {
-  pname = "timescaledb";
+  pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
   version = "2.10.1";
 
   nativeBuildInputs = [ cmake ];
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
+    ++ lib.optionals (!enableUnfree) [ "-DAPACHE_ONLY=ON" ]
     ++ lib.optionals stdenv.isDarwin [ "-DLINTER=OFF" ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/timescale/timescaledb/raw/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ marsam ];
     platforms = postgresql.meta.platforms;
-    license = licenses.asl20;
+    license = with licenses; if enableUnfree then tsl else asl20;
     broken = versionOlder postgresql.version "12";
   };
 }

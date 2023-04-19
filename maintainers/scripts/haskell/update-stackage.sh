@@ -40,6 +40,7 @@ sed -r \
     -e 's|^constraints:||' \
     -e 's|^ +|  - |' \
     -e 's|,$||' \
+    -e '/^with-compiler:/d' \
     -e '/installed$/d' \
     -e '/^$/d' \
     < "${tmpfile}" | sort --ignore-case >"${tmpfile_new}"
@@ -57,6 +58,7 @@ sed -r \
     -e '/ distribution-nixpkgs /d' \
     -e '/ jailbreak-cabal /d' \
     -e '/ language-nix /d' \
+    -e '/ hackage-db /d' \
     -e '/ cabal-install /d' \
     -e '/ lsp /d' \
     -e '/ lsp-types /d' \

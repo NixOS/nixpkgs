@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-qqvnko2sN4bdm9+F0PVjDW5FsiL5k3UAfjPSTqG+73c=";
   };
 
+  separateDebugInfo = true;
+
   buildInputs = [ libGLU libepoxy libX11 libdrm mesa ];
 
   nativeBuildInputs = [ cmake meson ninja pkg-config python3 ];

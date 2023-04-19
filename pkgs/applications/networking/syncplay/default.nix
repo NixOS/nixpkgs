@@ -13,6 +13,7 @@ buildPythonApplication rec {
     sha256 = "0qm3qn4a1nahhs7q81liz514n9blsi107g9s9xfw2i8pzi7v9v0v";
   };
 
+  buildInputs = lib.optionals enableGUI [ qt5.qtwayland ];
   propagatedBuildInputs = [ twisted certifi ]
     ++ twisted.optional-dependencies.tls
     ++ lib.optional enableGUI pyside2;

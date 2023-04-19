@@ -28,6 +28,7 @@
 , libxkbcommon
 , libxkbfile
 , wayland
+, wayland-scanner
 , gstreamer
 , gst-plugins-base
 , gst-plugins-good
@@ -48,6 +49,11 @@
 , Cocoa
 , CoreMedia
 , withUnfree ? false
+
+# tries to compile and run generate_argument_docbook.c
+, withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+
+, buildPackages
 }:
 
 let
@@ -149,7 +155,10 @@ stdenv.mkDerivation rec {
     faac
   ];
 
-  nativeBuildInputs = [ cmake libxslt docbook-xsl-nons pkg-config ];
+  nativeBuildInputs = [
+    cmake libxslt docbook-xsl-nons pkg-config
+    wayland-scanner
+  ];
 
   doCheck = true;
 
@@ -158,6 +167,7 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DDOCBOOKXSL_DIR=${docbook-xsl-nons}/xml/xsl/docbook"
+    "-DWAYLAND_SCANNER=${buildPackages.wayland-scanner}/bin/wayland-scanner"
   ]
   ++ lib.mapAttrsToList (k: v: "-D${k}=${cmFlag v}") {
     BUILD_TESTING = false; # false is recommended by upstream
@@ -168,6 +178,7 @@ stdenv.mkDerivation rec {
     WITH_JPEG = (libjpeg_turbo != null);
     WITH_OPENH264 = (openh264 != null);
     WITH_OSS = false;
+    WITH_MANPAGES = withManPages;
     WITH_PCSC = (pcsclite != null);
     WITH_PULSE = (libpulseaudio != null);
     WITH_SERVER = buildServer;

@@ -2,21 +2,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "argc";
-  version = "0.15.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hN8M12evYxqNSsQKm0oRf3/b7WUf8k8pWa+0vRHstv4=";
+    hash = "sha256-lZtAhsEfMzj8Irl7LQPzjBNiKKy8091p2XoB5wSPhKM=";
   };
 
-  cargoSha256 = "sha256-JCFBA9LuNILJs4flzD/bGpv/R2vxMlA0aFTVdGKKs5I=";
+  cargoHash = "sha256-L0FX4RuJ5n76CCWVpGQryX7usXGBN55W9+y83s9JJug=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    installShellCompletion completions/argc.{bash,fish,zsh}
+    installShellCompletion --cmd argc \
+      --bash <($out/bin/argc --argc-completions bash) \
+      --fish <($out/bin/argc --argc-completions fish) \
+      --zsh <($out/bin/argc --argc-completions zsh)
   '';
 
   meta = with lib; {

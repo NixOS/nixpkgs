@@ -7,18 +7,17 @@
 , withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , meson
 , ninja
-, python3
   # just for passthru
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "gsettings-desktop-schemas";
-  version = "43.0";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "XVVoKCqzi5V1nUJUAfdHblb4y/JimIVYdDn0O9C4S74=";
+    sha256 = "6y3kXK2QWZSEnmQqYjret11BshsGJtQNKge46igf7A4=";
   };
 
   strictDeps = true;
@@ -28,7 +27,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
   ];
@@ -36,11 +34,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonBool "introspection" withIntrospection)
   ];
-
-  postPatch = ''
-    chmod +x build-aux/meson/post-install.py
-    patchShebangs build-aux/meson/post-install.py
-  '';
 
   preInstall = ''
     # Meson installs the schemas to share/glib-2.0/schemas

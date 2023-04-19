@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/6cdh/tree-sitter-scheme",
-  "rev": "bdcd2c8496701153506a9e3e1b76dfed852873ba",
-  "date": "2022-11-06T17:17:49+08:00",
-  "path": "/nix/store/l096qb2872kab34avgscn9bwizrzail5-tree-sitter-scheme",
-  "sha256": "12knvhmayck9da3zj2w55al4yjhkkr9gxmfdmrjiz7vn9wc1dxr9",
+  "rev": "67b90a365bebf4406af4e5a546d6336de787e135",
+  "date": "2023-01-16T14:32:14+08:00",
+  "path": "/nix/store/vsbfzbn9phgkn008633yjxr3d95zf4y1-tree-sitter-scheme",
+  "sha256": "1pvxckza1kdfwqs78ka3lbwldrwkgymb31f5x1fq5vyawg60wxk8",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

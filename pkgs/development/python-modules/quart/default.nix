@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.18.3";
+  version = "0.18.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     rev = "refs/tags/${version}";
-    hash = "sha256-aQM8kEhienBG+/zQQ8C/DKiDIMF3l9rq8HSAvg7wvLM=";
+    hash = "sha256-iT/pePUtH1hwNIOG8Y/YbqCVseNXVOKC0nrXfB2RTlQ=";
   };
 
   nativeBuildInputs = [

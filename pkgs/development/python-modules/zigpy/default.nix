@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aiosqlite
-, asynctest
 , buildPythonPackage
 , crccheck
 , cryptography
@@ -18,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.53.2";
+  version = "0.54.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-/IUJzMzbNKXQZkhwmoKoafMVw+6rD3Sw/coBLOi4FIk=";
+    hash = "sha256-CFrqDKLklvbPBWAA0S6APGBYEXdmHYRzvbTzSfJ451w=";
   };
 
   propagatedBuildInputs = [
@@ -41,7 +40,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     freezegun
     pytest-asyncio
     pytest-timeout

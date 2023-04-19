@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-system-monitor";
-  version = "unstable-2022-04-25";
+  version = "unstable-2023-01-21";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
     repo = "gnome-shell-system-monitor-applet";
-    rev = "b359d888fd3fcccf1252f5f1dc390299e701493e";
-    hash = "sha256-FHErXetGN4n0TbrLQ5cN7V2IgO96ekHxiHLd0diRFAY=";
+    rev = "21d7b4e7a03ec8145b0b90c4f0b15c27d6f53788";
+    hash = "sha256-XDqWxTyaFEWPdXMTklcNQxqql73ESXAIF6TjMFHaj7g=";
   };
 
   nativeBuildInputs = [
@@ -17,14 +17,10 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # GNOME 43 compatibility
+    # GNOME 44 compatibility
     (fetchpatch {
-      url = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/754/commits/3b3a617f78c5e9bbce0aa2864b3989335edb37b7.patch";
-      hash = "sha256-BAD0ExQYmTg6i02Gg7jcF0vf1zp232vXRjGCn+rBYXE=";
-    })
-    (fetchpatch {
-      url = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/754/commits/0815ed9da5056542730838fbf6c600506cf7a76f.patch";
-      hash = "sha256-pavjlPV9BxXoqb0YrlP2bXT7tkNQaBkTy1pMrI9MLnk=";
+      url = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/788/commits/e69349942791140807c01d472dfe5e0ddf5c73c0.patch";
+      hash = "sha256-g5Ocpvp7eO/pBkDBZsxgXH7e8rdPBUUxDSwK2hJHKbY=";
     })
     (substituteAll {
       src = ./paths_and_nonexisting_dirs.patch;

@@ -71,7 +71,7 @@ if test -e /etc/NIXOS; then
   else
     emulate bash
     alias shopt=false
-    if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
+    if [ -z "\$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
       . /etc/set-environment
     fi
     unalias shopt

@@ -6,11 +6,12 @@
 , rfc3987
 , ruamel-yaml
 , setuptools-scm
+, libfdt
 }:
 
 buildPythonPackage rec {
   pname = "dtschema";
-  version = "2022.01";
+  version = "2022.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +20,13 @@ buildPythonPackage rec {
     owner = "devicetree-org";
     repo = "dt-schema";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wwlXIM/eO3dII/qQpkAGLT3/15rBLi7ZiNtqYFf7Li4=";
+    sha256 = "sha256-+wF6WdonZrkZEnlq/P6QeT3X7CMinxbapLa7q0t2zUc=";
   };
+
+  patches = [
+    # Change name of pylibfdt to libfdt
+    ./fix_libfdt_name.patch
+  ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -32,6 +38,7 @@ buildPythonPackage rec {
     jsonschema
     rfc3987
     ruamel-yaml
+    libfdt
   ];
 
   # Module has no tests

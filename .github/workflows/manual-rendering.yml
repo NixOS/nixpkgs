@@ -54,7 +54,7 @@ jobs:
       # less noisy until all nixpkgs pull requests have stopped using
       # docbook for option docs.
       - name: Comment on failure
-        uses: peter-evans/create-or-update-comment@v2
+        uses: peter-evans/create-or-update-comment@v3
         if: ${{ failure() && steps.check.conclusion == 'failure' }}
         with:
           issue-number: 189318

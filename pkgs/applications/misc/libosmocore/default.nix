@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmocore";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmocore";
     rev = version;
-    hash = "sha256-Dkud3ZA9m/UVbPugbQztUJXFpkQYTWjK2mamxfto9JA=";
+    hash = "sha256-xs8XI6xIUIZ7e0b+z4+FB6jNGY08t1wI4Ud8EHdi93I=";
   };
 
   postPatch = ''
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     talloc
+    libmnl
   ];
 
   nativeBuildInputs = [
@@ -38,7 +39,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gnutls
-    libmnl
     libusb1
     lksctp-tools
     pcsclite
