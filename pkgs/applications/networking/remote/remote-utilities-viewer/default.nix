@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    homepage = https://www.remoteutilities.com/download/linux.php;
+    homepage = "https://www.remoteutilities.com/download/linux.php";
     description = "Remote Utilities Viewer for Linux";
     license = licenses.unfree;
     platforms = platforms.linux;
