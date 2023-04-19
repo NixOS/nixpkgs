@@ -11910,12 +11910,6 @@
     github = "pennae";
     githubId = 82953136;
   };
-  pepzi = {
-    name = "Robert Sand";
-    email = "robert@pepzi.org";
-    github = "pepzi";
-    githubId = 766765;
-  };
   periklis = {
     email = "theopompos@gmail.com";
     github = "periklis";
