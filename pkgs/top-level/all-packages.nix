@@ -19256,6 +19256,8 @@ with pkgs;
 
   activemq = callPackage ../development/libraries/apache-activemq { };
 
+  ada-url = callPackage ../development/libraries/ada-url { };
+
   adns = callPackage ../development/libraries/adns { };
 
   adslib = callPackage ../development/libraries/adslib { };
