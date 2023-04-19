@@ -221,7 +221,15 @@ buildStdenv.mkDerivation ({
     "profilingPhase"
   ];
 
-  patches = [ ]
+  patches = lib.optionals (lib.versionAtLeast version "112.0" && lib.versionOlder version "113.0") [
+    (fetchpatch {
+      # Crash when desktop scaling does not divide window scale on Wayland
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1803016
+      name = "mozbz1803016.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/1068e0955cfb";
+      hash = "sha256-iPqmofsmgvlFNm+mqVPbdgMKmP68ANuzYu+PzfCpoNA=";
+    })
+  ]
   ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
   ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
