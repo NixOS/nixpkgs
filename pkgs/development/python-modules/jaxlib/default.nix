@@ -52,7 +52,7 @@ let
   inherit (cudaPackages) backendStdenv cudatoolkit cudaFlags cudnn nccl;
 
   pname = "jaxlib";
-  version = "0.3.22";
+  version = "0.4.4";
 
   meta = with lib; {
     description = "JAX is Autograd and XLA, brought together for high-performance machine learning research.";
@@ -137,8 +137,9 @@ let
     src = fetchFromGitHub {
       owner = "google";
       repo = "jax";
-      rev = "${pname}-v${version}";
-      hash = "sha256-bnczJ8ma/UMKhA5MUQ6H4az+Tj+By14ZTG6lQQwptQs=";
+      # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
+      rev = "refs/tags/${pname}-v${version}";
+      hash = "sha256-DP68UwS9bg243iWU4MLHN0pwl8LaOcW3Sle1ZjsLOHo=";
     };
 
     nativeBuildInputs = [
@@ -242,9 +243,9 @@ let
 
       sha256 =
         if cudaSupport then
-          "sha256-4yu4y4SwSQoeaOz9yojhvCRGSC6jp61ycVDIKyIK/l8="
+          "sha256-cgsiloW77p4+TKRrYequZ/UwKwfO2jsHKtZ+aA30H7E="
         else
-          "sha256-CyRfPfJc600M7VzR3/SQX/EAyeaXRJwDQWot5h2XnFU=";
+          "sha256-D7WYG3YUaWq+4APYx8WpA191VVtoHG0fth3uEHXOeos=";
     };
 
     buildAttrs = {
