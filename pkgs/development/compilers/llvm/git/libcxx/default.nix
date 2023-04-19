@@ -17,7 +17,7 @@ let
   basename = "libcxx";
 in
 
-assert stdenv.isDarwin -> cxxabi.pname == "libcxxabi";
+assert stdenv.isDarwin -> cxxabi.libName == "c++abi";
 
 stdenv.mkDerivation rec {
   pname = basename + lib.optionalString headersOnly "-headers";
@@ -64,34 +64,32 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals (!headersOnly) [ cxxabi ];
 
-  cmakeFlags = [
+  cmakeFlags = let
+    # See: https://libcxx.llvm.org/BuildingLibcxx.html#cmdoption-arg-libcxx-cxx-abi-string
+    libcxx_cxx_abi_opt = {
+      "c++abi" = "system-libcxxabi";
+      "cxxrt" = "libcxxrt";
+    }.${cxxabi.libName} or (throw "unknown cxxabi: ${cxxabi.libName} (${cxxabi.pname})");
+  in [
     "-DLLVM_ENABLE_RUNTIMES=libcxx"
-    "-DLIBCXX_CXX_ABI=${lib.optionalString (!headersOnly) "system-"}${cxxabi.pname}"
-  ] ++ lib.optional (!headersOnly && cxxabi.pname == "libcxxabi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
+    "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
+  ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
     ++ lib.optionals stdenv.hostPlatform.isWasm [
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
-    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
+    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF"
+    # If we're only building the headers we don't actually *need* a functioning
+    # C/C++ compiler:
+    ++ lib.optionals (headersOnly) [
+      "-DCMAKE_C_COMPILER_WORKS=ON"
+      "-DCMAKE_CXX_COMPILER_WORKS=ON"
+    ];
 
   ninjaFlags = lib.optional headersOnly "generate-cxx-headers";
   installTargets = lib.optional headersOnly "install-cxx-headers";
-
-  preInstall = lib.optionalString (stdenv.isDarwin && !headersOnly) ''
-    for file in lib/*.dylib; do
-      if [ -L "$file" ]; then continue; fi
-
-      baseName=$(basename $(${stdenv.cc.targetPrefix}otool -D $file | tail -n 1))
-      installName="$out/lib/$baseName"
-      abiName=$(echo "$baseName" | sed -e 's/libc++/libc++abi/')
-
-      for other in $(${stdenv.cc.targetPrefix}otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
-        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${cxxabi}/lib/$abiName $file
-      done
-    done
-  '';
 
   passthru = {
     isLLVM = true;
