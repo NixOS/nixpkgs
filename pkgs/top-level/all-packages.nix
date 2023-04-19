@@ -1660,6 +1660,8 @@ with pkgs;
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
+  tfupdate = callPackage ../tools/misc/tfupdate { };
+
   tfplugindocs = callPackage ../development/tools/tfplugindocs { };
 
   thumbs = callPackage ../tools/misc/thumbs { };
