@@ -5867,13 +5867,7 @@ with pkgs;
     enableExtraPlugins = true;
   };
 
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor {
-    bundlerApp = bundlerApp.override {
-      # asciidoc supports both ruby 2 and 3,
-      # but we don't want to be stuck on it:
-      ruby = ruby_3_1;
-    };
-  };
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
 
   asciidoctor-with-extensions = callPackage ../tools/typesetting/asciidoctor-with-extensions { };
 
@@ -13472,6 +13466,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  wgautomesh = callPackage ../tools/networking/wgautomesh { };
+
   woff2 = callPackage ../development/web/woff2 { };
 
   woodpecker-agent = callPackage ../development/tools/continuous-integration/woodpecker/agent.nix { };
@@ -13763,6 +13759,8 @@ with pkgs;
   wavemon = callPackage ../tools/networking/wavemon { };
 
   wdfs = callPackage ../tools/filesystems/wdfs { };
+
+  web-eid-app = libsForQt5.callPackage ../tools/security/web-eid-app { };
 
   wdiff = callPackage ../tools/text/wdiff { };
 
@@ -17015,8 +17013,8 @@ with pkgs;
     ruby_3_1
     ruby_3_2;
 
-  ruby = ruby_2_7;
-  rubyPackages = rubyPackages_2_7;
+  ruby = ruby_3_1;
+  rubyPackages = rubyPackages_3_1;
 
   rubyPackages_2_7 = recurseIntoAttrs ruby_2_7.gems;
   rubyPackages_3_0 = recurseIntoAttrs ruby_3_0.gems;
