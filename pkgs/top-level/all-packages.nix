@@ -32868,6 +32868,8 @@ with pkgs;
 
   osmo-hnbgw = callPackage ../servers/osmocom/osmo-hnbgw { };
 
+  osmo-hnodeb = callPackage ../servers/osmocom/osmo-hnodeb { };
+
   osmo-iuh = callPackage ../servers/osmocom/osmo-iuh { };
 
   osmo-mgw = callPackage ../servers/osmocom/osmo-mgw { };
