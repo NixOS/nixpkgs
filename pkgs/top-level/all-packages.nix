@@ -22008,6 +22008,8 @@ with pkgs;
 
   libosmo-netif = callPackage ../servers/osmocom/libosmo-netif { };
 
+  libosmo-sccp = callPackage ../servers/osmocom/libosmo-sccp { };
+
   libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
 
   libotr = callPackage ../development/libraries/libotr { };
