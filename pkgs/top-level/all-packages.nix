@@ -1871,6 +1871,8 @@ with pkgs;
 
   git-bug-migration = callPackage ../applications/version-management/git-bug-migration { };
 
+  git-cache = callPackage ../applications/version-management/git-cache { };
+
   git-chglog = callPackage ../applications/version-management/git-chglog { };
 
   git-cinnabar = callPackage ../applications/version-management/git-cinnabar {
