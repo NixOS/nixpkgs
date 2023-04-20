@@ -64,6 +64,10 @@ in
 
     systemd.services.wireplumber.wantedBy = [ "pipewire.service" ];
     systemd.user.services.wireplumber.wantedBy = [ "pipewire.service" ];
+    systemd.user.services.wireplumber.after = lib.mkIf config.xdg.portal.enable [
+      "xdg-desktop-portal.service"
+    ];
+
 
     systemd.services.wireplumber.environment = lib.mkIf config.services.pipewire.systemWide {
       # Force wireplumber to use system dbus.
