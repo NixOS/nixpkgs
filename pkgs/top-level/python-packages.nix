@@ -7512,6 +7512,8 @@ self: super: with self; {
 
   pytest-mockito = callPackage ../development/python-modules/pytest-mockito { };
 
+  pytest-codeblocks = callPackage ../development/python-modules/pytest-codeblocks { };
+
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-creole = callPackage ../development/python-modules/python-creole { };
