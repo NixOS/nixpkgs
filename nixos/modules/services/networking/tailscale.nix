@@ -56,6 +56,8 @@ in {
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       path = [
         config.networking.resolvconf.package # for configuring DNS in some configs
         pkgs.procps     # for collecting running services (opt-in feature)
