@@ -80,6 +80,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "UCSC Genome Bioinformatics Group's suite of biological analysis tools, i.e. the kent utilities";
+    homepage = "http://genome.ucsc.edu";
+    changelog = "https://github.com/ucscGenomeBrowser/kent/releases/tag/v${version}_base";
     license = licenses.unfree;
     maintainers = with maintainers; [ scalavision ];
     platforms = platforms.linux;
