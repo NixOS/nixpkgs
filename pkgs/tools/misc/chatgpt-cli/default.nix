@@ -5,18 +5,22 @@
 }:
 buildGoModule rec {
   pname = "chatgpt";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-sGcVtppw1q05ICcYyRcF2gpFCzbBftaxAM4X4/k48as=";
+    hash = "sha256-5tEtkEDQxWFVWyK7uipm20yccCPkCDaMLzS25MmGRbE=";
   };
 
-  vendorHash = "sha256-lD9G8N1BpWda2FAi80qzvdiQXoJIWl529THYMfQmXtg=";
+  vendorHash = "sha256-q1+4KExXth7+UC8h0+M6ChnW7T1j468umi7Q1jwnzgo=";
 
-  subPackages = [ "." ];
+  subPackages = [ "cmd" ];
+
+  postInstall = ''
+    mv $out/bin/cmd $out/bin/$pname
+  '';
 
   meta = with lib; {
     description = "Interactive CLI for ChatGPT";

@@ -33,7 +33,7 @@ let
     then realGrub.override { efiSupport = cfg.efiSupport; }
     else null;
 
-  f = x: if x == null then "" else "" + x;
+  f = x: optionalString (x != null) ("" + x);
 
   grubConfig = args:
     let
@@ -52,7 +52,7 @@ let
       fullName = lib.getName realGrub;
       fullVersion = lib.getVersion realGrub;
       grubEfi = f grubEfi;
-      grubTargetEfi = if cfg.efiSupport && (cfg.version == 2) then f (grubEfi.grubTarget or "") else "";
+      grubTargetEfi = optionalString (cfg.efiSupport && (cfg.version == 2)) (f (grubEfi.grubTarget or ""));
       bootPath = args.path;
       storePath = config.boot.loader.grub.storePath;
       bootloaderId = if args.efiBootloaderId == null then "${config.system.nixos.distroName}${efiSysMountPoint'}" else args.efiBootloaderId;

@@ -4975,6 +4975,7 @@ broken-packages:
   - softfloat-hs
   - solar
   - solga
+  - som # test failure in job https://hydra.nixos.org/build/216744749 at 2023-04-20
   - Sonnex
   - sorted
   - sorting
@@ -5254,6 +5255,7 @@ broken-packages:
   - tasty-hedgehog-coverage
   - tasty-json
   - tasty-mgolden
+  - tasty-papi # test failure in job https://hydra.nixos.org/build/216756583 at 2023-04-20
   - tasty-stats
   - tasty-test-vector
   - TastyTLT
@@ -5701,6 +5703,7 @@ broken-packages:
   - vector-fftw
   - vector-functorlazy
   - vector-heterogenous
+  - vector-quicksort # dependency missing in job https://hydra.nixos.org/build/216753081 at 2023-04-20
   - vector-random
   - vector-read-instances
   - vector-space-map

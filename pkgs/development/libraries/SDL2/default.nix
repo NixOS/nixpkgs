@@ -23,7 +23,7 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
-, drmSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, drmSupport ? false
 , libdrm
 , mesa
 , libxkbcommon

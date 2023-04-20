@@ -209,6 +209,20 @@ in
        '';
       };
 
+      extraSettings = mkOption {
+        type = with types; attrsOf (oneOf [ bool ints.positive str ]);
+        default = {};
+        description = lib.mdDoc ''
+          Extra default configuration for all jails (i.e. `[DEFAULT]`). See
+          <https://github.com/fail2ban/fail2ban/blob/master/config/jail.conf> for an overview.
+        '';
+        example = literalExpression ''
+          {
+            findtime = "15m";
+          }
+        '';
+      };
+
       jails = mkOption {
         default = { };
         example = literalExpression ''
@@ -335,6 +349,10 @@ in
       # Actions
       banaction   = ${cfg.banaction}
       banaction_allports = ${cfg.banaction-allports}
+      ${optionalString (cfg.extraSettings != {}) ''
+        # Extra settings
+        ${generators.toKeyValue {} cfg.extraSettings}
+      ''}
     '';
     # Block SSH if there are too many failing connection attempts.
     # Benefits from verbose sshd logging to observe failed login attempts,
