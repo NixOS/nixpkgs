@@ -536,10 +536,32 @@ else let
     } // {
       # Expose the result of the checks for everyone to see.
       inherit (validity) unfree broken unsupported insecure;
-      available = validity.valid != "no"
-               && (if config.checkMetaRecursively or false
-                   then lib.all (d: d.meta.available or true) references
-                   else true);
+      available =
+        let
+          message = lib.strings.replaceStrings ["\n"] [" "] ''
+            pkg.meta.available is deprecated; please do not use it
+            from within nixpkgs.  It depends on impure environment
+            variables (NIXPKGS_ALLOW_*) and config.allow* settings
+            which users expect should influence only the success or
+            failure of a build rather than which dependencies are
+            included.  Please consider using `lib.meta.availableOn
+            stdenv.hostPlatform pkg` instead
+          '';
+          valid = validity.valid != "no"
+                  && (if config.checkMetaRecursively or false
+                      then lib.all (d: d.meta.available or true) references
+                      else true);
+          # gross hack, remove when ofborg is fixed
+          inOfBorg =
+            lib.strings.hasSuffix ".gc-of-borg-stats.json"
+              (builtins.getEnv "NIX_SHOW_STATS_PATH");
+        in
+          # TODO: have Hydra and OfBorg `import check-meta.nix` and
+          # apply it to `pkg`, rather than embedding this value in
+          # pkg.meta.
+          if inOfBorg || (config.inHydra or false)
+          then valid
+          else lib.warn message valid;
     };
 
   checkedEnv =
