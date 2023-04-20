@@ -30,13 +30,15 @@ let
       # Extra flags to pass to gnome-desktop-testing-runner.
     , testRunnerFlags ? []
 
+    , excludeTestRegex ? null
+
       # Extra attributes to pass to makeTest.
       # They will be recursively merged into the attrset created by this function.
     , ...
     }@args:
     makeTest
       (recursiveUpdate
-        rec {
+        {
           name = tested.name;
 
           meta = {
@@ -48,7 +50,15 @@ let
               testConfig
             ] ++ optional withX11 ../common/x11.nix;
 
-            environment.systemPackages = with pkgs; [ gnome-desktop-testing ];
+            environment.systemPackages = [
+              (pkgs.writeShellScriptBin "nixos-installed-tests-runner" ''
+                runner() {
+                  ${pkgs.gnome-desktop-testing}/bin/gnome-desktop-testing-runner ${escapeShellArgs testRunnerFlags} -d '${tested.installedTests}/share' "$@"
+                }
+
+                runner ${optionalString (excludeTestRegex != null) "$(runner --list | cut -d ' ' -f 1 | grep -v ${escapeShellArg excludeTestRegex})"}
+              '')
+            ];
 
             # The installed tests need to be added to the test VM’s closure.
             # Otherwise, their dependencies might not actually be registered
@@ -58,18 +68,11 @@ let
             environment.variables.TESTED_PACKAGE_INSTALLED_TESTS = "${tested.installedTests}/share";
           };
 
-          testScript =
-            optionalString withX11 ''
-              machine.wait_for_x()
-            '' +
-            optionalString (preTestScript != "") ''
-              ${preTestScript}
-            '' +
-            ''
-              machine.succeed(
-                  "gnome-desktop-testing-runner ${escapeShellArgs testRunnerFlags} -d '${tested.installedTests}/share'"
-              )
-            '';
+          testScript = concatLines [
+            (optionalString withX11 "machine.wait_for_x()")
+            preTestScript
+            "machine.succeed('nixos-installed-tests-runner')"
+          ];
         }
 
         (removeAttrs args [
@@ -78,6 +81,7 @@ let
           "preTestScript"
           "withX11"
           "testRunnerFlags"
+          "excludeTestRegex"
         ])
       );
 
