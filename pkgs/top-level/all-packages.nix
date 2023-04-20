@@ -16632,6 +16632,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  dart-sass-embedded = callPackage ../misc/dart-sass-embedded { };
+
   clojupyter = callPackage ../applications/editors/jupyter-kernels/clojupyter {
     jre = jre8;
   };
