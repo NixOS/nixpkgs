@@ -10260,9 +10260,7 @@ with pkgs;
   inherit (callPackage ../servers/nextcloud {})
     nextcloud24 nextcloud25 nextcloud26;
 
-  nextcloud24Packages = ( callPackage ../servers/nextcloud/packages {
-    apps = lib.importJSON ../servers/nextcloud/packages/24.json;
-  });
+  nextcloud24Packages = throw "Nextcloud24 is EOL!";
   nextcloud25Packages = ( callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/25.json;
   });
