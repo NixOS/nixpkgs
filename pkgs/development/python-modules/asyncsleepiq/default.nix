@@ -7,18 +7,22 @@
 
 buildPythonPackage rec {
   pname = "asyncsleepiq";
-  version = "1.2.3";
+  version = "1.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X+bJyzQxWJaS1/KNOE/3zQKSbwUpm9XN35HYf6s+BPs=";
+    hash = "sha256-zV+R78+6z5q3byv+bAZsqN6NL3OulTqS3EjgQ56IC+Q=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+  ];
+
+  pythonNamespaces = [
+    "asyncsleepiq"
   ];
 
   # upstream has no tests
