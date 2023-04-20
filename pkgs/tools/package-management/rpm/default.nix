@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
                 ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
+                ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+                  python.pkgs.pythonImportsCheckHook
+                ]
                 ++ lib.optional stdenv.isLinux libcap;
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
@@ -65,6 +68,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  pythonImportsCheck = [
+    "rpm"
+  ];
 
   meta = with lib; {
     homepage = "https://www.rpm.org/";
