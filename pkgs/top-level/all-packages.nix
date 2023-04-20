@@ -10306,6 +10306,8 @@ with pkgs;
 
   nomad-pack = callPackage ../applications/networking/cluster/nomad-pack { };
 
+  nova = callPackage ../applications/networking/cluster/nova { };
+
   nomino = callPackage ../tools/misc/nomino { };
 
   nb = callPackage ../tools/misc/nb { };
@@ -28642,6 +28644,8 @@ with pkgs;
   vistafonts-cht = callPackage ../data/fonts/vista-fonts-cht { };
 
   vollkorn = callPackage ../data/fonts/vollkorn { };
+
+  whatsapp-emoji-font = callPackage ../data/fonts/whatsapp-emoji { };
 
   weather-icons = callPackage ../data/fonts/weather-icons { };
 
