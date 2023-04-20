@@ -12035,6 +12035,8 @@ with pkgs;
     lua = lua5_4;
   };
 
+  rpmdevtools = callPackage ../tools/package-management/rpm/devtools.nix { };
+
   rpm-ostree = callPackage ../tools/misc/rpm-ostree {
     gperf = gperf_3_0;
   };
