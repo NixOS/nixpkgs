@@ -24,10 +24,10 @@
   && (stdenv.hostPlatform == stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
-, enablePFM ? !(stdenv.isDarwin
-  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
-  || stdenv.isAarch32 # broken for the armv7l builder
-)
+, enablePFM ? stdenv.isLinux /* PFM only supports Linux */
+  # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+  # broken for the armv7l builder
+  && !stdenv.hostPlatform.isAarch
 , enablePolly ? true
 } @args:
 
