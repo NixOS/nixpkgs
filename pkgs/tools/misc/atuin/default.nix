@@ -37,6 +37,16 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
 
+  nativeCheckInputs = lib.optionals (lib.meta.availableOn stdenv.buildPlatform xvfb-run) [
+    xvfb-run
+  ];
+
+  checkPhase = lib.optionalString (lib.meta.availableOn stdenv.buildPlatform xvfb-run) ''
+    runHook preCheck
+    xvfb-run cargo test
+    runHook postCheck
+  '';
+
   passthru.tests = {
     inherit (nixosTests) atuin;
   };
