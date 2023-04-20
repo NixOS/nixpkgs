@@ -35681,7 +35681,7 @@ with pkgs;
   angband = callPackage ../games/angband { };
 
   anki = callPackage ../games/anki {
-    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+    inherit (darwin.apple_sdk.frameworks) AVKit CoreAudio;
   };
   anki-bin = callPackage ../games/anki/bin.nix { };
 
