@@ -1,6 +1,5 @@
-{ gcc12Stdenv
+{ mkDerivation
 , lib
-, srcs
 
 , cmake
 , extra-cmake-modules
@@ -30,10 +29,8 @@
 , sonnet
 }:
 
-# Workaround for AArch64 not using GCC11 yet.
-gcc12Stdenv.mkDerivation rec {
+mkDerivation {
   pname = "neochat";
-  inherit (srcs.neochat) version src;
 
   nativeBuildInputs = [
     cmake

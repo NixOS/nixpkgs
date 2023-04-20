@@ -20,7 +20,6 @@
 , tremor # provides 'virbisidec'
 , libGL
 , gobject-introspection
-, hotdoc
 , enableX11 ? stdenv.isLinux
 , libXext
 , libXi
@@ -39,6 +38,9 @@
 , cdparanoia
 , glib
 , testers
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, hotdoc
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,10 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gstreamer
     gobject-introspection
-
-    # documentation
+  ] ++ lib.optionals enableDocumentation [
     hotdoc
-  ] ++ lib.optional enableWayland wayland;
+  ] ++ lib.optionals enableWayland [
+    wayland
+  ];
 
   buildInputs = [
     gobject-introspection
@@ -110,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
+    (lib.mesonEnable "doc" enableDocumentation)
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dtests=disabled"
   ]

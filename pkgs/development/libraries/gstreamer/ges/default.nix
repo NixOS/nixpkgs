@@ -10,9 +10,10 @@
 , gst-devtools
 , libxml2
 , flex
-, hotdoc
 , gettext
 , gobject-introspection
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {
@@ -37,8 +38,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     python3
     flex
-
-    # documentation
+  ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     gst-plugins-base
     gst-plugins-bad
+  ];
+
+  mesonFlags = [
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   postPatch = ''

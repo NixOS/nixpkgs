@@ -5,11 +5,12 @@
 , ninja
 , pkg-config
 , python3
-, hotdoc
 , gstreamer
 , gst-plugins-base
 , gettext
 , libav
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 # Note that since gst-libav-1.6, libav is actually ffmpeg. See
@@ -32,8 +33,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     python3
-
-    # documentation
+  ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     libav
+  ];
+
+  mesonFlags = [
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   postPatch = ''
