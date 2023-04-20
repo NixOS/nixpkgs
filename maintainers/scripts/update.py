@@ -1,11 +1,10 @@
-from dataclasses import dataclass
 from enum import Enum
-from typing import Any, cast, Generator, Optional
+from pydantic import BaseModel, Field, parse_obj_as, ValidationError
+from typing import Annotated, Any, cast, Generator, Literal, Optional, overload
 import argparse
 import asyncio
 import contextlib
 import json
-import jsons
 import os
 import re
 import subprocess
@@ -19,34 +18,30 @@ class CalledProcessError(Exception):
 class UpdateFailedException(Exception):
     pass
 
-T = TypeVar('T')
-
-def make_object_from_json_value(value: Any, t: type[T]) -> T:
-    return cast(T, jsons.load(value, t), strict=True)
-
 def eprint(*args: Any) -> None:
     print(*args, file=sys.stderr)
 
 class Feature(Enum):
     COMMIT = 'commit'
 
-@dataclass
-class PackageInfo:
+class PackageInfo(BaseModel):
     name: str
     pname: str
-    updateScript: list[str]
+    updateScript: Annotated[list[str], Field(min_items=1)]
     supportedFeatures: set[Feature]
     oldVersion: str
     attrPath: str
 
-@dataclass
-class ChangeInfo:
+class ChangeInfo(BaseModel):
     attrPath: str
     oldVersion: str
     newVersion: str
     commitMessage: Optional[str]
     commitBody: Optional[str]
-    files: list[str]
+    files: Annotated[list[str], Field(min_items=1)]
+
+class InvalidCommitInfo(ValueError):
+    parent: ValidationError
 
 async def check_subprocess_output(
     cmd: list[str],
@@ -114,6 +109,13 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
 
         try:
             await merge_changes(merge_lock, package, update_info, temp_dir)
+        except InvalidCommitInfo as e:
+            if keep_going:
+                eprint(f" - {package.name}: ERROR")
+                eprint(f"Update script for {package.name} was supposed to print commit protocol to stdout but it cannot be recognized as such", *e.parent.args)
+                eprint(f"--- FAILED TO MERGE CHANGES FOR {package.name} ----------------")
+            else:
+                raise UpdateFailedException(f"Merging changes for package {package.name} failed with exit code {e.process.returncode}")
         except CalledProcessError as e:
             if keep_going:
                 eprint(f" - {package.name}: ERROR")
@@ -173,7 +175,12 @@ async def commit_changes(name: str, merge_lock: asyncio.Lock, worktree: str, bra
 
 async def check_changes(package: PackageInfo, worktree: str, update_info: bytes) -> list[ChangeInfo]:
     if Feature.COMMIT in package.supportedFeatures:
-        changes = json.loads(update_info)
+        try:
+            changes = json.loads(update_info)
+        except ValidationError as e:
+            invalid = InvalidCommitInfo()
+            invalid.parent = e
+            raise invalid
     else:
         changes = [{}]
 
@@ -212,7 +219,13 @@ async def check_changes(package: PackageInfo, worktree: str, update_info: bytes)
             if len(changed_files) == 0:
                 return []
 
-    return make_object_from_json_value(changes, list[ChangeInfo])
+    try:
+        return parse_obj_as(list[ChangeInfo], changes)
+    except ValidationError as e:
+        invalid = InvalidCommitInfo()
+        invalid.parent = e
+        raise invalid
+
 
 async def merge_changes(merge_lock: asyncio.Lock, package: PackageInfo, update_info: bytes, temp_dir: Optional[tuple[str, str]]) -> None:
     if temp_dir is not None:
@@ -287,7 +300,7 @@ async def start_updates(max_workers: int, keep_going: bool, commit: bool, packag
 
 def main(max_workers: int, keep_going: bool, commit: bool, packages_path: str) -> None:
     with open(packages_path) as f:
-        packages = make_object_from_json_value(json.load(f), list[PackageInfo])
+        packages = parse_obj_as(list[PackageInfo], json.load(f))
 
     eprint()
     eprint('Going to be running update for following packages:')

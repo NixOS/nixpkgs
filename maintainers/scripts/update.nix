@@ -209,7 +209,7 @@ let
   args = [ packagesJson ] ++ optionalArgs;
 
   python = pkgs.python3.withPackages (pp: [
-    pp.jsons
+    pp.pydantic
   ]);
 
 in pkgs.stdenv.mkDerivation {
