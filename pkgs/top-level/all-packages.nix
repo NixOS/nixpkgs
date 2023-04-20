@@ -32726,6 +32726,8 @@ with pkgs;
     electron = electron_24;
   };
 
+  obsidian-export = callPackage ../applications/misc/obsidian-export { };
+
   octoprint = callPackage ../applications/misc/octoprint { };
 
   oculante = callPackage ../applications/graphics/oculante { };
