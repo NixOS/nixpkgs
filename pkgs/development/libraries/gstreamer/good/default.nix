@@ -44,7 +44,8 @@
 , libgudev
 , wavpack
 , glib
-, hotdoc
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
@@ -74,8 +75,7 @@ stdenv.mkDerivation rec {
     orc
     libshout
     glib
-
-    # documentation
+  ] ++ lib.optionals enableDocumentation [
     hotdoc
   ] ++ lib.optionals qt5Support (with qt5; [
     qtbase
@@ -142,6 +142,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
+    (lib.mesonEnable "doc" enableDocumentation)
   ] ++ lib.optionals (!qt5Support) [
     "-Dqt5=disabled"
   ] ++ lib.optionals (!qt6Support) [

@@ -8,7 +8,6 @@
 , flex
 , python3
 , glib
-, hotdoc
 , makeWrapper
 , libcap
 , libunwind
@@ -19,6 +18,8 @@
 , CoreServices
 , gobject-introspection
 , testers
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,11 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     bash-completion
     gobject-introspection
-
-    # documentation
-    hotdoc
   ] ++ lib.optionals stdenv.isLinux [
     libcap # for setcap binary
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    (lib.mesonEnable "doc" enableDocumentation)
   ] ++ lib.optionals stdenv.isDarwin [
     # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
     "-Dlibunwind=disabled"

@@ -5,7 +5,6 @@
 , pkg-config
 , gst-plugins-base
 , bzip2
-, hotdoc
 , libva
 , wayland
 , wayland-protocols
@@ -19,6 +18,8 @@
 , nasm
 , libvpx
 , python3
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {
@@ -42,8 +43,7 @@ stdenv.mkDerivation rec {
     python3
     bzip2
     wayland
-
-    # documentation
+  ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   postPatch = ''

@@ -5,11 +5,12 @@
 , ninja
 , pkg-config
 , python3
-, hotdoc
 , gettext
 , gobject-introspection
 , gst-plugins-base
 , gst-plugins-bad
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {
@@ -33,8 +34,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     pkg-config
     python3
-
-    # documentation
+  ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   postPatch = ''
