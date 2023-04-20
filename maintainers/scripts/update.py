@@ -83,7 +83,15 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
             cwd=worktree,
         )
 
-        await merge_changes(merge_lock, package, update_info, temp_dir)
+        try:
+            await merge_changes(merge_lock, package, update_info, temp_dir)
+        except CalledProcessError as e:
+            if keep_going:
+                eprint(f" - {package['name']}: ERROR")
+                eprint()
+                eprint(f"--- FAILED TO MERGE CHANGES FOR {package['name']} ----------------")
+            else:
+                raise UpdateFailedException(f"Merging changes for package {package['name']} failed with exit code {e.process.returncode}")
     except KeyboardInterrupt as e:
         eprint('Cancelling…')
         raise asyncio.exceptions.CancelledError()
