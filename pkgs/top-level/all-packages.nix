@@ -38211,6 +38211,8 @@ with pkgs;
 
   atmos = callPackage ../applications/networking/cluster/atmos { };
 
+  aiac = callPackage ../applications/networking/cluster/aiac { };
+
   fn-cli = callPackage ../applications/networking/cluster/fn-cli { };
 
   areca = callPackage ../applications/backup/areca {
