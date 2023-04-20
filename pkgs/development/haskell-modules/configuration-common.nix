@@ -415,11 +415,11 @@ self: super: {
   # 2022-01-29: Tests require package to be in ghc-db.
   aeson-schemas = dontCheck super.aeson-schemas;
 
-  # matterhorn-50200.17.0 won't work with brick >= 0.71, brick-skylighting >= 1.0
-  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_70_1;
-    brick-skylighting = self.brick-skylighting_0_3;
-  }));
+  # 2023-04-20: Pretends to need brick 1.6 but the commit history here
+  # https://github.com/matterhorn-chat/matterhorn/commits/master/matterhorn.cabal
+  # makes very clear that 1.4 is equally fine.
+  # Generally a slightly packaging hostile bound practice.
+  matterhorn = doJailbreak super.matterhorn;
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   # 2022-11-24: jailbreak as it has too strict bounds on a bunch of things
