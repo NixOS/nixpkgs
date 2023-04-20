@@ -17171,6 +17171,8 @@ with pkgs;
 
   guile-git = callPackage ../development/guile-modules/guile-git { };
 
+  guile-gnutls = callPackage ../development/guile-modules/guile-gnutls { };
+
   guile-json = callPackage ../development/guile-modules/guile-json { };
 
   guile-lib = callPackage ../development/guile-modules/guile-lib { };
