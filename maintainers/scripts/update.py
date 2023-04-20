@@ -20,11 +20,21 @@ class UpdateFailedException(Exception):
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
-async def check_subprocess_output(*args, **kwargs) -> Optional[bytes]:
+async def check_subprocess_output(
+    cmd: list[str],
+    capture_stdout: bool = False,
+    capture_stderr: bool = False,
+    cwd: Optional[str] = None,
+) -> Optional[bytes]:
     """
     Emulate check and capture_output arguments of subprocess.run function.
     """
-    process = await asyncio.create_subprocess_exec(*args, **kwargs)
+    process = await asyncio.create_subprocess_exec(
+        *cmd,
+        stdout=asyncio.subprocess.PIPE if capture_stdout else None,
+        stderr=asyncio.subprocess.PIPE if capture_stderr else None,
+        cwd=cwd,
+    )
     # We need to use communicate() instead of wait(), as the OS pipe buffers
     # can fill up and cause a deadlock.
     stdout, stderr = await process.communicate()
@@ -47,7 +57,10 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
         worktree, _branch = temp_dir
 
         # Ensure the worktree is clean before update.
-        await check_subprocess_output('git', 'reset', '--hard', '--quiet', 'HEAD', cwd=worktree)
+        await check_subprocess_output(
+            ['git', 'reset', '--hard', '--quiet', 'HEAD'],
+            cwd=worktree,
+        )
 
         # Update scripts can use $(dirname $0) to get their location but we want to run
         # their clones in the git worktree, not in the main nixpkgs repo.
@@ -57,14 +70,16 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
 
     try:
         update_info = await check_subprocess_output(
-            'env',
-            f"UPDATE_NIX_NAME={package['name']}",
-            f"UPDATE_NIX_PNAME={package['pname']}",
-            f"UPDATE_NIX_OLD_VERSION={package['oldVersion']}",
-            f"UPDATE_NIX_ATTR_PATH={package['attrPath']}",
-            *update_script_command,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
+            [
+                'env',
+                f"UPDATE_NIX_NAME={package['name']}",
+                f"UPDATE_NIX_PNAME={package['pname']}",
+                f"UPDATE_NIX_OLD_VERSION={package['oldVersion']}",
+                f"UPDATE_NIX_ATTR_PATH={package['attrPath']}",
+                *update_script_command,
+            ],
+            capture_stdout=True,
+            capture_stderr=True,
             cwd=worktree,
         )
 
@@ -101,14 +116,22 @@ async def commit_changes(name: str, merge_lock: asyncio.Lock, worktree: str, bra
     for change in changes:
         # Git can only handle a single index operation at a time
         async with merge_lock:
-            await check_subprocess_output('git', 'add', *change['files'], cwd=worktree)
+            await check_subprocess_output(
+                ['git', 'add', *change['files']],
+                cwd=worktree,
+            )
             commit_message = '{attrPath}: {oldVersion} -> {newVersion}'.format(**change)
             if 'commitMessage' in change:
                 commit_message = change['commitMessage']
             elif 'commitBody' in change:
                 commit_message = commit_message + '\n\n' + change['commitBody']
-            await check_subprocess_output('git', 'commit', '--quiet', '-m', commit_message, cwd=worktree)
-            await check_subprocess_output('git', 'cherry-pick', branch)
+            await check_subprocess_output(
+                ['git', 'commit', '--quiet', '-m', commit_message],
+                cwd=worktree,
+            )
+            await check_subprocess_output(
+                ['git', 'cherry-pick', branch],
+            )
 
 async def check_changes(package: Dict, worktree: str, update_info: str):
     if 'commit' in package['supportedFeatures']:
@@ -129,11 +152,20 @@ async def check_changes(package: Dict, worktree: str, update_info: str):
 
         if 'newVersion' not in changes[0]:
             attr_path = changes[0]['attrPath']
-            obtain_new_version_output = await check_subprocess_output('nix-instantiate', '--expr', f'with import ./. {{}}; lib.getVersion {attr_path}', '--eval', '--strict', '--json', stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
+            obtain_new_version_output = await check_subprocess_output(
+                ['nix-instantiate', '--expr', f'with import ./. {{}}; lib.getVersion {attr_path}', '--eval', '--strict', '--json'],
+                capture_stdout=True,
+                capture_stderr=True,
+                cwd=worktree,
+            )
             changes[0]['newVersion'] = json.loads(obtain_new_version_output.decode('utf-8'))
 
         if 'files' not in changes[0]:
-            changed_files_output = await check_subprocess_output('git', 'diff', '--name-only', 'HEAD', stdout=asyncio.subprocess.PIPE, cwd=worktree)
+            changed_files_output = await check_subprocess_output(
+                ['git', 'diff', '--name-only', 'HEAD'],
+                capture_stdout=True,
+                cwd=worktree,
+            )
             changed_files = changed_files_output.splitlines()
             changes[0]['files'] = changed_files
 
@@ -176,7 +208,10 @@ async def start_updates(max_workers: int, keep_going: bool, commit: bool, packag
         # Do not create more workers than there are packages.
         num_workers = min(max_workers, len(packages))
 
-        nixpkgs_root_output = await check_subprocess_output('git', 'rev-parse', '--show-toplevel', stdout=asyncio.subprocess.PIPE)
+        nixpkgs_root_output = await check_subprocess_output(
+            ['git', 'rev-parse', '--show-toplevel'],
+            capture_stdout=True,
+        )
         nixpkgs_root = nixpkgs_root_output.decode('utf-8').strip()
 
         # Set up temporary directories when using auto-commit.
