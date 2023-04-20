@@ -14040,6 +14040,8 @@ with pkgs;
 
   zerofree = callPackage ../tools/filesystems/zerofree { };
 
+  zet = callPackage ../tools/text/zet { };
+
   zfp = callPackage ../tools/compression/zfp { };
 
   zfs-autobackup = callPackage ../tools/backup/zfs-autobackup { };
