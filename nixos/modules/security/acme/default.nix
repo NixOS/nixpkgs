@@ -781,11 +781,11 @@ in {
 
       # FIXME Most of these custom warnings and filters for security.acme.certs.* are required
       # because using mkRemovedOptionModule/mkChangedOptionModule with attrsets isn't possible.
-      warnings = filter (w: w != "") (mapAttrsToList (cert: data: if data.extraDomains != "_mkMergedOptionModule" then ''
+      warnings = filter (w: w != "") (mapAttrsToList (cert: data: optionalString (data.extraDomains != "_mkMergedOptionModule") ''
         The option definition `security.acme.certs.${cert}.extraDomains` has changed
         to `security.acme.certs.${cert}.extraDomainNames` and is now a list of strings.
         Setting a custom webroot for extra domains is not possible, instead use separate certs.
-      '' else "") cfg.certs);
+      '') cfg.certs);
 
       assertions = let
         certs = attrValues cfg.certs;
