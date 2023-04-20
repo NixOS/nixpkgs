@@ -127,10 +127,14 @@ qtModule {
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
 
-  # removes macOS 12+ dependencies
   patches = [
+    # removes macOS 12+ dependencies
     ../patches/qtwebengine-darwin-no-low-latency-flag.patch
     ../patches/qtwebengine-darwin-no-copy-certificate-chain.patch
+    # Don't assume /usr/share/X11, and also respect the XKB_CONFIG_ROOT
+    # environment variable, since NixOS relies on it working.
+    # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
+    ../patches/qtwebengine-xkb-includes.patch
   ];
 
   postPatch = ''
@@ -161,9 +165,6 @@ qtModule {
 
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
-
-    substituteInPlace src/3rdparty/chromium/ui/events/ozone/layout/xkb/xkb_keyboard_layout_engine.cc \
-      --replace "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
   ''
   + lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure.cmake \

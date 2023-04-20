@@ -11,7 +11,6 @@
 , kirigami2
 , kirigami-addons
 , knotifications
-, libwebsockets
 , qqc2-desktop-style
 , qtbase
 , qtkeychain
@@ -21,28 +20,10 @@
 , qtwebsockets
 , kitemmodels
 , pimcommon
-
-# Workarounds for the point release being missing.
-, libsForQt5
-, fetchFromGitLab
 }:
 
-# NOTE: we cannot use `mkDerivation` injected by the Plasma Mobile package
-#       set for the point release, as the point release was not uploaded to
-#       the Plasma Mobile gear repo, and the injected `mkDerivation` only can
-#       use the src (and version) from the `srcs` set.
-libsForQt5.mkDerivation rec {
+mkDerivation {
   pname = "tokodon";
-
-  version = "23.01.0";
-  # NOTE: the tokodon point release was not uploaded to the Plasma Mobile gear repo.
-  src = fetchFromGitLab {
-    domain = "invent.kde.org";
-    owner = "network";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-iJRyKEFdoWtZLZ/nkMvy2S7EF+JRHXi3O0DswfrClDU=";
-  };
 
   nativeBuildInputs = [
     cmake

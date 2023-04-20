@@ -8963,8 +8963,6 @@ with pkgs;
 
   kibi = callPackage ../applications/editors/kibi { };
 
-  kio-admin = libsForQt5.callPackage ../tools/filesystems/kio-admin { };
-
   kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
@@ -10304,6 +10302,8 @@ with pkgs;
   nomad-driver-podman = callPackage ../applications/networking/cluster/nomad-driver-podman { };
 
   nomad-pack = callPackage ../applications/networking/cluster/nomad-pack { };
+
+  nova = callPackage ../applications/networking/cluster/nova { };
 
   nomino = callPackage ../tools/misc/nomino { };
 
@@ -23482,14 +23482,6 @@ with pkgs;
 
   s2geometry = callPackage ../development/libraries/s2geometry { };
 
-  /*  This package references ghc844, which we no longer have. Unfortunately, I
-      have been unable to mark it as "broken" in a way that the ofBorg bot
-      recognizes. Since I don't want to merge code into master that generates
-      evaluation errors, I have no other idea but to comment it out entirely.
-
-  sad = callPackage ../applications/science/logic/sad { };
-  */
-
   safefile = callPackage ../development/libraries/safefile { };
 
   sbc = callPackage ../development/libraries/sbc { };
@@ -28665,6 +28657,8 @@ with pkgs;
 
   vollkorn = callPackage ../data/fonts/vollkorn { };
 
+  whatsapp-emoji-font = callPackage ../data/fonts/whatsapp-emoji { };
+
   weather-icons = callPackage ../data/fonts/weather-icons { };
 
   whitesur-gtk-theme = callPackage ../data/themes/whitesur {
@@ -30074,8 +30068,6 @@ with pkgs;
   genxword = callPackage ../applications/misc/genxword { };
 
   geoipupdate = callPackage ../applications/misc/geoipupdate { };
-
-  ghostwriter = libsForQt5.callPackage ../applications/editors/ghostwriter { };
 
   globe-cli = callPackage ../applications/misc/globe-cli { };
 
@@ -31534,6 +31526,8 @@ with pkgs;
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
   ktunnel = callPackage ../applications/networking/cluster/ktunnel { };
+
+  ktop = callPackage ../applications/networking/cluster/ktop { };
 
   pinniped = callPackage ../applications/networking/cluster/pinniped { };
 
@@ -37855,7 +37849,9 @@ with pkgs;
     guile = guile_2_0;
   };
 
-  gerbv = callPackage ../applications/science/electronics/gerbv { };
+  gerbv = callPackage ../applications/science/electronics/gerbv {
+    cairo = cairo.override { x11Support = true; };
+  };
 
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
