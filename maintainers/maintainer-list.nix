@@ -5695,6 +5695,12 @@
     githubId = 1713676;
     name = "Luis G. Torres";
   };
+  giorgiga = {
+    email = "giorgio.gallo@bitnic.it";
+    github = "giorgiga";
+    githubId = 471835;
+    name = "Giorgio Gallo";
+  };
   GKasparov = {
     email = "mizozahr@gmail.com";
     github = "GKasparov";
