@@ -1215,7 +1215,7 @@ in {
       enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
       extraConfig = {
         auth.token = {
-          realm = "http${if cfg.https == true then "s" else ""}://${cfg.host}/jwt/auth";
+          realm = "http${optionalString (cfg.https == true) "s"}://${cfg.host}/jwt/auth";
           service = cfg.registry.serviceName;
           issuer = cfg.registry.issuer;
           rootcertbundle = cfg.registry.certFile;

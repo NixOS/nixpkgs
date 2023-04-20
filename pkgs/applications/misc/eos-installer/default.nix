@@ -1,40 +1,44 @@
-{ lib, stdenv, fetchFromGitHub
-, autoconf, autoconf-archive, automake, glib, intltool, libtool, pkg-config
-, gnome-desktop, gnupg, gtk3, udisks
+{ lib, stdenv, fetchFromGitHub, writeText
+, glib, meson, ninja, pkg-config, python3
+, coreutils, gnome-desktop, gnupg, gtk3, systemdMinimal, udisks
 }:
 
 stdenv.mkDerivation rec {
   pname = "eos-installer";
-  version = "4.0.3";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "endlessm";
     repo = "eos-installer";
     rev = "Release_${version}";
-    sha256 = "1nl6vim5dd83kvskmf13xp9d6zx39fayz4z0wqwf7xf4nwl07gwz";
+    sha256 = "utTTux8o8TN51bvnGldrtMEatiLA1AiHf/9XJZ7k7KM=";
     fetchSubmodules = true;
   };
 
   strictDeps = true;
   nativeBuildInputs = [
-    autoconf autoconf-archive automake glib intltool libtool pkg-config
+    glib gnupg meson ninja pkg-config python3
   ];
-  buildInputs = [ gnome-desktop gtk3 udisks ];
+  buildInputs = [ gnome-desktop gtk3 systemdMinimal udisks ];
 
   preConfigure = ''
-    ./autogen.sh
+    patchShebangs tests
+    substituteInPlace tests/test-scribe.c \
+        --replace /bin/true ${coreutils}/bin/true \
+        --replace /bin/false ${coreutils}/bin/false
   '';
 
-  configureFlags = [
+  mesonFlags = [
     "--libexecdir=${placeholder "out"}/bin"
-    "--localstatedir=/var"
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--cross-file=${writeText "crossfile.ini" ''
+      [binaries]
+      gpg = '${gnupg}/bin/gpg'
+    ''}"
   ];
 
-  # These are for runtime, so can't be discovered from PATH, which
-  # is constructed from nativeBuildInputs.
-  GPG_PATH = "${gnupg}/bin/gpg";
-  GPGCONF_PATH = "${gnupg}/bin/gpgconf";
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+
+  doCheck = true;
 
   enableParallelBuilding = true;
 

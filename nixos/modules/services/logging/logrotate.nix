@@ -83,9 +83,8 @@ let
   };
 
   mailOption =
-    if foldr (n: a: a || (n.mail or false) != false) false (attrValues cfg.settings)
-    then "--mail=${pkgs.mailutils}/bin/mail"
-    else "";
+    optionalString (foldr (n: a: a || (n.mail or false) != false) false (attrValues cfg.settings))
+    "--mail=${pkgs.mailutils}/bin/mail";
 in
 {
   imports = [
