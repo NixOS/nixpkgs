@@ -16462,6 +16462,8 @@ with pkgs;
     inherit (darwin) postLinkSignHook signingUtils;
   } // extraArgs; in self);
 
+  xla = callPackage ../development/compilers/xla { };
+
   yaml-language-server = nodePackages.yaml-language-server;
 
   # prolog
