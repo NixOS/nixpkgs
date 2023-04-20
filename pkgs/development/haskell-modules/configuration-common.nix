@@ -415,6 +415,9 @@ self: super: {
   # 2022-01-29: Tests require package to be in ghc-db.
   aeson-schemas = dontCheck super.aeson-schemas;
 
+  # 2023-04-20: Restrictive bytestring bound in tests.
+  storablevector = doJailbreak super.storablevector;
+
   # 2023-04-20: Pretends to need brick 1.6 but the commit history here
   # https://github.com/matterhorn-chat/matterhorn/commits/master/matterhorn.cabal
   # makes very clear that 1.4 is equally fine.
