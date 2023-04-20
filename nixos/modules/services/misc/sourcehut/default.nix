@@ -827,7 +827,6 @@ in
               "${pkgs.writeShellScript "buildsrht-keys-wrapper" ''
                 set -e
                 cd /run/sourcehut/buildsrht/subdir
-                set -x
                 exec -a "$0" ${pkgs.sourcehut.buildsrht}/bin/buildsrht-keys "$@"
               ''}:/usr/bin/buildsrht-keys"
               "${pkgs.sourcehut.buildsrht}/bin/master-shell:/usr/bin/master-shell"
@@ -839,13 +838,11 @@ in
               "${pkgs.writeShellScript "gitsrht-keys-wrapper" ''
                 set -e
                 cd /run/sourcehut/gitsrht/subdir
-                set -x
                 exec -a "$0" ${pkgs.sourcehut.gitsrht}/bin/gitsrht-keys "$@"
               ''}:/usr/bin/gitsrht-keys"
               "${pkgs.writeShellScript "gitsrht-shell-wrapper" ''
                 set -e
                 cd /run/sourcehut/gitsrht/subdir
-                set -x
                 export PATH="${cfg.git.package}/bin:$PATH"
                 export SRHT_CONFIG=/run/sourcehut/gitsrht/config.ini
                 exec -a "$0" ${pkgs.sourcehut.gitsrht}/bin/gitsrht-shell "$@"
@@ -858,11 +855,9 @@ in
                 # hence this hack to put hooks/stage-3 back into gitsrht-update-hook's $0
                 if test "''${STAGE3:+set}"
                 then
-                  set -x
                   exec -a hooks/stage-3 ${pkgs.sourcehut.gitsrht}/bin/gitsrht-update-hook "$@"
                 else
                   export STAGE3=set
-                  set -x
                   exec -a "$0" ${pkgs.sourcehut.gitsrht}/bin/gitsrht-update-hook "$@"
                 fi
               ''}:/usr/bin/gitsrht-update-hook"
@@ -873,13 +868,11 @@ in
               "${pkgs.writeShellScript "hgsrht-keys-wrapper" ''
                 set -e
                 cd /run/sourcehut/hgsrht/subdir
-                set -x
                 exec -a "$0" ${pkgs.sourcehut.hgsrht}/bin/hgsrht-keys "$@"
               ''}:/usr/bin/hgsrht-keys"
               "${pkgs.writeShellScript "hgsrht-shell-wrapper" ''
                 set -e
                 cd /run/sourcehut/hgsrht/subdir
-                set -x
                 exec -a "$0" ${pkgs.sourcehut.hgsrht}/bin/hgsrht-shell "$@"
               ''}:/usr/bin/hgsrht-shell"
               # Mercurial's changegroup hooks are run relative to their repository's directory,
@@ -888,7 +881,6 @@ in
                 set -e
                 test -e "''$PWD"/config.ini ||
                 ln -s /run/sourcehut/hgsrht/config.ini "''$PWD"/config.ini
-                set -x
                 exec -a "$0" ${cfg.python}/bin/hgsrht-hook-changegroup "$@"
               ''}:/usr/bin/hgsrht-hook-changegroup"
             ];
