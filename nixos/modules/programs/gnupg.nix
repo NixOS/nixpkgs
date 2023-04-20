@@ -19,6 +19,20 @@ let
     else
       "curses";
 
+  scdaemonDisableCcid = pkgs.stdenv.mkDerivation {
+    pname = "scdaemon-disable-ccid";
+    version = cfg.package.version;
+    phases = [ "installPhase" ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    installPhase = ''
+      mkdir -p $out/bin
+      makeWrapper ${cfg.package}/libexec/scdaemon $out/bin/scdaemon-disable-ccid --add-flags --disable-ccid
+    '';
+  };
+
+  gpgAgentExtraArgs =
+    (lib.optional (cfg.agent.pinentryFlavor != null) "--pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry")
+    ++ (lib.optional config.services.pcscd.enable "--scdaemon-program ${scdaemonDisableCcid}/bin/scdaemon-disable-ccid");
 in
 
 {
@@ -94,11 +108,14 @@ in
 
   config = mkIf cfg.agent.enable {
     # This overrides the systemd user unit shipped with the gnupg package
-    systemd.user.services.gpg-agent = mkIf (cfg.agent.pinentryFlavor != null) {
-      serviceConfig.ExecStart = [ "" ''
-        ${cfg.package}/bin/gpg-agent --supervised \
-          --pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
-      '' ];
+    systemd.user.services.gpg-agent = mkIf (gpgAgentExtraArgs != [ ]) {
+      serviceConfig.ExecStart = [
+        ""
+        ''
+          ${cfg.package}/bin/gpg-agent --supervised \
+          ${concatStringsSep " \\\n" gpgAgentExtraArgs}
+        ''
+      ];
     };
 
     systemd.user.sockets.gpg-agent = {
