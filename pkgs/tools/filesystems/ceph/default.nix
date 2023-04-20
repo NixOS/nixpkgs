@@ -85,7 +85,7 @@
 assert cryptopp != null || (nss != null && nspr != null);
 
 let
-  shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
   optYasm = shouldUsePkg yasm;
   optExpat = shouldUsePkg expat;
