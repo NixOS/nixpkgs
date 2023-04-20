@@ -381,11 +381,11 @@
     "vendorHash": "sha256-E1gzdES/YVxQq2J47E2zosvud2C/ViBeQ8+RfNHMBAg="
   },
   "fastly": {
-    "hash": "sha256-YKF4aW+K5JffPd5b3Kh540ml0uc9q5WSvcNgj9g6/Bk=",
+    "hash": "sha256-Z38tG5Of+nYuIT3IxY/hxbV0HIgkITBnaXcr3oYIf6Y=",
     "homepage": "https://registry.terraform.io/providers/fastly/fastly",
     "owner": "fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v4.2.0",
+    "rev": "v4.3.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
