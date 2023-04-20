@@ -30365,6 +30365,8 @@ with pkgs;
 
   gtklock-powerbar-module = callPackage ../tools/wayland/gtklock/powerbar-module.nix { };
 
+  gtklock-userinfo-module = callPackage ../tools/wayland/gtklock/userinfo-module.nix { };
+
   guardian-agent = callPackage ../tools/networking/guardian-agent { };
 
   gv = callPackage ../applications/misc/gv { };
