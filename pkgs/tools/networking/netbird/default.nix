@@ -1,16 +1,31 @@
-{ stdenv, lib, nixosTests, buildGoModule, fetchFromGitHub, installShellFiles
+{ stdenv
+, lib
+, nixosTests
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
 , pkg-config
-, gtk3, libayatana-appindicator, libX11, libXcursor, libXxf86vm
-, Cocoa, IOKit, Kernel, UserNotifications, WebKit
-, ui ? false }:
+, gtk3
+, libayatana-appindicator
+, libX11
+, libXcursor
+, libXxf86vm
+, Cocoa
+, IOKit
+, Kernel
+, UserNotifications
+, WebKit
+, ui ? false
+}:
 let
-  modules = if ui then {
-    "client/ui" = "netbird-ui";
-  } else {
-    client = "netbird";
-    management = "netbird-mgmt";
-    signal = "netbird-signal";
-  };
+  modules =
+    if ui then {
+      "client/ui" = "netbird-ui";
+    } else {
+      client = "netbird";
+      management = "netbird-mgmt";
+      signal = "netbird-signal";
+    };
 in
 buildGoModule rec {
   pname = "netbird";
@@ -61,25 +76,26 @@ buildGoModule rec {
       --replace 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
   '';
 
-  postInstall = lib.concatStringsSep "\n" (lib.mapAttrsToList
-    (module: binary: ''
-      mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
-    '' + lib.optionalString (!ui) ''
-      installShellCompletion --cmd ${binary} \
-        --bash <($out/bin/${binary} completion bash) \
-        --fish <($out/bin/${binary} completion fish) \
-        --zsh <($out/bin/${binary} completion zsh)
-    '')
-    modules) + lib.optionalString (stdenv.isLinux && ui) ''
-      mkdir -p $out/share/pixmaps
-      cp $src/client/ui/disconnected.png $out/share/pixmaps/netbird.png
+  postInstall = lib.concatStringsSep "\n"
+    (lib.mapAttrsToList
+      (module: binary: ''
+        mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
+      '' + lib.optionalString (!ui) ''
+        installShellCompletion --cmd ${binary} \
+          --bash <($out/bin/${binary} completion bash) \
+          --fish <($out/bin/${binary} completion fish) \
+          --zsh <($out/bin/${binary} completion zsh)
+      '')
+      modules) + lib.optionalString (stdenv.isLinux && ui) ''
+    mkdir -p $out/share/pixmaps
+    cp $src/client/ui/disconnected.png $out/share/pixmaps/netbird.png
 
-      mkdir -p $out/share/applications
-      cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
+    mkdir -p $out/share/applications
+    cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
 
-      substituteInPlace $out/share/applications/netbird.desktop \
-        --replace "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
-    '';
+    substituteInPlace $out/share/applications/netbird.desktop \
+      --replace "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
+  '';
 
   passthru.tests.netbird = nixosTests.netbird;
 
