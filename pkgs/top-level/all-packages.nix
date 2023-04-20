@@ -8963,8 +8963,6 @@ with pkgs;
 
   kibi = callPackage ../applications/editors/kibi { };
 
-  kio-admin = libsForQt5.callPackage ../tools/filesystems/kio-admin { };
-
   kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
@@ -30078,8 +30076,6 @@ with pkgs;
   genxword = callPackage ../applications/misc/genxword { };
 
   geoipupdate = callPackage ../applications/misc/geoipupdate { };
-
-  ghostwriter = libsForQt5.callPackage ../applications/editors/ghostwriter { };
 
   globe-cli = callPackage ../applications/misc/globe-cli { };
 

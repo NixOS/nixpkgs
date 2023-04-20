@@ -6,12 +6,15 @@
 , qtquickcontrols2
 , akonadi
 , akonadi-contacts
+, akonadi-calendar
 , calendarsupport
 , eventviews
 }:
 
 mkDerivation {
   pname = "mauikit-calendar";
+
+  patches = [ ./add-akonadi-calendar.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -21,6 +24,7 @@ mkDerivation {
   buildInputs = [
     akonadi
     akonadi-contacts
+    akonadi-calendar
     calendarsupport
     eventviews
     mauikit
