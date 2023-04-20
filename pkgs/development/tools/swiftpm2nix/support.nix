@@ -6,7 +6,7 @@ in rec {
 
   # Derive a pin file from workspace state.
   mkPinFile = workspaceState:
-    assert workspaceState.version == 5;
+    assert workspaceState.version >= 5 && workspaceState.version <= 6;
     json.generate "Package.resolved" {
       version = 1;
       object.pins = map (dep: {
