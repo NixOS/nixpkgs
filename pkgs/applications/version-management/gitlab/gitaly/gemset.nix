@@ -220,10 +220,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1zqyy07ps6zh0gi9nppmnsngzv5nx1qjv726mzhv83sh90rc25nm";
+      sha256 = "1xcg53yz44cqhcpb85w3ay80kvnniy0v441c9p08wb6zzia2mnq9";
       type = "gem";
     };
-    version = "3.22.2";
+    version = "3.22.3";
   };
   googleapis-common-protos-types = {
     dependencies = ["google-protobuf"];
