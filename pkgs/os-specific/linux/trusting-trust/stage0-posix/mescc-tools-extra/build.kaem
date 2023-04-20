@@ -1,0 +1,20 @@
+# This is a modified version of mescc-tools-extra/mescc-tools-extra.kaem
+# https://github.com/oriansj/mescc-tools-extra/blob/ec53af69d6d2119b47b369cd0ec37ac806e7ad60/mescc-tools-extra.kaem
+
+alias CC="${mescc-tools}/bin/M2-Mesoplanet --operating-system ${OPERATING_SYSTEM} --architecture ${ARCH} -f"
+
+# Create output folder
+CC ${src}/mkdir.c -o ./mkdir
+./mkdir -p ${out}/bin
+
+CC ${src}/sha256sum.c -o ${out}/bin/sha256sum
+CC ${src}/match.c -o ${out}/bin/match
+CC ${src}/mkdir.c -o ${out}/bin/mkdir
+CC ${src}/untar.c -o ${out}/bin/untar
+CC ${src}/ungz.c -o ${out}/bin/ungz
+CC ${src}/unbz2.c -o ${out}/bin/unbz2
+CC ${src}/catm.c -o ${out}/bin/catm
+CC ${src}/cp.c -o ${out}/bin/cp
+CC ${src}/chmod.c -o ${out}/bin/chmod
+CC ${src}/rm.c -o ${out}/bin/rm
+CC ${src}/replace.c -o ${out}/bin/replace

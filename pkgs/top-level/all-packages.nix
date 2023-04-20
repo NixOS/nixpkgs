@@ -27459,6 +27459,8 @@ with pkgs;
 
   trust-dns = callPackage ../servers/dns/trust-dns { };
 
+  trusting-trust = recurseIntoAttrs (callPackage ../os-specific/linux/trusting-trust { });
+
   trustymail = callPackage ../tools/security/trustymail { };
 
   tunctl = callPackage ../os-specific/linux/tunctl { };
