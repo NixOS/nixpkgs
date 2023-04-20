@@ -12036,6 +12036,7 @@ with pkgs;
   };
 
   rpmdevtools = callPackage ../tools/package-management/rpm/devtools.nix { };
+  rpmlint = with python3Packages; toPythonApplication rpmlint;
 
   rpm-ostree = callPackage ../tools/misc/rpm-ostree {
     gperf = gperf_3_0;

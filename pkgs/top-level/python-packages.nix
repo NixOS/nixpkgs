@@ -10701,6 +10701,8 @@ self: super: with self; {
 
   rpmfluff = callPackage ../development/python-modules/rpmfluff { };
 
+  rpmlint = callPackage ../tools/package-management/rpm/lint.nix { };
+
   rpy2 = callPackage ../development/python-modules/rpy2 { };
 
   rpyc = callPackage ../development/python-modules/rpyc { };
