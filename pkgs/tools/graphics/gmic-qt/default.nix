@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   ] ++ variants.${variant}.extraDeps or [];
 
   cmakeFlags = [
-    "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else variant}"
+    "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else if variant == "gimp" && gimp.majorVersion == "2.99" then "gimp3" else variant}"
     "-DENABLE_SYSTEM_GMIC=ON"
     "-DENABLE_DYNAMIC_LINKING=ON"
   ];
