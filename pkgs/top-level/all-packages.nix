@@ -31537,6 +31537,8 @@ with pkgs;
 
   ktunnel = callPackage ../applications/networking/cluster/ktunnel { };
 
+  ktop = callPackage ../applications/networking/cluster/ktop { };
+
   pinniped = callPackage ../applications/networking/cluster/pinniped { };
 
   kthxbye = callPackage ../servers/monitoring/prometheus/kthxbye.nix { };
