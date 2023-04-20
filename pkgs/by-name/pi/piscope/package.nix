@@ -28,9 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
   ];
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
   # Upstream's Makefile assumes FHS
   installPhase = ''
     runHook preInstall
