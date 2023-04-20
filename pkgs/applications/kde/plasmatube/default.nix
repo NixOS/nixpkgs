@@ -11,7 +11,6 @@
 , mpv
 , qtmultimedia
 , qtquickcontrols2
-, yt-dlp
 }:
 
 mkDerivation {
@@ -36,15 +35,6 @@ mkDerivation {
     gst-plugins-good
     gstreamer
   ]);
-
-  patches = [
-    ./0001-Add-placeholders-for-runtime-dependencies.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace src/videomodel.cpp \
-      --replace "@yt-dlp@" "${yt-dlp}/bin/yt-dlp"
-  '';
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")

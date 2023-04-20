@@ -4,7 +4,7 @@
   akonadi, akonadi-contacts, akonadi-mime, akonadi-search, grantlee, karchive, kcmutils, kcodecs,
   kcompletion, kconfig, kconfigwidgets, kcontacts, kdbusaddons,
   kiconthemes, kimap, kio, kitemmodels, kjobwidgets, kldap, knewstuff, kpimtextedit,
-  kpurpose, kwallet, kwindowsystem, libkdepim, qtwebengine
+  kpurpose, kwallet, kwindowsystem, libkdepim, qtwebengine, ktextaddons
 }:
 
 mkDerivation {
@@ -17,7 +17,7 @@ mkDerivation {
   buildInputs = [
     akonadi-mime grantlee karchive kcmutils kcodecs kcompletion kconfigwidgets
     kdbusaddons kiconthemes kio kitemmodels kjobwidgets knewstuff kldap
-    kpurpose kwallet kwindowsystem libkdepim qtwebengine
+    kpurpose kwallet kwindowsystem libkdepim qtwebengine ktextaddons
   ];
   propagatedBuildInputs = [
     akonadi akonadi-contacts akonadi-search kconfig kcontacts kimap kpimtextedit
