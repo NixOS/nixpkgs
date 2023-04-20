@@ -25,14 +25,20 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng libuuid zlib bzip2 xz openssl curl libmysqlclient ];
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace ./src/checkUmask.sh \
       --replace "/bin/bash" "${bash}/bin/bash"
 
     substituteInPlace ./src/hg/sqlEnvTest.sh \
       --replace "which mysql_config" "${which}/bin/which ${libmysqlclient}/bin/mysql_config"
+
+    runHook postPatch
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     export MACHTYPE=$(uname -m)
     export CFLAGS="-fPIC"
     export MYSQLINC=$(mysql_config --include | sed -e 's/^-I//g')
@@ -56,14 +62,20 @@ stdenv.mkDerivation rec {
 
     cd ../utils
     make
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/lib
     cp $NIX_BUILD_TOP/lib/jkOwnLib.a $out/lib
     cp $NIX_BUILD_TOP/lib/jkweb.a $out/lib
     cp $NIX_BUILD_TOP/bin/x86_64/* $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {
