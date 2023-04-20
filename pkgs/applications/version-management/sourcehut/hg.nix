@@ -25,6 +25,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api hgsrht-keys" ""
+
+    substituteInPlace hgsrht-shell \
+      --replace /var/log/hgsrht-shell /var/log/sourcehut/hgsrht-shell
   '';
 
   hgsrht-api = buildGoModule ({
@@ -39,6 +42,11 @@ buildPythonPackage rec {
     pname = "hgsrht-keys";
     modRoot = "hgsrht-keys";
     vendorHash = "sha256-7ti8xCjSrxsslF7/1X/GY4FDl+69hPL4UwCDfjxmJLU=";
+
+    postPatch = ''
+      substituteInPlace hgsrht-keys/main.go \
+        --replace /var/log/hgsrht-keys /var/log/sourcehut/hgsrht-keys
+    '';
   };
 
   propagatedBuildInputs = [

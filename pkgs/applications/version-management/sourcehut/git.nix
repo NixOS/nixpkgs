@@ -31,6 +31,11 @@ let
     pname = "gitsrht-dispatch";
     modRoot = "gitsrht-dispatch";
     vendorHash = "sha256-EDvSZ3/g0xDSohrsAIpNhk+F0yy8tbnTW/3tURTonMc=";
+
+    postPatch = ''
+      substituteInPlace gitsrht-dispatch/main.go \
+        --replace /var/log/gitsrht-dispatch /var/log/sourcehut/gitsrht-dispatch
+    '';
   };
 
   gitKeys = buildGoModule {
@@ -38,6 +43,11 @@ let
     pname = "gitsrht-keys";
     modRoot = "gitsrht-keys";
     vendorHash = "sha256-9pojS69HCKVHUceyOpGtv9ewcxFD4WsOVsEzkmWJkF4=";
+
+    postPatch = ''
+      substituteInPlace gitsrht-keys/main.go \
+        --replace /var/log/gitsrht-keys /var/log/sourcehut/gitsrht-keys
+    '';
   };
 
   gitShell = buildGoModule {
@@ -45,6 +55,11 @@ let
     pname = "gitsrht-shell";
     modRoot = "gitsrht-shell";
     vendorHash = "sha256-WqfvSPuVsOHA//86u33atMfeA11+DJhjLmWy8Ivq0NI=";
+
+    postPatch = ''
+      substituteInPlace gitsrht-shell/main.go \
+        --replace /var/log/gitsrht-shell /var/log/sourcehut/gitsrht-shell
+    '';
   };
 
   gitUpdateHook = buildGoModule {
@@ -52,6 +67,11 @@ let
     pname = "gitsrht-update-hook";
     modRoot = "gitsrht-update-hook";
     vendorHash = "sha256-Bc3yPabS2S+qiroHFKrtkII/CfzBDYQ6xWxKHAME+Tc=";
+
+    postPatch = ''
+      substituteInPlace gitsrht-update-hook/main.go \
+        --replace /var/log/gitsrht-update-hook /var/log/sourcehut/gitsrht-update-hook
+    '';
   };
 
 in

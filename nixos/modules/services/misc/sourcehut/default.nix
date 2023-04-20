@@ -801,11 +801,20 @@ in
         '';
       };
       systemd.services.sshd = {
-        #path = optional cfg.git.enable [ cfg.git.package ];
+        preStart = concatStringsSep "\n" (
+          optionals cfg.git.enable (map (n: ''
+            touch /var/log/sourcehut/gitsrht-${n} # create if it does not exist yet
+            chown --silent ${cfg.git.user}:${cfg.git.group} /var/log/sourcehut/gitsrht-${n} || true
+          '') [
+            "keys"
+            "shell"
+            "update-hook"
+          ]) ++
+          optional cfg.hg.enable [
+            "chown ${cfg.hg.user}:${cfg.hg.group} /var/log/sourcehut/hgsrht-keys"
+          ]);
         serviceConfig = {
-          BindPaths = optionals cfg.git.enable [
-            "/var/log:/var/log"
-          ];
+          LogsDirectory = mkIf (cfg.git.enable || cfg.hg.enable) "sourcehut";
           BindReadOnlyPaths =
             # Note that those /usr/bin/* paths are hardcoded in multiple places in *.sr.ht,
             # for instance to get the user from the [git.sr.ht::dispatch] settings.
