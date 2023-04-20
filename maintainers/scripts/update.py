@@ -1,9 +1,11 @@
-from __future__ import annotations
-from typing import Dict, Generator, List, Optional, Tuple
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, cast, Generator, Optional
 import argparse
 import asyncio
 import contextlib
 import json
+import jsons
 import os
 import re
 import subprocess
@@ -17,8 +19,34 @@ class CalledProcessError(Exception):
 class UpdateFailedException(Exception):
     pass
 
-def eprint(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
+T = TypeVar('T')
+
+def make_object_from_json_value(value: Any, t: type[T]) -> T:
+    return cast(T, jsons.load(value, t), strict=True)
+
+def eprint(*args: Any) -> None:
+    print(*args, file=sys.stderr)
+
+class Feature(Enum):
+    COMMIT = 'commit'
+
+@dataclass
+class PackageInfo:
+    name: str
+    pname: str
+    updateScript: list[str]
+    supportedFeatures: set[Feature]
+    oldVersion: str
+    attrPath: str
+
+@dataclass
+class ChangeInfo:
+    attrPath: str
+    oldVersion: str
+    newVersion: str
+    commitMessage: Optional[str]
+    commitBody: Optional[str]
+    files: list[str]
 
 async def check_subprocess_output(
     cmd: list[str],
@@ -48,10 +76,10 @@ async def check_subprocess_output(
 
     return stdout
 
-async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_dir: Optional[Tuple[str, str]], package: Dict, keep_going: bool):
+async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_dir: Optional[tuple[str, str]], package: PackageInfo, keep_going: bool) -> None:
     worktree: Optional[str] = None
 
-    update_script_command = package['updateScript']
+    update_script_command = package.updateScript
 
     if temp_dir is not None:
         worktree, _branch = temp_dir
@@ -64,53 +92,55 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
 
         # Update scripts can use $(dirname $0) to get their location but we want to run
         # their clones in the git worktree, not in the main nixpkgs repo.
-        update_script_command = map(lambda arg: re.sub(r'^{0}'.format(re.escape(nixpkgs_root)), worktree, arg), update_script_command)
+        update_script_command = [re.sub(r'^{0}'.format(re.escape(nixpkgs_root)), worktree, arg) for arg in update_script_command]
 
-    eprint(f" - {package['name']}: UPDATING ...")
+    eprint(f" - {package.name}: UPDATING ...")
 
     try:
         update_info = await check_subprocess_output(
             [
                 'env',
-                f"UPDATE_NIX_NAME={package['name']}",
-                f"UPDATE_NIX_PNAME={package['pname']}",
-                f"UPDATE_NIX_OLD_VERSION={package['oldVersion']}",
-                f"UPDATE_NIX_ATTR_PATH={package['attrPath']}",
+                f"UPDATE_NIX_NAME={package.name}",
+                f"UPDATE_NIX_PNAME={package.pname}",
+                f"UPDATE_NIX_OLD_VERSION={package.oldVersion}",
+                f"UPDATE_NIX_ATTR_PATH={package.attrPath}",
                 *update_script_command,
             ],
             capture_stdout=True,
             capture_stderr=True,
             cwd=worktree,
         )
+        update_info = cast(bytes, update_info)
 
         try:
             await merge_changes(merge_lock, package, update_info, temp_dir)
         except CalledProcessError as e:
             if keep_going:
-                eprint(f" - {package['name']}: ERROR")
+                eprint(f" - {package.name}: ERROR")
                 eprint()
-                eprint(f"--- FAILED TO MERGE CHANGES FOR {package['name']} ----------------")
+                eprint(f"--- FAILED TO MERGE CHANGES FOR {package.name} ----------------")
             else:
-                raise UpdateFailedException(f"Merging changes for package {package['name']} failed with exit code {e.process.returncode}")
+                raise UpdateFailedException(f"Merging changes for package {package.name} failed with exit code {e.process.returncode}")
     except KeyboardInterrupt as e:
         eprint('Cancelling…')
         raise asyncio.exceptions.CancelledError()
     except CalledProcessError as e:
-        eprint(f" - {package['name']}: ERROR")
+        eprint(f" - {package.name}: ERROR")
         eprint()
-        eprint(f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------")
+        eprint(f"--- SHOWING ERROR LOG FOR {package.name} ----------------------")
         eprint()
-        eprint(e.stderr.decode('utf-8'))
-        with open(f"{package['pname']}.log", 'wb') as logfile:
-            logfile.write(e.stderr)
+        stderr = cast(bytes, e.stderr)
+        eprint(stderr.decode('utf-8'))
+        with open(f"{package.pname}.log", 'wb') as logfile:
+            logfile.write(stderr)
         eprint()
-        eprint(f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------")
+        eprint(f"--- SHOWING ERROR LOG FOR {package.name} ----------------------")
 
         if not keep_going:
-            raise UpdateFailedException(f"The update script for {package['name']} failed with exit code {e.process.returncode}")
+            raise UpdateFailedException(f"The update script for {package.name} failed with exit code {e.process.returncode}")
 
 @contextlib.contextmanager
-def make_worktree() -> Generator[Tuple[str, str], None, None]:
+def make_worktree() -> Generator[tuple[str, str], None, None]:
     with tempfile.TemporaryDirectory() as wt:
         branch_name = f'update-{os.path.basename(wt)}'
         target_directory = f'{wt}/nixpkgs'
@@ -120,19 +150,19 @@ def make_worktree() -> Generator[Tuple[str, str], None, None]:
         subprocess.run(['git', 'worktree', 'remove', '--force', target_directory])
         subprocess.run(['git', 'branch', '-D', branch_name])
 
-async def commit_changes(name: str, merge_lock: asyncio.Lock, worktree: str, branch: str, changes: List[Dict]) -> None:
+async def commit_changes(name: str, merge_lock: asyncio.Lock, worktree: str, branch: str, changes: list[ChangeInfo]) -> None:
     for change in changes:
         # Git can only handle a single index operation at a time
         async with merge_lock:
             await check_subprocess_output(
-                ['git', 'add', *change['files']],
+                ['git', 'add', *change.files],
                 cwd=worktree,
             )
-            commit_message = '{attrPath}: {oldVersion} -> {newVersion}'.format(**change)
-            if 'commitMessage' in change:
-                commit_message = change['commitMessage']
-            elif 'commitBody' in change:
-                commit_message = commit_message + '\n\n' + change['commitBody']
+            commit_message = f'{change.attrPath}: {change.oldVersion} -> {change.newVersion}'
+            if change.commitMessage is not None:
+                commit_message = change.commitMessage
+            elif change.commitBody is not None:
+                commit_message = commit_message + '\n\n' + change.commitBody
             await check_subprocess_output(
                 ['git', 'commit', '--quiet', '-m', commit_message],
                 cwd=worktree,
@@ -141,8 +171,8 @@ async def commit_changes(name: str, merge_lock: asyncio.Lock, worktree: str, bra
                 ['git', 'cherry-pick', branch],
             )
 
-async def check_changes(package: Dict, worktree: str, update_info: str):
-    if 'commit' in package['supportedFeatures']:
+async def check_changes(package: PackageInfo, worktree: str, update_info: bytes) -> list[ChangeInfo]:
+    if Feature.COMMIT in package.supportedFeatures:
         changes = json.loads(update_info)
     else:
         changes = [{}]
@@ -152,11 +182,11 @@ async def check_changes(package: Dict, worktree: str, update_info: str):
         # Dynamic data from updater take precedence over static data from passthru.updateScript.
         if 'attrPath' not in changes[0]:
             # update.nix is always passing attrPath
-            changes[0]['attrPath'] = package['attrPath']
+            changes[0]['attrPath'] = package.attrPath
 
         if 'oldVersion' not in changes[0]:
             # update.nix is always passing oldVersion
-            changes[0]['oldVersion'] = package['oldVersion']
+            changes[0]['oldVersion'] = package.oldVersion
 
         if 'newVersion' not in changes[0]:
             attr_path = changes[0]['attrPath']
@@ -166,6 +196,7 @@ async def check_changes(package: Dict, worktree: str, update_info: str):
                 capture_stderr=True,
                 cwd=worktree,
             )
+            obtain_new_version_output = cast(bytes, obtain_new_version_output)
             changes[0]['newVersion'] = json.loads(obtain_new_version_output.decode('utf-8'))
 
         if 'files' not in changes[0]:
@@ -174,44 +205,45 @@ async def check_changes(package: Dict, worktree: str, update_info: str):
                 capture_stdout=True,
                 cwd=worktree,
             )
-            changed_files = changed_files_output.splitlines()
+            changed_files_output = cast(bytes, changed_files_output)
+            changed_files = changed_files_output.decode('utf-8').splitlines()
             changes[0]['files'] = changed_files
 
             if len(changed_files) == 0:
                 return []
 
-    return changes
+    return make_object_from_json_value(changes, list[ChangeInfo])
 
-async def merge_changes(merge_lock: asyncio.Lock, package: Dict, update_info: str, temp_dir: Optional[Tuple[str, str]]) -> None:
+async def merge_changes(merge_lock: asyncio.Lock, package: PackageInfo, update_info: bytes, temp_dir: Optional[tuple[str, str]]) -> None:
     if temp_dir is not None:
         worktree, branch = temp_dir
         changes = await check_changes(package, worktree, update_info)
 
         if len(changes) > 0:
-            await commit_changes(package['name'], merge_lock, worktree, branch, changes)
+            await commit_changes(package.name, merge_lock, worktree, branch, changes)
         else:
-            eprint(f" - {package['name']}: DONE, no changes.")
+            eprint(f" - {package.name}: DONE, no changes.")
     else:
-        eprint(f" - {package['name']}: DONE.")
+        eprint(f" - {package.name}: DONE.")
 
-async def updater(nixpkgs_root: str, temp_dir: Optional[Tuple[str, str]], merge_lock: asyncio.Lock, packages_to_update: asyncio.Queue[Optional[Dict]], keep_going: bool, commit: bool):
+async def updater(nixpkgs_root: str, temp_dir: Optional[tuple[str, str]], merge_lock: asyncio.Lock, packages_to_update: asyncio.Queue[Optional[PackageInfo]], keep_going: bool, commit: bool) -> None:
     while True:
         package = await packages_to_update.get()
         if package is None:
             # A sentinel received, we are done.
             return
 
-        if not ('commit' in package['supportedFeatures'] or 'attrPath' in package):
+        if Feature.COMMIT not in package.supportedFeatures:
             temp_dir = None
 
         await run_update_script(nixpkgs_root, merge_lock, temp_dir, package, keep_going)
 
-async def start_updates(max_workers: int, keep_going: bool, commit: bool, packages: List[Dict]):
+async def start_updates(max_workers: int, keep_going: bool, commit: bool, packages: list[PackageInfo]) -> None:
     merge_lock = asyncio.Lock()
-    packages_to_update: asyncio.Queue[Optional[Dict]] = asyncio.Queue()
+    packages_to_update: asyncio.Queue[Optional[PackageInfo]] = asyncio.Queue()
 
     with contextlib.ExitStack() as stack:
-        temp_dirs: List[Optional[Tuple[str, str]]] = []
+        temp_dirs: list[Optional[tuple[str, str]]] = []
 
         # Do not create more workers than there are packages.
         num_workers = min(max_workers, len(packages))
@@ -220,6 +252,7 @@ async def start_updates(max_workers: int, keep_going: bool, commit: bool, packag
             ['git', 'rev-parse', '--show-toplevel'],
             capture_stdout=True,
         )
+        nixpkgs_root_output = cast(bytes, nixpkgs_root_output)
         nixpkgs_root = nixpkgs_root_output.decode('utf-8').strip()
 
         # Set up temporary directories when using auto-commit.
@@ -254,12 +287,12 @@ async def start_updates(max_workers: int, keep_going: bool, commit: bool, packag
 
 def main(max_workers: int, keep_going: bool, commit: bool, packages_path: str) -> None:
     with open(packages_path) as f:
-        packages = json.load(f)
+        packages = make_object_from_json_value(json.load(f), list[PackageInfo])
 
     eprint()
     eprint('Going to be running update for following packages:')
     for package in packages:
-        eprint(f" - {package['name']}")
+        eprint(f" - {package.name}")
     eprint()
 
     confirm = input('Press Enter key to continue...')
