@@ -30363,6 +30363,8 @@ with pkgs;
 
   gtklock-playerctl-module = callPackage ../tools/wayland/gtklock/playerctl-module.nix { };
 
+  gtklock-powerbar-module = callPackage ../tools/wayland/gtklock/powerbar-module.nix { };
+
   guardian-agent = callPackage ../tools/networking/guardian-agent { };
 
   gv = callPackage ../applications/misc/gv { };
