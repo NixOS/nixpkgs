@@ -1604,6 +1604,15 @@
     githubId = 9315;
     name = "Zhong Jianxin";
   };
+  b3nj5m1n = {
+    name = "Benjamin";
+    email = "b3nj4m1n@gmx.net";
+    github = "b3nj5m1n";
+    githubId = 47924309;
+    keys = [{
+      fingerprint = "9F7D 2083 BB22 0CEE B720  E068 309D 4C86 8984 9C5B";
+    }];
+  };
   b4dm4n = {
     email = "fabianm88@gmail.com";
     github = "B4dM4n";
