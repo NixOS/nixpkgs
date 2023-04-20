@@ -10305,6 +10305,8 @@ with pkgs;
 
   nomad-pack = callPackage ../applications/networking/cluster/nomad-pack { };
 
+  nova = callPackage ../applications/networking/cluster/nova { };
+
   nomino = callPackage ../tools/misc/nomino { };
 
   nb = callPackage ../tools/misc/nb { };
