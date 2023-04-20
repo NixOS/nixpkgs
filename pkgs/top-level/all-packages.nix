@@ -22640,6 +22640,8 @@ with pkgs;
 
   markdown-anki-decks = callPackage ../tools/misc/markdown-anki-decks { };
 
+  mdslides = callPackage ../tools/misc/mdslides { };
+
   micropython = callPackage ../development/interpreters/micropython { };
 
   MIDIVisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midi-visualizer {
