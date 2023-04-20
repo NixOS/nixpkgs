@@ -305,7 +305,7 @@ if ($virt eq "parallels") {
 }
 
 # Likewise for QEMU.
-if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
+if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs" || $virt eq "vm-other") {
     push @imports, "(modulesPath + \"/profiles/qemu-guest.nix\")";
 }
 
