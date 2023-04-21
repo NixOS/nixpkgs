@@ -21,6 +21,8 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 
 , extraNativeBuildInputs ? []
 , extraBuildInputs ? []
+, extraDepsBuildHost ? []
+, extraDepsHostTarget ? []
 , __stdenvImpureHostDeps ? []
 , __extraImpureHostDeps ? []
 , stdenvSandboxProfile ? ""
@@ -56,7 +58,7 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 }:
 
 let
-  defaultNativeBuildInputs = extraNativeBuildInputs ++
+  defaultDepsBuildHost = extraDepsBuildHost ++ extraNativeBuildInputs ++
     [
       ../../build-support/setup-hooks/audit-tmpdir.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
@@ -73,7 +75,7 @@ let
       ../../build-support/setup-hooks/strip.sh
     ] ++ lib.optionals hasCC [ cc ];
 
-  defaultBuildInputs = extraBuildInputs;
+  defaultDepsHostTarget = extraDepsHostTarget ++ extraBuildInputs;
 
   stdenv = (stdenv-overridable argsStdenv);
 
@@ -82,7 +84,7 @@ let
     derivation (
     lib.optionalAttrs (allowedRequisites != null) {
       allowedRequisites = allowedRequisites
-        ++ defaultNativeBuildInputs ++ defaultBuildInputs;
+        ++ defaultDepsBuildHost ++ defaultDepsHostTarget;
     }
     // lib.optionalAttrs config.contentAddressedByDefault {
       __contentAddressed = true;
@@ -124,7 +126,7 @@ let
       ;
 
       inherit initialPath shell
-        defaultNativeBuildInputs defaultBuildInputs;
+        defaultDepsBuildHost defaultDepsHostTarget;
     }
     // lib.optionalAttrs buildPlatform.isDarwin {
       __sandboxProfile = stdenvSandboxProfile;
@@ -140,7 +142,8 @@ let
 
       inherit buildPlatform hostPlatform targetPlatform;
 
-      inherit extraNativeBuildInputs extraBuildInputs
+      inherit extraDepsBuildHost extraDepsHostTarget
+        extraNativeBuildInputs extraBuildInputs
         __extraImpureHostDeps extraSandboxProfile;
 
       # Utility flags to test the type of platform.

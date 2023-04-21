@@ -39,7 +39,7 @@ rec {
   # Used to override packages in stdenv like Make.  Should not be used
   # for other dependencies.
   overrideInStdenv = stdenv: pkgs:
-    stdenv.override (prev: { allowedRequisites = null; extraBuildInputs = (prev.extraBuildInputs or []) ++ pkgs; });
+    stdenv.override (prev: { allowedRequisites = null; extraDepsHostTarget = (prev.extraDepsHostTarget or []) ++ pkgs; });
 
 
   # Override the setup script of stdenv.  Useful for testing new
@@ -68,7 +68,7 @@ rec {
           ];
       }));
     } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "libc") {
-      extraBuildInputs = (old.extraBuildInputs or []) ++ [
+      extraDepsHostTarget = (old.extraDepsHostTarget or []) ++ [
         pkgs.glibc.static
       ];
     });
@@ -93,8 +93,8 @@ rec {
   # Best effort static binaries. Will still be linked to libSystem,
   # but more portable than Nix store binaries.
   makeStaticDarwin = stdenv: stdenv.override (old: {
-    # extraBuildInputs are dropped in cross.nix, but darwin still needs them
-    extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
+    # extraDepsHostTarget are dropped in cross.nix, but darwin still needs them
+    extraDepsHostTarget = [ pkgs.buildPackages.darwin.CF ];
     mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
       NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
         + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";

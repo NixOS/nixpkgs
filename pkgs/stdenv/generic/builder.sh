@@ -9,8 +9,8 @@ mkdir $out
 {
     echo "export SHELL=$shell"
     echo "initialPath=\"$initialPath\""
-    echo "defaultNativeBuildInputs=\"$defaultNativeBuildInputs\""
-    echo "defaultBuildInputs=\"$defaultBuildInputs\""
+    echo "defaultDepsBuildHost=\"$defaultDepsBuildHost\""
+    echo "defaultDepsHostTarget=\"$defaultDepsHostTarget\""
     echo "$preHook"
     cat "$setup"
 } > "$out/setup"

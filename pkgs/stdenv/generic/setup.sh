@@ -611,16 +611,21 @@ findInputs() {
 
 # Make sure all are at least defined as empty
 : "${depsBuildBuild=}" "${depsBuildBuildPropagated=}"
-: "${nativeBuildInputs=}" "${propagatedNativeBuildInputs=}" "${defaultNativeBuildInputs=}"
+: "${nativeBuildInputs=}" "${propagatedNativeBuildInputs=}"
+: "${depsBuildHost=}" "${depsBuildHostPropagated=}" "${defaultDepsBuildHost=}"
 : "${depsBuildTarget=}" "${depsBuildTargetPropagated=}"
 : "${depsHostHost=}" "${depsHostHostPropagated=}"
-: "${buildInputs=}" "${propagatedBuildInputs=}" "${defaultBuildInputs=}"
+: "${buildInputs=}" "${propagatedBuildInputs=}"
+: "${depsHostTargetPropagated=}" "${depsHostTarget=}" "${defaultDepsHostTarget=}"
 : "${depsTargetTarget=}" "${depsTargetTargetPropagated=}"
 
 for pkg in ${depsBuildBuild[@]} ${depsBuildBuildPropagated[@]}; do
     findInputs "$pkg" -1 -1
 done
 for pkg in ${nativeBuildInputs[@]} ${propagatedNativeBuildInputs[@]}; do
+    findInputs "$pkg" -1  0
+done
+for pkg in ${depsBuildHost[@]} ${depsBuildHostPropagated[@]}; do
     findInputs "$pkg" -1  0
 done
 for pkg in ${depsBuildTarget[@]} ${depsBuildTargetPropagated[@]}; do
@@ -632,14 +637,17 @@ done
 for pkg in ${buildInputs[@]} ${propagatedBuildInputs[@]} ; do
     findInputs "$pkg"  0  1
 done
+for pkg in ${depsHostTarget[@]} ${depsHostTargetPropagated[@]} ; do
+    findInputs "$pkg"  0  1
+done
 for pkg in ${depsTargetTarget[@]} ${depsTargetTargetPropagated[@]}; do
     findInputs "$pkg"  1  1
 done
 # Default inputs must be processed last
-for pkg in ${defaultNativeBuildInputs[@]}; do
+for pkg in ${defaultDepsBuildHost[@]}; do
     findInputs "$pkg" -1  0
 done
-for pkg in ${defaultBuildInputs[@]}; do
+for pkg in ${defaultDepsHostTarget[@]}; do
     findInputs "$pkg"  0  1
 done
 

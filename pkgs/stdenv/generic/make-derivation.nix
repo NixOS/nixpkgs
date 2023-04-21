@@ -91,6 +91,8 @@ let
 , depsBuildBuildPropagated          ? [] # -1 -> -1
 , nativeBuildInputs                 ? [] # -1 ->  0  N.B. Legacy name
 , propagatedNativeBuildInputs       ? [] # -1 ->  0  N.B. Legacy name
+, depsBuildHost                     ? [] # -1 ->  0
+, depsBuildHostPropagated           ? [] # -1 ->  0
 , depsBuildTarget                   ? [] # -1 ->  1
 , depsBuildTargetPropagated         ? [] # -1 ->  1
 
@@ -98,6 +100,8 @@ let
 , depsHostHostPropagated            ? [] #  0 ->  0
 , buildInputs                       ? [] #  0 ->  1  N.B. Legacy name
 , propagatedBuildInputs             ? [] #  0 ->  1  N.B. Legacy name
+, depsHostTarget                    ? [] #  0 ->  1  N.B.
+, depsHostTargetPropagated          ? [] #  0 ->  1  N.B.
 
 , depsTargetTarget                  ? [] #  1 ->  1
 , depsTargetTargetPropagated        ? [] #  1 ->  1
@@ -184,6 +188,7 @@ let
   noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
                                   ++ depsHostHost ++ depsHostHostPropagated
                                   ++ buildInputs ++ propagatedBuildInputs
+                                  ++ depsBuildTarget ++ depsBuildTargetPropagated
                                   ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
   dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
 
@@ -224,10 +229,10 @@ then abort ("mkDerivation was called with unsupported hardening flags: " + lib.g
 else let
   doCheck = doCheck';
   doInstallCheck = doInstallCheck';
-  buildInputs' = buildInputs
+  depsHostTarget' = depsHostTarget ++ buildInputs
          ++ lib.optionals doCheck checkInputs
          ++ lib.optionals doInstallCheck installCheckInputs;
-  nativeBuildInputs' = nativeBuildInputs
+  depsBuildHost' = depsBuildHost ++ nativeBuildInputs
          ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
          ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
          ++ lib.optionals doCheck nativeCheckInputs
@@ -235,18 +240,18 @@ else let
 
   outputs = outputs';
 
-  references = nativeBuildInputs ++ buildInputs
-            ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
+  references = depsBuildHost ++ nativeBuildInputs ++ depsHostTarget ++ buildInputs
+            ++ depsBuildHostPropagated ++ propagatedNativeBuildInputs ++ depsHostTargetPropagated ++ propagatedBuildInputs;
 
   dependencies = map (map lib.chooseDevOutputs) [
     [
       (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
+      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "depsBuildHost/nativeBuildInputs" depsBuildHost'))
       (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
     ]
     [
       (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
+      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "depsHostTarget/buildInputs" depsHostTarget'))
     ]
     [
       (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
@@ -255,12 +260,12 @@ else let
   propagatedDependencies = map (map lib.chooseDevOutputs) [
     [
       (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
+      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "depsBuildHostPropagated/propagatedNativeBuildInputs" (depsBuildHostPropagated ++ propagatedNativeBuildInputs)))
       (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
     ]
     [
       (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
+      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "depsHostTargetPropagated/propagatedBuildInputs" (depsHostTargetPropagated ++ propagatedBuildInputs)))
     ]
     [
       (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
@@ -344,16 +349,20 @@ else let
 
       depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
       nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;
+      depsBuildHost               = lib.elemAt (lib.elemAt dependencies 0) 1;
       depsBuildTarget             = lib.elemAt (lib.elemAt dependencies 0) 2;
       depsHostHost                = lib.elemAt (lib.elemAt dependencies 1) 0;
       buildInputs                 = lib.elemAt (lib.elemAt dependencies 1) 1;
+      depsHostTarget              = lib.elemAt (lib.elemAt dependencies 1) 1;
       depsTargetTarget            = lib.elemAt (lib.elemAt dependencies 2) 0;
 
       depsBuildBuildPropagated    = lib.elemAt (lib.elemAt propagatedDependencies 0) 0;
       propagatedNativeBuildInputs = lib.elemAt (lib.elemAt propagatedDependencies 0) 1;
+      depsBuildHostPropagated     = lib.elemAt (lib.elemAt propagatedDependencies 0) 1;
       depsBuildTargetPropagated   = lib.elemAt (lib.elemAt propagatedDependencies 0) 2;
       depsHostHostPropagated      = lib.elemAt (lib.elemAt propagatedDependencies 1) 0;
       propagatedBuildInputs       = lib.elemAt (lib.elemAt propagatedDependencies 1) 1;
+      depsHostTargetPropagated    = lib.elemAt (lib.elemAt propagatedDependencies 1) 1;
       depsTargetTargetPropagated  = lib.elemAt (lib.elemAt propagatedDependencies 2) 0;
 
       # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
