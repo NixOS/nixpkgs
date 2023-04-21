@@ -6,7 +6,7 @@
 , gnuradio
 , cmake
 , pkg-config
-, log4cpp
+, logLib
 , mpir
 , boost
 , gmp
@@ -44,7 +44,7 @@ in mkDerivation {
   outputs = [ "out" "dev" ];
 
   buildInputs = [
-    log4cpp
+    logLib
     mpir
     boost
     fftwFloat

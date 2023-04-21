@@ -43,7 +43,7 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     wrapGAppsHook
   ];
   buildInputs = [
-    gnuradio3_8Minimal.unwrapped.log4cpp
+    gnuradio3_8Minimal.unwrapped.logLib
     mpir
     fftwFloat
     alsa-lib
