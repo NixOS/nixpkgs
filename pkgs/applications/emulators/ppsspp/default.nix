@@ -29,7 +29,7 @@ let
 in
 # Only SDL frontend needs to specify whether to use Wayland
 assert forceWayland -> !enableQt;
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ppsspp"
           + lib.optionalString enableQt "-qt"
           + lib.optionalString (!enableQt) "-sdl"
@@ -39,13 +39,13 @@ stdenv.mkDerivation (self: {
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     sha256 = "sha256-7xzhN8JIQD4LZg8sQ8rLNYZrW0nCNBfZFgzoKdoWbKc=";
   };
 
   postPatch = ''
-    substituteInPlace git-version.cmake --replace unknown ${self.src.rev}
+    substituteInPlace git-version.cmake --replace unknown ${finalAttrs.src.rev}
     substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
   '';
 
