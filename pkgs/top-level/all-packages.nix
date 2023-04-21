@@ -39750,6 +39750,8 @@ with pkgs;
     });
   };
 
+  tillitis-firmware-softcpu = callPackage ../misc/tillitis/firmware-softcpu.nix { };
+
   duti = callPackage ../os-specific/darwin/duti {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
