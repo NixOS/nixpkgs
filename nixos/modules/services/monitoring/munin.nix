@@ -35,7 +35,7 @@ let
     ''
       log_level 3
       log_file Sys::Syslog
-      port 4949
+      port ${toString nodeCfg.port}
       host *
       background 0
       user root
@@ -246,6 +246,24 @@ in
         '';
         example = [ "diskstats" "zfs_usage_*" ];
       };
+
+      port = mkOption {
+        default = 4949;
+        type = types.port;
+        description = lib.mdDoc ''
+          Port the Munin Node agent will listen on.
+        '';
+      };
+
+      openFirewall = mkOption {
+         default = false;
+         type = types.bool;
+         description = lib.mdDoc ''
+           Opens the firewall so that the Munin Node can be accessed by an external munin-cron.
+           Ensure that the correct `allow` stanza is set via `services.munin-node.extraConfig`.
+         '';
+      };
+
     };
 
     services.munin-cron = {
@@ -370,6 +388,8 @@ in
 
     # munin_stats plugin breaks as of 2.0.33 when this doesn't exist
     systemd.tmpfiles.rules = [ "d /run/munin 0755 munin munin -" ];
+
+    networking.firewall.allowedTCPPorts = mkIf nodeCfg.openFirewall [nodeCfg.port];
 
   }) (mkIf cronCfg.enable {
 
