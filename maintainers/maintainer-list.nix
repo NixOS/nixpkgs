@@ -3518,7 +3518,7 @@
   };
   davidcromp = {
     email = "davidcrompton1192@gmail.com";
-    github = "DavidCromp";
+    github = "CyborgPotato";
     githubId = 10701143;
     name = "David Crompton";
   };
@@ -8417,7 +8417,7 @@
   };
   kristian-brucaj = {
     email = "kbrucaj@gmail.com";
-    github = "Kristian-Brucaj";
+    github = "Flameslice";
     githubId = 8893110;
     name = "Kristian Brucaj";
   };
@@ -14367,7 +14367,7 @@
     name = "Smitty van Bodegom";
     email = "me@smitop.com";
     matrix = "@smitop:kde.org";
-    github = "Smittyvb";
+    github = "syvb";
     githubId = 10530973;
   };
   sna = {
@@ -17333,7 +17333,7 @@
   zseri = {
     name = "zseri";
     email = "zseri.devel@ytrizja.de";
-    github = "zseri";
+    github = "fogti";
     githubId = 1618343;
     keys = [{
       fingerprint = "7AFB C595 0D3A 77BD B00F  947B 229E 63AE 5644 A96D";
