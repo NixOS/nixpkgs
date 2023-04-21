@@ -412,6 +412,18 @@ let
         };
       };
 
+      ban.spellright = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "ban";
+          name = "spellright";
+          version = "3.0.112";
+          sha256 = "sha256-79Yg4I0OkfG7PaDYnTA8HK8jrSxre4FGriq0Baiq7wA=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       bbenoist.nix = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Nix";
