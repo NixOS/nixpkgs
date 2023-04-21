@@ -15410,6 +15410,12 @@
     githubId = 3268082;
     name = "Thibaut Marty";
   };
+  thielema = {
+    name = "Henning Thielemann";
+    email = "nix@henning-thielemann.de";
+    github = "thielema";
+    githubId = 898989;
+  };
   thled = {
     name = "Thomas Le Duc";
     email = "dev@tleduc.de";
