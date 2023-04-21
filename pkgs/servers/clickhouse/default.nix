@@ -1,31 +1,83 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja
-, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
-, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
-, poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
-, xxHash, zstd
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libtool
+, ninja
+, boost
+, brotli
+, capnproto
+, cctz
+, double-conversion
+, icu
+, jemalloc
+, libcpuid
+, libxml2
+, lld
+, lz4
+, libmysqlclient
+, openssl
+, perl
+, poco
+, protobuf
+, python3
+, rapidjson
+, re2
+, rdkafka
+, readline
+, sparsehash
+, unixODBC
+, llvmPackages_15
+, xxHash
+, zstd
+, yasm
 , nixosTests
+, ...
 }:
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "22.8.16.32";
+  version = "23.3.2.37";
 
   broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
   src = fetchFromGitHub {
-    owner  = "ClickHouse";
-    repo   = "ClickHouse";
-    rev    = "v${version}-lts";
+    owner = "ClickHouse";
+    repo = "ClickHouse";
+    rev = "v${version}-lts";
     fetchSubmodules = true;
-    sha256 = "sha256-LArHbsu2iaEP+GrCxdTrfpGDDfwcg1mlvbAceXNZyz8=";
+    sha256 = "sha256-t6aW3wYmD4UajVaUhIE96wCqr6JbOtoBt910nD9IVsk=";
   };
 
-  nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
+  nativeBuildInputs = [ cmake libtool llvmPackages_15.bintools llvmPackages_15.llvm llvmPackages_15.clang ninja ];
   buildInputs = [
-    boost brotli capnproto cctz clang-unwrapped double-conversion
-    icu jemalloc libxml2 lld llvm lz4 libmysqlclient openssl perl
-    poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
-    xxHash zstd
+    yasm
+    llvmPackages_15.llvm
+    llvmPackages_15.clang-unwrapped
+    boost
+    brotli
+    capnproto
+    cctz
+    double-conversion
+    icu
+    jemalloc
+    libxml2
+    lld
+    lz4
+    libmysqlclient
+    openssl
+    perl
+    poco
+    protobuf
+    python3
+    rapidjson
+    re2
+    rdkafka
+    readline
+    sparsehash
+    unixODBC
+    xxHash
+    zstd
   ] ++ lib.optional stdenv.hostPlatform.isx86 libcpuid;
 
   postPatch = ''
@@ -49,6 +101,10 @@ stdenv.mkDerivation rec {
     "-DENABLE_EMBEDDED_COMPILER=ON"
     "-USE_INTERNAL_LLVM_LIBRARY=OFF"
   ];
+
+
+  CC = "clang-15";
+  CXX = "clang++-15";
 
   postInstall = ''
     rm -rf $out/share/clickhouse-test
