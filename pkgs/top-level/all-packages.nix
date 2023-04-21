@@ -16233,6 +16233,7 @@ with pkgs;
 
   ograc = callPackage ../development/tools/rust/ograc { };
 
+  ravedude = callPackage ../development/tools/rust/ravedude { };
   rhack = callPackage ../development/tools/rust/rhack { };
   roogle = callPackage ../development/tools/rust/roogle { };
   rustfmt = rustPackages.rustfmt;
