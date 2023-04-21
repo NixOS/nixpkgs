@@ -7,11 +7,9 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
-, egl-wayland
 , cairo
 , dbus
 , pango
-, libxkbcommon
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +26,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  mesonFlags = [
+    (lib.mesonBool "demo" false)
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -38,11 +40,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wayland
     wayland-protocols
-    egl-wayland
     cairo
     dbus
     pango
-    libxkbcommon
   ];
 
   meta = with lib; {
