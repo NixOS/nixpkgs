@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   # This patch is needed for IEEE-standard long doubles on
   # powerpc64; it does not apply cleanly to texinfo 5.x or
   # earlier.  It is merged upstream in texinfo 6.8.
-  + lib.optionalString (with lib.strings; versionAtLeast version "6.0" && versionOlder version "6.8") ''
+  + lib.optionalString (version == "6.7") ''
     patch -p1 -d gnulib < ${gnulib.passthru.longdouble-redirect-patch}
   '';
 
