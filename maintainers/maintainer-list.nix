@@ -101,6 +101,13 @@
     github = "0xd61";
     githubId = 8351869;
   };
+  _0xMRTT = {
+    email = "0xMRTT@proton.me";
+    name = "0xMRTT";
+    github = "0xMRTT";
+    githubId = 105598867;
+    matrix = "@0xmrtt:envs.net";
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
