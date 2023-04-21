@@ -30,6 +30,6 @@ stdenvNoCC.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ athas ];
-    platforms = platforms.all;
+    inherit (jre.meta) platforms;
   };
 }
