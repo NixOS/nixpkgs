@@ -39731,6 +39731,8 @@ with pkgs;
     python = python3;
   };
 
+  chprog = callPackage ../misc/chprog { };
+
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {
     # https://github.com/AdolfVonKleist/Phonetisaurus/issues/70
     openfst = openfst.overrideAttrs (_: rec {
