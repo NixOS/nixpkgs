@@ -9,7 +9,7 @@ let
 in
 
 rec {
-  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr;
+  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr removeAttrs;
 
 
   /* Return an attribute from nested attribute sets.
