@@ -110,13 +110,13 @@
     "vendorHash": null
   },
   "aws": {
-    "hash": "sha256-XCGMoa/x8hkf+7gL0qYBX7jMx4wnMXxpyx/wH9ff+m4=",
+    "hash": "sha256-gI53y6/cbgXnWmFqihVPOZEtq4ZbpLtv1dgLiSxnYo4=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v4.63.0",
+    "rev": "v4.64.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-t6Hg1FLCd4dh6d3J0uNsNKKnz5T8/yoIXFo7bRO+XHM="
+    "vendorHash": "sha256-1eIJCtcrod6MUragxcx2qoTJO9OVbD3n+VErL6xnvmw="
   },
   "azuread": {
     "hash": "sha256-bCnCj2pEd29aQVePGeaTbVhH6sF/Y+lj94SEw1+tROc=",
@@ -128,11 +128,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-MSglw8EylPaAoMFz3S7pUeedNROeNAPTSXWN+NiIXN8=",
+    "hash": "sha256-tStlnMSlkkL+X/DP0SBmnm7xL6dH8HfyiaKY/McuMQE=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.52.0",
+    "rev": "v3.53.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -318,11 +318,11 @@
     "vendorHash": null
   },
   "dns": {
-    "hash": "sha256-pTBPSiPO84L9vhBv4mJIMJP0UNVwrz/MX0YCZODwb7s=",
+    "hash": "sha256-Bzj1rLTzWJuqKEq5mz0UAbYMWMp4JoRhedfC2lORocE=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/dns",
     "owner": "hashicorp",
     "repo": "terraform-provider-dns",
-    "rev": "v3.3.0",
+    "rev": "v3.3.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-wx8BXlobu86Nk9D8o5loKhbO14ANI+shFQ2i7jswKgE="
   },
@@ -354,11 +354,11 @@
     "vendorHash": "sha256-oVTanZpCWs05HwyIKW2ajiBPz1HXOFzBAt5Us+EtTRw="
   },
   "equinix": {
-    "hash": "sha256-GGJNfHizFc+wXNo7u/mqtonIs5D/S8RydBsIkftNcjc=",
+    "hash": "sha256-wuOgnliqwA8huZHmFuegbtuFbpTpe1VgQ53Z+XcgHjw=",
     "homepage": "https://registry.terraform.io/providers/equinix/equinix",
     "owner": "equinix",
     "repo": "terraform-provider-equinix",
-    "rev": "v1.14.0",
+    "rev": "v1.14.1",
     "spdx": "MIT",
     "vendorHash": "sha256-rJev48aS0nd8DRWmUN4i0LgDYvfjdfoO67N6AiWeg+k="
   },
@@ -638,11 +638,11 @@
     "vendorHash": "sha256-lXQHo66b9X0jZhoF+5Ix5qewQGyI82VPJ7gGzc2CHao="
   },
   "kubernetes": {
-    "hash": "sha256-FV5FoEd0zjXa8x77r/z8Tn/I1lZI1NZ4a8yisAuAhNQ=",
+    "hash": "sha256-B13jQTZqFb5o/GRTf4iQWUbOPhbb4uYKUy35nQrKGLI=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/kubernetes",
     "owner": "hashicorp",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v2.19.0",
+    "rev": "v2.20.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -773,13 +773,13 @@
     "vendorHash": "sha256-WF4AdTu6lxoNSCsFKLMeQbHgH6j+hM0VNBRsue+azJA="
   },
   "nomad": {
-    "hash": "sha256-oHY+jM4JQgLlE1wd+/H9H8H2g0e9ZuxI6OMlz3Izfjg=",
+    "hash": "sha256-1TmcFS+ul7xpSGqQohcCdeQ2zuDD429xGI0X2Add5HQ=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/nomad",
     "owner": "hashicorp",
     "repo": "terraform-provider-nomad",
-    "rev": "v1.4.19",
+    "rev": "v1.4.20",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-3t8pUAwuVeZN5cYGs72YsdRvJunudSmKSldFWEFVA/4="
+    "vendorHash": "sha256-jnZ7LzKgyPVCnYoWp+nDeQy2w91sBVX43KjInzqRWqc="
   },
   "ns1": {
     "hash": "sha256-F7nKtDlVnW7jDPTeszYv9aYMAnHo2/k+MxsXdjghS88=",
@@ -855,13 +855,13 @@
     "vendorHash": "sha256-62q67aaOZA3fQmyL8bEHB+W497bcx9Xy7kKrbkjkbaI="
   },
   "opentelekomcloud": {
-    "hash": "sha256-QcpA7FreTgITmnt0fQHUmUK6FZMP0QCeQK2MN2Y9tFQ=",
+    "hash": "sha256-bRvs4IxnUObX/ChPdCn97VUQSxTjV2tfnmBmWmgAXUA=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.34.1",
+    "rev": "v1.34.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-4tJe8v31txzLBbruicOI6WUdDk38CqfLniFyc3hWVxg="
+    "vendorHash": "sha256-VEreMBvqvBGUZz5EY5+0jbNDOVbmhYerfLYGa1rl+aw="
   },
   "opsgenie": {
     "hash": "sha256-Wbe+DyK5wKuZZX8yd3DJN+2wT8KZt+YsBwJYKnZnfcI=",
@@ -882,11 +882,11 @@
     "vendorHash": null
   },
   "pagerduty": {
-    "hash": "sha256-1OmHEWpilZH+wIY9d9J2JvTgTXw5AzKXbt0JLSVL9/I=",
+    "hash": "sha256-NWrE6DFyoI1RQnxLThenGeFNGj8AFiVWhXysk8U7RpI=",
     "homepage": "https://registry.terraform.io/providers/PagerDuty/pagerduty",
     "owner": "PagerDuty",
     "repo": "terraform-provider-pagerduty",
-    "rev": "v2.14.2",
+    "rev": "v2.14.3",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

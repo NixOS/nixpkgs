@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "gotestsum";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "gotestyourself";
     repo = "gotestsum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-22srQmvbVu8eWVAbLDZG93yod/bJS6hfoc/YwFs64pY=";
+    hash = "sha256-4Gcylc1x+GNLcAV/xBafxEdFCh6gKz9X2jMPZXxktLo=";
   };
 
   vendorHash = "sha256-zUqa6xlDV12ZV4N6+EZ7fLPsL8U+GB7boQ0qG9egvm0=";
