@@ -225,7 +225,7 @@ let
   inherit (shared) hasFeature; # function
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname;
   inherit (shared)
     version

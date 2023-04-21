@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 # Remove gcc and python references
 , removeReferencesTo
@@ -278,7 +277,7 @@ let
   inherit (shared) hasFeature; # function
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname;
   inherit (shared)
     version
