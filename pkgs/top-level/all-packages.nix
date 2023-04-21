@@ -371,7 +371,7 @@ with pkgs;
 
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
-  buildFHSEnv = buildFHSEnvBubblewrap;
+  buildFHSEnv = if stdenv.hostPlatform.isx86 then buildFHSEnvBubblewrap else buildFHSEnvChroot;
   buildFHSEnvChroot = callPackage ../build-support/build-fhsenv-chroot { }; # Deprecated; use buildFHSEnv/buildFHSEnvBubblewrap
   buildFHSEnvBubblewrap = callPackage ../build-support/build-fhsenv-bubblewrap { };
 
