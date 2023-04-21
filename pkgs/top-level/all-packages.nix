@@ -17315,6 +17315,8 @@ with pkgs;
     llvmPackages = llvmPackages_latest;
   };
 
+  docker-compose-language-service = callPackage ../development/tools/language-servers/docker-compose-language-service { };
+
   dot-language-server = callPackage ../development/tools/language-servers/dot-language-server { };
 
   fortls = python3.pkgs.callPackage ../development/tools/language-servers/fortls { };
