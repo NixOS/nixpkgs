@@ -24852,6 +24852,8 @@ with pkgs;
 
   asterisk-module-sccp = callPackage ../servers/asterisk/sccp { };
 
+  asterisk-ldap = lowPrio (asterisk.override { ldapSupport = true; });
+
   sabnzbd = callPackage ../servers/sabnzbd { };
 
   baserow = callPackage ../servers/baserow { };
