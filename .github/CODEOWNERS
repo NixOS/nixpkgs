@@ -139,7 +139,7 @@
 
 # C compilers
 /pkgs/development/compilers/gcc @matthewbauer
-/pkgs/development/compilers/llvm @matthewbauer
+/pkgs/development/compilers/llvm @matthewbauer @RaitoBezarius
 
 # Compatibility stuff
 /pkgs/top-level/unix-tools.nix @matthewbauer
