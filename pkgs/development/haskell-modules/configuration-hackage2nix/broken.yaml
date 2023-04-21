@@ -129,7 +129,6 @@ broken-packages:
   - alpino-tools
   - alsa
   - alsa-midi
-  - alsa-seq
   - altcomposition
   - alternative-extra
   - alternative-io
@@ -981,7 +980,6 @@ broken-packages:
   - curryrs
   - curves
   - custom-prelude
-  - cutter
   - cut-the-crap
   - CV
   - d3js
@@ -1208,7 +1206,6 @@ broken-packages:
   - docopt
   - docrecords
   - doctest-discover-configurator
-  - doctest-extract
   - doctest-prop
   - docusign-example
   - docvim
@@ -1373,7 +1370,6 @@ broken-packages:
   - epoll
   - epubname
   - Eq
-  - equal-files
   - EqualitySolver
   - equational-reasoning-induction
   - equeue
@@ -1902,7 +1898,6 @@ broken-packages:
   - grm
   - GroteTrap
   - groundhog
-  - group-by-date
   - groups-generic
   - group-theory
   - group-with
@@ -2686,7 +2681,6 @@ broken-packages:
   - ieee-utils
   - iexcloud
   - ifcxt
-  - iff
   - if-instance
   - IFS
   - ig
@@ -3287,7 +3281,6 @@ broken-packages:
   - MazesOfMonad
   - MBot
   - mbox-tools
-  - mbox-utility
   - mbug
   - mcl
   - mcm
@@ -5086,7 +5079,6 @@ broken-packages:
   - stooq-api
   - storable
   - storable-static-array
-  - storablevector
   - stp
   - str
   - Strafunski-ATermLib
@@ -5229,7 +5221,6 @@ broken-packages:
   - tabloid
   - tabs
   - tag-bits
-  - tagchup
   - tagged-exception-core
   - tagged-timers
   - taggy-lens
