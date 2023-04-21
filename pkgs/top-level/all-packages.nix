@@ -30917,6 +30917,8 @@ with pkgs;
 
   offpunk = callPackage ../applications/networking/browsers/offpunk { };
 
+  owl-compositor = callPackage ../applications/window-managers/owl { };
+
   p2pool = callPackage ../applications/misc/p2pool { };
 
   pass2csv = python3Packages.callPackage ../tools/security/pass2csv { };
