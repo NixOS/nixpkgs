@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-K6v+00basjI32ON27ZjC5spQi/zWCcslDwQwyosq2iY=";
   };
 
+  outputs = [ "out" "dev" ];
+
   patches = [
     # Fix tests for statically linked variant upstream PR is
     # https://github.com/libuv/libuv/pull/3735
