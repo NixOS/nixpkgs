@@ -2575,8 +2575,9 @@ with pkgs;
 
   microcom = callPackage ../applications/terminal-emulators/microcom { };
 
-  mlterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/mlterm {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa;
+  mlterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/mlterm { };
+  mlterm-wayland = mlterm.override {
+    enableX11 = false;
   };
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
@@ -10263,9 +10264,7 @@ with pkgs;
   inherit (callPackage ../servers/nextcloud {})
     nextcloud24 nextcloud25 nextcloud26;
 
-  nextcloud24Packages = ( callPackage ../servers/nextcloud/packages {
-    apps = lib.importJSON ../servers/nextcloud/packages/24.json;
-  });
+  nextcloud24Packages = throw "Nextcloud24 is EOL!";
   nextcloud25Packages = ( callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/25.json;
   });
@@ -17299,6 +17298,8 @@ with pkgs;
   ccls = callPackage ../development/tools/language-servers/ccls {
     llvmPackages = llvmPackages_latest;
   };
+
+  docker-compose-language-service = callPackage ../development/tools/language-servers/docker-compose-language-service { };
 
   dot-language-server = callPackage ../development/tools/language-servers/dot-language-server { };
 
@@ -30894,6 +30895,8 @@ with pkgs;
   mt32emu-smf2wav = callPackage ../applications/audio/munt/mt32emu-smf2wav.nix { };
 
   offpunk = callPackage ../applications/networking/browsers/offpunk { };
+
+  owl-compositor = callPackage ../applications/window-managers/owl { };
 
   p2pool = callPackage ../applications/misc/p2pool { };
 
