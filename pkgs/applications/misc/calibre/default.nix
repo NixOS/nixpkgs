@@ -191,7 +191,7 @@ stdenv.mkDerivation rec {
 
   disallowedReferences = [ podofo.dev ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://calibre-ebook.com";
     description = "Comprehensive e-book software";
     longDescription = ''
@@ -200,8 +200,12 @@ stdenv.mkDerivation rec {
       it takes things a step beyond normal e-book software. It’s also completely
       free and open source and great for both casual users and computer experts.
     '';
-    license = with licenses; if unrarSupport then unfreeRedistributable else gpl3Plus;
-    maintainers = with maintainers; [ pSub AndersonTorres ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${version}";
+    license = if unrarSupport
+              then lib.licenses.unfreeRedistributable
+              else lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pSub AndersonTorres ];
+    platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
