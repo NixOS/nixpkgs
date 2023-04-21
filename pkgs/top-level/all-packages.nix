@@ -39751,6 +39751,7 @@ with pkgs;
   };
 
   tillitis-firmware-softcpu = callPackage ../misc/tillitis/firmware-softcpu.nix { };
+  tillitis-firmware-usb2serial = callPackage ../misc/tillitis/firmware-usb2serial.nix { };
   tillitis-gateware = callPackage ../misc/tillitis/gateware.nix { };
   tillitis-qemu = callPackage ../misc/tillitis/qemu.nix { };
 
