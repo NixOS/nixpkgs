@@ -1,32 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja
-, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
-, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
-, poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
-, xxHash, zstd
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, python3
+, perl
+, yasm
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "22.8.16.32";
-
-  broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
+  version = "23.3.2.37";
 
   src = fetchFromGitHub {
-    owner  = "ClickHouse";
-    repo   = "ClickHouse";
-    rev    = "v${version}-lts";
+    owner = "ClickHouse";
+    repo = "ClickHouse";
+    rev = "v${version}-lts";
     fetchSubmodules = true;
-    sha256 = "sha256-LArHbsu2iaEP+GrCxdTrfpGDDfwcg1mlvbAceXNZyz8=";
+    sha256 = "sha256-t6aW3wYmD4UajVaUhIE96wCqr6JbOtoBt910nD9IVsk=";
   };
 
-  nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
-  buildInputs = [
-    boost brotli capnproto cctz clang-unwrapped double-conversion
-    icu jemalloc libxml2 lld llvm lz4 libmysqlclient openssl perl
-    poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
-    xxHash zstd
-  ] ++ lib.optional stdenv.hostPlatform.isx86 libcpuid;
+  strictDeps = true;
+  nativeBuildInputs = [
+    cmake
+    ninja
+    python3
+    perl
+  ] ++ lib.optionals stdenv.isx86_64 [
+    yasm
+  ];
 
   postPatch = ''
     patchShebangs src/
@@ -47,7 +50,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_TESTS=OFF"
     "-DENABLE_CCACHE=0"
     "-DENABLE_EMBEDDED_COMPILER=ON"
-    "-USE_INTERNAL_LLVM_LIBRARY=OFF"
+    "-DWERROR=OFF"
   ];
 
   postInstall = ''
@@ -61,8 +64,6 @@ stdenv.mkDerivation rec {
       --replace "<level>trace</level>" "<level>warning</level>"
   '';
 
-  hardeningDisable = [ "format" ];
-
   # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
 
@@ -73,6 +74,9 @@ stdenv.mkDerivation rec {
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+
+    # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
+    platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) platforms.linux;
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }
