@@ -294,7 +294,7 @@ in
           Type = "notify";
         };
 
-        unitConfig.RequiresMountsFor = "/var/lib/samba";
+        unitConfig.RequiresMountsFor = [ "/var/lib/samba" ];
 
         restartTriggers = [ configFile ];
       };
@@ -336,7 +336,7 @@ in
           Type = "notify";
         };
 
-        unitConfig.RequiresMountsFor = "/var/lib/samba";
+        unitConfig.RequiresMountsFor = [ "/var/lib/samba" ];
 
         restartTriggers = [ configFile ];
       };
@@ -372,7 +372,7 @@ in
           Type = "notify";
         };
 
-        unitConfig.RequiresMountsFor = "/var/lib/samba";
+        unitConfig.RequiresMountsFor = [ "/var/lib/samba" ];
 
         restartTriggers = [ configFile ];
       };
