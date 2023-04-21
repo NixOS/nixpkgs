@@ -64,14 +64,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.6.9";
+  version = "0.6.9-1";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-wvidO9LAZwVUZhYYWnelSiP0Q1WTPoCg6pMXsoJBPPg=";
+    hash = "sha256-AX4m1XZ+yXp74E3slFGyI3CGu2eYU+eXNN2EY+ivdfk=";
   };
 
   outputs = [ "out" "doc" "man" ];
