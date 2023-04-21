@@ -39752,6 +39752,7 @@ with pkgs;
 
   tillitis-firmware-softcpu = callPackage ../misc/tillitis/firmware-softcpu.nix { };
   tillitis-gateware = callPackage ../misc/tillitis/gateware.nix { };
+  tillitis-qemu = callPackage ../misc/tillitis/qemu.nix { };
 
   duti = callPackage ../os-specific/darwin/duti {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
