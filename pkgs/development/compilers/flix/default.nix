@@ -15,10 +15,12 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    export JAR=$out/share/java/${pname}/${pname}.jar
+
+    export JAR=$out/share/java/flix/flix.jar
     install -D $src $JAR
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${jre}/bin/java $out/bin/flix \
       --add-flags "-jar $JAR"
+
     runHook postInstall
   '';
 
