@@ -941,6 +941,18 @@ final: prev:
     meta.homepage = "https://github.com/max397574/better-escape.nvim/";
   };
 
+  bigfile-nvim = buildVimPluginFrom2Nix {
+    pname = "bigfile.nvim";
+    version = "2022-12-01";
+    src = fetchFromGitHub {
+      owner = "LunarVim";
+      repo = "bigfile.nvim";
+      rev = "c1bad34ce742b4f360b67ca23c873fef998240fc";
+      sha256 = "1jgjj0knyizwyvbv9ddg36hcpwbscy4p5fsqwzybnsjgxd32602j";
+    };
+    meta.homepage = "https://github.com/LunarVim/bigfile.nvim";
+  };
+
   bitbake-vim = buildVimPluginFrom2Nix {
     pname = "bitbake.vim";
     version = "2021-02-06";

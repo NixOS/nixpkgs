@@ -101,6 +101,13 @@
     github = "0xd61";
     githubId = 8351869;
   };
+  _0xMRTT = {
+    email = "0xMRTT@proton.me";
+    name = "0xMRTT";
+    github = "0xMRTT";
+    githubId = 105598867;
+    matrix = "@0xmrtt:envs.net";
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
@@ -11905,6 +11912,16 @@
     github = "pbar1";
     githubId = 26949935;
     name = "Pierce Bartine";
+  };
+  pbek = {
+    email = "patrizio@bekerle.com";
+    matrix = "@patrizio:bekerle.com";
+    github = "pbek";
+    githubId = 1798101;
+    name = "Patrizio Bekerle";
+    keys = [{
+      fingerprint = "E005 48D5 D6AC 812C AAD2  AFFA 9C42 B05E 5913 60DC";
+    }];
   };
   pblkt = {
     email = "pebblekite@gmail.com";

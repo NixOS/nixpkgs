@@ -680,6 +680,9 @@ in {
   systemd-initrd-simple = handleTest ./systemd-initrd-simple.nix {};
   systemd-initrd-swraid = handleTest ./systemd-initrd-swraid.nix {};
   systemd-initrd-vconsole = handleTest ./systemd-initrd-vconsole.nix {};
+  systemd-initrd-networkd = handleTest ./systemd-initrd-networkd.nix {};
+  systemd-initrd-networkd-ssh = handleTest ./systemd-initrd-networkd-ssh.nix {};
+  systemd-initrd-networkd-openvpn = handleTest ./initrd-network-openvpn { systemdStage1 = true; };
   systemd-journal = handleTest ./systemd-journal.nix {};
   systemd-machinectl = handleTest ./systemd-machinectl.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
