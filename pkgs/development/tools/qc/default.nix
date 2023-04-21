@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-7t5rQliLm6pMUHhtev/kNrQ7AOvmA/rR93SwNQhov6o=";
 
   ldflags = [
-    "-s -w -X github.com/qownnotes/qc/cmd.version=${version}"
+    "-s" "-w" "-X=github.com/qownnotes/qc/cmd.version=${version}"
   ];
 
   doCheck = false;
