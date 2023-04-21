@@ -18876,6 +18876,10 @@ with pkgs;
 
   blackmagic = callPackage ../development/embedded/blackmagic { };
 
+  blisp = callPackage ../development/tools/misc/blisp {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
+
   bloaty = callPackage ../development/tools/bloaty { };
 
   bloomrpc = callPackage ../development/web/bloomrpc { };
