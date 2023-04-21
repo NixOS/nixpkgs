@@ -30,26 +30,26 @@
 , unrarSupport ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
   version = "6.16.0";
 
   src = fetchurl {
-    url = "https://download.calibre-ebook.com/${version}/calibre-${version}.tar.xz";
+    url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
     hash = "sha256-2Lhp9PBZ19svq26PoldJ1H8tmt95MwY0l7+g6mPUvFI=";
   };
 
-  # https://sources.debian.org/patches/calibre/${version}+dfsg-1
+  # https://sources.debian.org/patches/calibre/${finalAttrs.version}+dfsg-1
   patches = [
     #  allow for plugin update check, but no calibre version check
     (fetchpatch {
       name = "0001-only-plugin-update.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}-1/debian/patches/0001-only-plugin-update.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}-1/debian/patches/0001-only-plugin-update.patch";
       hash = "sha256-uL1mSjgCl5ZRLbSuKxJM6XTfvVwog70F7vgKtQzQNEQ=";
     })
     (fetchpatch {
       name = "0007-Hardening-Qt-code.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}-1/debian/patches/0007-Hardening-Qt-code.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}-1/debian/patches/0007-Hardening-Qt-code.patch";
       hash = "sha256-9P1kGrQbWAWDzu5EUiQr7TiCPHRWUA8hxPpEvFpK20k=";
     })
   ]
@@ -200,7 +200,7 @@ stdenv.mkDerivation rec {
       it takes things a step beyond normal e-book software. It’s also completely
       free and open source and great for both casual users and computer experts.
     '';
-    changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${version}";
+    changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${finalAttrs.version}";
     license = if unrarSupport
               then lib.licenses.unfreeRedistributable
               else lib.licenses.gpl3Plus;
@@ -208,4 +208,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
-}
+})
