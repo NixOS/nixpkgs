@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-opensearch";
-  version = "0.1.6";
+  version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,13 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-opensearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Vn0H6yDHo0zzAx9CtKCYmXxpWRd2g1Y2GZWkpPFvihs=";
+    hash = "sha256-erqKAtTNMQQy/zUkpOd0LoQT2MY2mgz5yGuSQJ0QTjI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=sigma --cov-report term --cov-report xml:cov.xml" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
