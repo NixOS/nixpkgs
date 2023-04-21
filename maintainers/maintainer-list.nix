@@ -11906,6 +11906,16 @@
     githubId = 26949935;
     name = "Pierce Bartine";
   };
+  pbek = {
+    email = "patrizio@bekerle.com";
+    matrix = "@patrizio:bekerle.com";
+    github = "pbek";
+    githubId = 1798101;
+    name = "Patrizio Bekerle";
+    keys = [{
+      fingerprint = "E005 48D5 D6AC 812C AAD2  AFFA 9C42 B05E 5913 60DC";
+    }];
+  };
   pblkt = {
     email = "pebblekite@gmail.com";
     github = "pblkt";
