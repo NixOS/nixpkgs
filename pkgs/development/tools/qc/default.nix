@@ -34,7 +34,7 @@ buildGoModule rec {
     description = "QOwnNotes command-line snippet manager";
     homepage = "https://github.com/qownnotes/qc";
     license = licenses.mit;
-    maintainers = with maintainers; [ pbek ];
+    maintainers = with maintainers; [ pbek totoroot ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
