@@ -86,4 +86,10 @@ assert args ? system -> !(args ? localSystem);
 
 import ./. (builtins.removeAttrs args [ "system" ] // {
   inherit config overlays localSystem;
+} // {
+  # TODO: have OfBorg set inOfBorg correctly, then remove this hack
+  config = config // (if config.revCount or 0 == 999999 then {
+    inOfBorg = true;
+  } else { });
 })
+

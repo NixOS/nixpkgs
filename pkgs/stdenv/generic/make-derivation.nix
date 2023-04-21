@@ -553,13 +553,14 @@ else let
                       else true);
           # gross hack, remove when ofborg is fixed
           inOfBorg =
+            (config.inOfBorg or false) ||
             lib.strings.hasSuffix ".gc-of-borg-stats.json"
               (builtins.getEnv "NIX_SHOW_STATS_PATH");
         in
           # TODO: have Hydra and OfBorg `import check-meta.nix` and
           # apply it to `pkg`, rather than embedding this value in
           # pkg.meta.
-          if inOfBorg || (config.inHydra or false)
+          if inOfBorg || (config.inHydra or false) || !(config.checkMeta or true)
           then valid
           else lib.warn message valid;
     };

@@ -9,6 +9,12 @@ with import ../lib;
 with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
 
 let
+  nixpkgsFun = args: import ./..
+    (
+      { inherit system; }
+      # TODO: have OfBorg set inOfBorg correctly, then remove this hack
+      // lib.optionalAttrs (nixpkgs.revCount == 999999) { config.inOfBorg = true; }
+      // args);
 
   version = fileContents ../.version;
   versionSuffix =
@@ -21,7 +27,7 @@ let
   allTestsForSystem = system:
     import ./tests/all-tests.nix {
       inherit system;
-      pkgs = import ./.. { inherit system; };
+      pkgs = nixpkgsFun { };
       callTest = config: {
         ${system} = hydraJob config.test;
       };
@@ -31,7 +37,7 @@ let
       allDrivers =
         import ./tests/all-tests.nix {
         inherit system;
-        pkgs = import ./.. { inherit system; };
+        pkgs = nixpkgsFun { };
         callTest = config: {
           ${system} = hydraJob config.driver;
         };
@@ -41,7 +47,7 @@ let
   allTests =
     foldAttrs recursiveUpdate {} (map allTestsForSystem supportedSystems);
 
-  pkgs = import ./.. { system = "x86_64-linux"; };
+  pkgs = nixpkgsFun { system = "x86_64-linux"; };
 
 
   versionModule =
@@ -54,7 +60,7 @@ let
   makeIso =
     { module, type, system, ... }:
 
-    with import ./.. { inherit system; };
+    with nixpkgsFun { };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -67,7 +73,7 @@ let
   makeSdImage =
     { module, system, ... }:
 
-    with import ./.. { inherit system; };
+    with nixpkgsFun { };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -78,7 +84,7 @@ let
   makeSystemTarball =
     { module, maintainers ? ["viric"], system }:
 
-    with import ./.. { inherit system; };
+    with nixpkgsFun { };
 
     let
 
@@ -224,7 +230,7 @@ in rec {
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forMatchingSystems [ "x86_64-linux" ] (system:
 
-    with import ./.. { inherit system; };
+    with nixpkgsFun { };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -238,7 +244,7 @@ in rec {
 
   # KVM image for proxmox in VMA format
   proxmoxImage = forMatchingSystems [ "x86_64-linux" ] (system:
-    with import ./.. { inherit system; };
+    with nixpkgsFun { };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -250,7 +256,7 @@ in rec {
 
   # LXC tarball for proxmox
   proxmoxLXC = forMatchingSystems [ "x86_64-linux" ] (system:
-    with import ./.. { inherit system; };
+    with nixpkgsFun { };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -263,7 +269,7 @@ in rec {
   # A disk image that can be imported to Amazon EC2 and registered as an AMI
   amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
-    with import ./.. { inherit system; };
+    with nixpkgsFun { };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -277,7 +283,7 @@ in rec {
   );
   amazonImageZfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
-    with import ./.. { inherit system; };
+    with nixpkgsFun { };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -295,7 +301,7 @@ in rec {
   # automatic sizing without blocking the channel.
   amazonImageAutomaticSize = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
-    with import ./.. { inherit system; };
+    with nixpkgsFun { };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -312,7 +318,7 @@ in rec {
   # An image that can be imported into lxd and used for container creation
   lxdImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
-    with import ./.. { inherit system; };
+    with nixpkgsFun { };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -328,7 +334,7 @@ in rec {
   # Metadata for the lxd image
   lxdMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
-    with import ./.. { inherit system; };
+    with nixpkgsFun { };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
