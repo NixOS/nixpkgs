@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   version = "6.16.0";
 
   src = fetchurl {
-    url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
+    url = "https://download.calibre-ebook.com/${version}/calibre-${version}.tar.xz";
     hash = "sha256-2Lhp9PBZ19svq26PoldJ1H8tmt95MwY0l7+g6mPUvFI=";
   };
 
