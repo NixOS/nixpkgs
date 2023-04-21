@@ -31,7 +31,8 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.5";
+  version = "1.10.7";
+  format = "setuptools";
 
   outputs = [
     "out"
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hcjnFqHTQiCIJh7L9JfpHHTm8GEZ+Vac6HO59cbEpWM=";
+    hash = "sha256-7X7rlHJ5Q01CuB9FZzoUfyfwx6AMXtE1BV5t+LnZKIM=";
   };
 
   postPatch = ''
