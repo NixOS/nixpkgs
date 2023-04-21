@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which
 , ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn, libxml2, notmuch, openssl
-, lua, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib
+, lua, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib, lndir
 , pkg-config, zstd, enableZstd ? true, enableMixmaster ? false, enableLua ? false
+, withContrib ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -74,22 +75,35 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
-  '';
+  ''
+  # https://github.com/neomutt/neomutt-contrib
+  # Contains vim-keys, keybindings presets and more.
+  + lib.optionalString withContrib "${lib.getExe lndir} ${passthru.contrib} $out/share/doc/neomutt";
 
   doCheck = true;
 
   preCheck = ''
-    cp -r ${fetchFromGitHub {
-      owner = "neomutt";
-      repo = "neomutt-test-files";
-      rev = "1569b826a56c39fd09f7c6dd5fc1163ff5a356a2";
-      sha256 = "sha256-MaH2zEH1Wq3C0lFxpEJ+b/A+k2aKY/sr1EtSPAuRPp8=";
-    }} $(pwd)/test-files
+    cp -r ${passthru.test-files} $(pwd)/test-files
     chmod -R +w test-files
     (cd test-files && ./setup.sh)
 
     export NEOMUTT_TEST_DIR=$(pwd)/test-files
   '';
+
+  passthru = {
+    test-files = fetchFromGitHub {
+      owner = "neomutt";
+      repo = "neomutt-test-files";
+      rev = "1569b826a56c39fd09f7c6dd5fc1163ff5a356a2";
+      sha256 = "sha256-MaH2zEH1Wq3C0lFxpEJ+b/A+k2aKY/sr1EtSPAuRPp8=";
+    };
+    contrib = fetchFromGitHub {
+      owner = "neomutt";
+      repo = "neomutt-contrib";
+      rev = "8e97688693ca47ea1055f3d15055a4f4ecc5c832";
+      sha256 = "sha256-tx5Y819rNDxOpjg3B/Y2lPcqJDArAxVwjbYarVmJ79k=";
+    };
+  };
 
   checkTarget = "test";
   postCheck = "unset NEOMUTT_TEST_DIR";
