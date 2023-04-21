@@ -242,7 +242,7 @@ in {
                 jobdir="${jenkinsCfg.home}/$jenkinsjobname"
                 rm -rf "$jobdir"
             done
-          '' + (if cfg.accessUser != "" then reloadScript else "");
+          '' + (optionalString (cfg.accessUser != "") reloadScript);
       serviceConfig = {
         Type = "oneshot";
         User = jenkinsCfg.user;

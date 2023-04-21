@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "zrok";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchzip {
     url = "https://github.com/openziti/zrok/releases/download/v${version}/zrok_${version}_linux_amd64.tar.gz";
     stripRoot = false;
-    sha256 = "sha256-lfsKOo53DarrczQfFhZED2vmzxIyq/TCPtVZECLMV3U=";
+    sha256 = "sha256-gcmgpvfk7bciTmotTHObvZvLPdLudAR2vQneLKN+uE4=";
   };
 
   installPhase = let
