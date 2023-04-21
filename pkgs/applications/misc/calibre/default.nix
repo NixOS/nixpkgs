@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "calibre";
-  version = "6.15.1";
+  version = "6.16.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-t9fG1hBlQmDh0i5ezBoqk9C9oliNNF0peKDz1YH7RBo=";
+    hash = "sha256-2Lhp9PBZ19svq26PoldJ1H8tmt95MwY0l7+g6mPUvFI=";
   };
 
   # https://sources.debian.org/patches/calibre/${version}+dfsg-1
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-uL1mSjgCl5ZRLbSuKxJM6XTfvVwog70F7vgKtQzQNEQ=";
     })
     (fetchpatch {
-      name = "0006-Hardening-Qt-code.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}-1/debian/patches/0006-Hardening-Qt-code.patch";
+      name = "0007-Hardening-Qt-code.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}-1/debian/patches/0007-Hardening-Qt-code.patch";
       hash = "sha256-9P1kGrQbWAWDzu5EUiQr7TiCPHRWUA8hxPpEvFpK20k=";
     })
   ]
