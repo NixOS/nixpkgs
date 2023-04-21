@@ -12,10 +12,33 @@
 , tor
 , zip
 , xz
+
+# The environment variable JAVA_TOOL_OPTIONS is used by the JVM during initialization.
+# It can be used to configure how the JVM is initialized. See https://docs.oracle.com/en/java/javase/11/docs/specs/jvmti.html#tooloptions
+# This package defaults to using the options recommended by upstream. Unfortunately, I can't find the source of these recommendations.
+# The attribute overrideJavaToolOptions is a function which takes the set { flags, options } as its input and produces another set of { flags, options }.
+# This can be used to modify the JAVA_TOOL_OPTIONS environment variable in the launcher script.
+# But keep in mind that using this attribute will cause the entire package to be built.
+# In the following example, a flag is removed and an option is added:
+# bisq-desktop.override { overrideJavaToolOptions = orig: { flags = builtins.filter (flag: flag != "XX:+UseG1GC") orig.flags;
+#                                                           options = orig.options // { "XX:MaxRAM" = "4g"; };
+#                                                         };}
+, overrideJavaToolOptions ? set: set
 }:
 
 let
-  bisq-launcher = writeScript "bisq-launcher" ''
+  bisq-launcher = let
+    javaToolOptions = overrideJavaToolOptions
+      { flags = [ "XX:+UseG1GC" "XX:+UseStringDeduplication" ];
+        options = {
+          "XX:MaxHeapFreeRatio" = "10";
+          "XX:MinHeapFreeRatio" = "5";
+        };
+      };
+
+    flags = builtins.map (flag: "-${flag}") (lib.unique javaToolOptions.flags);
+    options = builtins.map (key: "-${key}=${builtins.getAttr key javaToolOptions.options}") (builtins.attrNames javaToolOptions.options);
+  in writeScript "bisq-launcher" ''
     #! ${bash}/bin/bash
 
     # This is just a comment to convince Nix that Tor is a
@@ -23,7 +46,7 @@ let
     # whereas Nix only scans for hashes in uncompressed text.
     # ${bisq-tor}
 
-    JAVA_TOOL_OPTIONS="-XX:+UseG1GC -XX:MaxHeapFreeRatio=10 -XX:MinHeapFreeRatio=5 -XX:+UseStringDeduplication" bisq-desktop-wrapped "$@"
+    JAVA_TOOL_OPTIONS="${builtins.concatStringsSep " " (flags ++ options)}" bisq-desktop-wrapped "$@"
   '';
 
   bisq-tor = writeScript "bisq-tor" ''
