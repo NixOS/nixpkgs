@@ -48,6 +48,7 @@ let
     deepin-movie-reborn = callPackage ./apps/deepin-movie-reborn { };
     deepin-music = callPackage ./apps/deepin-music { };
     deepin-picker = callPackage ./apps/deepin-picker { };
+    deepin-screen-recorder = callPackage ./apps/deepin-screen-recorder { };
     deepin-shortcut-viewer = callPackage ./apps/deepin-shortcut-viewer { };
     deepin-terminal = callPackage ./apps/deepin-terminal { };
     deepin-reader = callPackage ./apps/deepin-reader { };
