@@ -1,29 +1,45 @@
-{ stdenv, lib, nixosTests, buildGoModule, fetchFromGitHub, installShellFiles
+{ stdenv
+, lib
+, nixosTests
+, nix-update-script
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
 , pkg-config
-, gtk3, libayatana-appindicator, libX11, libXcursor, libXxf86vm
-, Cocoa, IOKit, Kernel, UserNotifications, WebKit
-, ui ? false }:
+, gtk3
+, libayatana-appindicator
+, libX11
+, libXcursor
+, libXxf86vm
+, Cocoa
+, IOKit
+, Kernel
+, UserNotifications
+, WebKit
+, ui ? false
+}:
 let
-  modules = if ui then {
-    "client/ui" = "netbird-ui";
-  } else {
-    client = "netbird";
-    management = "netbird-mgmt";
-    signal = "netbird-signal";
-  };
+  modules =
+    if ui then {
+      "client/ui" = "netbird-ui";
+    } else {
+      client = "netbird";
+      management = "netbird-mgmt";
+      signal = "netbird-signal";
+    };
 in
 buildGoModule rec {
   pname = "netbird";
-  version = "0.14.6";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-S11PshEVwOYPb8RGs5joC3Cr8CNKAenK6JRd/oV4LNQ=";
+    sha256 = "sha256-HtkMwy+8Af69vOz9VYMozOzW/W7CFSXlWR0vLlmYCeY=";
   };
 
-  vendorHash = "sha256-RyTfEZPwr2CNb9M8vGmo4gtbqQDh2KWApyz2Yx6qPmk=";
+  vendorHash = "sha256-lag/usfAvpZhWeVe1wB3SJJsTCLcBeh04RvkE803OqQ=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
@@ -46,7 +62,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/netbirdio/netbird/client/system.version=${version}"
+    "-X github.com/netbirdio/netbird/version.version=${version}"
     "-X main.builtBy=nix"
   ];
 
@@ -61,27 +77,31 @@ buildGoModule rec {
       --replace 'unix:///var/run/netbird.sock' 'unix:///var/run/netbird/sock'
   '';
 
-  postInstall = lib.concatStringsSep "\n" (lib.mapAttrsToList
-    (module: binary: ''
-      mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
-    '' + lib.optionalString (!ui) ''
-      installShellCompletion --cmd ${binary} \
-        --bash <($out/bin/${binary} completion bash) \
-        --fish <($out/bin/${binary} completion fish) \
-        --zsh <($out/bin/${binary} completion zsh)
-    '')
-    modules) + lib.optionalString (stdenv.isLinux && ui) ''
-      mkdir -p $out/share/pixmaps
-      cp $src/client/ui/disconnected.png $out/share/pixmaps/netbird.png
+  postInstall = lib.concatStringsSep "\n"
+    (lib.mapAttrsToList
+      (module: binary: ''
+        mv $out/bin/${lib.last (lib.splitString "/" module)} $out/bin/${binary}
+      '' + lib.optionalString (!ui) ''
+        installShellCompletion --cmd ${binary} \
+          --bash <($out/bin/${binary} completion bash) \
+          --fish <($out/bin/${binary} completion fish) \
+          --zsh <($out/bin/${binary} completion zsh)
+      '')
+      modules) + lib.optionalString (stdenv.isLinux && ui) ''
+    mkdir -p $out/share/pixmaps
+    cp $src/client/ui/disconnected.png $out/share/pixmaps/netbird.png
 
-      mkdir -p $out/share/applications
-      cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
+    mkdir -p $out/share/applications
+    cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
 
-      substituteInPlace $out/share/applications/netbird.desktop \
-        --replace "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
-    '';
+    substituteInPlace $out/share/applications/netbird.desktop \
+      --replace "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
+  '';
 
-  passthru.tests.netbird = nixosTests.netbird;
+  passthru = {
+    tests.netbird = nixosTests.netbird;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage = "https://netbird.io";
