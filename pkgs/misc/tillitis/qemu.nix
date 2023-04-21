@@ -5,14 +5,17 @@
 , qemu
 , git
 , buildPackages
+, writeScript
+, tillitis-qemu               # for passthru
+, tillitis-firmware-softcpu   # for passthru
 }:
 
 (qemu.override { enableDocs = false; })
   .overrideAttrs(previousAttrs: {
-  version = "7.2.1";
+  version = "8.0.0";
 
   # This is just `git rebase` of the tillitis fork forward to
-  # upstream v7.2.1, with a few very small and very obvious merge
+  # upstream v8.0.0, with a few very small and very obvious merge
   # conflicts fixed.
   #
   # An official rebase from tillits has been requested:
@@ -21,8 +24,8 @@
   src = fetchFromGitHub {
     owner = "amjoseph-nixpkgs";
     repo = "qemu";
-    rev = "e17b37e28046c7ca089db90dd3fa168cc0c02fce";
-    hash = "sha256-hQcEHU9dS5Z0z9YjUJdXJfkm42U3SXF4n0DcEleIeac=";
+    rev = "8464ccca2dfcad85b22821a10d4ff8e1740b9e4b";
+    hash = "sha256-AyCuszTHwlHlx/gYQzDBy6btWWSK8zCvmNjBgzPbSe4=";
     fetchSubmodules = true;
   };
 
@@ -45,5 +48,17 @@
   meta = previousAttrs.meta // {
     description = previousAttrs.meta.description + "(tillitis fork)";
     homepage = "https://github.com/tillitis/qemu/";
+  };
+
+  passthru = {
+    run = writeScript "tillitis-qemu-run" ''
+      exec \
+        ${tillitis-qemu}/bin/qemu-system-riscv32 \
+        -nographic \
+        -M tk1,fifo=chrid \
+        -bios ${tillitis-firmware-softcpu}/firmware.elf \
+        -chardev pty,id=chrid \
+        "$@"
+    '';
   };
 })
