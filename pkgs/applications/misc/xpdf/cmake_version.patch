@@ -7,6 +7,8 @@ https://cmake.org/cmake/help/v3.10/command/cmake_minimum_required.html
 @@ -8,7 +8,7 @@
  #
  #========================================================================
+#  One can use this command line argument also 
+#  git apply --ignore-space-change --ignore-whitespace cmake_version.patch
  
 -cmake_minimum_required(VERSION 2.8.12)
 +cmake_minimum_required(VERSION 3.1.0)
