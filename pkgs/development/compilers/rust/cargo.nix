@@ -2,13 +2,13 @@
 , file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, rustPlatform, rustc
 , CoreFoundation, Security
-, auditable ? true
+, auditable ? !cargo-auditable.meta.broken
 , cargo-auditable
 }:
 
-rustPlatform.buildRustPackage.override {
+rustPlatform.buildRustPackage.override (lib.optionalAttrs (!cargo-auditable.meta.broken) {
   cargo-auditable = cargo-auditable.bootstrap;
-} {
+}) {
   pname = "cargo";
   inherit (rustc) version src;
 
