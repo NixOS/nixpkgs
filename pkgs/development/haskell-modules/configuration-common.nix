@@ -217,6 +217,7 @@ self: super: {
 
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
+  comfort-fftw = dontCheck super.comfort-fftw;
 
   # fix tests failure for base≥4.15 (https://github.com/kim/leveldb-haskell/pull/41)
   leveldb-haskell = appendPatch (fetchpatch {
