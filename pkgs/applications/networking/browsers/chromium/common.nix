@@ -13,6 +13,8 @@
 , which
 , llvmPackages_attrName
 , rustc
+, libuuid
+, overrideCC
 # postPatch:
 , pkgsBuildHost
 # configurePhase:
@@ -119,6 +121,33 @@ let
     inherit (upstream-info.deps.ungoogled-patches) rev sha256;
   };
 
+  # There currently isn't a (much) more concise way to get a stdenv
+  # that uses lld as its linker without bootstrapping pkgsLLVM; see
+  # https://github.com/NixOS/nixpkgs/issues/142901
+  buildPlatformLlvmStdenv =
+    let
+      llvmPackages = pkgsBuildBuild.${llvmPackages_attrName};
+    in
+      overrideCC llvmPackages.stdenv
+        (llvmPackages.stdenv.cc.override {
+          inherit (llvmPackages) bintools;
+        });
+
+  chromiumRosettaStone = {
+    cpu = platform:
+      let name = platform.parsed.cpu.name;
+      in ({ "x86_64" = "x64";
+            "i686" = "x86";
+            "arm" = "arm";
+            "aarch64" = "arm64";
+          }.${platform.parsed.cpu.name}
+        or (throw "no chromium Rosetta Stone entry for cpu: ${name}"));
+    os = platform:
+      if platform.isLinux
+      then "linux"
+      else throw "no chromium Rosetta Stone entry for os: ${platform.config}";
+  };
+
   base = rec {
     pname = "${packageName}-unwrapped";
     inherit (upstream-info) version;
@@ -136,6 +165,22 @@ let
       buildPackages.${llvmPackages_attrName}.bintools
       bison gperf
     ];
+
+    depsBuildBuild = [
+      buildPlatformLlvmStdenv
+      buildPlatformLlvmStdenv.cc
+      pkg-config
+      libuuid
+      libpng # needed for "host/generate_colors_info"
+    ]
+    # When cross-compiling, chromium builds a huge proportion of its
+    # components for both the `buildPlatform` (which it calls
+    # `host`) as well as for the `hostPlatform` -- easily more than
+    # half of the dependencies are needed here.  To avoid having to
+    # maintain a separate list of buildPlatform-dependencies, we
+    # simply throw in the kitchen sink.
+    ++ buildInputs
+    ;
 
     buildInputs = [
       (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
@@ -168,6 +213,7 @@ let
       ++ lib.optional pulseSupport libpulseaudio;
 
     patches = [
+      ./cross-compile.patch
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
@@ -275,9 +321,27 @@ let
       # weaken or disable security measures like sandboxing or ASLR):
       is_official_build = true;
       disable_fieldtrial_testing_config = true;
+
+      # note: chromium calls buildPlatform "host" and calls hostPlatform "target"
+      host_cpu      = chromiumRosettaStone.cpu stdenv.buildPlatform;
+      host_os       = chromiumRosettaStone.os  stdenv.buildPlatform;
+      target_cpu    = chromiumRosettaStone.cpu stdenv.hostPlatform;
+      v8_target_cpu = chromiumRosettaStone.cpu stdenv.hostPlatform;
+      target_os     = chromiumRosettaStone.os  stdenv.hostPlatform;
+
       # Build Chromium using the system toolchain (for Linux distributions):
+      #
+      # What you would expect to be caled "target_toolchain" is
+      # actually called either "default_toolchain" or "custom_toolchain",
+      # depending on which part of the codebase you are in; see:
+      # https://github.com/chromium/chromium/blob/d36462cc9279464395aea5e65d0893d76444a296/build/config/BUILDCONFIG.gn#L17-L44
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
-      host_toolchain = "//build/toolchain/linux/unbundle:default";
+      host_toolchain = "//build/toolchain/linux/unbundle:host";
+      v8_snapshot_toolchain = "//build/toolchain/linux/unbundle:host";
+
+      host_pkg_config = "${pkgsBuildBuild.pkg-config}/bin/pkg-config";
+      pkg_config      = "${pkgsBuildHost.pkg-config}/bin/${stdenv.cc.targetPrefix}pkg-config";
+
       # Don't build against a sysroot image downloaded from Cloud Storage:
       use_sysroot = false;
       # Because we use a different toolchain / compiler version:
@@ -321,6 +385,9 @@ let
       # We do intentionally not set rustc_version as nixpkgs will never do incremental
       # rebuilds, thus leaving this empty is fine.
       rust_sysroot_absolute = "${rustc}";
+    } // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
+      # https://www.mail-archive.com/v8-users@googlegroups.com/msg14528.html
+      arm_control_flow_integrity = "none";
     } // lib.optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
@@ -350,6 +417,11 @@ let
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
     env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
+    env.BUILD_CC = "$CC_FOR_BUILD";
+    env.BUILD_CXX = "$CXX_FOR_BUILD";
+    env.BUILD_AR = "$AR_FOR_BUILD";
+    env.BUILD_NM = "$NM_FOR_BUILD";
+    env.BUILD_READELF = "$READELF_FOR_BUILD";
 
     buildPhase = let
       buildCommand = target: ''
