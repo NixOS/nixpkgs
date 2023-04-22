@@ -25,6 +25,7 @@ let
     path = makeBinPath [
       pkgs.jq
       nixos-enter
+      pkgs.util-linuxMinimal
     ];
   };
 
@@ -65,6 +66,9 @@ let
     name = "nixos-enter";
     src = ./nixos-enter.sh;
     inherit (pkgs) runtimeShell;
+    path = makeBinPath [
+      pkgs.util-linuxMinimal
+    ];
   };
 
 in
