@@ -17,6 +17,7 @@
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
 , pkgsBuildTarget
+, pkgsBuildBuild
 }:
 
 let
@@ -61,7 +62,12 @@ let
       inherit channel chromiumVersionAtLeast enableWideVine ungoogled;
     };
 
-    ungoogled-chromium = callPackage ./ungoogled.nix {};
+    # ungoogled-chromium is, contrary to its name, not a build of
+    # chromium.  It is a patched copy of chromium's *source code*.
+    # Therefore, it needs to come from buildPackages, because it
+    # contains python scripts which get /nix/store/.../bin/python3
+    # patched into their shebangs.
+    ungoogled-chromium = pkgsBuildBuild.callPackage ./ungoogled.nix {};
   };
 
   pkgSuffix = if channel == "dev" then "unstable" else
