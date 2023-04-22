@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    vala
     pkg-config
     wrapGAppsHook4
     appstream-glib
