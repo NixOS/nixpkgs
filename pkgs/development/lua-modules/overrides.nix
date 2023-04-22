@@ -56,6 +56,7 @@ with prev;
     patches = [
       ./bit32.patch
     ];
+    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
   busted = prev.busted.overrideAttrs (oa: {
