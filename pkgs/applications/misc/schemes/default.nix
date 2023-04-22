@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Edit GtkSourceView style-schemes for an application or platform";
     homepage = "https://gitlab.gnome.org/chergert/schemes";
+    mainProgram = "schemes";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ _0xMRTT ];
     platforms = platforms.linux;
