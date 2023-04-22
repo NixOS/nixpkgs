@@ -75,6 +75,11 @@ self: super: {
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_1_20230312;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_0;
 
+  # allows mtl, template-haskell, text and transformers
+  hedgehog = doDistribute self.hedgehog_1_2;
+  # allows base >= 4.18
+  tasty-hedgehog = doDistribute self.tasty-hedgehog_1_4_0_1;
+
   #
   # Too strict bounds without upstream fix
   #
