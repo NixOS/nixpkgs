@@ -6454,6 +6454,8 @@ with pkgs;
 
   codebraid = callPackage ../tools/misc/codebraid { };
 
+  codemov = callPackage ../tools/misc/codemov { };
+
   codevis = callPackage ../tools/misc/codevis { };
 
   compass = callPackage ../development/tools/compass { };

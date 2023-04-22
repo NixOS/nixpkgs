@@ -3,8 +3,9 @@
 , fetchFromGitHub
 , libxkbcommon
 , pkg-config
-, wayland
 , wayland-protocols
+, wayland-scanner
+, wayland
 }:
 
 stdenv.mkDerivation rec {
@@ -18,14 +19,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-jvGm2gFdMS61otETF7gOEpYn6IuLfqI95IpEVfIv+C4=";
   };
 
-  nativeBuildInputs = [
+  depsBuildBuild = [
     pkg-config
+  ];
+
+  nativeBuildInputs = [
+    wayland-protocols
+    wayland-scanner
   ];
 
   buildInputs = [
     libxkbcommon
     wayland
-    wayland-protocols
   ];
 
   dontConfigure = true;
@@ -36,6 +41,8 @@ stdenv.mkDerivation rec {
     install -D -m 644 havoc.cfg -t $out/etc/${pname}/
     install -D -m 644 README.md -t $out/share/doc/${pname}-${version}/
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://github.com/ii8/havoc";
