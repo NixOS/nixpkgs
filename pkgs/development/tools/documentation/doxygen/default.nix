@@ -41,6 +41,12 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
+  # put examples in an output so people/tools can test against them
+  outputs = [ "out" "examples" ];
+  postInstall = ''
+    cp -r ../examples $examples
+  '';
+
   meta = {
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.doxygen.nl/";
