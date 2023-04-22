@@ -181,7 +181,9 @@ self: super: builtins.intersectAttrs super {
       executableHaskellDepends = [self.optparse-applicative self.soxlib];
     }) super.audacity);
   med-module = enableCabalFlag "buildExamples" super.med-module;
-  spreadsheet = enableCabalFlag "buildExamples" super.spreadsheet;
+  spreadsheet = enableCabalFlag "buildExamples" (overrideCabal (drv: {
+      executableHaskellDepends = [self.optparse-applicative self.shell-utility];
+    }) super.spreadsheet);
 
   # fix errors caused by hardening flags
   epanet-haskell = disableHardening ["format"] super.epanet-haskell;
