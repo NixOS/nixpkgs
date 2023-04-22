@@ -34,10 +34,10 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
-    description = "A blazingly fast LSP client for Emacs";
-    homepage = "https://github.com/manateelazycat/lsp-bridge";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+  meta = {
+    description = "A major mode for editing LIGO source code";
+    homepage = "https://gitlab.com/ligolang/ligo";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
   };
 }
