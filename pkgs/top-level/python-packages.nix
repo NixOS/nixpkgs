@@ -15421,6 +15421,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  watchdog-gevent = callPackage ../development/python-modules/watchdog-gevent { };
+
   watchfiles = callPackage ../development/python-modules/watchfiles {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
