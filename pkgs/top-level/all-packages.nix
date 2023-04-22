@@ -17326,6 +17326,8 @@ with pkgs;
 
   gopls = callPackage ../development/tools/language-servers/gopls { };
 
+  helm-ls = callPackage ../development/tools/language-servers/helm-ls { };
+
   jdt-language-server = callPackage ../development/tools/language-servers/jdt-language-server { };
 
   jsonnet-language-server = callPackage ../development/tools/language-servers/jsonnet-language-server { };
