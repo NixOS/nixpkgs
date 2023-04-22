@@ -5326,7 +5326,6 @@ broken-packages:
   - text-offset
   - text-position
   - text-register-machine
-  - text-time
   - text-trie
   - textual
   - text-utf7
