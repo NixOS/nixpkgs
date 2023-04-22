@@ -110,10 +110,10 @@ in {
   # Note: Any compilation fixes need to be done on the versioned attributes,
   # since those are used for the internal dependencies between the versioned
   # hspec packages in configuration-common.nix.
-  hspec = self.hspec_2_10_10;
-  hspec-core = self.hspec-core_2_10_10;
+  hspec = self.hspec_2_11_0;
+  hspec-core = self.hspec-core_2_11_0;
   hspec-meta = self.hspec-meta_2_10_5;
-  hspec-discover = self.hspec-discover_2_10_10;
+  hspec-discover = self.hspec-discover_2_11_0;
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
