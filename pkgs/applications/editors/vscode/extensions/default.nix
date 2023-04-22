@@ -420,7 +420,11 @@ let
           sha256 = "sha256-79Yg4I0OkfG7PaDYnTA8HK8jrSxre4FGriq0Baiq7wA=";
         };
         meta = {
+          description = "A Visual Studio Code extension for Spellchecker";
+          changelog = "https://marketplace.visualstudio.com/items/ban.spellright/changelog";
+          homepage = "https://github.com/bartosz-antosik/vscode-spellright";
           license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ onedragon ];
         };
       };
 
@@ -673,19 +677,17 @@ let
           sha256 = "sha256-blqLK7S+RmEoyr9zktS5/SNC0GeSXnNpbhltyajoAfw=";
         };
         meta = {
-          description  = "A pure vscode translation plug-in";
+          description = "A Visual Studio Code extension to provide purely hover translation";
           longDescription = ''
-            Code Translate 是一款纯粹的滑词翻译软件
-
-            无侵入式的显示翻译结果: 与VS Code代码分析完美结合
-            强大的单词拆分能力: 支持驼峰, 下划线形式等各种单词拆分
-            丰富的本地词库: 包含 340 万+离线单词, 支持各种生僻单词
-            基于丰富的本地词库: Code Translate 拥有超快的查询速度, 每个单词在基本在 10ms 内可查询完毕
-            多端支持: VS Code 桌面版 和 VS Code Online 版本, 插件均可支持
+            Code Translate is a purely hover translation extension
+            - Non-intrusive display of translation results: perfectly integrated with VS Code code analysis.
+            - Powerful word splitting capabilities: supports various forms of word splitting such as camel case and underscore.
+            - Rich local vocabulary: includes 3.4+ million offline words, supporting various rare words.
+            - Based on a rich local vocabulary: Code Translate has super-fast query speed, with each word typically queried in less than 10ms.
+            - Multi-platform support: supports both the desktop version and online version of VS Code, and the plugin can be used on both versions.
           '';
-          repositories = "https://github.com/w88975/code-translate-vscode";
+          homepage = "https://github.com/w88975/code-translate-vscode";
           changelog = "https://marketplace.visualstudio.com/items/w88975.code-translate/changelog";
-          homepage = "https://marketplace.visualstudio.com/items?itemName=w88975.code-translate";
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ onedragon ];
         };
@@ -1167,11 +1169,11 @@ let
           sha256 = "sha256-caNcbDTB/F2mdlGpfIfJv13lzY5Wwj7p7r8dAte9+3A=";
         };
         meta = {
-          description   = "汉英英汉词典, 金山词霸, 有道翻译 for vscode";
-          repositories  = "https://github.com/exiahuang/fanyi-vscode.git";
-          homepage      = "https://github.com/exiahuang/fanyi-vscode";
-          changelog     = "https://marketplace.visualstudio.com/items/ExiaHuang.dictionary/changelog";
+          description = "A Visual Studio Code extension of using chinese-english dictonary in right-click menu";
+          homepage = "https://github.com/exiahuang/fanyi-vscode";
+          changelog = "https://marketplace.visualstudio.com/items/ExiaHuang.dictionary/changelog";
           license = lib.licenses.gpl3Only;
+          maintainers = with lib.maintainers; [ onedragon ];
         };
       };
 
@@ -1310,12 +1312,12 @@ let
           sha256 = "sha256-9Vo6lwqD1eE3zY0Gi9ME/6lPwmwuJ3Iq9StHPvncnM4=";
         };
         meta = {
-          description   = "Translate text right in your code";
-          downloadPage  = "https://marketplace.visualstudio.com/items?itemName=funkyremi.vscode-google-translate";
-          homepage      = "https://github.com/funkyremi/vscode-google-translate.git";
-          repositories  = "https://github.com/funkyremi/vscode-google-translate.git";
-          changelog     = "https://marketplace.visualstudio.com/items/funkyremi.vscode-google-translate/changelog";
-          license       = lib.licenses.mit;
+          description = "A Visual Studio Code extension using google translation to helping you quickly translate text right in your code rocket";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=funkyremi.vscode-google-translate";
+          homepage = "https://github.com/funkyremi/vscode-google-translate.git";
+          changelog = "https://marketplace.visualstudio.com/items/funkyremi.vscode-google-translate/changelog";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ onedragon ];
         };
       };
 
@@ -1581,15 +1583,18 @@ let
           sha256 = "sha256-g6mlScxv8opZuqgWtTJ3k0Yo7W7WzIkwB+8lWf6cMiU=";
         };
         meta = {
-          description = "This plugin uses the Google Translate API to translate comments for the VSCode programming language.";
+          description = "A Visual Studio Code extension to translate the comments for computer language";
+          longDescription = ''
+            This plugin uses the Google Translate API to translate comments for the VSCode programming language.
+          '';
           homepage = "https://github.com/intellism/vscode-comment-translate/blob/HEAD/doc/README.md";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=intellsmi.comment-translate";
-          repositories = "https://github.com/intellism/vscode-comment-translate.git";
           changelog = "https://marketplace.visualstudio.com/items/intellsmi.comment-translate/changelog";
+          maintainers = with lib.maintainers; [ onedragon ];
           license = lib.licenses.mit;
         };
       };
-      
+
       ionide.ionide-fsharp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Ionide-fsharp";
@@ -3312,6 +3317,27 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      yzhang.dictionary-completion = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "yzhang";
+          name = "dictionary-completion";
+          version = "1.2.2";
+          sha256 = "sha256-dpJcJARRKzRNHfXs/qknud8OQ8xIyeaVnt/EcDq0k4E=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension to help user easyly finish long words ";
+          longDescription = ''
+            Dictionary completion allows user to get a list of keywords, based off of the current word at the cursor.
+            This is useful if you are typing a long word (e.g. acknowledgeable) and don't want to finish typing or don't remember the Spelling
+          '';
+          homepage = "https://github.com/yzhang-gh/vscode-dic-completion#readme";
+          changelog = "https://marketplace.visualstudio.com/items/yzhang.dictionary-completion/changelog";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=yzhang.dictionary-completion";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ onedragon ];
         };
       };
 
