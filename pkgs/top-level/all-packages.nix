@@ -24156,6 +24156,8 @@ with pkgs;
 
   vkd3d = callPackage ../development/libraries/vkd3d {};
 
+  vkd3d-proton = callPackage ../development/libraries/vkd3d-proton {};
+
   vkdisplayinfo = callPackage ../tools/graphics/vkdisplayinfo { };
 
   vkdt = callPackage ../applications/graphics/vkdt { };
