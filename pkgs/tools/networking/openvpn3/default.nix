@@ -54,6 +54,11 @@ stdenv.mkDerivation rec {
     echo "3.git:v${version}:unknown" > openvpn3-core-version
   '';
 
+  postInstall = ''
+    rm -rf $out/var/lib/openvpn3
+    ln -sf /var/lib/openvpn3 $out/var/lib/openvpn3
+  '';
+
   preAutoreconf = ''
     substituteInPlace ./update-version-m4.sh --replace 'VERSION="$(git describe --always --tags)"' "VERSION=v${version}"
     ./update-version-m4.sh
