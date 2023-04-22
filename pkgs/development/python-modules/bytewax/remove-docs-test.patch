@@ -1,0 +1,10 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 9b6ee4b..4a82c15 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -56,5 +56,4 @@ testpaths = [
+ 
+     # TODO: Turn back on markdown tests once we stabilize inputs.
+ 
+-    "docs",
+ ]

@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-X0VuXNghHoNsNNDfZJXXJ++nfUa5ofjW8rv3CHOUzxQ=";
   };
 
+  patches = [ ./0001-fix-build-with-qt-6.5.patch ];
+
   nativeBuildInputs = [
     cmake
     pkg-config

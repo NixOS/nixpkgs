@@ -30,26 +30,26 @@ in {
     specialisation.boot-luks-wrong-keyfile.configuration = {
       boot.initrd.luks.devices = lib.mkVMOverride {
         cryptroot = {
-          device = "/dev/vdc";
+          device = "/dev/vdb";
           keyFile = "/etc/cryptroot.key";
           tryEmptyPassphrase = true;
           fallbackToPassword = !systemdStage1;
         };
       };
-      virtualisation.bootDevice = "/dev/mapper/cryptroot";
+      virtualisation.rootDevice = "/dev/mapper/cryptroot";
       boot.initrd.secrets."/etc/cryptroot.key" = keyfile;
     };
 
     specialisation.boot-luks-missing-keyfile.configuration = {
       boot.initrd.luks.devices = lib.mkVMOverride {
         cryptroot = {
-          device = "/dev/vdc";
+          device = "/dev/vdb";
           keyFile = "/etc/cryptroot.key";
           tryEmptyPassphrase = true;
           fallbackToPassword = !systemdStage1;
         };
       };
-      virtualisation.bootDevice = "/dev/mapper/cryptroot";
+      virtualisation.rootDevice = "/dev/mapper/cryptroot";
     };
   };
 
@@ -76,7 +76,7 @@ in {
 
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
-    machine.succeed("echo "" | cryptsetup luksFormat /dev/vdc --batch-mode")
+    machine.succeed("echo "" | cryptsetup luksFormat /dev/vdb --batch-mode")
     machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks-wrong-keyfile.conf")
     machine.succeed("sync")
     machine.crash()

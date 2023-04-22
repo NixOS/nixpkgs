@@ -38,7 +38,7 @@
   buildPythonApplication = if isQt6 then python3Packages.buildPythonApplication else mkDerivationWith python3Packages.buildPythonApplication;
 
   pname = "qutebrowser";
-  version = if isQt6 then "unstable-2023-03-19" else "2.5.3";
+  version = if isQt6 then "unstable-2023-04-18" else "2.5.3";
 in
 
 assert withMediaPlayback -> gst_all_1 != null;
@@ -54,8 +54,8 @@ buildPythonApplication {
     fetchFromGitHub {
       owner = "qutebrowser";
       repo = "qutebrowser";
-      rev = "294e73660c1f3d1aff50843c25e2f8f7574c4332";
-      sha256 = "sha256-vXMME9vqB4C4MScT9j7lOz4Bvu5R8nHFKi+uz9mbqtg=";
+      rev = "d4cafc0019a4a5574caa11966fc40ede89076d26";
+      hash = "sha256-Ma79EPvnwmQkeXEG9aSnD/Vt1DGhK2JX9dib7uARH8M=";
     }
   # the release tarballs are different from the git checkout!
    else fetchurl {

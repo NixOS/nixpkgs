@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ninja
     perl # for kernel-doc
     pkg-config
-    python3
+    python3.pythonForBuild
     swig
   ];
 
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     json_c
     openssl
     systemd
+    python3
   ];
 
   mesonFlags = [

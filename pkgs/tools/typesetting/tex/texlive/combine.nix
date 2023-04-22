@@ -35,8 +35,11 @@ let
 
   name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
 
-  texmf = (buildEnv {
-    name = "${name}-texmf";
+  texmfroot = (buildEnv {
+    name = "${name}-texmfroot";
+
+    # the 'non-relocated' packages must live in $TEXMFROOT/texmf-dist (e.g. fmtutil, updmap look for perl modules there)
+    extraPrefix = "/texmf-dist";
 
     # remove fake derivations (without 'outPath') to avoid undesired build dependencies
     paths = lib.catAttrs "outPath" pkgList.nonbin;
@@ -46,7 +49,7 @@ let
     postBuild = # generate ls-R database
     ''
       perl -I "${bin.core.out}/share/texmf-dist/scripts/texlive" \
-        -- "$out/scripts/texlive/mktexlsr.pl" --sort "$out"
+        -- "$out/texmf-dist/scripts/texlive/mktexlsr.pl" --sort "$out"/texmf-dist
     '';
   }).overrideAttrs (_: { allowSubstitutes = true; });
 
@@ -54,7 +57,7 @@ let
   doc = buildEnv {
     name = "${name}-doc";
 
-    paths = [ (texmf.outPath + "/doc") ];
+    paths = [ (texmfroot.outPath + "/texmf-dist/doc") ];
     extraPrefix = "/share";
 
     pathsToLink = [
@@ -83,9 +86,10 @@ in (buildEnv {
   passthru.packages = pkgList.all;
 
   postBuild = ''
-    TEXMFDIST="${texmf}"
+    TEXMFROOT="${texmfroot}"
+    TEXMFDIST="${texmfroot}/texmf-dist"
     export PATH="$out/bin:$PATH"
-    export PERL5LIB="$TEXMFDIST/scripts/texlive:${bin.core.out}/share/texmf-dist/scripts/texlive"
+    export PERL5LIB="${bin.core.out}/share/texmf-dist/scripts/texlive" # modules otherwise found in tlpkg/ of texlive.infra
     TEXMFSYSCONFIG="$out/share/texmf-config"
     TEXMFSYSVAR="$out/share/texmf-var"
     export TEXMFCNF="$TEXMFSYSVAR/web2c"
@@ -99,7 +103,10 @@ in (buildEnv {
     mkdir -p "$TEXMFCNF"
     if [ -e "$TEXMFDIST/web2c/texmfcnf.lua" ]; then
       sed \
+        -e "s,\(TEXMFOS[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFROOT\",g" \
         -e "s,\(TEXMFDIST[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFDIST\",g" \
+        -e "s,\(TEXMFSYSVAR[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFSYSVAR\",g" \
+        -e "s,\(TEXMFSYSCONFIG[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFSYSCONFIG\",g" \
         -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf-local\",g" \
         -e "s,\$SELFAUTOLOC,$out,g" \
         -e "s,selfautodir:/,$out/share/,g" \
@@ -110,7 +117,10 @@ in (buildEnv {
     fi
 
     sed \
+      -e "s,\(TEXMFROOT[ ]*=[ ]*\)[^\,]*,\1$TEXMFROOT,g" \
       -e "s,\(TEXMFDIST[ ]*=[ ]*\)[^\,]*,\1$TEXMFDIST,g" \
+      -e "s,\(TEXMFSYSVAR[ ]*=[ ]*\)[^\,]*,\1$TEXMFSYSVAR,g" \
+      -e "s,\(TEXMFSYSCONFIG[ ]*=[ ]*\)[^\,]*,\1$TEXMFSYSCONFIG,g" \
       -e "s,\$SELFAUTOLOC,$out,g" \
       -e "s,\$SELFAUTODIR,$out/share,g" \
       -e "s,\$SELFAUTOPARENT,$out/share,g" \
@@ -222,7 +232,6 @@ in (buildEnv {
   ''
     cp "$TEXMFDIST"/scripts/texlive/fmtutil.pl "$out/bin/fmtutil"
     patchShebangs "$out/bin/fmtutil"
-    sed "1s|$| -I $TEXMFDIST/scripts/texlive|" -i "$out/bin/fmtutil"
     ln -sf fmtutil "$out/bin/mktexfmt"
 
     texlinks "$out/bin" && wrapBin

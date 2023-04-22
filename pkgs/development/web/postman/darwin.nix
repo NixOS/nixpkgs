@@ -33,6 +33,11 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ unzip ];
 
+  # Postman is notarized on macOS. Running the fixup phase will change the shell scripts embedded
+  # in the bundle, which causes the notarization check to fail on macOS 13+.
+  # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
+  dontFixup = true;
+
   sourceRoot = appName;
 
   installPhase = ''

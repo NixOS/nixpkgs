@@ -17,23 +17,26 @@
 , makeDesktopItem
 , copyDesktopItems
 , makeWrapper
+, nodePackages
+, python3
 }:
 
 let
-  pname = "Pulsar";
-  version = "1.103.0";
+  pname = "pulsar";
+  version = "1.104.0";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-C9La+rMpxyFthNPwPBZfV1goP/F1TiNYYYwmPCSkKdw=";
+    x86_64-linux.hash = "sha256-HEMUQVNPb6qWIXX25N79HwHo7j11MyFiBRsq9otdAL8=";
     aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-uVGxDLqFgm5USZT6i7pLYJZq8jFxZviVXXYTL3RVhpw=";
+    aarch64-linux.hash = "sha256-f+s54XtLLdhTFY9caKTKngJF6zLai0F7ur9v37bwuNE=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   additionalLibs = lib.makeLibraryPath [
     xorg.libxshmfence
     libxkbcommon
     xorg.libxkbfile
+    stdenv.cc.cc.lib
   ];
   newLibpath = "${atomEnv.libPath}:${additionalLibs}";
 
@@ -57,6 +60,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     wrapGAppsHook
     copyDesktopItems
+    nodePackages.asar
   ];
 
   buildInputs = [
@@ -110,11 +114,25 @@ stdenv.mkDerivation rec {
     ln -s ${git}/bin/git $dugite/git/bin/git
     rm -f $dugite/git/libexec/git-core/git
     ln -s ${git}/bin/git $dugite/git/libexec/git-core/git
+
+    # We have to patch a prebuilt binary in the asar archive
+    # But asar complains because the node_gyp unpacked dependency uses a prebuilt Python3 itself
+
+    rm $opt/resources/app.asar.unpacked/node_modules/tree-sitter-bash/build/node_gyp_bins/python3
+    ln -s ${python3}/bin/python3 $opt/resources/app.asar.unpacked/node_modules/tree-sitter-bash/build/node_gyp_bins/python3
   '' + ''
     # Patch the bundled node executables
     find $opt -name "*.node" -exec patchelf --set-rpath "${newLibpath}:$opt" {} \;
     # Also patch the node executable for apm
     patchelf --set-rpath "${newLibpath}:$opt" $opt/resources/app/ppm/bin/node
+
+    # The pre-packaged ASAR bundle comes with prebuild binaries, expecting libstdc++.so.6
+    asarBundle=$TMPDIR/asarbundle
+    asar e $opt/resources/app.asar $asarBundle
+    find $asarBundle -name "*.node" -exec patchelf --set-rpath "${newLibpath}:$opt" --add-needed libstdc++.so.6 {} \;
+    unlink $asarBundle/node_modules/document-register-element/dre # Self referencing symlink, breaking asar rebundling
+    asar p $asarBundle $opt/resources/app.asar
+    rm -rf $asarBundle
 
     # We have patched the original wrapper, but now it needs the "PULSAR_PATH" env var
     mkdir -p $out/bin

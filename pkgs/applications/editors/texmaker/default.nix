@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchurl, qtbase, qtscript, qtwebengine, qmake, zlib, pkg-config, poppler }:
+{ lib, mkDerivation, fetchurl, qtbase, qtscript, qtwebengine, qmake, zlib, pkg-config, poppler, wrapGAppsHook }:
 
 mkDerivation rec {
   pname = "texmaker";
@@ -10,7 +10,7 @@ mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtscript poppler zlib qtwebengine ];
-  nativeBuildInputs = [ pkg-config poppler qmake ];
+  nativeBuildInputs = [ pkg-config poppler qmake wrapGAppsHook ];
   env.NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
 
   qmakeFlags = [
@@ -18,6 +18,12 @@ mkDerivation rec {
     "ICONDIR=${placeholder "out"}/share/pixmaps"
     "METAINFODIR=${placeholder "out"}/share/metainfo"
   ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = with lib; {
     description = "TeX and LaTeX editor";

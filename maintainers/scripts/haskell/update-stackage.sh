@@ -58,6 +58,7 @@ sed -r \
     -e '/ distribution-nixpkgs /d' \
     -e '/ jailbreak-cabal /d' \
     -e '/ language-nix /d' \
+    -e '/ hackage-db /d' \
     -e '/ cabal-install /d' \
     -e '/ lsp /d' \
     -e '/ lsp-types /d' \

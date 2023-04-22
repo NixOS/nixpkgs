@@ -12,6 +12,7 @@
 , libXxf86vm
 , go-licenses
 , pkg-config
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -40,11 +41,17 @@ buildGoModule rec {
     pkg-config
   ];
 
+  outputs = [ "out" "testing_infra" ];
+
   postPatch = ''
     # Without patching, "go run" fails with the error message:
     # package github.com/google/go-licenses: no Go files in /build/source/vendor/github.com/google/go-licenses
     substituteInPlace scripts/build-licenses.sh --replace \
       '$GO run ''${GO_FLAGS} github.com/google/go-licenses' 'go-licenses'
+
+    patchShebangs scripts/
+    substituteInPlace scripts/regression-test-demo.sh \
+      --replace 'sh scripts/run-timedemo.sh' "$testing_infra/scripts/run-timedemo.sh"
   '';
 
   makeFlags = [
@@ -63,19 +70,15 @@ buildGoModule rec {
     install -Dm644 'aaaaxy.png' -t "$out/share/icons/hicolor/128x128/apps/"
     install -Dm644 'aaaaxy.desktop' -t "$out/share/applications/"
     install -Dm644 'io.github.divverent.aaaaxy.metainfo.xml' -t "$out/share/metainfo/"
+
+    install -Dm755 'scripts/run-timedemo.sh' -t "$testing_infra/scripts/"
+    install -Dm755 'scripts/regression-test-demo.sh' -t "$testing_infra/scripts/"
+    install -Dm644 'assets/demos/benchmark.dem' -t "$testing_infra/assets/demos/"
   '';
 
-  checkPhase = ''
-    runHook preCheck
-
-    # Can't get GLX to work even though it seems to work in their CI system:
-    # [FATAL] RunGame exited abnormally: APIUnavailable: GLX: GLX extension not found
-    # xvfb-run sh scripts/regression-test-demo.sh aaaaxy \
-    #   "on track for Any%, All Paths and No Teleports" \
-    #   ./aaaaxy assets/demos/benchmark.dem
-
-    runHook postCheck
-  '';
+  passthru.tests = {
+    aaaaxy = nixosTests.aaaaxy;
+  };
 
   strictDeps = true;
 

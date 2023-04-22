@@ -12,23 +12,29 @@
 , libpulseaudio
 , pipewire
 , alsa-utils
+, which
 }:
 
 stdenv.mkDerivation rec {
   pname = "teams-for-linux";
-  version = "1.0.59";
+  version = "1.0.65";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-82uRZEktKHMQhozG5Zpa2DFu1VZOEDBWpsbfgMzoXY8=";
+    sha256 = "sha256-Rj6A1h5R4w8zacoTV0WKTbTD67qwsw4zHP+KQ6h7/gs=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
     sha256 = "sha256-3zjmVIPQ+F2jPQ2xkAv5hQUjr8k5jIHTsa73J+IMayw=";
   };
+
+  patches = [
+    # Can be removed once Electron upstream resolves https://github.com/electron/electron/issues/36660
+    ./screensharing-wayland-hack-fix.patch
+  ];
 
   nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
 
@@ -71,7 +77,7 @@ stdenv.mkDerivation rec {
     # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, and 'libpipewire' for screen sharing
     makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
-        --prefix PATH : ${lib.makeBinPath [ alsa-utils ]} \
+        --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire ]} \
       ''} \
       --add-flags "$out/share/teams-for-linux/app.asar" \

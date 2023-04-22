@@ -54,9 +54,12 @@ else # Only set up Qt once.
         dontPatchMkspecs=1
 
         local lib="${!outputLib}"
+        local dev="${!outputDev}"
 
-        if [ -d "$lib/mkspecs/modules" ]; then
-            fixQtModulePaths "$lib/mkspecs/modules"
+        moveToOutput "mkspecs/modules" "$dev"
+
+        if [ -d "$dev/mkspecs/modules" ]; then
+            fixQtModulePaths "$dev/mkspecs/modules"
         fi
 
         if [ -d "$lib/mkspecs" ]; then
