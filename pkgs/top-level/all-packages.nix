@@ -13125,6 +13125,8 @@ with pkgs;
 
   udptunnel = callPackage ../tools/networking/udptunnel { };
 
+  udpx = callPackage ../tools/security/udpx { };
+
   uftrace = callPackage ../development/tools/uftrace { };
 
   uget = callPackage ../tools/networking/uget { };
