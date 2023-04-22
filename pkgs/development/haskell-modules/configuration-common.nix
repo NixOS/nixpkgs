@@ -630,6 +630,10 @@ self: super: {
     })
   ] (dontCheck super.snappy);
 
+  # 2023-04-22: omfort-fftw 0.0.0.1 contains fixes to the tests. We can drop
+  # this override as soon as stackage advances.
+  comfort-fftw = doDistribute super.comfort-fftw_0_0_0_1;
+
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
 
