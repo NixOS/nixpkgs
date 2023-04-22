@@ -27557,6 +27557,8 @@ with pkgs;
 
   ### SERVERS / GEOSPATIAL
 
+  fit-trackee = callPackage ../servers/geospatial/fit-trackee { };
+
   geoserver = callPackage ../servers/geospatial/geoserver { };
 
   mapcache = callPackage ../servers/geospatial/mapcache { };
