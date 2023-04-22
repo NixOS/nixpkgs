@@ -641,6 +641,7 @@ unsupported-platforms:
   spade:                                        [ platforms.darwin ] # depends on sdl2-mixer, which doesn't work on darwin
   synthesizer-alsa:                             [ platforms.darwin ]
   taffybar:                                     [ platforms.darwin ]
+  twirl:                                        [ platforms.darwin ] # depends on sdl2-mixer
   emanote:                                      [ x86_64-darwin ] # Depends on stork which is broken on macOS sdk < 10.14
   termonad:                                     [ platforms.darwin ]
   tokyotyrant-haskell:                          [ platforms.darwin ]
