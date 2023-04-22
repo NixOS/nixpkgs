@@ -6,7 +6,7 @@
 , cffi
 , fetchPypi
 , isPyPy
-, libgit2_1_5
+, libgit2
 , pycparser
 , pytestCheckHook
 , pythonOlder
@@ -14,22 +14,22 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.11.1";
+  version = "1.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eT9YP9M2IPCsODdtsPV3aO8pIribRZ51saxEA3frZOw=";
+    hash = "sha256-6UQNCGZeNSeJiZOVkKU/N6k46tpPlEaESTCqLuMNc74=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH="${libgit2_1_5}/lib"
+    export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 
   buildInputs = [
-    libgit2_1_5
+    libgit2
   ];
 
   propagatedBuildInputs = [
