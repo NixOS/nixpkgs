@@ -9966,6 +9966,18 @@ final: prev:
     meta.homepage = "https://github.com/moll/vim-bbye/";
   };
 
+  vim-be-good = buildVimPluginFrom2Nix {
+    pname = "vim-be-good";
+    version = "2022-11-08";
+    src = fetchFromGitHub {
+      owner = "ThePrimeagen";
+      repo = "vim-be-good";
+      rev = "c290810728a4f75e334b07dc0f3a4cdea908d351";
+      sha256 = "1xnydbqyjrmwj7cpj3qcr1icg8v75ny847i1qpj94dafjzzmi4wl";
+    };
+    meta.homepage = "https://github.com/ThePrimeagen/vim-be-good/";
+  };
+
   vim-beancount = buildVimPluginFrom2Nix {
     pname = "vim-beancount";
     version = "2023-01-02";
