@@ -73,11 +73,11 @@
     "vendorHash": "sha256-DqAHkNxfI1txtW9PadHzgWuRCiuV/CVqq/qba+e0O7M="
   },
   "argocd": {
-    "hash": "sha256-IDPX+j9bxQGoBpG/XpLpsFx48iDLcCUzDso08xAsOf0=",
+    "hash": "sha256-3WhbyMqIlncD7UmmfJBFrb9FmmbC/a4CWesmjo0jzoU=",
     "homepage": "https://registry.terraform.io/providers/oboukili/argocd",
     "owner": "oboukili",
     "repo": "terraform-provider-argocd",
-    "rev": "v5.1.0",
+    "rev": "v5.2.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-mKefDPwWPlUleoAkJpTvJwQeOb7pA80cZQ7fpwir6kk="
   },
