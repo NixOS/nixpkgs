@@ -49,6 +49,10 @@ default-package-overrides:
   # 2023-04-13: latest version requires ghc-events >= 0.19 but it's not on LTS yet
   - eventlog2html < 0.10
 
+  # 2023-04-22: For dhall < 1.42 compatibility
+  - dhall-nixpkgs == 1.0.9
+  - dhall-nix == 1.1.25
+
 extra-packages:
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - Cabal == 2.4.*                      # required for cabal-install etc.
