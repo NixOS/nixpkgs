@@ -25149,6 +25149,8 @@ with pkgs;
 
   jicofo = callPackage ../servers/jicofo { };
 
+  jitsi-excalidraw = callPackage ../servers/jitsi-excalidraw { };
+
   jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
 
   jitsi-meet-prosody = callPackage ../misc/jitsi-meet-prosody { };
