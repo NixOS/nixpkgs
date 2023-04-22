@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , boost
 , cmake
 , giflib
@@ -17,22 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
-  version = "2.4.6.1";
+  version = "2.4.10.0";
 
   src = fetchFromGitHub {
     owner = "OpenImageIO";
     repo = "oiio";
     rev = "v${version}";
-    sha256 = "sha256-oBICukkborxXFHXyM2rIn5qSbCWECjwDQI9MUg13IRU=";
+    sha256 = "sha256-EQ9/G41AZJJ+KMIwDRZDf5V0VOx5fewmebeHlPWSPCQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "arm-fix-signed-unsigned-simd-mismatch.patch";
-      url = "https://github.com/OpenImageIO/oiio/commit/726c51181a2888b0bd1edbef5ac8451e9cc3f893.patch";
-      hash = "sha256-G4vexf0OHZ/sbcRob5X92tajkmAv72ok8rcVQtIE9XE=";
-    })
-  ];
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
