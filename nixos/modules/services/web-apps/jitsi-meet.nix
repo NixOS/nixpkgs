@@ -176,6 +176,8 @@ in
       default = 3002;
       description = lib.mdDoc ''The port which the Excalidraw backend for Jitsi should listen to.'';
     };
+
+    secureDomain.enable = mkEnableOption (lib.mdDoc "Authenticated room creation");
   };
 
   config = mkIf cfg.enable {
@@ -293,7 +295,7 @@ in
         enabled = true;
         domain = cfg.hostName;
         extraConfig = ''
-          authentication = "jitsi-anonymous"
+          authentication = ${if cfg.secureDomain.enable then "\"internal_hashed\"" else "\"jitsi-anonymous\""}
           c2s_require_encryption = false
           admins = { "focus@auth.${cfg.hostName}" }
           smacks_max_unacked_stanzas = 5
@@ -333,6 +335,14 @@ in
         domain = "recorder.${cfg.hostName}";
         extraConfig = ''
           authentication = "internal_plain"
+          c2s_require_encryption = false
+        '';
+      };
+      virtualHosts."guest.${cfg.hostName}" = {
+        enabled = true;
+        domain = "guest.${cfg.hostName}";
+        extraConfig = ''
+          authentication = "anonymous"
           c2s_require_encryption = false
         '';
       };
@@ -499,12 +509,16 @@ in
       };
     };
 
-    services.jitsi-meet.config = mkIf cfg.excalidraw.enable {
-      whiteboard = {
-        enabled = true;
-        collabServerBaseUrl = "https://${cfg.hostName}";
-      };
-    };
+    services.jitsi-meet.config = recursiveUpdate
+      (mkIf cfg.excalidraw.enable {
+        whiteboard = {
+          enabled = true;
+          collabServerBaseUrl = "https://${cfg.hostName}";
+        };
+      })
+      (mkIf cfg.secureDomain.enable {
+        hosts.anonymousdomain = "guest.${cfg.hostName}";
+      });
 
     services.jitsi-videobridge = mkIf cfg.videobridge.enable {
       enable = true;
@@ -529,13 +543,23 @@ in
       config = mkMerge [{
         jicofo.xmpp.service.disable-certificate-verification = true;
         jicofo.xmpp.client.disable-certificate-verification = true;
-      #} (lib.mkIf cfg.jibri.enable {
-       } (lib.mkIf (config.services.jibri.enable || cfg.jibri.enable) {
-         jicofo.jibri = {
-           brewery-jid = "JibriBrewery@internal.auth.${cfg.hostName}";
-           pending-timeout = "90";
-         };
-      })];
+      }
+        (lib.mkIf (config.services.jibri.enable || cfg.jibri.enable) {
+          jicofo.jibri = {
+            brewery-jid = "JibriBrewery@internal.auth.${cfg.hostName}";
+            pending-timeout = "90";
+          };
+        })
+        (lib.mkIf cfg.secureDomain.enable {
+          jicofo = {
+            authentication = {
+              enabled = "true";
+              type = "XMPP";
+              login-url = cfg.hostName;
+            };
+            xmpp.client.client-proxy = "focus.${cfg.hostName}";
+          };
+        })];
     };
 
     services.jibri = mkIf cfg.jibri.enable {
