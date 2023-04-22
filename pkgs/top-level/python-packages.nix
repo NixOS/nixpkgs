@@ -12553,6 +12553,8 @@ self: super: with self; {
 
   static3 = callPackage ../development/python-modules/static3 { };
 
+  staticmap = callPackage ../development/python-modules/staticmap { };
+
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statistics = callPackage ../development/python-modules/statistics { };
