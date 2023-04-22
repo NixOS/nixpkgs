@@ -177,6 +177,10 @@ self: super: builtins.intersectAttrs super {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
+  audacity = enableCabalFlag "buildExamples" super.audacity;
+  med-module = enableCabalFlag "buildExamples" super.med-module;
+  spreadsheet = enableCabalFlag "buildExamples" super.spreadsheet;
+
   # fix errors caused by hardening flags
   epanet-haskell = disableHardening ["format"] super.epanet-haskell;
 
