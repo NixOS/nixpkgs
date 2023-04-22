@@ -647,6 +647,7 @@ unsupported-platforms:
   VulkanMemoryAllocator:                        [ i686-linux, armv7l-linux, platforms.darwin ]
   vulkan-utils:                                 [ platforms.darwin ]
   webkit2gtk3-javascriptcore:                   [ platforms.darwin ]
+  wiringPi:                                     [ aarch64-darwin ]
   xattr:                                        [ platforms.darwin ]
   xgboost-haskell:                              [ aarch64-linux, armv7l-linux ]
   xmobar:                                       [ platforms.darwin ]
