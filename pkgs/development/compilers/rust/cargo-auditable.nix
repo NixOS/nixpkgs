@@ -1,4 +1,6 @@
-{ lib, fetchFromGitHub, makeRustPlatform, rustc, cargo, installShellFiles }:
+{ lib
+, stdenv
+, fetchFromGitHub, makeRustPlatform, rustc, cargo, installShellFiles }:
 
 let
   args = rec {
@@ -25,6 +27,7 @@ let
       changelog = "https://github.com/rust-secure-code/cargo-auditable/blob/v${version}/cargo-auditable/CHANGELOG.md";
       license = with licenses; [ mit /* or */ asl20 ];
       maintainers = with maintainers; [ figsoda ];
+      broken = stdenv.hostPlatform != stdenv.buildPlatform;
     };
   };
 
