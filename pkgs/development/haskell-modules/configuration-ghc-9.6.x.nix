@@ -68,6 +68,7 @@ self: super: {
   tasty-inspection-testing = doDistribute self.tasty-inspection-testing_0_2;
   th-abstraction = doDistribute self.th-abstraction_0_5_0_0;
   th-desugar = doDistribute self.th-desugar_1_15;
+  turtle = doDistribute self.turtle_1_6_1;
   # Too strict bounds on ghc-prim and template-haskell
   aeson = doDistribute (doJailbreak self.aeson_2_1_2_1);
   # Too strict bounds on ghc-prim
