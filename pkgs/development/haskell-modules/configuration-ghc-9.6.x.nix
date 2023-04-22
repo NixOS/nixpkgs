@@ -118,8 +118,8 @@ self: super: {
   #
 
   # base >= 4.18 is allowed in those newer versions
-  boring = jailbreakForCurrentVersion super.boring "0.2.1";
-  these = jailbreakForCurrentVersion super.these "1.2";
+  boring = assert !(self ? boring_0_2_1); doJailbreak super.boring;
+  these = assert !(self ? assoc_1_2); doJailbreak super.these;
 
   # XXX: We probably should be using semigroupoids 6.0.1 which is intended for 9.6
   semigroupoids = doJailbreak super.semigroupoids;
