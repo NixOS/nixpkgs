@@ -9,7 +9,6 @@
 , libgee
 , libadwaita
 , gtksourceview5
-, blueprint-compiler
 , wrapGAppsHook4
 , appstream-glib
 , desktop-file-utils
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
-    blueprint-compiler
   ];
 
   buildInputs = [
