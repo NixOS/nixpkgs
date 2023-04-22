@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     install -D -m 644 README.md -t $out/share/doc/${pname}-${version}/
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://github.com/ii8/havoc";
     description = "A minimal terminal emulator for Wayland";
