@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.19.0";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    hash = "sha256-y1hJTcQV+6nusSuCZVCtMZDckuJlxbsq4aIckoQc/Tg=";
+    hash = "sha256-JaV4Wl2jVmiQAUQJJrlOln0C4TxJ63dD417wzyLkJ1A=";
   };
 
   patches = [
