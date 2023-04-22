@@ -5613,7 +5613,7 @@ with pkgs;
   river = callPackage ../applications/window-managers/river { };
 
   rivercarro = callPackage ../applications/misc/rivercarro {
-    zig = zig_0_9;
+    zig = buildPackages.zig_0_9;
   };
 
   river-luatile = callPackage ../applications/misc/river-luatile{ };
@@ -7434,7 +7434,7 @@ with pkgs;
   findutils = callPackage ../tools/misc/findutils { };
 
   findup = callPackage ../tools/misc/findup {
-    zig = zig_0_9;
+    zig = buildPackages.zig_0_9;
   };
 
   fingerprintx = callPackage ../tools/security/fingerprintx { };
@@ -17361,7 +17361,7 @@ with pkgs;
   verible = callPackage ../development/tools/language-servers/verible { };
 
   zls = callPackage ../development/tools/language-servers/zls {
-    zig = zig_0_10;
+    zig = buildPackages.zig_0_10;
   };
 
   ansible-later = with python3.pkgs; toPythonApplication ansible-later;
@@ -31051,7 +31051,7 @@ with pkgs;
   waybar = callPackage ../applications/misc/waybar { };
 
   waylock = callPackage ../applications/misc/waylock {
-    zig = zig_0_10;
+    zig = buildPackages.zig_0_10;
   };
 
   wayshot = callPackage ../tools/misc/wayshot { };
@@ -31995,7 +31995,7 @@ with pkgs;
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
   mepo = callPackage ../applications/misc/mepo {
-    zig = zig_0_9;
+    zig = buildPackages.zig_0_9;
   };
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
@@ -32660,7 +32660,7 @@ with pkgs;
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
   ncdu = callPackage ../tools/misc/ncdu {
-    zig = zig_0_10;
+    zig = buildPackages.zig_0_10;
   };
 
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
@@ -35750,7 +35750,7 @@ with pkgs;
   };
 
   blackshades = callPackage ../games/blackshades {
-    zig = zig_0_9;
+    zig = buildPackages.zig_0_9;
   };
 
   blobby = callPackage ../games/blobby { };
