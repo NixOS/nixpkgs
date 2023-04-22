@@ -106,6 +106,7 @@ self: super: {
   # Forbids base >= 4.18, fix proposed: https://github.com/well-typed/cborg/pull/312
   cborg = assert !(self ? cborg_0_2_8_0); doJailbreak super.cborg;
   cborg-json = assert !(self ? cborg_0_2_5_0); doJailbreak super.cborg-json;
+  serialise = assert !(self ? serialise_0_2_6_0); doJailbreak super.serialise;
 
   #
   # Too strict bounds, waiting on Hackage release in nixpkgs
