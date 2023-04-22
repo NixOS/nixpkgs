@@ -9,6 +9,11 @@ let
     overrideCabal (old: {
       jailbreak = assert old.revision or "0" == toString rev; true;
     });
+  checkAgainAfter = pkg: ver: msg: act:
+    if builtins.compareVersions pkg.version ver <= 0 then act
+    else
+      builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
+  jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
 in
 
 self: super: {
@@ -102,19 +107,19 @@ self: super: {
   lukko = doJailbreak super.lukko;
 
   # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
-  newtype-generics = assert !(self ? newtype-generics_0_6_2); doJailbreak super.newtype-generics;
+  newtype-generics = jailbreakForCurrentVersion super.newtype-generics "0.6.2";
   # Forbids base >= 4.18, fix proposed: https://github.com/well-typed/cborg/pull/312
-  cborg = assert !(self ? cborg_0_2_8_0); doJailbreak super.cborg;
-  cborg-json = assert !(self ? cborg_0_2_5_0); doJailbreak super.cborg-json;
-  serialise = assert !(self ? serialise_0_2_6_0); doJailbreak super.serialise;
+  cborg = jailbreakForCurrentVersion super.cborg "0.2.8.0";
+  cborg-json = jailbreakForCurrentVersion super.cborg-json "0.2.5.0";
+  serialise = jailbreakForCurrentVersion super.serialise "0.2.6.0";
 
   #
   # Too strict bounds, waiting on Hackage release in nixpkgs
   #
 
   # base >= 4.18 is allowed in those newer versions
-  boring = assert !(self ? boring_0_2_1); doJailbreak super.boring;
-  these = assert !(self ? assoc_1_2); doJailbreak super.these;
+  boring = jailbreakForCurrentVersion super.boring "0.2.1";
+  these = jailbreakForCurrentVersion super.these "1.2";
 
   # XXX: We probably should be using semigroupoids 6.0.1 which is intended for 9.6
   semigroupoids = doJailbreak super.semigroupoids;
