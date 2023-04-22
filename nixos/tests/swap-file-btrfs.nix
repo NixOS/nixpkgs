@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ lib, ... }:
     {
       virtualisation.useDefaultFilesystems = false;
 
-      virtualisation.bootDevice = "/dev/vda";
+      virtualisation.rootDevice = "/dev/vda";
 
       boot.initrd.postDeviceCommands = ''
         ${pkgs.btrfs-progs}/bin/mkfs.btrfs --label root /dev/vda

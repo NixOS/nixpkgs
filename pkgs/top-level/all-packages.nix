@@ -2575,8 +2575,9 @@ with pkgs;
 
   microcom = callPackage ../applications/terminal-emulators/microcom { };
 
-  mlterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/mlterm {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa;
+  mlterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/mlterm { };
+  mlterm-wayland = mlterm.override {
+    enableX11 = false;
   };
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
@@ -7651,6 +7652,8 @@ with pkgs;
     texinfo = texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
   };
 
+  elastic = callPackage ../applications/misc/elastic { };
+
   exfat = callPackage ../tools/filesystems/exfat { };
 
   exfatprogs = callPackage ../tools/filesystems/exfatprogs { };
@@ -10262,9 +10265,7 @@ with pkgs;
   inherit (callPackage ../servers/nextcloud {})
     nextcloud24 nextcloud25 nextcloud26;
 
-  nextcloud24Packages = ( callPackage ../servers/nextcloud/packages {
-    apps = lib.importJSON ../servers/nextcloud/packages/24.json;
-  });
+  nextcloud24Packages = throw "Nextcloud24 is EOL!";
   nextcloud25Packages = ( callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/25.json;
   });
@@ -11526,16 +11527,16 @@ with pkgs;
 
   qovery-cli = callPackage ../tools/admin/qovery-cli { };
 
-  qownnotes = darwin.apple_sdk_11_0.callPackage ../applications/office/qownnotes {
-    inherit (libsForQt5) qmake qtbase qtdeclarative qtsvg qttools qtwayland qtwebsockets qtx11extras qtxmlpatterns wrapQtAppsHook;
+  qownnotes = libsForQt5.callPackage ../applications/office/qownnotes {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   qpdf = callPackage ../development/libraries/qpdf { };
 
   qprint = callPackage ../tools/text/qprint { };
 
-  qscintilla = darwin.apple_sdk_11_0.callPackage ../development/libraries/qscintilla {
-    inherit (libsForQt5) qmake qtbase qtmacextras;
+  qscintilla = libsForQt5.callPackage ../development/libraries/qscintilla {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   qscintilla-qt4 = callPackage ../development/libraries/qscintilla-qt4 { };
@@ -17315,6 +17316,8 @@ with pkgs;
     llvmPackages = llvmPackages_latest;
   };
 
+  docker-compose-language-service = callPackage ../development/tools/language-servers/docker-compose-language-service { };
+
   dot-language-server = callPackage ../development/tools/language-servers/dot-language-server { };
 
   fortls = python3.pkgs.callPackage ../development/tools/language-servers/fortls { };
@@ -22378,6 +22381,8 @@ with pkgs;
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
+  libxisf = callPackage ../development/libraries/science/astronomy/libxisf { };
+
   libxkbcommon = libxkbcommon_8;
   libxkbcommon_8 = callPackage ../development/libraries/libxkbcommon { };
   libxkbcommon_7 = callPackage ../development/libraries/libxkbcommon/libxkbcommon_7.nix { };
@@ -24846,6 +24851,8 @@ with pkgs;
     asterisk_16 asterisk_18 asterisk_19 asterisk_20;
 
   asterisk-module-sccp = callPackage ../servers/asterisk/sccp { };
+
+  asterisk-ldap = lowPrio (asterisk.override { ldapSupport = true; });
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
@@ -30915,6 +30922,8 @@ with pkgs;
 
   offpunk = callPackage ../applications/networking/browsers/offpunk { };
 
+  owl-compositor = callPackage ../applications/window-managers/owl { };
+
   p2pool = callPackage ../applications/misc/p2pool { };
 
   pass2csv = python3Packages.callPackage ../tools/security/pass2csv { };
@@ -33281,8 +33290,8 @@ with pkgs;
 
   quantomatic = callPackage ../applications/science/physics/quantomatic { };
 
-  quassel = darwin.apple_sdk_11_0.callPackage ../applications/networking/irc/quassel {
-    inherit (libsForQt5) kconfigwidgets kcoreaddons knotifications knotifyconfig ktextwidgets kwidgetsaddons kxmlgui phonon qtbase qtscript mkDerivation qca-qt5;
+  quassel = libsForQt5.callPackage ../applications/networking/irc/quassel {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   quasselClient = quassel.override {

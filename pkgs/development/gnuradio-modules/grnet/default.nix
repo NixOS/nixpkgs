@@ -6,7 +6,7 @@
 , cmake
 , pkg-config
 , boost
-, log4cpp
+, logLib
 , python
 , swig
 , mpir
@@ -67,7 +67,7 @@ mkDerivation {
 
   buildInputs = [
     boost
-    log4cpp
+    logLib
     doxygen
     mpir
     gmp
