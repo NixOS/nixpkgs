@@ -62,6 +62,12 @@ in {
         type = with types; listOf path;
         default = [];
       };
+
+      extraPlugins = mkOption {
+        description = mdDoc "Extra plugins for the Budgie desktop";
+        type = with types; listOf package;
+        default = [];
+      };
     };
 
     environment.budgie.excludePackages = mkOption {
@@ -103,12 +109,12 @@ in {
         # Budgie Desktop.
         budgie.budgie-backgrounds
         budgie.budgie-control-center
-        budgie.budgie-desktop
+        (budgie.budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
         budgie.budgie-desktop-view
         budgie.budgie-screensaver
 
         # Required by the Budgie Desktop session.
-        (gnome.gnome-session.override {gnomeShellSupport = false;})
+        (gnome.gnome-session.override { gnomeShellSupport = false; })
 
         # Required by Budgie Menu.
         gnome-menus
