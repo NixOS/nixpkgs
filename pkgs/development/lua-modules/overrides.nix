@@ -395,6 +395,10 @@ with prev;
     ];
   });
 
+  lua-subprocess = prev.lua-subprocess.overrideAttrs (oa: {
+    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+  });
+
   lush-nvim = prev.lush-nvim.overrideAttrs (drv: {
     doCheck = false;
   });
