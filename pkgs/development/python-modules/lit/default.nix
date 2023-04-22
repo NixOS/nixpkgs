@@ -1,16 +1,20 @@
-{ lib, python3 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+}:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "lit";
   version = "15.0.6";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-S06OQfDmDyutls21HxyQ016ku3FTTsDOP8Di67d9f+k=";
   };
 
   passthru = {
-    python = python3;
+    inherit python;
   };
 
   # Non-standard test suite. Needs custom checkPhase.

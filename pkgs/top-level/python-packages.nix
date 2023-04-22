@@ -5678,6 +5678,8 @@ self: super: with self; {
     python3 = python;
   });
 
+  lit = callPackage ../development/python-modules/lit { };
+
   littleutils = callPackage ../development/python-modules/littleutils { };
 
   livelossplot = callPackage ../development/python-modules/livelossplot { };

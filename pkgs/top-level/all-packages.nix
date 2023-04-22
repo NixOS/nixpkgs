@@ -18517,7 +18517,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  lit = callPackage ../development/tools/misc/lit { };
+  lit = with python3Packages; toPythonApplication lit;
 
   litecli = callPackage ../development/tools/database/litecli { };
 
