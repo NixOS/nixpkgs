@@ -27,6 +27,7 @@
 , tpmSupport ? true
 , uringSupport ? stdenv.isLinux, liburing
 , canokeySupport ? false, canokey-qemu
+, enableDocs ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
                     then (lib.optional stdenv.isx86_64 "i386-softmmu"
@@ -147,7 +148,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-strip" # We'll strip ourselves after separating debug info.
-    "--enable-docs"
+    (lib.enableFeature enableDocs "docs")
     "--enable-tools"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
