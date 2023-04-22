@@ -1313,6 +1313,8 @@ let
           description   = "Translate text right in your code";
           downloadPage  = "https://marketplace.visualstudio.com/items?itemName=funkyremi.vscode-google-translate";
           homepage      = "https://github.com/funkyremi/vscode-google-translate.git";
+          repositories  = "https://github.com/funkyremi/vscode-google-translate.git";
+          changelog     = "https://marketplace.visualstudio.com/items/funkyremi.vscode-google-translate/changelog";
           license       = lib.licenses.mit;
         };
       };
@@ -1571,6 +1573,23 @@ let
         };
       };
 
+      intellsmi.comment-translate = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "intellsmi";
+          name = "comment-translate";
+          version = "2.2.4";
+          sha256 = "sha256-g6mlScxv8opZuqgWtTJ3k0Yo7W7WzIkwB+8lWf6cMiU=";
+        };
+        meta = {
+          description = "This plugin uses the Google Translate API to translate comments for the VSCode programming language.";
+          homepage = "https://github.com/intellism/vscode-comment-translate/blob/HEAD/doc/README.md";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=intellsmi.comment-translate";
+          repositories = "https://github.com/intellism/vscode-comment-translate.git";
+          changelog = "https://marketplace.visualstudio.com/items/intellsmi.comment-translate/changelog";
+          license = lib.licenses.mit;
+        };
+      };
+      
       ionide.ionide-fsharp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Ionide-fsharp";
