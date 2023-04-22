@@ -13,8 +13,6 @@ in
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
-  bqn-mode = callPackage ./manual-packages/bqn-mode { };
-
   cask = callPackage ./manual-packages/cask { };
 
   control-lock = callPackage ./manual-packages/control-lock { };
