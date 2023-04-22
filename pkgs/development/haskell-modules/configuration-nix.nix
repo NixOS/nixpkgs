@@ -177,7 +177,9 @@ self: super: builtins.intersectAttrs super {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
-  audacity = enableCabalFlag "buildExamples" super.audacity;
+  audacity = enableCabalFlag "buildExamples" (overrideCabal (drv: {
+      executableHaskellDepends = [self.optparse-applicative self.soxlib];
+    }) super.audacity);
   med-module = enableCabalFlag "buildExamples" super.med-module;
   spreadsheet = enableCabalFlag "buildExamples" super.spreadsheet;
 
