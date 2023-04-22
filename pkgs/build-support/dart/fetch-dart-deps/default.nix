@@ -4,6 +4,7 @@
 , dart
 , git
 , cacert
+, jq
 }:
 
 {
@@ -151,13 +152,35 @@ let
       outputHashMode = "recursive";
       outputHash = if vendorHash != "" then vendorHash else lib.fakeSha256;
     } // (removeAttrs drvArgs [ "name" "pname" ]));
+
+  depsListDrv = stdenvNoCC.mkDerivation ({
+    name = "${name}-dart-deps-list.json";
+    nativeBuildInputs = [ hook dart jq ];
+
+    configurePhase = ''
+      runHook preConfigure
+      dart pub get --offline
+      runHook postConfigure
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+      dart pub deps --json | jq .packages > $out
+      runHook postBuild
+    '';
+  } // buildDrvInheritArgs);
+
+  hook = (makeSetupHook {
+    # The setup hook should not be part of the fixed-output derivation.
+    # Updates to the hook script should not change vendor hashes, and it won't
+    # work at all anyway due to https://github.com/NixOS/nix/issues/6660.
+    name = "${name}-dart-deps-setup-hook";
+    substitutions = { inherit deps; };
+    propagatedBuildInputs = [ dart git ];
+    passthru = {
+      files = deps.outPath;
+      depsListFile = depsListDrv.outPath;
+    };
+  }) ./setup-hook.sh;
 in
-(makeSetupHook {
-  # The setup hook should not be part of the fixed-output derivation.
-  # Updates to the hook script should not change vendor hashes, and it won't
-  # work at all anyway due to https://github.com/NixOS/nix/issues/6660.
-  name = "${name}-dart-deps-setup-hook";
-  substitutions = { inherit deps; };
-  propagatedBuildInputs = [ dart git ];
-  passthru.files = deps.outPath;
-}) ./setup-hook.sh
+hook

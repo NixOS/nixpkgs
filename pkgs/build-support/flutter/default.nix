@@ -5,6 +5,7 @@
 , llvmPackages_13
 , cacert
 , flutter
+, jq
 }:
 
 # absolutely no mac support for now
@@ -13,9 +14,11 @@
 , flutterBuildFlags ? [ ]
 , runtimeDependencies ? [ ]
 , customPackageOverrides ? { }
+, depsListFile ? null
 , vendorHash
 , pubspecLockFile ? null
 , nativeBuildInputs ? [ ]
+, preUnpack ? ""
 , postFixup ? ""
 , ...
 }@args:
@@ -41,7 +44,18 @@ let
       makeWrapper
       deps
       flutter
+      jq
     ] ++ nativeBuildInputs;
+
+    preUnpack = ''
+      if ! { [ '${lib.boolToString (depsListFile != null)}' = 'true' ] ${lib.optionalString (depsListFile != null) "&& cmp -s <(jq -Sc . '${depsListFile}') <(jq -Sc . '${finalAttrs.passthru.depsListFile}')"}; }; then
+        echo 1>&2 -e '\nThe dependency list file was either not given or differs from the expected result.' \
+                     '\nPlease copy the contents of ${finalAttrs.passthru.depsListFile} to a new file to pass to the depsListFile argument.'
+        exit 1
+      fi
+
+      ${preUnpack}
+    '';
 
     configurePhase = ''
       runHook preConfigure
@@ -106,11 +120,14 @@ let
 
       ${postFixup}
     '';
+
+    passthru = {
+      inherit (deps) depsListFile;
+    };
   });
 
   packageOverrideRepository = (callPackage ../../development/compilers/flutter/package-overrides { }) // customPackageOverrides;
-  packages = callPackage ../dart/list-dart-deps { dart = flutter; } deps;
-  productPackages = builtins.filter (package: package.kind != "dev") packages;
+  productPackages = builtins.filter (package: package.kind != "dev") (if depsListFile == null then [ ] else (builtins.fromJSON (builtins.readFile depsListFile)));
 in
 builtins.foldl'
   (prev: package:

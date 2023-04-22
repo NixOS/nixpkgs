@@ -8,6 +8,7 @@ flutter2.buildFlutterApplication {
   version = "unstable";
 
   pubspecLockFile = ./pubspec.lock;
+  depsListFile = ./deps.json;
   vendorHash = "sha256-kKfe+7obb2fihrca+mjCM2+51wNkbPLEPFLpXzK5Wvc=";
 
   src = fetchFromGitHub {
