@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "mdit-py-plugins";
-  version = "0.3.4";
+  version = "0.3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BvxqMSl8YXD84O6qjDI0VZgZpqL0UL0vYDMKxCc9qtI=";
+    hash = "sha256-U6Qh/1GklW9ZXBXmjPLuxga0JS/Cyga1iorcMEA+WP8=";
   };
 
   nativeBuildInputs = [
