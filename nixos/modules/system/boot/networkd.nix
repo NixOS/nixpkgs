@@ -2944,9 +2944,9 @@ let
     value.source = "${cfg.units.${name}.unit}/${name}";
   }) (attrNames cfg.units));
 
-  commonOptions = {
+  commonOptions = visible: {
 
-    systemd.network.enable = mkOption {
+    enable = mkOption {
       default = false;
       type = types.bool;
       description = lib.mdDoc ''
@@ -2954,31 +2954,35 @@ let
       '';
     };
 
-    systemd.network.links = mkOption {
+    links = mkOption {
       default = {};
+      inherit visible;
       type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
       description = lib.mdDoc "Definition of systemd network links.";
     };
 
-    systemd.network.netdevs = mkOption {
+    netdevs = mkOption {
       default = {};
+      inherit visible;
       type = with types; attrsOf (submodule [ { options = netdevOptions; } ]);
       description = lib.mdDoc "Definition of systemd network devices.";
     };
 
-    systemd.network.networks = mkOption {
+    networks = mkOption {
       default = {};
+      inherit visible;
       type = with types; attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
       description = lib.mdDoc "Definition of systemd networks.";
     };
 
-    systemd.network.config = mkOption {
+    config = mkOption {
       default = {};
+      inherit visible;
       type = with types; submodule [ { options = networkdOptions; } networkdConfig ];
       description = lib.mdDoc "Definition of global systemd network config.";
     };
 
-    systemd.network.units = mkOption {
+    units = mkOption {
       description = lib.mdDoc "Definition of networkd units.";
       default = {};
       internal = true;
@@ -2991,7 +2995,7 @@ let
         }));
     };
 
-    systemd.network.wait-online = {
+    wait-online = {
       enable = mkOption {
         type = types.bool;
         default = true;
@@ -3225,8 +3229,9 @@ let
 in
 
 {
-  options = commonOptions // {
-    boot.initrd = commonOptions;
+  options = {
+    systemd.network = commonOptions true;
+    boot.initrd.systemd.network = commonOptions "shallow";
   };
 
   config = mkMerge [

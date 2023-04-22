@@ -2220,6 +2220,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  g810-led = callPackage ../misc/g810-led { };
+
   gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
 
   gensgs = pkgsi686Linux.callPackage ../applications/emulators/gens-gs { };
@@ -5281,6 +5283,8 @@ with pkgs;
   maple-mono = (callPackage ../data/fonts/maple-font { }).Mono;
   maple-mono-NF = (callPackage ../data/fonts/maple-font { }).NF;
   maple-mono-SC-NF = (callPackage ../data/fonts/maple-font { }).SC-NF;
+  maple-mono-otf = (callPackage ../data/fonts/maple-font { }).opentype;
+  maple-mono-woff2 = (callPackage ../data/fonts/maple-font { }).woff2;
 
   marl = callPackage ../development/libraries/marl { };
 
@@ -12897,6 +12901,8 @@ with pkgs;
 
   toml2nix = callPackage ../development/tools/toml2nix { };
 
+  topfew-rs = callPackage ../tools/text/topfew-rs { };
+
   topgrade = callPackage ../tools/misc/topgrade {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
   };
@@ -17325,6 +17331,8 @@ with pkgs;
   fortran-language-server = python3.pkgs.callPackage ../development/tools/language-servers/fortran-language-server { };
 
   gopls = callPackage ../development/tools/language-servers/gopls { };
+
+  helm-ls = callPackage ../development/tools/language-servers/helm-ls { };
 
   jdt-language-server = callPackage ../development/tools/language-servers/jdt-language-server { };
 

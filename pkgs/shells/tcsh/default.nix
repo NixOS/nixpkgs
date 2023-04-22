@@ -6,13 +6,13 @@
 , buildPackages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcsh";
-  version = "6.24.07";
+  version = "6.24.10";
 
   src = fetchurl {
-    url = "mirror://tcsh/${pname}-${version}.tar.gz";
-    hash = "sha256-dOTpgFy9lBPtNLT/odcvyNDvgaW3lHaFQJFBbOkzaZU=";
+    url = "mirror://tcsh/tcsh-${finalAttrs.version}.tar.gz";
+    hash = "sha256-E0dcD763QTnTPteTvwD/u7KsLcn7HURGekEHYKujZmQ=";
   };
 
   strictDeps = true;
@@ -26,7 +26,9 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = with lib; {
+  passthru.shellPath = "/bin/tcsh";
+
+  meta = {
     homepage = "https://www.tcsh.org/";
     description = "An enhanced version of the Berkeley UNIX C shell (csh)";
     longDescription = ''
@@ -41,10 +43,8 @@ stdenv.mkDerivation rec {
       - history mechanism
       - job control
     '';
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-
-  passthru.shellPath = "/bin/tcsh";
-}
+})

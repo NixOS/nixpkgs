@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  configureFlags = [
+    "--with-libgcrypt-prefix=${lib.getDev libgcrypt}"
+  ];
+
   nativeBuildInputs = [ pkg-config asciidoc ];
   buildInputs = [ poppler libgcrypt pcre ];
 

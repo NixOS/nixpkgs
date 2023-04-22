@@ -2,6 +2,7 @@
 , buildPythonPackage
 , cssselect
 , fetchPypi
+, jmespath
 , lxml
 , packaging
 , psutil
@@ -12,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "parsel";
-  version = "1.7.0";
+  version = "1.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AlQTPLAwTeE/zEhXu4IU/3DWmIcnYfpr6DdOG7vVgZI=";
+    hash = "sha256-r/KOaMmz8akB2ypOPxWNhICjhyTXMo7nUcGk4cGAHjk=";
   };
 
   postPatch = ''
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cssselect
+    jmespath
     lxml
     packaging
     w3lib
