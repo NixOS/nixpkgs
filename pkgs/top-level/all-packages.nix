@@ -6454,6 +6454,8 @@ with pkgs;
 
   codebraid = callPackage ../tools/misc/codebraid { };
 
+  codemov = callPackage ../tools/misc/codemov { };
+
   codevis = callPackage ../tools/misc/codevis { };
 
   compass = callPackage ../development/tools/compass { };
@@ -29998,7 +30000,7 @@ with pkgs;
   flwrap = callPackage ../applications/radio/flwrap { stdenv = gcc10StdenvCompat; };
 
   fluidsynth = callPackage ../applications/audio/fluidsynth {
-    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreMIDI CoreServices;
+    inherit (darwin.apple_sdk.frameworks) AppKit AudioUnit CoreAudio CoreMIDI CoreServices;
   };
 
   fmit = libsForQt5.callPackage ../applications/audio/fmit { };

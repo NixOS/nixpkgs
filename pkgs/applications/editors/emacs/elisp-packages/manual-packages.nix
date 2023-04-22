@@ -13,8 +13,6 @@ in
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
-  bqn-mode = callPackage ./manual-packages/bqn-mode { };
-
   cask = callPackage ./manual-packages/cask { };
 
   control-lock = callPackage ./manual-packages/control-lock { };
@@ -48,6 +46,8 @@ in
   isearch-prop = callPackage ./manual-packages/isearch-prop { };
 
   jam-mode = callPackage ./manual-packages/jam-mode { };
+
+  ligo-mode = callPackage ./manual-packages/ligo-mode { };
 
   llvm-mode = callPackage ./manual-packages/llvm-mode { };
 
