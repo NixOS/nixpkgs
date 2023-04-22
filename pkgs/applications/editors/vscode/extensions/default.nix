@@ -690,7 +690,7 @@ let
           maintainers = with lib.maintainers; [ onedragon ];
         };
       };
-      
+
       colejcummins.llvm-syntax-highlighting = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "llvm-syntax-highlighting";
@@ -1156,6 +1156,22 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=evzen-wybitul.magic-racket";
           homepage = "https://github.com/Eugleo/magic-racket";
           license = lib.licenses.agpl3Only;
+        };
+      };
+
+      ExiaHuang.dictionary = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "ExiaHuang";
+          name = "dictionary";
+          version = "0.0.2";
+          sha256 = "sha256-caNcbDTB/F2mdlGpfIfJv13lzY5Wwj7p7r8dAte9+3A=";
+        };
+        meta = {
+          description   = "汉英英汉词典, 金山词霸, 有道翻译 for vscode";
+          repositories  = "https://github.com/exiahuang/fanyi-vscode.git";
+          homepage      = "https://github.com/exiahuang/fanyi-vscode";
+          changelog     = "https://marketplace.visualstudio.com/items/ExiaHuang.dictionary/changelog";
+          license = lib.licenses.gpl3Only;
         };
       };
 
