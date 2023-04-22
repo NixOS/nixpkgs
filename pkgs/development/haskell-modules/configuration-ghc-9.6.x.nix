@@ -61,6 +61,8 @@ self: super: {
   inspection-testing = doDistribute self.inspection-testing_0_5_0_1; # allows base >= 4.18
   OneTuple = doDistribute (dontCheck super.OneTuple_0_4_1_1); # allows base >= 4.18
   primitive = doDistribute (dontCheck self.primitive_0_7_4_0); # allows base >= 4.18
+  http-api-data = doDistribute self.http-api-data_0_5_1; # allows base >= 4.18
+  attoparsec-iso8601 = doDistribute self.attoparsec-iso8601_1_1_0_0; # for http-api-data-0.5.1
   tagged = doDistribute self.tagged_0_8_7; # allows template-haskell-2.20
   some = doDistribute self.some_1_0_5;
   tasty-inspection-testing = doDistribute self.tasty-inspection-testing_0_2;
