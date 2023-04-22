@@ -47,6 +47,8 @@ in
 
   jam-mode = callPackage ./manual-packages/jam-mode { };
 
+  ligo-mode = callPackage ./manual-packages/ligo-mode { };
+
   llvm-mode = callPackage ./manual-packages/llvm-mode { };
 
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
