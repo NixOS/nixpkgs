@@ -4,7 +4,6 @@
 , meson
 , ninja
 , pkg-config
-, vala
 , gtk4
 , libgee
 , libadwaita
