@@ -703,7 +703,8 @@ supported-platforms:
   linux-mount:                                  [ platforms.linux ]
   linux-namespaces:                             [ platforms.linux ]
   lxc:                                          [ platforms.linux ]
-  midi-alsa:                                    [ platforms.linux ]
+  midi-alsa:                                    [ platforms.linux ] # alsa-core only supported on linux
+  midisurface:                                  [ platforms.linux ] # alsa-core only supported on linux
   OrderedBits:                                  [ platforms.x86 ] # lacks implementations for non-x86: https://github.com/choener/OrderedBits/blob/401cbbe933b1635aa33e8e9b29a4a570b0a8f044/lib/Data/Bits/Ordered.hs#L316
   password:                                     [ platforms.x86 ] # uses scrypt, which requries x86
   password-instances:                           [ platforms.x86 ] # uses scrypt, which requries x86
@@ -712,6 +713,7 @@ supported-platforms:
   scat:                                         [ platforms.x86 ] # uses scrypt, which requries x86
   scrypt:                                       [ platforms.x86 ] # https://github.com/informatikr/scrypt/issues/8
   seqalign:                                     [ platforms.x86 ] # x86 intrinsics
+  streamed:                                     [ platforms.linux] # alsa-core only supported on linux
   swisstable:                                   [ platforms.x86_64 ] # Needs AVX2
   tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
   udev:                                         [ platforms.linux ]
