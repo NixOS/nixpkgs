@@ -125,7 +125,7 @@ let
         ligo-mode =
           if super.ligo-mode.version == "0.3"
           then markBroken super.ligo-mode
-          else markBroken super.ligo-mode; # auto-updater is failing somehow
+          else null; # auto-updater is failing; use manual one
 
         # upstream issue: missing file header
         link = markBroken super.link;
