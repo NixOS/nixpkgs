@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "atari++";
-  version = "1.83";
+  version = "1.85";
 
   src = fetchurl {
     url = "http://www.xl-project.com/download/${pname}_${version}.tar.gz";
-    sha256 = "04fm2ic2qi4a52mi72wcaxyrpll4k8vvchx3qrik8rhg3jrxgm47";
+    sha256 = "sha256-LbGTVUs1XXR+QfDhCxX9UMkQ3bnk4z0ckl94Cwwe9IQ=";
   };
 
   buildInputs = [ libSM libX11 SDL libICE alsa-lib gcc-unwrapped libXext ];
