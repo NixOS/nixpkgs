@@ -2,9 +2,9 @@
 
 {
 
-  tlpdb-nix = runCommand "texlive-test-tlpdb-nix" {
+  tlpdbNix = runCommand "texlive-test-tlpdb-nix" {
     nixpkgsTlpdbNix = ../../tools/typesetting/tex/texlive/tlpdb.nix;
-    tlpdbNix = texlive.tlpdb-nix;
+    tlpdbNix = texlive.tlpdb.nix;
   }
   ''
     mkdir -p "$out"

@@ -2,6 +2,17 @@
 1i{ # no indentation
 $a}
 
+# extract repository metadata
+/^name 00texlive\.config$/,/^$/{
+  s/^name (.*)$/"\1" = {/p
+  /^$/,1i};
+
+  s!^depend frozen/0$!  frozen = false;!p
+  s!^depend frozen/1$!  frozen = true;!p
+  s!^depend release/(.*)$!  year = \1;!p
+  s!^depend revision/(.*)$!  revision = \1;!p
+}
+
 # form an attrmap per package
 # ignore packages whose name contains "." (such as binaries)
 /^name ([^.]+)$/,/^$/{
