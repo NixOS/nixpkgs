@@ -1406,6 +1406,8 @@ self: super: with self; {
 
   bme680 = callPackage ../development/python-modules/bme680 { };
 
+  bnnumerizer = callPackage ../development/python-modules/bnnumerizer { };
+
   bnunicodenormalizer = callPackage ../development/python-modules/bnunicodenormalizer { };
 
   boa-api = callPackage ../development/python-modules/boa-api { };
