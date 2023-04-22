@@ -16,5 +16,5 @@ buildLinux (args // rec {
     sha256 = "149h95r5msvqah868zd36y92ls9h41cr1rb5vzinl20mxdn46wnb";
   };
   # TODO: possible to remove after any rebuild, e.g. after update.
-  extraConfig = lib.optionalString (buildPackages.system == "x86_64-linux") "\n";
+  extraConfig = lib.optionalString (buildPackages.stdenv.system == "x86_64-linux") "\n";
 } // (args.argsOverride or { }))
