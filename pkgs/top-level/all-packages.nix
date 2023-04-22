@@ -40060,4 +40060,6 @@ with pkgs;
   zf = callPackage ../tools/misc/zf { };
 
   isolate = callPackage ../tools/security/isolate { };
+  
+  yarsi = callPackage ../tools/misc/yarsi { };
 }
