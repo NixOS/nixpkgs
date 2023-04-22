@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
   # CMake is just used for finding doctest.
   dontUseCmakeConfigure = true;
 
+  mesonFlags = [
+    (lib.mesonEnable "tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+  ];
+
   doCheck = true;
 
   meta = with lib; {
