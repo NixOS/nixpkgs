@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , callPackage
 , runCommandLocal
 , writeShellScript
@@ -113,6 +114,7 @@ let
     exec ${run} "$@"
   '';
 
+  indentLines = str: lib.concatLines (map (s: "  " + s) (filter (s: s != "") (lib.splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
     ignored=(/nix /dev /proc /etc)
     ro_mounts=()
@@ -202,11 +204,13 @@ let
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
       --remount-ro ${glibc}/etc \
+  '' + lib.optionalString (stdenv.isx86_64 && stdenv.isLinux) (indentLines ''
       --tmpfs ${pkgsi686Linux.glibc}/etc \
       --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \
       --ro-bind ${pkgsi686Linux.glibc}/etc/rpc ${pkgsi686Linux.glibc}/etc/rpc \
       --remount-ro ${pkgsi686Linux.glibc}/etc \
+  '') + ''
       "''${ro_mounts[@]}"
       "''${symlinks[@]}"
       "''${auto_mounts[@]}"
