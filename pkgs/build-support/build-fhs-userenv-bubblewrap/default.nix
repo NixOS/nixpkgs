@@ -1,4 +1,4 @@
-{ lib, callPackage, runCommandLocal, writeShellScriptBin, glibc, pkgsi686Linux, coreutils, bubblewrap }:
+{ lib, stdenv, callPackage, runCommandLocal, writeShellScriptBin, glibc, pkgsi686Linux, coreutils, bubblewrap }:
 
 let buildFHSEnv = callPackage ./env.nix { }; in
 
@@ -100,6 +100,7 @@ let
     exec ${run} "$@"
   '';
 
+  indentLines = str: lib.concatMapStrings (s: s + "\n") (map (s: "  " + s) (filter (s: s != "") (lib.splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
     blacklist=(/nix /dev /proc /etc)
     ro_mounts=()
@@ -164,11 +165,13 @@ let
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
       --remount-ro ${glibc}/etc \
+  '' + lib.optionalString (stdenv.isx86_64 && stdenv.isLinux) (indentLines ''
       --tmpfs ${pkgsi686Linux.glibc}/etc \
       --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \
       --ro-bind ${pkgsi686Linux.glibc}/etc/rpc ${pkgsi686Linux.glibc}/etc/rpc \
       --remount-ro ${pkgsi686Linux.glibc}/etc \
+  '') + ''
       ${etcBindFlags}
       "''${ro_mounts[@]}"
       "''${symlinks[@]}"
