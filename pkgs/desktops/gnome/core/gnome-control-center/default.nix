@@ -49,6 +49,7 @@
 , polkit
 , python3
 , samba
+, shadow
 , shared-mime-info
 , sound-theme-freedesktop
 , tracker
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
-      inherit glibc libgnomekbd tzdata;
+      inherit glibc libgnomekbd tzdata shadow;
       inherit cups networkmanagerapplet;
     })
   ];
