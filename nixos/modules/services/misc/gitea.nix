@@ -553,7 +553,7 @@ in
             ${replaceSecretBin} '#internaltoken#' '${internalToken}' '${runConfig}'
 
             ${lib.optionalString cfg.lfs.enable ''
-              ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'"
+              ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
             ''}
 
             ${lib.optionalString (cfg.mailerPasswordFile != null) ''
