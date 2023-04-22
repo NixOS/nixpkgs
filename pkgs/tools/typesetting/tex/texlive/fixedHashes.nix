@@ -797,8 +797,8 @@
 "texdiff.doc-0.4"="0f7q7cszy6ca6fmwzi7fn6p72szgzyj9fldvzz1rk3ywkhsnpakr";
 "texdirflatten-1.3"="0q2m138gpk9cvfp19jvsw746mkxa613c2204qfxw1bxw8b454d7m";
 "texdirflatten.doc-1.3"="19iiznql82a34d2yhzqcp339zszbhfz9fh0h4mb11696mj8rx3v7";
-"texdoc-4.0.1"="1ph4mzrlri8daxg7j4n15s3b9dj58ni4fdqhpvqxwy6736fiw130";
-"texdoc.doc-4.0.1"="1dpz5ni9xdbwfy4m12j3v407ywbddmy3j2dhzwrdsyj7wq3impmg";
+"texdoc-4.0.1-tlpdb-66590"="1ph4mzrlri8daxg7j4n15s3b9dj58ni4fdqhpvqxwy6736fiw130";
+"texdoc.doc-4.0.1-tlpdb-66590"="1dpz5ni9xdbwfy4m12j3v407ywbddmy3j2dhzwrdsyj7wq3impmg";
 "texdoctk-0.6.0"="13j0c5m12if8jx8sp7hlirz33y6l2jk8lvnms7dalz52mxz8kq4h";
 "texdoctk.doc-0.6.0"="1k41z2lbfjsar5rl47xnk1adbcnnb4w97bzbgf2rnjhimd1gn9hq";
 "texfot-1.48"="19aswiyr722n9misvg9ajdsgpn1ghmic2xfmr4w0w00sai5sh5rx";

@@ -60,6 +60,8 @@ let
       };
 
       texdoc = orig.texdoc // {
+        version = orig.texdoc.version + "-tlpdb-" + (toString tlpdbVersion.revision);
+
         # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
         postUnpack = ''
           if [[ -f "$out"/scripts/texdoc/texdoc.tlu ]]; then
