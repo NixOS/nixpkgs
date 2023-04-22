@@ -14,6 +14,7 @@
 , appstream-glib
 , desktop-file-utils
 , glib
+, libpanel
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "chergert";
     repo = "schemes";
     rev = version;
-    sha256 = "sha256-1mCTw+nJ1w7RdCXfPCO31t1aYOq9Bki3EaXsHiiveD0=";
+    sha256 = "sha256-XUC24KzZSU4+F2JZMsydukvAwEGdMxCnkPG6QHnCw6w=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,8 @@ stdenv.mkDerivation rec {
     glib
     gtk4
     libadwaita
+    gtksourceview5
+    libpanel
   ];
 
   meta = with lib; {
