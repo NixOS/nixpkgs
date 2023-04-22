@@ -6,7 +6,7 @@
 , pkg-config
 , swig
 , python
-, log4cpp
+, logLib
 , mpir
 , thrift
 , boost
@@ -36,7 +36,7 @@ in mkDerivation {
   disabledForGRafter = "3.9";
 
   buildInputs = [
-    log4cpp
+    logLib
     mpir
     boost
     gmp

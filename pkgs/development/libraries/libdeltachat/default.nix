@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.112.7";
+  version = "1.113.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = "v${version}";
-    hash = "sha256-zBstNj8IZ8ScwZxzvTxDPwe8R0n2z/EuvjbR+bJepJk=";
+    hash = "sha256-Ft7BMgHGeTEM3WQVhAEjtyYYCfVFa2+ZkbdmDF22X9A=";
   };
 
   patches = [
