@@ -1,6 +1,7 @@
 { lib, pkgs }:
 
 lib.makeScope pkgs.newScope (self: with self; {
+  budgie-analogue-clock-applet = callPackage ./budgie-analogue-clock-applet { };
   budgie-backgrounds = callPackage ./budgie-backgrounds { };
   budgie-control-center = callPackage ./budgie-control-center { };
   budgie-desktop = callPackage ./budgie-desktop { };
