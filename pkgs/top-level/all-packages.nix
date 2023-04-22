@@ -2220,6 +2220,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  g810-led = callPackage ../misc/g810-led { };
+
   gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
 
   gensgs = pkgsi686Linux.callPackage ../applications/emulators/gens-gs { };
