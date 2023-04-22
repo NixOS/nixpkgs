@@ -169,6 +169,13 @@ in
         off if you want to configure it manually.
       '';
     };
+
+    excalidraw.enable = mkEnableOption (lib.mdDoc "Excalidraw collaboration backend for Jitsi");
+    excalidraw.port = mkOption {
+      type = types.port;
+      default = 3002;
+      description = lib.mdDoc ''The port which the Excalidraw backend for Jitsi should listen to.'';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -246,6 +253,7 @@ in
         "muc_rate_limit"
         "limits_exception"
         "persistent_lobby"
+        "room_metadata"
       ];
       extraPluginPaths = [ "${pkgs.jitsi-meet-prosody}/share/prosody-plugins" ];
       extraConfig = lib.mkMerge [
@@ -393,6 +401,20 @@ in
       '';
     };
 
+    systemd.services.jitsi-excalidraw = mkIf cfg.excalidraw.enable {
+      description = "Excalidraw collaboration backend for Jitsi";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      environment.PORT = toString cfg.excalidraw.port;
+
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.jitsi-excalidraw}/bin/jitsi-excalidraw-backend";
+        Restart = "on-failure";
+        Group = "jitsi-meet";
+      };
+    };
+
     services.nginx = mkIf cfg.nginx.enable {
       enable = mkDefault true;
       virtualHosts.${cfg.hostName} = {
@@ -434,6 +456,10 @@ in
         locations."=/interface_config.js" = mkDefault {
           alias = overrideJs "${pkgs.jitsi-meet}/interface_config.js" "interfaceConfig" cfg.interfaceConfig "";
         };
+        locations."/socket.io/" = mkIf cfg.excalidraw.enable {
+          proxyPass = "http://127.0.0.1:${toString cfg.excalidraw.port}";
+          proxyWebsockets = true;
+        };
       };
     };
 
@@ -470,6 +496,13 @@ in
             file_server
           }
         '';
+      };
+    };
+
+    services.jitsi-meet.config = mkIf cfg.excalidraw.enable {
+      whiteboard = {
+        enabled = true;
+        collabServerBaseUrl = "https://${cfg.hostName}";
       };
     };
 
