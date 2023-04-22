@@ -8515,7 +8515,7 @@
 "texdate.source-2.0"="0mbcap5nfj5ap8gxn4pyv8w37hcfnq4bm5m6jx43cwkzf2hiwar5";
 "texdimens-1.1"="0fny36zd88qkcz7k3hdxq2qr41dmk9j88skihls4vwf350fy8j98";
 "texdimens.doc-1.1"="1qls1hqs6ypmsg4rqa26dp98m6h7zq18wdg9n6g6895jrmj10qdz";
-"texinfo-6.8"="0zlmch50haqbf0c68pdicdyzc5bq0z374vglaxng9d10151k0kpd";
+"texinfo-6.8"="sha256-V+fSY9kzd40ZyeFpShVh4CtDm9haiUOUEk7k7QAuCP0=";
 "timetable-15878"="1lnl8gi2rrzcy688qb8b1ff9yivwxdqmbcfx2ph49aymkxfym97b";
 "tracklang-1.4"="0dlfwsysadr78dkdrm96ibv3gjizwkqbm8m7pjipmp637vjb70ry";
 "tracklang.doc-1.4"="1dygdc8rj4kmh1gwpkpmqkih35yzx262n9f5n06k0ydf5rr96fqm";
