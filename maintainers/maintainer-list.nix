@@ -4701,6 +4701,11 @@
     github = "ErinvanderVeen";
     githubId = 10973664;
   };
+  ernestre = {
+    github = "ernestre";
+    githubId = 6313452;
+    name = "Ernest Rekel";
+  };
   erosennin = {
     email = "ag@sologoc.com";
     github = "erosennin";
