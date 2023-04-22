@@ -3244,6 +3244,8 @@ self: super: with self; {
 
   dragonfly = callPackage ../development/python-modules/dragonfly { };
 
+  dramatiq = callPackage ../development/python-modules/dramatiq { };
+
   drawille = callPackage ../development/python-modules/drawille { };
 
   drawilleplot = callPackage ../development/python-modules/drawilleplot { };
