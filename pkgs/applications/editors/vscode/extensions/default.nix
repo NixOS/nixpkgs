@@ -665,6 +665,32 @@ let
         };
       };
 
+      w88975.code-translate = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "code-translate";
+          publisher = "w88975";
+          version = "1.0.20";
+          sha256 = "sha256-blqLK7S+RmEoyr9zktS5/SNC0GeSXnNpbhltyajoAfw=";
+        };
+        meta = {
+          description  = "A pure vscode translation plug-in";
+          longDescription = ''
+            Code Translate 是一款纯粹的滑词翻译软件
+
+            无侵入式的显示翻译结果: 与VS Code代码分析完美结合
+            强大的单词拆分能力: 支持驼峰, 下划线形式等各种单词拆分
+            丰富的本地词库: 包含 340 万+离线单词, 支持各种生僻单词
+            基于丰富的本地词库: Code Translate 拥有超快的查询速度, 每个单词在基本在 10ms 内可查询完毕
+            多端支持: VS Code 桌面版 和 VS Code Online 版本, 插件均可支持
+          '';
+          repositories = "https://github.com/w88975/code-translate-vscode";
+          changelog = "https://marketplace.visualstudio.com/items/w88975.code-translate/changelog";
+          homepage = "https://marketplace.visualstudio.com/items?itemName=w88975.code-translate";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ onedragon ];
+        };
+      };
+      
       colejcummins.llvm-syntax-highlighting = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "llvm-syntax-highlighting";
