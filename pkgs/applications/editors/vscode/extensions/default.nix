@@ -1302,6 +1302,21 @@ let
         };
       };
 
+      funkyremi.vscode-google-translate = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "funkyremi";
+          name = "vscode-google-translate";
+          version = "1.4.13";
+          sha256 = "sha256-9Vo6lwqD1eE3zY0Gi9ME/6lPwmwuJ3Iq9StHPvncnM4=";
+        };
+        meta = {
+          description   = "Translate text right in your code";
+          downloadPage  = "https://marketplace.visualstudio.com/items?itemName=funkyremi.vscode-google-translate";
+          homepage      = "https://github.com/funkyremi/vscode-google-translate.git";
+          license       = lib.licenses.mit;
+        };
+      };
+
       gencer.html-slim-scss-css-class-completion = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "html-slim-scss-css-class-completion";
