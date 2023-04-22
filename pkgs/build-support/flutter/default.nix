@@ -14,6 +14,7 @@
 , flutterBuildFlags ? [ ]
 , runtimeDependencies ? [ ]
 , customPackageOverrides ? { }
+, autoDepsList ? false
 , depsListFile ? null
 , vendorHash
 , pubspecLockFile ? null
@@ -48,11 +49,16 @@ let
     ] ++ nativeBuildInputs;
 
     preUnpack = ''
-      if ! { [ '${lib.boolToString (depsListFile != null)}' = 'true' ] ${lib.optionalString (depsListFile != null) "&& cmp -s <(jq -Sc . '${depsListFile}') <(jq -Sc . '${finalAttrs.passthru.depsListFile}')"}; }; then
-        echo 1>&2 -e '\nThe dependency list file was either not given or differs from the expected result.' \
-                     '\nPlease copy the contents of ${finalAttrs.passthru.depsListFile} to a new file to pass to the depsListFile argument.'
-        exit 1
-      fi
+      ${lib.optionalString (!autoDepsList) ''
+        if ! { [ '${lib.boolToString (depsListFile != null)}' = 'true' ] ${lib.optionalString (depsListFile != null) "&& cmp -s <(jq -Sc . '${depsListFile}') <(jq -Sc . '${finalAttrs.passthru.depsListFile}')"}; }; then
+          echo 1>&2 -e '\nThe dependency list file was either not given or differs from the expected result.' \
+                      '\nPlease choose one of the following solutions:' \
+                      '\n - Duplicate the following file and pass it to the depsListFile argument.' \
+                      '\n   ${finalAttrs.passthru.depsListFile}' \
+                      '\n - Set autoDepsList to true (not supported by Hydra or permitted in Nixpkgs)'.
+          exit 1
+        fi
+      ''}
 
       ${preUnpack}
     '';
@@ -127,7 +133,13 @@ let
   });
 
   packageOverrideRepository = (callPackage ../../development/compilers/flutter/package-overrides { }) // customPackageOverrides;
-  productPackages = builtins.filter (package: package.kind != "dev") (if depsListFile == null then [ ] else (builtins.fromJSON (builtins.readFile depsListFile)));
+  productPackages = builtins.filter (package: package.kind != "dev")
+    (if autoDepsList
+    then builtins.fromJSON (builtins.readFile deps.depsListFile)
+    else
+      if depsListFile == null
+      then [ ]
+      else builtins.fromJSON (builtins.readFile depsListFile));
 in
 builtins.foldl'
   (prev: package:
