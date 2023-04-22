@@ -93,6 +93,9 @@ self: super: {
   # Forbids base >= 4.18
   lukko = doJailbreak super.lukko;
 
+  # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
+  newtype-generics = assert !(self ? newtype-generics_0_6_2); doJailbreak super.newtype-generics;
+
   #
   # Too strict bounds, waiting on Hackage release in nixpkgs
   #
