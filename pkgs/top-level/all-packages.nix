@@ -29926,6 +29926,8 @@ with pkgs;
 
   expenses = callPackage ../applications/misc/expenses { };
 
+  flowtime = callPackage ../applications/misc/flowtime { };
+
   fnott = callPackage ../applications/misc/fnott { };
 
   furnace = callPackage ../applications/audio/furnace {
