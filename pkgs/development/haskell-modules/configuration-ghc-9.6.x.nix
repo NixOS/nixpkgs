@@ -103,6 +103,9 @@ self: super: {
 
   # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
   newtype-generics = assert !(self ? newtype-generics_0_6_2); doJailbreak super.newtype-generics;
+  # Forbids base >= 4.18, fix proposed: https://github.com/well-typed/cborg/pull/312
+  cborg = assert !(self ? cborg_0_2_8_0); doJailbreak super.cborg;
+  cborg-json = assert !(self ? cborg_0_2_5_0); doJailbreak super.cborg-json;
 
   #
   # Too strict bounds, waiting on Hackage release in nixpkgs
