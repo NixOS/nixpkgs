@@ -7,7 +7,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-HcHvZtMpBtNXq9Yp2ayeHTuIf7gpBUb6xZqjaECbfgo=";
+    hash = "sha256-HcHvZtMpBtNXq9Yp2ayeHTuIf7gpBUb6xZqjaECbfgo=";
   };
 
   # Do not run the test suite: it takes a long time and uses

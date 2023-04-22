@@ -411,11 +411,14 @@ in
       componentPasswordFile = "/var/lib/jitsi-meet/jicofo-component-secret";
       bridgeMuc = "jvbbrewery@internal.${cfg.hostName}";
       config = mkMerge [{
-        "org.jitsi.jicofo.ALWAYS_TRUST_MODE_ENABLED" = "true";
+        jicofo.xmpp.service.disable-certificate-verification = true;
+        jicofo.xmpp.client.disable-certificate-verification = true;
       #} (lib.mkIf cfg.jibri.enable {
        } (lib.mkIf (config.services.jibri.enable || cfg.jibri.enable) {
-        "org.jitsi.jicofo.jibri.BREWERY" = "JibriBrewery@internal.${cfg.hostName}";
-        "org.jitsi.jicofo.jibri.PENDING_TIMEOUT" = "90";
+         jicofo.jibri = {
+           brewery-jid = "JibriBrewery@internal.${cfg.hostName}";
+           pending-timeout = "90";
+         };
       })];
     };
 

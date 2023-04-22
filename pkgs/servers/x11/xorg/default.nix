@@ -178,11 +178,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontalias = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     pname = "font-alias";
-    version = "1.0.4";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-alias-1.0.4.tar.bz2";
-      sha256 = "0xjjjindczv3g7m1597l0x19zz75xy70wh5garghz61fpzl1l4gk";
+      url = "mirror://xorg/individual/font/font-alias-1.0.5.tar.xz";
+      sha256 = "0vkb5mybc0fjfq29lgf5w1b536bwifzkyj8ad9iy7q3kpcby52cz";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -896,7 +896,7 @@ self: with self; {
     builder = ./builder.sh;
     src = fetchurl {
       url = "mirror://xorg/individual/lib/libX11-1.8.4.tar.xz";
-      sha256 = "sha256-yaKHpa76mATOPPr89Rb+lu0/fo5FwOLuWehMhnV99Rg=";
+      sha256 = "067mgmsqck78b7pf5h25irz3zvcnzqbgbz7s7k70967smsjqg8n9";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1308,11 +1308,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXvMC = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXv }: stdenv.mkDerivation {
     pname = "libXvMC";
-    version = "1.0.12";
+    version = "1.0.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXvMC-1.0.12.tar.bz2";
-      sha256 = "1kbdjsvkm5l7axv7g477qj18sab2wnqhliy6197syzizgfbsfgbb";
+      url = "mirror://xorg/individual/lib/libXvMC-1.0.13.tar.xz";
+      sha256 = "0z35xqna3dnrfxgn9aa1y6jx7mrwsn8vi8dcwm3sg23qx9nvx7ha";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1356,11 +1356,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXxf86vm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
     pname = "libXxf86vm";
-    version = "1.1.4";
+    version = "1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXxf86vm-1.1.4.tar.bz2";
-      sha256 = "0mydhlyn72i7brjwypsqrpkls3nm6vxw0li8b2nw0caz7kwjgvmg";
+      url = "mirror://xorg/individual/lib/libXxf86vm-1.1.5.tar.xz";
+      sha256 = "1rw8z01vgfc4wvf0q75sgnj6n04dkrw1w7z455qydrz0nd4fyzr4";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1402,7 +1402,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libpciaccess = callPackage ({ stdenv, pkg-config, fetchurl, zlib }: stdenv.mkDerivation {
+  libpciaccess = callPackage ({ stdenv, pkg-config, fetchurl, hwdata, zlib }: stdenv.mkDerivation {
     pname = "libpciaccess";
     version = "0.16";
     builder = ./builder.sh;
@@ -1413,7 +1413,8 @@ self: with self; {
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ zlib ];
+    buildInputs = [ hwdata zlib ];
+    configureFlags = [ "--with-pciids-path=${hwdata}/share/hwdata" ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -1564,11 +1565,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   mkfontscale = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, freetype, xorgproto, zlib }: stdenv.mkDerivation {
     pname = "mkfontscale";
-    version = "1.2.1";
+    version = "1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/mkfontscale-1.2.1.tar.bz2";
-      sha256 = "1ixsnsm2mn0zy9ksdid0lj6irnhvasfik9mz8bbrs5sajzmra16a";
+      url = "mirror://xorg/individual/app/mkfontscale-1.2.2.tar.xz";
+      sha256 = "1i6mw97r2s1rb6spjj8fbdsgw6197smaqq2haqgnwhz73xdzpqwa";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2572,11 +2573,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoqxl = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-qxl";
-    version = "0.1.5";
+    version = "0.1.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-qxl-0.1.5.tar.bz2";
-      sha256 = "14jc24znnahhmz4kqalafmllsg8awlz0y6gpgdpk5ih38ph851mi";
+      url = "mirror://xorg/individual/driver/xf86-video-qxl-0.1.6.tar.xz";
+      sha256 = "0pwncx60r1xxk8kpp9a46ga5h7k7hjqf14726v0gra27vdc9blra";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2700,11 +2701,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosuncg6 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-suncg6";
-    version = "1.1.2";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-suncg6-1.1.2.tar.bz2";
-      sha256 = "04fgwgk02m4nimlv67rrg1wnyahgymrn6rb2cjj1l8bmzkii4glr";
+      url = "mirror://xorg/individual/driver/xf86-video-suncg6-1.1.3.tar.xz";
+      sha256 = "16c3g5m0f5y9nx2x6w9jdzbs9yr6xhq31j37dcffxbsskmfxq57w";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2716,11 +2717,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosunffb = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-sunffb";
-    version = "1.2.2";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-sunffb-1.2.2.tar.bz2";
-      sha256 = "07z3ngifwg2d4jgq8pms47n5lr2yn0ai72g86xxjnb3k20n5ym7s";
+      url = "mirror://xorg/individual/driver/xf86-video-sunffb-1.2.3.tar.xz";
+      sha256 = "0pf4ddh09ww7sxpzs5gr9pxh3gdwkg3f54067cp802nkw1n8vypi";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2732,11 +2733,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosunleo = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-sunleo";
-    version = "1.2.2";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-sunleo-1.2.2.tar.bz2";
-      sha256 = "1gacm0s6rii4x5sx9py5bhvs50jd4vs3nnbwjdjymyf31kpdirl3";
+      url = "mirror://xorg/individual/driver/xf86-video-sunleo-1.2.3.tar.xz";
+      sha256 = "1px670aiqyzddl1nz3xx1lmri39irajrqw6dskirs2a64jgp3dpc";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2780,11 +2781,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videotrident = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-trident";
-    version = "1.3.8";
+    version = "1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-trident-1.3.8.tar.bz2";
-      sha256 = "0gxcar434kx813fxdpb93126lhmkl3ikabaljhcj5qn3fkcijlcy";
+      url = "mirror://xorg/individual/driver/xf86-video-trident-1.4.0.tar.xz";
+      sha256 = "16qqn1brz50mwcy42zi1wsw9af56qadsaaiwm9hn1p6plyf22xkz";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3052,11 +3053,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbcomp = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile, xorgproto }: stdenv.mkDerivation {
     pname = "xkbcomp";
-    version = "1.4.5";
+    version = "1.4.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xkbcomp-1.4.5.tar.bz2";
-      sha256 = "0pmhshqinwqh5rip670l3szjpywky67hv232ql6gvdj489n0hlb8";
+      url = "mirror://xorg/individual/app/xkbcomp-1.4.6.tar.xz";
+      sha256 = "164fqnpq80vbl7693x82h38kvxcdf668vggpg9439q21xw8xcl7s";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3324,11 +3325,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgserver = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, openssl, libX11, libXau, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile }: stdenv.mkDerivation {
     pname = "xorg-server";
-    version = "21.1.7";
+    version = "21.1.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/xserver/xorg-server-21.1.7.tar.xz";
-      sha256 = "sha256-2cYLLdDsUjJspqsg2w5JCx/09Wb1nKdC1lMuknlYd7s=";
+      url = "mirror://xorg/individual/xserver/xorg-server-21.1.8.tar.xz";
+      sha256 = "0lmimvaw9x0ymdhjfqsrbx689bcapy8c24ajw9705j2harrxpaiq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

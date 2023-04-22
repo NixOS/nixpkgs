@@ -35,6 +35,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ traitlets ];
 
   nativeCheckInputs = [ numpy pandas xarray nose pytestCheckHook ];
+
+  disabledTestPaths = lib.optionals (lib.versionAtLeast numpy.version "1.17") [
+    # https://github.com/jupyter-widgets/traittypes/blob/master/setup.py#L86-L87
+    "traittypes/tests/test_traittypes.py"
+  ];
+
   pythonImportsCheck = [ "traittypes" ];
 
   meta = with lib; {

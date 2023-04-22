@@ -4,11 +4,11 @@
 
 let
 
-  version = "3.1";
+  version = "3.3";
 
   fullMaude = fetchurl {
-    url = "http://maude.cs.illinois.edu/w/images/0/0a/Full-Maude-${version}.zip";
-    sha256 = "8b13af02c6243116c2ef9592622ecaa06d05dbe1dd6b1e595551ff33855948f2";
+    url = "https://maude.cs.illinois.edu/w/images/b/bc/Full-Maude-3.2.1.zip";
+    sha256 = "0751b3c4619283b3f0adf1c3aac113f1d4334a3ca859ed00d66de5f5857563ec";
   };
 
 in
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "http://maude.cs.illinois.edu/w/images/d/d3/Maude-${version}.tar.gz";
-    sha256 = "b112d7843f65217e3b5a9d40461698ef8dab7cbbe830af21216dfb924dc88a2f";
+    url = "https://github.com/SRI-CSL/Maude/archive/refs/tags/Maude${version}.tar.gz";
+    sha256 = "aebf21523ba7999b4594e315d49b92c5feaef7ca5d176e2e62a8ee1b901380c6";
   };
 
   nativeBuildInputs = [ flex bison unzip makeWrapper ];
@@ -34,7 +34,10 @@ stdenv.mkDerivation {
   # https://gitweb.gentoo.org/repo/gentoo.git/commit/dev-lang/maude/maude-3.1-r1.ebuild?id=f021cc6cfa1e35eb9c59955830f1fd89bfcb26b4
   configureFlags = [ "--without-libsigsegv" ];
 
+  # Certain tests (in particular, Misc/fileTest) expect us to build in a subdirectory
+  # We'll use the directory Opt/ as suggested in INSTALL
   preConfigure = ''
+    mkdir Opt; cd Opt
     configureFlagsArray=(
       --datadir="$out/share/maude"
       TECLA_LIBS="-ltecla -lncursesw"
@@ -42,13 +45,14 @@ stdenv.mkDerivation {
       CFLAGS="-O3" CXXFLAGS="-O3"
     )
   '';
+  configureScript = "../configure";
 
   doCheck = true;
 
   postInstall = ''
     for n in "$out/bin/"*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
     unzip ${fullMaude}
-    install -D -m 444 full-maude31.maude $out/share/maude/full-maude.maude
+    install -D -m 444 full-maude.maude $out/share/maude/full-maude.maude
   '';
 
   # bison -dv surface.yy -o surface.c

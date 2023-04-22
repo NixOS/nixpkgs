@@ -9,14 +9,15 @@
 
 buildPythonPackage rec {
   pname = "deep-translator";
-  version = "1.9.3";
+  version = "1.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7VsEN6t9c0FMw0zHWnxnIyilQmQ127rXEfLrAYatKEc=";
+    pname = "deep_translator";
+    inherit version;
+    hash = "sha256-6ZQ42rcOO+vNqTLj9ehv09MrQ/h9Zu2fi2gW2xRvHZ8=";
   };
 
   propagatedBuildInputs = [

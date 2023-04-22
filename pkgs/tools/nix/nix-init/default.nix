@@ -1,42 +1,79 @@
 { lib
+, writeText
 , rustPlatform
 , fetchFromGitHub
+, curl
 , installShellFiles
 , makeWrapper
 , pkg-config
+, bzip2
+, libgit2_1_5
+, openssl
+, zlib
 , zstd
 , stdenv
 , darwin
+, spdx-license-list-data
 , nix
 , nurl
-, callPackage
-, spdx-license-list-data
 }:
+
+let
+  get-nix-license = import ./get-nix-license.nix {
+    inherit lib writeText;
+  };
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-init";
-  version = "0.1.1";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     rev = "v${version}";
-    hash = "sha256-x9UrBCnEGz6nI1XGBLjIeiF3qi3EvynAfafiuhQdt9Q=";
+    hash = "sha256-SvoKw0Ep8NGknu+6qd6xW6hfH261kFD6DjZhPXQpzs0=";
   };
 
-  cargoHash = "sha256-RUfprANAbj8w8LPRwQEF9SD9fhWb1CEcwbvOa6DX9Xk=";
+  cargoHash = "sha256-lm4Y/ZTRMiBp3ECKnHZBvwM8Qso+rilT3BDxzfcnpHQ=";
 
   nativeBuildInputs = [
+    curl
     installShellFiles
     makeWrapper
     pkg-config
   ];
 
   buildInputs = [
+    bzip2
+    curl
+    libgit2_1_5
+    openssl
+    zlib
     zstd
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    darwin.apple_sdk.frameworks.CoreFoundation
   ];
+
+  buildNoDefaultFeatures = true;
+
+  checkFlags = [
+    # requires internet access
+    "--skip=lang::rust::tests"
+  ];
+
+  postPatch = ''
+    mkdir -p data
+    ln -s ${get-nix-license} data/get-nix-license.rs
+  '';
+
+  preBuild = ''
+    cargo run -p license-store-cache \
+      -j $NIX_BUILD_CORES --frozen \
+      data/license-store-cache.zstd ${spdx-license-list-data.json}/json/details
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/nix-init \
@@ -46,8 +83,6 @@ rustPlatform.buildRustPackage rec {
   '';
 
   GEN_ARTIFACTS = "artifacts";
-  NIX_LICENSES = callPackage ./license.nix { };
-  SPDX_LICENSE_LIST_DATA = "${spdx-license-list-data.json}/json/details";
   ZSTD_SYS_USE_PKG_CONFIG = true;
 
   meta = with lib; {

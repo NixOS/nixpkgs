@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 # Remove gcc and python references
 , removeReferencesTo
@@ -30,7 +29,6 @@
 , libunwind
 , thrift
 , cppzmq
-, zeromq
 # Needed only if qt-gui is disabled, from some reason
 , icu
 # GUI related
@@ -48,13 +46,13 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.10";
-  minor = "5";
-  patch = "1";
+  minor = "6";
+  patch = "0";
 }
 }:
 
 let
-  sourceSha256 = "sha256-D5Bsj70IHFOLPZQbaxkGdx7Lz94bXhCfnNfhZb3dDp4=";
+  sourceSha256 = "sha256-WLxb9vJBlRfo9bKWEIsCI0Zb040XkLNjYw84j6ivOrk=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -73,7 +71,7 @@ let
         # building with boost 1.7x fails
         ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pkgs; [
-        Mako
+        mako
         six
       ];
     };
@@ -120,7 +118,7 @@ let
     gnuradio-companion = {
       pythonRuntime = with python.pkgs; [
         pyyaml
-        Mako
+        mako
         numpy
         pygobject3
       ];
@@ -144,6 +142,10 @@ let
     };
     gr-blocks = {
       cmakeEnableFlag = "GR_BLOCKS";
+      runtime = [
+        # Required to compile wavfile blocks.
+        libsndfile
+      ];
     };
     gr-fec = {
       cmakeEnableFlag = "GR_FEC";
@@ -247,7 +249,7 @@ let
       runtime = [ gsl libsodium ];
     };
     gr-zeromq = {
-      runtime = [ cppzmq zeromq ];
+      runtime = [ cppzmq ];
       cmakeEnableFlag = "GR_ZEROMQ";
     };
     gr-network = {
@@ -279,7 +281,7 @@ let
   inherit (shared) hasFeature; # function
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname;
   inherit (shared)
     version
@@ -303,8 +305,10 @@ stdenv.mkDerivation rec {
     inherit
       boost
       volk
-      spdlog
     ;
+    # Used by many gnuradio modules, the same attribute is present in
+    # previous gnuradio versions where there it's log4cpp.
+    logLib = spdlog;
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
   } // lib.optionalAttrs (hasFeature "gr-pdu") {

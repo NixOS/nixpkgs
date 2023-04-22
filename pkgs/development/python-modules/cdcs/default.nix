@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "cdcs";
-  version = "0.1.9";
+  version = "0.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = "pycdcs";
     # https://github.com/usnistgov/pycdcs/issues/1
-    rev = "0a770b752301c27e227ca40a4752f305b55dee20";
-    sha256 = "sha256-AUrVEFea4VtBJXWWgECqdBFCqKuHWAlh07Dljp+HBa0=";
+    rev = "3aeaeb4782054a220e916c189ffe440d113b571d";
+    hash = "sha256-OsabgO2B2PRhU3DVvkK+f9VLOMqctl4nyCETxLtzwNs=";
   };
 
   nativeBuildInputs = [

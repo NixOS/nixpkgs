@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "algolia-cli";
-  version = "1.3.0";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "algolia";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-j0d2HK4McWA2yP7pt+TUOEYVUOQP4NYOdMlK7IqaAcU=";
+    hash = "sha256-OclNhqJ7BJwpwu8EWjZuIw/an4K7dETjynrU0Ju1yak=";
   };
 
-  vendorHash = "sha256-RG/aLlCve0XLj3ljBBSsloFUgNAG6faqjyMYXOo+CgI=";
+  vendorHash = "sha256-QgNL7pp0KH1RUV69BFVtHpaLHrPp4UQhEtOEiRmfAi0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

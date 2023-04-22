@@ -2,15 +2,15 @@
 
 buildDunePackage rec {
   pname = "rdbg";
-  version = "1.196.12";
+  version = "1.199.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   minimalOCamlVersion = "4.07";
 
   src = fetchurl {
-    url = "http://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/rdbg.1.196.12.tgz";
-    sha512 = "8e88034b1eda8f1233b4990adc9746782148254c93d8d0c99c246c0d50f306eeb6aa4afcfca8834acb3e268860647f47a24cc6a2d29fb45cac11f098e2ede275";
+    url = "http://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/rdbg.v${version}.tgz";
+    hash = "sha512:6076eaa3608a313f8ac71a4f5aa4fcc64aeb0c646d581e5035110d4c80f94de34f2ba26f90a9a1e92a7f788c9e799f1f7b0e3728c853a21983ad732f0ee60352";
   };
 
   buildInputs = [

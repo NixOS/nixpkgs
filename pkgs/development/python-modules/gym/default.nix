@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-uJgm8l1SxIRC5PV6BIH/ht/1ucGT5UaUhkFMdusejgA=";
+    hash = "sha256-uJgm8l1SxIRC5PV6BIH/ht/1ucGT5UaUhkFMdusejgA=";
   };
 
   propagatedBuildInputs = [

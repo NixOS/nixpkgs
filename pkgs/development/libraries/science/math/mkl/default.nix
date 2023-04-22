@@ -139,6 +139,9 @@ in stdenvNoCC.mkDerivation ({
 
     # Headers
     cp -r opt/intel/oneapi/mkl/${mklVersion}/include $out/
+
+    # CMake config
+    cp -r opt/intel/oneapi/mkl/${mklVersion}/lib/cmake $out/lib
   '' +
     (if enableStatic then ''
       install -Dm0644 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/intel64/*.a

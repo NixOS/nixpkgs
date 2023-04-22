@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "Ultimaker";
     repo = "libSavitar";
     rev = version;
-    sha256 = "sha256-MAA1WtGED6lvU6N4BE6wwY1aYaFrCq/gkmQFz3VWqNA=";
+    hash = "sha256-MAA1WtGED6lvU6N4BE6wwY1aYaFrCq/gkmQFz3VWqNA=";
   };
 
   postPatch = ''

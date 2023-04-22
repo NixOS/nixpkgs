@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rRGmlGZeKtKEV8VgSU9PjDaiX8WOUA1gip2R4E4dMJM=";
+    hash = "sha256-rRGmlGZeKtKEV8VgSU9PjDaiX8WOUA1gip2R4E4dMJM=";
   };
 
   # Disable test tests since they depend on a memcached server running on

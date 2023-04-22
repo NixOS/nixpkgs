@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "evhub";
     repo = "coconut";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-+OrVNtre7kAfU5L7/6DadZxFNWVt5raF6HLGXHHpOvE=";
+    hash = "sha256-+OrVNtre7kAfU5L7/6DadZxFNWVt5raF6HLGXHHpOvE=";
   };
 
   propagatedBuildInputs = [ cpyparsing ipykernel mypy pygments prompt-toolkit watchdog ];

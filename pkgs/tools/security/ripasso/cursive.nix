@@ -1,30 +1,69 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, python3, openssl, libgpg-error, gpgme, xorg, nettle, llvmPackages, clang, AppKit, Security, installShellFiles }:
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, python3
+, openssl
+, libgpg-error
+, gpgme
+, xorg
+, nettle
+, llvmPackages
+, clang
+, AppKit
+, Security
+, installShellFiles
+}:
 
-with rustPlatform;
-buildRustPackage rec {
-  version = "0.6.2";
+rustPlatform.buildRustPackage rec {
+  version = "0.6.4";
   pname = "ripasso-cursive";
 
   src = fetchFromGitHub {
     owner = "cortex";
     repo = "ripasso";
-    rev  = "release-${version}";
-    sha256 = "sha256-OKFgBfm4d9IqSJFjg+J1XdsgQrfuIaoRIhVJQeZ+558=";
+    rev = "release-${version}";
+    hash = "sha256-9wBaFq2KVfLTd1j8ZPoUlmZJDW2UhvGBAaCGX+qg92s=";
   };
 
-  patches = [ ./fix-tests.patch ./build-on-macos.patch ];
+  patches = [
+    ./fix-tests.patch
+  ];
 
-  # Needed so bindgen can find libclang.so
-  LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
+  cargoPatches = [
+    ./fix-build.patch
+  ];
 
-  cargoSha256 = "sha256-cAhLI5IES6FM3/rjHjokLq5pCoA08K/8lpdAeSNrTFs=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "qml-0.0.9" = "sha256-ILqvUaH7nSu2JtEs8ox7KroOzYnU5ai44k1HE4Bz5gg=";
+    };
+  };
 
   cargoBuildFlags = [ "-p ripasso-cursive" ];
 
-  nativeBuildInputs = [ pkg-config gpgme python3 installShellFiles clang ];
+  nativeBuildInputs = [
+    pkg-config
+    gpgme
+    python3
+    installShellFiles
+    clang
+    rustPlatform.bindgenHook
+  ];
+
   buildInputs = [
-    openssl libgpg-error gpgme xorg.libxcb nettle
-  ] ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
+    openssl
+    libgpg-error
+    gpgme
+    xorg.libxcb
+    nettle
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Security
+  ];
 
   preCheck = ''
     export HOME=$TMPDIR

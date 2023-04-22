@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5zE5a+BYzQjgVb0Ti7bSQrGzTyysOTTR0NMOO5IKG68=";
+    hash = "sha256-dfdrXp05eJALTQnx2F3GxRWKMA+Icj0mRPcb72z7qMw=";
   };
 
   nativeBuildInputs = [

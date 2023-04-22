@@ -16,8 +16,8 @@
   },
   "qtbase": {
     "url": "https://invent.kde.org/qt/qt/qtbase.git",
-    "rev": "fa8dee92201448cc4eaa92f222b93d0b044d8ea5",
-    "sha256": "16b0q0anlgmfzbdm0jyakb8cxikrr295pj7avzny26x9609lzqga"
+    "rev": "6c09620dc84900c31a2d307a8640dbc15b1fcfdd",
+    "sha256": "0nr8xlfdrgjr6rrd5f99p8vzlxx6n8xch5l2z95pb2lx4w4pz26q"
   },
   "qtcharts": {
     "url": "https://invent.kde.org/qt/qt/qtcharts.git",
@@ -26,8 +26,8 @@
   },
   "qtconnectivity": {
     "url": "https://invent.kde.org/qt/qt/qtconnectivity.git",
-    "rev": "056294c0493f814c3951ef57e5d0656efe643fb5",
-    "sha256": "0byzmd7azrx06xmd8dsapjljpc9wwnsr39jjccbapjl5rfxywipw"
+    "rev": "2d241e0b79971917845a6ed448e838ef273d73d7",
+    "sha256": "15zk9q1n9yfg4nkr0rs7agsvzim8nlrqzm1h4h9r0iwr91g9vqp5"
   },
   "qtdatavis3d": {
     "url": "https://invent.kde.org/qt/qt/qtdatavis3d.git",
@@ -56,13 +56,13 @@
   },
   "qtimageformats": {
     "url": "https://invent.kde.org/qt/qt/qtimageformats.git",
-    "rev": "abe44c0f526e499668b1131c5990d9b571f99c46",
-    "sha256": "0llw5lsw368vzsc7dnjy3ahxny8qzb7yz3aakgsbd5glk3dgr4i4"
+    "rev": "dbc9c396199ef78e820b40ddb8a4e76c0a86d48c",
+    "sha256": "18dhnvkv9hialjfcm80g9y38fsxfcfk4fgrrsm3hy2yda6a6g1c6"
   },
   "qtlocation": {
     "url": "https://invent.kde.org/qt/qt/qtlocation.git",
-    "rev": "f991e28cb0a670597f1955585c76ce8a26ce9e4b",
-    "sha256": "0bvxjciisq2hixhbxxs68zdwfdyvljy8iq48rnwpynqsdrhh5rma"
+    "rev": "435f931a7e42172e12ceba8f0d9da06ba4ec0bee",
+    "sha256": "1p7hz09jv8whlv0m39cnjz3yc6pjzyxkc8zinl6f0qmrska6m4gp"
   },
   "qtlottie": {
     "url": "https://invent.kde.org/qt/qt/qtlottie.git",
@@ -76,8 +76,8 @@
   },
   "qtmultimedia": {
     "url": "https://invent.kde.org/qt/qt/qtmultimedia.git",
-    "rev": "0d7cc33ac1404758886acef4f804b788c6774e98",
-    "sha256": "1ra9iv4pjcgz98927lkbpw494qf1jxsg4vbzxsxi247q2d1dkwzi"
+    "rev": "32557dbe01ba66005b8e28b38033eeee9819a4c6",
+    "sha256": "09mds5v3b3jq34r40hqg2a39q16p4q648wda7cqgm2yp249j06g8"
   },
   "qtnetworkauth": {
     "url": "https://invent.kde.org/qt/qt/qtnetworkauth.git",
@@ -166,8 +166,8 @@
   },
   "qtwayland": {
     "url": "https://invent.kde.org/qt/qt/qtwayland.git",
-    "rev": "f6a1e838e371dc90272c62daeea597fe487dec3e",
-    "sha256": "0v8vcs4jl24h754ilg9dm4qq1q24fk9mmnanpqk1q102ymmz2rac"
+    "rev": "df41e7e3e1f0e5495c5c8c52f1c9bb5a32b0da27",
+    "sha256": "0f292axj0ivgwgx97zc8x744243i7lgqcxbkjxham6md81m1xbwj"
   },
   "qtwebchannel": {
     "url": "https://invent.kde.org/qt/qt/qtwebchannel.git",

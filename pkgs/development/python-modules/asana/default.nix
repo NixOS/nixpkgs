@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "3.1.0";
+  version = "3.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "asana";
     repo = "python-asana";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aYWojS+SeAnFvSqyb9ceyRKhG1Hpn6/eK9xrXxQbVeA=";
+    hash = "sha256-hvAyKGoNkX3bs7Mz2h7SnOa5T6J88c0YiTR/L8fgfi8=";
   };
 
   propagatedBuildInputs = [

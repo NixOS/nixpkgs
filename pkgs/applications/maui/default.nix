@@ -28,9 +28,6 @@ See also `pkgs/applications/kde` as this is what this is based on.
 }:
 
 let
-  minQtVersion = "5.15";
-  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
-
   mirror = "mirror://kde";
   srcs = import ./srcs.nix { inherit fetchurl mirror; };
 
@@ -51,11 +48,10 @@ let
           meta // {
             homepage = meta.homepage or "https://mauikit.org/";
             platforms = meta.platforms or lib.platforms.linux;
-            broken = meta.broken or broken;
           };
       });
 
-  packages = self: with self;
+  packages = self:
     let
       callPackage = self.newScope {
         inherit mkDerivation;
@@ -64,7 +60,7 @@ let
       # libraries
       mauikit = callPackage ./mauikit.nix { };
       mauikit-accounts = callPackage ./mauikit-accounts.nix { };
-      mauikit-calendar = callPackage ./mauikit-calendar.nix { };
+      mauikit-calendar = callPackage ./mauikit-calendar { };
       mauikit-filebrowsing = callPackage ./mauikit-filebrowsing.nix { };
       mauikit-imagetools = callPackage ./mauikit-imagetools.nix { };
       mauikit-texteditor = callPackage ./mauikit-texteditor.nix { };

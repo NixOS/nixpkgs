@@ -233,7 +233,7 @@ in
       # nix-serve = 199; # unused, removed 2020-12-12
       #tvheadend = 200; # dynamically allocated as of 2021-09-18
       uwsgi = 201;
-      gitit = 202;
+      # gitit = 202; # unused, module was removed 2023-04-03
       riemanntools = 203;
       subsonic = 204;
       # riak = 205; # unused, remove 2022-07-22
@@ -338,7 +338,7 @@ in
       lidarr = 306;
       slurm = 307;
       kapacitor = 308;
-      solr = 309;
+      # solr = 309; removed 2023-03-16
       alerta = 310;
       minetest = 311;
       rss2email = 312;
@@ -648,7 +648,7 @@ in
       lidarr = 306;
       slurm = 307;
       kapacitor = 308;
-      solr = 309;
+      # solr = 309; removed 2023-03-16
       alerta = 310;
       minetest = 311;
       rss2email = 312;

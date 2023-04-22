@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AATsUNcYLB4vtyvuooAMDZx8p5fayijb6yJoUKTCW40=";
+    hash = "sha256-AATsUNcYLB4vtyvuooAMDZx8p5fayijb6yJoUKTCW40=";
   };
 
   patches = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "fix-mistake-in-menu-group-specification.patch";
       url = "https://github.com/enthought/envisage/commit/f23ea3864a5f6ffca665d47dec755992e062029b.patch";
-      sha256 = "sha256-l4CWB4jRkSmoTDoV8CtP2w87Io2cLINKfOSaSPy7cXE=";
+      hash = "sha256-l4CWB4jRkSmoTDoV8CtP2w87Io2cLINKfOSaSPy7cXE=";
     })
   ];
 

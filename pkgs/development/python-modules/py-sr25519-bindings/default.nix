@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "polkascan";
     repo = "py-sr25519-bindings";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Lu3J0+YeQHHKItOZTT24DlQAUJuE9fd+py6Eb46/MSE=";
+    hash = "sha256-Lu3J0+YeQHHKItOZTT24DlQAUJuE9fd+py6Eb46/MSE=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

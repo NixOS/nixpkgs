@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "cryptoparser";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eLQNqeCUnjcxWbazhWHtqJJgvPUMH42fboU5y2ZMy44=";
+    hash = "sha256-Sn4sfzu1Y1gC+4K9WdiZW92cYuVbUsBXcNbNQOv0BRw=";
   };
 
   propagatedBuildInputs = [

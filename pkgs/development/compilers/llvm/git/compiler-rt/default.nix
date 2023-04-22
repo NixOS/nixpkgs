@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta, version
 , monorepoSrc, runCommand
-, cmake, python3, xcbuild, libllvm, libcxxabi
+, cmake, ninja, python3, xcbuild, libllvm, libcxxabi, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   inherit src;
   sourceRoot = "${src.name}/${baseName}";
 
-  nativeBuildInputs = [ cmake python3 libllvm.dev ]
+  nativeBuildInputs = [ cmake ninja python3 libllvm.dev ]
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
@@ -39,13 +39,16 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
+  ] ++ lib.optionals (haveLibc && stdenv.hostPlatform.libc == "glibc") [
+    "-DSANITIZER_COMMON_CFLAGS=-I${libxcrypt}/include"
   ] ++ lib.optionals (useLLVM || bareMetal || isMusl) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
-    "-DCOMPILER_RT_BUILD_PROFILE=OFF"
     "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
     "-DCOMPILER_RT_BUILD_ORC=OFF" # may be possible to build with musl if necessary
+  ] ++ lib.optionals (useLLVM || bareMetal) [
+    "-DCOMPILER_RT_BUILD_PROFILE=OFF"
   ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
@@ -63,6 +66,9 @@ stdenv.mkDerivation {
     "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
+    # `COMPILER_RT_DEFAULT_TARGET_ONLY` does not apply to Darwin:
+    # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/base-config-ix.cmake#L153
+    "-DCOMPILER_RT_ENABLE_IOS=OFF"
   ];
 
   outputs = [ "out" "dev" ];
@@ -75,8 +81,10 @@ stdenv.mkDerivation {
     ./normalize-var.patch
     # Prevent a compilation error on darwin
     ./darwin-targetconditionals.patch
+    # See: https://github.com/NixOS/nixpkgs/pull/186575
     ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
-    ./armv7l.patch
+    # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
+    ../../common/compiler-rt/armv7l-15.patch
   ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks

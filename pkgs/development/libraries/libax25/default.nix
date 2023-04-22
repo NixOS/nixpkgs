@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   pname = "libax25";
   version = "0.0.12-rc5";
 
-  buildInputs = [ glibc ] ++ lib.optional stdenv.hostPlatform.isStatic [ glibc.static ];
+  buildInputs = [ glibc ] ++ lib.optionals stdenv.hostPlatform.isStatic [ glibc.static ];
 
   # Due to recent unsolvable administrative domain problems with linux-ax25.org,
   # the new domain is linux-ax25.in-berlin.de

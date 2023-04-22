@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "gopsuinfo";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "gopsuinfo";
     rev = "v${version}";
-    sha256 = "sha256-atUx035Tyy73AUBvhyo8cUHID5pTKj2/+PX9i/TRfoE=";
+    sha256 = "sha256-e+obIFbhjxsdnyJe3+sUpe9pK9eNTspxNH+Cvf4RBMQ=";
   };
 
-  vendorSha256 = "sha256-RsplFwUL4KjWaXE6xvURX+4wkNG+i+1oyBXwLyVcb2Q=";
+  vendorHash = "sha256-S2ZHfrbEjPDweazwWbMbEMcMl/i+8Nru0G0e7RjOJMk=";
 
   # Remove installing of binary from the Makefile (already taken care of by
   # `buildGoModule`)

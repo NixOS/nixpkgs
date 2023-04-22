@@ -5,19 +5,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "byacc";
-  version = "20221229";
+  version = "20230219";
 
   src = fetchurl {
-    urls = let
-      inherit (finalAttrs) pname version;
-    in [
-      "https://invisible-mirror.net/archives/byacc/${pname}-${version}.tgz"
-      "ftp://ftp.invisible-island.net/byacc/${pname}-${version}.tgz"
+    urls = [
+      "https://invisible-mirror.net/archives/byacc/byacc-${finalAttrs.version}.tgz"
+      "ftp://ftp.invisible-island.net/byacc/byacc-${finalAttrs.version}.tgz"
     ];
-    hash = "sha256-ExbG95D6+maIQn8f+RJnth2LeHO0Q8Yg7vaabv8FA7w=";
+    hash = "sha256-NrlyptSul1hN0YaSX7vDl9JssgYyp2wvUqx2U80IG1g=";
   };
 
   configureFlags = [
+    # change yacc to byacc
     "--program-transform-name='s,^,b,'"
   ];
 
@@ -27,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/byacc $out/bin/yacc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://invisible-island.net/byacc/byacc.html";
     description = "Berkeley YACC";
     longDescription = ''
@@ -42,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
       Nowadays byacc is maintained by Thomas E. Dickey.
     '';
     changelog = "https://invisible-island.net/byacc/CHANGES.html";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
 })

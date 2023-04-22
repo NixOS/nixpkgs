@@ -8,10 +8,11 @@
 , gperf
 , sqlite
 , libarchive
+, libdmapsharing
 , libsoup_3
 , gnome
 , libxml2
-, lua5_3
+, lua5_4
 , liboauth
 , libgdata
 , libmediaart
@@ -30,11 +31,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grilo-plugins";
-  version = "0.3.15";
+  version = "0.3.16";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "hRjD2VT5MJXZVWJKBEzhanNFUy+BHSmdv6HhFM/rqzM=";
+    sha256 = "/m9Nvlhsa4uiQGOU4gLyLQCdZCqW6zpU8y9qIdCEzcs=";
   };
 
   patches = [
@@ -65,12 +66,13 @@ stdenv.mkDerivation rec {
     grilo
     libxml2
     # libgdata
-    lua5_3
+    lua5_4
     liboauth
     sqlite
     gnome-online-accounts
     totem-pl-parser
     libarchive
+    libdmapsharing
     libsoup_3
     gmime
     gom

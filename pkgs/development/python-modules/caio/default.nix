@@ -2,13 +2,14 @@
 , aiomisc
 , buildPythonPackage
 , fetchFromGitHub
+, pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "caio";
-  version = "0.9.11";
+  version = "0.9.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,11 +18,12 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-BFlpjbC2yxwGtCAMfn1VM5zmioyN5fFNMJDDWceB+LE=";
+    hash = "sha256-uMq/3yWP9OwaVxixGAFCLMsDPoJhmIuG0I7hO7AnIOk=";
   };
 
   nativeCheckInputs = [
     aiomisc
+    pytest-aiohttp
     pytestCheckHook
   ];
 

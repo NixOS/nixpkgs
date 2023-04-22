@@ -16,7 +16,8 @@ stdenv.mkDerivation {
 }
 ```
 
-(`stdenv` needs to be in scope, so if you write this in a separate Nix expression from `pkgs/all-packages.nix`, you need to pass it as a function argument.) Specifying a `name` and a `src` is the absolute minimum Nix requires. For convenience, you can also use `pname` and `version` attributes and `mkDerivation` will automatically set `name` to `"${pname}-${version}"` by default. Since [RFC 0035](https://github.com/NixOS/rfcs/pull/35), this is preferred for packages in Nixpkgs, as it allows us to reuse the version easily:
+(`stdenv` needs to be in scope, so if you write this in a separate Nix expression from `pkgs/all-packages.nix`, you need to pass it as a function argument.) Specifying a `name` and a `src` is the absolute minimum Nix requires. For convenience, you can also use `pname` and `version` attributes and `mkDerivation` will automatically set `name` to `"${pname}-${version}"` by default.
+**Since [RFC 0035](https://github.com/NixOS/rfcs/pull/35), this is preferred for packages in Nixpkgs**, as it allows us to reuse the version easily:
 
 ```nix
 stdenv.mkDerivation rec {
@@ -33,7 +34,8 @@ Many packages have dependencies that are not provided in the standard environmen
 
 ```nix
 stdenv.mkDerivation {
-  name = "libfoo-1.2.3";
+  pname = "libfoo";
+  version = "1.2.3";
   ...
   buildInputs = [libbar perl ncurses];
 }
@@ -45,7 +47,8 @@ Often it is necessary to override or modify some aspect of the build. To make th
 
 ```nix
 stdenv.mkDerivation {
-  name = "fnord-4.5";
+  pname = "fnord";
+  version = "4.5";
   ...
   buildPhase = ''
     gcc foo.c -o foo
@@ -65,7 +68,8 @@ While the standard environment provides a generic builder, you can still supply 
 
 ```nix
 stdenv.mkDerivation {
-  name = "libfoo-1.2.3";
+  pname = "libfoo";
+  version = "1.2.3";
   ...
   builder = ./builder.sh;
 }
@@ -101,11 +105,11 @@ To build a `stdenv` package in a [`nix-shell`](https://nixos.org/manual/nix/unst
 
 ```bash
 nix-shell '<nixpkgs>' -A some_package
-eval ${unpackPhase:-unpackPhase}
+eval "${unpackPhase:-unpackPhase}"
 cd $sourceRoot
-eval ${patchPhase:-patchPhase}
-eval ${configurePhase:-configurePhase}
-eval ${buildPhase:-buildPhase}
+eval "${patchPhase:-patchPhase}"
+eval "${configurePhase:-configurePhase}"
+eval "${buildPhase:-buildPhase}"
 ```
 
 To modify a [phase](#sec-stdenv-phases), first print it with
@@ -380,39 +384,107 @@ Values inside it are not passed to the builder, so you can change them without t
 
 #### `passthru.updateScript` {#var-passthru-updateScript}
 
-A script to be run by `maintainers/scripts/update.nix` when the package is matched. It needs to be an executable file, either on the file system:
+A script to be run by `maintainers/scripts/update.nix` when the package is matched. The attribute can contain one of the following:
 
-```nix
-passthru.updateScript = ./update.sh;
-```
+- []{#var-passthru-updateScript-command} an executable file, either on the file system:
 
-or inside the expression itself:
+  ```nix
+  passthru.updateScript = ./update.sh;
+  ```
 
-```nix
-passthru.updateScript = writeScript "update-zoom-us" ''
-  #!/usr/bin/env nix-shell
-  #!nix-shell -i bash -p curl pcre common-updater-scripts
+  or inside the expression itself:
 
-  set -eu -o pipefail
+  ```nix
+  passthru.updateScript = writeScript "update-zoom-us" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl pcre common-updater-scripts
 
-  version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcregrep -o1 '/(([0-9]\.?)+)/')"
-  update-source-version zoom-us "$version"
-'';
-```
+    set -eu -o pipefail
 
-The attribute can also contain a list, a script followed by arguments to be passed to it:
+    version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcregrep -o1 '/(([0-9]\.?)+)/')"
+    update-source-version zoom-us "$version"
+  '';
+  ```
 
-```nix
-passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
-```
+- a list, a script followed by arguments to be passed to it:
 
-The script will be run with the `UPDATE_NIX_NAME`, `UPDATE_NIX_PNAME`, `UPDATE_NIX_OLD_VERSION` and `UPDATE_NIX_ATTR_PATH` environment variables set respectively to the name, pname, old version and attribute path of the package it is supposed to update.
+  ```nix
+  passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
+  ```
+
+- an attribute set containing:
+  - [`command`]{#var-passthru-updateScript-set-command} – a string or list in the [format expected by `passthru.updateScript`](#var-passthru-updateScript-command).
+  - [`attrPath`]{#var-passthru-updateScript-set-attrPath} (optional) – a string containing the canonical attribute path for the package. If present, it will be passed to the update script instead of the attribute path on which the package was discovered during Nixpkgs traversal.
+  - [`supportedFeatures`]{#var-passthru-updateScript-set-supportedFeatures} (optional) – a list of the [extra features](#var-passthru-updateScript-supported-features) the script supports.
+
+  ```nix
+  passthru.updateScript = {
+    command = [ ../../update.sh pname ];
+    attrPath = pname;
+    supportedFeatures = [ … ];
+  };
+  ```
+
+##### How update scripts are executed? {#var-passthru-updateScript-execution}
+
+Update scripts are to be invoked by `maintainers/scripts/update.nix` script. You can run `nix-shell maintainers/scripts/update.nix` in the root of Nixpkgs repository for information on how to use it. `update.nix` offers several modes for selecting packages to update (e.g. select by attribute path, traverse Nixpkgs and filter by maintainer, etc.), and it will execute update scripts for all matched packages that have an `updateScript` attribute.
+
+Each update script will be passed the following environment variables:
+
+- [`UPDATE_NIX_NAME`]{#var-passthru-updateScript-env-UPDATE_NIX_NAME} – content of the `name` attribute of the updated package.
+- [`UPDATE_NIX_PNAME`]{#var-passthru-updateScript-env-UPDATE_NIX_PNAME} – content of the `pname` attribute of the updated package.
+- [`UPDATE_NIX_OLD_VERSION`]{#var-passthru-updateScript-env-UPDATE_NIX_OLD_VERSION} – content of the `version` attribute of the updated package.
+- [`UPDATE_NIX_ATTR_PATH`]{#var-passthru-updateScript-env-UPDATE_NIX_ATTR_PATH} – attribute path the `update.nix` discovered the package on (or the [canonical `attrPath`](#var-passthru-updateScript-set-attrPath) when available). Example: `pantheon.elementary-terminal`
 
 ::: {.note}
-The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running `git commit` or any other commands that cannot handle that.
+An update script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that `update.nix` executes update scripts in parallel by default so you should avoid running `git commit` or any other commands that cannot handle that.
 :::
 
-For information about how to run the updates, execute `nix-shell maintainers/scripts/update.nix`.
+::: {.tip}
+While update scripts should not create commits themselves, `maintainers/scripts/update.nix` supports automatically creating commits when running it with `--argstr commit true`. If you need to customize commit message, you can have the update script implement [`commit`](#var-passthru-updateScript-commit) feature.
+:::
+
+##### Supported features {#var-passthru-updateScript-supported-features}
+###### `commit` {#var-passthru-updateScript-commit}
+
+This feature allows update scripts to *ask* `update.nix` to create Git commits.
+
+When support of this feature is declared, whenever the update script exits with `0` return status, it is expected to print a JSON list containing an object described below for each updated attribute to standard output.
+
+When `update.nix` is run with `--argstr commit true` arguments, it will create a separate commit for each of the objects. An empty list can be returned when the script did not update any files, for example, when the package is already at the latest version.
+
+The commit object contains the following values:
+
+- [`attrPath`]{#var-passthru-updateScript-commit-attrPath} – a string containing attribute path.
+- [`oldVersion`]{#var-passthru-updateScript-commit-oldVersion} – a string containing old version.
+- [`newVersion`]{#var-passthru-updateScript-commit-newVersion} – a string containing new version.
+- [`files`]{#var-passthru-updateScript-commit-files} – a non-empty list of file paths (as strings) to add to the commit.
+- [`commitBody`]{#var-passthru-updateScript-commit-commitBody} (optional) – a string with extra content to be appended to the default commit message (useful for adding changelog links).
+- [`commitMessage`]{#var-passthru-updateScript-commit-commitMessage} (optional) – a string to use instead of the default commit message.
+
+If the returned array contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
+
+```{=docbook}
+<example>
+<title>Standard output of an update script using commit feature</title>
+```
+
+```json
+[
+  {
+    "attrPath": "volume_key",
+    "oldVersion": "0.3.11",
+    "newVersion": "0.3.12",
+    "files": [
+      "/path/to/nixpkgs/pkgs/development/libraries/volume-key/default.nix"
+    ]
+  }
+]
+```
+
+```{=docbook}
+</example>
+```
 
 ### Recursive attributes in `mkDerivation` {#mkderivation-recursive-attributes}
 
@@ -635,7 +707,7 @@ The prefix under which the package must be installed, passed via the `--prefix` 
 
 The key to use when specifying the prefix. By default, this is set to `--prefix=` as that is used by the majority of packages.
 
-##### `dontAddStaticConfigureFlags`
+##### `dontAddStaticConfigureFlags` {#var-stdenv-dontAddStaticConfigureFlags}
 
 By default, when building statically, stdenv will try to add build system appropriate configure flags to try to enable static builds.
 
@@ -1027,15 +1099,15 @@ postInstall = ''
 
 Performs string substitution on the contents of \<infile\>, writing the result to \<outfile\>. The substitutions in \<subs\> are of the following form:
 
-#### `--replace` \<s1\> \<s2\>
+#### `--replace` \<s1\> \<s2\> {#fun-substitute-replace}
 
 Replace every occurrence of the string \<s1\> by \<s2\>.
 
-#### `--subst-var` \<varName\>
+#### `--subst-var` \<varName\> {#fun-substitute-subst-var}
 
 Replace every occurrence of `@varName@` by the contents of the environment variable \<varName\>. This is useful for generating files from templates, using `@...@` in the template as placeholders.
 
-#### `--subst-var-by` \<varName\> \<s\>
+#### `--subst-var-by` \<varName\> \<s\> {#fun-substitute-subst-var-by}
 
 Replace every occurrence of `@varName@` by the string \<s\>.
 
@@ -1176,7 +1248,7 @@ Multiple paths can be specified.
 patchShebangs [--build | --host] PATH...
 ```
 
-##### Flags
+##### Flags {#patch-shebangs.sh-invocation-flags}
 
 `--build`
 : Look up commands available at build time
@@ -1184,7 +1256,7 @@ patchShebangs [--build | --host] PATH...
 `--host`
 : Look up commands available at run time
 
-##### Examples
+##### Examples {#patch-shebangs.sh-invocation-examples}
 
 ```sh
 patchShebangs --host /nix/store/<hash>-hello-1.0/bin
@@ -1271,7 +1343,7 @@ Similarly, the CC Wrapper follows the Bintools Wrapper in defining standard envi
 
 Here are some more packages that provide a setup hook. Since the list of hooks is extensible, this is not an exhaustive list. The mechanism is only to be used as a last resort, so it might cover most uses.
 
-### Other hooks
+### Other hooks {#stdenv-other-hooks}
 
 Many other packages provide hooks, that are not part of `stdenv`. You can find
 these in the [Hooks Reference](#chap-hooks).

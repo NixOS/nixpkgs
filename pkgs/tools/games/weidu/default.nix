@@ -9,12 +9,10 @@
 }:
 
 let
-  # 1. Needs ocaml >= 4.04 and <= 4.11
+  # 1. Needs ocaml >= 4.04 and <= 4.11 (patched against 4.14)
   # 2. ocaml 4.10 defaults to safe (immutable) strings so we need a version with
   #    that disabled as weidu is strongly dependent on mutable strings
-  ocaml' = ocaml-ng.ocamlPackages_4_11.ocaml.override {
-    unsafeStringSupport = true;
-  };
+  ocaml' = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
 
 in
 stdenv.mkDerivation rec {
@@ -34,6 +32,9 @@ stdenv.mkDerivation rec {
       --replace elkhound ${elkhound}/bin/elkhound
 
     mkdir -p obj/{.depend,x86_LINUX}
+
+    # undefined reference to `caml_hash_univ_param'
+    sed -i "20,21d;s/old_hash_param/hash_param/" hashtbl-4.03.0/myhashtbl.ml
   '';
 
   nativeBuildInputs = [ elkhound ocaml' perl which gnumake42 ];

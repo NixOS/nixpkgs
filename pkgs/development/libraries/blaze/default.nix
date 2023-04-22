@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blaze";
-  version = "3.8.1";
+  version = "3.8.2";
 
   src = fetchFromBitbucket {
     owner = "blaze-lib";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fe6J0aquk4j+b11Sq+ihagWA/LMTYnAgIHbaDCZacP0=";
+    hash = "sha256-Jl9ZWFqBvLgQwCoMNX3g7z02yc7oYx+d6mbyLBzBJOs=";
   };
 
   strictDeps = true;

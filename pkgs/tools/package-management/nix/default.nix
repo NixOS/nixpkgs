@@ -20,15 +20,66 @@ let
     patches = (drv.patches or [ ]) ++ [ ./patches/boehmgc-coroutine-sp-fallback.patch ];
   });
 
-  aws-sdk-cpp-nix = (aws-sdk-cpp.override {
+  # old nix fails to build with newer aws-sdk-cpp and the patch doesn't apply
+  aws-sdk-cpp-old-nix = (aws-sdk-cpp.override {
     apis = [ "s3" "transfer" ];
     customMemoryManagement = false;
-  }).overrideDerivation (args: {
+  }).overrideAttrs (args: rec {
+    # intentionally overriding postPatch
+    version = "1.9.294";
+
+    src = fetchFromGitHub {
+      owner = "aws";
+      repo = "aws-sdk-cpp";
+      rev = version;
+      sha256 = "sha256-Z1eRKW+8nVD53GkNyYlZjCcT74MqFqqRMeMc33eIQ9g=";
+    };
+    postPatch = ''
+      # Avoid blanket -Werror to evade build failures on less
+      # tested compilers.
+      substituteInPlace cmake/compiler_settings.cmake \
+        --replace '"-Werror"' ' '
+
+      # Missing includes for GCC11
+      sed '5i#include <thread>' -i \
+        aws-cpp-sdk-cloudfront-integration-tests/CloudfrontOperationTest.cpp \
+        aws-cpp-sdk-cognitoidentity-integration-tests/IdentityPoolOperationTest.cpp \
+        aws-cpp-sdk-dynamodb-integration-tests/TableOperationTest.cpp \
+        aws-cpp-sdk-elasticfilesystem-integration-tests/ElasticFileSystemTest.cpp \
+        aws-cpp-sdk-lambda-integration-tests/FunctionTest.cpp \
+        aws-cpp-sdk-mediastore-data-integration-tests/MediaStoreDataTest.cpp \
+        aws-cpp-sdk-queues/source/sqs/SQSQueue.cpp \
+        aws-cpp-sdk-redshift-integration-tests/RedshiftClientTest.cpp \
+        aws-cpp-sdk-s3-crt-integration-tests/BucketAndObjectOperationTest.cpp \
+        aws-cpp-sdk-s3-integration-tests/BucketAndObjectOperationTest.cpp \
+        aws-cpp-sdk-s3control-integration-tests/S3ControlTest.cpp \
+        aws-cpp-sdk-sqs-integration-tests/QueueOperationTest.cpp \
+        aws-cpp-sdk-transfer-tests/TransferTests.cpp
+      # Flaky on Hydra
+      rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
+      # Includes aws-c-auth private headers, so only works with submodule build
+      rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
+      # TestRandomURLMultiThreaded fails
+      rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
+    '' + lib.optionalString aws-sdk-cpp.stdenv.isi686 ''
+      # EPSILON is exceeded
+      rm aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
+    '';
+
     patches = (args.patches or [ ]) ++ [ ./patches/aws-sdk-cpp-TransferManager-ContentEncoding.patch ];
 
     # only a stripped down version is build which takes a lot less resources to build
-    requiredSystemFeatures = null;
+    requiredSystemFeatures = [ ];
   });
+
+  aws-sdk-cpp-nix = (aws-sdk-cpp.override {
+    apis = [ "s3" "transfer" ];
+    customMemoryManagement = false;
+  }).overrideAttrs (args: {
+    # only a stripped down version is build which takes a lot less resources to build
+    requiredSystemFeatures = [ ];
+  });
+
 
   common = args:
     callPackage
@@ -36,7 +87,7 @@ let
       {
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
-        aws-sdk-cpp = aws-sdk-cpp-nix;
+        aws-sdk-cpp = if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
       };
 
   # https://github.com/NixOS/nix/pull/7585
@@ -51,6 +102,13 @@ let
     name = "nix-7473-sqlite-exception-add-message.patch";
     url = "https://github.com/hercules-ci/nix/commit/c965f35de71cc9d88f912f6b90fd7213601e6eb8.patch";
     sha256 = "sha256-tI5nKU7SZgsJrxiskJ5nHZyfrWf5aZyKYExM0792N80=";
+  };
+
+  patch-non-existing-output = fetchpatch {
+    # https://github.com/NixOS/nix/pull/7283
+    name = "fix-requires-non-existing-output.patch";
+    url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+    sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
   };
 
 in lib.makeExtensible (self: {
@@ -82,12 +140,7 @@ in lib.makeExtensible (self: {
     sha256 = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
     patches = [
       ./patches/flaky-tests.patch
-      (fetchpatch {
-        # https://github.com/NixOS/nix/pull/7283
-        name = "fix-requires-non-existing-output.patch";
-        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
-        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
-      })
+      patch-non-existing-output
       patch-monitorfdhup
       patch-sqlite-exception
     ];
@@ -98,12 +151,7 @@ in lib.makeExtensible (self: {
     sha256 = "sha256-qCV65kw09AG+EkdchDPq7RoeBznX0Q6Qa4yzPqobdOk=";
     patches = [
       ./patches/flaky-tests.patch
-      (fetchpatch {
-        # https://github.com/NixOS/nix/pull/7283
-        name = "fix-requires-non-existing-output.patch";
-        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
-        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
-      })
+      patch-non-existing-output
       patch-monitorfdhup
       patch-sqlite-exception
     ];
@@ -129,7 +177,12 @@ in lib.makeExtensible (self: {
     sha256 = "sha256-5aCmGZbsFcLIckCDfvnPD4clGPQI7qYAqHYlttN/Wkg=";
   };
 
+  nix_2_15 = common {
+    version = "2.15.0";
+    sha256 = "sha256-hNHfvmb1bIWwqFT5nesQgwh4V0OlyZHxj5ZVSQbZ+p4=";
+  };
+
   stable = self.nix_2_13;
 
-  unstable = self.nix_2_14;
+  unstable = self.nix_2_15;
 })

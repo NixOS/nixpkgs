@@ -1,4 +1,4 @@
-{ stdenv, pkgs }:
+{ stdenv, pkgs, lib }:
 
 # ordering should match defaultNativeBuildInputs
 
@@ -91,7 +91,7 @@
     '';
   };
   # TODO: add multiple-outputs
-  # TODO: move patch-shebangs test from pkgs/test/patch-shebangs/default.nix to here
+  patch-shebangs = import ./patch-shebangs.nix { inherit stdenv lib pkgs; };
   prune-libtool-files =
     let
       libFoo = pkgs.writeText "libFoo" ''

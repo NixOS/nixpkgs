@@ -17,7 +17,7 @@ buildPythonPackage rec {
     repo = "localstack-python-client";
     # Request for proper tags: https://github.com/localstack/localstack-python-client/issues/38
     rev = "f1e538ad23700e5b1afe98720404f4801475e470";
-    sha256 = "sha256-MBXTiTzCwkduJPPRN7OKaWy2q9J8xCX/GGu09tyac3A=";
+    hash = "sha256-MBXTiTzCwkduJPPRN7OKaWy2q9J8xCX/GGu09tyac3A=";
   };
 
   propagatedBuildInputs = [

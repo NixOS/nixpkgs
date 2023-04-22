@@ -11,6 +11,8 @@ lib.makeScope newScope (self:
       };
     fetchNimble = callPackage ../development/nim-packages/fetch-nimble { };
 
+    asciigraph = callPackage ../development/nim-packages/asciigraph { };
+
     astpatternmatching =
       callPackage ../development/nim-packages/astpatternmatching { };
 
@@ -28,9 +30,15 @@ lib.makeScope newScope (self:
 
     chroma = callPackage ../development/nim-packages/chroma { };
 
+    coap = callPackage  ../development/nim-packages/coap { };
+
     docopt = callPackage ../development/nim-packages/docopt { };
 
+    eris = callPackage ../development/nim-packages/eris { };
+
     flatty = callPackage ../development/nim-packages/flatty { };
+
+    freedesktop_org = callPackage ../development/nim-packages/freedesktop_org { };
 
     frosty = callPackage ../development/nim-packages/frosty { };
 
@@ -38,6 +46,10 @@ lib.makeScope newScope (self:
       inherit (pkgs) getdns; };
 
     hts-nim = callPackage ../development/nim-packages/hts-nim { };
+
+    illwill = callPackage ../development/nim-packages/illwill { };
+
+    illwillwidgets = callPackage ../development/nim-packages/illwillwidgets { };
 
     jester = callPackage ../development/nim-packages/jester { };
 
@@ -65,7 +77,11 @@ lib.makeScope newScope (self:
 
     packedjson = callPackage ../development/nim-packages/packedjson { };
 
+    parsetoml = callPackage ../development/nim-packages/parsetoml { };
+
     pixie = callPackage ../development/nim-packages/pixie { };
+
+    preserves = callPackage ../development/nim-packages/preserves { };
 
     redis = callPackage ../development/nim-packages/redis { };
 
@@ -77,6 +93,8 @@ lib.makeScope newScope (self:
       inherit (pkgs) rocksdb;
     };
 
+    safeset = callPackage ../development/nim-packages/safeset { };
+
     sass = callPackage ../development/nim-packages/sass { };
 
     sdl2 = callPackage ../development/nim-packages/sdl2 { };
@@ -86,6 +104,8 @@ lib.makeScope newScope (self:
     snappy =
       callPackage ../development/nim-packages/snappy { inherit (pkgs) snappy; };
 
+    nimraylib-now = callPackage ../development/nim-packages/nimraylib-now { };
+
     spry = callPackage ../development/nim-packages/spry { };
 
     spryvm = callPackage ../development/nim-packages/spryvm { };
@@ -93,6 +113,8 @@ lib.makeScope newScope (self:
     stew = callPackage ../development/nim-packages/stew { };
 
     supersnappy = callPackage ../development/nim-packages/supersnappy { };
+
+    syndicate = callPackage ../development/nim-packages/syndicate { };
 
     taps = callPackage ../development/nim-packages/taps { };
 
@@ -107,6 +129,8 @@ lib.makeScope newScope (self:
     unicodeplus = callPackage ../development/nim-packages/unicodeplus { };
 
     vmath = callPackage ../development/nim-packages/vmath { };
+
+    x11 = callPackage ../development/nim-packages/x11 { };
 
     zippy = callPackage ../development/nim-packages/zippy { };
 

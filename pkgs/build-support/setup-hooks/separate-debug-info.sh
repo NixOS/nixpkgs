@@ -11,6 +11,9 @@ _separateDebugInfo() {
     local dst="${debug:-$out}"
     if [ "$prefix" = "$dst" ]; then return 0; fi
 
+    # in case there is nothing to strip, don't fail the build
+    mkdir -p "$dst"
+
     dst="$dst/lib/debug/.build-id"
 
     # Find executables and dynamic libraries.

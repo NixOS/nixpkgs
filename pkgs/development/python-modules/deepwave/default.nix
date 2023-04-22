@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "ar4";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4B3V87/voYs61pXhqmydLe48JsnRGuJlUYOOdmJlroA=";
+    hash = "sha256-4B3V87/voYs61pXhqmydLe48JsnRGuJlUYOOdmJlroA=";
   };
 
   # unable to find ninja although it is available, most likely because it looks for its pip version

@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "celery";
     repo = "pytest-celery";
     rev = "v${version}";
-    sha256 = "sha256-vzWwkOS3BLOInaFDk+PegvEmC88ZZ1sG1CmHwhn7r9w=";
+    hash = "sha256-vzWwkOS3BLOInaFDk+PegvEmC88ZZ1sG1CmHwhn7r9w=";
   };
 
   postPatch = ''

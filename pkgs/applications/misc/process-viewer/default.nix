@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "process-viewer";
-  version = "0.5.6";
+  version = "0.5.8";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-ELASfcXNhUCE/mhPKBHA78liFMbcT9RB/aoLt4ZRPa0=";
+    sha256 = "sha256-mEmtLCtHlrCurjKKJ3vEtEkLBik4LwuUED5UeQ1QLws=";
   };
 
-  cargoSha256 = "sha256-K2kyZwKRALh9ImPngijgpoHyLS+c5sDYviN74JxhJLM=";
+  cargoSha256 = "sha256-lgVByl+mpCDbhwlC1Eiw9ZkHIDYJsOR06Ds790pXOMc=";
 
   nativeBuildInputs = [ pkg-config ];
 

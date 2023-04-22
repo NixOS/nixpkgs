@@ -81,99 +81,90 @@ let
 in
 
 {
-  options.services.xserver.desktopManager.plasma5 = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc "Enable the Plasma 5 (KDE 5) desktop environment.";
-    };
+  options = {
+    services.xserver.desktopManager.plasma5 = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Enable the Plasma 5 (KDE 5) desktop environment.";
+      };
 
-    phononBackend = mkOption {
-      type = types.enum [ "gstreamer" "vlc" ];
-      default = "vlc";
-      example = "gstreamer";
-      description = lib.mdDoc "Phonon audio backend to install.";
-    };
+      phononBackend = mkOption {
+        type = types.enum [ "gstreamer" "vlc" ];
+        default = "vlc";
+        example = "gstreamer";
+        description = lib.mdDoc "Phonon audio backend to install.";
+      };
 
-    supportDDC = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Support setting monitor brightness via DDC.
+      useQtScaling = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Enable HiDPI scaling in Qt.";
+      };
 
-        This is not needed for controlling brightness of the internal monitor
-        of a laptop and as it is considered experimental by upstream, it is
-        disabled by default.
-      '';
-    };
+      runUsingSystemd = mkOption {
+        description = lib.mdDoc "Use systemd to manage the Plasma session";
+        type = types.bool;
+        default = true;
+      };
 
-    useQtScaling = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc "Enable HiDPI scaling in Qt.";
-    };
+      notoPackage = mkPackageOptionMD pkgs "Noto fonts" {
+        default = [ "noto-fonts" ];
+        example = "noto-fonts-lgc-plus";
+      };
 
-    runUsingSystemd = mkOption {
-      description = lib.mdDoc "Use systemd to manage the Plasma session";
-      type = types.bool;
-      default = true;
-    };
+      # Internally allows configuring kdeglobals globally
+      kdeglobals = mkOption {
+        internal = true;
+        default = {};
+        type = kdeConfigurationType;
+      };
 
-    excludePackages = mkOption {
-      description = lib.mdDoc "List of default packages to exclude from the configuration";
-      type = types.listOf types.package;
-      default = [];
-      example = literalExpression "[ pkgs.plasma5Packages.oxygen ]";
-    };
+      # Internally allows configuring kwin globally
+      kwinrc = mkOption {
+        internal = true;
+        default = {};
+        type = kdeConfigurationType;
+      };
 
-    notoPackage = mkPackageOptionMD pkgs "Noto fonts" {
-      default = [ "noto-fonts" ];
-      example = "noto-fonts-lgc-plus";
-    };
+      mobile.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Enable support for running the Plasma Mobile shell.
+        '';
+      };
 
-    # Internally allows configuring kdeglobals globally
-    kdeglobals = mkOption {
-      internal = true;
-      default = {};
-      type = kdeConfigurationType;
-    };
+      mobile.installRecommendedSoftware = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          Installs software recommended for use with Plasma Mobile, but which
+          is not strictly required for Plasma Mobile to run.
+        '';
+      };
 
-    # Internally allows configuring kwin globally
-    kwinrc = mkOption {
-      internal = true;
-      default = {};
-      type = kdeConfigurationType;
+      bigscreen.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Enable support for running the Plasma Bigscreen session.
+        '';
+      };
     };
-
-    mobile.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Enable support for running the Plasma Mobile shell.
-      '';
-    };
-
-    mobile.installRecommendedSoftware = mkOption {
-      type = types.bool;
-      default = true;
-      description = lib.mdDoc ''
-        Installs software recommended for use with Plasma Mobile, but which
-        is not strictly required for Plasma Mobile to run.
-      '';
-    };
-
-    bigscreen.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Enable support for running the Plasma Bigscreen session.
-      '';
-    };
+    environment.plasma5.excludePackages = mkOption {
+        description = lib.mdDoc "List of default packages to exclude from the configuration";
+        type = types.listOf types.package;
+        default = [];
+        example = literalExpression "[ pkgs.plasma5Packages.oxygen ]";
+      };
   };
 
   imports = [
     (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "enableQt4Support" ] "Phonon no longer supports Qt 4.")
+    (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "supportDDC" ] "DDC/CI is no longer supported upstream.")
     (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde5" ] [ "services" "xserver" "desktopManager" "plasma5" ])
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "excludePackages" ] [ "environment" "plasma5" "excludePackages" ])
   ];
 
   config = mkMerge [
@@ -200,12 +191,6 @@ in
           source = "${getBin plasma5.kwin}/bin/kwin_wayland";
         };
       };
-
-      # DDC support
-      boot.kernelModules = lib.optional cfg.supportDDC "i2c_dev";
-      services.udev.extraRules = lib.optionalString cfg.supportDDC ''
-        KERNEL=="i2c-[0-9]*", TAG+="uaccess"
-      '';
 
       environment.systemPackages =
         with libsForQt5;
@@ -301,7 +286,7 @@ in
           ];
         in
         requiredPackages
-        ++ utils.removePackagesByName optionalPackages cfg.excludePackages
+        ++ utils.removePackagesByName optionalPackages config.environment.plasma5.excludePackages
 
         # Phonon audio backend
         ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
@@ -444,17 +429,19 @@ in
             dolphin-plugins
             ffmpegthumbs
             kdegraphics-thumbnailers
-            pkgs.kio-admin
+            kde-inotify-survey
+            kio-admin
             kio-extras
           ];
           optionalPackages = [
+            ark
             elisa
             gwenview
             okular
             khelpcenter
             print-manager
           ];
-      in requiredPackages ++ utils.removePackagesByName optionalPackages cfg.excludePackages;
+      in requiredPackages ++ utils.removePackagesByName optionalPackages config.environment.plasma5.excludePackages;
 
       systemd.user.services = {
         plasma-run-with-systemd = {

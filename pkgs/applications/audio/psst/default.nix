@@ -25,7 +25,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ZKhHN0ruLb6ZVKkrKv/YawRsVop6SP1QF/nrtkmA8P8=";
   };
 
-  cargoSha256 = "sha256-TDxoRWQAzrgPElEEDNYkk3XX2i+LnNLMuY/J3pb3Xlk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "cubeb-0.10.1" = "sha256-PRQL8dq5BAsodbVlm5SnuzUDLg9/UY3BmoumcmWF+aY=";
+      "druid-0.7.0" = "sha256-fnsm+KGsuePLRRjTecJ0GBQEySSeDIth13AX/aAigqU=";
+      "druid-enums-0.1.0" = "sha256-4fo0ywoK+m4OuqYlbNbJS2BZK/VBFqeAYEFNGnGUVmM=";
+      "piet-0.5.0" = "sha256-hCg8vABnLAO8egFwMtRSpRdzH6auETrICoUfuBZVzz8=";
+    };
+  };
   # specify the subdirectory of the binary crate to build from the workspace
   buildAndTestSubdir = "psst-gui";
 

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, rebar, erlang, opencl-headers, ocl-icd }:
+{ lib, stdenv, fetchFromGitHub, rebar, erlang, opencl-headers, ocl-icd }:
 
 stdenv.mkDerivation rec {
   version = "1.2.4";
@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
     rev = "cl-${version}";
     sha256 = "1gwkjl305a0231hz3k0w448dsgbgdriaq764sizs5qfn59nzvinz";
   };
+
+  # https://github.com/tonyrog/cl/issues/39
+  postPatch = ''
+    substituteInPlace c_src/Makefile \
+      --replace "-m64" ""
+  '';
 
   buildInputs = [ erlang rebar opencl-headers ocl-icd ];
 
@@ -29,8 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tonyrog/cl";
     description = "OpenCL binding for Erlang";
     license = licenses.mit;
-    # https://github.com/tonyrog/cl/issues/39
-    broken = stdenv.isAarch64;
     platforms = platforms.linux;
   };
 }

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "connect_box";
     inherit version;
-    sha256 = "sha256-d1KqVKaHlZDm2o1GJ7r8KoONwfd1lxXexJxavCvjfW8=";
+    hash = "sha256-d1KqVKaHlZDm2o1GJ7r8KoONwfd1lxXexJxavCvjfW8=";
   };
 
   propagatedBuildInputs = [

@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libliftoff";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MbXDUkAA9gY6Qb6Ok33MNuqIfb4bPIEHd1IVH/UmH10=";
+    sha256 = "sha256-NPwhsd6IOQ0XxNQQNdaaM4kmwoLftokV86WYhoa5csY=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/emersion/libliftoff/releases/tag/v${version}";
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ pedrohlc primeos Scrumplex ];
   };
 }

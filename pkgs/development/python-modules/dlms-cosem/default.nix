@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pwitab";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-BrLanP+SIRRof15yzqwcDOxw92phbW7m9CfORz0xo7I=";
+    hash = "sha256-BrLanP+SIRRof15yzqwcDOxw92phbW7m9CfORz0xo7I=";
   };
 
   propagatedBuildInputs = [

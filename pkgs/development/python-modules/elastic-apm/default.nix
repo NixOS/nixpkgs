@@ -8,7 +8,7 @@
 , httpx
 , jinja2
 , jsonschema
-, Logbook
+, logbook
 , mock
 , pytest-asyncio
 , pytest-bdd
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     httpx
     jinja2
     jsonschema
-    Logbook
+    logbook
     mock
     pytest-asyncio
     pytest-bdd

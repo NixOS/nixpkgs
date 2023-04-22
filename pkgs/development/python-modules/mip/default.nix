@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "mip";
-  version = "1.14.2";
+  version = "1.15.0";
 
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wr4gXSh456heG5nsaEi2yo7LMre2Nd6QbTm0dcDCX1k=";
+    hash = "sha256-f28Dgc/ixSwbhkAgPaLLVpdLJuI5UN37GnazfZFvGX4=";
   };
 
   nativeCheckInputs = [ matplotlib networkx numpy pytestCheckHook ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     cffi
   ] ++ lib.optionals gurobiSupport ([
     gurobipy
-  ] ++ lib.optional (builtins.isNull gurobiHome) gurobi);
+  ] ++ lib.optional (gurobiHome == null) gurobi);
 
   # Source files have CRLF terminators, which make patch error out when supplied
   # with diffs made on *nix machines
@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   # Make MIP use the Gurobi solver, if configured to do so
   makeWrapperArgs = lib.optional gurobiSupport
-    "--set GUROBI_HOME ${if builtins.isNull gurobiHome then gurobi.outPath else gurobiHome}";
+    "--set GUROBI_HOME ${if gurobiHome == null then gurobi.outPath else gurobiHome}";
 
   # Tests that rely on Gurobi are activated only when Gurobi support is enabled
   disabledTests = lib.optional (!gurobiSupport) "gurobi";

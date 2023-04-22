@@ -19,12 +19,12 @@
 , types-pytz
 , typing-extensions
 , xarray
-, XlsxWriter
+, xlsxwriter
 }:
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
-  version = "1.5.3.230214";
+  version = "1.5.3.230321";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "pandas-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hLQXGnWtjYNzzyHO+p7CCFEHc2lrSwh35Om94K5Ozhk=";
+    hash = "sha256-RjU762VyDPy86Cvmr8hfPkqLtmntB3F6tf2OAgqmnK4=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     tabulate
     typing-extensions
     xarray
-    XlsxWriter
+    xlsxwriter
   ];
 
   disabledTests = [
@@ -107,6 +107,8 @@ buildPythonPackage rec {
     "test_types_rank"
     "test_undefined_variable_error"
     "test_value_label_type_mismatch"
+    "test_read_sql_via_sqlalchemy_connection"
+    "test_read_sql_via_sqlalchemy_engine"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_plotting" # Fatal Python error: Illegal instruction
   ];

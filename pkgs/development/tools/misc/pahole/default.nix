@@ -1,15 +1,22 @@
-{ lib, stdenv, fetchgit, pkg-config, libbpf, cmake, elfutils, zlib, argp-standalone, musl-obstack }:
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, libbpf
+, cmake
+, elfutils
+, zlib
+, argp-standalone
+, musl-obstack
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "pahole";
-  # Need a revision that supports DW_TAG_unspecified_type(0x3b).
-  # Was added after 1.24 release in a series of changes.
-  # Can switch back to release tags once 1.25 is cut.
-  version = "1.24-unstable-2022-11-24";
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git";
-    rev = "02d67c51765dfbd5893087da63744c864c7cc9e0";
-    hash = "sha256-hKc8UKxPtEM2zlYmolSt1pXJKNRt4wC/Uf+dP/Sb7+s=";
+  version = "1.25";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot/pahole-${version}.tar.gz";
+    hash = "sha256-s0YVT2UnMSO8jS/4XCt06wNPV4czHH6bmZRy/snO3jg=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -21,6 +28,10 @@ stdenv.mkDerivation rec {
 
   # Put libraries in "lib" subdirectory, not top level of $out
   cmakeFlags = [ "-D__LIB=lib" "-DLIBBPF_EMBEDDED=OFF" ];
+
+  passthru.tests = {
+    inherit (nixosTests) bpf;
+  };
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/";

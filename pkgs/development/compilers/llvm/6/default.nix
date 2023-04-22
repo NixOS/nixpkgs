@@ -20,7 +20,16 @@ let
   llvm_meta = {
     license     = lib.licenses.ncsa;
     maintainers = lib.teams.llvm.members;
-    platforms   = lib.platforms.all;
+
+    # See llvm/cmake/config-ix.cmake.
+    platforms   =
+      lib.platforms.aarch64 ++
+      lib.platforms.arm ++
+      lib.platforms.mips ++
+      lib.platforms.power ++
+      lib.platforms.s390x ++
+      lib.platforms.wasi ++
+      lib.platforms.x86;
   };
 
   tools = lib.makeExtensible (tools: let

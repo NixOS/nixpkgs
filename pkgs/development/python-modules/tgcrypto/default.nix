@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pyrogram";
     repo = "tgcrypto";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-u+mXzkmM79NBi4oHnb32RbN9WPnba/cm1q2Ko0uNEZg=";
+    hash = "sha256-u+mXzkmM79NBi4oHnb32RbN9WPnba/cm1q2Ko0uNEZg=";
   };
 
   nativeBuildInputs = [

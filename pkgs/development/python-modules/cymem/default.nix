@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "cymem";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-lYMRFFMS+ETjWd4xi12ezC8CVLbLJfynmOU1DpYQcck=";
+    hash = "sha256-lYMRFFMS+ETjWd4xi12ezC8CVLbLJfynmOU1DpYQcck=";
   };
 
   propagatedBuildInputs = [

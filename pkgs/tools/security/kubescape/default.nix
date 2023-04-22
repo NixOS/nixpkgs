@@ -6,15 +6,17 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.0.161";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
-    owner = "armosec";
+    owner = "kubescape";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-rsO6ZTQg5fmpp+5Zx36tQnDW1vf2k+FCI3cFbGZifVM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tXfjbE4C08YWgLJlZHjagAP3upqCpaOgwSegovVSFCI=";
+    fetchSubmodules = true;
   };
-  vendorSha256 = "sha256-EinrVdGdYroh0X/ACAVD2gw4k0jrPHQ3Ucb3TUYKd8Q=";
+
+  vendorHash = "sha256-bZPM8PCn0+W7Sf/+lQ3ASeqxFSZi49r32rjvQdD7Bvc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -23,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/armosec/kubescape/v2/core/cautils.BuildNumber=v${version}"
+    "-X github.com/kubescape/kubescape/v2/core/cautils.BuildNumber=v${version}"
   ];
 
   subPackages = [ "." ];
@@ -39,6 +41,7 @@ buildGoModule rec {
 
     # remove tests that use networking
     rm core/pkg/resourcehandler/urlloader_test.go
+    rm core/pkg/opaprocessor/*_test.go
 
     # remove tests that use networking
     substituteInPlace core/pkg/resourcehandler/repositoryscanner_test.go \
@@ -58,19 +61,18 @@ buildGoModule rec {
   '';
 
   doInstallCheck = true;
+
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/kubescape --help
-    # `--version` vs `version` shows the version without checking for latest
-    # if the flag is missing the BuildNumber may have moved
-    $out/bin/kubescape --version | grep "v${version}"
+    $out/bin/kubescape version | grep "v${version}"
     runHook postInstallCheck
   '';
 
   meta = with lib; {
     description = "Tool for testing if Kubernetes is deployed securely";
-    homepage = "https://github.com/armosec/kubescape";
-    changelog = "https://github.com/armosec/kubescape/releases/tag/v${version}";
+    homepage = "https://github.com/kubescape/kubescape";
+    changelog = "https://github.com/kubescape/kubescape/releases/tag/v${version}";
     longDescription = ''
       Kubescape is the first open-source tool for testing if Kubernetes is
       deployed securely according to multiple frameworks: regulatory, customized

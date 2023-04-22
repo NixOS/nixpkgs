@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tonelib-metal";
-  version = "1.1.0";
+  version = "1.2.6";
 
   src = fetchurl {
-    url = "https://www.tonelib.net/download/220218/ToneLib-Metal-amd64.deb";
-    sha256 = "sha256-F5EKwNQ9f/kdZLFI+QDZHvwevV/vDnxMdSmT/vnX6ug=";
+    url = "https://tonelib.net/download/221222/ToneLib-Metal-amd64.deb";
+    sha256 = "sha256-G80EKAsXomdk8GsnNyvjN8shz3YMKhqdWWYyVB7xTsU=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg ];

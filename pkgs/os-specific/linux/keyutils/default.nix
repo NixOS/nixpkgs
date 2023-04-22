@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
     # Before removing this patch, please ensure the package still builds by running eg.
     # nix-build -E 'with import ./. {}; pkgs.keyutils.override { stdenv = pkgs.llvmPackages_latest.stdenv; }'
     ./0001-Remove-unused-function-after_eq.patch
+
+    # Fix build for s390-linux, where size_t is different from ptrdiff_t.
+    (fetchurl {
+      url = "https://lore.kernel.org/keyrings/20230301134250.301819-1-hi@alyssa.is/raw";
+      sha256 = "1cbgwxq28fw5ldh38ngcs7xiqvpnmrw0hw9zzhbhb1hdxkavrc1s";
+    })
   ];
 
   makeFlags = lib.optionals stdenv.hostPlatform.isStatic "NO_SOLIB=1";

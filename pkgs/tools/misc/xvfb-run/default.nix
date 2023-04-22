@@ -14,7 +14,7 @@
 , xterm
 }:
 stdenvNoCC.mkDerivation rec {
-  name = "xvfb-run";
+  pname = "xvfb-run";
   version = "1+g87f6705";
 
   src = fetchFromGitHub {

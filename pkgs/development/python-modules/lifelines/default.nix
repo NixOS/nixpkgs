@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "CamDavidsonPilon";
     repo = "lifelines";
     rev = "v${version}";
-    sha256 = "sha256-KDoXplqkTsk85dmcTBhbj2GDcC4ry+2z5C2QHAnBTw4=";
+    hash = "sha256-KDoXplqkTsk85dmcTBhbj2GDcC4ry+2z5C2QHAnBTw4=";
   };
 
   propagatedBuildInputs = [

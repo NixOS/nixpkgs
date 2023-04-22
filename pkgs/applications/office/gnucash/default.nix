@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch2
 , fetchurl
 , aqbanking
 , boost
@@ -74,6 +75,34 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote helpers directly
     ./0004-exec-fq-helpers.patch
+    # the following patches fix compilation with gcc 13 and glib > 2.76
+    # "Build fails with gcc 13 and glib > 2.76"
+    (fetchpatch2 {
+      url = "https://github.com/Gnucash/gnucash/commit/184669f517744ac7be6e420e5e1f359384f676d5.patch";
+      sha256 = "sha256-X5HCK//n+V5k/pEUNL6xwZY5NTeGnBt+7GhooqOXQ2I=";
+    })
+    # "Build fails with gcc 13 and glib > 2.76, bis"
+    (fetchpatch2 {
+      url = "https://github.com/Gnucash/gnucash/commit/abcce5000ca72bf943ca8951867729942388848e.patch";
+      sha256 = "sha256-WiMkozqMAYl5wrRhAQMNVDY77aRBa3E5/a0gvYyc9Zk=";
+    })
+    # "Build fails with gcc 13 and glib > 2.76, ter"
+    (fetchpatch2 {
+      url = "https://github.com/Gnucash/gnucash/commit/89e63ef67235d231d242f018894295a6cb38cfc3.patch";
+      sha256 = "sha256-xCkY8RlZPVDaRLbVn+QT28s4qIUgtMgjmuB0axSrNpw=";
+    })
+    # "Build fails with gcc 13"
+    # "Protect against passing an lseek failure rv to read()."
+    (fetchpatch2 {
+      url = "https://github.com/Gnucash/gnucash/commit/ce3447e6ea8b2f734b24a2502e865ebbbc21aaaa.patch";
+      sha256 = "sha256-mfPs/5rkCamihE0z1SRoX0tV4FNPkKUGd1T6iaCwy7E=";
+    })
+    # "Fix crashes in test-engine on Arch Linux."
+    # Also fixes the same crashes in nixpkgs.
+    (fetchpatch2 {
+      url = "https://github.com/Gnucash/gnucash/commit/1020bde89c77f70cee6cc8181ead96e8fade47aa.patch";
+      sha256 = "sha256-JCWm3M8hdgAwjuhLbFRN4Vk3BQqpn0FUwHk6Kg5Qa7Q=";
+    })
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress

@@ -25,6 +25,17 @@ buildPythonPackage rec {
     commentjson
     pytestCheckHook
   ];
+  # TODO: reenable after updating to >= 1.0.0
+  # https://github.com/sarugaku/resolvelib/issues/114
+  disabledTests = [
+    "shared_parent_dependency"
+    "deep_complex_conflict"
+    "shared_parent_dependency_with_swapping"
+    "spapping_and_rewinding"
+    "pruned_unresolved_orphan"
+    "conflict_common_parent"
+    "same-package"
+  ];
 
   pythonImportsCheck = [
     "resolvelib"

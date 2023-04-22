@@ -30,6 +30,7 @@
 , perlPackages
 , sqlite
 , vigra
+, wrapGAppsHook
 , wxGTK
 , zlib
 }:
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config wrapGAppsHook ];
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];

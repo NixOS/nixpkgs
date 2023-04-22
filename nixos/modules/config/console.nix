@@ -21,7 +21,7 @@ let
   # Sadly, systemd-vconsole-setup doesn't support binary keymaps.
   vconsoleConf = pkgs.writeText "vconsole.conf" ''
     KEYMAP=${cfg.keyMap}
-    FONT=${cfg.font}
+    ${optionalString (cfg.font != null) "FONT=${cfg.font}"}
   '';
 
   consoleEnv = kbd: pkgs.buildEnv {
@@ -45,14 +45,19 @@ in
     };
 
     font = mkOption {
-      type = with types; either str path;
-      default = "Lat2-Terminus16";
+      type = with types; nullOr (either str path);
+      default = null;
       example = "LatArCyrHeb-16";
       description = mdDoc ''
-        The font used for the virtual consoles.  Leave empty to use
-        whatever the {command}`setfont` program considers the
-        default font.
-        Can be either a font name or a path to a PSF font file.
+        The font used for the virtual consoles.
+        Can be `null`, a font name, or a path to a PSF font file.
+
+        Use `null` to let the kernel choose a built-in font.
+        The default is 8x16, and, as of Linux 5.3, Terminus 32 bold for display
+        resolutions of 2560x1080 and higher.
+        These fonts cover the [IBM437][] character set.
+
+        [IBM437]: https://en.wikipedia.org/wiki/Code_page_437
       '';
     };
 
@@ -151,7 +156,7 @@ in
           printf "\033%%${if isUnicode then "G" else "@"}" >> /dev/console
           loadkmap < ${optimizedKeymap}
 
-          ${optionalString cfg.earlySetup ''
+          ${optionalString (cfg.earlySetup && cfg.font != null) ''
             setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
           ''}
         '');
@@ -168,7 +173,7 @@ in
           "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
           "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
           "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # Fonts and keyboard layouts are compressed
-        ] ++ optionals (hasPrefix builtins.storeDir cfg.font) [
+        ] ++ optionals (cfg.font != null && hasPrefix builtins.storeDir cfg.font) [
           "${cfg.font}"
         ] ++ optionals (hasPrefix builtins.storeDir cfg.keyMap) [
           "${cfg.keyMap}"
@@ -195,7 +200,7 @@ in
         ];
       })
 
-      (mkIf (cfg.earlySetup && !config.boot.initrd.systemd.enable) {
+      (mkIf (cfg.earlySetup && cfg.font != null && !config.boot.initrd.systemd.enable) {
         boot.initrd.extraUtilsCommands = ''
           mkdir -p $out/share/consolefonts
           ${if substring 0 1 cfg.font == "/" then ''

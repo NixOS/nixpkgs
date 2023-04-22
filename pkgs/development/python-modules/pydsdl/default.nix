@@ -9,7 +9,7 @@
     owner = "UAVCAN";
     repo = pname;
     rev = version;
-    sha256 = "sha256-5AwwqduIvLSZk6WcI59frwRKwjniQXfNWWVsy6V6I1E=";
+    hash = "sha256-5AwwqduIvLSZk6WcI59frwRKwjniQXfNWWVsy6V6I1E=";
   };
 
   # allow for writable directory for darwin

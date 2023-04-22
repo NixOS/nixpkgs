@@ -18,5 +18,6 @@ buildPythonApplication rec {
     description = "Collection of simple tools for sway (and i3)";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ atila ];
+    platforms = platforms.linux;
   };
 }

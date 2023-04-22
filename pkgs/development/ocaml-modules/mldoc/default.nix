@@ -6,7 +6,7 @@
 , cmdliner
 , core
 , core_bench
-, core_unix
+, core_unix ? null
 , js_of_ocaml
 , js_of_ocaml-ppx
 , ppx_deriving_yojson

@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication {
     requests
     tlslite-ng
     # plugins
-    btchip
+    btchip-python
     ckcc-protocol
     keepkey
     trezor

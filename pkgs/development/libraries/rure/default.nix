@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchCrate
+, fixDarwinDylibNames
 }:
 
 let
@@ -26,6 +27,10 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     install -Dm644 include/rure.h -t "$dev/include"
   '';
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   passthru.updateScript = ./update.sh;
 

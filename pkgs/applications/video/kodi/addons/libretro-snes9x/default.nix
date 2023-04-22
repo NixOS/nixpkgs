@@ -1,4 +1,4 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, libretro, snes9x }:
+{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, snes9x }:
 
 buildKodiBinaryAddon rec {
   pname = "kodi-libretro-snes9x";
@@ -8,7 +8,7 @@ buildKodiBinaryAddon rec {
   src = fetchFromGitHub {
     owner = "kodi-game";
     repo = "game.libretro.snes9x";
-    rev = "${version}-${rel}";
+    rev = "${version}-Matrix";
     sha256 = "sha256-LniZf8Gae4+4Rgc9OGhMCkOI3IA7CPjVrN/gbz9te38=";
   };
 

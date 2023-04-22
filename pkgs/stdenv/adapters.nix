@@ -176,7 +176,7 @@ rec {
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
         dontStrip = true;
-        env.NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
+        env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og"; };
       });
     });
 
@@ -189,6 +189,28 @@ rec {
       });
     });
 
+  useMoldLinker = stdenv: let
+    bintools = stdenv.cc.bintools.override {
+      extraBuildCommands = ''
+        wrap ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+        wrap ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+      '';
+    };
+  in stdenv.override (old: {
+    cc = stdenv.cc.override {
+      inherit bintools;
+    };
+    allowedRequisites =
+      lib.mapNullable (rs: rs ++ [ bintools pkgs.mold (lib.getLib pkgs.mimalloc) (lib.getLib pkgs.openssl) ]) (stdenv.allowedRequisites or null);
+      # gcc >12.1.0 supports '-fuse-ld=mold'
+      # the wrap ld above in bintools supports gcc <12.1.0 and shouldn't harm >12.1.0
+    # https://github.com/rui314/mold#how-to-use
+    } // lib.optionalAttrs (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12")) {
+    mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
+    });
+  });
+
 
   /* Modify a stdenv so that it builds binaries optimized specifically
      for the machine they are built on.
@@ -197,7 +219,8 @@ rec {
   impureUseNativeOptimizations = stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        env.NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -march=native";
+        env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -march=native"; };
+
         NIX_ENFORCE_NO_NATIVE = false;
 
         preferLocalBuild = true;
@@ -222,7 +245,7 @@ rec {
   withCFlags = compilerFlags: stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        env.NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}";
+        env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}"; };
       });
     });
 }

@@ -13,7 +13,7 @@ let pyjsparser = buildPythonPackage rec {
     owner = "PiotrDabkowski";
     repo = pname;
     rev = "5465d037b30e334cb0997f2315ec1e451b8ad4c1";
-    sha256 = "sha256-Hqay9/qsjUfe62U7Q79l0Yy01L2Bnj5xNs6427k3Br8=";
+    hash = "sha256-Hqay9/qsjUfe62U7Q79l0Yy01L2Bnj5xNs6427k3Br8=";
   };
 
   nativeCheckInputs = [ pytestCheckHook js2py ];

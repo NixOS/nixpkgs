@@ -232,8 +232,11 @@ fi
 
 # Only add --build-id if this is a final link. FIXME: should build gcc
 # with --enable-linker-build-id instead?
+#
+# Note: `lld` interprets `--build-id` to mean `--build-id=fast`; GNU ld defaults
+# to SHA1.
 if [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] && ! (( "$relocatable" )); then
-    extraAfter+=(--build-id)
+    extraAfter+=(--build-id="${NIX_BUILD_ID_STYLE:-sha1}")
 fi
 
 
@@ -250,10 +253,18 @@ fi
 
 PATH="$path_backup"
 # Old bash workaround, see above.
-@prog@ \
-    ${extraBefore+"${extraBefore[@]}"} \
-    ${params+"${params[@]}"} \
-    ${extraAfter+"${extraAfter[@]}"}
+
+if (( "${NIX_LD_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
+    @prog@ @<(printf "%q\n" \
+        ${extraBefore+"${extraBefore[@]}"} \
+        ${params+"${params[@]}"} \
+        ${extraAfter+"${extraAfter[@]}"})
+else
+    @prog@ \
+        ${extraBefore+"${extraBefore[@]}"} \
+        ${params+"${params[@]}"} \
+        ${extraAfter+"${extraAfter[@]}"}
+fi
 
 if [ -e "@out@/nix-support/post-link-hook" ]; then
     source @out@/nix-support/post-link-hook

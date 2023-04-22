@@ -22,7 +22,7 @@ let
     "x86_64-solaris"
 
     # JS
-    "js-ghcjs"
+    "javascript-ghcjs"
 
     # Linux
     "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"

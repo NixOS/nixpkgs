@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "kwarunek";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-7lDOI1SHPpRZLTHRTmfbKlZH18T73poJdFyVmb+HKms=";
+    hash = "sha256-7lDOI1SHPpRZLTHRTmfbKlZH18T73poJdFyVmb+HKms=";
   };
 
   propagatedBuildInputs = [

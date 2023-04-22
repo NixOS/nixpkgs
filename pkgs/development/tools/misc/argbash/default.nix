@@ -1,39 +1,50 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, runtimeShell, python3Packages, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, makeWrapper
+, python3Packages
+, runtimeShell
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "argbash";
-
   version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "matejak";
     repo = "argbash";
-    rev = version;
-    sha256 = "1xdhpbnc0xjv6ydcm122hhdjcl77jhiqnccjfqjp3cd1lfmzvg8v";
+    rev = finalAttrs.version;
+    hash = "sha256-G739q6OhsXEldpIxiyOU51AmG4RChMqaN1t2wOy6sPU=";
   };
 
-  sourceRoot = "source/resources";
-
   postPatch = ''
-    chmod -R +w ..
-    patchShebangs ..
-    substituteInPlace Makefile \
+    patchShebangs .
+    substituteInPlace resources/Makefile \
       --replace '/bin/bash' "${runtimeShell}"
   '';
 
-  nativeBuildInputs = [ autoconf python3Packages.docutils makeWrapper ];
+  nativeBuildInputs = [
+    autoconf
+    makeWrapper
+    python3Packages.docutils
+  ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "-C" "resources"
+    "PREFIX=$(out)"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/argbash \
       --prefix PATH : '${autoconf}/bin'
   '';
 
-  meta = with lib; {
-    description = "Bash argument parsing code generator";
+  meta = {
     homepage = "https://argbash.io/";
-    license = licenses.free; # custom license.  See LICENSE in source repo.
-    maintainers = with maintainers; [ rencire ];
+    description = "Bash argument parsing code generator";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
   };
-}
+})

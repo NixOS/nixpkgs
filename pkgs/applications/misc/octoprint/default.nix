@@ -1,5 +1,6 @@
 { pkgs
 , stdenv
+, callPackage
 , lib
 , fetchFromGitHub
 , python3
@@ -38,6 +39,17 @@ let
               nativeBuildInputs = [ ];
               format = "setuptools";
               outputs = [ "out" ];
+              patches = [ ];
+            });
+            # downgrade needed for flask-babel 2.0.0
+            babel = super.babel.overridePythonAttrs (oldAttrs: rec {
+              version = "2.11.0";
+              src = super.fetchPypi {
+                pname = "Babel";
+                inherit version;
+                hash = "sha256-XvSzImsBgN7d7UIpZRyLDho6aig31FoHMnLzE+TPl/Y=";
+              };
+              propagatedBuildInputs = [ self.pytz ];
             });
           }
         )
@@ -231,9 +243,10 @@ let
               ];
 
               passthru = {
-                python = self.python;
+                inherit (self) python;
                 updateScript = nix-update-script { };
                 tests = {
+                  plugins = (callPackage ./plugins.nix { }) super self;
                   inherit (nixosTests) octoprint;
                 };
               };
@@ -247,7 +260,7 @@ let
             };
           }
         )
-        (import ./plugins.nix { inherit pkgs; })
+        (callPackage ./plugins.nix { })
         packageOverrides
       ]
     );

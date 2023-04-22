@@ -24,6 +24,7 @@ in stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
+  buildInputs = [ stdenv.cc.cc.libgcc or null ];
 
   meta = with lib; {
     homepage = "https://pulumi.io/";

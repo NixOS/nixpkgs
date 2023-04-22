@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, erlang, cl, libGL, libGLU, runtimeShell }:
+{ lib, stdenv, fetchurl, fetchpatch, erlang, cl, libGL, libGLU, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "wings";
@@ -9,10 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "1xcmifs4vq2810pqqvsjsm8z3lz24ys4c05xkh82nyppip2s89a3";
   };
 
-  ERL_LIBS = "${cl}/lib/erlang/lib";
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/dgud/wings/commit/94b3a3c6a0cfdcdbd98edce055d5c83ecb361f37.patch";
+      hash = "sha256-DHT1TiYoowloIWrdutBu70mL+557cTFr1dRcNgwbkpE=";
+    })
+  ];
 
-  patchPhase = ''
-    sed -i 's,-Werror ,,' e3d/Makefile
+  postPatch = ''
+    find . -type f -name "Makefile" -exec sed -i 's,-Werror ,,' {} \;
     sed -i 's,../../wings/,../,' icons/Makefile
     find plugins_src -mindepth 2 -type f -name "*.[eh]rl" -exec sed -i 's,wings/src/,../../src/,' {} \;
     find plugins_src -mindepth 2 -type f -name "*.[eh]rl" -exec sed -i 's,wings/e3d/,../../e3d/,' {} \;
@@ -23,6 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ erlang cl libGL libGLU ];
+
+  ERL_LIBS = "${cl}/lib/erlang/lib";
 
   # I did not test the *cl* part. I added the -pa just by imitation.
   installPhase = ''

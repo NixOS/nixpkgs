@@ -51,11 +51,9 @@
 , systemd
 , pipewire
 , gn
-, cups
-, openbsm
 , runCommand
 , writeScriptBin
-, ffmpeg
+, ffmpeg_4
 , lib
 , stdenv
 , glib
@@ -67,6 +65,36 @@
 , mesa
 , xkeyboard_config
 , enableProprietaryCodecs ? true
+  # darwin
+, clang_14
+, bootstrap_cmds
+, cctools
+, xcbuild
+, AGL
+, AVFoundation
+, Accelerate
+, Cocoa
+, CoreLocation
+, CoreML
+, ForceFeedback
+, GameController
+, ImageCaptureCore
+, LocalAuthentication
+, MediaAccessibility
+, MediaPlayer
+, MetalKit
+, Network
+, OpenDirectory
+, Quartz
+, ReplayKit
+, SecurityInterface
+, Vision
+, openbsm
+, libunwind
+, cups
+, libpm
+, sandbox
+, xnu
 }:
 
 qtModule {
@@ -84,6 +112,11 @@ qtModule {
     which
     gn
     nodejs
+  ] ++ lib.optionals stdenv.isDarwin [
+    clang_14
+    bootstrap_cmds
+    cctools
+    xcbuild
   ];
   doCheck = true;
   outputs = [ "out" "dev" ];
@@ -93,6 +126,16 @@ qtModule {
   # ninja builds some components with -Wno-format,
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
+
+  patches = [
+    # removes macOS 12+ dependencies
+    ../patches/qtwebengine-darwin-no-low-latency-flag.patch
+    ../patches/qtwebengine-darwin-no-copy-certificate-chain.patch
+    # Don't assume /usr/share/X11, and also respect the XKB_CONFIG_ROOT
+    # environment variable, since NixOS relies on it working.
+    # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
+    ../patches/qtwebengine-xkb-includes.patch
+  ];
 
   postPatch = ''
     # Patch Chromium build tools
@@ -110,20 +153,26 @@ qtModule {
     substituteInPlace cmake/Functions.cmake \
       --replace "/bin/bash" "${buildPackages.bash}/bin/bash"
 
-    sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-      src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
-
-    sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
-      src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
-
-    substituteInPlace src/3rdparty/chromium/ui/events/ozone/layout/xkb/xkb_keyboard_layout_engine.cc \
-      --replace "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
-
     # Patch library paths in sources
     substituteInPlace src/core/web_engine_library_info.cpp \
       --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
       --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
       --replace "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
+  ''
+  + lib.optionalString stdenv.isLinux ''
+    sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
+      src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
+
+    sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
+      src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
+  ''
+  + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure.cmake \
+      --replace "AppleClang" "Clang"
+    substituteInPlace cmake/Functions.cmake \
+      --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
+      --replace "\$sysroot/usr" "${xnu}"
   '';
 
   cmakeFlags = [
@@ -143,9 +192,14 @@ qtModule {
     # android only. https://bugreports.qt.io/browse/QTBUG-100293
     # "-DQT_FEATURE_webengine_native_spellchecker=ON"
     "-DQT_FEATURE_webengine_sanitizer=ON"
-    "-DQT_FEATURE_webengine_webrtc_pipewire=ON"
     "-DQT_FEATURE_webengine_kerberos=ON"
-  ] ++ lib.optional enableProprietaryCodecs "-DQT_FEATURE_webengine_proprietary_codecs=ON";
+  ] ++ lib.optionals stdenv.isLinux [
+    "-DQT_FEATURE_webengine_webrtc_pipewire=ON"
+  ] ++ lib.optionals enableProprietaryCodecs [
+    "-DQT_FEATURE_webengine_proprietary_codecs=ON"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.targetPlatform.darwinSdkVersion}"
+  ];
 
   propagatedBuildInputs = [
     # Image formats
@@ -173,8 +227,8 @@ qtModule {
     re2
 
     libevent
-    ffmpeg
-
+    ffmpeg_4
+  ] ++ lib.optionals stdenv.isLinux [
     dbus
     zlib
     minizip
@@ -214,10 +268,36 @@ qtModule {
 
     libkrb5
     mesa
+  ] ++ lib.optionals stdenv.isDarwin [
+    AGL
+    AVFoundation
+    Accelerate
+    Cocoa
+    CoreLocation
+    CoreML
+    ForceFeedback
+    GameController
+    ImageCaptureCore
+    LocalAuthentication
+    MediaAccessibility
+    MediaPlayer
+    MetalKit
+    Network
+    OpenDirectory
+    Quartz
+    ReplayKit
+    SecurityInterface
+    Vision
+
+    openbsm
+    libunwind
   ];
 
   buildInputs = [
     cups
+  ] ++ lib.optionals stdenv.isDarwin [
+    libpm
+    sandbox
   ];
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -226,15 +306,10 @@ qtModule {
     export NINJAFLAGS="-j$NIX_BUILD_CORES"
   '';
 
-  postInstall = ''
-    # This is required at runtime
-    mkdir $out/libexec
-    mv $dev/libexec/QtWebEngineProcess $out/libexec
-  '';
-
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin && stdenv.isx86_64;
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;

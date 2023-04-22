@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     bison
     flex
     git
-  ] ++ lib.optional useCore [ perl gsl ]
-  ++ lib.optional stdenv.isDarwin [ xcbuild ];
+  ] ++ lib.optionals useCore [ perl gsl ]
+  ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  buildInputs = lib.optional useIv [
+  buildInputs = lib.optionals useIv [
     xorg.libX11.dev
     xorg.libXcomposite.dev
     xorg.libXext.dev
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     python3.pkgs.setuptools
     python3.pkgs.scikit-build
     python3.pkgs.matplotlib
-  ] ++ lib.optional useMpi [
+  ] ++ lib.optionals useMpi [
     mpi
-  ] ++ lib.optional useMpi [
+  ] ++ lib.optionals useMpi [
     python3.pkgs.mpi4py
-  ] ++ lib.optional useRx3d [
+  ] ++ lib.optionals useRx3d [
     python3.pkgs.cython
     python3.pkgs.numpy
   ];

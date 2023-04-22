@@ -7,6 +7,18 @@ let
   serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.serverSettings);
   clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.clientSettings);
   unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unixSettings);
+  certPaths = builtins.map builtins.dirOf [ cfg.serverSettings.tls_chain cfg.serverSettings.tls_key ];
+
+  # Merge bind mount paths and remove paths where a prefix is already mounted.
+  # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is alread in the mount
+  # paths, no new bind mount is added. Adding subpaths caused problems on ofborg.
+  hasPrefixInList = list: newPath: lib.any (path: lib.hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
+  mergePaths = lib.foldl' (merged: newPath: let
+      # If the new path is a prefix to some existing path, we need to filter it out
+      filteredPaths = lib.filter (p: !lib.hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
+      # If a prefix of the new path is already in the list, do not add it
+      filteredNew = if hasPrefixInList filteredPaths newPath then [] else [ newPath ];
+    in filteredPaths ++ filteredNew) [];
 
   defaultServiceConfig = {
     BindReadOnlyPaths = [
@@ -16,7 +28,7 @@ let
       "-/etc/hosts"
       "-/etc/localtime"
     ];
-    CapabilityBoundingSet = "";
+    CapabilityBoundingSet = [];
     # ProtectClock= adds DeviceAllow=char-rtc r
     DeviceAllow = "";
     # Implies ProtectSystem=strict, which re-mounts all paths
@@ -216,22 +228,28 @@ in
       description = "kanidm identity management daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      serviceConfig = defaultServiceConfig // {
-        StateDirectory = "kanidm";
-        StateDirectoryMode = "0700";
-        ExecStart = "${pkgs.kanidm}/bin/kanidmd server -c ${serverConfigFile}";
-        User = "kanidm";
-        Group = "kanidm";
+      serviceConfig = lib.mkMerge [
+        # Merge paths and ignore existing prefixes needs to sidestep mkMerge
+        (defaultServiceConfig // {
+          BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ certPaths);
+        })
+        {
+          StateDirectory = "kanidm";
+          StateDirectoryMode = "0700";
+          ExecStart = "${pkgs.kanidm}/bin/kanidmd server -c ${serverConfigFile}";
+          User = "kanidm";
+          Group = "kanidm";
 
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
-        # This would otherwise override the CAP_NET_BIND_SERVICE capability.
-        PrivateUsers = false;
-        # Port needs to be exposed to the host network
-        PrivateNetwork = false;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        TemporaryFileSystem = "/:ro";
-      };
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+          CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+          # This would otherwise override the CAP_NET_BIND_SERVICE capability.
+          PrivateUsers = lib.mkForce false;
+          # Port needs to be exposed to the host network
+          PrivateNetwork = lib.mkForce false;
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          TemporaryFileSystem = "/:ro";
+        }
+      ];
       environment.RUST_LOG = "info";
     };
 
@@ -240,34 +258,32 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       restartTriggers = [ unixConfigFile clientConfigFile ];
-      serviceConfig = defaultServiceConfig // {
-        CacheDirectory = "kanidm-unixd";
-        CacheDirectoryMode = "0700";
-        RuntimeDirectory = "kanidm-unixd";
-        ExecStart = "${pkgs.kanidm}/bin/kanidm_unixd";
-        User = "kanidm-unixd";
-        Group = "kanidm-unixd";
+      serviceConfig = lib.mkMerge [
+        defaultServiceConfig
+        {
+          CacheDirectory = "kanidm-unixd";
+          CacheDirectoryMode = "0700";
+          RuntimeDirectory = "kanidm-unixd";
+          ExecStart = "${pkgs.kanidm}/bin/kanidm_unixd";
+          User = "kanidm-unixd";
+          Group = "kanidm-unixd";
 
-        BindReadOnlyPaths = [
-          "/nix/store"
-          "-/etc/resolv.conf"
-          "-/etc/nsswitch.conf"
-          "-/etc/hosts"
-          "-/etc/localtime"
-          "-/etc/kanidm"
-          "-/etc/static/kanidm"
-          "-/etc/ssl"
-          "-/etc/static/ssl"
-        ];
-        BindPaths = [
-          # To create the socket
-          "/run/kanidm-unixd:/var/run/kanidm-unixd"
-        ];
-        # Needs to connect to kanidmd
-        PrivateNetwork = false;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
-        TemporaryFileSystem = "/:ro";
-      };
+          BindReadOnlyPaths = [
+            "-/etc/kanidm"
+            "-/etc/static/kanidm"
+            "-/etc/ssl"
+            "-/etc/static/ssl"
+          ];
+          BindPaths = [
+            # To create the socket
+            "/run/kanidm-unixd:/var/run/kanidm-unixd"
+          ];
+          # Needs to connect to kanidmd
+          PrivateNetwork = lib.mkForce false;
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+          TemporaryFileSystem = "/:ro";
+        }
+      ];
       environment.RUST_LOG = "info";
     };
 

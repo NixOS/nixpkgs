@@ -14,13 +14,27 @@
 , xorg
 }:
 
-stdenv.mkDerivation rec {
+let
+  availableBinaries = {
+    x86_64-linux = {
+      platform = "linux-x64";
+      checksum = "sha256-ozyQya2WxnDK6of1VfxlDlXo6IDGxAXkCjFt3DqRM4k=";
+    };
+    aarch64-linux = {
+      platform = "linux-arm64";
+      checksum = "sha256-UxceWQ/eIGPFXNFIPSzBe431qqp54GwDbs9p7cqLosA=";
+    };
+  };
+  inherit (stdenv.hostPlatform) system;
+  binary = availableBinaries.${system} or (throw "cypress: No binaries available for system ${system}");
+  inherit (binary) platform checksum;
+in stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "10.10.0";
+  version = "12.9.0";
 
   src = fetchzip {
-    url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "sha256-26mkizwkF0qPX2+0rkjep28ZuNlLGPljCvVO73t34Lk=";
+    url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
+    sha256 = checksum;
   };
 
   # don't remove runtime deps
@@ -63,7 +77,12 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
 
     tests = {
-      example = callPackage ./cypress-example-kitchensink { };
+      # We used to have a test here, but was removed because
+      #  - it broke, and ofborg didn't fail https://github.com/NixOS/ofborg/issues/629
+      #  - it had a large footprint in the repo; prefer RFC 92 or an ugly FOD fetcher?
+      #  - the author switched away from cypress.
+      # To provide a test once more, you may find useful information in
+      # https://github.com/NixOS/nixpkgs/pull/223903
     };
   };
 
@@ -73,7 +92,7 @@ stdenv.mkDerivation rec {
     mainProgram = "Cypress";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.attrNames availableBinaries;
     maintainers = with maintainers; [ tweber mmahut Crafter ];
   };
 }

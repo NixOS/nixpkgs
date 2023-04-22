@@ -1,6 +1,5 @@
 { lib
 , aiohttp
-, asynctest
 , buildPythonPackage
 , ddt
 , fetchPypi
@@ -19,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-m4wQizY1TARjO60Op1K1XZVqdgL+PjI0uTn8RK+W8dg=";
+    hash = "sha256-m4wQizY1TARjO60Op1K1XZVqdgL+PjI0uTn8RK+W8dg=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     ddt
     pytestCheckHook
   ];

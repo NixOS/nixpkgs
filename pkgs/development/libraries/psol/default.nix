@@ -1,11 +1,22 @@
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchurl }:
 
-fetchzip rec {
+stdenvNoCC.mkDerivation rec {
   pname = "psol";
   version = "1.13.35.2"; # Latest stable, 2018-02-05
 
-  url = "https://dl.google.com/dl/page-speed/psol/${version}-x64.tar.gz";
-  sha256 = "0xi2srf9gx0x2sz9r45zb35k2n0iv457if1lqzvbanls3f935cmr";
+  src = fetchurl {
+    url = "https://dl.google.com/dl/page-speed/psol/${version}-x64.tar.gz";
+    hash = "sha256-3zujyPxU4ThF0KHap6bj2YMSbCORKFG7+Lo1vmRqQ08=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out
+    mv include lib -t $out
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "PageSpeed Optimization Libraries";

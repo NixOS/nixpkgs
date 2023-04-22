@@ -1,7 +1,6 @@
 { buildDunePackage
 , lib
 , fetchurl
-, fetchpatch
 , mirage-stack
 , mirage-time
 , h2
@@ -25,11 +24,11 @@
 
 buildDunePackage rec {
   pname = "paf";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/paf-le-chien/releases/download/${version}/paf-${version}.tbz";
-    hash = "sha256-ux8fk4XDdih4Ua9NGOJVSuPseJBPv6+6ND/esHrluQE=";
+    hash = "sha256-oWRvwb8DhtF3ltWaZ6moKmgadFUngruo1UOIaGNV/oM=";
   };
 
   minimalOCamlVersion = "4.08";

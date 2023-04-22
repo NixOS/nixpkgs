@@ -37,9 +37,14 @@
 , enableContrib ? true
 
 , enableCuda ? (config.cudaSupport or false) && stdenv.hostPlatform.isx86_64
-, cudatoolkit
+, enableCublas ? enableCuda
+, enableCudnn ? false # NOTE: CUDNN has a large impact on closure size so we disable it by default
+, enableCufft ? enableCuda
+, cudaPackages ? {}
+, symlinkJoin
 , nvidia-optical-flow-sdk
 
+, enableLto ? true
 , enableUnfree ? false
 , enableIpp ? false
 , enablePython ? false
@@ -74,6 +79,7 @@
 , VideoDecodeAcceleration
 , CoreMedia
 , MediaToolbox
+, Accelerate
 , bzip2
 , callPackage
 }:
@@ -224,6 +230,33 @@ let
   #multithreaded openblas conflicts with opencv multithreading, which manifest itself in hung tests
   #https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
+
+  inherit (cudaPackages) backendStdenv cudaFlags cudaVersion;
+  inherit (cudaFlags) cudaCapabilities;
+
+  cuda-common-redist = with cudaPackages; [
+    cuda_cccl # <thrust/*>
+    libnpp # npp.h
+  ] ++ lib.optionals enableCublas [
+    libcublas # cublas_v2.h
+  ] ++ lib.optionals enableCudnn [
+    cudnn # cudnn.h
+  ] ++ lib.optionals enableCufft [
+    libcufft # cufft.h
+  ];
+
+  cuda-native-redist = symlinkJoin {
+    name = "cuda-native-redist-${cudaVersion}";
+    paths = with cudaPackages; [
+      cuda_cudart # cuda_runtime.h
+      cuda_nvcc
+    ] ++ cuda-common-redist;
+   };
+
+  cuda-redist = symlinkJoin {
+    name = "cuda-redist-${cudaVersion}";
+    paths = cuda-common-redist;
+   };
 in
 
 stdenv.mkDerivation {
@@ -294,18 +327,21 @@ stdenv.mkDerivation {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
-    ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox ]
-    ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
+    ++ lib.optionals stdenv.isDarwin [
+      bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate
+    ]
+    ++ lib.optionals enableDocs [ doxygen graphviz-nox ]
+    ++ lib.optionals enableCuda [ cuda-redist ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
-    ++ lib.optionals enableCuda [ cudatoolkit nvidia-optical-flow-sdk ];
+    ++ lib.optionals enableCuda [ nvidia-optical-flow-sdk ];
 
   nativeBuildInputs = [ cmake pkg-config unzip ]
   ++ lib.optionals enablePython [
     pythonPackages.pip
     pythonPackages.wheel
     pythonPackages.setuptools
-  ];
+  ] ++ lib.optionals enableCuda [ cuda-native-redist ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -335,13 +371,39 @@ stdenv.mkDerivation {
     (opencvFlag "OPENEXR" enableEXR)
     (opencvFlag "OPENJPEG" enableJPEG2000)
     "-DWITH_JASPER=OFF" # OpenCV falls back to a vendored copy of Jasper when OpenJPEG is disabled
-    (opencvFlag "CUDA" enableCuda)
-    (opencvFlag "CUBLAS" enableCuda)
     (opencvFlag "TBB" enableTbb)
+
+    # CUDA options
+    (opencvFlag "CUDA" enableCuda)
+    (opencvFlag "CUDA_FAST_MATH" enableCuda)
+    (opencvFlag "CUBLAS" enableCublas)
+    (opencvFlag "CUDNN" enableCudnn)
+    (opencvFlag "CUFFT" enableCufft)
+
+    # LTO options
+    (opencvFlag "ENABLE_LTO" enableLto)
+    (opencvFlag "ENABLE_THIN_LTO" (
+      enableLto && (
+        # Only clang supports thin LTO, so we must either be using clang through the stdenv,
+        stdenv.cc.isClang ||
+          # or through the backend stdenv.
+          (enableCuda && backendStdenv.cc.isClang)
+      )
+    ))
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
-    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+    # We need to set the C and C++ host compilers for CUDA to the same compiler.
+    "-DCMAKE_C_COMPILER=${backendStdenv.cc}/bin/cc"
+    "-DCMAKE_CXX_COMPILER=${backendStdenv.cc}/bin/c++"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
+
+    # OpenCV respects at least three variables:
+    # -DCUDA_GENERATION takes a single arch name, e.g. Volta
+    # -DCUDA_ARCH_BIN takes a semi-colon separated list of real arches, e.g. "8.0;8.6"
+    # -DCUDA_ARCH_PTX takes the virtual arch, e.g. "8.6"
+    "-DCUDA_ARCH_BIN=${lib.concatStringsSep ";" cudaCapabilities}"
+    "-DCUDA_ARCH_PTX=${lib.last cudaCapabilities}"
+
     "-DNVIDIA_OPTICAL_FLOW_2_0_HEADERS_PATH=${nvidia-optical-flow-sdk}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"

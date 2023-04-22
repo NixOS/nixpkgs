@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-e/QM7FrpPdZWEocX29Joz8Ozso2VU214hndslPomeFU=";
+      hash = "sha256-e/QM7FrpPdZWEocX29Joz8Ozso2VU214hndslPomeFU=";
     };
 
     # IOError: [Errno 95] Operation not supported (expected)

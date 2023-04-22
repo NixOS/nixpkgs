@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nchat";
-  version = "3.17";
+  version = "3.39";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     rev = "v${version}";
-    hash = "sha256-BtWKt8paI0gCGSzLYN8x3Yp5MUpwCb2vBGcGQG2aumY=";
+    hash = "sha256-ZV2vpXztvBDN66OPLpO/ezLB4+/3NOOs1Eky8uXxBbc=";
   };
 
   postPatch = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     readline
     sqlite
     zlib
-  ] ++ lib.optional stdenv.isDarwin [ AppKit Cocoa Foundation ];
+  ] ++ lib.optionals stdenv.isDarwin [ AppKit Cocoa Foundation ];
 
   cmakeFlags = [
     "-DHAS_WHATSAPP=OFF" # go module build required

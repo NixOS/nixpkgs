@@ -49,6 +49,7 @@
 , polkit
 , python3
 , samba
+, shadow
 , shared-mime-info
 , sound-theme-freedesktop
 , tracker
@@ -64,18 +65,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "43.4.1";
+  version = "44.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-AA+XBRroJHJJOSsB+/uiCv7lZiZxlscNVEChisBY2Z4=";
+    sha256 = "sha256-er02UBjihnne9gpezTBJ2w+4XebaSaltrdIfuo2wAuc=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
-      inherit glibc libgnomekbd tzdata;
+      inherit glibc libgnomekbd tzdata shadow;
       inherit cups networkmanagerapplet;
     })
   ];

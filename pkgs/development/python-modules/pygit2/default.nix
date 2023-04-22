@@ -6,7 +6,7 @@
 , cffi
 , fetchPypi
 , isPyPy
-, libgit2
+, libgit2_1_5
 , pycparser
 , pytestCheckHook
 , pythonOlder
@@ -25,11 +25,11 @@ buildPythonPackage rec {
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH="${libgit2}/lib"
+    export DYLD_LIBRARY_PATH="${libgit2_1_5}/lib"
   '';
 
   buildInputs = [
-    libgit2
+    libgit2_1_5
   ];
 
   propagatedBuildInputs = [

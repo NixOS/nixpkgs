@@ -58,6 +58,10 @@ stdenv.mkDerivation rec {
   #   crypto/jitterentropy.c:54:3: error: #error "The CPU Jitter random number generator must not be compiled with optimizations. See documentation. Use the compiler switch -O0 for compiling jitterentropy.c."
   hardeningDisable = [ "format" "fortify" ];
 
+  # Fixes the following error when using liblkl-hijack.so on aarch64-linux:
+  # symbol lookup error: liblkl-hijack.so: undefined symbol: __aarch64_ldadd4_sync
+  env.NIX_CFLAGS_LINK = "-lgcc_s";
+
   makeFlags = [
     "-C tools/lkl"
     "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"

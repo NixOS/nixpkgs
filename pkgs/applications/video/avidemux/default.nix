@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional withVPX libvpx;
 
   buildCommand = let
-    qtVersion = "5.${lib.versions.minor qtbase.version}";
     wrapWith = makeWrapper: filename:
       "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
     wrapQtApp = wrapWith "wrapQtApp";

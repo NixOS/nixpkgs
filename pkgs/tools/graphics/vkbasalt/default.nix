@@ -11,15 +11,15 @@
 , vkbasalt32
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vkbasalt";
-  version = "0.3.2.8";
+  version = "0.3.2.9";
 
   src = fetchFromGitHub {
     owner = "DadSchoorse";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-/ynJ6zOVj6Si23Jsq6IHlw36KqBtMvjj41fos6irm9o=";
+    repo = "vkBasalt";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-IVlZ6o+1EEEh547rFPN7z+W+EY7MrIM/yUh6+PPkNeI=";
   };
 
   nativeBuildInputs = [ glslang meson ninja pkg-config ];
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = platforms.linux;
   };
-}
+})

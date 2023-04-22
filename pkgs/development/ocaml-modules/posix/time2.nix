@@ -5,6 +5,8 @@ buildDunePackage {
 
   inherit (posix-base) version src;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ posix-base posix-types unix-errno ];
 
   doCheck = true;

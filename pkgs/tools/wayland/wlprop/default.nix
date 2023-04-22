@@ -1,4 +1,4 @@
-{ fetchgit, gawk, jq, lib, makeWrapper, slurp, stdenv, sway }:
+{ fetchgit, gawk, jq, lib, makeWrapper, slurp, stdenv, sway, bash }:
 
 stdenv.mkDerivation rec {
   pname = "wlprop";
@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZJ9LYYrU2cNYikiVNTlEcI4QXcoqfl7iwk3Be+NhGG8=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bash ];
 
   dontBuild = true;
   installPhase = ''

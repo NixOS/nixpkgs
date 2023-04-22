@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -28,22 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "folks";
-  version = "0.15.5";
+  version = "0.15.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "D/+KiWMwzYKu5FmDJPflQciE0DN1NiEnI7S+s4x1kIY=";
+    sha256 = "yGZjDFU/Kc6b4cemAmfLQICmvM9LjVUdxMfmI02EAkg=";
   };
-
-  patches = [
-    # Do not check for unneeded GTK dependency.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/folks/-/commit/686d58fb2454e5038bb951423245ed8c2d4b5cf6.patch";
-      sha256 = "0ydafVKhSrkHZK8bitPF5mNDTG5GrixGzBgBLNzLuXQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
@@ -117,7 +108,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A library that aggregates people from multiple sources to create metacontacts";
     homepage = "https://wiki.gnome.org/Projects/Folks";
-    license = licenses.lgpl2Plus;
+    license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };

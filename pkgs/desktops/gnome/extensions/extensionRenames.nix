@@ -6,11 +6,19 @@
 # - Make a separate section for each GNOME version. Collisions will come back eventually
 #   as the extensions are updated.
 {
+  # ############################################################################
+  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
+  # Make sure to move them up once they are updated
+
+  # ####### GNOME 43 #######
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
 
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
+
+  "PersianCalendar@oxygenws.com" = "persian-calendar";
+  "persian-calendar@iamrezamousavi.gmail.com" = "persian-calendar-2";
 
   "clipboard-indicator@tudmotu.com" = "clipboard-indicator";
   "clipboard-indicator@Dieg0Js.github.io" = "clipboard-indicator-2";
@@ -22,16 +30,18 @@
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
 
+  "vbox-applet@gs.eros2.info" = "virtualbox-applet";
+  "vbox-applet@buba98" = "virtualbox-applet-2";
+
   "batime@martin.zurowietz.de" = "battery-time";
   "batterytime@typeof.pw" = "battery-time-2";
+
+  "volume_scroller@trflynn89.pm.me" = "volume-scroller";
+  "volume_scroller@francislavoie.github.io" = "volume-scroller-2";
 
   # no source repository can be found for this extension
   "floating-panel@aylur" = "floating-panel";
   "floating-panel-usedbymyself@wpism" = null;
-
-  # ############################################################################
-  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
-  # Make sure to move them up once they are updated
 
   # ####### GNOME 42 #######
 
@@ -41,14 +51,16 @@
   "panel-date-format@keiii.github.com" = "panel-date-format";
   "panel-date-format@atareao.es" = "panel-date-format-2";
 
-  "volume_scroller@trflynn89.pm.me" = "volume-scroller";
-  "volume_scroller@noskoski" = "volume-scroller-2";
+  "volume_scroller@noskoski" = "volume-scroller-3";
 
   "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
   "wireguard-indicator@atareao.es" = "wireguard-indicator";
 
   "auto-activities@acedron.github.io" = "auto-activities-2";
   "auto-activities@CleoMenezesJr.github.io" = "auto-activities";
+
+  "true-color-invert@jackkenney" = "true-color-invert";
+  "true-color-window-invert@lynet101" = "true-color-window-invert";
 
   # ####### GNOME 41 #######
 

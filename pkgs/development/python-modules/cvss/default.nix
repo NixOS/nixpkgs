@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "RedHatProductSecurity";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-gD9MreJQPaxziy02Wt3BGFiIoQ/+pW3KqiNfNlTijJY=";
+    hash = "sha256-gD9MreJQPaxziy02Wt3BGFiIoQ/+pW3KqiNfNlTijJY=";
   };
 
   nativeCheckInputs = [

@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "jdt-language-server";
-  version = "1.19.0";
-  timestamp = "202301171536";
+  version = "1.21.0";
+  timestamp = "202303161431";
 
   src = fetchurl {
     url = "https://download.eclipse.org/jdtls/milestones/${version}/jdt-language-server-${version}-${timestamp}.tar.gz";
-    sha256 = "sha256-9rreuMw2pODzOVX5PBmUZoV5ixUDilQyTsrnyCQ+IHs=";
+    sha256 = "sha256-c8RDSvOgLbl05LDNelKgQXucbJnjJ7GVcut6mVT6GjA=";
   };
 
   sourceRoot = ".";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       # The application ships with config directories for linux and mac
       configDir = if stdenv.isDarwin then "config_mac" else "config_linux";
     in
-    ''
+      ''
       # Copy jars
       install -D -t $out/share/java/plugins/ plugins/*.jar
 
@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
       #   -Declipse.application=org.eclipse.jdt.ls.core.id1
       #   -Dosgi.bundles.defaultStartLevel=4
       #   -Declipse.product=org.eclipse.jdt.ls.core.product
-      #   -noverify
       #   --add-modules=ALL-SYSTEM
       #   --add-opens java.base/java.util=ALL-UNNAMED
       #   --add-opens java.base/java.lang=ALL-UNNAMED
@@ -85,7 +84,6 @@ stdenv.mkDerivation rec {
         --add-flags "-Dosgi.checkConfiguration=true" \
         --add-flags "-Dosgi.configuration.cascaded=true" \
         --add-flags "-Dlog.level=ALL" \
-        --add-flags "-noverify" \
         --add-flags "\$JAVA_OPTS" \
         --add-flags "-jar $launcher" \
         --add-flags "--add-modules=ALL-SYSTEM" \

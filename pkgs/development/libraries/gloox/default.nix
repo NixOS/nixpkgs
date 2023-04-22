@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec{
   pname = "gloox";
-  version = "1.0.24";
+  version = "1.0.26";
 
   src = fetchurl {
     url = "https://camaya.net/download/gloox-${version}.tar.bz2";
-    sha256 = "1jgrd07qr9jvbb5hcmhrqz4w4lvwc51m30jls1fgxf1f5az6455f";
+    sha256 = "sha256-a0WzkNOwNGo89swRjVzK/N8Q1RvlegKwB27fBkAzq28=";
   };
 
   # needed since gcc12

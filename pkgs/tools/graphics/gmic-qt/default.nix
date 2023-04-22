@@ -1,11 +1,11 @@
 { lib
-, mkDerivation
+, stdenv
 , variant ? "standalone"
 , fetchzip
-, fetchpatch
 , cmake
 , pkg-config
 , ninja
+, wrapQtAppsHook
 , opencv3
 , openexr
 , graphicsmagick
@@ -19,12 +19,6 @@
 , gmic
 , qtbase
 , qttools
-, writeShellScript
-, common-updater-scripts
-, gnugrep
-, gnused
-, coreutils
-, jq
 , nix-update-script
 , gimpPlugins
 }:
@@ -50,22 +44,14 @@ assert lib.assertMsg (builtins.hasAttr variant variants) "gmic-qt variant “${v
 
 assert lib.assertMsg (builtins.all (d: d != null) variants.${variant}.extraDeps or []) "gmic-qt variant “${variant}” is missing one of its dependencies.";
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.2.1";
+  version = "3.2.3";
 
   src = fetchzip {
     url = "https://gmic.eu/files/source/gmic_${version}.tar.gz";
-    hash = "sha256-2lMnn19FcFKnfIjSxOObqxIjqLMUoWgi0ADZBCBePY4=";
+    hash = "sha256-OTdf9BtaRak/jv1GknidDAkdxf99saBqj6EMoRJDIuo=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "gmic-qt-3.2.1-fix-system-gmic.patch";
-      url = "https://github.com/c-koi/gmic-qt/commit/e8d7a3523753ff592da63b1d54edf0921c54fe53.patch";
-      hash = "sha256-kBFZo2qvod4pH3oK8gvnmw39x6eMH9zjr4mMcY74mFo=";
-    })
-  ];
 
   sourceRoot = "source/gmic-qt";
 
@@ -73,6 +59,7 @@ mkDerivation rec {
     cmake
     pkg-config
     ninja
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -119,6 +106,7 @@ mkDerivation rec {
     description = variants.${variant}.description;
     homepage = "http://gmic.eu/";
     license = licenses.gpl3Plus;
+    maintainers = [ maintainers.lilyinstarlight ];
     platforms = platforms.unix;
   };
 }

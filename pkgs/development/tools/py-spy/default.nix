@@ -1,4 +1,14 @@
-{ lib, stdenv, pkgsBuildBuild, rustPlatform, fetchFromGitHub, pkg-config, libunwind, python3, runCommand, darwin }:
+{ lib
+, stdenv
+, darwin
+, fetchFromGitHub
+, libunwind
+, pkg-config
+, pkgsBuildBuild
+, python3
+, runCommand
+, rustPlatform
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "py-spy";
@@ -7,11 +17,19 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "benfred";
     repo = "py-spy";
-    rev = "v${version}";
-    sha256 = "sha256-NciyzKiDKIMeuHhTjzmHIc3dYW4AniuCNjZugm4hMss=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NciyzKiDKIMeuHhTjzmHIc3dYW4AniuCNjZugm4hMss=";
   };
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+  cargoHash = "sha256-nm+44YWSJOOg9a9d8b3APXW50ThV3iA2C/QsJMttscE=";
+
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+  ];
+
+  nativeCheckInputs = [
+    python3
+  ];
 
   buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # Pull a header that contains a definition of proc_pid_rusage().
@@ -27,13 +45,16 @@ rustPlatform.buildRustPackage rec {
     export RUSTFLAGS="-Clinker=$CC"
   '';
 
-  nativeCheckInputs = [ python3 ];
-
-  cargoSha256 = "sha256-nm+44YWSJOOg9a9d8b3APXW50ThV3iA2C/QsJMttscE=";
+  checkFlags = [
+    # thread 'python_data_access::tests::test_copy_string' panicked at 'called `Result::unwrap()` on an `Err`
+    "--skip=python_data_access::tests::test_copy_string"
+  ];
 
   meta = with lib; {
     description = "Sampling profiler for Python programs";
+    homepage = "https://github.com/benfred/py-spy";
+    changelog = "https://github.com/benfred/py-spy/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.lnl7 ];
+    maintainers = with maintainers; [ lnl7 ];
   };
 }

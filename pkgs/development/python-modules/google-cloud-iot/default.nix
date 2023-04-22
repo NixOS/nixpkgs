@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iot";
-  version = "2.8.1";
+  version = "2.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Rh23HbHv1FVmiZtyofv0bktv7tZWN3IS5jQawzbFfRk=";
+    hash = "sha256-6+6EsRdj38jD+i3nhVHOI1wVGWYKMIGDILHgO3wN7zg=";
   };
 
   propagatedBuildInputs = [

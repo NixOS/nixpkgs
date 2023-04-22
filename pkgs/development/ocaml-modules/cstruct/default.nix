@@ -2,13 +2,14 @@
 
 buildDunePackage rec {
   pname = "cstruct";
-  version = "6.1.1";
+  version = "6.2.0";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-cstruct/releases/download/v${version}/cstruct-${version}.tbz";
-    sha256 = "sha256-G3T5hw9qfuYAiSRZBxbdUzpyijyhC7GNqf6ovkZ/UY0=";
+    hash = "sha256-mngHM5JYDoNJFI+jq0sbLpidydMNB0AbBMlrfGDwPmI=";
   };
 
   buildInputs = [ fmt ];

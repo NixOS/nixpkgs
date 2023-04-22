@@ -22,6 +22,7 @@
 , gsl
 , iml
 , jinja2
+, libpng
 , lcalc
 , lrcalc
 , gap
@@ -99,6 +100,7 @@ buildPythonPackage rec {
     gd
     readline
     iml
+    libpng
   ];
 
   propagatedBuildInputs = [

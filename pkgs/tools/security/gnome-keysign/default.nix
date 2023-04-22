@@ -67,9 +67,6 @@ python3.pkgs.buildPythonApplication rec {
     twisted
   ];
 
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   # bunch of linting
   doCheck = false;
 

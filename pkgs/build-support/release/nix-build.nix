@@ -140,7 +140,7 @@ stdenv.mkDerivation (
       (lib.optional doCoverityAnalysis args.cov-build) ++
       (lib.optional doCoverityAnalysis args.xz);
 
-    lcovFilter = ["/nix/store/*"] ++ lcovFilter;
+    lcovFilter = ["${builtins.storeDir}/*"] ++ lcovFilter;
 
     inherit lcovExtraTraceFiles;
 

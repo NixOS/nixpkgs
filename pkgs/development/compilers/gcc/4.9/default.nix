@@ -60,7 +60,8 @@ let majorVersion = "4";
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-      [ ../use-source-date-epoch.patch ../parallel-bconfig.patch ./parallel-strsignal.patch
+      [ ../9/fix-struct-redefinition-on-glibc-2.36.patch ../use-source-date-epoch.patch
+        ../parallel-bconfig.patch ./parallel-strsignal.patch
         ./libsanitizer.patch
         (fetchpatch {
           name = "avoid-ustat-glibc-2.28.patch";
@@ -317,6 +318,7 @@ stdenv.mkDerivation ({
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langGo version;
     isGNU = true;
+    hardeningUnsupportedFlags = [ "fortify3" ];
   };
 
   enableParallelBuilding = true;

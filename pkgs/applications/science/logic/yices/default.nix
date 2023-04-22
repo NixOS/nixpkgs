@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # musl las no ldconfig, create symlinks explicitly
+    # musl has no ldconfig, create symlinks explicitly
     ./linux-no-ldconfig.patch
   ];
   postPatch = "patchShebangs tests/regress/check.sh";

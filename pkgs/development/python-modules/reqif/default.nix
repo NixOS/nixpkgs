@@ -2,7 +2,7 @@
 , buildPythonPackage
 , python
 , fetchFromGitHub
-, poetry-core
+, hatchling
 , beautifulsoup4
 , lxml
 , jinja2
@@ -11,26 +11,25 @@
 
 buildPythonPackage rec {
   pname = "reqif";
-  version = "0.0.8";
+  version = "0.0.27";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-PtzRJUvv+Oee08+sdakFviKIhwfLngyal1WSWDtMELg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-K+su1fhXf/fzL+AI/me2imCNI9aWMcv9Qo1dDRNypso=";
   };
 
   postPatch = ''
     substituteInPlace ./tests/unit/conftest.py --replace \
        "os.path.abspath(os.path.join(__file__, \"../../../../reqif\"))" \
       "\"${placeholder "out"}/${python.sitePackages}/reqif\""
-    substituteInPlace pyproject.toml --replace "^" ">="
     substituteInPlace requirements.txt --replace "==" ">="
   '';
 
   nativeBuildInputs = [
-    poetry-core
+    hatchling
   ];
 
   propagatedBuildInputs = [

@@ -3,21 +3,25 @@
 , fetchPypi
 , autoconf
 , cython
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dtlssocket";
-  version = "0.1.12";
+  version = "0.1.14";
+
+  format = "pyproject";
 
   src = fetchPypi {
     pname = "DTLSSocket";
     inherit version;
-    sha256 = "909a8f52f1890ec9e92fd46ef609daa8875c2a1c262c0b61200e73c6c2dd5099";
+    hash = "sha256-BLNfdKDKUvc+BJnhLqx7VzJg0opvrdaXhNLCigLH02k=";
   };
 
   nativeBuildInputs = [
     autoconf
     cython
+    setuptools
   ];
 
   # no tests on PyPI, no tags on GitLab

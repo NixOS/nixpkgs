@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "GoogleCloudPlatform";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-slTxh2j9VhLiSyiTmJIFFakzpzH/+mgilDRxx0VqqKQ=";
+    hash = "sha256-slTxh2j9VhLiSyiTmJIFFakzpzH/+mgilDRxx0VqqKQ=";
   };
 
   postPatch = ''

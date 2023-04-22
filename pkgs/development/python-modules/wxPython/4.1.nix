@@ -142,5 +142,6 @@ buildPythonPackage rec {
     homepage = "http://wxpython.org/";
     license = licenses.wxWindows;
     maintainers = with maintainers; [ tfmoraes ];
+    broken = true;
   };
 }

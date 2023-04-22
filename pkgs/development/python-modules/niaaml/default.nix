@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "lukapecnik";
     repo = "NiaAML";
     rev = version;
-    sha256 = "sha256-B87pI1EpZj1xECrgTmzN5S35Cy1nPowBRyu1IDb5zCE=";
+    hash = "sha256-B87pI1EpZj1xECrgTmzN5S35Cy1nPowBRyu1IDb5zCE=";
   };
 
   nativeBuildInputs = [

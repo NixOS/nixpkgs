@@ -1,4 +1,4 @@
-{ stdenv, lib, lispPackages
+{ stdenv, lib, sbclPackages
 , makeWrapper, wrapGAppsHook, gst_all_1
 , glib, gdk-pixbuf, cairo
 , mailcap, pango, gtk3
@@ -8,9 +8,9 @@
 
 stdenv.mkDerivation rec {
   pname = "nyxt";
-  inherit (lispPackages.nyxt.meta) version;
+  inherit (sbclPackages.nyxt) version;
 
-  src = lispPackages.nyxt;
+  src = sbclPackages.nyxt;
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
   gstBuildInputs = with gst_all_1; [
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
   installPhase = ''
     mkdir -p $out/share/applications/
-    sed "s/VERSION/$version/" $src/lib/common-lisp/nyxt/assets/nyxt.desktop > $out/share/applications/nyxt.desktop
+    sed "s/VERSION/$version/" $src/assets/nyxt.desktop > $out/share/applications/nyxt.desktop
     for i in 16 32 128 256 512; do
       mkdir -p "$out/share/icons/hicolor/''${i}x''${i}/apps/"
-      cp -f $src/lib/common-lisp/nyxt/assets/nyxt_''${i}x''${i}.png "$out/share/icons/hicolor/''${i}x''${i}/apps/nyxt.png"
+      cp -f $src/assets/nyxt_''${i}x''${i}.png "$out/share/icons/hicolor/''${i}x''${i}/apps/nyxt.png"
     done
 
     mkdir -p $out/bin && makeWrapper $src/bin/nyxt $out/bin/nyxt \

@@ -5,6 +5,7 @@
 , binaryName ? "firefox"
 , application ? "browser"
 , applicationName ? "Mozilla Firefox"
+, branding ? null
 , src
 , unpackPhase ? null
 , extraPatches ? []
@@ -88,7 +89,7 @@
 , gssSupport ? true, libkrb5
 , jackSupport ? stdenv.isLinux, libjack2
 , jemallocSupport ? true, jemalloc
-, ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
+, ltoSupport ? (stdenv.isLinux && stdenv.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
 , pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
@@ -102,11 +103,11 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `!privacySupport` or `false`.
 
-, crashreporterSupport ? !privacySupport, curl
+, crashreporterSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV, curl
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , mlsAPISupport ? geolocationSupport
-, webrtcSupport ? !privacySupport
+, webrtcSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV
 
 # digital rights managemewnt
 
@@ -220,15 +221,17 @@ buildStdenv.mkDerivation ({
     "profilingPhase"
   ];
 
-  patches = lib.optionals (lib.versionOlder version "102.6.0") [
+  patches = lib.optionals (lib.versionAtLeast version "112.0" && lib.versionOlder version "113.0") [
     (fetchpatch {
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1773259
-      name = "rust-cbindgen-0.24.2-compat.patch";
-      url = "https://raw.githubusercontent.com/canonical/firefox-snap/5622734942524846fb0eb7108918c8cd8557fde3/patches/fix-ftbfs-newer-cbindgen.patch";
-      hash = "sha256-+wNZhkDB3HSknPRD4N6cQXY7zMT/DzNXx29jQH0Gb1o=";
+      # Crash when desktop scaling does not divide window scale on Wayland
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1803016
+      name = "mozbz1803016.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/1068e0955cfb";
+      hash = "sha256-iPqmofsmgvlFNm+mqVPbdgMKmP68ANuzYu+PzfCpoNA=";
     })
   ]
-  ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
+  ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
+  ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
   ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
   ++ extraPatches;
 
@@ -389,6 +392,7 @@ buildStdenv.mkDerivation ({
   ]
   ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
+  ++ lib.optional (branding != null) "--with-branding=${branding}"
   ++ extraConfigureFlags;
 
   buildInputs = [
@@ -471,9 +475,6 @@ buildStdenv.mkDerivation ({
   separateDebugInfo = enableDebugSymbols;
   enableParallelBuilding = true;
 
-  # https://github.com/NixOS/nixpkgs/issues/201254
-  NIX_LDFLAGS = if (with stdenv; isAarch64 && isLinux) then [ "-lgcc" ] else null;
-
   # tests were disabled in configureFlags
   doCheck = false;
 
@@ -498,41 +499,6 @@ buildStdenv.mkDerivation ({
 
     # Needed to find Mozilla runtime
     gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
-  '';
-
-  # Workaround: The separateDebugInfo hook skips artifacts whose build ID's length is not 40.
-  # But we got 16-length build ID here. The function body is mainly copied from pkgs/build-support/setup-hooks/separate-debug-info.sh
-  # Remove it when https://github.com/NixOS/nixpkgs/pull/146275 is merged.
-  preFixup = lib.optionalString enableDebugSymbols ''
-    _separateDebugInfo() {
-        [ -e "$prefix" ] || return 0
-
-        local dst="''${debug:-$out}"
-        if [ "$prefix" = "$dst" ]; then return 0; fi
-
-        dst="$dst/lib/debug/.build-id"
-
-        # Find executables and dynamic libraries.
-        local i
-        while IFS= read -r -d $'\0' i; do
-            if ! isELF "$i"; then continue; fi
-
-            # Extract the Build ID. FIXME: there's probably a cleaner way.
-            local id="$($READELF -n "$i" | sed 's/.*Build ID: \([0-9a-f]*\).*/\1/; t; d')"
-            if [[ -z "$id" ]]; then
-                echo "could not find build ID of $i, skipping" >&2
-                continue
-            fi
-
-            # Extract the debug info.
-            echo "separating debug info from $i (build ID $id)"
-            mkdir -p "$dst/''${id:0:2}"
-            $OBJCOPY --only-keep-debug "$i" "$dst/''${id:0:2}/''${id:2}.debug"
-
-            # Also a create a symlink <original-name>.debug.
-            ln -sfn ".build-id/''${id:0:2}/''${id:2}.debug" "$dst/../$(basename "$i")"
-        done < <(find "$prefix" -type f -print0)
-    }
   '';
 
   postFixup = lib.optionalString crashreporterSupport ''

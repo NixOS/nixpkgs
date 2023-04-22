@@ -1,0 +1,42 @@
+diff --git a/xen/arch/x86/Makefile b/xen/arch/x86/Makefile
+index b6567c4127..83defeee95 100644
+--- a/xen/arch/x86/Makefile
++++ b/xen/arch/x86/Makefile
+@@ -124,11 +124,11 @@ ifneq ($(efi-y),)
+ export XEN_BUILD_EFI := $(shell $(CC) $(XEN_CFLAGS) -c efi/check.c -o efi/check.o 2>/dev/null && echo y)
+ # Check if the linker supports PE.
+ EFI_LDFLAGS = $(patsubst -m%,-mi386pep,$(XEN_LDFLAGS)) --subsystem=10 --strip-debug
+-XEN_BUILD_PE := $(if $(XEN_BUILD_EFI),$(shell $(LD) $(EFI_LDFLAGS) -o efi/check.efi efi/check.o 2>/dev/null && echo y))
++XEN_BUILD_PE := $(if $(XEN_BUILD_EFI),$(shell $(EFI_LD) $(EFI_LDFLAGS) -o efi/check.efi efi/check.o 2>/dev/null && echo y))
+ CFLAGS-$(XEN_BUILD_EFI) += -DXEN_BUILD_EFI
+ # Check if the linker produces fixups in PE by default (we need to disable it doing so for now).
+ XEN_NO_PE_FIXUPS := $(if $(XEN_BUILD_EFI), \
+-                         $(shell $(LD) $(EFI_LDFLAGS) --disable-reloc-section -o efi/check.efi efi/check.o 2>/dev/null && \
++                         $(shell $(EFI_LD) $(EFI_LDFLAGS) --disable-reloc-section -o efi/check.efi efi/check.o 2>/dev/null && \
+                                  echo --disable-reloc-section))
+ endif
+ 
+@@ -217,20 +217,20 @@ note_file_option ?= $(note_file)
+ ifeq ($(XEN_BUILD_PE),y)
+ $(TARGET).efi: prelink-efi.o $(note_file) efi.lds efi/relocs-dummy.o efi/mkreloc
+ 	$(foreach base, $(VIRT_BASE) $(ALT_BASE), \
+-	          $(LD) $(call EFI_LDFLAGS,$(base)) -T efi.lds -N $< efi/relocs-dummy.o \
++	          $(EFI_LD) $(call EFI_LDFLAGS,$(base)) -T efi.lds -N $< efi/relocs-dummy.o \
+ 	                $(BASEDIR)/common/symbols-dummy.o $(note_file_option) -o $(@D)/.$(@F).$(base).0 &&) :
+ 	efi/mkreloc $(foreach base,$(VIRT_BASE) $(ALT_BASE),$(@D)/.$(@F).$(base).0) >$(@D)/.$(@F).0r.S
+ 	$(NM) -pa --format=sysv $(@D)/.$(@F).$(VIRT_BASE).0 \
+ 		| $(BASEDIR)/tools/symbols $(all_symbols) --sysv --sort >$(@D)/.$(@F).0s.S
+ 	$(MAKE) -f $(BASEDIR)/Rules.mk $(@D)/.$(@F).0r.o $(@D)/.$(@F).0s.o
+ 	$(foreach base, $(VIRT_BASE) $(ALT_BASE), \
+-	          $(LD) $(call EFI_LDFLAGS,$(base)) -T efi.lds -N $< \
++	          $(EFI_LD) $(call EFI_LDFLAGS,$(base)) -T efi.lds -N $< \
+ 	                $(@D)/.$(@F).0r.o $(@D)/.$(@F).0s.o $(note_file_option) -o $(@D)/.$(@F).$(base).1 &&) :
+ 	efi/mkreloc $(foreach base,$(VIRT_BASE) $(ALT_BASE),$(@D)/.$(@F).$(base).1) >$(@D)/.$(@F).1r.S
+ 	$(NM) -pa --format=sysv $(@D)/.$(@F).$(VIRT_BASE).1 \
+ 		| $(BASEDIR)/tools/symbols $(all_symbols) --sysv --sort >$(@D)/.$(@F).1s.S
+ 	$(MAKE) -f $(BASEDIR)/Rules.mk $(@D)/.$(@F).1r.o $(@D)/.$(@F).1s.o
+-	$(LD) $(call EFI_LDFLAGS,$(VIRT_BASE)) -T efi.lds -N $< \
++	$(EFI_LD) $(call EFI_LDFLAGS,$(VIRT_BASE)) -T efi.lds -N $< \
+ 	                $(@D)/.$(@F).1r.o $(@D)/.$(@F).1s.o $(note_file_option) -o $@
+ 	$(NM) -pa --format=sysv $(@D)/$(@F) \
+ 		| $(BASEDIR)/tools/symbols --all-symbols --xensyms --sysv --sort >$(@D)/$(@F).map

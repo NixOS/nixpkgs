@@ -53,5 +53,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = "dillo";
   };
 }

@@ -1,21 +1,31 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
   cudaSupport ? false, cudaPackages, magma,
-  mklDnnSupport ? true, useSystemNccl ? true,
+  useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
 
   # Native build inputs
   cmake, util-linux, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
+  pythonRelaxDepsHook,
 
   # Build inputs
   numactl,
-  CoreServices, libobjc,
+  Accelerate, CoreServices, libobjc,
 
   # Propagated build inputs
+  filelock,
+  jinja2,
+  networkx,
+  openai-triton,
+  sympy,
   numpy, pyyaml, cffi, click, typing-extensions,
 
   # Unit tests
   hypothesis, psutil,
+
+  # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
+  # this is also what official pytorch build does
+  mklDnnSupport ? !(stdenv.isDarwin && stdenv.isAarch64),
 
   # virtual pkg that consistently instantiates blas across nixpkgs
   # See https://github.com/NixOS/nixpkgs/pull/83888
@@ -45,9 +55,7 @@ let
   inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 in
 
-# assert that everything needed for cuda is present and that the correct cuda versions are used
-assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
-                        in majorIs == "9" || majorIs == "10" || majorIs == "11");
+assert cudaSupport -> (cudaPackages.cudaMajorVersion == "11");
 
 # confirm that cudatoolkits are sync'd across dependencies
 assert !(MPISupport && cudaSupport) || mpi.cudatoolkit == cudatoolkit;
@@ -125,10 +133,10 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "1.13.1";
+  version = "2.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7.0";
+  disabled = pythonOlder "3.8.0";
 
   outputs = [
     "out" # output standard python package
@@ -141,7 +149,7 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-yQz+xHPw9ODRBkV9hv1th38ZmUr/fXa+K+d+cvmX3Z8=";
+    hash = "sha256-cSw7+AYBUcZLz3UyK/+JWWjQxKwVBXcFvBq0XAcL3tE=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
@@ -151,15 +159,6 @@ in buildPythonPackage rec {
     # base is 10.12. Until we upgrade, we can fall back on the older
     # pthread support.
     ./pthreadpool-disable-gcd.diff
-  ] ++ [
-    # PyTorch fails to build on gcc 12 due to gloo
-    # https://github.com/pytorch/pytorch/issues/77614
-    (fetchpatch {
-      url = "https://github.com/facebookincubator/gloo/commit/4a5e339b764261d20fc409071dc7a8b8989aa195.patch";
-      stripLen = 1;
-      extraPrefix = "third_party/gloo/";
-      hash = "sha256-UxR1r7F6g76BWj3GBIrSy5t+YZDCWy6mMddwx+hon5w=";
-    })
   ];
 
   postPatch = lib.optionalString rocmSupport ''
@@ -183,6 +182,13 @@ in buildPythonPackage rec {
     substituteInPlace cmake/public/LoadHIP.cmake \
       --replace "set(ROCM_PATH \$ENV{ROCM_PATH})" \
         "set(ROCM_PATH \$ENV{ROCM_PATH})''\nset(ROCM_VERSION ${lib.concatStrings (lib.intersperse "0" (lib.splitString "." hip.version))})"
+  ''
+  # error: no member named 'aligned_alloc' in the global namespace; did you mean simply 'aligned_alloc'
+  # This lib overrided aligned_alloc hence the error message. Tltr: his function is linkable but not in header.
+  + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0") ''
+    substituteInPlace third_party/pocketfft/pocketfft_hdronly.h --replace '#if __cplusplus >= 201703L
+    inline void *aligned_alloc(size_t align, size_t size)' '#if __cplusplus >= 201703L && 0
+    inline void *aligned_alloc(size_t align, size_t size)'
   '';
 
   preConfigure = lib.optionalString cudaSupport ''
@@ -257,7 +263,16 @@ in buildPythonPackage rec {
   # Suppress gcc regression: avx512 math function raises uninitialized variable warning
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105593
   # See also: Fails to compile with GCC 12.1.0 https://github.com/pytorch/pytorch/issues/77939
-  ++ lib.optionals stdenv.cc.isGNU [ "-Wno-error=maybe-uninitialized" "-Wno-error=uninitialized" ]));
+  ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12.0.0") [
+    "-Wno-error=maybe-uninitialized"
+    "-Wno-error=uninitialized"
+  ]
+  # Since pytorch 2.0:
+  # gcc-12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:33: error: ‘void operator delete(void*, std::size_t)’
+  # ... called on pointer ‘<unknown>’ with nonzero offset [1, 9223372036854775800] [-Werror=free-nonheap-object]
+  ++ lib.optionals (stdenv.cc.isGNU && lib.versions.major stdenv.cc.version == "12" ) [
+    "-Wno-error=free-nonheap-object"
+  ]));
 
   nativeBuildInputs = [
     cmake
@@ -265,6 +280,7 @@ in buildPythonPackage rec {
     which
     ninja
     pybind11
+    pythonRelaxDepsHook
     removeReferencesTo
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
@@ -275,18 +291,34 @@ in buildPythonPackage rec {
     ++ lib.optionals rocmSupport [ openmp ]
     ++ lib.optionals (cudaSupport || rocmSupport) [ magma ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices libobjc ];
+    ++ lib.optionals stdenv.isDarwin [ Accelerate CoreServices libobjc ];
 
   propagatedBuildInputs = [
     cffi
     click
     numpy
     pyyaml
+
+    # From install_requires:
+    filelock
     typing-extensions
+    sympy
+    networkx
+    jinja2
+
     # the following are required for tensorboard support
     pillow six future tensorboard protobuf
-  ] ++ lib.optionals MPISupport [ mpi ]
-    ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
+  ]
+  ++ lib.optionals MPISupport [ mpi ]
+  ++ lib.optionals rocmSupport [ rocmtoolkit_joined ]
+  # rocm build requires openai-triton;
+  # openai-triton currently requires cuda_nvcc,
+  # so not including it in the cpu-only build;
+  # torch.compile relies on openai-triton,
+  # so we include it for the cuda build as well
+  ++ lib.optionals (rocmSupport || cudaSupport) [
+    openai-triton
+  ];
 
   # Tests take a long time and may be flaky, so just sanity-check imports
   doCheck = false;
@@ -312,6 +344,11 @@ in buildPythonPackage rec {
       (optionalString (majorMinor version == "1.3" ) "tensorboard")
     ])
     "runHook postCheck"
+  ];
+
+  pythonRemoveDeps = [
+    # In our dist-info the name is just "triton"
+    "pytorch-triton-rocm"
   ];
 
   postInstall = ''
@@ -360,10 +397,14 @@ in buildPythonPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
-    inherit cudaSupport cudaPackages gpuTargetString;
-    cudaCapabilities = supportedCudaCapabilities;
+    inherit cudaSupport cudaPackages;
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
+  } // lib.optionalAttrs cudaSupport {
+    # NOTE: supportedCudaCapabilities isn't computed unless cudaSupport is true, so we can't use
+    #   it in the passthru set above because a downstream package might try to access it even
+    #   when cudaSupport is false. Better to have it missing than null or an empty list by default.
+    cudaCapabilities = supportedCudaCapabilities;
   };
 
   meta = with lib; {

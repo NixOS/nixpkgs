@@ -3,7 +3,7 @@
 Building software with Nix often requires downloading source code and other files from the internet.
 `nixpkgs` provides *fetchers* for different protocols and services. Fetchers are functions that simplify downloading files.
 
-## Caveats
+## Caveats {#chap-pkgs-fetchers-caveats}
 
 Fetchers create [fixed output derivations](https://nixos.org/manual/nix/stable/#fixed-output-drvs) from downloaded files.
 Nix can reuse the downloaded files via the hash of the resulting derivation.
@@ -71,6 +71,7 @@ The main difference between `fetchurl` and `fetchzip` is in how they store the c
 
 - `relative`: Similar to using `git-diff`'s `--relative` flag, only keep changes inside the specified directory, making paths relative to it.
 - `stripLen`: Remove the first `stripLen` components of pathnames in the patch.
+- `decode`: Pipe the downloaded data through this command before processing it as a patch.
 - `extraPrefix`: Prefix pathnames by this string.
 - `excludes`: Exclude files matching these patterns (applies after the above arguments).
 - `includes`: Include only files matching these patterns (applies after the above arguments).

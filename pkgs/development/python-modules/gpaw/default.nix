@@ -13,6 +13,7 @@
 , ase
 , numpy
 , scipy
+, pyyaml
 }:
 
 assert lib.asserts.assertMsg (!blas.isILP64)
@@ -85,7 +86,7 @@ in buildPythonPackage rec {
 
   buildInputs = [ blas scalapack libxc libvdwxc ];
 
-  propagatedBuildInputs = [ ase scipy numpy mpi ];
+  propagatedBuildInputs = [ ase scipy numpy mpi pyyaml ];
 
   patches = [ ./SetupPath.patch ];
 

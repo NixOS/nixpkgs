@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "pylnk3";
-    sha256 = "sha256-yu4BNvYai3iBVNyOfAOsLd5XrcFw8cR4arRyFJHKbpk=";
+    hash = "sha256-yu4BNvYai3iBVNyOfAOsLd5XrcFw8cR4arRyFJHKbpk=";
   };
 
    propagatedBuildInputs = [

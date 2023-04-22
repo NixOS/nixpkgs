@@ -368,7 +368,18 @@ let
     else if !allowBroken && attrs.meta.broken or false then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      { valid = "no"; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
+      let toPretty = lib.generators.toPretty {
+            allowPrettyValues = true;
+            indent = "  ";
+          };
+      in { valid = "no"; reason = "unsupported";
+           errormsg = ''
+             is not available on the requested hostPlatform:
+               hostPlatform.config = "${hostPlatform.config}"
+               package.meta.platforms = ${toPretty (attrs.meta.platforms or [])}
+               package.meta.badPlatforms = ${toPretty (attrs.meta.badPlatforms or [])}
+            '';
+         }
     else if !(hasAllowedInsecure attrs) then
       { valid = "no"; reason = "insecure"; errormsg = "is marked as insecure"; }
 

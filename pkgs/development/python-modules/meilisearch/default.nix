@@ -3,13 +3,14 @@
 , camel-converter
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "meilisearch";
-  version = "0.25.0";
-  format = "setuptools";
+  version = "0.26.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -17,8 +18,12 @@ buildPythonPackage rec {
     owner = "meilisearch";
     repo = "meilisearch-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tN6rjUozN+VqUAm4vHN3RDQoNmkPE49pSUl+zuei9lc=";
+    hash = "sha256-DhArrKIA9S/huO3QRjZNZ2xOpHybZgj6tIBKfRX6ZYg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     camel-converter

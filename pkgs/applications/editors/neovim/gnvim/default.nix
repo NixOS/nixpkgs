@@ -11,7 +11,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1cc3yk04v9icdjr5cn58mqc3ba1wqmlzhf9ly7biy9m8yk30w9y0";
   };
 
-  cargoSha256 = "0z6hhahxdc6d7nzqvc8jlxn1frsc39va8z5pmwfmmq5z61ahk90z";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "nvim-rs-0.1.1-alpha.0" = "sha256-wn68Lix3zZULrg/G4hP+OSj1GbEZMsA/+PaOlG9WLtc=";
+    };
+  };
 
   buildInputs = [ gtk webkitgtk ];
 

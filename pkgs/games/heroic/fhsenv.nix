@@ -1,11 +1,11 @@
 { lib
-, buildFHSUserEnv
+, buildFHSEnv
 , heroic-unwrapped
 , extraPkgs ? pkgs: [ ]
 , extraLibraries ? pkgs: [ ]
 }:
 
-buildFHSUserEnv {
+buildFHSEnv {
   name = "heroic";
 
   runScript = "heroic";
@@ -71,6 +71,7 @@ buildFHSUserEnv {
     libGLU
     libglvnd
     libgpg-error
+    libgudev
     libjpeg
     libkrb5
     libmpeg2
@@ -81,22 +82,31 @@ buildFHSUserEnv {
     libselinux
     libsndfile
     libsndfile
+    libsoup
     libtheora
     libtiff
     libusb1
     libv4l
     libva
+    libvdpau
     libvorbis
+    libvpx
+    libwebp
     libxkbcommon
     libxml2
     mpg123
     ncurses
     ocl-icd
+    openal
     openldap
+    openssl
+    openssl_1_1
+    pango
     pipewire
     samba4
     sane-backends
     SDL2
+    speex
     sqlite
     udev
     udev

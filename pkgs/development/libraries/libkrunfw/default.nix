@@ -13,28 +13,26 @@
 assert sevVariant -> stdenv.isx86_64;
 stdenv.mkDerivation rec {
   pname = "libkrunfw";
-  version = "3.9.0";
+  version = "3.11.0";
 
   src = if stdenv.isLinux then fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hpVE7g6V3nquZ3R5fQCcfRWuFDHJ3rgisezwdsDMaGg=";
+    hash = "sha256-p5z3Dc7o/Ja3K0VlOWIPc0qOIU5p+JSxWe7QiVQNkjs=";
   } else fetchurl {
     url = "https://github.com/containers/libkrunfw/releases/download/v${version}/v${version}-with_macos_prebuilts.tar.gz";
-    hash = "sha256-moZ2LYLhZDb8Y8jgWbdgK6SbJ8lY8f356d5vKHc/54Q=";
+    hash = "sha256-XcdsK8L5NwMgelSMhE2YKYxaAin/3p/+GrljGGZpK5Y=";
   };
 
   kernelSrc = fetchurl {
-    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.6.tar.xz";
-    hash = "sha256-Pk2OVh2lcDogWujXsr7WxcZPxCme68v9IEgeY7V9XuM=";
+    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.2.9.tar.xz";
+    hash = "sha256-kDRJwWTAPw50KqzJIOGFY1heB6KMbLeeD9bDZpX9Q/U=";
   };
 
   preBuild = ''
     substituteInPlace Makefile \
       --replace 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s $(kernelSrc) $(KERNEL_TARBALL)' \
-      --replace 'tar xf $(KERNEL_TARBALL)' \
-                'tar xf $(KERNEL_TARBALL); sed -i "s|/usr/bin/env bash|$(SHELL)|" $(KERNEL_SOURCES)/scripts/check-local-export' \
       --replace 'gcc' '$(CC)'
   '';
 

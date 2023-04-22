@@ -70,7 +70,6 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     inherit description;
     homepage = "https://www.pymol.org/";
     license = licenses.mit;

@@ -15,6 +15,7 @@
 , nixosTests
 , python3
 , makeWrapper
+, runtimeShell
 , symlinkJoin
 , extraPackages ? [ ]
 , runc
@@ -35,8 +36,7 @@
 let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
 
-  binPath = lib.makeBinPath ([
-  ] ++ lib.optionals stdenv.isLinux [
+  binPath = lib.makeBinPath (lib.optionals stdenv.isLinux [
     runc
     crun
     conmon
@@ -62,13 +62,13 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "4.4.2";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-337PFsPGm7pUgnFeNJKwT+/7AdbWSfCx4kXyAvHyWJQ=";
+    hash = "sha256-udvvTdkpL8xvY0iIMBgBFQk5sybpn9vCFFXP0ZqOajM=";
   };
 
   patches = [
@@ -100,6 +100,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
+    substituteInPlace Makefile --replace "/bin/bash" "${runtimeShell}"
     ${if stdenv.isDarwin then ''
       make podman-remote # podman-mac-helper uses FHS paths
     '' else ''
@@ -146,6 +147,11 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://podman.io/";
     description = "A program for managing pods, containers and container images";
+    longDescription = ''
+      Podman (the POD MANager) is a tool for managing containers and images, volumes mounted into those containers, and pods made from groups of containers. Podman runs containers on Linux, but can also be used on Mac and Windows systems using a Podman-managed virtual machine. Podman is based on libpod, a library for container lifecycle management that is also contained in this repository. The libpod library provides APIs for managing containers, pods, container images, and volumes.
+
+      To install on NixOS, please use the option `virtualisation.podman.enable = true`.
+    '';
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;

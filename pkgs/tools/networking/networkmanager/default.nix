@@ -58,11 +58,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.40.12";
+  version = "1.42.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "sha256-wCJ+BKttAylmLfoKftxGbgQGJek2odjo4CoFM6cRca8=";
+    sha256 = "sha256-3P6cXJCdOMga6VzP6JWjKKKhTBHaz7f1B760Be/OBYA=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -113,6 +113,7 @@ stdenv.mkDerivation rec {
     "-Dfirewalld_zone=false"
     "-Dtests=no"
     "-Dcrypto=gnutls"
+    "-Dmobile_broadband_provider_info_database=${mobile-broadband-provider-info}/share/mobile-broadband-provider-info/serviceproviders.xml"
   ];
 
   patches = [

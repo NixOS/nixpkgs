@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.61.0";
+  version = "6.68.2";
   outputs = [ "out" ] ++ lib.optional enableDocumentation "doc";
   format = "setuptools";
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    hash = "sha256-gTcdJaOgP8Nc4fN8UH6+sLedivq5ZNxMRULajFOVnSo=";
+    hash = "sha256-SgX8esTyC3ulFIv9mZJUoBA5hiv7Izr2hyD+NOudkpE=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -85,6 +85,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for property based testing";
     homepage = "https://github.com/HypothesisWorks/hypothesis";
+    changelog = "https://hypothesis.readthedocs.io/en/latest/changes.html#v${lib.replaceStrings [ "." ] [ "-" ] version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

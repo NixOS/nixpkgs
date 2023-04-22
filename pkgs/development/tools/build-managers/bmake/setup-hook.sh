@@ -76,6 +76,7 @@ bmakeInstallPhase() {
 
     # shellcheck disable=SC2086
     local flagsArray=(
+        ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
         SHELL=$SHELL
         # Old bash empty array hack
         $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}

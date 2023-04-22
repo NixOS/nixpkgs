@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     glib
   ];
 
+  postPatch = ''
+    # Fix pkg-config name for cross-compilation
+    substituteInPlace Makefile --replace "pkg-config" "$PKG_CONFIG"
+  '';
+
   makeFlags = [
     "LIBDIR=$(out)/lib"
     "INSTALL_INCLUDE_DIR=$(dev)/include/gutil"

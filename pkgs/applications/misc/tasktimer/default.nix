@@ -21,7 +21,7 @@ buildGoModule rec {
     description = "Task Timer (tt) is a dead simple TUI task timer";
     homepage = "https://github.com/caarlos0/tasktimer";
     license = licenses.mit;
-    maintainers = with maintainers; [ abbe ];
+    maintainers = with maintainers; [ abbe caarlos0 ];
     mainProgram = "tt";
   };
 }

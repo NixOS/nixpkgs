@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-elgato";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-kyFnc/lMxgYy8s/gAP5vpEPV8a+dphOummr6G7deGQ4=";
+    hash = "sha256-kyFnc/lMxgYy8s/gAP5vpEPV8a+dphOummr6G7deGQ4=";
   };
 
   nativeBuildInputs = [

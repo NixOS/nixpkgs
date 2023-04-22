@@ -17,7 +17,7 @@ in {
       type = types.listOf types.str;
       description = lib.mdDoc "Nix top-level packages to be compiled using CCache";
       default = [];
-      example = [ "wxGTK30" "ffmpeg" "libav_all" ];
+      example = [ "wxGTK32" "ffmpeg" "libav_all" ];
     };
   };
 

@@ -6,14 +6,14 @@
 , php}:
 
 stdenvNoCC.mkDerivation rec {
-  name = "cloudlog";
-  version = "2.4";
+  pname = "cloudlog";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "magicbug";
     repo = "Cloudlog";
     rev = version;
-    sha256 = "sha256-aF1f6EmlcUgZOkHJgrW6P923QW56vWMH8CZ4cnYiiSk=";
+    sha256 = "sha256-tFerQJhe/FemtOaP56b2XhLtXH2a8CRT2E69v/77Qz0=";
   };
 
   postPath = ''

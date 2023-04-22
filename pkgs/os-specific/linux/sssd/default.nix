@@ -54,6 +54,9 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  # Disable parallel install due to missing depends:
+  #   libtool:   error: error: relink '_py3sss.la' with the above command before installing i
+  enableParallelInstalling = false;
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config doxygen ];
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
                   samba nfs-utils p11-kit python3 popt

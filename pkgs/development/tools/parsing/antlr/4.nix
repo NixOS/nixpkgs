@@ -42,11 +42,15 @@ let
         echo "#! ${stdenv.shell}" >> "$out/bin/antlr"
         echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' -Xmx500M org.antlr.v4.Tool \"\$@\"" >> "$out/bin/antlr"
 
+        echo "#! ${stdenv.shell}" >> "$out/bin/antlr-parse"
+        echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' -Xmx500M org.antlr.v4.gui.Interpreter \"\$@\"" >> "$out/bin/antlr-parse"
+
         echo "#! ${stdenv.shell}" >> "$out/bin/grun"
         echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' org.antlr.v4.gui.TestRig \"\$@\"" >> "$out/bin/grun"
 
-        chmod a+x "$out/bin/antlr" "$out/bin/grun"
+        chmod a+x "$out/bin/antlr" "$out/bin/antlr-parse" "$out/bin/grun"
         ln -s "$out/bin/antlr"{,4}
+        ln -s "$out/bin/antlr"{,4}-parse
       '';
 
       inherit jre;
@@ -99,6 +103,20 @@ let
   };
 
 in {
+  antlr4_12 = (mkAntlr {
+    version = "4.12.0";
+    sourceSha256 = "sha256-0JMG8UYFT+IAWvARY2KnuXSr5X6LlVZN4LJHy5d4x08=";
+    jarSha256 = "sha256-iPGKK/rA3eEAntpcfc41ilKHf673ho9WIjpbzBUynkM=";
+    extraCppCmakeFlags = [
+      # Generate CMake config files, which are not installed by default.
+      "-DANTLR4_INSTALL=ON"
+
+      # Disable tests, since they require downloading googletest, which is
+      # not available in a sandboxed build.
+      "-DANTLR_BUILD_CPP_TESTS=OFF"
+    ];
+  }).antlr;
+
   antlr4_11 = (mkAntlr {
     version = "4.11.1";
     sourceSha256 = "sha256-SUeDgfqLjYQorC8r/CKlwbYooTThMOILkizwQV8pocc=";

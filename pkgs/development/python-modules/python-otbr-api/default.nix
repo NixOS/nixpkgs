@@ -1,5 +1,6 @@
 { lib
 , aiohttp
+, bitstruct
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "python-otbr-api";
-  version = "1.0.5";
+  version = "1.0.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-yI7TzVJGSWdi+NKZ0CCOi3BC4WIqFuS7YZgihfWDBSY=";
+    hash = "sha256-Rg5+EOsxRse618WvP4+9ybiu0mJpizrzCmeIbRnFgaA=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    bitstruct
     cryptography
     voluptuous
   ];

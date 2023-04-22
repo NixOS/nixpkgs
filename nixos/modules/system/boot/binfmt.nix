@@ -134,11 +134,11 @@ let
       mask = ''\xff\xff\xff\xff'';
     };
     x86_64-windows = {
-      magicOrExtension = ".exe";
+      magicOrExtension = "exe";
       recognitionType = "extension";
     };
     i686-windows = {
-      magicOrExtension = ".exe";
+      magicOrExtension = "exe";
       recognitionType = "extension";
     };
   };

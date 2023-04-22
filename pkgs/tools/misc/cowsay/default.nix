@@ -1,4 +1,4 @@
-{ lib, stdenv, perl, fetchFromGitHub, fetchpatch, nix-update-script, testers, cowsay }:
+{ lib, stdenv, perl, fetchFromGitHub, fetchpatch, makeWrapper, nix-update-script, testers, cowsay }:
 
 stdenv.mkDerivation rec {
   pname = "cowsay";
@@ -22,7 +22,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ];
+
+  postInstall = ''
+    wrapProgram $out/bin/cowsay \
+      --suffix COWPATH : $out/share/cowsay/cows
+  '';
 
   makeFlags = [
     "prefix=${placeholder "out"}"

@@ -3,18 +3,19 @@
 , fetchgit
 , packaging
 , portalocker
+, pyparsing
 , sympy
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "qmake2cmake";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchgit {
     url = "https://codereview.qt-project.org/qt/qmake2cmake";
     rev = "v${version}";
-    hash = "sha256-Ibi7tIaMI44POfoRfKsgTMR3u+Li5UzeHBUNylnc9dw=";
+    hash = "sha256-HzbygFmnKq3E2eEdWCFa4z9Qszfck7dJm2Z5s+il4I0=";
   };
 
   patches = [
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     packaging
     portalocker
+    pyparsing
     sympy
   ];
 

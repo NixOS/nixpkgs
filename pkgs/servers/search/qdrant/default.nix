@@ -10,16 +10,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.0.2";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-AVglZr3J9fEWgE2g5UHt1j6YQud/viGp0IvuR9XRntE=";
+    sha256 = "sha256-Kjao5TjVT8QVV2tKt7TTt9cYmYXRl/oPLi8UK1tc/nA=";
   };
 
-  cargoSha256 = "sha256-4hzixh1/nVIMRsBSoldmbtpcpBMmvxik3lV/h4FPOrk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "quantization-0.1.0" = "sha256-4TY08ScRbL4zVG428BTZu42ocAsPk/8wM+zzI8EFSrs=";
+      "wal-0.1.2" = "sha256-EfCvwgHMfyiId8VjV+yFyNqoIv6fxF8UFcw1s46hF5k=";
+    };
+  };
 
   prePatch = lib.optionalString stdenv.isAarch64 ''
     substituteInPlace .cargo/config.toml \

@@ -38,7 +38,7 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -117,9 +117,6 @@ self: super: {
   exceptions = super.exceptions_0_10_7;
 
   ormolu = super.ormolu_0_2_0_0;
-
-  # vector 0.12.2 indroduced doctest checks that don’t work on older compilers
-  vector = dontCheck super.vector;
 
   ghc-api-compat = doDistribute (unmarkBroken super.ghc-api-compat_8_6);
 

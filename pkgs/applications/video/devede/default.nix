@@ -15,17 +15,8 @@ in buildPythonApplication rec {
     sha256 = "1xb7acjphvn4ya8fgjsvag5gzi9a6c2famfl0ffr8nhb9y8ig9mg";
   };
 
-  # Temporary fix
-  # See https://github.com/NixOS/nixpkgs/issues/61578
-  # and https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   nativeBuildInputs = [
     gettext wrapGAppsHook
-
-    # Temporary fix
-    # See https://github.com/NixOS/nixpkgs/issues/61578
-    # and https://github.com/NixOS/nixpkgs/issues/56943
     gobject-introspection
   ];
 

@@ -29,7 +29,12 @@ rustPlatform.buildRustPackage rec {
     freetype
   ];
 
-  cargoSha256 = "sha256-w+E4UG7NC+HwsYwz90qO7WME5vhtO1GXWozssrLFEms=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "unic-0.9.0" = "sha256-ZE4C+rrtmHdqTmenP5c7QGNTW/n7pi8nh7lqLhHgi3w=";
+    };
+  };
 
   meta = with lib; {
     description = "Unicode tool with a terminal user interface";

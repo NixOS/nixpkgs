@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "tsproisl";
     repo = "SoMaJo";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-EnYw8TSZLXgB4pZaZBgxaO13PpTDx4lGsdGJ+51A6wE=";
+    hash = "sha256-EnYw8TSZLXgB4pZaZBgxaO13PpTDx4lGsdGJ+51A6wE=";
   };
 
   propagatedBuildInputs = [

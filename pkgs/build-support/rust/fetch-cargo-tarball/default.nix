@@ -62,6 +62,10 @@ in stdenv.mkDerivation ({
     export CARGO_HOME=$(mktemp -d cargo-home.XXX)
     CARGO_CONFIG=$(mktemp cargo-config.XXXX)
 
+    # https://blog.rust-lang.org/2023/03/09/Rust-1.68.0.html#cargos-sparse-protocol
+    # planned to become the default in 1.70
+    export CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
+
     if [[ -n "$NIX_CRATES_INDEX" ]]; then
     cat >$CARGO_HOME/config.toml <<EOF
     [source.crates-io]
@@ -75,6 +79,17 @@ in stdenv.mkDerivation ({
 
     # Override the `http.cainfo` option usually specified in `.cargo/config`.
     export CARGO_HTTP_CAINFO=${cacert}/etc/ssl/certs/ca-bundle.crt
+
+    if grep '^source = "git' Cargo.lock; then
+        echo
+        echo "ERROR: The Cargo.lock contains git dependencies"
+        echo
+        echo "This is currently not supported in the fixed-output derivation fetcher."
+        echo "Use cargoLock.lockFile / importCargoLock instead."
+        echo
+
+        exit 1
+    fi
 
     cargo vendor $name --respect-source-config | cargo-vendor-normalise > $CARGO_CONFIG
 

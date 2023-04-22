@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cyclonedds";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "eclipse-cyclonedds";
     repo = "cyclonedds";
     rev = version;
-    sha256 = "sha256-xr9H9n+gyFMgEMHn59T6ELYVZJ1m8laG0d99SE9k268=";
+    sha256 = "sha256-Ie2l2TwEXqhMZWL3CmQD+c8LdQlclP6egsP7jnsOAlM=";
   };
 
   patches = [

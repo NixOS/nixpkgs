@@ -36,14 +36,14 @@ buildPythonPackage rec {
         owner = "AmineKhaldi";
         repo = "libsodium-cmake";
         rev = "f73a3fe1afdc4e37ac5fe0ddd401bf521f6bba65"; # pinned by blspy
-        sha256 = "sha256-lGz7o6DQVAuEc7yTp8bYS2kwjzHwGaNjugDi1ruRJOA=";
+        hash = "sha256-lGz7o6DQVAuEc7yTp8bYS2kwjzHwGaNjugDi1ruRJOA=";
         fetchSubmodules = true;
       };
       catch2_src = fetchFromGitHub {
         owner = "catchorg";
         repo = "Catch2";
         rev = "v3.0.0-preview5"; # pinned by blspy
-        sha256 = "sha256-IQ1yGZo3nKHTqScUoq3i3Njxqvk7uW8hQ3GT0/SxGaw=";
+        hash = "sha256-IQ1yGZo3nKHTqScUoq3i3Njxqvk7uW8hQ3GT0/SxGaw=";
       };
     })
   ];

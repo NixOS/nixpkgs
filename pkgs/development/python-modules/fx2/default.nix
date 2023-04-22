@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "whitequark";
     repo = "libfx2";
     rev = "v${version}";
-    sha256 = "sha256-Uk+K7ym92JX4fC3PyTNxd0UvBzoNZmtbscBYjSWChuk=";
+    hash = "sha256-Uk+K7ym92JX4fC3PyTNxd0UvBzoNZmtbscBYjSWChuk=";
   };
 
   nativeBuildInputs = [ sdcc ];

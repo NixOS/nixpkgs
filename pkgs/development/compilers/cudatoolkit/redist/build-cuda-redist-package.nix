@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, backendStdenv
 , fetchurl
 , autoPatchelfHook
 , autoAddOpenGLRunpathHook
@@ -10,7 +11,8 @@ attrs:
 
 let
   arch = "linux-x86_64";
-in stdenv.mkDerivation {
+in
+backendStdenv.mkDerivation {
   inherit pname;
   inherit (attrs) version;
 
@@ -29,6 +31,10 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    # autoPatchelfHook will search for a libstdc++ and we're giving it
+    # one that is compatible with the rest of nixpkgs, even when
+    # nvcc forces us to use an older gcc
+    # NB: We don't actually know if this is the right thing to do
     stdenv.cc.cc.lib
   ];
 
@@ -42,6 +48,8 @@ in stdenv.mkDerivation {
     mv * $out
     runHook postInstall
   '';
+
+  passthru.stdenv = backendStdenv;
 
   meta = {
     description = attrs.name;

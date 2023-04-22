@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "mezz64";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EpmXdyKtfb/M8rTv6YrfNCpDmKei2AD5DBcdVvqCVWw=";
+    hash = "sha256-EpmXdyKtfb/M8rTv6YrfNCpDmKei2AD5DBcdVvqCVWw=";
   };
 
   propagatedBuildInputs = [

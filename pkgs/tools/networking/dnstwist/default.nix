@@ -5,19 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnstwist";
-  version = "20221213";
+  version = "20230413";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "elceef";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-xYZGrlrEdot2l1SkXcT2IbeRWouaN6C+WwbBSHXhAtw=";
+    hash = "sha256-YYERI+GNRP2wGWhYAy6m8QI4alFZniCSWp9/fdb9mpM=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     dnspython
-    GeoIP
+    geoip
     ppdeep
     requests
     tld

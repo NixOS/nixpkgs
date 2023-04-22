@@ -1,17 +1,17 @@
-{ lib, fetchFromGitHub, rustPlatform, stdenv, Security, installShellFiles }:
+{ lib, fetchFromGitHub, rustPlatform, stdenv, Security, installShellFiles, nix-update-script }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic-rs";
-  version = "0.4.4";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
-    rev = "v${version}";
-    hash = "sha256-irN5enJ0nyyzrLvnLXm7YhyEJ3nz9PQukzAfUrKmOzY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-r1h21J+pR8HiFfSxBwTVhuPFtc7HP+XnI3Xtx4oRKzY=";
   };
 
-  cargoHash = "sha256-wJuWeoS45ikP12S2o6aB2Iogw5HomXzCIjkFbp3rSR4=";
+  cargoHash = "sha256-HiGBp79bxxZaupPo5s6cjXa4Q83O9i8VLzB9psjKSfo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage rec {
 
     installShellCompletion rustic.{ba,fi,z}sh
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/rustic-rs/rustic";

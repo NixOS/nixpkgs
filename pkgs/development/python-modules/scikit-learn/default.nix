@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+/ilyJPJtLmbzH7Y+z6FAJV6ET9BAYYDhtBmNVIPfPs=";
+    hash = "sha256-+/ilyJPJtLmbzH7Y+z6FAJV6ET9BAYYDhtBmNVIPfPs=";
   };
 
   buildInputs = [
@@ -54,6 +54,9 @@ buildPythonPackage rec {
   preBuild = ''
     export SKLEARN_BUILD_PARALLEL=$NIX_BUILD_CORES
   '';
+
+  # TODO: a proper fix?  See around PR #225220
+  NIX_LDFLAGS = if stdenv.cc.isGNU then "-L${stdenv.cc.cc.lib}/lib" else null;
 
   doCheck = !stdenv.isAarch64;
 

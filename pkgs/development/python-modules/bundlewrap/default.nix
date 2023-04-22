@@ -4,7 +4,7 @@
 , pythonOlder
 , cryptography
 , jinja2
-, Mako
+, mako
 , passlib
 , pytest
 , pyyaml
@@ -19,19 +19,20 @@
 buildPythonPackage rec {
   pname = "bundlewrap";
   version = "4.17.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bundlewrap";
     repo = "bundlewrap";
-    rev = version;
-    sha256 = "sha256-hdTJcuhVMbLqtPclgj4u6XwH0A5DvnGpnkhIG6Gm8+4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-hdTJcuhVMbLqtPclgj4u6XwH0A5DvnGpnkhIG6Gm8+4=";
   };
 
   nativeBuildInputs = [ setuptools ];
   propagatedBuildInputs = [
-    setuptools cryptography jinja2 Mako passlib pyyaml requests tomlkit librouteros
+    setuptools cryptography jinja2 mako passlib pyyaml requests tomlkit librouteros
   ] ++ lib.optionals (pythonOlder "3.11") [ rtoml ];
 
   pythonImportsCheck = [ "bundlewrap" ];

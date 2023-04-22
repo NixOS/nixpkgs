@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-lsp";
-  version = "3.10.2";
+  version = "4.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VZrUaS+X9C3WufCzMKuScD8CuORbuvbpz1mJiolyIqA=";
+    hash = "sha256-1VPRfs+F24h2xJeoJglZQpuCcPDk6Ptf8cWrAW3G5to=";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter-lsp/jupyterlab-lsp";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [ ];
   };
 }

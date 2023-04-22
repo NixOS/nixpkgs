@@ -9,13 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pdm-pep517";
-  version = "1.0.6";
+  version = "1.1.2";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pEB3A9UPpNZxODo1SGiwWhMGDBvzgmTLtd3Jpz5KHcU=";
+    hash = "sha256-1PpzWmRffpWmvrNKK19+jgDZPdBDnXPzHMguQLW4/c4=";
   };
 
   preCheck = ''
@@ -26,7 +25,6 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    setuptools
     pytestCheckHook
     git
     setuptools

@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "relikd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TfQvAbP7iCpRQg2G+ejl245NCYo9DpYwMgiwY2BuJnY=";
+    hash = "sha256-TfQvAbP7iCpRQg2G+ejl245NCYo9DpYwMgiwY2BuJnY=";
   };
 
   doCheck = true;

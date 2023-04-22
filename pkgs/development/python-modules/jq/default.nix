@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "mwilliamson";
     repo = "jq.py";
     rev = version;
-    sha256 = "sha256-1EQm5ShjFHbO1IO5QD42fsGHFGDBrJulLrcl+WeU7wo=";
+    hash = "sha256-1EQm5ShjFHbO1IO5QD42fsGHFGDBrJulLrcl+WeU7wo=";
   };
 
   patches = [

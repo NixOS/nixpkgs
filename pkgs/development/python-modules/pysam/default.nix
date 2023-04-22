@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "pysam-developers";
     repo = "pysam";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-7yEZJ+iIw4qOxsanlKQlqt1bfi8MvyYjGJWiVDmXBrc=";
+    hash = "sha256-7yEZJ+iIw4qOxsanlKQlqt1bfi8MvyYjGJWiVDmXBrc=";
   };
 
   nativeBuildInputs = [ samtools ];

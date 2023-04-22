@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libidn2";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchurl {
-    url = "mirror://gnu/gnu/libidn/${pname}-${version}.tar.gz";
-    sha256 = "sha256-dpQM1Od46Ak1eanRlbJf/16Tbp3GJCBoUotDenZ2T5E=";
+    url = "https://ftp.gnu.org/gnu/libidn/${pname}-${version}.tar.gz";
+    sha256 = "sha256-k8q6crTgUdH41PWgdqtjyZt3+u4Bm3K5eDsmeYbbtF8=";
   };
 
   strictDeps = true;

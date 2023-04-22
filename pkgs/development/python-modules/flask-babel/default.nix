@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 
 # build-system
 , poetry-core
@@ -22,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "flask-babel";
-  version = "3.0.1";
+  version = "3.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python-babel";
     repo = "flask-babel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bHsB1f7dbZW4k8JteyZOwVCgWRDZMu21XdMcjM5NYjk=";
+    hash = "sha256-KoTHBrGD6M3rkXoxUadRXhroRUbWKaL/rE6Rd2mxw4c=";
   };
 
   outputs = [

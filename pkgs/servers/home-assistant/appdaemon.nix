@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     azure-mgmt-storage
     azure-storage-blob
     bcrypt
-    cchardet
+    faust-cchardet
     deepdiff
     feedparser
     iso8601

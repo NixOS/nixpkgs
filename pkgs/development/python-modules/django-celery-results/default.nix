@@ -18,6 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-dapRlw21aRy/JCxqD/UMjN9BniZc0Om3cjNdBkNsS5k=";
   };
 
+  postPatch = ''
+    # Drop malformatted tests_require specification
+    sed -i '/tests_require=/d' setup.py
+  '';
+
   propagatedBuildInputs = [
     celery
     django

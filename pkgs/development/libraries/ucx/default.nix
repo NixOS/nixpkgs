@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, doxygen
-, numactl, rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen, numactl
+, rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin, pkg-config
 , enableCuda ? false
 , cudatoolkit
+, enableRocm ? false
+, rocm-core, rocm-runtime, rocm-device-libs, hip
 }:
 
 let
@@ -10,29 +12,24 @@ let
     inherit (cudatoolkit) name meta;
     paths = [ cudatoolkit cudatoolkit.lib ];
   };
+  rocm = symlinkJoin {
+    name = "rocm";
+    paths = [ rocm-core rocm-runtime rocm-device-libs hip ];
+  };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ucx";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "sha256-NhtN8xrHc6UnUrMbq9LHpb25JO+/LDGcLLGebCfGnv4=";
+    sha256 = "sha256-OSYeJfMi57KABt8l3Yj0glqx54C5cwM2FqlijszJIk4=";
   };
 
-  patches = [
-    # Pull upstream fix for binutils-2.39:
-    #   https://github.com/openucx/ucx/pull/8450
-    (fetchpatch {
-      name = "binutils-2.39.patch";
-      url = "https://github.com/openucx/ucx/commit/6b6128efd416831cec3a1820f7d1c8e648b79448.patch";
-      sha256 = "sha256-ci00nZG8iOUEFXbmgr/5XkIfiw4eAAdG1wcEYjQSiT8=";
-    })
-  ];
-
-  nativeBuildInputs = [ autoreconfHook doxygen ];
+  nativeBuildInputs = [ autoreconfHook doxygen pkg-config ];
 
   buildInputs = [
     libbfd
@@ -41,7 +38,8 @@ in stdenv.mkDerivation rec {
     perl
     rdma-core
     zlib
-  ] ++ lib.optional enableCuda cudatoolkit;
+  ] ++ lib.optional enableCuda cudatoolkit
+  ++ lib.optionals enableRocm [ rocm-core rocm-runtime rocm-device-libs hip ];
 
   configureFlags = [
     "--with-rdmacm=${rdma-core}"
@@ -49,7 +47,8 @@ in stdenv.mkDerivation rec {
     "--with-rc"
     "--with-dm"
     "--with-verbs=${rdma-core}"
-  ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}";
+  ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}"
+  ++ lib.optional enableRocm "--with-rocm=${rocm}";
 
   enableParallelBuilding = true;
 

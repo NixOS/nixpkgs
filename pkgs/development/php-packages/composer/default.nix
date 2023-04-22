@@ -1,20 +1,17 @@
-{ mkDerivation, fetchurl, makeWrapper, unzip, lib, php }:
+{ mkDerivation, fetchurl, makeBinaryWrapper, unzip, lib, php }:
 
-let
+mkDerivation rec {
   pname = "composer";
-  version = "2.5.1";
-in
-mkDerivation {
-  inherit pname version;
+  version = "2.5.5";
 
   src = fetchurl {
     url = "https://github.com/composer/composer/releases/download/${version}/composer.phar";
-    sha256 = "sha256-8blP7hGlvWoarl13yNomnfJ8cF/MgG6/TIwub6hkXCA=";
+    sha256 = "sha256-VmptHPS+HMOsiC0qKhOBf/rlTmD1qnyRN0NIEKWAn/w=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase = ''
     runHook preInstall

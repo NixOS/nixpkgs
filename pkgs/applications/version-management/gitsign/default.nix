@@ -1,20 +1,30 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv, makeWrapper, gitMinimal }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv, makeWrapper, gitMinimal, testers, gitsign }:
 
 buildGoModule rec {
   pname = "gitsign";
-  version = "0.4.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lSE4BLwtxicngvnDCcMa6F6c3+Okn9NKAOnT2FGi7kU=";
+    hash = "sha256-VgkTFYnHKpqZOack5SabOFu2BRespVRhgrsepo0V1mI=";
   };
-  vendorSha256 = "sha256-WrVunAxOXXGSbs9OyKydeg4N/s871mt2O3t2e5DxXQo=";
+  vendorHash = "sha256-zalysp+90+QM5hX7yUudJW61h+3tQOab7ZpcF5kZSB0=";
+
+  subPackages = [
+    "."
+    "cmd/gitsign-credential-cache"
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [ "-s" "-w" "-buildid=" "-X github.com/sigstore/gitsign/pkg/version.gitVersion=${version}" ];
+
+  preCheck = ''
+    # test all paths
+    unset subPackages
+  '';
 
   postInstall = ''
     for f in $out/bin/*; do
@@ -22,11 +32,13 @@ buildGoModule rec {
     done
   '';
 
+  passthru.tests.version = testers.testVersion { package = gitsign; };
+
   meta = {
     homepage = "https://github.com/sigstore/gitsign";
     changelog = "https://github.com/sigstore/gitsign/releases/tag/v${version}";
     description = "Keyless Git signing using Sigstore";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lesuisse ];
+    maintainers = with lib.maintainers; [ lesuisse developer-guy ];
   };
 }

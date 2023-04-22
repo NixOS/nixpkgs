@@ -22,8 +22,8 @@ let
       (option: ''
         menuentry '${defaults.name} ${
         # Name appended to menuentry defaults to params if no specific name given.
-        option.name or (if option ? params then "(${option.params})" else "")
-        }' ${if option ? class then " --class ${option.class}" else ""} {
+        option.name or (optionalString (option ? params) "(${option.params})")
+        }' ${optionalString (option ? class) " --class ${option.class}"} {
           linux ${defaults.image} \''${isoboot} ${defaults.params} ${
             option.params or ""
           }
@@ -535,10 +535,17 @@ in
       '';
     };
 
+    isoImage.makeBiosBootable = mkOption {
+      default = false;
+      description = lib.mdDoc ''
+        Whether the ISO image should be a BIOS-bootable disk.
+      '';
+    };
+
     isoImage.makeEfiBootable = mkOption {
       default = false;
       description = lib.mdDoc ''
-        Whether the ISO image should be an efi-bootable volume.
+        Whether the ISO image should be an EFI-bootable volume.
       '';
     };
 
@@ -693,7 +700,7 @@ in
     boot.loader.grub.enable = false;
 
     environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
-      ++ optional canx86BiosBoot pkgs.syslinux
+      ++ optional (config.isoImage.makeBiosBootable && canx86BiosBoot) pkgs.syslinux
     ;
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
@@ -744,7 +751,7 @@ in
         { source = pkgs.writeText "version" config.system.nixos.label;
           target = "/version.txt";
         }
-      ] ++ optionals canx86BiosBoot [
+      ] ++ optionals (config.isoImage.makeBiosBootable && canx86BiosBoot) [
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
@@ -771,7 +778,7 @@ in
         { source = config.isoImage.efiSplashImage;
           target = "/EFI/boot/efi-background.png";
         }
-      ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
+      ] ++ optionals (config.boot.loader.grub.memtest86.enable && config.isoImage.makeBiosBootable && canx86BiosBoot) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
           target = "/boot/memtest.bin";
         }
@@ -786,10 +793,10 @@ in
     # Create the ISO image.
     system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({
       inherit (config.isoImage) isoName compressImage volumeID contents;
-      bootable = canx86BiosBoot;
+      bootable = config.isoImage.makeBiosBootable && canx86BiosBoot;
       bootImage = "/isolinux/isolinux.bin";
-      syslinux = if canx86BiosBoot then pkgs.syslinux else null;
-    } // optionalAttrs (config.isoImage.makeUsbBootable && canx86BiosBoot) {
+      syslinux = if config.isoImage.makeBiosBootable && canx86BiosBoot then pkgs.syslinux else null;
+    } // optionalAttrs (config.isoImage.makeUsbBootable && config.isoImage.makeBiosBootable && canx86BiosBoot) {
       usbBootable = true;
       isohybridMbrImage = "${pkgs.syslinux}/share/syslinux/isohdpfx.bin";
     } // optionalAttrs config.isoImage.makeEfiBootable {

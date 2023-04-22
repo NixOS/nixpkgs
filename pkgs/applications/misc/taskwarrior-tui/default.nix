@@ -20,7 +20,12 @@ rustPlatform.buildRustPackage rec {
   # Because there's a test that requires terminal access
   doCheck = false;
 
-  cargoSha256 = "sha256-b+bncWx7Z4GG2vwImRYeywc77THGMYVXlm4v/9YKCMI=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "task-hookrs-0.7.0" = "sha256-EGnhUgYxygU3JrYXQPE9SheuXWS91qEwR+w3whaYuYw=";
+    };
+  };
 
   postInstall = ''
     installManPage docs/taskwarrior-tui.1

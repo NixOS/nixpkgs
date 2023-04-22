@@ -3,7 +3,9 @@
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-notes, kcalendarcore, kcmutils, kcrash, kdbusaddons,
   kidentitymanagement, kldap, kmailtransport, knewstuff, knotifications,
-  knotifyconfig, kparts, kross, ktexteditor, kwallet, libkdepim, libkleo,
+  knotifyconfig, kparts, kross, ktexteditor,
+  kuserfeedback,
+  kwallet, libkdepim, libkleo,
   pimcommon, qttools, karchive, mailcommon, messagelib
 }:
 
@@ -19,7 +21,9 @@ mkDerivation {
   buildInputs = [
     akonadi akonadi-notes kcalendarcore kcmutils kcrash kdbusaddons
     kidentitymanagement kldap kmailtransport knewstuff knotifications
-    knotifyconfig kparts kross ktexteditor kwallet libkdepim libkleo pimcommon
+    knotifyconfig kparts kross ktexteditor
+    kuserfeedback
+    kwallet libkdepim libkleo pimcommon
     qttools karchive mailcommon messagelib
   ];
 }

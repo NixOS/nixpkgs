@@ -190,7 +190,7 @@ rec {
       cat > /etc/pam.d/other <<EOF
     account sufficient pam_unix.so
     auth sufficient pam_rootok.so
-    password requisite pam_unix.so nullok sha512
+    password requisite pam_unix.so nullok yescrypt
     session required pam_unix.so
     EOF
     fi
@@ -229,6 +229,15 @@ rec {
           mount /dev/${vmTools.hd} disk
           cd disk
 
+          function dedup() {
+            declare -A seen
+            while read ln; do
+              if [[ -z "''${seen["$ln"]:-}" ]]; then
+                echo "$ln"; seen["$ln"]=1
+              fi
+            done
+          }
+
           if [[ -n "$fromImage" ]]; then
             echo "Unpacking base image..."
             mkdir image
@@ -245,7 +254,8 @@ rec {
               parentID="$(cat "image/manifest.json" | jq -r '.[0].Config | rtrimstr(".json")')"
             fi
 
-            cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+            # In case of repeated layers, unpack only the last occurrence of each
+            cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' | tac | dedup | tac > layer-list
           else
             touch layer-list
           fi

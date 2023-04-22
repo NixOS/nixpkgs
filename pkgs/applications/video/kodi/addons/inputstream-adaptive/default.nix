@@ -1,15 +1,28 @@
 { stdenv, lib, rel, addonDir, buildKodiBinaryAddon, fetchFromGitHub, expat, glib, nspr, nss, gtest }:
+let
+  bento4 = fetchFromGitHub {
+    owner = "xbmc";
+    repo = "Bento4";
+    rev = "1.6.0-639-5-${rel}";
+    sha256 = "sha256-jjeBy3LmnN7hPjnbBSPcdtPD+MdbG+0kU8mekM2/ZFw=";
+  };
+in
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
-  version = "19.0.7";
+  version = "20.3.2";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.adaptive";
     rev = "${version}-${rel}";
-    sha256 = "sha256-2bQVTSMznh7soeL1VJJpXrlZd4ONmP9wq9pYLnwPnZE=";
+    sha256 = "sha256-QG0qBRbUJJgsRLS2cQIDeTDYLjqVD0dRaZ7pCxpxNcs=";
   };
+
+  extraCMakeFlags = [
+    "-DENABLE_INTERNAL_BENTO4=ON"
+    "-DBENTO4_URL=${bento4}"
+  ];
 
   extraNativeBuildInputs = [ gtest ];
 

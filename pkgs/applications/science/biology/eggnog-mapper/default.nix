@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
   ] ++ (with python3Packages; [
     biopython
     psutil
-    XlsxWriter
+    xlsxwriter
   ]);
 
   # Tests rely on some of the databases being available, which is not bundled

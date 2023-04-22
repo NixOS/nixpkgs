@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "allisson";
     repo = "python-simple-rest-client";
     rev = version;
-    sha256 = "sha256-HdGYLDrqQvd7hvjwhC5dY2amdHUZHTYJvD1QP89lcXU=";
+    hash = "sha256-HdGYLDrqQvd7hvjwhC5dY2amdHUZHTYJvD1QP89lcXU=";
   };
 
   propagatedBuildInputs = [

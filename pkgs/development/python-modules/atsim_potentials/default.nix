@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mjdrushton";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-G7lNqwEUwAT0f7M2nUTCxpXOAl6FWKlh7tcsvbur1eM=";
+    hash = "sha256-G7lNqwEUwAT0f7M2nUTCxpXOAl6FWKlh7tcsvbur1eM=";
   };
 
   postPatch = ''

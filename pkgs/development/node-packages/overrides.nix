@@ -176,6 +176,10 @@ final: prev: {
     '';
   };
 
+  firebase-tools = prev.firebase-tools.override {
+    nativeBuildInputs = lib.optionals stdenv.isDarwin  [ pkgs.xcbuild ];
+  };
+
   flood = prev.flood.override {
     buildInputs = [ final.node-pre-gyp ];
   };
@@ -263,6 +267,8 @@ final: prev: {
       pixman
       cairo
       pango
+    ] ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreText
     ];
   };
 
@@ -340,14 +346,22 @@ final: prev: {
     };
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = let
-      # Needed to fix Node.js 16+ - PR svanderburg/node2nix#302
-      npmPatch = fetchpatch {
-        name = "emit-lockfile-v2-and-fix-bin-links-with-npmv7.patch";
-        url = "https://github.com/svanderburg/node2nix/commit/375a055041b5ee49ca5fb3f74a58ca197c90c7d5.patch";
-        hash = "sha256-uVYrXptJILojeur9s2O+J/f2vyPNCaZMn1GM/NoC5n8=";
-      };
+      patches = [
+        # Needed to fix Node.js 16+ - PR svanderburg/node2nix#302
+        (fetchpatch {
+          name = "emit-lockfile-v2-and-fix-bin-links-with-npmv7.patch";
+          url = "https://github.com/svanderburg/node2nix/commit/375a055041b5ee49ca5fb3f74a58ca197c90c7d5.patch";
+          hash = "sha256-uVYrXptJILojeur9s2O+J/f2vyPNCaZMn1GM/NoC5n8=";
+        })
+        # Needed to fix packages with DOS line-endings after above patch - PR svanderburg/node2nix#314
+        (fetchpatch {
+          name = "convert-crlf-for-script-bin-files.patch";
+          url = "https://github.com/svanderburg/node2nix/commit/91aa511fe7107938b0409a02ab8c457a6de2d8ca.patch";
+          hash = "sha256-ISiKYkur/o8enKDzJ8mQndkkSC4yrTNlheqyH+LiXlU=";
+        })
+      ];
     in ''
-      patch -d $out/lib/node_modules/node2nix -p1 < ${npmPatch}
+      ${lib.concatStringsSep "\n" (map (patch: "patch -d $out/lib/node_modules/node2nix -p1 < ${patch}") patches)}
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${lib.makeBinPath [ pkgs.nix ]}
     '';
   };
@@ -404,14 +418,13 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      sha512 = "sha512-0jDxgg+DruB1kHVNlcspXQB9au62IFfVg9drkhzXudszHNUAQn0lVuu+T8np0uC2z1nKD5S3qPeCyR8u5YFLnA==";
+      hash = "sha512-L9mqjnSmvWIRCYJ9mQkwCtj4+JDYYTdhoyo8hlsHNDXaZLh/b4hR0IoKIBbTKxZuyHQzLopb/+0Rvb69uGV7uA==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
         --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/migration-engine \
         --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
         --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
-        --set PRISMA_INTROSPECTION_ENGINE_BINARY ${prisma-engines}/bin/introspection-engine \
         --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
     '';
 
@@ -617,6 +630,7 @@ final: prev: {
     # These dependencies are required by
     # https://github.com/Automattic/node-canvas.
     buildInputs = with pkgs; [
+      giflib
       pixman
       cairo
       pango

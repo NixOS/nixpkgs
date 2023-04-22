@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "3.1.0";
-  disabled = pythonOlder "3.6";
+  version = "3.2.1";
+  disabled = pythonOlder "3.7";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QP2481RJIcXfzUhqwIDOIocOcdgs7W0uePqXwq3dSAw=";
+    hash = "sha256-GEm9mNiyQrlI5HLbdHjgkL8zYZEqj+2HmS7ZQIX1Ryc=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,7 @@ buildPythonPackage rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
+    changelog = "https://github.com/pytest-dev/pytest-xdist/blob/v${version}/CHANGELOG.rst";
     description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;

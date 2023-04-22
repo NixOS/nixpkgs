@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchpatch
 , kernel
 , commitDate ? "2023-02-01"
@@ -12,14 +13,13 @@
 
 # NOTE: bcachefs-tools should be updated simultaneously to preserve compatibility
 (kernel.override ( args // {
-  argsOverride = {
-    version = "${kernel.version}-bcachefs-unstable-${commitDate}";
+  version = "${kernel.version}-bcachefs-unstable-${commitDate}";
 
-    extraMeta = {
-      branch = "master";
-      maintainers = with lib.maintainers; [ davidak Madouura pedrohlc ];
-    };
-  } // argsOverride;
+  extraMeta = {
+    branch = "master";
+    broken = stdenv.isAarch64;
+    maintainers = with lib.maintainers; [ davidak Madouura pedrohlc ];
+  };
 
   kernelPatches = [ {
       name = "bcachefs-${currentCommit}";

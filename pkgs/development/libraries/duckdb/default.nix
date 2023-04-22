@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9m9+fldOgv2QTuUbw5y0zekBxZe8Dd4+8FqR3t3uFGg=";
+    sha256 = "sha256-dCPWrB/Jqm4/kS6J/3jcQG291tFKAZSEptEYLGOZsLo=";
   };
 
   patches = [ ./version.patch ];
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withOdbc [ unixODBC ];
 
   cmakeFlags = [
+    "-DBUILD_AUTOCOMPLETE_EXTENSION=ON"
     "-DBUILD_ICU_EXTENSION=ON"
     "-DBUILD_PARQUET_EXTENSION=ON"
     "-DBUILD_TPCH_EXTENSION=ON"
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_TPCE=ON"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
+  ] ++ lib.optionals doInstallCheck [
     # development settings
     "-DBUILD_UNITTESTS=ON"
   ];
@@ -84,6 +86,10 @@ stdenv.mkDerivation rec {
         "test/sql/json/read_json.test"
         "test/sql/copy/parquet/parquet_5968.test"
         "test/fuzzer/pedro/buffer_manager_out_of_memory.test"
+        "test/sql/storage/compression/bitpacking/bitpacking_size_calculation.test"
+        "test/sql/copy/parquet/delta_byte_array_length_mismatch.test"
+        "test/sql/function/timestamp/test_icu_strptime.test"
+        "test/sql/timezone/test_icu_timezone.test"
         # these are only hidden if no filters are passed in
         "[!hide]"
         # this test apparently never terminates

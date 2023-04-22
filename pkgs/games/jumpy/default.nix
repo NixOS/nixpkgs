@@ -1,9 +1,11 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, stdenv
+, fetchpatch
 , makeWrapper
 , pkg-config
+, zstd
+, stdenv
 , alsa-lib
 , libxkbcommon
 , udev
@@ -15,26 +17,44 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jumpy";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "fishfolk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5hgd4t9ZKHmv8wzED7Tn+ykzUM0EbQqRX15HBHzXtJY=";
+    sha256 = "sha256-03VPfSIlGB8Cc1jWzZSj9MBFBBmMjyx+RdHr3r3oolU=";
   };
 
-  cargoSha256 = "sha256-cK5n75T+Kkd6F4q4MFZNn0R6W6Nk2/H23AGhIe2FCig=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "bones_asset-0.1.0" = "sha256-YyY5OsbRLkpAgvNifRiXfmzfsgFw/oFV1nQVCkXG4j4=";
+    };
+  };
 
-  auditable = true; # TODO: remove when this is the default
+  patches = [
+    # removes unused patch in patch.crates-io, which cases the build to fail
+    # error: failed to load source for dependency `bevy_simple_tilemap`
+    # Caused by: attempting to update a git repository, but --frozen was specified
+    ./remove-unused-patch.patch
+
+    # the crate version is outdated
+    (fetchpatch {
+      name = "bump-version-to-0-6-1.patch";
+      url = "https://github.com/fishfolk/jumpy/commit/15081c425056cdebba1bc90bfcaba50a2e24829f.patch";
+      hash = "sha256-dxLfy1HMdjh2VPbqMb/kwvDxeuptFi3W9tLzvg6TLsE=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = [
+    zstd
+  ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     libxkbcommon
     udev
@@ -49,9 +69,11 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  postPatch = ''
-    touch ../$(stripHash $cargoDeps)/taffy/README.md
-  '';
+  cargoBuildFlags = [ "--bin" "jumpy" ];
+
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   postInstall = ''
     mkdir $out/share

@@ -3,16 +3,16 @@
   nixosTests }:
 buildGoModule rec {
   pname = "buildkite-agent";
-  version = "3.44.0";
+  version = "3.45.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "sha256-iN6Q+HXaZgUt8kXDGG5e1hY0/g/JYSHQ768YYRwZsuw=";
+    sha256 = "sha256-T1B9eo0LVN5FMI76TJQ4yxIXOfqT9wHNO5DHfVaWHBA=";
   };
 
-  vendorHash = "sha256-I+tjSBfAvRyE0bjVRloAkb5Jftb6dxoq8lNSgWHAcVk=";
+  vendorHash = "sha256-kxqwGJBm5cT0ay29TlAqq3cFWheLqMwX/MtHpaHohBc=";
 
   postPatch = ''
     substituteInPlace bootstrap/shell/shell.go --replace /bin/bash ${bash}/bin/bash

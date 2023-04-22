@@ -7,18 +7,26 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gitlint";
-  version = "0.18.0";
+  version = "0.19.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jorisroovers";
     repo = "gitlint";
-    rev = "v${version}";
-    sha256 = "sha256-MmXzrooN+C9MUaAz4+IEGkGJWHbgvPMSLHgssM0wyN8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4SGkkC4LjZXTDXwK6jMOIKXR1qX76CasOwSqv8XUrjs=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   # Upstream splitted the project into gitlint and gitlint-core to
   # simplify the dependency handling
   sourceRoot = "source/gitlint-core";
+
+  nativeBuildInputs = with python3.pkgs; [
+    hatch-vcs
+    hatchling
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     arrow
@@ -31,12 +39,6 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # We don't need gitlint-core
-    substituteInPlace setup.py \
-      --replace "'gitlint-core[trusted-deps]==' + version," ""
-  '';
-
   pythonImportsCheck = [
     "gitlint"
   ];
@@ -44,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Linting for your git commit messages";
     homepage = "https://jorisroovers.com/gitlint/";
+    changelog = "https://github.com/jorisroovers/gitlint/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ethancedwards8 fab ];
   };

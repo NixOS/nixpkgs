@@ -6,6 +6,7 @@
 , glib
 , gtk3
 , lib
+, libappindicator
 , libdrm
 , libgcrypt
 , libkrb5
@@ -14,21 +15,22 @@
 , xorg
 , systemd
 , stdenv
+, vips
 , at-spi2-core
 , autoPatchelfHook
 , wrapGAppsHook
 }:
 
 let
-  version = "3.0.0-571";
+  version = "3.1.1-11223";
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/c005c911/linuxqq_${version}_amd64.deb";
-      sha256 = "sha256-8KcUhZwgeFzGyrQITWnJUzEPGZOCj0LIHLmRuKqkgmQ=";
+      url = "https://dldir1.qq.com/qqfile/qq/QQNT/2355235c/linuxqq_${version}_amd64.deb";
+      sha256 = "sha256-TBgQ7zV+juB3KSgIIXuvxnYmvnnM/1/wU0EkiopIqvY=";
     };
     aarch64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/c005c911/linuxqq_${version}_arm64.deb";
-      sha256 = "sha256-LvE+Pryq4KLu+BFYVrGiTwBdgOrBguPHQd73MMFlfiY=";
+      url = "https://dldir1.qq.com/qqfile/qq/QQNT/2355235c/linuxqq_${version}_arm64.deb";
+      sha256 = "sha256-1ba/IA/+X/s7jUtIhh3OsBHU7MPggGrASsBPx8euBBs=";
     };
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -49,18 +51,20 @@ stdenv.mkDerivation {
     alsa-lib
     at-spi2-core
     cups
-    gtk3
     glib
+    gtk3
     libdrm
     libgcrypt
     libkrb5
     mesa
     nss
+    vips
     xorg.libXdamage
   ];
 
-  runtimeDependencies = [
-    (lib.getLib systemd)
+  runtimeDependencies = map lib.getLib [
+    libappindicator
+    systemd
   ];
 
   installPhase = ''
@@ -74,7 +78,14 @@ stdenv.mkDerivation {
       --replace "/usr/share" "$out/share"
     ln -s $out/opt/QQ/qq $out/bin/qq
 
+    # Remove bundled libraries
+    rm -r $out/opt/QQ/resources/app/sharp-lib
+
     runHook postInstall
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ gjs ]}")
   '';
 
   meta = with lib; {

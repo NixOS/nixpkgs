@@ -1,16 +1,16 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, buildFHSUserEnv, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, buildFHSEnv, installShellFiles }:
 
 let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "0.29.0";
+    version = "0.31.0";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = pname;
       rev = version;
-      sha256 = "sha256-jew4KLpOOXE9N/h4qFqof8y26DQrvm78E/ARbbwocD4=";
+      hash = "sha256-y51/5Gu6nTaL+XLP7hLk/gaksIdRahecl5q5jYBWATE=";
     };
 
     nativeBuildInputs = [
@@ -19,7 +19,7 @@ let
 
     subPackages = [ "." ];
 
-    vendorSha256 = "sha256-BunonnjzGnpcmGJXxEQXvjJLGvdSXUOK9zAhXoAemHY=";
+    vendorSha256 = "sha256-JuuGJuSax2tfuQHH/Hqk1JpQE2OboYJKJjzPjIZ1UD8=";
 
     doCheck = false;
 
@@ -48,10 +48,10 @@ let
 
 in
 if stdenv.isLinux then
-# buildFHSUserEnv is needed because the arduino-cli downloads compiler
+# buildFHSEnv is needed because the arduino-cli downloads compiler
 # toolchains from the internet that have their interpreters pointed at
 # /lib64/ld-linux-x86-64.so.2
-  buildFHSUserEnv
+  buildFHSEnv
   {
     inherit (pkg) name meta;
 

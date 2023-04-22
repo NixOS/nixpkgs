@@ -1,7 +1,7 @@
 { lib, beamPackages
 , fetchFromGitHub, fetchFromGitLab, fetchHex
 , file, cmake
-, libxcrypt
+, libxcrypt-legacy
 , nixosTests, writeText
 , ...
 }:
@@ -165,7 +165,7 @@ beamPackages.mixRelease rec {
       crypt = let
         version = prev.crypt.version;
       in prev.crypt.override {
-        buildInputs = [ libxcrypt ];
+        buildInputs = [ libxcrypt-legacy ];
         postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{hex-source-crypt-${version},crypt}.so";
       };
     });

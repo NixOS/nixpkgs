@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
-, substituteAll, cmake, libxml2, libllvm, version, python3
+, substituteAll, cmake, ninja, libxml2, libllvm, version, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -20,7 +20,7 @@ let
 
     sourceRoot = "${src.name}/${pname}";
 
-    nativeBuildInputs = [ cmake python3 ]
+    nativeBuildInputs = [ cmake ninja python3 ]
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
@@ -28,7 +28,6 @@ let
 
     cmakeFlags = [
       "-DCLANG_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/clang"
-      "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
     ] ++ lib.optionals enableManpages [
@@ -46,7 +45,7 @@ let
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
-      ./add-nostdlibinc-flag.patch
+      ../../common/clang/add-nostdlibinc-flag.patch
       (substituteAll {
         src = ../../clang-11-12-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";
@@ -55,9 +54,6 @@ let
 
     postPatch = ''
       (cd tools && ln -s ../../clang-tools-extra extra)
-
-      # Patch for standalone doc building
-      sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '' + lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
     '';
@@ -88,8 +84,9 @@ let
     '';
 
     passthru = {
-      isClang = true;
       inherit libllvm;
+      isClang = true;
+      hardeningUnsupportedFlags = [ "fortify3" ];
     };
 
     meta = llvm_meta // {
@@ -111,9 +108,7 @@ let
   } // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";
 
-    buildPhase = ''
-      make docs-clang-man
-    '';
+    ninjaFlags = [ "docs-clang-man" ];
 
     installPhase = ''
       mkdir -p $out/share/man/man1

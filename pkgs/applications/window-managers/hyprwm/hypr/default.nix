@@ -22,26 +22,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypr";
-  version = "unstable-2022-05-25";
+  version = "unstable-2023-01-26";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "Hypr";
-    rev = "3e3d943c446ae77c289611a1a875c8dff8883c1e";
-    hash = "sha256-lyaGGm53qxg7WVoFxZ7kerLe12P1N3JbN8nut6oZS50=";
+    rev = "af4641847b578b233a6f06806f575b3f320d74da";
+    hash = "sha256-FUKR5nceEhm9GWa61hHO8+y4GBz7LYKXPB0OpQcQ674=";
   };
 
   patches = [
     ./000-dont-set-compiler.diff
-    # TODO: remove on next release
-    (fetchpatch {
-      url = "https://github.com/hyprwm/Hypr/commit/08d6af2caf882247943f0e8518ad782f35d1aba4.patch";
-      sha256 = "sha256-WjR12ZH8CE+l9xSeQUAPYW5r5HzoPpod5YqDPJTdTY8=";
-    })
-    (fetchpatch {
-      url = "https://github.com/hyprwm/Hypr/commit/7512a3ab91865b1e11b8c4a9dfdffb25c2b153de.patch";
-      sha256 = "sha256-0Hq5n115z0U44op7A1FO9tUOeMEPV0QgD5E5zcmend0=";
-    })
   ];
 
   nativeBuildInputs = [

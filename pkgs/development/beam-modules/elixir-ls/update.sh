@@ -23,7 +23,7 @@ if ("$latest_version" === "$current_version") {
       .\"sha256\" = \"$tarball_hash\" | \
       .\"depsSha256\" = \"\"" $directory/pin.json | sponge $directory/pin.json
 
-  const new_mix_hash = $(nix-build -A elixir_ls.mixFodDeps 2>&1 | \
+  const new_mix_hash = $(nix-build -A elixir-ls.mixFodDeps 2>&1 | \
     tail -n 1 | \
     sd '\s+got:\s+' '')
 

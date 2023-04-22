@@ -19,6 +19,7 @@ fennel,,,,,,misterio77
 fifo,,,,,,
 fluent,,,,,,alerque
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,5.1,
+haskell-tools.nvim,,,,,,
 http,,,,0.3-0,,vcunat
 inspect,,,,,,
 jsregexp,,,,,,
@@ -39,6 +40,7 @@ lrexlib-pcre,,,,,,vyp
 lrexlib-posix,,,,,,
 lua-cjson,,,,,,
 lua-cmsgpack,,,,,,
+lua-curl,,,,,,
 lua-iconv,,,,,,
 lua-lsp,,,,,,
 lua-messagepack,,,,,,
@@ -81,7 +83,7 @@ luautf8,,,,,,pstn
 luazip,,,,,,
 lua-yajl,,,,,,pstn
 luuid,,,,,,
-luv,,,,1.43.0-0,,
+luv,,,,1.44.2-1,,
 lush.nvim,https://github.com/rktjmp/lush.nvim,,,,,teto
 lyaml,,,,,,lblasc
 markdown,,,,,,
@@ -102,6 +104,8 @@ std._debug,https://github.com/lua-stdlib/_debug.git,,,,,
 std.normalize,https://github.com/lua-stdlib/normalize.git,,,,,
 stdlib,,,,41.2.2,,vyp
 teal-language-server,,,http://luarocks.org/dev,,,
+telescope.nvim,,,,,5.1,
+telescope-manix,,,,,,
 tl,,,,,,mephistophiles
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
 vusted,,,,,,figsoda

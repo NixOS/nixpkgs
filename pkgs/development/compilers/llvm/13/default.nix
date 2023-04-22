@@ -1,4 +1,5 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake
+, stdenv-tmpDropB
 , gccForLibs, preLibcCrossHeaders
 , libxml2, python3, isl, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
@@ -37,7 +38,17 @@ let
   llvm_meta = {
     license     = lib.licenses.ncsa;
     maintainers = lib.teams.llvm.members;
-    platforms   = lib.platforms.all;
+
+    # See llvm/cmake/config-ix.cmake.
+    platforms   =
+      lib.platforms.aarch64 ++
+      lib.platforms.arm ++
+      lib.platforms.mips ++
+      lib.platforms.power ++
+      lib.platforms.riscv ++
+      lib.platforms.s390x ++
+      lib.platforms.wasi ++
+      lib.platforms.x86;
   };
 
   tools = lib.makeExtensible (tools: let
@@ -226,14 +237,14 @@ let
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
-               else stdenv;
+               else stdenv-tmpDropB;
     };
 
     compiler-rt-no-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
-               else stdenv;
+               else stdenv-tmpDropB;
     };
 
     # N.B. condition is safe because without useLLVM both are the same.

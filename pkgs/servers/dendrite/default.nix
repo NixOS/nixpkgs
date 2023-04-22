@@ -3,22 +3,20 @@
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    sha256 = "sha256-EJUHpV+ZsMMSMsJGhF0Atblksg5rgI3a2qcRxLyZP38=";
+    hash = "sha256-syOLrw4ig8rmFDkxJ9KSAuzUVO8UokekV17mT1bJNNM=";
   };
 
-  vendorHash = "sha256-Ygd5wC4j0kAbEMMVct5WXZvkcYSqqK8d7ZZ9CDU1RHU=";
+  vendorHash = "sha256-nvGhKCUiyHSD0VpE4OtT9YQSHxv0d7iwOChCJl2D3zk=";
 
   subPackages = [
-    # The server as a monolith: https://matrix-org.github.io/dendrite/installation/install/monolith
-    "cmd/dendrite-monolith-server"
-    # The server as a polylith: https://matrix-org.github.io/dendrite/installation/install/polylith
-    "cmd/dendrite-polylith-multi"
+    # The server
+    "cmd/dendrite"
     # admin tools
     "cmd/create-account"
     "cmd/generate-config"
@@ -31,7 +29,6 @@ buildGoModule rec {
     ## tech demos
     # "cmd/dendrite-demo-pinecone"
     # "cmd/dendrite-demo-yggdrasil"
-    # "cmd/dendritejs-pinecone"
   ];
 
   nativeCheckInputs = [

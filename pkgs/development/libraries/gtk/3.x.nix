@@ -8,6 +8,7 @@
 , docbook_xml_dtd_43
 , gtk-doc
 , meson
+, mesonEmulatorHook
 , ninja
 , python3
 , makeWrapper
@@ -21,6 +22,8 @@
 , atk
 , at-spi2-atk
 , gobject-introspection
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , fribidi
 , xorg
 , libepoxy
@@ -39,7 +42,6 @@
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
-, withGtkDoc ? stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
 , cups
 , AppKit
 , Cocoa
@@ -61,9 +63,9 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.36";
+  version = "3.24.37";
 
-  outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
+  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
   outputBin = "dev";
 
   setupHooks = [
@@ -75,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
   in fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-J6bvFXdDNQyAf/6lm6odcCJtvt6CpelT/9WOpgWf5pE=";
+    sha256 = "sha256-Z0XwtMBTeUFR/Q8OJHSwd8zP9fg+ndG/PTn+n+X7f1c=";
   };
 
   patches = [
@@ -94,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   nativeBuildInputs = [
     gettext
-    gobject-introspection
     makeWrapper
     meson
     ninja
@@ -102,12 +103,15 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     sassc
     gdk-pixbuf
-  ] ++ finalAttrs.setupHooks ++ lib.optionals withGtkDoc [
+  ] ++ finalAttrs.setupHooks ++ lib.optionals withIntrospection [
+    gobject-introspection
     docbook_xml_dtd_43
     docbook-xsl-nons
     gtk-doc
     # For xmllint
     libxml2
+  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ] ++ lib.optionals waylandSupport [
     wayland-scanner
   ];
@@ -157,12 +161,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString withGtkDoc}"
+    "-Dgtk_doc=${lib.boolToString withIntrospection}"
     "-Dtests=false"
     "-Dtracker3=${lib.boolToString trackerSupport}"
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
     "-Dx11_backend=${lib.boolToString x11Support}"
     "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
+    "-Dintrospection=${lib.boolToString withIntrospection}"
   ];
 
   doCheck = false; # needs X11

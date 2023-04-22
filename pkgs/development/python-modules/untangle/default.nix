@@ -9,7 +9,7 @@ buildPythonPackage rec {
     repo = "untangle";
     # 1.1.1 is not tagged on GitHub
     rev = "refs/tags/${version}";
-    sha256 = "sha256-cJkN8vT5hW5hRuLxr/6udwMO4GVH1pJhAc6qmPO2EEI=";
+    hash = "sha256-cJkN8vT5hW5hRuLxr/6udwMO4GVH1pJhAc6qmPO2EEI=";
   };
 
   propagatedBuildInputs = [

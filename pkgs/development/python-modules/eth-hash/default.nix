@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "eth-hash";
     rev = "v${version}";
-    sha256 = "sha256-LMDtFUrsPYgj/Fl9aBW1todlj1D3LlFxAkzNFAzCGLQ=";
+    hash = "sha256-LMDtFUrsPYgj/Fl9aBW1todlj1D3LlFxAkzNFAzCGLQ=";
   };
 
   nativeCheckInputs = [

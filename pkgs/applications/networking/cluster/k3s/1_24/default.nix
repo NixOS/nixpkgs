@@ -22,6 +22,7 @@
 , fetchgit
 , zstd
 , yq-go
+, sqlite
 , nixosTests
 , k3s
 , pkgsBuildBuild
@@ -172,10 +173,12 @@ let
     vendorSha256 = k3sVendorSha256;
 
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libseccomp ];
+    buildInputs = [ libseccomp sqlite.dev ];
 
     subPackages = [ "cmd/server" ];
     ldflags = versionldflags;
+
+    tags = [ "libsqlite3" "linux" ];
 
     # create the multicall symlinks for k3s
     postInstall = ''

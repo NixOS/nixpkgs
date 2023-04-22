@@ -3,8 +3,7 @@
 , fetchFromGitHub
 , SDL2
 , cmake
-, ffmpeg_4
-, imagemagick
+, ffmpeg
 , libedit
 , libelf
 , libepoxy
@@ -16,7 +15,6 @@
 }:
 
 let
-    ffmpeg = ffmpeg_4;
     lua = lua5_4;
     inherit (libsForQt5)
       qtbase
@@ -44,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     ffmpeg
-    imagemagick
     libedit
     libelf
     libepoxy

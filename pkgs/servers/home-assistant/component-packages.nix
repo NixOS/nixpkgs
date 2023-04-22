@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.3.0";
+  version = "2023.4.5";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -241,8 +241,8 @@
       pyatome
     ];
     "august" = ps: with ps; [
-      yalexs
       yalexs-ble
+      yalexs
     ];
     "august_ble" = ps: with ps; [
     ];
@@ -325,7 +325,7 @@
       blinkpy
     ];
     "blinksticklight" = ps: with ps; [
-      BlinkStick
+      blinkstick
     ];
     "bliss_automation" = ps: with ps; [
     ];
@@ -513,7 +513,7 @@
       plexapi
       plexauth
       plexwebsocket
-      PyChromecast
+      pychromecast
       sqlalchemy
       zeroconf
     ];
@@ -629,9 +629,6 @@
     "danfoss_air" = ps: with ps; [
       pydanfossair
     ];
-    "darksky" = ps: with ps; [
-      python-forecastio
-    ];
     "datadog" = ps: with ps; [
       datadog
     ];
@@ -661,17 +658,20 @@
       bluetooth-data-tools
       dbus-fast
       fnvhash
+      av
       hass-nabucasa
       hassil
       home-assistant-frontend
       home-assistant-intents
       ifaddr
       janus
+      numpy
       pillow
       psutil-home-assistant
       pyserial
       pyudev
       scapy
+      securetar
       sqlalchemy
       zeroconf
     ];
@@ -843,7 +843,8 @@
       aioeafm
     ];
     "easyenergy" = ps: with ps; [
-    ]; # missing inputs: easyenergy
+      easyenergy
+    ];
     "ebox" = ps: with ps; [
     ]; # missing inputs: pyebox
     "ebusd" = ps: with ps; [
@@ -934,7 +935,8 @@
       sqlalchemy
     ];
     "energyzero" = ps: with ps; [
-    ]; # missing inputs: energyzero
+      energyzero
+    ];
     "enigma2" = ps: with ps; [
       openwebifpy
     ];
@@ -984,6 +986,8 @@
     "escea" = ps: with ps; [
       pescea
     ];
+    "esera_onewire" = ps: with ps; [
+    ];
     "esphome" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -1017,13 +1021,14 @@
       bluetooth-data-tools
       dbus-fast
       esphome-dashboard-api
+      eufylife-ble-client
       fnvhash
       ifaddr
       pyserial
       pyudev
       sqlalchemy
       zeroconf
-    ]; # missing inputs: eufylife_ble_client
+    ];
     "everlights" = ps: with ps; [
       pyeverlights
     ];
@@ -2101,8 +2106,6 @@
       fnvhash
       sqlalchemy
     ];
-    "magicseaweed" = ps: with ps; [
-    ]; # missing inputs: magicseaweed
     "mailbox" = ps: with ps; [
       aiohttp-cors
     ];
@@ -2378,7 +2381,7 @@
       mutesync
     ];
     "mvglive" = ps: with ps; [
-      PyMVGLive
+      pymvglive
     ];
     "my" = ps: with ps; [
       aiohttp-cors
@@ -2481,7 +2484,8 @@
       nextdns
     ];
     "nfandroidtv" = ps: with ps; [
-    ]; # missing inputs: notifications-android-tv
+      notifications-android-tv
+    ];
     "nibe_heatpump" = ps: with ps; [
       nibe
     ];
@@ -2538,6 +2542,7 @@
       nuheat
     ];
     "nuki" = ps: with ps; [
+      aiohttp-cors
       pynuki
     ];
     "numato" = ps: with ps; [
@@ -2682,12 +2687,25 @@
     ]; # missing inputs: lightify
     "otbr" = ps: with ps; [
       aiohttp-cors
+      bellows
       fnvhash
       ifaddr
+      janus
+      pillow
+      psutil-home-assistant
       pyroute2
+      pyserial-asyncio
+      pyserial
       python-otbr-api
+      pyudev
       sqlalchemy
       zeroconf
+      zha-quirks
+      zigpy-deconz
+      zigpy-xbee
+      zigpy-zigate
+      zigpy-znp
+      zigpy
     ];
     "otp" = ps: with ps; [
       pyotp
@@ -2898,6 +2916,8 @@
     "qrcode" = ps: with ps; [
       pillow
       pyzbar
+    ];
+    "quadrafire" = ps: with ps; [
     ];
     "quantum_gateway" = ps: with ps; [
       quantum-gateway
@@ -3998,6 +4018,8 @@
     "verisure" = ps: with ps; [
       vsure
     ];
+    "vermont_castings" = ps: with ps; [
+    ];
     "versasense" = ps: with ps; [
       pyversasense
     ];
@@ -4026,6 +4048,12 @@
     ];
     "vlc_telnet" = ps: with ps; [
       aiovlc
+    ];
+    "voice_assistant" = ps: with ps; [
+      aiohttp-cors
+      hassil
+      home-assistant-intents
+      mutagen
     ];
     "voicerss" = ps: with ps; [
     ];
@@ -4429,7 +4457,6 @@
     "cpuspeed"
     "crownstone"
     "daikin"
-    "darksky"
     "datadog"
     "debugpy"
     "deconz"
@@ -4462,9 +4489,11 @@
     "dunehd"
     "dynalite"
     "eafm"
+    "easyenergy"
     "ecobee"
     "econet"
     "ecowitt"
+    "edl21"
     "efergy"
     "eight_sleep"
     "elgato"
@@ -4475,12 +4504,14 @@
     "emulated_kasa"
     "emulated_roku"
     "energy"
+    "energyzero"
     "enocean"
     "enphase_envoy"
     "environment_canada"
     "epson"
     "escea"
     "esphome"
+    "eufylife_ble"
     "everlights"
     "evil_genius_labs"
     "ezviz"
@@ -4521,6 +4552,7 @@
     "fritzbox_callmonitor"
     "fronius"
     "frontend"
+    "frontier_silicon"
     "fully_kiosk"
     "garages_amsterdam"
     "gdacs"
@@ -4729,7 +4761,9 @@
     "network"
     "nexia"
     "nextbus"
+    "nextcloud"
     "nextdns"
+    "nfandroidtv"
     "nibe_heatpump"
     "nightscout"
     "nina"
@@ -4746,6 +4780,7 @@
     "nut"
     "nws"
     "nx584"
+    "obihai"
     "octoprint"
     "omnilogic"
     "onboarding"
@@ -4936,6 +4971,7 @@
     "telegram"
     "telegram_bot"
     "tellduslive"
+    "temper"
     "template"
     "tesla_wall_connector"
     "text"
@@ -5001,6 +5037,7 @@
     "vilfo"
     "vizio"
     "vlc_telnet"
+    "voice_assistant"
     "voicerss"
     "volumio"
     "volvooncall"

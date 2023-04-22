@@ -1,6 +1,5 @@
 { lib
 , aiohttp
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
@@ -10,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.93";
+  version = "0.0.97";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +18,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     rev = "refs/tags/${version}";
-    hash = "sha256-ilPwzQV4vucLV3QAR/otsVIDIxRw8iWPGXM8CvgtFxg=";
+    hash = "sha256-A96Q+BoHKc9Q2XY70gAZYg1f1l8hts9P0kiBQwDMN+s=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +27,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     pytestCheckHook
   ];
 

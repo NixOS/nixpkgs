@@ -20,6 +20,7 @@
 , librsvg
 , libvpx
 , libwebp
+, lz4
 , nv-codec-headers-10
 , nvidia_x11 ? null
 , pam
@@ -68,11 +69,11 @@ let
   '';
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.3.3";
+  version = "4.4.4";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    hash = "sha256-J6zzkho0A1faCVzS/0wDlbgLtJmyPrnBkEcR7kDld7A=";
+    hash = "sha256-oPa9ECqCE9+PrcZufsHWYR6EHxTZVFJOMUlK2b0mwLE=";
   };
 
   patches = [
@@ -122,6 +123,7 @@ in buildPythonApplication rec {
     librsvg
     libvpx
     libwebp
+    lz4
     pam
     pango
     x264
@@ -188,6 +190,7 @@ in buildPythonApplication rec {
   postInstall = ''
     # append module paths to xorg.conf
     cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
+    cat ${xorgModulePaths} >> $out/etc/xpra/xorg-uinput.conf
 
     # make application icon visible to desktop environemnts
     icon_dir="$out/share/icons/hicolor/64x64/apps"

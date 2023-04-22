@@ -127,8 +127,36 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-9BhQLFB3wUhiXRQsK9L+I62lSjvTfrqMNi7QUIQvH4U=";
     })
 
-    # temporarily paper over https://github.com/jupyter-widgets/ipywidgets/issues/3669
-    ./patches/ipywidgets-on_submit-deprecationwarning.patch
+    # https://github.com/sagemath/sage/pull/35235
+    (fetchpatch {
+      name = "ipython-8.11-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/23471e2d242c4de8789d7b1fc8b07a4b1d1e595a.diff";
+      sha256 = "sha256-wvH4BvDiaBv7jbOP8LvOE5Vs16Kcwz/C9jLpEMohzLQ=";
+    })
+
+    # positively reviewed
+    (fetchpatch {
+      name = "matplotlib-3.7.0-upgrade.patch";
+      url = "https://github.com/sagemath/sage/pull/35177.diff";
+      sha256 = "sha256-YdPnMsjXBm9ZRm6a8hH8rSynkrABjLoIzqwp3F/rKAw=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35336, merged in 10.0.beta8
+    (fetchpatch {
+      name = "ipywidgets-8.0.5-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/7ab3e3aa81d47a35d09161b965bba8ab16fd5c9e.diff";
+      sha256 = "sha256-WjdsPTui6uv92RerlV0mqltmLaxADvz+3aqSvxBFmfU=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35499
+    (fetchpatch {
+      name = "ipywidgets-8.0.5-upgrade-part-deux.patch";
+      url = "https://github.com/sagemath/sage/pull/35499.diff";
+      sha256 = "sha256-uNCjLs9qrARTQNsq1+kTdvuV2A1M4xx5b1gWh5c55X0=";
+    })
+
+    # rebased from https://github.com/sagemath/sage/pull/34994, merged in sage 10.0.beta2
+    ./patches/numpy-1.24-upgrade.patch
 
     # Sage uses mixed integer programs (MIPs) to find edge disjoint
     # spanning trees. For some reason, aarch64 glpk takes much longer

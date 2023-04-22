@@ -5,13 +5,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "libimagequant";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = pname;
     rev = version;
-    hash = "sha256-W9Q81AbFhWUe6c3csAnm8L5wLqURizrjwqcurWhPISI=";
+    hash = "sha256-sCxscs4D2p7LNDpcrKfAc315/NbxbQXtsyc33zUmccM=";
   };
 
   cargoLock = {
@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoHash = "sha256-0HOmItooNsGq6iTIb9M5IPXMwYh2nQ03qfjomkg0d00=";
-
-  auditable = true; # TODO: remove when this is the default
 
   nativeBuildInputs = [ cargo-c ];
 

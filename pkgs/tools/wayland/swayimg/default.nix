@@ -4,6 +4,7 @@
 , meson
 , ninja
 , pkg-config
+, wayland-scanner
 , wayland
 , wayland-protocols
 , json_c
@@ -22,13 +23,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "swayimg";
-  version = "1.10";
+  version = "1.11";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Iq7T00hvr9Mv50V/GKJBddjoeHdFa2DneVaXyxhMCE0=";
+    sha256 = "sha256-UwIufR3EwbpNVHD1GypV3qNgiqDRllwtxAM0CZPodn0=";
   };
 
   strictDeps = true;
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
 
   buildInputs = [
     bash-completion
@@ -63,6 +64,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/artemsen/swayimg/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

@@ -14,7 +14,7 @@
 , keyrings-alt
 , packaging
 , pathspec
-, Pyro5
+, pyro5
 , requests
 , rich
 , setuptools
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     keyrings-alt
     packaging
     pathspec
-    Pyro5
+    pyro5
     requests
     rich
     setuptools

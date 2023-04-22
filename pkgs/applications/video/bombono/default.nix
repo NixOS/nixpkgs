@@ -8,7 +8,7 @@
 , dvdplusrwtools
 , enca
 , cdrkit
-, ffmpeg
+, ffmpeg_4
 , gettext
 , gtk2
 , gtkmm2
@@ -53,6 +53,11 @@ stdenv.mkDerivation rec {
     {name="fix_ffmpeg30.patch";               sha256="sha256-vKEbvbjYVRzEaVYC8XOJBPmk6FDXI/WA0X/dldRRO8c=";}
   ]);
 
+  postPatch = ''
+    substituteInPlace src/mbase/SConscript \
+      --replace "lib_mbase_env['CPPDEFINES']" "list(lib_mbase_env['CPPDEFINES'])"
+  '';
+
   nativeBuildInputs = [ wrapGAppsHook scons pkg-config gettext ];
 
   buildInputs = [
@@ -60,7 +65,7 @@ stdenv.mkDerivation rec {
     dvdauthor
     dvdplusrwtools
     enca
-    ffmpeg
+    ffmpeg_4
     gtk2
     gtkmm2
     libdvdread
@@ -76,7 +81,7 @@ stdenv.mkDerivation rec {
     # fix iso authoring
     install -Dt  $out/share/bombono/resources/scons_authoring tools/scripts/SConsTwin.py
 
-    wrapProgram $out/bin/bombono-dvd --prefix PATH : ${lib.makeBinPath [ ffmpeg dvdauthor cdrkit ]}
+    wrapProgram $out/bin/bombono-dvd --prefix PATH : ${lib.makeBinPath [ ffmpeg_4 dvdauthor cdrkit ]}
   '';
 
   meta = with lib; {
@@ -84,5 +89,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bombono.org/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ symphorien ];
+    platforms = platforms.linux;
   };
 }

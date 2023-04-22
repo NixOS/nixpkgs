@@ -100,7 +100,7 @@ import ./make-test-python.nix (
           "${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots",
           '${pkgs.restic}/bin/restic -r ${remoteFromFileRepository} -p ${passwordFile} snapshots"',
           "${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots",
-          "grep 'backup .* /opt' /tmp/fake-restic.log",
+          "grep 'backup.* /opt' /tmp/fake-restic.log",
       )
       server.succeed(
           # set up
@@ -129,8 +129,8 @@ import ./make-test-python.nix (
 
           # test that custompackage runs both `restic backup` and `restic check` with reasonable commandlines
           "systemctl start restic-backups-custompackage.service",
-          "grep 'backup .* /opt' /tmp/fake-restic.log",
-          "grep 'check .* --some-check-option' /tmp/fake-restic.log",
+          "grep 'backup.* /opt' /tmp/fake-restic.log",
+          "grep 'check.* --some-check-option' /tmp/fake-restic.log",
 
           # test that we can create four snapshots in remotebackup and rclonebackup
           "timedatectl set-time '2017-12-13 13:45'",

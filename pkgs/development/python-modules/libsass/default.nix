@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "sass";
     repo = "libsass-python";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-5O4Er3jNUFy83m/K0HzYR+fHcSDqF/3M+fXaFZY8zEg=";
+    hash = "sha256-5O4Er3jNUFy83m/K0HzYR+fHcSDqF/3M+fXaFZY8zEg=";
   };
 
   buildInputs = [ libsass ];

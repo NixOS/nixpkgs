@@ -1,12 +1,16 @@
-{ lib, fetchFromGitHub, buildDunePackage }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml }:
 
 buildDunePackage rec {
   pname = "bigstring";
   version = "0.3";
 
-  useDune2 = true;
+  duneVersion = "3";
+  minimalOCamlVersion = "4.03";
 
-  minimumOCamlVersion = "4.03";
+  # Ensure compatibility with OCaml ≥ 5.0
+  preConfigure = lib.optional (lib.versionAtLeast ocaml.version "4.08") ''
+    substituteInPlace src/dune --replace '(libraries bytes bigarray)' ""
+  '';
 
   src = fetchFromGitHub {
     owner = "c-cube";

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, zlib, libglvnd, libGLU, wrapQtAppsHook
 , sshSupport ? true, openssl, libssh
 , tetgenSupport ? true, tetgen
-, ffmpegSupport ? true, ffmpeg
+, ffmpegSupport ? true, ffmpeg_4
 , dicomSupport  ? false, dcmtk
 , withModelRepo ? true
 , withCadFeatures ? false
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib libglvnd libGLU openssl libssh ]
     ++ lib.optional sshSupport openssl
     ++ lib.optional tetgenSupport tetgen
-    ++ lib.optional ffmpegSupport ffmpeg
+    ++ lib.optional ffmpegSupport ffmpeg_4
     ++ lib.optional dicomSupport dcmtk
   ;
 

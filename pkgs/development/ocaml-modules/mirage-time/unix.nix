@@ -1,11 +1,12 @@
-{ buildDunePackage, fetchurl, mirage-time, ocaml_lwt, duration }:
+{ buildDunePackage, fetchurl, mirage-time, lwt, duration }:
 
 buildDunePackage {
   pname = "mirage-time-unix";
 
-  inherit (mirage-time) src useDune2 version minimumOCamlVersion;
+  inherit (mirage-time) src version;
+  duneVersion = "3";
 
-  propagatedBuildInputs = [ mirage-time ocaml_lwt duration ];
+  propagatedBuildInputs = [ mirage-time lwt duration ];
 
   meta = mirage-time.meta // {
     description = "Time operations for MirageOS on Unix";

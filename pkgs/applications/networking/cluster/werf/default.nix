@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "werf";
-  version = "1.2.204";
+  version = "1.2.224";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
-    hash = "sha256-/AMOnoED7MKvX/UTRWVGyXw8xuAHQWCnBnA6aQujXiE=";
+    hash = "sha256-j7Lio56CMC4bJ58Oucm1hCqFNzMeoDpDRh/ALmF9Y3Y=";
   };
 
-  vendorHash = "sha256-SzqGcbfDtBfgnu6CRPyk2tPdwNDhM1RfteKTXVvivw4=";
+  vendorHash = "sha256-SdBWW1tv3OauCex8l6Kg7uKLFUOvDvCE8rnULytndqw=";
 
   proxyVendor = true;
 
@@ -64,7 +64,7 @@ buildGoModule rec {
       integration/suites \
       pkg/true_git/*test.go \
       test/e2e
-  '' + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) ''
+
     # Remove failing tests.
     rm -rf \
       cmd/werf/docs/replacers/kubectl/kubectl_test.go

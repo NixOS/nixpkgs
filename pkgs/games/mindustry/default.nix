@@ -34,20 +34,20 @@
 
 let
   pname = "mindustry";
-  version = "141.2";
+  version = "143.1";
   buildVersion = makeBuildVersion version;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    hash = "sha256-7olnyjkcT8OwokipDnLFW3rMOPljF6HvsU249SDvA3U=";
+    hash = "sha256-p6HxccLg+sjFW+ZGGTfo5ZvOIs6lKjub88kX/iaBres=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    hash = "sha256-JYM2/dkrLFZz+oqOs8e+iTRG5Vv4oUcmpAavRQ7NMMM=";
+    hash = "sha256-fbFjelwqBRadcUmbW3/oDnhmNAjTj660qB5WwXugIIU=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -126,7 +126,7 @@ let
         | sh
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-Eb+LyO1d2XwhAp9awgMlxs7dfZav0ja9kH7PaUJQOCo=";
+    outputHash = "sha256-uxnW5AqX6PazqHJYLuF/By5qpev8Se+992jCyacogSY=";
   };
 
 in
@@ -229,7 +229,7 @@ stdenv.mkDerivation rec {
       binaryBytecode  # deps
     ];
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chkno fgaz ];
+    maintainers = with maintainers; [ chkno fgaz thekostins ];
     platforms = platforms.x86_64;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293

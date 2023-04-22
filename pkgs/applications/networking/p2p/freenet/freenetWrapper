@@ -1,7 +1,8 @@
 #! @bash@/bin/bash
 set -eo pipefail
 PATH=@coreutils@/bin:$PATH
-export CLASSPATH=@freenet@/share/freenet/bcprov.jar:@freenet@/share/freenet/freenet-ext.jar:@freenet@/share/freenet/jna_platform.jar:@freenet@/share/freenet/jna.jar:@freenet@/share/freenet/freenet.jar
+export CLASSPATH=$(find @outFreenet@/deps/ -name "*.jar"|grep -v bcprov-jdk15on-1.48.jar|tr $'\n' :)
+CLASSPATH=$CLASSPATH:@outFreenet@/share/freenet/freenet-ext.jar:@outFreenet@/share/freenet/freenet.jar
 
 export FREENET_HOME="$HOME/.local/share/freenet"
 if [ -n "$XDG_DATA_HOME" ] ; then

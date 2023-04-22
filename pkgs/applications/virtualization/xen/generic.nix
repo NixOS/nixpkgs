@@ -4,9 +4,8 @@ config:
 # Xen
 , bison, bzip2, checkpolicy, dev86, figlet, flex, gettext, glib
 , acpica-tools, libaio, libiconv, libuuid, ncurses, openssl, perl
-, python2Packages
-# python2Packages.python
 , xz, yajl, zlib
+, python3Packages
 
 # Xen Optional
 , ocamlPackages
@@ -14,10 +13,10 @@ config:
 # Scripts
 , coreutils, gawk, gnused, gnugrep, diffutils, multipath-tools
 , iproute2, inetutils, iptables, bridge-utils, openvswitch, nbd, drbd
-, lvm2, util-linux, procps, systemd
+, util-linux, procps, systemd
 
 # Documentation
-# python2Packages.markdown
+# python3Packages.markdown
 , fig2dev, ghostscript, texinfo, pandoc
 
 , binutils-unwrapped
@@ -72,16 +71,16 @@ stdenv.mkDerivation (rec {
 
     # Xen
     bison bzip2 checkpolicy dev86 figlet flex gettext glib acpica-tools libaio
-    libiconv libuuid ncurses openssl perl python2Packages.python xz yajl zlib
+    libiconv libuuid ncurses openssl perl python3Packages.python xz yajl zlib
 
     # oxenstored
     ocamlPackages.findlib ocamlPackages.ocaml systemd
 
     # Python fixes
-    python2Packages.wrapPython
+    python3Packages.wrapPython
 
     # Documentation
-    python2Packages.markdown fig2dev ghostscript texinfo pandoc
+    python3Packages.markdown fig2dev ghostscript texinfo pandoc
 
     # Others
   ] ++ (concatMap (x: x.buildInputs or []) (attrValues config.xenfiles))
@@ -133,10 +132,6 @@ stdenv.mkDerivation (rec {
   '';
 
   patches = [
-    ./0000-fix-ipxe-src.patch
-    ./0000-fix-install-python.patch
-    ./0004-makefile-use-efi-ld.patch
-    ./0005-makefile-fix-efi-mountdir-use.patch
   ] ++ (config.patches or []);
 
   postPatch = ''
@@ -156,19 +151,12 @@ stdenv.mkDerivation (rec {
     substituteInPlace tools/libfsimage/common/fsimage_plugin.c \
       --replace /usr $out
 
-    substituteInPlace tools/blktap2/lvm/lvm-util.c \
-      --replace /usr/sbin/vgs ${lvm2}/bin/vgs \
-      --replace /usr/sbin/lvs ${lvm2}/bin/lvs
-
     substituteInPlace tools/misc/xenpvnetboot \
       --replace /usr/sbin/mount ${util-linux}/bin/mount \
       --replace /usr/sbin/umount ${util-linux}/bin/umount
 
     substituteInPlace tools/xenmon/xenmon.py \
       --replace /usr/bin/pkill ${procps}/bin/pkill
-
-    substituteInPlace tools/xenstat/Makefile \
-      --replace /usr/include/curses.h ${ncurses.dev}/include/curses.h
 
     ${optionalString (builtins.compareVersions config.version "4.8" >= 0) ''
       substituteInPlace tools/hotplug/Linux/launch-xenstore.in \
@@ -208,6 +196,10 @@ stdenv.mkDerivation (rec {
   #makeFlags = [ "XSM_ENABLE=y" "FLASK_ENABLE=y" "PREFIX=$(out)" "CONFIG_DIR=/etc" "XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files" ];
   makeFlags = [ "PREFIX=$(out) CONFIG_DIR=/etc" "XEN_SCRIPT_DIR=/etc/xen/scripts" ]
            ++ (config.makeFlags or []);
+
+  preBuild = ''
+    ${config.preBuild or ""}
+  '';
 
   buildFlags = [ "xen" "tools" ];
 

@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/hyask/swaysome";
     license = licenses.mit;
     maintainers = with maintainers; [ esclear ];
+    platforms = platforms.linux;
   };
 }

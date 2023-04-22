@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "janet";
-  version = "1.26.0";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-o5+gVRYJCkzoEejJoPwkNRawj2BO6fjdBloy2D1kHb4=";
+    sha256 = "sha256-UsM7J1LsiO5g3yxpO245Yr0oJQaCxs7LMNvxuHv6pTk=";
   };
 
   postPatch = ''

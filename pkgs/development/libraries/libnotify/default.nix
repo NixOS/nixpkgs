@@ -8,19 +8,20 @@
 , glib
 , gdk-pixbuf
 , gnome
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnotify";
-  version = "0.8.1";
+  version = "0.8.2";
 
   outputs = [ "out" "man" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0DPm1NbMv0akNsMWKKS2YbNtyh9dQXT+AXPidPTmJVc=";
+    sha256 = "xfTtPR+G5bEYx2QVqsuGGHPtPm8MazGBuCjPWE/FxhY=";
   };
 
   mesonFlags = [

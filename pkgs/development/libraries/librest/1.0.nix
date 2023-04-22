@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
     meson
     ninja
@@ -64,6 +66,12 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/librest/-/merge_requests/19
     substituteInPlace meson.build \
       --replace "con." "conf."
+
+    # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+    # it should be a build-time dep for build
+    # TODO: send upstream
+    substituteInPlace docs/meson.build \
+      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver"
   '';
 
   postFixup = ''

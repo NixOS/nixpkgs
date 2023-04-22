@@ -26,10 +26,12 @@ yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 
 curl -O "$src/package.json"
+# There is no prefetcher for the cargo hash, but care should still be taken to update it
 cat > pin.json << EOF
 {
   "version": "$version",
   "srcHash": "$src_hash",
-  "yarnHash": "$yarn_hash"
+  "yarnHash": "$yarn_hash",
+  "cargoHash": "0000000000000000000000000000000000000000000000000000"
 }
 EOF

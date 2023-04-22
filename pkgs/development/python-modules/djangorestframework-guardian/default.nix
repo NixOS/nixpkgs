@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "rpkilby";
     repo = "django-rest-framework-guardian";
     rev = version;
-    sha256 = "sha256-jl/VEl1pUHU8J1d5ZQSGJweNJayIGw1iVAmwID85fqw=";
+    hash = "sha256-jl/VEl1pUHU8J1d5ZQSGJweNJayIGw1iVAmwID85fqw=";
   };
 
   postPatch = ''

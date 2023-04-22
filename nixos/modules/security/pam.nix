@@ -620,7 +620,7 @@ let
           optionalString config.services.homed.enable ''
             password sufficient ${config.systemd.package}/lib/security/pam_systemd_home.so
           '' + ''
-            password sufficient pam_unix.so nullok sha512
+            password sufficient pam_unix.so nullok yescrypt
           '' +
           optionalString config.security.pam.enableEcryptfs ''
             password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
@@ -793,7 +793,7 @@ let
     };
   }));
 
-  motd = if isNull config.users.motdFile
+  motd = if config.users.motdFile == null
          then pkgs.writeText "motd" config.users.motd
          else config.users.motdFile;
 
@@ -1233,7 +1233,7 @@ in
   config = {
     assertions = [
       {
-        assertion = isNull config.users.motd || isNull config.users.motdFile;
+        assertion = config.users.motd == null || config.users.motdFile == null;
         message = ''
           Only one of users.motd and users.motdFile can be set.
         '';

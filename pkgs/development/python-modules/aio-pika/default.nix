@@ -1,8 +1,9 @@
 { lib
-, aiomisc
+, aiomisc-pytest
 , aiormq
 , buildPythonPackage
 , fetchFromGitHub
+, pamqp
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "9.0.4";
+  version = "9.0.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-dY4uSkiAZz8kjeqt0QwehogljBrxqhVI9LmRE/I8HKA=";
+    hash = "sha256-/T4Z508LBaka5mZ+erFwMBW6RoE1nZM61N/NMotmt4E=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +40,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiomisc-pytest
+    pamqp
     pytestCheckHook
-  ];
-
-  checkInputs = [
-    aiomisc
     shortuuid
   ];
 

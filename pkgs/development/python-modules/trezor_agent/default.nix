@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4IylpUvXZYAXFkyFGNbN9iPTsHff3M/RL2Eq9f7wWFU=";
+    hash = "sha256-4IylpUvXZYAXFkyFGNbN9iPTsHff3M/RL2Eq9f7wWFU=";
   };
 
   propagatedBuildInputs = [ setuptools trezor libagent ecdsa ed25519 mnemonic keepkey semver wheel pinentry ];

@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     copyDesktopItems
     cmake
     pkg-config
+    ruby
     erlang
     elixir
     beamPackages.hex
@@ -94,7 +95,6 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     parallel
-    ruby
     supercollider-with-sc3-plugins
     jack2
   ];
@@ -215,6 +215,8 @@ stdenv.mkDerivation rec {
       categories = [ "Audio" "AudioVideo" "Education" ];
     })
   ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://sonic-pi.net/";

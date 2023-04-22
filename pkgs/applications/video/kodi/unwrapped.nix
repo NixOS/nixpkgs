@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, makeWrapper
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
@@ -15,7 +15,7 @@
 , curl, bzip2, zip, unzip, glxinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
-, bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1
+, bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn2, libpthreadstubs, libtasn1
 , libplist, p11-kit, zlib, flatbuffers, fstrcmp, rapidjson
 , lirc
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
@@ -38,25 +38,29 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20221204";
-  kodiVersion = "19.5";
-  rel = "Matrix";
+  kodiReleaseDate = "20230312";
+  kodiVersion = "20.1";
+  rel = "Nexus";
 
   kodi_src = fetchFromGitHub {
-    owner  = "xbmc";
-    repo   = "xbmc";
-    rev    = "${kodiVersion}-${rel}";
-    sha256 = "sha256-vprhEPxYpY3/AsUgvPNnhBlh0Dl73ekALAblHaUKzd0=";
+    owner = "xbmc";
+    repo = "xbmc";
+    rev = "${kodiVersion}-${rel}";
+    hash = "sha256-2nwjW0MYrMVk+dllrAv9yn+YNA6/loZzoK8mbFIZ8Xs=";
   };
 
+  # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ to get suggested versions for all dependencies
+
+  # kodi 20.0 moved to ffmpeg 5, *but* there is a bug making the compilation fail which will
+  # only been fixed in kodi 21, so stick to ffmpeg 4 for now
   ffmpeg = stdenv.mkDerivation rec {
     pname = "kodi-ffmpeg";
-    version = "4.3.2"; # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ffmpeg/FFMPEG-VERSION
+    version = "4.4.1";
     src = fetchFromGitHub {
       owner   = "xbmc";
       repo    = "FFmpeg";
-      rev     = "${version}-${rel}-19.2";
-      sha256  = "14s215sgc93ds1mrdbkgb7fvy94lpgv2ldricyxzis0gbzqfgs4f";
+      rev     = "${version}-${rel}-Alpha1";
+      sha256  = "sha256-EQHmmWnDw+/udKYq7Nrf00nL7I5XWUtmzdauDryfTII=";
     };
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
@@ -69,7 +73,7 @@ let
       "-DOS=${stdenv.hostPlatform.parsed.kernel.name}"
       "-DPKG_CONFIG_EXECUTABLE=pkg-config"
     ];
-    buildInputs = [ libidn libtasn1 p11-kit zlib libva ]
+    buildInputs = [ libidn2 libtasn1 p11-kit zlib libva ]
       ++ lib.optional vdpauSupport libvdpau;
     nativeBuildInputs = [ cmake nasm pkg-config gnutls ];
   };
@@ -79,22 +83,22 @@ let
   libdvdcss = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdcss";
-    rev = "1.4.2-Leia-Beta-5";
-    sha256 = "0j41ydzx0imaix069s3z07xqw9q95k7llh06fc27dcn6f7b8ydyl";
+    rev = "1.4.3-Next-Nexus-Alpha2-2";
+    sha256 = "sha256-CJMGH50mNAkovccNcol5ArF3zUnZKfbVB9EXyQgu5k4=";
   };
 
   libdvdnav = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdnav";
-    rev = "6.0.0-Leia-Alpha-3";
-    sha256 = "0qwlf4lgahxqxk1r2pzl866mi03pbp7l1fc0rk522sc0ak2s9jhb";
+    rev = "6.1.1-Next-Nexus-Alpha2-2";
+    sha256 = "sha256-m8SCjOokVbwJ7eVfYKHap1pQjVbI+BXaoxhGZQIg0+k=";
   };
 
   libdvdread = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdread";
-    rev = "6.0.0-Leia-Alpha-3";
-    sha256 = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
+    rev = "6.1.3-Next-Nexus-Alpha2-2";
+    sha256 = "sha256-AphBQhXud+a6wm52zjzC5biz53NnqWdgpL2QDt2ZuXc=";
   };
 
   kodi_platforms = lib.optional gbmSupport "gbm"
@@ -107,24 +111,8 @@ in stdenv.mkDerivation {
 
     src = kodi_src;
 
-    patches = [
-      # This is a backport of
-      # https://github.com/xbmc/xbmc/commit/a6dedce7ba1f03bdd83b019941d1e369a06f7888
-      # to Kodi 19.4 Matrix.
-      # This can be removed once a new major release of Kodi comes out and we upgrade
-      # to it.
-      ./add-KODI_WEBSERVER_EXTRA_WHITELIST.patch
-
-      # A patch to fix build until the next major release of Kodi comes out and we upgrade
-      # https://github.com/xbmc/xbmc/pull/22291
-      (fetchpatch {
-        url = "https://github.com/xbmc/xbmc/commit/5449652abf0bb9dddd0d796de4120e60f19f89a5.patch";
-        sha256 = "sha256-vqX08dTSPhIur4aVu2BzXEpAxMOjaadwRNI43GSV9Og=";
-      })
-    ];
-
     buildInputs = [
-      gnutls libidn libtasn1 nasm p11-kit
+      gnutls libidn2 libtasn1 nasm p11-kit
       libxml2 python3Packages.python
       boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva libdrm
@@ -196,6 +184,7 @@ in stdenv.mkDerivation {
       "-DGIT_VERSION=${kodiReleaseDate}"
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
+      "-DENABLE_INTERNAL_RapidJSON=OFF"
       "-DENABLE_OPTICAL=ON"
       "-DLIRC_DEVICE=/run/lirc/lircd"
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
-  version = "2.4.1";
+  version = "2.4.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eD2N+9cVzZdyjpE5FnebN8+OllZjVevaz+NBHSvrR5Y=";
+    hash = "sha256-0aNkq4nacW2RZxup2J748ZZgaLug5HB5ekiWU4KcqvM=";
   };
 
   propagatedBuildInputs = [

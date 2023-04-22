@@ -5,25 +5,26 @@
 , stdenv
 , openssl
 , libiconv
+, sqlite
 , Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "listenbrainz-mpd";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "elomatreb";
     repo = "listenbrainz-mpd";
     rev = "v${version}";
-    hash = "sha256-DO7YUqaJZyVWjiAZ9WIVNTTvOU0qdsI2ct7aT/6O5dQ=";
+    hash = "sha256-AalZTlizaw93KlVffFDjGNoKkCHUFQTiElZgJo64shs=";
   };
 
-  cargoHash = "sha256-MiAalxe0drRHrST3maVvi8GM2y3d0z4Zl7R7Zx8VjEM=";
+  cargoHash = "sha256-n24P56ZrF8qEpM45uIFr7bJhlzuAexNr6siEsF219uA=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = if stdenv.isDarwin then [ libiconv Security ] else [ openssl ];
+  buildInputs = [ sqlite ] ++ (if stdenv.isDarwin then [ libiconv Security ] else [ openssl ]);
 
   meta = with lib; {
     homepage = "https://codeberg.org/elomatreb/listenbrainz-mpd";

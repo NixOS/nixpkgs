@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "deepin-voice-note";
-  version = "5.10.22";
+  version = "5.11.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZDw/kGmhcoTPDUsZa9CYhrVbK4Uo75G0L4q4cCBPr7E=";
+    sha256 = "sha256-JX4OuVu+5/a3IhkfnvaWVDaKl+xg/8qxlvp9hM0nHNU=";
   };
 
   postPatch = ''
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     dtkwidget
+    qt5integration
     qt5platform-plugins
     dde-qt-dbus-factory
     qtmultimedia
@@ -56,14 +57,11 @@ stdenv.mkDerivation rec {
     gst-plugins-good
   ]);
 
+  strictDeps = true;
+
   cmakeFlags = [ "-DVERSION=${version}" ];
 
   env.NIX_CFLAGS_COMPILE = "-I${dde-qt-dbus-factory}/include/libdframeworkdbus-2.0";
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
 
   preFixup = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")

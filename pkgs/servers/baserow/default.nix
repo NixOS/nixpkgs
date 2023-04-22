@@ -82,6 +82,7 @@ with python.pkgs; buildPythonApplication rec {
     importlib-resources
     itsdangerous
     pillow
+    pyparsing
     psutil
     psycopg2
     redis

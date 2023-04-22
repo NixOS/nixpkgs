@@ -8,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "datalad";
     repo = pname;
     rev = version;
-    hash = "sha256-6uWOKsYeNZJ64WqoGHL7AsoK4iZd24TQOJ1ECw+K28Y=";
+    hash = "sha256-F5UFW0/XqntrHclpj3TqoAwuHJbiiv5a7/4MnFoJ1dE=";
   };
 
   nativeBuildInputs = [ installShellFiles git ];

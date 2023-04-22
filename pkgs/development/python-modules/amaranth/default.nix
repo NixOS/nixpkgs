@@ -58,6 +58,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     git
+    setuptools
     setuptools-scm
   ];
 
@@ -79,7 +80,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "Jinja2~=2.11" "Jinja2>=2.11" \
-      --replace "pyvcd~=0.2.2" "pyvcd"
+      --replace "pyvcd~=0.2.2" "pyvcd" \
+      --replace "amaranth-yosys>=0.10.*" "amaranth-yosys>=0.10"
 
     # jinja2.contextfunction was removed in jinja2 v3.1
     substituteInPlace amaranth/build/plat.py \

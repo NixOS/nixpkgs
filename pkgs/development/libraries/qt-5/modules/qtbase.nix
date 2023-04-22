@@ -13,12 +13,15 @@
 , xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm , zlib, at-spi2-core
 
   # optional dependencies
-, cups ? null, libmysqlclient ? null, postgresql ? null
+, cups ? null, postgresql ? null
 , withGtk3 ? false, dconf, gtk3
 
   # options
 , libGLSupported ? !stdenv.isDarwin
 , libGL
+  # qmake detection for libmysqlclient does not seem to work when cross compiling
+, mysqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform
+, libmysqlclient
 , buildExamples ? false
 , buildTests ? false
 , debug ? false
@@ -73,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     )
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
-    ++ lib.optional (libmysqlclient != null) libmysqlclient
+    ++ lib.optional (mysqlSupport) libmysqlclient
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
@@ -213,7 +216,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-shared"
     "-accessibility"
     "-optimized-qmake"
-    "-strip"
+    # for separateDebugInfo
+    "-no-strip"
     "-system-proxies"
     "-pkg-config"
 
@@ -258,7 +262,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-L" "${lib.getLib openssl}/lib"
     "-I" "${openssl.dev}/include"
     "-system-sqlite"
-    ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''
+    ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
     ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
     "-make libs"
@@ -297,7 +301,7 @@ stdenv.mkDerivation (finalAttrs: {
     ] ++ lib.optionals (cups != null) [
       "-L" "${cups.lib}/lib"
       "-I" "${cups.dev}/include"
-    ] ++ lib.optionals (libmysqlclient != null) [
+    ] ++ lib.optionals (mysqlSupport) [
       "-L" "${libmysqlclient}/lib"
       "-I" "${libmysqlclient}/include"
     ]

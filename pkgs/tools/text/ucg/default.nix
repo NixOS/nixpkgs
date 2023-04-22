@@ -1,20 +1,23 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pkg-config
 , autoreconfHook
+, pkg-config
 , pcre
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ucg";
-  version = "0.3.3+date=2019-02-25";
+  version = "unstable-2022-09-03";
 
   src = fetchFromGitHub {
     owner = "gvansickle";
-    repo = pname;
-    rev = "c3a67632f1e3f332bfb102f0db167f34a2e42da7";
-    sha256 = "sha256-/wU1PmI4ejlv7gZzZNasgROYXFiDiIxE9BFoCo6+G5Y=";
+    repo = "ucg";
+    rev = "cbb185e8adad6546b7e1c5e9ca59a81f98dca49f";
+    hash = "sha256-Osdyxp8DoEjcr2wQLCPqOQ2zQf/0JWYxaDpZB02ACWo=";
   };
+
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -40,8 +43,8 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/gvansickle/ucg/";
+  meta =  {
+    homepage = "https://gvansickle.github.io/ucg/";
     description = "Grep-like tool for searching large bodies of source code";
     longDescription = ''
       UniversalCodeGrep (ucg) is an extremely fast grep-like tool specialized
@@ -49,10 +52,10 @@ stdenv.mkDerivation rec {
       command-line compatible with Ack, to some extent with ag, and where
       appropriate with grep. Search patterns are specified as PCRE regexes.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
-    broken = stdenv.isAarch64; # cpuid.h: no such file or directory
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
+    broken = stdenv.isAarch64 || stdenv.isDarwin;
   };
-}
+})
 # TODO: report upstream

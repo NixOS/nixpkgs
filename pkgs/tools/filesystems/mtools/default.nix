@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mtools";
-  version = "4.0.42";
+  version = "4.0.43";
 
   src = fetchurl {
     url = "mirror://gnu/mtools/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ZL/f3k2Cr2si88HHLD4jHLthj0wjCcxG9U0W1VAszxU=";
+    sha256 = "sha256-VB4XlmXcTicrlgLyB0JDWRoVfaicxHBk2oxYKdvSszk=";
   };
 
   patches = lib.optional stdenv.isDarwin ./UNUSED-darwin.patch;
@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   doCheck = true;
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/mtools/";

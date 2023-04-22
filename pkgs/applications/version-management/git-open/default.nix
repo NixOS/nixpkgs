@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-open";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-open";
     rev = "v${version}";
-    sha256 = "11n46bngvca5wbdbfcxzjhjbfdbad7sgf7h9gf956cb1q8swsdm0";
+    sha256 = "sha256-Bag2rI2uR7ilkg2ozjR8tPXqKz5XjiY7WAUJKTVTXd8=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper pandoc ];
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp git-open $out/bin
+    mv git-open $out/bin
     installManPage git-open.1
     wrapProgram $out/bin/git-open \
-      --prefix PATH : "${lib.makeBinPath [ git gnugrep ]}" \
+      --prefix PATH : "${lib.makeBinPath [ gnugrep ]}" \
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
   '';
 
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     description = "Open the GitHub page or website for a repository in your browser";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jlesquembre SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

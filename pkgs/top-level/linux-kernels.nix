@@ -46,7 +46,10 @@ let
           inherit sha256;
         };
         extraMeta = {
-          broken = kernel.meta.broken || (stdenv.isx86_64 && lib.versions.majorMinor version == "5.4");
+          broken =
+            kernel.meta.broken ||
+            lib.versions.majorMinor version == "4.14" ||
+            (stdenv.isx86_64 && lib.versionAtLeast version "4.19" && lib.versionOlder version "5.5");
         };
       };
       kernelPatches = kernel.kernelPatches ++ [
@@ -166,6 +169,15 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.fix-em-ice-bonding
+      ];
+    };
+
+    linux_rt_6_1 = callPackage ../os-specific/linux/kernel/linux-rt-6.1.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.fix-em-ice-bonding
+        kernelPatches.export-rt-sched-migrate
       ];
     };
 
@@ -308,6 +320,8 @@ in {
 
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
+    ch9344 = callPackage ../os-specific/linux/ch9344 { };
+
     chipsec = callPackage ../tools/security/chipsec {
       inherit kernel;
       withDriver = true;
@@ -341,6 +355,10 @@ in {
     e1000e = if lib.versionOlder kernel.version "4.10" then  callPackage ../os-specific/linux/e1000e {} else null;
 
     intel-speed-select = if lib.versionAtLeast kernel.version "5.3" then callPackage ../os-specific/linux/intel-speed-select { } else null;
+
+    ipu6-drivers = callPackage ../os-specific/linux/ipu6-drivers {};
+
+    ivsc-driver = callPackage ../os-specific/linux/ivsc-driver {};
 
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
 
@@ -559,6 +577,7 @@ in {
      linux_rt_5_4 = packagesFor kernels.linux_rt_5_4;
      linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
      linux_rt_5_15 = packagesFor kernels.linux_rt_5_15;
+     linux_rt_6_1 = packagesFor kernels.linux_rt_6_1;
   };
 
   rpiPackages = {
@@ -614,9 +633,9 @@ in {
     linux_default = packages.linux_6_1;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_2;
-    linux_mptcp = packages.linux_mptcp_95;
+    linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
-    linux_rt_latest = packages.linux_rt_5_10;
+    linux_rt_latest = packages.linux_rt_6_1;
     linux_hardkernel_latest = packages.hardkernel_4_14;
   };
 
@@ -630,6 +649,7 @@ in {
   # Derive one of the default .config files
   linuxConfig = {
     src,
+    kernelPatches ? [],
     version ? (builtins.parseDrvName src.name).version,
     makeTarget ? "defconfig",
     name ? "kernel.config",
@@ -637,6 +657,7 @@ in {
     inherit name src;
     depsBuildBuild = [ buildPackages.stdenv.cc ]
       ++ lib.optionals (lib.versionAtLeast version "4.16") [ buildPackages.bison buildPackages.flex ];
+    patches = map (p: p.patch) kernelPatches;  # Patches may include new configs.
     postPatch = ''
       patchShebangs scripts/
     '';

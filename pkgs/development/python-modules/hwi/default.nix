@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bitcoin-core";
     repo = "HWI";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-vQJN2YXWGvYSVV9lemZyu61inc9iBFxf5nIlpIiRe+s=";
+    hash = "sha256-vQJN2YXWGvYSVV9lemZyu61inc9iBFxf5nIlpIiRe+s=";
   };
 
   propagatedBuildInputs = [

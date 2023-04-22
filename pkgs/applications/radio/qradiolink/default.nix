@@ -19,18 +19,17 @@
 , speex
 , speexdsp
 , cppzmq
-, zeromq
 }:
 
 gnuradio3_8.pkgs.mkDerivation rec {
   pname = "qradiolink";
-  version = "0.8.8-1";
+  version = "0.8.9-1";
 
   src = fetchFromGitHub {
     owner = "qradiolink";
     repo = "qradiolink";
     rev = version;
-    sha256 = "sha256-2M5TSTNbbH188GiKqjP+IfBqks379Fw0fiGLBNiaxEg=";
+    sha256 = "sha256-yY9sdLFaG0fX/4obImxVAyJk13RklYjX99Ch9hgzTe8=";
   };
 
   preBuild = ''
@@ -50,7 +49,7 @@ gnuradio3_8.pkgs.mkDerivation rec {
   buildInputs = [
     gnuradio3_8.unwrapped.boost
     codec2
-    gnuradio3_8.unwrapped.log4cpp
+    gnuradio3_8.unwrapped.logLib
     gmp
     libpulseaudio
     libconfig
@@ -67,7 +66,6 @@ gnuradio3_8.pkgs.mkDerivation rec {
     libftdi
     libsndfile
     cppzmq
-    zeromq
     gnuradio3_8.qwt
   ] ++ lib.optionals (gnuradio3_8.hasFeature "gr-ctrlport") [
     thrift

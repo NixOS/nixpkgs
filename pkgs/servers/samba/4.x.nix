@@ -51,11 +51,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.17.5";
+  version = "4.17.7";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    hash = "sha256-67eIDUdP/AnXO1/He8vWV/YjWRAzczGpwk1/acoRRCs=";
+    hash = "sha256-lcnBa2VKiM+u/ZWAUt1XPi+F7N8RTk7Owxh1N6CU2Rk=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -103,15 +103,13 @@ stdenv.mkDerivation rec {
     libarchive
     zlib
     gnutls
-    ldb
-    talloc
     libtasn1
     tdb
-    tevent
     libxcrypt
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
     ++ optionals stdenv.isDarwin [ libiconv ]
     ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
+    ++ optionals (!enableLDAP && stdenv.isLinux) [ ldb talloc tevent ]
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
     ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
@@ -149,6 +147,7 @@ stdenv.mkDerivation rec {
   ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
+  ] ++ optionals (!enableLDAP && stdenv.isLinux) [
     "--bundled-libraries=!ldb,!pyldb-util!talloc,!pytalloc-util,!tevent,!tdb,!pytdb"
   ] ++ optional enableLibunwind "--with-libunwind"
     ++ optional enableProfiling "--with-profiling-data"

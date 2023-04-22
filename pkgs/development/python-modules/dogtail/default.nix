@@ -37,7 +37,6 @@ buildPythonPackage {
 
   nativeBuildInputs = [ gobject-introspection dbus xvfb-run wrapGAppsHook ]; # for setup hooks
   propagatedBuildInputs = [ at-spi2-core gtk3 pygobject3 pyatspi pycairo ];
-  strictDeps = false; # issue 56943
 
   checkPhase = ''
     runHook preCheck
@@ -48,6 +47,12 @@ buildPythonPackage {
       --config-file=${dbus}/share/dbus-1/session.conf \
       ${python.interpreter} nix_run_setup test
     runHook postCheck
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   # TODO: Tests require accessibility

@@ -7,13 +7,13 @@
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
-, setuptools-scm
-, setuptools
+, hatch-vcs
+, hatchling
 }:
 
 buildPythonPackage rec {
   pname = "app-model";
-  version = "0.1.1";
+  version = "0.1.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,14 +22,14 @@ buildPythonPackage rec {
     owner = "pyapp-kit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-nZnIb2QHfpkPirjQPiBdLd7pc1NNn97fdjGxKs0lWQU=";
+    hash = "sha256-GvMPWIvDydJ8C7wDR5DjmEGhVt0jd5e4WzP10a7mGm8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [

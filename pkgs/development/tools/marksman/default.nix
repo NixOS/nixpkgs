@@ -8,17 +8,17 @@
 
 buildDotnetModule rec {
   pname = "marksman";
-  version = "2023-01-29";
+  version = "2023-03-04";
 
   src = fetchFromGitHub {
     owner = "artempyanykh";
     repo = "marksman";
     rev = version;
-    sha256 = "sha256-UPPO4ueu7gMR7a573M2/xT3N0QgRSNBshJAqoyXEZpc=";
+    sha256 = "sha256-jBZC2z1wtDMIssgRrKkZpl9NQ3XkRCcxo5eylwB2OBQ=";
   };
 
   projectFile = "Marksman/Marksman.fsproj";
-  dotnetBuildFlags = "-p:VersionString=${version}";
+  dotnetBuildFlags = [ "-p:VersionString=${version}" ];
 
   doCheck = true;
   testProjectFile = "Tests/Tests.fsproj";

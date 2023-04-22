@@ -71,7 +71,18 @@ rustPlatform.buildRustPackage rec {
       "''${gappsWrapperArgs[@]}"
   '';
 
-  cargoSha256 = "sha256-h5qshincT48zYvbNLMXcvxw7Ovupnn9c93lpqY7oNtc=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "dasp-0.11.0" = "sha256-CZNgTLL4IG7EJR2xVp9X9E5yre8foY6VX2hUMRawxiI=";
+      "flash-lso-0.5.0" = "sha256-WQ+x0fVIdJPKECc8zA8xITS0vc58e5zxvSHc+UfsO70=";
+      "gc-arena-0.2.2" = "sha256-InZH9bzSKa+agqa3T9luWYNhoCwCdpg46mr4D+uWokc=";
+      "h263-rs-0.1.0" = "sha256-E1/bWJ/UU3nVz2IKUDaPh3cyoDBbAJ08TnIo/FcABWY=";
+      "nellymoser-rs-0.1.2" = "sha256-GykDQc1XwySOqfxW/OcSxkKCFJyVmwSLy/CEBcwcZJs=";
+      "nihav_codec_support-0.1.0" = "sha256-rE9AIiQr+PnHC9xfDQULndSfFHSX4sqKkCAQYVNaJcQ=";
+      "quick-xml-0.22.0" = "sha256-3rHOChcoBUWaUIJ+ZbJzRAJm2fpV0aa6/76qQB5ICgE=";
+    };
+  };
 
   meta = with lib; {
     description = "An Adobe Flash Player emulator written in the Rust programming language.";

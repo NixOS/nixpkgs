@@ -129,7 +129,7 @@
     imports = [ "airflow.providers.ftp.hooks.ftp" ];
   };
   github = {
-    deps = [ "PyGithub" ];
+    deps = [ "pygithub" ];
     imports = [ "airflow.providers.github.hooks.github" "airflow.providers.github.operators.github" ];
   };
   google = {
@@ -157,7 +157,7 @@
     imports = [ "airflow.providers.influxdb.hooks.influxdb" "airflow.providers.influxdb.operators.influxdb" ];
   };
   jdbc = {
-    deps = [ "JayDeBeApi" ];
+    deps = [ "jaydebeapi" ];
     imports = [ "airflow.providers.jdbc.hooks.jdbc" "airflow.providers.jdbc.operators.jdbc" ];
   };
   jenkins = {

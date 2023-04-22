@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     mv $out/bin/wayout $out/bin/proycon-wayout # Avoid conflict with shinyzenith/wayout
   '';
 
+  strictDeps = true;
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ scdoc ninja meson cmake pkg-config wayland-scanner ];
   buildInputs = [ wayland-protocols wayland cairo pango ];

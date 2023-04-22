@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wYl+UxfiJfx4tFVJpqtLZo5MmW/QOgTpOP5eevK//9A=";
+    hash = "sha256-wYl+UxfiJfx4tFVJpqtLZo5MmW/QOgTpOP5eevK//9A=";
   };
 
   LC_ALL = "en_US.utf8";
@@ -62,6 +62,7 @@ buildPythonPackage rec {
     "sock_server"
     "test_list_formats" # tries to find python MIME type
     "KernelCullingTest" # has a race condition failing on slower hardware
+    "test_connections" # tornado.simple_httpclient.HTTPTimeoutError: Timeout during request"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_delete"
     "test_checkpoints_follow_file"

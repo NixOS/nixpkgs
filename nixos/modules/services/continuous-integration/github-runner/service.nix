@@ -149,7 +149,7 @@ in
               else
                 args+=(--token "$token")
               fi
-              ${cfg.package}/bin/config.sh "''${args[@]}"
+              ${cfg.package}/bin/Runner.Listener configure "''${args[@]}"
               # Move the automatically created _diag dir to the logs dir
               mkdir -p  "$STATE_DIRECTORY/_diag"
               cp    -r  "$STATE_DIRECTORY/_diag/." "$LOGS_DIRECTORY/"

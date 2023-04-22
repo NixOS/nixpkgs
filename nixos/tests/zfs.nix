@@ -12,6 +12,7 @@ let
                       then pkgs.zfsUnstable.latestCompatibleLinuxPackages
                       else pkgs.linuxPackages
     , enableUnstable ? false
+    , enableSystemdStage1 ? false
     , extraTest ? ""
     }:
     makeTest {
@@ -36,6 +37,7 @@ let
         boot.kernelPackages = kernelPackage;
         boot.supportedFilesystems = [ "zfs" ];
         boot.zfs.enableUnstable = enableUnstable;
+        boot.initrd.systemd.enable = enableSystemdStage1;
 
         environment.systemPackages = [ pkgs.parted ];
 
@@ -78,6 +80,11 @@ let
             fsType = "zfs";
             options = [ "noauto" ];
           };
+          virtualisation.fileSystems."/manual/httpkey" = {
+            device = "manual/httpkey";
+            fsType = "zfs";
+            options = [ "noauto" ];
+          };
         };
 
         specialisation.forcepool.configuration = {
@@ -90,21 +97,34 @@ let
             options = [ "noauto" ];
           };
         };
+
+        services.nginx = {
+          enable = true;
+          virtualHosts = {
+            localhost = {
+              locations = {
+                "/zfskey" = {
+                  return = ''200 "httpkeyabc"'';
+                };
+              };
+            };
+          };
+        };
       };
 
       testScript = ''
         machine.wait_for_unit("multi-user.target")
         machine.succeed(
             "zpool status",
+            "parted --script /dev/vdb mklabel msdos",
+            "parted --script /dev/vdb -- mkpart primary 1024M -1s",
             "parted --script /dev/vdc mklabel msdos",
             "parted --script /dev/vdc -- mkpart primary 1024M -1s",
-            "parted --script /dev/vdd mklabel msdos",
-            "parted --script /dev/vdd -- mkpart primary 1024M -1s",
         )
 
         with subtest("sharesmb works"):
             machine.succeed(
-                "zpool create rpool /dev/vdc1",
+                "zpool create rpool /dev/vdb1",
                 "zfs create -o mountpoint=legacy rpool/root",
                 # shared datasets cannot have legacy mountpoint
                 "zfs create rpool/shared_smb",
@@ -124,10 +144,12 @@ let
         with subtest("encryption works"):
             machine.succeed(
                 'echo password | zpool create -O mountpoint=legacy '
-                + "-O encryption=aes-256-gcm -O keyformat=passphrase automatic /dev/vdc1",
-                "zpool create -O mountpoint=legacy manual /dev/vdd1",
+                + "-O encryption=aes-256-gcm -O keyformat=passphrase automatic /dev/vdb1",
+                "zpool create -O mountpoint=legacy manual /dev/vdc1",
                 "echo otherpass | zfs create "
                 + "-o encryption=aes-256-gcm -o keyformat=passphrase manual/encrypted",
+                "zfs create -o encryption=aes-256-gcm -o keyformat=passphrase "
+                + "-o keylocation=http://localhost/zfskey manual/httpkey",
                 "bootctl set-default nixos-generation-1-specialisation-encryption.conf",
                 "sync",
                 "zpool export automatic",
@@ -139,10 +161,12 @@ let
             machine.send_console("password\n")
             machine.wait_for_unit("multi-user.target")
             machine.succeed(
-                "zfs get keystatus manual/encrypted | grep unavailable",
+                "zfs get -Ho value keystatus manual/encrypted | grep -Fx unavailable",
                 "echo otherpass | zfs load-key manual/encrypted",
                 "systemctl start manual-encrypted.mount",
-                "umount /automatic /manual/encrypted /manual",
+                "zfs load-key manual/httpkey",
+                "systemctl start manual-httpkey.mount",
+                "umount /automatic /manual/encrypted /manual/httpkey /manual",
                 "zpool destroy automatic",
                 "zpool destroy manual",
             )
@@ -151,7 +175,7 @@ let
             machine.succeed(
                 "rm /etc/hostid",
                 "zgenhostid deadcafe",
-                "zpool create forcepool /dev/vdc1 -O mountpoint=legacy",
+                "zpool create forcepool /dev/vdb1 -O mountpoint=legacy",
                 "bootctl set-default nixos-generation-1-specialisation-forcepool.conf",
                 "rm /etc/hostid",
                 "sync",
@@ -174,6 +198,11 @@ in {
 
   unstable = makeZfsTest "unstable" {
     enableUnstable = true;
+  };
+
+  unstableWithSystemdStage1 = makeZfsTest "unstable" {
+    enableUnstable = true;
+    enableSystemdStage1 = true;
   };
 
   installer = (import ./installer.nix { }).zfsroot;

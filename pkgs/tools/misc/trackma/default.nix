@@ -35,10 +35,10 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ copyDesktopItems ]
-    ++ lib.optionals withGTK [ wrapGAppsHook ]
+    ++ lib.optionals withGTK [ wrapGAppsHook gobject-introspection ]
     ++ lib.optionals withQT [ qt5.wrapQtAppsHook ];
 
-  buildInputs = lib.optionals withGTK [ glib gobject-introspection gtk3 ];
+  buildInputs = lib.optionals withGTK [ glib gtk3 ];
 
   propagatedBuildInputs = with python3.pkgs; ([ urllib3 ]
     ++ lib.optionals withQT [ pyqt5 ]
@@ -46,9 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals withCurses [ urwid ]
     ++ lib.optionals stdenv.isLinux [ dbus-python pygobject3 pyinotify ]
     ++ lib.optionals (withGTK || withQT) [ pillow ]);
-
-  # broken with gobject-introspection setup hook, see https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   dontWrapQtApps = true;
   dontWrapGApps = true;

@@ -19,25 +19,25 @@
 }:
 
 let
-  pinData = lib.importJSON ./pin.json;
+  pinData = import ./pin.nix;
+  inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
   keytar = callPackage ./keytar { inherit Security AppKit; };
   seshat = callPackage ./seshat { inherit CoreServices; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   pname = "element-desktop";
-  inherit (pinData) version;
-  name = "${pname}-${version}";
+  name = "${finalAttrs.pname}-${finalAttrs.version}";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "element-desktop";
-    rev = "v${version}";
-    sha256 = pinData.desktopSrcHash;
+    rev = "v${finalAttrs.version}";
+    sha256 = desktopSrcHash;
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = pinData.desktopYarnHash;
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    sha256 = desktopYarnHash;
   };
 
   nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper ]
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
 
     # desktop item
     mkdir -p "$out/share"
-    ln -s "${desktopItem}/share/applications" "$out/share/applications"
+    ln -s "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
 
     # executable wrapper
     # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     icon = "element";
     desktopName = "Element";
     genericName = "Matrix Client";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
     startupWMClass = "element";
     mimeTypes = [ "x-scheme-handler/element" ];
@@ -141,9 +141,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A feature-rich client for Matrix.org";
     homepage = "https://element.io/";
-    changelog = "https://github.com/vector-im/element-desktop/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/vector-im/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;
   };
-}
+})

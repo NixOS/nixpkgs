@@ -1,41 +1,55 @@
-{ python3Packages, lib, nrfutil  }:
+{ python3Packages, lib, nrfutil, libnitrokey }:
 
 with python3Packages;
 
 buildPythonApplication rec {
   pname = "pynitrokey";
-  version = "0.4.27";
+  version = "0.4.36";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-aWQhMvATcDtyBtj38mGnypkKIqKQgneBzWDh5o/5Wkc=";
+    hash = "sha256-Y+6T1iUp9TVYbAjpXVHozC6WT061r0VYv/ifu8lcN6E=";
   };
 
   propagatedBuildInputs = [
+    certifi
+    cffi
     click
     cryptography
     ecdsa
+    frozendict
     fido2
     intelhex
+    nkdfu
     nrfutil
-    pyserial
+    python-dateutil
     pyusb
     requests
-    pygments
-    python-dateutil
     spsdk
+    tqdm
     urllib3
-    cffi
-    cbor
-    nkdfu
+    tlv8
+    typing-extensions
   ];
 
-  # spsdk is patched to allow for newer cryptography
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-        --replace "cryptography >=3.4.4,<37" "cryptography"
-  '';
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "cryptography"
+    "protobuf"
+    "python-dateutil"
+    "spsdk"
+    "typing_extensions"
+  ];
+
+  # libnitrokey is not propagated to users of pynitrokey
+  # It is only usable from the wrapped bin/nitropy
+  makeWrapperArgs = [
+    "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}"
+  ];
 
   # no tests
   doCheck = false;

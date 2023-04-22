@@ -12,6 +12,7 @@ in
 , flambdaSupport ? false
 , spaceTimeSupport ? false
 , unsafeStringSupport ? false
+, framePointerSupport ? false
 }:
 
 assert useX11 -> safeX11 stdenv;
@@ -19,6 +20,7 @@ assert aflSupport -> lib.versionAtLeast version "4.05";
 assert flambdaSupport -> lib.versionAtLeast version "4.03";
 assert spaceTimeSupport -> lib.versionAtLeast version "4.04" && lib.versionOlder version "4.12";
 assert unsafeStringSupport -> lib.versionAtLeast version "4.06" && lib.versionOlder version "5.0";
+assert framePointerSupport -> lib.versionAtLeast version "4.01";
 
 let
   src = args.src or (fetchurl {
@@ -28,9 +30,14 @@ let
 in
 
 let
-   useNativeCompilers = !stdenv.isMips;
-   inherit (lib) optional optionals optionalString;
-   pname = "ocaml${optionalString aflSupport "+afl"}${optionalString spaceTimeSupport "+spacetime"}${optionalString flambdaSupport "+flambda"}";
+  useNativeCompilers = !stdenv.isMips;
+  inherit (lib) optional optionals optionalString strings concatStrings;
+  pname = concatStrings [ "ocaml"
+    (optionalString aflSupport "+afl")
+    (optionalString spaceTimeSupport "+spacetime")
+    (optionalString flambdaSupport "+flambda")
+    (optionalString framePointerSupport "+fp")
+  ];
 in
 
 let
@@ -61,6 +68,7 @@ stdenv.mkDerivation (args // {
   ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
   ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
   ++ optional spaceTimeSupport (flags "--enable-spacetime" "-spacetime")
+  ++ optional framePointerSupport (flags "--enable-frame-pointers" "-with-frame-pointers")
   ++ optionals unsafeStringSupport [
     "--disable-force-safe-string"
     "DEFAULT_STRING=unsafe"
@@ -86,6 +94,11 @@ stdenv.mkDerivation (args // {
   #  cp: cannot stat 'boot/ocamlrun': No such file or directory
   #  make[2]: *** [Makefile:199: backup] Error 1
   enableParallelBuilding = lib.versionAtLeast version "4.08";
+
+  # Workaround missing dependencies for install parallelism:
+  #  install: target '...-ocaml-4.14.0/lib/ocaml/threads': No such file or directory
+  #  make[1]: *** [Makefile:140: installopt] Error 1
+  enableParallelInstalling = false;
 
   # Workaround lack of parallelism support among top-level targets:
   # we place nixpkgs-specific targets to a separate file and set

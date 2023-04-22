@@ -43,7 +43,7 @@ let
     owner = "facebook";
     repo = "sapling";
     rev = version;
-    hash = "sha256-WOvkw+vuU/9vWgxCx7ogawQWCr1O7E70uw/LhuLiSzE";
+    hash = "sha256-rZLLRcZNeYP7yKAgBujqEJ9TwwDPAct060pZ4aj/7PM=";
   };
 
   addonsSrc = "${src}/addons";
@@ -51,7 +51,7 @@ let
   # Fetches the Yarn modules in Nix to to be used as an offline cache
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${addonsSrc}/yarn.lock";
-    sha256 = "sha256-haeVRO5JBStrO7fjI9WhC5xZwX0IlZR1wxh0Q+m/UQM";
+    sha256 = "sha256-cEIij7hocCSPw1Q1ESI/t9IFmLM0Nbr/IjSz3HzBdzU=";
   };
 
   # Builds the NodeJS server that runs with `sl web`
@@ -101,12 +101,10 @@ python3Packages.buildPythonApplication {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "abomonation-0.7.3+smallvec1" = "sha256-AxEXR6GC8gHjycIPOfoViP7KceM29p2ZISIt4iwJzvM=";
-      "cloned-0.1.0" = "sha256-ZWO3/+O3Oc2Zg99seJ40CInrW1+3rFvL5HjIxhjDW5I=";
-      "deltae-0.3.0" = "sha256-a9Skaqs+tVTw8x83jga+INBr+TdaMmo35Bf2wbfR6zs=";
-      "fb303_core-0.0.0" = "sha256-LEib4QL5sMCUyQ9yGWnsOmO6hmlDaE80nfmrTC8elu0=";
-      "fbthrift-0.0.1+unstable" = "sha256-4SjdZzG6UP8OY7/Qy7ebdKOg1WdZ2USG6wJ7YhA/PxU=";
-      "reqwest-0.11.11" = "sha256-uhc8XhkGW22XDNo0qreWdXeFF2cslOOZHfTRQ30IBcE=";
-      "serde_bser-0.3.1" = "sha256-uW7qXEn0p7m6uo5r+rD3TDH/Lf1cBMWml0TbhysgDH8=";
+      "cloned-0.1.0" = "sha256-54XxXSeGoS0j0+dDUC15xn1Hvpvl2T7NJ0dZ6/ZSd9s=";
+      "fb303_core-0.0.0" = "sha256-YVPObJaxb5Giu3s70YP5syRSCmtijUK6y9g3UOzgrQU=";
+      "fbthrift-0.0.1+unstable" = "sha256-sfn8EB1hbJGq/jFjgCrf9OyBpXmIBv5qlIsiao071Os=";
+      "serde_bser-0.3.1" = "sha256-mrY6K6hoRo4exyZlStEIh8vuQdzd8XGkaR1MCEgKIP8=";
     };
   };
   postPatch = ''
@@ -167,15 +165,20 @@ python3Packages.buildPythonApplication {
 
   HGNAME = "sl";
   SAPLING_OSS_BUILD = "true";
-  SAPLING_VERSION = version;
   SAPLING_VERSION_HASH = versionHash;
+
+  # Python setuptools version 66 and newer does not support upstream Sapling's
+  # version numbers (e.g. "0.2.20230124-180750-hf8cd450a"). Change the version
+  # number to something supported by setuptools (e.g. "0.2.20230124").
+  # https://github.com/facebook/sapling/issues/571
+  SAPLING_VERSION = builtins.elemAt (builtins.split "-" version) 0;
 
   # just a simple check phase, until we have a running test suite. this should
   # help catch issues like lack of a LOCALE_ARCHIVE setting (see GH PR #202760)
   doCheck = true;
   installCheckPhase = ''
-    echo -n "testing sapling version; should be \"${version}\"... "
-    $out/bin/sl version | grep -qw "${version}"
+    echo -n "testing sapling version; should be \"$SAPLING_VERSION\"... "
+    $out/bin/sl version | grep -qw "$SAPLING_VERSION"
     echo "OK!"
   '';
 

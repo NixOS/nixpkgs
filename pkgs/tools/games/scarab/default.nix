@@ -17,13 +17,13 @@
 
 buildDotnetModule rec {
   pname = "scarab";
-  version = "1.20.0.0";
+  version = "1.31.0.0";
 
   src = fetchFromGitHub {
     owner = "fifty-six";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VfXIxir4SaELuF2QpqbVzTvlkYxwERa0ddGEn1OAh04=";
+    sha256 = "sha256-oReU0kL0wPR6oqhq/uzO7nD1qo74h36w/gyvgffwzns=";
   };
 
   nugetDeps = ./deps.nix;

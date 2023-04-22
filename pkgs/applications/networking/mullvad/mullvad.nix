@@ -15,35 +15,32 @@
 , enableOpenvpn ? true
 , openvpn-mullvad
 , shadowsocks-rust
+, installShellFiles
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2023.1";
+  version = "2023.3";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     rev = version;
-    hash = "sha256-BoduliiDOpzEPYHAjr636e7DbrhFnC/v9au6Mp9T/Qs=";
+    hash = "sha256-as/d14xVTqJvb+QxzEyZWh1EMRVpE8cDQRbdc4R4pcU=";
   };
 
-  cargoHash = "sha256-5kK2IA0Z1dQbHlnGXNZHD+BycurshfpqrwcIEveWKT0=";
-
-  patches = [
-    # https://github.com/mullvad/mullvadvpn-app/pull/4389
-    # can be removed after next release
-    (fetchpatch {
-      name = "mullvad-version-dont-check-git.patch";
-      url = "https://github.com/mullvad/mullvadvpn-app/commit/8062cc74fc94bbe073189e78328901606c859d41.patch";
-      hash = "sha256-1BhCId0J1dxhPM3oOmhZB+07N+k1GlvAT1h6ayfx174=";
-    })
-  ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "udp-over-tcp-0.3.0" = "sha256-5PeaM7/zhux1UdlaKpnQ2yIdmFy1n2weV/ux9lSRha4=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
     protobuf
     makeWrapper
     git
+    installShellFiles
   ];
 
   buildInputs = [
@@ -57,6 +54,17 @@ rustPlatform.buildRustPackage rec {
     dest=build/lib/${stdenv.targetPlatform.config}
     mkdir -p $dest
     ln -s ${libwg}/lib/libwg.a $dest
+  '';
+
+  postInstall = ''
+    compdir=$(mktemp -d)
+    for shell in bash zsh fish; do
+      $out/bin/mullvad shell-completions $shell $compdir
+    done
+    installShellCompletion --cmd mullvad \
+      --bash $compdir/mullvad.bash \
+      --zsh $compdir/_mullvad \
+      --fish $compdir/mullvad.fish
   '';
 
   postFixup =

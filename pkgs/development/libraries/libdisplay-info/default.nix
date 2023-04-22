@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libdisplay-info";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jfi7RpEtyQicW0WWhrQg28Fta60YWxTbpbmPHmXxDhw=";
+    sha256 = "sha256-7t1CoLus3rPba9paapM7+H3qpdsw7FlzJsSHFwM/2Lk=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja edid-decode python3 ];

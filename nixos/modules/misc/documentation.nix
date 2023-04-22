@@ -131,7 +131,8 @@ let
     desktopItem = pkgs.makeDesktopItem {
       name = "nixos-manual";
       desktopName = "NixOS Manual";
-      genericName = "View NixOS documentation in a web browser";
+      genericName = "System Manual";
+      comment = "View NixOS documentation in a web browser";
       icon = "nix-snowflake";
       exec = "nixos-help";
       categories = ["System"];

@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , gettext
 , kdoctools
@@ -12,7 +11,6 @@
 , packagekit-qt
 , pcre
 , util-linux
-, qtbase
 , qtquickcontrols2
 , qtwebview
 , qtx11extras
@@ -28,6 +26,7 @@
 , kitemmodels
 , knewstuff
 , kpurpose
+, kuserfeedback
 , kwindowsystem
 , kxmlgui
 , plasma-framework
@@ -61,6 +60,7 @@ mkDerivation {
     kitemmodels
     knewstuff
     kpurpose
+    kuserfeedback
     kwindowsystem
     kxmlgui
     plasma-framework

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "gammu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-lFQBrKWwdvUScwsBva08izZVeVDn1u+ldzixtL9YTpA=";
+    hash = "sha256-lFQBrKWwdvUScwsBva08izZVeVDn1u+ldzixtL9YTpA=";
   };
 
   nativeBuildInputs = [

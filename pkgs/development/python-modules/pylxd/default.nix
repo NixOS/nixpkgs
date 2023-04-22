@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "lxc";
     repo = "pylxd";
     rev = version;
-    sha256 = "sha256-eDRCJYjmBndMnSNuS6HD/2p/KhzqJq2qPAzMk7kC5UM=";
+    hash = "sha256-eDRCJYjmBndMnSNuS6HD/2p/KhzqJq2qPAzMk7kC5UM=";
   };
 
   propagatedBuildInputs = [

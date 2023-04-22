@@ -26,13 +26,13 @@ stdenv.mkDerivation {
     gtk3
     libGL
     libGLU
-    pkg-config
     libX11
     xcbutil
   ];
 
   nativeBuildInputs = [
     upx
+    pkg-config
   ];
 
   postPatch = ''

@@ -4,21 +4,37 @@
 , greenlet
 , pytest
 , decorator
+, twisted
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-twisted";
-  version = "1.13.2";
+  version = "1.14.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "cee2320becc5625050ab221b8f38533e636651a24644612f4726891fdf1f1847";
+    sha256 = "sha256-IJv1pkUs+/th3o8BWQLBTsgSZACRFQcHS7LuTOjf4xM=";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
-  propagatedBuildInputs = [ greenlet decorator ];
+  propagatedBuildInputs = [
+    decorator
+    greenlet
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    twisted
+  ];
+
+  pythonImportsCheck = [
+    "pytest_twisted"
+  ];
 
   meta = with lib; {
     description = "A twisted plugin for py.test";

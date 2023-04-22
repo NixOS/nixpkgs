@@ -125,7 +125,7 @@ let
         ligo-mode =
           if super.ligo-mode.version == "0.3"
           then markBroken super.ligo-mode
-          else super.ligo-mode;
+          else null; # auto-updater is failing; use manual one
 
         # upstream issue: missing file header
         link = markBroken super.link;
@@ -314,6 +314,57 @@ let
 
         ivy-rtags = fix-rtags super.ivy-rtags;
 
+        jinx = super.jinx.overrideAttrs (old: let
+          libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+        in {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+            pkgs.pkg-config
+          ];
+
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
+
+          postBuild = ''
+            pushd working/jinx
+            NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
+            $CC -shared -o jinx-mod${libExt} jinx-mod.c -lenchant-2
+            popd
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            pushd source
+            outd=$(echo $out/share/emacs/site-lisp/elpa/jinx-*)
+            install -m444 --target-directory=$outd jinx-mod${libExt}
+            rm $outd/jinx-mod.c $outd/emacs-module.h
+            popd
+          '';
+
+          meta = old.meta // {
+            maintainers = [ lib.maintainers.DamienCassou ];
+          };
+        });
+
+        sqlite3 = super.sqlite3.overrideAttrs (old: {
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.sqlite ];
+
+          postBuild = ''
+            pushd working/sqlite3
+            make
+            popd
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            pushd source
+            outd=$out/share/emacs/site-lisp/elpa/sqlite3-*
+            install -m444 -t $outd sqlite3-api.so
+            rm $outd/*.c $outd/*.h
+            popd
+          '';
+
+          meta = old.meta // {
+            maintainers = [ lib.maintainers.DamienCassou ];
+          };
+        });
+
         libgit = super.libgit.overrideAttrs(attrs: {
           nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [ pkgs.cmake ];
           buildInputs = attrs.buildInputs ++ [ pkgs.libgit2 ];
@@ -410,6 +461,8 @@ let
 
         orgit-forge = buildWithGit super.orgit-forge;
 
+        ox-rss = buildWithGit super.ox-rss;
+
         # upstream issue: missing file header
         mhc = super.mhc.override {
           inherit (self.melpaPackages) calfw;
@@ -424,6 +477,18 @@ let
         rtags = dontConfigure (externalSrc super.rtags pkgs.rtags);
 
         rtags-xref = dontConfigure super.rtags;
+
+        rime = super.rime.overrideAttrs (old: {
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.librime ];
+          preBuild = (old.preBuild or "") + ''
+            make lib
+            mkdir -p /build/rime-lib
+            cp *.so /build/rime-lib
+          '';
+          postInstall = (old.postInstall or "") + ''
+            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /build/rime-lib/*.so
+          '';
+        });
 
         shm = super.shm.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ pkgs.haskellPackages.structured-haskell-mode ];

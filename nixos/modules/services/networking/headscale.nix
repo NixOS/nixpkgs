@@ -291,11 +291,11 @@ in {
                 '';
               };
 
-              client_secret_file = mkOption {
+              client_secret_path = mkOption {
                 type = types.nullOr types.path;
                 default = null;
                 description = lib.mdDoc ''
-                  Path to OpenID Connect client secret file.
+                  Path to OpenID Connect client secret file. Expands environment variables in format ''${VAR}.
                 '';
               };
 
@@ -425,7 +425,7 @@ in {
     (mkRenamedOptionModule ["services" "headscale" "dns" "baseDomain"] ["services" "headscale" "settings" "dns_config" "base_domain"])
     (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "issuer"] ["services" "headscale" "settings" "oidc" "issuer"])
     (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "clientId"] ["services" "headscale" "settings" "oidc" "client_id"])
-    (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "clientSecretFile"] ["services" "headscale" "settings" "oidc" "client_secret_file"])
+    (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "clientSecretFile"] ["services" "headscale" "settings" "oidc" "client_secret_path"])
     (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "hostname"] ["services" "headscale" "settings" "tls_letsencrypt_hostname"])
     (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "challengeType"] ["services" "headscale" "settings" "tls_letsencrypt_challenge_type"])
     (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "httpListen"] ["services" "headscale" "settings" "tls_letsencrypt_listen"])
@@ -478,9 +478,6 @@ in {
           export HEADSCALE_DB_PASS="$(head -n1 ${escapeShellArg cfg.settings.db_password_file})"
         ''}
 
-        ${optionalString (cfg.settings.oidc.client_secret_file != null) ''
-          export HEADSCALE_OIDC_CLIENT_SECRET="$(head -n1 ${escapeShellArg cfg.settings.oidc.client_secret_file})"
-        ''}
         exec ${cfg.package}/bin/headscale serve
       '';
 

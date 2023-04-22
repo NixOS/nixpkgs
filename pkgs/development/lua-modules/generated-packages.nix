@@ -560,7 +560,30 @@ buildLuarocksPackage {
   };
 }) {};
 
-http = callPackage({ fetchzip, lua, fifo, luaossl, lpeg_patterns, lpeg, basexx, buildLuarocksPackage, cqueues, bit32, binaryheap, luaOlder, compat53 }:
+haskell-tools-nvim = callPackage({ plenary-nvim, fetchzip, lua, luaOlder, buildLuarocksPackage }:
+buildLuarocksPackage {
+  pname = "haskell-tools.nvim";
+  version = "1.9.1-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/haskell-tools.nvim-1.9.1-1.rockspec";
+    sha256 = "1m7fasn5iz9hv9l1ycsjiaah14i1s5nssvqq9sypbwcpc9slj93b";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/mrcjkb/haskell-tools.nvim/archive/1.9.1.zip";
+    sha256 = "0m425ipfvbb1f1m2wmz8qg57b901vspvvpckxr380crbwl3dflpr";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua plenary-nvim ];
+
+  meta = {
+    homepage = "https://github.com/mrcjkb/haskell-tools.nvim";
+    description = "Supercharge your Haskell experience in neovim!";
+    license.fullName = "GPL-2.0";
+  };
+}) {};
+
+http = callPackage({ luaossl, lpeg_patterns, lpeg, binaryheap, compat53, cqueues, bit32, basexx, fetchzip, lua, fifo, luaOlder, buildLuarocksPackage }:
 buildLuarocksPackage {
   pname = "http";
   version = "0.3-0";
@@ -1098,6 +1121,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+lua-curl = callPackage({ lua, buildLuarocksPackage, fetchzip, luaOlder, luaAtLeast }:
+buildLuarocksPackage {
+  pname = "lua-curl";
+  version = "0.3.13-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lua-curl-0.3.13-1.rockspec";
+    sha256 = "0lz534sm35hxazf1w71hagiyfplhsvzr94i6qyv5chjfabrgbhjn";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/Lua-cURL/Lua-cURLv3/archive/v0.3.13.zip";
+    sha256 = "0gn59bwrnb2mvl8i0ycr6m3jmlgx86xlr9mwnc85zfhj7zhi5anp";
+  };
+
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/Lua-cURL";
+    description = "Lua binding to libcurl";
+    license.fullName = "MIT/X11";
+  };
+}) {};
+
 lua-iconv = callPackage({ fetchurl, lua, buildLuarocksPackage, luaOlder }:
 buildLuarocksPackage {
   pname = "lua-iconv";
@@ -1329,7 +1375,7 @@ buildLuarocksPackage {
   };
 }) {};
 
-lua-resty-session = callPackage({ lua_pack, buildLuarocksPackage, fetchgit, luaOlder, lua, lua-ffi-zlib, lua-resty-openssl }:
+lua-resty-session = callPackage({ buildLuarocksPackage, fetchgit, luaOlder, lua, lua-resty-openssl /*, lua_pack, lua-ffi-zlib */  }:
 buildLuarocksPackage {
   pname = "lua-resty-session";
   version = "4.0.3-1";
@@ -1351,12 +1397,13 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua lua-ffi-zlib lua-resty-openssl lua_pack ];
+  propagatedBuildInputs = [ lua lua-resty-openssl /* lua_pack lua-ffi-zlib */ ];
 
   meta = {
     homepage = "https://github.com/bungle/lua-resty-session";
     description = "Session Library for OpenResty - Flexible and Secure";
     license.fullName = "BSD";
+    broken = true; # lua_pack and lua-ffi-zlib are unpackaged, causing this package to not evaluate
   };
 }) {};
 
@@ -2322,17 +2369,17 @@ buildLuarocksPackage {
   };
 }) {};
 
-luv = callPackage({ buildLuarocksPackage, lua, fetchurl, luaOlder }:
+luv = callPackage({ luaOlder, buildLuarocksPackage, fetchurl, lua }:
 buildLuarocksPackage {
   pname = "luv";
-  version = "1.43.0-0";
+  version = "1.44.2-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luv-1.43.0-0.rockspec";
-    sha256 = "0z5a7yp20xbb3f9w73skm9fj89gxxqv72nrxjq3kycsc6c2v3m8f";
+    url    = "mirror://luarocks/luv-1.44.2-1.rockspec";
+    sha256 = "07jwi50i16rv7sj914k1q3l9dy9wldbw2skmsdrzlkc57mqvg348";
   }).outPath;
   src = fetchurl {
-    url    = "https://github.com/luvit/luv/releases/download/1.43.0-0/luv-1.43.0-0.tar.gz";
-    sha256 = "1qlx1r79sfn8r20yx19bhdr0v58ykpwgwzy5vma9p2ngrlynyyjn";
+    url    = "https://github.com/luvit/luv/releases/download/1.44.2-1/luv-1.44.2-1.tar.gz";
+    sha256 = "0c2wkszxw6gwa4l6g1d2zzh660j13lif6c7a910vq7zn8jycgd9y";
   };
 
   disabled = (luaOlder "5.1");
@@ -2853,7 +2900,61 @@ buildLuarocksPackage {
   };
 }) {};
 
-tl = callPackage({ compat53, buildLuarocksPackage, argparse, luafilesystem, fetchgit }:
+telescope-manix = callPackage({ telescope-nvim, buildLuarocksPackage, lua, fetchzip, luaOlder }:
+buildLuarocksPackage {
+  pname = "telescope-manix";
+  version = "0.4.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/telescope-manix-0.4.0-1.rockspec";
+    sha256 = "1kh3dn4aixydxrq01sbl40v7if8bmpsvv30qf7vig7dvl21aqkrp";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/mrcjkb/telescope-manix/archive/0.4.0.zip";
+    sha256 = "153fqnk8iymyq309kpfiz3xmlqryj02rji3z7air23bgyjkx0gr8";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua telescope-nvim ];
+
+  meta = {
+    homepage = "https://github.com/mrcjkb/telescope-manix";
+    description = "A telescope.nvim extension for Manix - A fast documentation searcher for Nix";
+    license.fullName = "GPL-2.0";
+  };
+}) {};
+
+telescope-nvim = callPackage({ plenary-nvim, buildLuarocksPackage, lua, fetchgit }:
+buildLuarocksPackage {
+  pname = "telescope.nvim";
+  version = "scm-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/telescope.nvim-scm-1.rockspec";
+    sha256 = "07mjkv1nv9b3ifxk2bbpbhvp0awblyklyz6aaqw418x4gm4q1g35";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/nvim-telescope/telescope.nvim",
+  "rev": "a3f17d3baf70df58b9d3544ea30abe52a7a832c2",
+  "date": "2023-02-26T13:26:12+01:00",
+  "path": "/nix/store/qyzs7im9nqn04h9w9nii4nv12ysgk1fk-telescope.nvim",
+  "sha256": "136pik53kwl2avjdakwfls10d85jqybl7yd0mbzxc5nry8krav22",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = (lua.luaversion != "5.1");
+  propagatedBuildInputs = [ lua plenary-nvim ];
+
+  meta = {
+    homepage = "https://github.com/nvim-telescope/telescope.nvim";
+    description = "Find, Filter, Preview, Pick. All lua, all the time.";
+    license.fullName = "MIT";
+  };
+}) {};
+
+tl = callPackage({ compat53, luafilesystem, argparse, buildLuarocksPackage, fetchgit }:
 buildLuarocksPackage {
   pname = "tl";
   version = "0.15.1-1";

@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.51.1"; # N.B: if you change this, please update:
+  version = "1.54.0"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -29,22 +29,16 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-o1C35mtA2lTGgugCKAQyRDNlCnutoJ1ol/DInJNobnc=";
+    hash = "sha256-WVH7rYyFx2LyAnctnNbX4KevoJ5KKZujN+SmL0Y6wvw=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # Fix build on armv6l (https://github.com/grpc/grpc/pull/21341)
     (fetchpatch {
-      url = "https://github.com/grpc/grpc/commit/2f4cf1d9265c8e10fb834f0794d0e4f3ec5ae10e.patch";
-      sha256 = "0ams3jmgh9yzwmxcg4ifb34znamr7pb4qm0609kvil9xqvkqz963";
-    })
-
-    # Revert gRPC C++ Mutex to be an alias of Abseil, because it breaks dependent packages
-    (fetchpatch {
-      url = "https://github.com/grpc/grpc/commit/931f91b745cd5b2864a0d1787815871d0bd844ae.patch";
-      sha256 = "0vc93g2i4982ys4gzyaxdv9ni25yk10sxq3n7fkz8dypy8sylck7";
-      revert = true;
+      # armv6l support, https://github.com/grpc/grpc/pull/21341
+      name = "grpc-link-libatomic.patch";
+      url = "https://github.com/lopsided98/grpc/commit/164f55260262c816e19cd2c41b564486097d62fe.patch";
+      hash = "sha256-d6kMyjL5ZnEnEz4XZfRgXJBH53gp1r7q1tlwh+HM6+Y=";
     })
   ];
 

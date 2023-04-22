@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "lmdb";
-  version = "1.4.0";
+  version = "1.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OfbE7hRdKNFwJdNQcgq7b5XbgWUU6GjbV0RP3vUcu0c=";
+    hash = "sha256-H0x2ryTpB1k0h8kE7166GZO+s47Tha+CrbJahY8tZY0=";
   };
 
   buildInputs = [

@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "stavros";
     repo = "python-yeelight";
     rev = "v${version}";
-    sha256 = "sha256-vUsL1CvhYRtv75gkmiPe/UkAtBDZPy1iK2BPUupMXz8=";
+    hash = "sha256-vUsL1CvhYRtv75gkmiPe/UkAtBDZPy1iK2BPUupMXz8=";
   };
 
   propagatedBuildInputs = [

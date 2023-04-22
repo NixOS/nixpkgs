@@ -1,8 +1,8 @@
 diff --git a/meson.build b/meson.build
-index 300e71319c..2a9fba7116 100644
+index 6813e52ac1..ecdb78ca54 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -996,9 +996,9 @@ meson.add_install_script(
+@@ -999,9 +999,9 @@ meson.add_install_script(
    join_paths('tools', 'meson-post-install.sh'),
    nm_datadir,
    nm_bindir,

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "devitocodes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5a4zvyf2vfz8aI6vFMI2vxekYrcUi/YuPFvZnUOx+Zs=";
+    hash = "sha256-5a4zvyf2vfz8aI6vFMI2vxekYrcUi/YuPFvZnUOx+Zs=";
   };
 
   nativeBuildInputs = [ versioneer cython ];

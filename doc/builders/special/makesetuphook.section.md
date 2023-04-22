@@ -12,7 +12,7 @@ pkgs.makeSetupHook {
 } ./script.sh
 ```
 
-#### setup hook that depends on the hello package and runs hello and @shell@ is substituted with path to bash
+#### setup hook that depends on the hello package and runs hello and @shell@ is substituted with path to bash {#sec-pkgs.makeSetupHook-usage-example}
 
 ```nix
 pkgs.makeSetupHook {
@@ -27,7 +27,7 @@ pkgs.makeSetupHook {
 '')
 ```
 
-## Attributes
+## Attributes {#sec-pkgs.makeSetupHook-attributes}
 
 * `name` Set the name of the hook.
 * `propagatedBuildInputs` Runtime dependencies (such as binaries) of the hook.

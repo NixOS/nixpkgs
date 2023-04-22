@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "pythongssapi";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-qz4EWAO++yq72/AGwyNOtH/fTRSFbiCo/K98htROUxI=";
+    hash = "sha256-qz4EWAO++yq72/AGwyNOtH/fTRSFbiCo/K98htROUxI=";
   };
 
   # It's used to locate headers

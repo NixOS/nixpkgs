@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiomysensors";
-  version = "0.3.5";
+  version = "0.3.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jVqOOQLu/vL0L5WWtfU2rL4gNhPX+9HvchBp29aw+qA=";
+    hash = "sha256-hLUITEPUoUKGqN3AnacahnKwoKdfGN3mp34df74gsbE=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to connect to MySensors gateways";
     homepage = "https://github.com/MartinHjelmare/aiomysensors";
+    changelog = "https://github.com/MartinHjelmare/aiomysensors/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

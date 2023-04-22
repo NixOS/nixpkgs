@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "openstep_plist";
     inherit version;
-    sha256 = "sha256-GK/z1e3tnr++3+ukRKPASDJGl7+KObsENhwN1Tv+qws=";
+    hash = "sha256-GK/z1e3tnr++3+ukRKPASDJGl7+KObsENhwN1Tv+qws=";
     extension = "zip";
   };
 

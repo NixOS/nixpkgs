@@ -22,8 +22,8 @@ ocamlPackages.buildDunePackage rec {
   '';
 
   minimalOCamlVersion = "4.12";
+  duneVersion = "3";
 
-  strictDeps = true;
   nativeBuildInputs = [
     pkg-config
   ];
@@ -40,10 +40,11 @@ ocamlPackages.buildDunePackage rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/talex5/wayland-virtwl-proxy";
     description = "Proxy Wayland connections across a VM boundary";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.sternenseemann ];
+    platforms = platforms.linux;
   };
 }

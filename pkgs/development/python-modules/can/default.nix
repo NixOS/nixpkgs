@@ -10,6 +10,8 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, stdenv
 , typing-extensions
 , wrapt
 , uptime
@@ -37,6 +39,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     msgpack
     packaging
+    setuptools
     typing-extensions
     wrapt
   ];
@@ -73,10 +76,16 @@ buildPythonPackage rec {
     # pytest.approx is not supported in a boolean context (since pytest7)
     "test_pack_unpack"
     "test_receive"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # timing sensitive
+    "test_general"
+    "test_gap"
   ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
+    # skips timing senstive tests
+    export CI=1
   '';
 
   pythonImportsCheck = [

@@ -4,7 +4,7 @@
 , version
 , src
 , meta
-, makeWrapper
+, makeShellWrapper
 , wrapGAppsHook
 , alsa-lib
 , at-spi2-atk
@@ -49,7 +49,7 @@ let
 in stdenv.mkDerivation {
   inherit pname version src meta;
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ makeShellWrapper wrapGAppsHook ];
   buildInputs = [ glib ];
 
   dontConfigure = true;
@@ -120,12 +120,14 @@ in stdenv.mkDerivation {
     '';
 
   preFixup = ''
+    # makeWrapper defaults to makeBinaryWrapper due to wrapGAppsHook
+    # but we need a shell wrapper specifically for `NIXOS_OZONE_WL`.
     # Electron is trying to open udev via dlopen()
     # and for some reason that doesn't seem to be impacted from the rpath.
     # Adding udev to LD_LIBRARY_PATH fixes that.
     # Make xdg-open overrideable at runtime.
-    makeWrapper $out/share/1password/1password $out/bin/1password \
-      ''${gappsWrapperArgs[@]} \
+    makeShellWrapper $out/share/1password/1password $out/bin/1password \
+      "''${gappsWrapperArgs[@]}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"

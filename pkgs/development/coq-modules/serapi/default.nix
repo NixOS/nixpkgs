@@ -2,6 +2,7 @@
 
 let
   release = {
+    "8.17.0+0.17.0".sha256 = "sha256-I81qvaXpJfXcbFw8vyzYLzlnhPg1QD0lTqAFXhoZ0rI=";
     "8.16.0+0.16.3".sha256 = "sha256-22Kawp8jAsgyBTppwN5vmN7zEaB1QfPs0qKxd6x/7Uc=";
     "8.15.0+0.15.0".sha256 = "1vh99ya2dq6a8xl2jrilgs0rpj4j227qx8zvzd2v5xylx0p4bbrp";
     "8.14.0+0.14.0".sha256 = "1kh80yb791yl771qbqkvwhbhydfii23a7lql0jgifvllm2k8hd8d";
@@ -12,12 +13,13 @@ let
   };
 in
 
-(with lib; mkCoqDerivation rec {
+(with lib; mkCoqDerivation {
   pname = "serapi";
   inherit version release;
 
   defaultVersion =  with versions;
     lib.switch coq.version [
+      { case = isEq "8.17"; out = "8.17.0+0.17.0"; }
       { case = isEq "8.16"; out = "8.16.0+0.16.3"; }
       { case = isEq "8.15"; out = "8.15.0+0.15.0"; }
       { case = isEq "8.14"; out = "8.14.0+0.14.0"; }
@@ -39,6 +41,7 @@ in
       ppx_deriving_yojson
       ppx_import
       ppx_sexp_conv
+      ppx_hash
       sexplib
       yojson
       zarith # needed because of Coq
@@ -54,7 +57,7 @@ in
     homepage = "https://github.com/ejgallego/coq-serapi";
     description = "SerAPI is a library for machine-to-machine interaction with the Coq proof assistant";
     license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.Zimmi48 ];
+    maintainers = with maintainers; [ alizter Zimmi48 ];
   };
 }).overrideAttrs(o:
   let inherit (o) version; in {

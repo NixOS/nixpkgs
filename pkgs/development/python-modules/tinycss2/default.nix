@@ -20,7 +20,7 @@ buildPythonPackage rec {
     rev = "v${version}";
     # for tests
     fetchSubmodules = true;
-    sha256 = "sha256-RUF/3cjNgDFofoxl9iKY3u5ZAVVQmXu2Qbb5U4brdcQ=";
+    hash = "sha256-RUF/3cjNgDFofoxl9iKY3u5ZAVVQmXu2Qbb5U4brdcQ=";
   };
 
   postPatch = ''

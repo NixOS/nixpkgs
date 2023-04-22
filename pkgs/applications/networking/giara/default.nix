@@ -64,9 +64,6 @@ python3.pkgs.buildPythonApplication rec {
       --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
-  # Fix setup-hooks https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   meta = with lib; {
     description = "A Reddit app, built with Python, GTK and Handy; Created with mobile Linux in mind";
     maintainers = with maintainers; [ dasj19 ];

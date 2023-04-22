@@ -450,8 +450,9 @@ sub addEntry {
 
     # Include second initrd with secrets
     if (-e -x "$path/append-initrd-secrets") {
-        my $initrdName = basename($initrd);
-        my $initrdSecretsPath = "$bootPath/kernels/$initrdName-secrets";
+        # Name the initrd secrets after the system from which they're derived.
+        my $systemName = basename(Cwd::abs_path("$path"));
+        my $initrdSecretsPath = "$bootPath/kernels/$systemName-secrets";
 
         mkpath(dirname($initrdSecretsPath), 0, 0755);
         my $oldUmask = umask;
@@ -470,7 +471,7 @@ sub addEntry {
         if (-e $initrdSecretsPathTemp && ! -z _) {
             rename $initrdSecretsPathTemp, $initrdSecretsPath or die "failed to move initrd secrets into place: $!\n";
             $copied{$initrdSecretsPath} = 1;
-            $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$initrdName-secrets";
+            $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$systemName-secrets";
         } else {
             unlink $initrdSecretsPathTemp;
             rmdir dirname($initrdSecretsPathTemp);

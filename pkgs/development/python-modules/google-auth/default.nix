@@ -1,41 +1,40 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
-, cachetools
-, pyasn1-modules
-, rsa
-, six
 , aiohttp
-, cryptography
-, pyopenssl
-, pyu2f
-, requests
-, pythonOlder
 , aioresponses
-, asynctest
+, cachetools
+, cryptography
+, fetchPypi
 , flask
 , freezegun
 , grpcio
 , mock
 , oauth2client
+, pyasn1-modules
+, pyopenssl
 , pytest-asyncio
 , pytest-localserver
 , pytestCheckHook
+, pythonOlder
+, pyu2f
+, requests
 , responses
+, rsa
+, six
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.15.0";
+  version = "2.17.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cvEqbPyWjXVNe9qzacXFwWAyEG5S0yxt/YSE5MAabR8=";
+    hash = "sha256-jzebRrrTga0qC5id+wwTrSjTwqefJzSCE/iUah0V1Vo=";
   };
 
   propagatedBuildInputs = [
@@ -67,7 +66,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
-    asynctest
     flask
     freezegun
     grpcio
@@ -95,6 +93,8 @@ buildPythonPackage rec {
     "tests/transport/test_urllib3.py"
     "tests/transport/test__custom_tls_signer.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Google Auth Python Library";

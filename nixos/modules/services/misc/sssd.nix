@@ -77,6 +77,10 @@ in {
   };
   config = mkMerge [
     (mkIf cfg.enable {
+      # For `sssctl` to work.
+      environment.etc."sssd/sssd.conf".source = settingsFile;
+      environment.etc."sssd/conf.d".source = "${dataDir}/conf.d";
+
       systemd.services.sssd = {
         description = "System Security Services Daemon";
         wantedBy    = [ "multi-user.target" ];
@@ -101,6 +105,7 @@ in {
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         };
         preStart = ''
+          mkdir -p "${dataDir}/conf.d"
           [ -f ${settingsFile} ] && rm -f ${settingsFile}
           old_umask=$(umask)
           umask 0177

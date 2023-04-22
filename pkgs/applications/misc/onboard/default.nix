@@ -108,9 +108,6 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.nose
   ];
 
-  # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   doCheck = false;
 
   preBuild = ''

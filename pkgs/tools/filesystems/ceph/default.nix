@@ -1,44 +1,82 @@
-{ lib, stdenv, runCommand, fetchurl, fetchpatch
+{ lib
+, stdenv
+, runCommand
+, fetchurl
+, fetchFromGitHub
+
+# Build time
+, cmake
 , ensureNewerSourcesHook
-, cmake, pkg-config
-, which, git
-, boost175, xz
-, libxml2, zlib, lz4
-, openldap, lttng-ust
-, babeltrace, gperf
-, gtest
-, cunit, snappy
-, makeWrapper
-, leveldb, oath-toolkit
-, libnl, libcap_ng
-, rdkafka
-, nixosTests
-, cryptsetup
-, sqlite
-, lua
-, icu
-, bzip2
-, doxygen
-, graphviz
 , fmt
-, python39
+, git
+, makeWrapper
+, pkg-config
+, which
+
+# Tests
+, nixosTests
+
+# Runtime dependencies
+, arrow-cpp
+, babeltrace
+, boost179
+, bzip2
+, cryptsetup
+, cimg
+, cunit
+, doxygen
+, gperf
+, graphviz
+, gtest
+, icu
+, jsoncpp
+, libcap_ng
+, libnl
+, libxml2
+, lttng-ust
+, lua
+, lz4
+, oath-toolkit
+, openldap
+, python310
+, rdkafka
+, rocksdb
+, snappy
+, sqlite
+, utf8proc
+, zlib
+, zstd
 
 # Optional Dependencies
-, yasm ? null, fcgi ? null, expat ? null
-, curl ? null, fuse ? null
-, libedit ? null, libatomic_ops ? null
+, curl ? null
+, expat ? null
+, fuse ? null
+, libatomic_ops ? null
+, libedit ? null
 , libs3 ? null
+, yasm ? null
 
 # Mallocs
-, jemalloc ? null, gperftools ? null
+, gperftools ? null
+, jemalloc ? null
 
 # Crypto Dependencies
 , cryptopp ? null
-, nss ? null, nspr ? null
+, nspr ? null
+, nss ? null
 
 # Linux Only Dependencies
-, linuxHeaders, util-linux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
-, libaio ? null, libxfs ? null, zfs ? null, liburing ? null
+, linuxHeaders
+, util-linux
+, libuuid
+, udev
+, keyutils
+, rdma-core
+, rabbitmq-c
+, libaio ? null
+, libxfs ? null
+, liburing ? null
+, zfs ? null
 , ...
 }:
 
@@ -49,7 +87,6 @@ let
   shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
   optYasm = shouldUsePkg yasm;
-  optFcgi = shouldUsePkg fcgi;
   optExpat = shouldUsePkg expat;
   optCurl = shouldUsePkg curl;
   optFuse = shouldUsePkg fuse;
@@ -68,8 +105,18 @@ let
   optLibxfs = shouldUsePkg libxfs;
   optZfs = shouldUsePkg zfs;
 
-  hasRadosgw = optFcgi != null && optExpat != null && optCurl != null && optLibedit != null;
+  # Downgrade rocksdb, 7.10 breaks ceph
+  rocksdb' = rocksdb.overrideAttrs (oldAttrs: {
+    version = "7.9.2";
+    src = fetchFromGitHub {
+      owner = "facebook";
+      repo = "rocksdb";
+      rev = "refs/tags/v7.9.2";
+      hash = "sha256-5P7IqJ14EZzDkbjaBvbix04ceGGdlWBuVFH/5dpD5VM=";
+    };
+  });
 
+  hasRadosgw = optExpat != null && optCurl != null && optLibedit != null;
 
   # Malloc implementation (can be jemalloc, tcmalloc or null)
   malloc = if optJemalloc != null then optJemalloc else optGperftools;
@@ -92,106 +139,171 @@ let
      platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
 
-  ceph-common = python.pkgs.buildPythonPackage rec{
+  ceph-common = with python.pkgs; buildPythonPackage {
     pname = "ceph-common";
     inherit src version;
 
     sourceRoot = "ceph-${version}/src/python-common";
 
-    nativeCheckInputs = [ python.pkgs.pytest ];
-    propagatedBuildInputs = with python.pkgs; [ pyyaml six ];
+    propagatedBuildInputs = [
+      pyyaml
+    ];
+
+    nativeCheckInputs = [
+      pytestCheckHook
+    ];
+
+    disabledTests = [
+      # requires network access
+      "test_valid_addr"
+    ];
 
     meta = getMeta "Ceph common module for code shared by manager modules";
   };
 
-  # Boost 1.75 is not compatible with Python 3.10
-  python = python39;
+  # Watch out for python <> boost compatibility
+  python = python310.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.46";
+        src = super.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+        };
+        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
+          pytest-xdist
+        ]);
+        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
+          "test/aaa_profiling"
+          "test/ext/mypy"
+        ];
+      });
+    };
+  };
 
-  boost = boost175.override {
+  boost = boost179.override {
     enablePython = true;
     inherit python;
   };
 
-  ceph-python-env = python.withPackages (ps: [
-    # Check .requires files below https://github.com/ceph/ceph/tree/main/debian for dependencies
-    ps.sphinx
-    ps.flask
-    ps.routes
-    ps.cython
-    ps.setuptools
-    ps.virtualenv
-    # Libraries needed by the python tools
-    ps.Mako
+  # TODO: split this off in build and runtime environment
+  ceph-python-env = python.withPackages (ps: with ps; [
     ceph-common
-    ps.cherrypy
-    ps.cmd2
-    ps.colorama
-    ps.python-dateutil
-    ps.jsonpatch
-    ps.pecan
-    ps.prettytable
-    ps.pyopenssl
-    ps.pyjwt
-    ps.webob
-    ps.bcrypt
-    ps.scipy
-    ps.six
-    ps.pyyaml
+
+    # build time
+    cython
+
+    # debian/control
+    bcrypt
+    cherrypy
+    influxdb
+    jinja2
+    kubernetes
+    natsort
+    numpy
+    pecan
+    prettytable
+    pyjwt
+    pyopenssl
+    python-dateutil
+    pyyaml
+    requests
+    routes
+    scikit-learn
+    scipy
+    setuptools
+    sphinx
+    virtualenv
+    werkzeug
+
+    # src/pybind/mgr/requirements-required.txt
+    cryptography
+    jsonpatch
+
+    # src/tools/cephfs/shell/setup.py
+    cmd2
+    colorama
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "16.2.10";
+  version = "17.2.5";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "sha256-342+nUV3mCX7QJfZSnKEfnQFCJwJmVQeYnefJwW/AtU=";
+    hash = "sha256-NiJpwUeROvh0siSaRoRrDm+C0s61CvRiIrbd7JmRspo=";
   };
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
     inherit src version;
 
-    patches = [
-      ./0000-fix-SPDK-build-env.patch
-      # pacific: include/buffer: include <memory>
-      # fixes build with gcc 12
-      # https://github.com/ceph/ceph/pull/47295
-      (fetchpatch {
-        url = "https://github.com/ceph/ceph/pull/47295/commits/df88789a38c053513d3b2a9b7d12a952fc0c9042.patch";
-        hash = "sha256-je65kBfa5hR0ZKo6ZI10XmD5ZUbKj5rxlGxxI9ZJVfo=";
-      })
-      (fetchpatch {
-        url = "https://github.com/ceph/ceph/pull/47295/commits/2abcbe4e47705e6e0fcc7d9d9b75625f563199af.patch";
-        hash = "sha256-8sWQKoZNHuGuhzX/F+3fY4+kjsrwsfoMdVpfVSj2x5w=";
-      })
-      (fetchpatch {
-        url = "https://github.com/ceph/ceph/pull/47295/commits/13dc077cf6c65a3b8c4f13d896847b9964b3fcbb.patch";
-        hash = "sha256-byfiZh9OJrux/y5m3QCPg0LET6q33ZDXmp/CN+yOSQQ=";
-      })
-    ];
-
     nativeBuildInputs = [
       cmake
-      pkg-config which git python.pkgs.wrapPython makeWrapper
-      python.pkgs.python # for the toPythonPath function
-      (ensureNewerSourcesHook { year = "1980"; })
-      python
       fmt
+      git
+      makeWrapper
+      pkg-config
+      python
+      python.pkgs.python # for the toPythonPath function
+      python.pkgs.wrapPython
+      which
+      (ensureNewerSourcesHook { year = "1980"; })
       # for building docs/man-pages presumably
       doxygen
       graphviz
     ];
 
+    enableParallelBuilding = true;
+
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
-      boost xz ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
-      malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy lz4 oath-toolkit leveldb libnl libcap_ng rdkafka
-      cryptsetup sqlite lua icu bzip2
+      arrow-cpp
+      babeltrace
+      boost
+      bzip2
+      ceph-python-env
+      cimg
+      cryptsetup
+      cunit
+      gperf
+      gtest
+      jsoncpp
+      icu
+      libcap_ng
+      libnl
+      libxml2
+      lttng-ust
+      lua
+      lz4
+      malloc
+      oath-toolkit
+      openldap
+      optLibatomic_ops
+      optLibs3
+      optYasm
+      rdkafka
+      rocksdb'
+      snappy
+      sqlite
+      utf8proc
+      zlib
+      zstd
     ] ++ lib.optionals stdenv.isLinux [
-      linuxHeaders util-linux libuuid udev keyutils liburing optLibaio optLibxfs optZfs
-      # ceph 14
-      rdma-core rabbitmq-c
+      keyutils
+      liburing
+      libuuid
+      linuxHeaders
+      optLibaio
+      optLibxfs
+      optZfs
+      rabbitmq-c
+      rdma-core
+      udev
+      util-linux
     ] ++ lib.optionals hasRadosgw [
-      optFcgi optExpat optCurl optFuse optLibedit
+      optCurl
+      optExpat
+      optFuse
+      optLibedit
     ];
 
     pythonPath = [ ceph-python-env "${placeholder "out"}/${ceph-python-env.sitePackages}" ];
@@ -208,17 +320,27 @@ in rec {
     '';
 
     cmakeFlags = [
-      "-DWITH_SYSTEM_ROCKSDB=OFF"  # breaks Bluestore
       "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
-      "-DWITH_SYSTEM_BOOST=ON"
-      "-DWITH_SYSTEM_GTEST=ON"
       "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
-      "-DWITH_SYSTEMD=OFF"
-      "-DWITH_TESTS=OFF"
-      "-DWITH_CEPHFS_SHELL=ON"
+      "-DWITH_CEPHFS_SHELL:BOOL=ON"
+      "-DWITH_SYSTEMD:BOOL=OFF"
+      "-DWITH_TESTS:BOOL=OFF"
+
+      # Use our own libraries, where possible
+      "-DWITH_SYSTEM_ARROW:BOOL=ON"
+      "-DWITH_SYSTEM_BOOST:BOOL=ON"
+      "-DWITH_SYSTEM_CIMG:BOOL=ON"
+      "-DWITH_SYSTEM_JSONCPP:BOOL=ON"
+      "-DWITH_SYSTEM_GTEST:BOOL=ON"
+      "-DWITH_SYSTEM_ROCKSDB:BOOL=ON"
+      "-DWITH_SYSTEM_UTF8PROC:BOOL=ON"
+      "-DWITH_SYSTEM_ZSTD:BOOL=ON"
+
       # TODO breaks with sandbox, tries to download stuff with npm
-      "-DWITH_MGR_DASHBOARD_FRONTEND=OFF"
+      "-DWITH_MGR_DASHBOARD_FRONTEND:BOOL=OFF"
+      # no matching function for call to 'parquet::PageReader::Open(std::shared_ptr<arrow::io::InputStream>&, int64_t, arrow::Compression::type, parquet::MemoryPool*, parquet::CryptoContext*)'
+      "-DWITH_RADOSGW_SELECT_PARQUET:BOOL=OFF"
       # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
       ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
     ] ++ lib.optional stdenv.isLinux "-DWITH_SYSTEM_LIBURING=ON";
@@ -241,8 +363,15 @@ in rec {
 
     meta = getMeta "Distributed storage system";
 
-    passthru.version = version;
-    passthru.tests = { inherit (nixosTests) ceph-single-node ceph-multi-node ceph-single-node-bluestore; };
+    passthru = {
+      inherit version;
+      tests = {
+        inherit (nixosTests)
+          ceph-multi-node
+          ceph-single-node
+          ceph-single-node-bluestore;
+      };
+    };
   };
 
   ceph-client = runCommand "ceph-client-${version}" {

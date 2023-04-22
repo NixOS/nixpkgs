@@ -6,7 +6,7 @@
 , case
 , fetchPypi
 , importlib-metadata
-, Pyro4
+, pyro4
 , pytestCheckHook
 , pythonOlder
 , pytz
@@ -25,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-N87j7nJflOqLsXPqq3wXYCA+pTu+uuImMoYA+dJ5lhA=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements/test.txt \
+      --replace "pytz>dev" "pytz"
+  '';
+
   propagatedBuildInputs = [
     amqp
     vine
@@ -36,7 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     azure-servicebus
     case
-    Pyro4
+    pyro4
     pytestCheckHook
     pytz
   ];

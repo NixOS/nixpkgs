@@ -14,9 +14,8 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-iOF11/fhQYlvnpWJidJS1yJVavF7xLxvBl59VCh9A4U=";
   };
 
-  buildInputs = [ gtk3 gobject-introspection gnome.adwaita-icon-theme ];
+  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
   propagatedBuildInputs = with python3Packages; [ pyxdg pygobject3 ];
-  # see https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
 
   dontWrapGApps = true;

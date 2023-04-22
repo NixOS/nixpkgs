@@ -19,7 +19,7 @@ let
         else if true  ==   v then "yes"
         else if false ==   v then "no"
         else if isList     v then concatStringsSep "," v
-        else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
+        else throw "unsupported type ${builtins.typeOf v}: ${(lib.generators.toPretty {}) v}";
 
   # dont use the "=" operator
   settingsFormat = (pkgs.formats.keyValue {
@@ -474,10 +474,10 @@ in
                       mkdir -m 0755 -p "$(dirname '${k.path}')"
                       ssh-keygen \
                         -t "${k.type}" \
-                        ${if k ? bits then "-b ${toString k.bits}" else ""} \
-                        ${if k ? rounds then "-a ${toString k.rounds}" else ""} \
-                        ${if k ? comment then "-C '${k.comment}'" else ""} \
-                        ${if k ? openSSHFormat && k.openSSHFormat then "-o" else ""} \
+                        ${optionalString (k ? bits) "-b ${toString k.bits}"} \
+                        ${optionalString (k ? rounds) "-a ${toString k.rounds}"} \
+                        ${optionalString (k ? comment) "-C '${k.comment}'"} \
+                        ${optionalString (k ? openSSHFormat && k.openSSHFormat) "-o"} \
                         -f "${k.path}" \
                         -N ""
                   fi
@@ -536,7 +536,7 @@ in
     # https://github.com/NixOS/nixpkgs/pull/10155
     # https://github.com/NixOS/nixpkgs/pull/41745
     services.openssh.authorizedKeysFiles =
-      [ "%h/.ssh/authorized_keys" "%h/.ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
+      [ "%h/.ssh/authorized_keys" "/etc/ssh/authorized_keys.d/%u" ];
 
     services.openssh.extraConfig = mkOrder 0
       ''
@@ -550,7 +550,7 @@ in
         '') cfg.ports}
 
         ${concatMapStrings ({ port, addr, ... }: ''
-          ListenAddress ${addr}${if port != null then ":" + toString port else ""}
+          ListenAddress ${addr}${optionalString (port != null) (":" + toString port)}
         '') cfg.listenAddresses}
 
         ${optionalString cfgc.setXAuthLocation ''

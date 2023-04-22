@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , python3
 , qt6
@@ -43,8 +44,10 @@ python3.pkgs.buildPythonApplication rec {
     wrapQtAppsHook
   ]);
 
-  buildInputs = with qt6; [
-    qtwayland
+  buildInputs = lib.optionals stdenv.isLinux [
+    qt6.qtwayland
+  ] ++ lib.optionals stdenv.isDarwin [
+    qt6.qtbase
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -106,5 +109,7 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/debanjum/khoj/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dit7ya ];
+    # src/tcmalloc.cc:333] Attempt to free invalid pointer
+    broken = stdenv.isDarwin;
   };
 }

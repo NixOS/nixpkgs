@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "gagebenne";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
+    hash = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
   };
 
   propagatedBuildInputs = [ requests ];

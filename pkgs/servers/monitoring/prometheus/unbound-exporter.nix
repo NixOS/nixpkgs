@@ -11,7 +11,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-wkr9T6GlJP/PSv17z3MC7vC0cXg/Z6rGlhlCUHH3Ua4=";
   };
 
-  cargoSha256 = "sha256-6V39Wfqin2RK73rehsIwmqDkOin4FEiqJQjTKAEx9Vs=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "native-tls-0.2.3" = "sha256-I1+ZNLDVGS1x9Iu81RD2//xnqhKhNGBmlrT0ryNFSlE=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
 

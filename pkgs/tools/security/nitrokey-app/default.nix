@@ -1,5 +1,13 @@
-{ lib, stdenv, bash-completion, cmake, fetchFromGitHub, hidapi, libusb1, pkg-config
-, qtbase, qttranslations, qtsvg, wrapQtAppsHook }:
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, pkg-config
+, qttranslations
+, wrapQtAppsHook
+, libnitrokey
+, cppcodec
+}:
 
 stdenv.mkDerivation rec {
   pname = "nitrokey-app";
@@ -9,24 +17,25 @@ stdenv.mkDerivation rec {
     owner = "Nitrokey";
     repo = "nitrokey-app";
     rev = "v${version}";
-    sha256 = "1k0w921hfrya4q2r7bqn7kgmwvwb7c15k9ymlbnksmfc9yyjyfcv";
-    fetchSubmodules = true;
+    hash = "sha256-c6EC5uuMna07xVHDRFq0UDwuSeopZTmZGZ9ZD5zaq8Y=";
   };
 
-  buildInputs = [
-    bash-completion
-    hidapi
-    libusb1
-    qtbase
-    qttranslations
-    qtsvg
-  ];
   nativeBuildInputs = [
     cmake
     pkg-config
     wrapQtAppsHook
+    qttranslations
   ];
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
+
+  cmakeFlags = [
+    "-DADD_GIT_INFO=OFF"
+    "-DBASH_COMPLETION_PATH=share/bash-completion/completions"
+  ];
+
+  buildInputs = [
+    libnitrokey
+    cppcodec
+  ];
 
   meta = with lib; {
     description      = "Provides extra functionality for the Nitrokey Pro and Storage";
@@ -37,6 +46,6 @@ stdenv.mkDerivation rec {
     '';
     homepage         = "https://github.com/Nitrokey/nitrokey-app";
     license          = licenses.gpl3;
-    maintainers      = with maintainers; [ kaiha ];
+    maintainers      = with maintainers; [ kaiha panicgh ];
   };
 }

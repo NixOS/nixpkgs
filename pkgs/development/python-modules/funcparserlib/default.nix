@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "vlasovskikh";
     repo = pname;
     rev = version;
-    sha256 = "sha256-moWaOzyF/yhDQCLEp7bc0j8wNv7FM7cvvpCwon3j+gI=";
+    hash = "sha256-moWaOzyF/yhDQCLEp7bc0j8wNv7FM7cvvpCwon3j+gI=";
   };
 
   nativeBuildInputs = [

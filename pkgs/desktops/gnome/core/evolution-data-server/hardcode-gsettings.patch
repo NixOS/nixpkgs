@@ -1,8 +1,8 @@
 diff --git a/src/addressbook/libebook/e-book-client.c b/src/addressbook/libebook/e-book-client.c
-index 7888e69..27215e4 100644
+index bd479d8..bd049b3 100644
 --- a/src/addressbook/libebook/e-book-client.c
 +++ b/src/addressbook/libebook/e-book-client.c
-@@ -1983,7 +1983,18 @@ e_book_client_get_self (ESourceRegistry *registry,
+@@ -1997,7 +1997,18 @@ e_book_client_get_self (ESourceRegistry *registry,
  
  	*out_client = book_client;
  
@@ -22,7 +22,7 @@ index 7888e69..27215e4 100644
  	uid = g_settings_get_string (settings, SELF_UID_KEY);
  	g_object_unref (settings);
  
-@@ -2051,7 +2062,18 @@ e_book_client_set_self (EBookClient *client,
+@@ -2065,7 +2076,18 @@ e_book_client_set_self (EBookClient *client,
  	g_return_val_if_fail (
  		e_contact_get_const (contact, E_CONTACT_UID) != NULL, FALSE);
  
@@ -42,7 +42,7 @@ index 7888e69..27215e4 100644
  	g_settings_set_string (
  		settings, SELF_UID_KEY,
  		e_contact_get_const (contact, E_CONTACT_UID));
-@@ -2087,8 +2109,18 @@ e_book_client_is_self (EContact *contact)
+@@ -2101,8 +2123,18 @@ e_book_client_is_self (EContact *contact)
  	 * unfortunately the API doesn't allow that.
  	 */
  	g_mutex_lock (&mutex);
@@ -64,7 +64,7 @@ index 7888e69..27215e4 100644
  	g_mutex_unlock (&mutex);
  
 diff --git a/src/addressbook/libebook/e-book.c b/src/addressbook/libebook/e-book.c
-index 8dfff6d..fb4434b 100644
+index e85a56b..59d3fe2 100644
 --- a/src/addressbook/libebook/e-book.c
 +++ b/src/addressbook/libebook/e-book.c
 @@ -2587,7 +2587,18 @@ e_book_get_self (ESourceRegistry *registry,
@@ -128,10 +128,10 @@ index 8dfff6d..fb4434b 100644
  	g_object_unref (settings);
  
 diff --git a/src/addressbook/libedata-book/e-book-meta-backend.c b/src/addressbook/libedata-book/e-book-meta-backend.c
-index d3f130e..bc820e9 100644
+index 4aaabee..dd6ce6d 100644
 --- a/src/addressbook/libedata-book/e-book-meta-backend.c
 +++ b/src/addressbook/libedata-book/e-book-meta-backend.c
-@@ -135,7 +135,18 @@ ebmb_is_power_saver_enabled (void)
+@@ -143,7 +143,18 @@ ebmb_is_power_saver_enabled (void)
  	GSettings *settings;
  	gboolean enabled = FALSE;
  
@@ -176,10 +176,10 @@ index 42f3457..b4926af 100644
  	cbc->priv->update_alarms_id = 0;
  	cbc->priv->alarm_enabled = FALSE;
 diff --git a/src/calendar/libecal/e-reminder-watcher.c b/src/calendar/libecal/e-reminder-watcher.c
-index 52095a4..184b657 100644
+index 5087de1..5c24b87 100644
 --- a/src/calendar/libecal/e-reminder-watcher.c
 +++ b/src/calendar/libecal/e-reminder-watcher.c
-@@ -2555,7 +2555,19 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
+@@ -2578,7 +2578,19 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
  
  	watcher->priv = e_reminder_watcher_get_instance_private (watcher);
  	watcher->priv->cancellable = g_cancellable_new ();
@@ -201,10 +201,10 @@ index 52095a4..184b657 100644
  	watcher->priv->default_zone = e_cal_util_copy_timezone (zone);
  	watcher->priv->timers_enabled = TRUE;
 diff --git a/src/calendar/libedata-cal/e-cal-meta-backend.c b/src/calendar/libedata-cal/e-cal-meta-backend.c
-index 94a875f..1d2ed92 100644
+index cd91f07..79ede04 100644
 --- a/src/calendar/libedata-cal/e-cal-meta-backend.c
 +++ b/src/calendar/libedata-cal/e-cal-meta-backend.c
-@@ -149,7 +149,18 @@ ecmb_is_power_saver_enabled (void)
+@@ -156,7 +156,18 @@ ecmb_is_power_saver_enabled (void)
  	GSettings *settings;
  	gboolean enabled = FALSE;
  
@@ -298,10 +298,10 @@ index e61160c..b6553a4 100644
  		G_CALLBACK (mi_user_headers_settings_changed_cb), NULL);
  	G_UNLOCK (mi_user_headers);
 diff --git a/src/camel/providers/imapx/camel-imapx-server.c b/src/camel/providers/imapx/camel-imapx-server.c
-index 28755e2..da8c40c 100644
+index ce4a58c..2906228 100644
 --- a/src/camel/providers/imapx/camel-imapx-server.c
 +++ b/src/camel/providers/imapx/camel-imapx-server.c
-@@ -5593,7 +5593,18 @@ camel_imapx_server_skip_old_flags_update (CamelStore *store)
+@@ -5591,7 +5591,18 @@ camel_imapx_server_skip_old_flags_update (CamelStore *store)
  	if (!skip_old_flags_update) {
  		GSettings *eds_settings;
  
@@ -322,10 +322,10 @@ index 28755e2..da8c40c 100644
  		if (g_settings_get_boolean (eds_settings, "limit-operations-in-power-saver-mode")) {
  			GPowerProfileMonitor *power_monitor;
 diff --git a/src/camel/providers/smtp/camel-smtp-transport.c b/src/camel/providers/smtp/camel-smtp-transport.c
-index f535ad6..918975d 100644
+index effaf06..1b2a003 100644
 --- a/src/camel/providers/smtp/camel-smtp-transport.c
 +++ b/src/camel/providers/smtp/camel-smtp-transport.c
-@@ -1458,7 +1458,18 @@ smtp_helo (CamelSmtpTransport *transport,
+@@ -1462,7 +1462,18 @@ smtp_helo (CamelSmtpTransport *transport,
  		transport->authtypes = NULL;
  	}
  
@@ -370,7 +370,7 @@ index 188f276..939f89b 100644
  		settings, "network-monitor-gio-name",
  		object, "gio-name",
 diff --git a/src/libedataserver/e-oauth2-service-google.c b/src/libedataserver/e-oauth2-service-google.c
-index f215388..501222e 100644
+index ec08afe..7b31227 100644
 --- a/src/libedataserver/e-oauth2-service-google.c
 +++ b/src/libedataserver/e-oauth2-service-google.c
 @@ -71,7 +71,18 @@ eos_google_read_settings (EOAuth2Service *service,
@@ -394,7 +394,7 @@ index f215388..501222e 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service-outlook.c b/src/libedataserver/e-oauth2-service-outlook.c
-index 9cff0d0..4c9a203 100644
+index 7633e93..2328048 100644
 --- a/src/libedataserver/e-oauth2-service-outlook.c
 +++ b/src/libedataserver/e-oauth2-service-outlook.c
 @@ -71,7 +71,18 @@ eos_outlook_read_settings (EOAuth2Service *service,
@@ -418,7 +418,7 @@ index 9cff0d0..4c9a203 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service-yahoo.c b/src/libedataserver/e-oauth2-service-yahoo.c
-index 8e4ee81..cc94026 100644
+index 3bb1071..199e822 100644
 --- a/src/libedataserver/e-oauth2-service-yahoo.c
 +++ b/src/libedataserver/e-oauth2-service-yahoo.c
 @@ -67,7 +67,18 @@ eos_yahoo_read_settings (EOAuth2Service *service,
@@ -442,7 +442,7 @@ index 8e4ee81..cc94026 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service.c b/src/libedataserver/e-oauth2-service.c
-index b0c2410..ca915e0 100644
+index 7eca355..795d822 100644
 --- a/src/libedataserver/e-oauth2-service.c
 +++ b/src/libedataserver/e-oauth2-service.c
 @@ -94,7 +94,18 @@ eos_default_guess_can_process (EOAuth2Service *service,

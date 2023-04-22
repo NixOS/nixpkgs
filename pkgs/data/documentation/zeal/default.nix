@@ -17,15 +17,17 @@
 
 let
   isQt5 = lib.versions.major qtbase.version == "5";
-in stdenv.mkDerivation rec {
+
+in
+stdenv.mkDerivation rec {
   pname = "zeal";
-  version = "0.6.20221022";
+  version = "0.6.1.20230320";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
-    rev = "7ea03e4bb9754020e902a2989f56f4bc42b85c82";
-    sha256 = "sha256-BozRLlws56i9P7Qtc5qPZWgJR5yhYqnLQsEdsymt5us=";
+    rev = "a617ae5e06b95cec99bae058650e55b98613916d";
+    hash = "sha256-WL2uqA0sZ5Q3lZIA9vkLVyfec/jBkfGcWb6XQ7AuM94=";
   };
 
   # we only need this if we are using a version that hasn't been released. We
@@ -35,20 +37,22 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     sed -i CMakeLists.txt \
       -e 's@^project.*@project(Zeal VERSION ${version})@'
+  '' + lib.optionalString (!isQt5) ''
+    substituteInPlace src/app/CMakeLists.txt \
+      --replace "COMPONENTS Widgets" "COMPONENTS Widgets QmlIntegration"
   '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      qtbase
-      qtimageformats
-      qtwebengine
-      libarchive
-      libXdmcp
-      libpthreadstubs
-      xcbutilkeysyms
-    ] ++ lib.optionals isQt5 [ qtx11extras ];
+  buildInputs = [
+    qtbase
+    qtimageformats
+    qtwebengine
+    libarchive
+    libXdmcp
+    libpthreadstubs
+    xcbutilkeysyms
+  ] ++ lib.optionals isQt5 [ qtx11extras ];
 
   meta = with lib; {
     description = "A simple offline API documentation browser";

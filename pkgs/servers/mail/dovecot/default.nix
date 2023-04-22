@@ -41,6 +41,9 @@ stdenv.mkDerivation rec {
     sed -i -s -E 's!\bcat\b!${coreutils}/bin/cat!g' src/lib-smtp/test-bin/*.sh
 
     patchShebangs src/config/settings-get.pl
+
+    # DES-encrypted passwords are not supported by NixPkgs anymore
+    sed '/test_password_scheme("CRYPT"/d' -i src/auth/test-libpassword.c
   '' + lib.optionalString stdenv.isLinux ''
     export systemdsystemunitdir=$out/etc/systemd/system
   '';

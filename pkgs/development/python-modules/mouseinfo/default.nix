@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "asweigart";
     repo = "mouseinfo";
     rev = "1876ad5cd311b4352d46bc64a12edfb4da49974e";
-    sha256 = "sha256-UTaHTJE0xFihN9r+DY/WhekZ7S/CXtMFbqAayzexRxk=";
+    hash = "sha256-UTaHTJE0xFihN9r+DY/WhekZ7S/CXtMFbqAayzexRxk=";
   };
 
   patches = [

@@ -5,6 +5,7 @@ let
     certifi
     colorama
     lxml
+    pandas
     pysocks
     requests
     requests-futures
@@ -15,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sherlock";
-  version = "0.14.0";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "sherlock-project";
     repo = pname;
-    rev = "f8566960d461783558b7bcba5c818d9275de492a";
-    sha256 = "sha256-6jG/SmsiEL63EcBrx2fcQDYbmMCA+A7Jsc3E4f5NGts=";
+    rev = "ab2f6788340903df797d8c336a97fa6e742daf77";
+    hash = "sha256-AbWZa33DNrDM0FdjoFSVMnz4Ph7mUiUe/erhI3w7GQQ";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -30,6 +30,14 @@ let
       for i in texk/kpathsea/mktex*; do
         sed -i '/^mydir=/d' "$i"
       done
+
+      # ST_NLINK_TRICK causes kpathsea to treat folders with no real subfolders
+      # as leaves, even if they contain symlinks to other folders; must be
+      # disabled to work correctly with the nix store", see section 5.3.6
+      # “Subdirectory expansion” of the kpathsea manual
+      # http://mirrors.ctan.org/systems/doc/kpathsea/kpathsea.pdf for more
+      # details
+      sed -i '/^#define ST_NLINK_TRICK/d' texk/kpathsea/config.h
     '';
 
     configureFlags = [
@@ -113,8 +121,11 @@ core = stdenv.mkDerivation rec {
   installTargets = [ "install" "texlinks" ];
 
   # TODO: perhaps improve texmf.cnf search locations
-  postInstall = /* links format -> engine will be regenerated in texlive.combine */ ''
-    PATH="$out/bin:$PATH" ${buildPackages.texlive.bin.texlinks}/bin/texlinks --cnffile "$out/share/texmf-dist/web2c/fmtutil.cnf" --unlink "$out/bin"
+  postInstall =
+    /* links format -> engine will be regenerated in texlive.combine
+       note: for unlinking, the texlinks patch is irrelevant, so we use
+       the included texlinks.sh to avoid the dependency on bin.texlinks */ ''
+    PATH="$out/bin:$PATH" sh ../texk/texlive/linked_scripts/texlive-extra/texlinks.sh --cnffile "$out/share/texmf-dist/web2c/fmtutil.cnf" --unlink "$out/bin"
   '' + /* a few texmf-dist files are useful; take the rest from pkgs */ ''
     mv "$out/share/texmf-dist/web2c/texmf.cnf" .
     rm -r "$out/share/texmf-dist"
@@ -475,7 +486,7 @@ xindy = stdenv.mkDerivation {
     pkg-config perl
     (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
   ];
-  buildInputs = [ clisp libiconv ];
+  buildInputs = [ clisp libiconv perl ];
 
   configureFlags = [ "--with-clisp-runtime=system" "--disable-xindy-docs" ];
 

@@ -15,6 +15,7 @@
 , home-assistant-chip-clusters
 
 # optionals
+, cryptography
 , home-assistant-chip-core
 
 # tests
@@ -26,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "3.1.0";
+  version = "3.2.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-nNf0Q3J5nrYDinMnl+p3HC4FYMX+GubYmtchfuATWms=";
+    hash = "sha256-T2DB3oWePYR8qKfUeVDMUA5JGdMk/onbpjBt2fWhCuw=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,7 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     server = [
+      cryptography
       home-assistant-chip-core
     ];
   };

@@ -2,6 +2,7 @@
 , rustPlatform
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cargo
 , expat
 , fontconfig
@@ -18,13 +19,13 @@
 # See: https://github.com/Shizcow/dmenu-rs#plugins
 stdenv.mkDerivation rec {
   pname = "dmenu-rs";
-  version = "5.5.1";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "Shizcow";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WpDqBjIZ5ESnoRtWZmvm+gNTLKqxL4IibRVCj0yRIFM=";
+    sha256 = "sha256-6yO2S6j/BD6x/bsuTFKAKvARl1n94KRiPwpmswmUOPU=";
   };
 
   nativeBuildInputs = [
@@ -51,21 +52,19 @@ stdenv.mkDerivation rec {
     lockFile = ./Cargo.lock;
   };
 
-  # The rust-xcb dependency dynamically generates rust code at build time.
-  # This derivation uses nixpkgs rust functions that vendor each cargo
-  # dependency's source code into the READ-ONLY nix store. To avoid the code
-  # generation step failing, we copy the rust-xcb source out of the nix store
-  # and make it writeable. Also, we remove the build's hardcoded c compiler.
-  # See: https://github.com/rust-x-bindings/rust-xcb/tree/v0.8.2
+  # Fix a bug in the makefile when installing.
+  # See https://github.com/Shizcow/dmenu-rs/pull/50
+  patches = let
+    fix-broken-make-install-patch = fetchpatch {
+      url = "https://github.com/Shizcow/dmenu-rs/commit/1f4b3f8a07d73272f8c6f19bfb6ff3de5e042815.patch";
+      sha256 = "sha256-hmXApWg8qngc1vHkHUnB7Lt7wQUOyCSsBmn4HC1j53M=";
+    };
+  in [
+    fix-broken-make-install-patch
+  ];
+
+  # Copy the Cargo.lock stored here in nixpkgs into the build directory.
   postPatch = ''
-    substituteInPlace config.mk --replace "clang" ""
-
-    chmod +w "$NIX_BUILD_TOP/cargo-vendor-dir"
-    mkdir -p "$NIX_BUILD_TOP/cargo-vendor-dir/xcb-0.8.2-readwrite"
-    cp -r --no-preserve=mod "$NIX_BUILD_TOP/cargo-vendor-dir/xcb-0.8.2/." "$NIX_BUILD_TOP/cargo-vendor-dir/xcb-0.8.2-readwrite"
-    unlink "$NIX_BUILD_TOP/cargo-vendor-dir/xcb-0.8.2"
-    mv "$NIX_BUILD_TOP/cargo-vendor-dir/xcb-0.8.2-readwrite" "$NIX_BUILD_TOP/cargo-vendor-dir/xcb-0.8.2"
-
     cp ${./Cargo.lock} src/Cargo.lock
   '';
 
