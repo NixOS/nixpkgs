@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "yara-python";
-  version = "4.3.0";
+  version = "4.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = "yara-python";
     rev = "v${version}";
-    hash = "sha256-r1qsD5PquOVDEVmrgU2QP5bZpsuZuKlfaaHUjY4AHy4=";
+    hash = "sha256-WjH27pOOBXmbj8ghr42TLTp8eAKiTq4eRTYnim56J/8=";
   };
 
   buildInputs = [
