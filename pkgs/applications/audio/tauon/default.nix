@@ -10,6 +10,7 @@
 , gobject-introspection
 , gtk3
 , kissfft
+, libappindicator
 , libnotify
 , libsamplerate
 , libvorbis
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
     flac
     gobject-introspection
     gtk3
+    libappindicator
     libnotify
     libopenmpt
     librsvg
