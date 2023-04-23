@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    dbus
     cmake
     pkg-config
     wayland-scanner
   ];
 
   buildInputs = with lib; [
+    dbus
     glib
     udev
     polkit
