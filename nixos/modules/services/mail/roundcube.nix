@@ -70,7 +70,11 @@ in
       };
       passwordFile = mkOption {
         type = types.str;
-        description = lib.mdDoc "Password file for the postgresql connection. Must be readable by user `nginx`. Ignored if `database.host` is set to `localhost`, as peer authentication will be used.";
+        description = lib.mdDoc ''
+          Password file for the postgresql connection.
+          Must be formated according to PostgreSQL .pgpass standard (see https://www.postgresql.org/docs/current/libpq-pgpass.html)
+          and readable by user `nginx`. Ignored if `database.host` is set to `localhost`, as peer authentication will be used.
+        '';
       };
       dbname = mkOption {
         type = types.str;
@@ -124,8 +128,6 @@ in
       <?php
 
       ${lib.optionalString (!localDB) ''
-        # Password file should be formated according to PostgreSQL .pgpass standard
-        # see https://www.postgresql.org/docs/current/libpq-pgpass.html
         $password = file_get_contents('${cfg.database.passwordFile}');
         $password = preg_split('~\\\\.(*SKIP)(*FAIL)|\:~s', $password);
         $password = end($password);
