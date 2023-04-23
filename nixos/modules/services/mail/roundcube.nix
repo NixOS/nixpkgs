@@ -123,7 +123,15 @@ in
     environment.etc."roundcube/config.inc.php".text = ''
       <?php
 
-      ${lib.optionalString (!localDB) "$password = file_get_contents('${cfg.database.passwordFile}');"}
+      ${lib.optionalString (!localDB) ''
+        # Password file should be formated according to PostgreSQL .pgpass standard
+        # see https://www.postgresql.org/docs/current/libpq-pgpass.html
+        $password = file_get_contents('${cfg.database.passwordFile}');
+        $password = preg_split('~\\\\.(*SKIP)(*FAIL)|\:~s', $password);
+        $password = end($password);
+        $password = str_replace("\\:", ":", $password);
+        $password = str_replace("\\\\", "\\", $password);
+      ''}
 
       $config = array();
       $config['db_dsnw'] = 'pgsql://${cfg.database.username}${lib.optionalString (!localDB) ":' . $password . '"}@${if localDB then "unix(/run/postgresql)" else cfg.database.host}/${cfg.database.dbname}';
