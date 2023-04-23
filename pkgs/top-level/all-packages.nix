@@ -11978,6 +11978,8 @@ with pkgs;
 
   sasview = libsForQt5.callPackage ../applications/science/misc/sasview { };
 
+  schemes = callPackage ../applications/misc/schemes { };
+
   scanbd = callPackage ../tools/graphics/scanbd { };
 
   scdl = callPackage ../tools/misc/scdl { };
