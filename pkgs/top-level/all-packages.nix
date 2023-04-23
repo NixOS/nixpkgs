@@ -31631,6 +31631,8 @@ with pkgs;
 
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
 
+  kubexit = callPackage ../applications/networking/cluster/kubexit { } ;
+
   kup = libsForQt5.callPackage ../applications/misc/kup { };
 
   kupfer = callPackage ../applications/misc/kupfer { };
