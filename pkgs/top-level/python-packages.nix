@@ -16075,6 +16075,8 @@ self: super: with self; {
 
   youless-api = callPackage ../development/python-modules/youless-api { };
 
+  youseedee = callPackage ../development/python-modules/youseedee { };
+
   youtube-dl = callPackage ../tools/misc/youtube-dl { };
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
