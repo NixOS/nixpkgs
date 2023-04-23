@@ -40,8 +40,9 @@ buildPythonPackage rec {
 
   meta = with pkgs.lib; {
     description = "Complete yet simple CSS parser for Python";
+    homepage = "https://tinycss.readthedocs.io";
+    changelog = "https://github.com/Kozea/tinycss/releases/tag/v${version}";
     license = licenses.bsd3;
-    homepage = "https://pythonhosted.org/tinycss/";
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }
