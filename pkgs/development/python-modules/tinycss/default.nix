@@ -1,11 +1,9 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pytest
-, python
-, cython
 , cssutils
-, isPyPy
+, cython
+, fetchPypi
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -21,26 +19,36 @@ buildPythonPackage rec {
     hash = "sha256-EjBvtQ5enn6u74S4Au2HdIi6gONcZyhn9UjAkkp2cW4=";
   };
 
-  nativeCheckInputs = [ pytest ];
-  propagatedBuildInputs = [ cssutils ];
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
+
   nativeBuildInputs = [
     cython
   ];
 
+  propagatedBuildInputs = [
+    cssutils
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   preBuild = ''
-    # Force cython to re-generate this file. If it is present, cython will
+    # Force Cython to re-generate this file. If it is present, Cython will
     # think it is "up to date" even though it was generated with an older,
-    # incompatible version of cython. See
+    # incompatible version of Cython. See
     # https://github.com/Kozea/tinycss/issues/17.
     rm tinycss/speedups.c
   '';
 
-  checkPhase = ''
-    py.test $out/${python.sitePackages}
-  '';
+  # Disable Cython tests
+  TINYCSS_SKIP_SPEEDUPS_TESTS = true;
 
-  # Disable Cython tests for PyPy
-  TINYCSS_SKIP_SPEEDUPS_TESTS = pkgs.lib.optional isPyPy true;
+  pythonImportsCheck = [
+    "tinycss"
+  ];
 
   meta = with lib; {
     description = "Complete yet simple CSS parser for Python";
