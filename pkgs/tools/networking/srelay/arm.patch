@@ -1,0 +1,12 @@
+diff -ru srelay-0.4.8b4.orig/configure srelay-0.4.8b4/configure
+--- srelay-0.4.8b4.orig/configure	2010-12-21 01:11:14.000000000 +1100
++++ srelay-0.4.8b4/configure	2016-06-22 09:03:42.250000345 +1000
+@@ -1875,7 +1875,7 @@
+ 	;;
+   linux*)
+ 	case "$host_cpu" in
+-	  i*86|mips*|powerpc*|sparc*|x86_64*)
++	  i*86|mips*|powerpc*|sparc*|x86_64*|arm*)
+ 	    OS=LINUX
+ 	    cat >>confdefs.h <<\_ACEOF
+ #define LINUX 1

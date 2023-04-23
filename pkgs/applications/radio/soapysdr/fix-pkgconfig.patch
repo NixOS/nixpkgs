@@ -1,0 +1,14 @@
+diff --git a/lib/SoapySDR.in.pc b/lib/SoapySDR.in.pc
+index a1ca698..fd2f4c0 100644
+--- a/lib/SoapySDR.in.pc
++++ b/lib/SoapySDR.in.pc
+@@ -1,7 +1,5 @@
+-prefix=@CMAKE_INSTALL_PREFIX@
+-exec_prefix=${prefix}
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: Soapy SDR
+ Description: Vendor and platform neutral SDR interface library.

@@ -1,0 +1,42 @@
+diff -rc sendmail-8.14.4/devtools/M4/UNIX/library.m4 sendmail-8.14.4-new/devtools/M4/UNIX/library.m4
+*** sendmail-8.14.4/devtools/M4/UNIX/library.m4	Wed Sep  6 00:56:53 2006
+--- sendmail-8.14.4-new/devtools/M4/UNIX/library.m4	Tue Feb  9 11:25:13 2010
+***************
+*** 28,34 ****
+  
+  install-`'bldCURRENT_PRODUCT: bldCURRENT_PRODUCT.a
+  ifdef(`bldINSTALLABLE', `	ifdef(`confMKDIR', `if [ ! -d ${DESTDIR}${bldINSTALL_DIR`'LIBDIR} ]; then confMKDIR -p ${DESTDIR}${bldINSTALL_DIR`'LIBDIR}; else :; fi ')
+! 	${INSTALL} -c -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} bldCURRENT_PRODUCT.a ${DESTDIR}${LIBDIR}')
+  
+  bldCURRENT_PRODUCT-clean:
+  	rm -f ${OBJS} bldCURRENT_PRODUCT.a ${MANPAGES}
+--- 28,34 ----
+  
+  install-`'bldCURRENT_PRODUCT: bldCURRENT_PRODUCT.a
+  ifdef(`bldINSTALLABLE', `	ifdef(`confMKDIR', `if [ ! -d ${DESTDIR}${bldINSTALL_DIR`'LIBDIR} ]; then confMKDIR -p ${DESTDIR}${bldINSTALL_DIR`'LIBDIR}; else :; fi ')
+! 	${INSTALL} -c bldCURRENT_PRODUCT.a ${DESTDIR}${LIBDIR}')
+  
+  bldCURRENT_PRODUCT-clean:
+  	rm -f ${OBJS} bldCURRENT_PRODUCT.a ${MANPAGES}
+diff -rc sendmail-8.14.4/libmilter/Makefile.m4 sendmail-8.14.4-new/libmilter/Makefile.m4
+*** sendmail-8.14.4/libmilter/Makefile.m4	Tue Nov 24 22:59:33 2009
+--- sendmail-8.14.4-new/libmilter/Makefile.m4	Tue Feb  9 10:47:19 2010
+***************
+*** 33,40 ****
+  MFDEF=	${SRCDIR}/inc`'lude/libmilter/mfdef.h
+  install-mfapi: ${MFAPI}
+  	if [ ! -d ${DESTDIR}${INCLUDEDIR}/libmilter ]; then mkdir -p ${DESTDIR}${INCLUDEDIR}/libmilter; else :; fi
+! 	${INSTALL} -c -o ${INCOWN} -g ${INCGRP} -m ${INCMODE} ${MFAPI} ${DESTDIR}${INCLUDEDIR}/libmilter/mfapi.h
+! 	${INSTALL} -c -o ${INCOWN} -g ${INCGRP} -m ${INCMODE} ${MFDEF} ${DESTDIR}${INCLUDEDIR}/libmilter/mfdef.h
+  divert(0)
+  
+  bldFINISH
+--- 33,40 ----
+  MFDEF=	${SRCDIR}/inc`'lude/libmilter/mfdef.h
+  install-mfapi: ${MFAPI}
+  	if [ ! -d ${DESTDIR}${INCLUDEDIR}/libmilter ]; then mkdir -p ${DESTDIR}${INCLUDEDIR}/libmilter; else :; fi
+! 	${INSTALL} -c ${MFAPI} ${DESTDIR}${INCLUDEDIR}/libmilter/mfapi.h
+! 	${INSTALL} -c ${MFDEF} ${DESTDIR}${INCLUDEDIR}/libmilter/mfdef.h
+  divert(0)
+  
+  bldFINISH

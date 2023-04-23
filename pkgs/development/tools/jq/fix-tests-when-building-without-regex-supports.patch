@@ -1,0 +1,38 @@
+From f6a69a6e52b68a92b816a28eb20719a3d0cb51ae Mon Sep 17 00:00:00 2001
+From: Dmitry Bogatov <git#v1@kaction.cc>
+Date: Sat, 27 Mar 2021 00:00:00 +0000
+Subject: [PATCH] Disable some tests when building without regex support
+
+---
+ Makefile.am  | 5 ++++-
+ configure.ac | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index f5c1db594..f3f44bb9e 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -130,7 +130,10 @@ endif
+ 
+ ### Tests (make check)
+ 
+-TESTS = tests/optionaltest tests/mantest tests/jqtest tests/onigtest tests/shtest tests/utf8test tests/base64test
++TESTS = tests/optionaltest tests/jqtest tests/shtest tests/utf8test tests/base64test
++if WITH_ONIGURUMA
++TESTS += tests/mantest tests/onigtest
++endif
+ TESTS_ENVIRONMENT = NO_VALGRIND=$(NO_VALGRIND)
+ 
+ # This is a magic make variable that causes it to treat tests/man.test as a
+diff --git a/configure.ac b/configure.ac
+index 0441d4a2c..987d94e0a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -278,6 +278,7 @@ AC_SUBST(onig_CFLAGS)
+ AC_SUBST(onig_LDFLAGS)
+ 
+ AM_CONDITIONAL([BUILD_ONIGURUMA], [test "x$build_oniguruma" = xyes])
++AM_CONDITIONAL([WITH_ONIGURUMA], [test "x$with_oniguruma" = xyes])
+ AC_SUBST([BUNDLER], ["$bundle_cmd"])
+ 
+ AC_CONFIG_MACRO_DIR([config/m4])

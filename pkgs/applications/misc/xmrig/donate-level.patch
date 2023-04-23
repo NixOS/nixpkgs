@@ -1,0 +1,12 @@
+diff --git a/src/donate.h b/src/donate.h
+--- a/src/donate.h
++++ b/src/donate.h
+@@ -46,6 +46,6 @@
+  */
+-constexpr const int kDefaultDonateLevel = 1;
+-constexpr const int kMinimumDonateLevel = 1;
++constexpr const int kDefaultDonateLevel = @donateLevel@;
++constexpr const int kMinimumDonateLevel = @donateLevel@;
+ 
+ 
+ #endif /* XMRIG_DONATE_H */

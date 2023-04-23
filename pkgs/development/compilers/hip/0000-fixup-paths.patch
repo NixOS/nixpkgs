@@ -1,0 +1,62 @@
+diff --git a/hip-config.cmake.in b/hip-config.cmake.in
+index 89d1224..dc9ba05 100755
+--- a/hip-config.cmake.in
++++ b/hip-config.cmake.in
+@@ -142,7 +142,7 @@ if(HIP_COMPILER STREQUAL "clang")
+       file(TO_CMAKE_PATH "${HIP_PATH}/../lc" HIP_CLANG_ROOT)
+     endif()
+   else()
+-    set(HIP_CLANG_ROOT "${ROCM_PATH}/llvm")
++    set(HIP_CLANG_ROOT "@clang@")
+   endif()
+   if(NOT HIP_CXX_COMPILER)
+     set(HIP_CXX_COMPILER ${CMAKE_CXX_COMPILER})
+@@ -171,7 +171,7 @@ if(HIP_COMPILER STREQUAL "clang")
+     get_filename_component(_HIP_CLANG_BIN_PATH "${_HIP_CLANG_REAL_PATH}" DIRECTORY)
+     get_filename_component(HIP_CLANG_ROOT "${_HIP_CLANG_BIN_PATH}" DIRECTORY)
+   endif()
+-  file(GLOB HIP_CLANG_INCLUDE_SEARCH_PATHS ${HIP_CLANG_ROOT}/lib/clang/*/include)
++  file(GLOB HIP_CLANG_INCLUDE_SEARCH_PATHS "@clang@/resource-root/include")
+   find_path(HIP_CLANG_INCLUDE_PATH stddef.h
+       HINTS
+           ${HIP_CLANG_INCLUDE_SEARCH_PATHS}
+@@ -209,7 +209,7 @@ if(NOT WIN32)
+       "${_IMPORT_PREFIX}/include"
+       #FILE_REORG_BACKWARD_COMPATIBILITY ${_IMPORT_PREFIX}/../include is for Backward compatibility
+       "${_IMPORT_PREFIX}/../include"
+-      ${ROCM_PATH}/include
++      "@rocm_runtime@/include"
+   )
+ 
+   if (NOT HSA_HEADER)
+@@ -291,7 +291,7 @@ if(HIP_COMPILER STREQUAL "clang")
+     endif()
+   endif()
+ 
+-  file(GLOB HIP_CLANGRT_LIB_SEARCH_PATHS "${HIP_CLANG_ROOT}/lib/clang/*/lib/*")
++  file(GLOB HIP_CLANGRT_LIB_SEARCH_PATHS "@clang@/resource-root/lib/*")
+   find_library(CLANGRT_BUILTINS
+     NAMES
+       clang_rt.builtins
+diff --git a/src/hip_embed_pch.sh b/src/hip_embed_pch.sh
+index 0a1572b..2feb19a 100755
+--- a/src/hip_embed_pch.sh
++++ b/src/hip_embed_pch.sh
+@@ -149,7 +149,7 @@ EOF
+ 
+   $LLVM_DIR/bin/clang -cc1 -O3 -emit-pch -triple amdgcn-amd-amdhsa -aux-triple x86_64-unknown-linux-gnu -fcuda-is-device -std=c++17 -fgnuc-version=4.2.1 -o $tmp/hip_wave64.pch -x hip-cpp-output - <$tmp/pch_wave64.cui &&
+ 
+-  $LLVM_DIR/bin/llvm-mc -o hip_pch.o $tmp/hip_pch.mcin --filetype=obj &&
++  @llvm@/bin/llvm-mc -o hip_pch.o $tmp/hip_pch.mcin --filetype=obj &&
+ 
+   rm -rf $tmp
+ }
+@@ -195,7 +195,7 @@ EOF
+   set -x
+   $LLVM_DIR/bin/clang -O3 --rocm-path=$HIP_INC_DIR/.. -std=c++14 -nogpulib --hip-version=4.4 -isystem $HIP_INC_DIR -isystem $HIP_BUILD_INC_DIR -isystem $HIP_AMD_INC_DIR --cuda-device-only -D__HIPCC_RTC__ -x hip $tmp/hipRTC_header.h -E -o $tmp/hiprtc &&
+   cat $macroFile >> $tmp/hiprtc &&
+-  $LLVM_DIR/bin/llvm-mc -o $tmp/hiprtc_header.o $tmp/hipRTC_header.mcin --filetype=obj &&
++  @llvm@/bin/llvm-mc -o $tmp/hiprtc_header.o $tmp/hipRTC_header.mcin --filetype=obj &&
+   $LLVM_DIR/bin/clang $tmp/hiprtc_header.o -o $rtc_shared_lib_out -shared &&
+   $LLVM_DIR/bin/clang -O3 --rocm-path=$HIP_INC_DIR/.. -std=c++14 -nogpulib -nogpuinc -emit-llvm -c -o $tmp/tmp.bc --cuda-device-only -D__HIPCC_RTC__ --offload-arch=gfx906 -x hip-cpp-output $tmp/hiprtc &&
+   rm -rf $tmp

@@ -1,0 +1,28 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 7159c28..0fa43c2 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1248,9 +1248,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "ropey"
+-version = "1.4.1"
++version = "1.5.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "fa0dd9b26e2a102b33d400b7b7d196c81a4014eb96eda90b1c5b48d7215d9633"
++checksum = "bbd22239fafefc42138ca5da064f3c17726a80d2379d817a3521240e78dd0064"
+ dependencies = [
+  "smallvec",
+  "str_indices",
+@@ -1408,9 +1408,9 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
+ 
+ [[package]]
+ name = "str_indices"
+-version = "0.3.2"
++version = "0.4.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "adfad63a1b47951101cd667a85b2959a62910cf03f814fff25df89c460b873f8"
++checksum = "9d9199fa80c817e074620be84374a520062ebac833f358d74b37060ce4a0f2c0"
+ 
+ [[package]]
+ name = "strsim"

@@ -1,0 +1,11 @@
+diff --git a/lib/CatalystX/Script/Server/Starman.pm b/lib/CatalystX/Script/Server/Starman.pm
+index 670bd74..7b3bd2e 100644
+--- a/lib/CatalystX/Script/Server/Starman.pm
++++ b/lib/CatalystX/Script/Server/Starman.pm
+@@ -9,5 +9,5 @@ our $VERSION = '0.02';
+ 
+ extends 'Catalyst::Script::Server';
+ 
+-has '+fork' => ( default => 1, init_arg => undef );
++has '+fork' => ( default => 1 );
+ 
