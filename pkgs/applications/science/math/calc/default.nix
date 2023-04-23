@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.isthe.com/chongo/tech/comp/calc/";
     # The licensing situation depends on readline (see section 3 of the LGPL)
     # If linked against readline then GPLv2 otherwise LGPLv2.1
+    changelog = "https://github.com/lcn2/calc/blob/v${version}/CHANGES";
     license = with licenses; if enableReadline then gpl2Only else lgpl21Only;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;
