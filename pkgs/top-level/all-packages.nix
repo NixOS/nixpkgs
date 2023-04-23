@@ -28916,6 +28916,8 @@ with pkgs;
 
   argo-rollouts = callPackage ../applications/networking/cluster/argo-rollouts { };
 
+  arianna = libsForQt5.callPackage ../applications/misc/arianna { };
+
   ario = callPackage ../applications/audio/ario { };
 
   arion = callPackage ../applications/virtualization/arion { };
