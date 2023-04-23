@@ -9,6 +9,7 @@
 , pixman
 , pkg-config
 , substituteAll
+, wayland-scanner
 , wayland
 , wayland-protocols
 , wlroots_0_16
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -61,17 +63,19 @@ stdenv.mkDerivation (finalAttrs: {
                  else writeText "config.def.h" conf;
   in lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
+  makeFlags = [
+    "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
+    "WAYLAND_SCANNER=wayland-scanner"
+    "PREFIX=$(out)"
+    "MANDIR=$(man)/share/man/man1"
+  ];
+
   preBuild = ''
     makeFlagsArray+=(
       XWAYLAND=${lib.optionalString enableXWayland "-DXWAYLAND"}
       XLIBS=${lib.optionalString enableXWayland "xcb\\ xcb-icccm"}
     )
   '';
-
-  installFlags = [
-    "PREFIX=$(out)"
-    "MANDIR=$(man)/share/man/man1"
-  ];
 
   meta = {
     homepage = "https://github.com/djpohly/dwl/";
