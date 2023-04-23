@@ -31,9 +31,9 @@ in
 {
   inherit mkFlutter wrapFlutter flutterDrv flutter3Patches flutter2Patches;
   stable = flutterDrv {
-    version = "3.7.11";
+    version = "3.7.12";
     dartVersion = "2.19.6";
-    hash = "sha256-H2S8nRpTte6ux34jTkCneGbSMQldrnjH1dI+/pzrcNg=";
+    hash = "sha256-5ExDBQXIpoZ5NwS66seY3m9/V8xDiyq/RdzldAyHdEE=";
     dartHash = {
       x86_64-linux = "sha256-4ezRuwhQHVCxZg5WbzU/tBUDvZVpfCo6coDE4K0UzXo=";
       aarch64-linux = "sha256-pYmClIqOo0sRPOkrcF4xQbo0mHlrr1TkhT1fnNyYNck=";
