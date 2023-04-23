@@ -1,4 +1,4 @@
-{ pkgs
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -6,15 +6,19 @@
 , cython
 , cssutils
 , isPyPy
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tinycss";
   version = "0.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12306fb50e5e9e7eaeef84b802ed877488ba80e35c672867f548c0924a76716e";
+    hash = "sha256-EjBvtQ5enn6u74S4Au2HdIi6gONcZyhn9UjAkkp2cW4=";
   };
 
   nativeCheckInputs = [ pytest ];
@@ -38,7 +42,7 @@ buildPythonPackage rec {
   # Disable Cython tests for PyPy
   TINYCSS_SKIP_SPEEDUPS_TESTS = pkgs.lib.optional isPyPy true;
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "Complete yet simple CSS parser for Python";
     homepage = "https://tinycss.readthedocs.io";
     changelog = "https://github.com/Kozea/tinycss/releases/tag/v${version}";
