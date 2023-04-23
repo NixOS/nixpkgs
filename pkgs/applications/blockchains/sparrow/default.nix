@@ -167,9 +167,9 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "Sparrow";
-      exec = pname;
-      icon = pname;
+      name = "sparrow-desktop";
+      exec = "sparrow-desktop";
+      icon = "sparrow-desktop";
       desktopName = "Sparrow Bitcoin Wallet";
       genericName = "Bitcoin Wallet";
       categories = [ "Finance" "Network" ];
@@ -187,7 +187,7 @@ stdenv.mkDerivation rec {
       for n in 16 24 32 48 64 96 128 256; do
         size=$n"x"$n
         mkdir -p $out/hicolor/$size/apps
-        convert lib/Sparrow.png -resize $size $out/hicolor/$size/apps/sparrow.png
+        convert lib/Sparrow.png -resize $size $out/hicolor/$size/apps/sparrow-desktop.png
         done;
     '';
   };
@@ -197,9 +197,9 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin $out
     ln -s ${sparrow-modules}/modules $out/lib
-    install -D -m 777 ${launcher} $out/bin/sparrow
-    substituteAllInPlace $out/bin/sparrow
-    substituteInPlace $out/bin/sparrow --subst-var-by jdkModules ${jdk-modules}
+    install -D -m 777 ${launcher} $out/bin/sparrow-desktop
+    substituteAllInPlace $out/bin/sparrow-desktop
+    substituteInPlace $out/bin/sparrow-desktop --subst-var-by jdkModules ${jdk-modules}
 
     mkdir -p $out/share/icons
     ln -s ${sparrow-icons}/hicolor $out/share/icons
@@ -222,5 +222,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ emmanuelrosa _1000101 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "sparrow-desktop";
   };
 }
