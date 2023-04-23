@@ -84,8 +84,8 @@ rec {
   stageFun = step: last: { shell ? "${bootstrapTools}/bin/bash"
                          , overrides ? (self: super: { })
                          , extraPreHook ? ""
-                         , extraNativeBuildInputs
-                         , extraBuildInputs
+                         , extraDepsBuildHost
+                         , extraDepsHostTarget
                          , libcxx
                          , allowedRequisites ? null
                          }:
@@ -148,9 +148,9 @@ rec {
       thisStdenv = import ../generic {
         name = "${name}-stdenv-darwin";
 
-        inherit config shell extraBuildInputs;
+        inherit config shell extraDepsHostTarget;
 
-        extraNativeBuildInputs = extraNativeBuildInputs ++ lib.optionals doUpdateAutoTools [
+        extraDepsBuildHost = extraDepsBuildHost ++ lib.optionals doUpdateAutoTools [
           last.pkgs.updateAutotoolsGnuConfigScriptsHook
           last.pkgs.gnu-config
         ];
@@ -364,8 +364,8 @@ rec {
       };
     };
 
-    extraNativeBuildInputs = [ ];
-    extraBuildInputs = [ ];
+    extraDepsBuildHost = [ ];
+    extraDepsHostTarget = [ ];
     libcxx = null;
   };
 
@@ -411,8 +411,8 @@ rec {
     in
     with prevStage; stageFun 1 prevStage {
       extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
-      extraNativeBuildInputs = [ ];
-      extraBuildInputs = [ pkgs.darwin.CF ];
+      extraDepsBuildHost = [ ];
+      extraDepsHostTarget = [ pkgs.darwin.CF ];
       libcxx = pkgs."${finalLlvmPackages}".libcxx;
 
       allowedRequisites =
@@ -469,8 +469,8 @@ rec {
         export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
       '';
 
-      extraNativeBuildInputs = [ pkgs.xz ];
-      extraBuildInputs = [ pkgs.darwin.CF ];
+      extraDepsBuildHost = [ pkgs.xz ];
+      extraDepsHostTarget = [ pkgs.darwin.CF ];
       libcxx = pkgs."${finalLlvmPackages}".libcxx;
 
       allowedRequisites =
@@ -539,8 +539,8 @@ rec {
       # enables patchShebangs above. Unfortunately, patchShebangs ignores our $SHELL setting
       # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
       # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
-      extraNativeBuildInputs = with pkgs; [ xz ];
-      extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
+      extraDepsBuildHost = with pkgs; [ xz ];
+      extraDepsHostTarget = [ pkgs.darwin.CF pkgs.bash ];
       libcxx = pkgs."${finalLlvmPackages}".libcxx;
 
       extraPreHook = ''
@@ -625,8 +625,8 @@ rec {
     in
     with prevStage; stageFun 4 prevStage {
       shell = "${pkgs.bash}/bin/bash";
-      extraNativeBuildInputs = with pkgs; [ xz ];
-      extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
+      extraDepsBuildHost = with pkgs; [ xz ];
+      extraDepsHostTarget = [ pkgs.darwin.CF pkgs.bash ];
       libcxx = pkgs."${finalLlvmPackages}".libcxx;
 
       extraPreHook = ''
@@ -692,11 +692,11 @@ rec {
 
       cc = pkgs."${finalLlvmPackages}".libcxxClang;
 
-      extraNativeBuildInputs = lib.optionals localSystem.isAarch64 [
+      extraDepsBuildHost = lib.optionals localSystem.isAarch64 [
         pkgs.updateAutotoolsGnuConfigScriptsHook
       ];
 
-      extraBuildInputs = [ pkgs.darwin.CF ];
+      extraDepsHostTarget = [ pkgs.darwin.CF ];
 
       extraAttrs = {
         libc = pkgs.darwin.Libsystem;

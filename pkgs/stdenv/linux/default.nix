@@ -156,7 +156,7 @@ let
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun = prevStage:
-    { name, overrides ? (self: super: {}), extraNativeBuildInputs ? [] }:
+    { name, overrides ? (self: super: {}), extraDepsBuildHost ? [] }:
 
     let
 
@@ -165,7 +165,7 @@ let
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-        inherit config extraNativeBuildInputs;
+        inherit config extraDepsBuildHost;
         preHook =
           ''
             # Don't patch #!/interpreter because it leads to retained
@@ -469,7 +469,7 @@ in
     };
 
     # `libtool` comes with obsolete config.sub/config.guess that don't recognize Risc-V.
-    extraNativeBuildInputs =
+    extraDepsBuildHost =
       lib.optional (localSystem.isRiscV) prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
@@ -507,7 +507,7 @@ in
         passthru = a.passthru // { inherit (self) gmp mpfr libmpc isl; };
       });
     };
-    extraNativeBuildInputs = [ prevStage.patchelf ] ++
+    extraDepsBuildHost = [ prevStage.patchelf ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
       lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
                    prevStage.updateAutotoolsGnuConfigScriptsHook;
@@ -562,7 +562,7 @@ in
         shell = self.bash + "/bin/bash";
       };
     };
-    extraNativeBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
+    extraDepsBuildHost = [ prevStage.patchelf prevStage.xz ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
       lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
                    prevStage.updateAutotoolsGnuConfigScriptsHook;
@@ -599,7 +599,7 @@ in
       initialPath =
         ((import ../generic/common-path.nix) {pkgs = prevStage;});
 
-      extraNativeBuildInputs = [ prevStage.patchelf ] ++
+      extraDepsBuildHost = [ prevStage.patchelf ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
         lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
         prevStage.updateAutotoolsGnuConfigScriptsHook;

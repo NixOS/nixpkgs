@@ -66,7 +66,7 @@ let
     export lt_cv_deplibs_check_method=pass_all
   '';
 
-  extraNativeBuildInputsCygwin = [
+  extraDepsBuildHostCygwin = [
     ../cygwin/all-buildinputs-as-runtimedep.sh
     ../cygwin/wrap-exes-to-find-dlls.sh
   ] ++ (if system == "i686-cygwin" then [
@@ -78,7 +78,7 @@ let
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
   makeStdenv =
-    { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }), extraNativeBuildInputs ? [] }:
+    { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }), extraDepsBuildHost ? [] }:
 
     import ../generic {
       buildPlatform = localSystem;
@@ -94,9 +94,9 @@ let
         if system == "x86_64-cygwin" then prehookCygwin else
         prehookBase;
 
-      extraNativeBuildInputs = extraNativeBuildInputs ++
-        (if system == "i686-cygwin" then extraNativeBuildInputsCygwin else
-        if system == "x86_64-cygwin" then extraNativeBuildInputsCygwin else
+      extraDepsBuildHost = extraDepsBuildHost ++
+        (if system == "i686-cygwin" then extraDepsBuildHostCygwin else
+        if system == "x86_64-cygwin" then extraDepsBuildHostCygwin else
         []);
 
       initialPath = extraPath ++ path;
@@ -163,7 +163,7 @@ in
       inherit (prevStage.stdenv) cc fetchurl;
       extraPath = [ prevStage.xz ];
       overrides = self: super: { inherit (prevStage) xz; };
-      extraNativeBuildInputs = if localSystem.isLinux then [ prevStage.patchelf ] else [];
+      extraDepsBuildHost = if localSystem.isLinux then [ prevStage.patchelf ] else [];
     };
   })
 
