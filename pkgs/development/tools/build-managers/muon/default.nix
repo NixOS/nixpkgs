@@ -17,14 +17,14 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "muon"
           + lib.optionalString embedSamurai "-embedded-samurai";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromSourcehut {
     name = "muon-src";
     owner = "~lattis";
     repo = "muon";
     rev = finalAttrs.version;
-    hash = "sha256-m382/Y+qOYk7hHdDdOpiYWNWrqpnWPCG4AKGGkmLt4o=";
+    hash = "sha256-ZHWyUV/BqM3ihauXDqDVkZURDDbBiRcEzptyGQmw94I=";
   };
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" ];
