@@ -1554,6 +1554,22 @@ let
         };
       };
 
+      janet-lang.vscode-janet = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-janet";
+          publisher = "janet-lang";
+          version = "0.0.2";
+          sha256 = "sha256-oj0e++z2BtadIXOnTlocIIHliYweZ1iyrV08DwatfLI=";
+        };
+        meta = {
+          description = "Janet language support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=janet-lang.vscode-janet";
+          homepage = "https://github.com/janet-lang/vscode-janet";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.wackbyte ];
+        };
+      };
+
       jdinhlife.gruvbox = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gruvbox";
