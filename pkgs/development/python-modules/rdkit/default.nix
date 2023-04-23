@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2022.09.1";
+  version = "2022.09.5";
   format = "other";
 
   src =
@@ -51,7 +51,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      hash = "sha256-AaawjCv3/ShByOKU0c37/hjuyfD7NhFC8UngDoG7C0s=";
+      hash = "sha256-zsiH4gNCAeXDLjHhDsKwZMkTvVCWG9LwAaEKNOuqV2Q=";
     };
 
   unpackPhase = ''
@@ -59,7 +59,9 @@ buildPythonPackage rec {
     find . -type d -exec chmod +w {} +
 
     mkdir External/AvalonTools/avalon
-    ln -s ${external.avalon}/* External/AvalonTools/avalon
+    # In buildPhase, CMake patches the file in this directory
+    # see https://github.com/rdkit/rdkit/pull/5928
+    cp -r ${external.avalon}/* External/AvalonTools/avalon
 
     mkdir External/YAeHMOP/yaehmop
     ln -s ${external.yaehmop}/* External/YAeHMOP/yaehmop

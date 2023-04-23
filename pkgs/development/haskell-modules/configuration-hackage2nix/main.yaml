@@ -46,6 +46,8 @@ default-package-overrides:
   - pandoc-crossref < 0.3.15.0
   # Needs to match hspec which is tracked in stackage
   - hspec-api < 2.10
+  # 2023-04-13: latest version requires ghc-events >= 0.19 but it's not on LTS yet
+  - eventlog2html < 0.10
 
 extra-packages:
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
@@ -132,7 +134,7 @@ extra-packages:
   - retrie < 1.2.0.0                    # 2022-12-30: required for hls on ghc < 9.2
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - primitive == 0.7.4.0                # 2023-03-04: primitive 0.8 is not compatible with too many packages on ghc 9.4 as of now
-  - fourmolu == 0.10.0.0                # 2023-04-03: for hls-fourmolu-plugin 1.1.1.0
+  - fourmolu == 0.10.1.0                # 2023-04-18: for hls-fourmolu-plugin 1.1.1.0
 
 package-maintainers:
   abbradar:
@@ -269,7 +271,10 @@ package-maintainers:
     - clay
     - ema
     - emanote
+    - eventlog2html
     - generic-optics
+    - ghc-debug-brick
+    - ghc-debug-stub
     - ghcid
     - graphql-client
     - haskell-language-server

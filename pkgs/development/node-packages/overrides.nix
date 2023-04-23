@@ -176,6 +176,10 @@ final: prev: {
     '';
   };
 
+  firebase-tools = prev.firebase-tools.override {
+    nativeBuildInputs = lib.optionals stdenv.isDarwin  [ pkgs.xcbuild ];
+  };
+
   flood = prev.flood.override {
     buildInputs = [ final.node-pre-gyp ];
   };
@@ -263,6 +267,8 @@ final: prev: {
       pixman
       cairo
       pango
+    ] ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreText
     ];
   };
 
@@ -412,7 +418,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha512-xqVper4mbwl32BWzLpdznHAYvYDWQQWK2tBfXjdUD397XaveRyAP7SkBZ6kFlIg8kKayF4hvuaVtYwXd9BodAg==";
+      hash = "sha512-L9mqjnSmvWIRCYJ9mQkwCtj4+JDYYTdhoyo8hlsHNDXaZLh/b4hR0IoKIBbTKxZuyHQzLopb/+0Rvb69uGV7uA==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \

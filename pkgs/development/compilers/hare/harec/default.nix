@@ -4,7 +4,7 @@
 , qbe
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
   version = "unstable-2023-02-18";
 

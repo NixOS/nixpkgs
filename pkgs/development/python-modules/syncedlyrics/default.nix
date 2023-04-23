@@ -5,6 +5,7 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , rapidfuzz
 , requests
 }:
@@ -25,6 +26,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "rapidfuzz"
   ];
 
   propagatedBuildInputs = [

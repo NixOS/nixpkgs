@@ -318,7 +318,7 @@ let
 
         listenString = { addr, port, ssl, extraParameters ? [], ... }:
           # UDP listener for QUIC transport protocol.
-          (if ssl && vhost.quic then "
+          (optionalString (ssl && vhost.quic) ("
             listen ${addr}:${toString port} quic "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
@@ -326,7 +326,7 @@ let
             let inCompatibleParameters = [ "ssl" "proxy_protocol" "http2" ];
                 isCompatibleParameter = param: !(any (p: p == param) inCompatibleParameters);
             in filter isCompatibleParameter extraParameters))
-          + ";" else "")
+          + ";"))
           + "
 
             listen ${addr}:${toString port} "

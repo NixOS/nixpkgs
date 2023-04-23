@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/dde-calendar" "$out/bin/dde-calendar"
     substituteInPlace calendar-service/{src/{csystemdtimercontrol.cpp,jobremindmanager.cpp},assets/{data/com.dde.calendarserver.calendar.service,dde-calendar-service.desktop}} \
       --replace "/bin/bash" "${runtimeShell}"
+
+    substituteInPlace CMakeLists.txt \
+      --replace "ADD_SUBDIRECTORY(tests)" " "
   '';
 
   nativeBuildInputs = [

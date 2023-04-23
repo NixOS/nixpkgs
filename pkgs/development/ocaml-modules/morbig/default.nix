@@ -1,4 +1,6 @@
-{ lib, buildDunePackage, fetchFromGitHub, ocamlPackages }:
+{ lib, buildDunePackage, fetchFromGitHub
+, menhir, menhirLib, ppx_deriving_yojson, visitors, yojson
+}:
 
 buildDunePackage rec {
   pname = "morbig";
@@ -13,11 +15,11 @@ buildDunePackage rec {
 
   duneVersion = "3";
 
-  nativeBuildInputs = with ocamlPackages; [
+  nativeBuildInputs = [
     menhir
   ];
 
-  propagatedBuildInputs = with ocamlPackages; [
+  propagatedBuildInputs = [
     menhirLib
     ppx_deriving_yojson
     visitors

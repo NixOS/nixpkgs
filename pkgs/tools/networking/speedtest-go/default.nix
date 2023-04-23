@@ -5,18 +5,18 @@
 
 buildGoModule rec {
   pname = "speedtest-go";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "showwin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9jLreb3tEw5bCVka6/BzGbsd5V3+9OHNzENe/IxL1YM=";
+    hash = "sha256-LpsesUC0Cj9pkc/6c0wDEl6X9Y6GqwACwVv7J31TTg0=";
   };
 
-  vendorHash = "sha256-A54G3fvs1bXSwPHVUNFC9VJqydqYR5t4I2fIBvrVoRE=";
+  vendorHash = "sha256-wQqAX7YuxxTiMWmV9LRoXunGMMzs12UyHbf4VvbQF1E=";
 
-  subPackages = [ "speedtest.go" ];
+  excludedPackages = [ "example" ];
 
   # test suite requires network
   doCheck = false;
@@ -27,6 +27,5 @@ buildGoModule rec {
     changelog = "https://github.com/showwin/speedtest-go/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ aleksana ];
-    mainProgram = "speedtest";
   };
 }

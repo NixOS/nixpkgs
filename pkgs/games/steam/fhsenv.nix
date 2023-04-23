@@ -1,4 +1,4 @@
-{ lib, stdenv, writeShellScript, buildFHSUserEnv, steam, glxinfo-i686
+{ lib, stdenv, writeShellScript, buildFHSEnv, steam, glxinfo-i686
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
@@ -55,7 +55,7 @@ let
 
   envScript = lib.toShellVars extraEnv;
 
-in buildFHSUserEnv rec {
+in buildFHSEnv rec {
   name = "steam";
 
   targetPkgs = pkgs: with pkgs; [
@@ -270,7 +270,7 @@ in buildFHSUserEnv rec {
   # breaks the ability for application to reference shared memory.
   unsharePid = false;
 
-  passthru.run = buildFHSUserEnv {
+  passthru.run = buildFHSEnv {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;

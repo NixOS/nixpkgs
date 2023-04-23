@@ -473,6 +473,7 @@ broken-packages:
   - brick-dropdownmenu
   - brick-filetree
   - brick-list-search #  failure  in job https://hydra.nixos.org/build/211236614 at 2023-03-13
+  - brick-list-skip #  failure  in job https://hydra.nixos.org/build/215850872 at 2023-04-17
   - bricks-internal
   - brick-tabular-list
   - brillig
@@ -1404,7 +1405,6 @@ broken-packages:
   - eved
   - event
   - event-driven
-  - eventlog2html #  failure  in job https://hydra.nixos.org/build/214597490 at 2023-04-07
   - eventsource-api
   - eventsourced
   - eventstore
@@ -1744,7 +1744,6 @@ broken-packages:
   - ghc-clippy-plugin
   - ghc-core-smallstep
   - ghc-datasize
-  - ghc-debug-client
   - ghc-dump-tree
   - ghc-dup
   - ghc-events-analyze
@@ -3465,6 +3464,7 @@ broken-packages:
   - monoidplus
   - monoids
   - monoid-statistics
+  - monomer-flatpak-example #  failure  in job https://hydra.nixos.org/build/215851035 at 2023-04-17
   - monopati
   - monus
   - monzo
@@ -3742,6 +3742,7 @@ broken-packages:
   - opaleye-trans
   - open-adt
   - OpenAFP
+  - openai-hs # failure building library in job https://hydra.nixos.org/build/215850908 at 2023-04-17
   - openapi3
   - openapi3-code-generator
   - openapi-petstore
@@ -3985,6 +3986,7 @@ broken-packages:
   - pg-store
   - pgstream
   - pg-transact
+  - pgvector #  failure  in job https://hydra.nixos.org/build/215851675 at 2023-04-17
   - phasechange
   - phaser
   - phoityne
@@ -4973,6 +4975,7 @@ broken-packages:
   - softfloat-hs
   - solar
   - solga
+  - som # test failure in job https://hydra.nixos.org/build/216744749 at 2023-04-20
   - Sonnex
   - sorted
   - sorting
@@ -5252,6 +5255,7 @@ broken-packages:
   - tasty-hedgehog-coverage
   - tasty-json
   - tasty-mgolden
+  - tasty-papi # test failure in job https://hydra.nixos.org/build/216756583 at 2023-04-20
   - tasty-stats
   - tasty-test-vector
   - TastyTLT
@@ -5699,6 +5703,7 @@ broken-packages:
   - vector-fftw
   - vector-functorlazy
   - vector-heterogenous
+  - vector-quicksort # dependency missing in job https://hydra.nixos.org/build/216753081 at 2023-04-20
   - vector-random
   - vector-read-instances
   - vector-space-map

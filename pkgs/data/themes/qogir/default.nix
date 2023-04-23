@@ -24,13 +24,13 @@ lib.checkListOfEnum "${pname}: tweaks" [ "image" "square" "round" ] tweaks
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "2022-11-09";
+  version = "2023-02-27";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "VmMlebERe6LDyfD/lo8o4TvNrJ37m2OHC25JkUc6sig=";
+    sha256 = "oBUBSPlOCBEaRRFK5ZyoGlk+gwcE8LtdwxvL+iTfuMA=";
   };
 
   nativeBuildInputs = [
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Flat Design theme for GTK based desktop environments";
-    homepage = "https://vinceliuice.github.io/Qogir-theme";
+    homepage = "https://github.com/vinceliuice/Qogir-theme";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

@@ -247,6 +247,9 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
+  # 2023-04-17: https://gitlab.haskell.org/ghc/ghc-debug/-/issues/20
+  ghc-debug-brick = doJailbreak super.ghc-debug-brick;
+
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
@@ -741,9 +744,6 @@ self: super: {
   Win32 = overrideCabal (drv: { broken = !pkgs.stdenv.isCygwin; }) super.Win32;
   inline-c-win32 = dontDistribute super.inline-c-win32;
   Southpaw = dontDistribute super.Southpaw;
-
-  # Hydra no longer allows building texlive packages.
-  lhs2tex = dontDistribute super.lhs2tex;
 
   # https://ghc.haskell.org/trac/ghc/ticket/9825
   vimus = overrideCabal (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; }) super.vimus;
@@ -1423,12 +1423,21 @@ self: super: {
     });
   };
 
-  jsaddle-webkit2gtk = overrideCabal (old: {
-    postPatch = old.postPatch or "" + ''
-      sed -i 's/bytestring.*0.11/bytestring/' jsaddle-webkit2gtk.cabal
-    '';
-  }) super.jsaddle-webkit2gtk;
 
+  # 2023-04-16: https://github.com/ghcjs/jsaddle/pull/137
+  jsaddle-webkit2gtk = lib.pipe super.jsaddle-webkit2gtk
+    [
+      (appendPatch (fetchpatch {
+        url = "https://github.com/ghcjs/jsaddle/commit/f990366f19d23a8008d482572d52351c1a6f7215.patch";
+        hash = "sha256-IbkJrlyG6q5rqMIhn//Dt3u6T314Pug+mQMwwe0LK5w=";
+        relative = "jsaddle-webkit2gtk";
+      }))
+      (overrideCabal (old: {
+        postPatch = old.postPatch or "" + ''
+          sed -i 's/bytestring.*0.11/bytestring/' jsaddle-webkit2gtk.cabal
+        '';
+      }))
+    ];
 
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
@@ -2477,7 +2486,7 @@ self: super: {
   # 2022-11-15: Needs newer witch package and brick 1.3 which in turn works with text-zipper 0.12
   # Other dependencies are resolved with doJailbreak for both swarm and brick_1_3
   swarm = doJailbreak (super.swarm.override {
-    brick = doJailbreak (dontCheck super.brick_1_6);
+    brick = doJailbreak (dontCheck super.brick_1_7);
   });
 
   # Too strict upper bound on bytestring

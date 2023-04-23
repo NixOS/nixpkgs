@@ -44,10 +44,8 @@ mkDerivation {
 
   cmakeFlags = lib.optional (defaultDriver != "MYSQL") "-DDATABASE_BACKEND=${defaultDriver}";
 
-  # compatibility symlinks for kmymoney, can probably be removed in next kde bump
   postInstall = ''
-    ln -s $dev/include/KF5/AkonadiCore/Akonadi/Collection $dev/include/KF5/AkonadiCore/Collection
-    ln -s $dev/include/KF5/AkonadiCore/Akonadi/ItemFetchScope $dev/include/KF5/AkonadiCore/ItemFetchScope
-    ln -s $dev/include/KF5/AkonadiCore/Akonadi/RecursiveItemFetchJob $dev/include/KF5/AkonadiCore/RecursiveItemFetchJob
+    # added as an include directory by cmake files and fails to compile if it's missing
+    mkdir -p "$dev/include/KF5"
   '';
 }

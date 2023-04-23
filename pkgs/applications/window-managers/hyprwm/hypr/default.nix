@@ -20,7 +20,7 @@
 , xmodmap
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hypr";
   version = "unstable-2023-01-26";
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation (self: {
   '';
 
   meta = with lib; {
-    inherit (self.src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "A tiling X11 window manager written in modern C++";
     license = licenses.bsd3;
     maintainers = with maintainers; [ AndersonTorres ];

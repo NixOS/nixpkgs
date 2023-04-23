@@ -5,7 +5,8 @@
 , version
 , desktopName
 , longDescription
-, buildFHSUserEnv
+, broken ? false
+, buildFHSEnv
 , extraBuildInputs ? [ ]
 , jdk
 , stdenv
@@ -68,7 +69,7 @@ let
 
 in
 # Package with cups in FHS sandbox, because JAVA bin expects "/usr/bin/lpr" for printing.
-buildFHSUserEnv {
+buildFHSEnv {
   name = pname;
   targetPkgs = pkgs: [
     cups
@@ -94,6 +95,7 @@ buildFHSUserEnv {
     ];
     license = licenses.unfree;
     platforms = platforms.linux;
+    inherit broken;
     mainProgram = pname;
     maintainers = [ maintainers.pwoelfel ];
   };

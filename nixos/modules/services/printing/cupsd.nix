@@ -317,6 +317,7 @@ in
     environment.etc.cups.source = "/var/lib/cups";
 
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
+    services.udev.packages = cfg.drivers;
 
     # Allow asswordless printer admin for members of wheel group
     security.polkit.extraConfig = mkIf polkitEnabled ''

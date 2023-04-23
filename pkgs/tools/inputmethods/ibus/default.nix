@@ -1,6 +1,7 @@
 { lib, stdenv
 , substituteAll
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , gettext
 , makeWrapper
@@ -56,13 +57,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.27";
+  version = "1.5.28";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "sha256-DwX7SYRb18C0Lz2ySPS3yV99Q1xQezs0Ls2P7Rbtk5Q=";
+    sha256 = "sha256-zjV+QkhVkrHFs9Vt1FpbvmS4nRHxwKaKU3mQkSgyLaQ=";
   };
 
   patches = [
@@ -72,6 +73,12 @@ stdenv.mkDerivation rec {
       pythonSitePackages = python3.sitePackages;
     })
     ./build-without-dbus-launch.patch
+    # unicode and emoji input are broken before 1.5.29
+    # https://github.com/NixOS/nixpkgs/issues/226526
+    (fetchpatch {
+      url = "https://github.com/ibus/ibus/commit/7c8abbe89403c2fcb08e3fda42049a97187e53ab.patch";
+      hash = "sha256-59HzAdLq8ahrF7K+tFGLjTodwIiTkJGEkFe8quqIkhU=";
+    })
   ];
 
   outputs = [ "out" "dev" "installedTests" ];
@@ -97,6 +104,12 @@ stdenv.mkDerivation rec {
     "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
   ];
+
+  # missing make dependency
+  # https://github.com/NixOS/nixpkgs/pull/218120#issuecomment-1514027173
+  preBuild = ''
+    make -C src ibusenumtypes.h
+  '';
 
   makeFlags = [
     "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"

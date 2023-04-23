@@ -10,11 +10,13 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
   {
     imports = [ ./common/user-account.nix ];
+
+    fonts.fonts = with pkgs; [ dejavu_fonts ];
+
     services.cage = {
       enable = true;
       user = "alice";
-      # Disable color and bold and use a larger font to make OCR easier:
-      program = "${pkgs.xterm}/bin/xterm -cm -pc -fa Monospace -fs 24";
+      program = "${pkgs.xterm}/bin/xterm";
     };
 
     # Need to switch to a different GPU driver than the default one (-vga std) so that Cage can launch:
