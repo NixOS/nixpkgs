@@ -29,7 +29,7 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/helm-ls $out/bin/helm_ls
-    installShellCompletion --cmd roxctl \
+    installShellCompletion --cmd helm_ls \
       --bash <($out/bin/helm_ls completion bash) \
       --fish <($out/bin/helm_ls completion fish) \
       --zsh <($out/bin/helm_ls completion zsh)
