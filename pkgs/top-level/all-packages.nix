@@ -3474,6 +3474,8 @@ with pkgs;
 
   itd = callPackage ../applications/misc/itd { };
 
+  kavita = callPackage ../servers/web-apps/kavita { };
+
   kord = callPackage ../applications/misc/kord { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
