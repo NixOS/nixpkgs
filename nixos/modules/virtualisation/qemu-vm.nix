@@ -574,12 +574,15 @@ in
     virtualisation.writableStore =
       mkOption {
         type = types.bool;
-        default = true; # FIXME
+        default = cfg.mountHostNixStore;
+        defaultText = literalExpression "cfg.mountHostNixStore";
         description =
           lib.mdDoc ''
             If enabled, the Nix store in the VM is made writable by
             layering an overlay filesystem on top of the host's Nix
             store.
+
+            By default, this is enabled if you mount a host Nix store.
           '';
       };
 
@@ -713,6 +716,21 @@ in
           For applications which do a lot of reads from the store,
           this can drastically improve performance, but at the cost of
           disk space and image build time.
+
+          As an alternative, you can use a bootloader which will provide you
+          with a full NixOS system image containing a Nix store and
+          avoid mounting the host nix store through
+          {option}`virtualisation.mountHostNixStore`.
+        '';
+      };
+
+    virtualisation.mountHostNixStore =
+      mkOption {
+        type = types.bool;
+        default = !cfg.useNixStoreImage && !cfg.useBootLoader;
+        defaultText = literalExpression "!cfg.useNixStoreImage && !cfg.useBootLoader";
+        description = lib.mdDoc ''
+          Mount the host Nix store as a 9p mount.
         '';
       };
 
@@ -933,7 +951,7 @@ in
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
     virtualisation.sharedDirectories = {
-      nix-store = mkIf (!cfg.useNixStoreImage) {
+      nix-store = mkIf cfg.mountHostNixStore {
         source = builtins.storeDir;
         target = "/nix/store";
       };
