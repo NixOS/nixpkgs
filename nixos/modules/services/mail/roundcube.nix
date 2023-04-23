@@ -225,6 +225,7 @@ in
         path = [ config.services.postgresql.package ];
       })
       {
+        after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         script = let
           psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} ${pkgs.postgresql}/bin/psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
