@@ -8,14 +8,14 @@
 , enableReadline ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calc";
   version = "2.14.1.5";
 
   src = fetchurl {
     urls = [
-      "https://github.com/lcn2/calc/releases/download/v${version}/calc-${version}.tar.bz2"
-      "http://www.isthe.com/chongo/src/calc/calc-${version}.tar.bz2"
+      "https://github.com/lcn2/calc/releases/download/v${finalAttrs.version}/calc-${finalAttrs.version}.tar.bz2"
+      "http://www.isthe.com/chongo/src/calc/calc-${finalAttrs.version}.tar.bz2"
     ];
     hash = "sha256-bPacYnEJBdQsIP+Z8D/ODskyEcvhgAy3ra4wasYMo6A=";
   };
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.isthe.com/chongo/tech/comp/calc/";
     description = "C-style arbitrary precision calculator";
-    changelog = "https://github.com/lcn2/calc/blob/v${version}/CHANGES";
+    changelog = "https://github.com/lcn2/calc/blob/v${finalAttrs.version}/CHANGES";
     # The licensing situation depends on readline (see section 3 of the LGPL)
     # If linked against readline then GPLv2 otherwise LGPLv2.1
     license = if enableReadline
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ matthewbauer ];
     platforms = lib.platforms.all;
   };
-}
+})
