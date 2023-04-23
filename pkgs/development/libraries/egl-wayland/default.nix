@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # Declares an includedir but doesn't install any headers
+    # CMake's `pkg_check_modules(NAME wayland-eglstream IMPORTED_TARGET)` considers this an error
+    sed -i -e '/includedir/d' wayland-eglstream.pc.in
+  '';
+
   depsBuildBuild = [
     pkg-config
   ];
@@ -58,12 +64,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     eglexternalplatform
   ];
-
-  postFixup = ''
-    # Doubled prefix in pc file after postbuild hook replaces includedir prefix variable with dev output path
-    substituteInPlace $dev/lib/pkgconfig/wayland-eglstream.pc \
-      --replace "=$dev/$dev" "=$dev"
-  '';
 
   meta = with lib; {
     description = "The EGLStream-based Wayland external platform";
