@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fbergroth ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
   };
 }
