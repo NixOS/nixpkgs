@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , aiohttp
+, async-timeout
+, orjson
 , pythonOlder
 , requests
 , websocket-client
@@ -10,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "sense-energy";
-  version = "0.11.1";
+  version = "0.11.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,15 +21,18 @@ buildPythonPackage rec {
     owner = "scottbonline";
     repo = "sense";
     rev = "refs/tags/${version}";
-    hash = "sha256-lfqQelAHh/xJH1jPz3JK32AIEA7ghUP6Mnya2M34V/w=";
+    hash = "sha256-i6XI6hiQTOGHB4KcDgz/MlYAhdEKaElLfNMq2R0fgu8=";
   };
 
   postPatch = ''
-    sed -i '/download_url/d' setup.py
+    substituteInPlace setup.py \
+      --replace "{{VERSION_PLACEHOLDER}}" "${version}"
   '';
 
   propagatedBuildInputs = [
     aiohttp
+    async-timeout
+    orjson
     requests
     websocket-client
     websockets

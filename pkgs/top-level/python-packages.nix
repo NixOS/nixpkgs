@@ -7193,6 +7193,8 @@ self: super: with self; {
 
   peaqevcore = callPackage ../development/python-modules/peaqevcore { };
 
+  pegen = callPackage ../development/python-modules/pegen { };
+
   pebble = callPackage ../development/python-modules/pebble { };
 
   pecan = callPackage ../development/python-modules/pecan { };
