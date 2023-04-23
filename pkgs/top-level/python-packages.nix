@@ -15569,6 +15569,8 @@ self: super: with self; {
 
   vg = callPackage ../development/python-modules/vg { };
 
+  vharfbuzz = callPackage ../development/python-modules/vharfbuzz { };
+
   videocr = callPackage ../development/python-modules/videocr { };
 
   vidstab = callPackage ../development/python-modules/vidstab { };
