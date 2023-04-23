@@ -20,14 +20,14 @@ buildPgxExtension rec {
     sha256 = "sha256-vyEfQMGguHrHYdBEEmbev29L2uCa/4xL9DpGIniUwfI=";
   };
 
-  cargoSha256 = "sha256-vq/R9Kd0a9ckgEYm9Kt2J+RdyiHHYVutNEM4dcRViUo=";
+  cargoSha256 = "sha256-VK9DObkg4trcGUXxxISCd0zqU3vc1Qt6NxqpgKIARCQ=";
 
   cargoPatches = [
     # there is a duplicate definition in the lock file which fails to build with buildRustPackage
     (fetchpatch {
       name = "cargo-vendor.patch";
-      url = "https://github.com/timescale/promscale_extension/commit/3cef3f26f72ebf52d8800910ea655cac09312c57.patch";
-      hash = "sha256-bXwvOv6T09EsCu+QCOCZny+V/Cy1UvCP6zlE8TdBlEg=";
+      url = "https://github.com/timescale/promscale_extension/commit/3048bd959430e9abc2c1d5c772ab6b4fc1dc6a95.patch";
+      hash = "sha256-xTk4Ml8GN06QlJdrvAdVK21r30ZR/S83y5A5jJPdOw4=";
     })
   ];
 
