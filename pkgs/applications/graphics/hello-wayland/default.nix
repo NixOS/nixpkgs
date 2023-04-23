@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub
 , imagemagick, pkg-config, wayland, wayland-protocols
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation {
@@ -22,6 +23,8 @@ stdenv.mkDerivation {
     install hello-wayland $out/bin
     runHook postBuild
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Hello world Wayland client";
