@@ -1,4 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch
+, buildPackages
+, pkgsBuildBuild
+, pkgsBuildTarget
 # Channel data:
 , channel, upstream-info
 # Helper functions:
@@ -8,7 +11,7 @@
 , ninja, pkg-config
 , python3, perl
 , which
-, llvmPackages
+, llvmPackages_attrName
 , rustc
 # postPatch:
 , pkgsBuildHost
@@ -130,7 +133,7 @@ let
       ninja pkg-config
       python3WithPackages perl
       which
-      llvmPackages.bintools
+      buildPackages.${llvmPackages_attrName}.bintools
       bison gperf
     ];
 
@@ -308,7 +311,7 @@ let
       rtc_use_pipewire = true;
       # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
       chrome_pgo_phase = 0;
-      clang_base_path = "${llvmPackages.stdenv.cc}";
+      clang_base_path = "${pkgsBuildTarget.${llvmPackages_attrName}.stdenv.cc}";
       use_qt = false;
       # To fix the build as we don't provide libffi_pic.a
       # (ld.lld: error: unable to find library -l:libffi_pic.a):

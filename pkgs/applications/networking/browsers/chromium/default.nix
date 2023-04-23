@@ -18,11 +18,15 @@
 , commandLineArgs ? ""
 , pkgsBuildTarget
 , pkgsBuildBuild
+, pkgs
 }:
 
 let
-  llvmPackages = pkgsBuildTarget.llvmPackages_16;
-  stdenv = llvmPackages.stdenv;
+  # Sometimes we access `llvmPackages` via `pkgs`, and other times
+  # via `pkgsFooBar`, so a string (attrname) is the only way to have
+  # a single point of control over the LLVM version used.
+  llvmPackages_attrName = "llvmPackages_16";
+  stdenv = pkgs.${llvmPackages_attrName}.stdenv;
 
   upstream-info = (lib.importJSON ./upstream-info.json).${channel};
 
@@ -44,7 +48,7 @@ let
   callPackage = newScope chromium;
 
   chromium = rec {
-    inherit stdenv llvmPackages upstream-info;
+    inherit stdenv llvmPackages_attrName upstream-info;
 
     mkChromiumDerivation = callPackage ./common.nix ({
       inherit channel chromiumVersionAtLeast versionRange;
