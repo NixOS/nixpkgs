@@ -950,11 +950,16 @@ runTests {
   };
 
   testToLuaAttrsetWithSpaceInKey = {
-    expr = generators.toLua {} { "some space and double-quote (\")" = generators.mkLuaInline ''"abc" .. "def"''; };
+    expr = generators.toLua {} { "some space and double-quote (\")" = 42; };
     expected = ''
       {
-        ["some space and double-quote (\")"] = ("abc" .. "def")
+        ["some space and double-quote (\")"] = 42
       }'';
+  };
+
+  testToLuaWithoutMultiline = {
+    expr = generators.toLua { multiline = false; } [ 41 43 ];
+    expected = ''{ 41, 43 }'';
   };
 
   testToLuaBasicExample = {

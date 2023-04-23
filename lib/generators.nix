@@ -432,6 +432,7 @@ ${expr "" v}
    Lua-inlines that can be construted by mkLuaInline function.
 
    Configuration:
+     * multiline - by default is true which results in indented block-like view.
      * indent - initial indent.
 
    Attention:
@@ -459,12 +460,19 @@ ${expr "" v}
    Type:
      toLua :: AttrSet -> Any -> String
   */
-  toLua = { indent ? "" }@args: v:
+  toLua = {
+    /* If this option is true, the output is indented with newlines for attribute sets and lists */
+    multiline ? true,
+    /* Initial indentation level */
+    indent ? ""
+  }@args: v:
     with builtins;
     let
-      indent' = "${indent}  ";
-      args' = args // { indent = indent'; };
-      concatItems = concatStringsSep ",\n";
+      innerIndent = "${indent}  ";
+      introSpace = if multiline then "\n${innerIndent}" else " ";
+      outroSpace = if multiline then "\n${indent}" else " ";
+      innerArgs = args // { indent = innerIndent; };
+      concatItems = concatStringsSep ",${introSpace}";
       isLuaInline = { _type ? null, ... }: _type == "lua-inline";
     in
     if v == null then
@@ -473,7 +481,7 @@ ${expr "" v}
       builtins.toJSON v
     else if isList v then
       (if v == [ ] then "{}" else
-      "{\n${concatItems (map (value: "${indent'}${toLua args' value}") v)}\n${indent}}")
+      "{${introSpace}${concatItems (map (value: "${toLua innerArgs value}") v)}${outroSpace}}")
     else if isAttrs v then
       (
         if isLuaInline v then
@@ -481,9 +489,9 @@ ${expr "" v}
         else if v == { } then
           "{}"
         else
-          "{\n${concatItems (
-            lib.attrsets.mapAttrsToList (key: value: "${indent'}[${builtins.toJSON key}] = ${toLua args' value}") v
-            )}\n${indent}}"
+          "{${introSpace}${concatItems (
+            lib.attrsets.mapAttrsToList (key: value: "[${builtins.toJSON key}] = ${toLua innerArgs value}") v
+            )}${outroSpace}}"
       )
     else
       abort "generators.toLua: type ${typeOf v} is unsupported";
