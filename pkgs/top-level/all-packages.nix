@@ -19534,7 +19534,7 @@ with pkgs;
   boost16x = boost169;
   boost17x = boost179;
   boost18x = boost182;
-  boost = boost17x;
+  boost = boost18x;
 
   boost_process = callPackage ../development/libraries/boost-process { };
 
