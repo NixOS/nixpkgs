@@ -274,8 +274,8 @@ else let
 
   computedSandboxProfile =
     lib.concatMap (input: input.__propagatedSandboxProfile or [])
-      (stdenv.extraNativeBuildInputs
-       ++ stdenv.extraBuildInputs
+      (stdenv.extraDepsBuildHost
+       ++ stdenv.extraDepsHostTarget
        ++ lib.concatLists dependencies);
 
   computedPropagatedSandboxProfile =
@@ -284,8 +284,8 @@ else let
 
   computedImpureHostDeps =
     lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
-      (stdenv.extraNativeBuildInputs
-       ++ stdenv.extraBuildInputs
+      (stdenv.extraDepsBuildHost
+       ++ stdenv.extraDepsHostTarget
        ++ lib.concatLists dependencies));
 
   computedPropagatedImpureHostDeps =
