@@ -9977,6 +9977,8 @@ self: super: with self; {
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
+  qasync = callPackage ../development/python-modules/qasync { };
+
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
   qcengine = callPackage ../development/python-modules/qcengine { };
