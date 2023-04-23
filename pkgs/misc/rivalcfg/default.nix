@@ -19,20 +19,22 @@ python3Packages.buildPythonPackage rec {
   # tests are broken
   doCheck = false;
 
-  # this file has to be copied here instead of generated at build time because
-  # rivalcfg --update-udev will fail if it detects a supported device but cannot
-  # access it
-  # it should probably be regenerated on version bumps
   postInstall = ''
     set -x
     mkdir -p $out/lib/udev/rules.d
-    substitute ${./rival.rules} $out/lib/udev/rules.d/99-rivalcfg.rules --replace MODE=\"0666\" "MODE=\"0664\", GROUP=\"input\""
+    tmpl_udev="$out/lib/udev/rules.d/99-rivalcfg.rules"
+    tmpudev="''${tmpl_udev}.in"
+    finaludev="$tmpl_udev"
+    "$out/bin/rivalcfg" --print-udev > "$tmpudev"
+    substitute "$tmpudev" "$out/lib/udev/rules.d/99-rivalcfg.rules" \
+      --replace MODE=\"0666\" "MODE=\"0664\", GROUP=\"input\""
+    rm "$tmpudev"
   '';
 
   meta = with lib; {
     description = "Utility program that allows you to configure SteelSeries Rival gaming mice";
     homepage = "https://github.com/flozz/rivalcfg";
-    license     = licenses.wtfpl;
+    license = licenses.wtfpl;
     maintainers = with maintainers; [ ornxka ];
   };
 }
