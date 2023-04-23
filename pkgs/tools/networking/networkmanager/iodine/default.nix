@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, substituteAll, autoreconfHook, iodine, intltool, pkg-config, networkmanager, libsecret, gtk3
-, withGnome ? true, gnome, fetchpatch, libnma, glib }:
+{ lib, stdenv, fetchFromGitLab, substituteAll, autoreconfHook, iodine, intltool, pkg-config, networkmanager, libsecret, gtk3, gtk4
+, withGnome ? true, gnome, fetchpatch, libnma, libnma-gtk4, glib }:
 
 let
   pname = "NetworkManager-iodine";
-  version = "unstable-2019-11-05";
+  version = "unstable-2022-07-28";
 in stdenv.mkDerivation {
   name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
 
@@ -11,24 +11,23 @@ in stdenv.mkDerivation {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "network-manager-iodine";
-    rev = "2ef0abf089b00a0546f214dde0d45e63f2990b79";
-    sha256 = "1ps26fr9b1yyafj7lrzf2kmaxb0ipl0mhagch5kzrjdsc5xkajz7";
+    rev = "db0fcb2e7d9a6ea1e344bbe4500275ea10c9059c";
+    sha256 = "sha256-o8RI9re1MvXkc0UD3qq1d0sIKHMVDeK7gzbPiukI8wU=";
   };
 
   patches = [
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/network-manager-iodine/-/commit/8ca3e0dca7d2543622e8d899445a1c348db490f4.diff";
+      sha256 = "sha256-mG4Jv4pnYrithKkhWlp0x2iAGExlqqeGewA5jUX2w0M=";
+    })
     (substituteAll {
       src = ./fix-paths.patch;
       inherit iodine;
     })
-    # Don't use etc/dbus-1/system.d
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/network-manager-iodine/merge_requests/2.patch";
-      sha256 = "108pkf0mddj32s46k7jkmpwcaq2ylci4dqpp7wck3zm9q2jffff2";
-    })
   ];
 
   buildInputs = [ iodine networkmanager glib ]
-    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
+    ++ lib.optionals withGnome [ gtk3 gtk4 libsecret libnma-gtk4 ];
 
   nativeBuildInputs = [ intltool autoreconfHook pkg-config ];
 
@@ -39,6 +38,7 @@ in stdenv.mkDerivation {
   configureFlags = [
     "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--with-gtk4=${if withGnome then "yes" else "no"}"
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
     "--enable-absolute-paths"
   ];
