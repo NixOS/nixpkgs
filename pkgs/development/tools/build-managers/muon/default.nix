@@ -52,14 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     # URLs manually extracted from subprojects directory
     meson-docs-wrap = fetchurl {
       name = "meson-docs-wrap";
-      url = "https://mochiro.moe/wrap/meson-docs-0.63.0-239-g41a05ff93.tar.gz";
-      hash = "sha256-wg2mDkrkE1xVNXJf4sVm6cN1ozVeDbbw0CBYtixg5/Q=";
+      url = "https://mochiro.moe/wrap/meson-docs-1.0.1-19-gdd8d4ee22.tar.gz";
+      hash = "sha256-jHSPdLFR5jUeds4e+hLZ6JOblor5iuCV5cIwoc4K9gI=";
     };
 
     samurai-wrap = fetchurl {
       name = "samurai-wrap";
-      url = "https://mochiro.moe/wrap/samurai-1.2-28-g4e3a595.tar.gz";
-      hash = "sha256-TZAEwndVgoWr/zhykfr0wcz9wM96yG44GfzM5p9TpBo=";
+      url = "https://mochiro.moe/wrap/samurai-1.2-32-g81cef5d.tar.gz";
+      hash = "sha256-aPMAtScqweGljvOLaTuR6B0A0GQQQrVbRviXY4dpCoc=";
   };
   in ''
     pushd $sourceRoot/subprojects
