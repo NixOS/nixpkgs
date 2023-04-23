@@ -51,6 +51,16 @@ in {
                 send = "cross-signed-tofu";
                 share = "cross-signed-tofu";
               };
+
+              delete_keys = {
+                delete_fully_used_on_decrypt = false;
+                delete_on_device_delete = false;
+                delete_outbound_on_ack = false;
+                delete_prev_on_new_session = false;
+                dont_store_outbound = false;
+                periodically_delete_expired = false;
+                ratchet_on_decrypt = false;
+              };
             };
             username_template = "facebook_{userid}";
           };
