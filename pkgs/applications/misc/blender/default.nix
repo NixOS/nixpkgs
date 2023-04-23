@@ -34,7 +34,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-JHxMEignDJAQ9HIcmFy1tiirUKvPnyZ4Ywc3FC7rkcM=";
   };
 
-  patches = lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [
+    # remove with 3.5.X
+    ./blender-numpy.patch
+  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   nativeBuildInputs = [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev ]
     ++ lib.optionals cudaSupport [ addOpenGLRunpath ];

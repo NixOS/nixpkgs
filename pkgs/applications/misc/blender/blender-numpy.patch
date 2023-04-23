@@ -1,0 +1,14 @@
+diff --git a/release/scripts/addons/io_scene_gltf2/blender/imp/gltf2_blender_mesh.py b/release/scripts/addons/io_scene_gltf2/blender/imp/gltf2_blender_mesh.py
+index 41dd4d03..a97f9d38 100755
+--- a/release/scripts/addons/io_scene_gltf2/blender/imp/gltf2_blender_mesh.py
++++ b/release/scripts/addons/io_scene_gltf2/blender/imp/gltf2_blender_mesh.py
+@@ -572,7 +572,7 @@ def set_poly_smoothing(gltf, pymesh, mesh, vert_normals, loop_vidxs):
+     # Try to guess which polys should be flat based on the fact that all the
+     # loop normals for a flat poly are = the poly's normal.
+ 
+-    poly_smooths = np.empty(num_polys, dtype=np.bool)
++    poly_smooths = np.empty(num_polys, dtype=np.bool_)
+ 
+     poly_normals = np.empty(num_polys * 3, dtype=np.float32)
+     mesh.polygons.foreach_get('normal', poly_normals)
+
