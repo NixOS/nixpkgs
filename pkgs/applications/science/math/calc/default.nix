@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchurl, util-linux, makeWrapper
-, enableReadline ? true, readline, ncurses }:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, ncurses
+, readline
+, util-linux
+, enableReadline ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "calc";
