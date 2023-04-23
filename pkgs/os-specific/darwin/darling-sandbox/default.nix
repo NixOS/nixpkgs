@@ -1,7 +1,7 @@
 {stdenv, lib, fetchzip}:
 
 stdenv.mkDerivation rec {
-  pname = "darling";
+  pname = "darling-sandbox";
   name = pname;
 
   src = fetchzip {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     maintainers = with maintainers; [ matthewbauer ];
     license = licenses.gpl3;
-    description = "Darwin/macOS emulation layer for Linux";
+    description = "The sandbox part of Darling, a Darwin/macOS emulation layer for Linux";
     platforms = platforms.darwin;
   };
 }

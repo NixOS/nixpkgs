@@ -2,7 +2,7 @@
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook dtrace ];
-  # buildInputs = [ Foundation xpc darling ];
+  # buildInputs = [ Foundation xpc darling-sandbox ];
   buildInputs = [ xpc xnu ];
 
   xcbuildFlags = [ "-target" "Security_frameworks_osx" ];

@@ -2,7 +2,7 @@
 , appleDerivation', xnu, Libc, Libm, libdispatch, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
 , copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libplatform, libpthread
-, mDNSResponder, launchd, libutilHeaders, hfsHeaders, darling, darwin-stubs
+, mDNSResponder, launchd, libutilHeaders, hfsHeaders, darling-sandbox, darwin-stubs
 , headersOnly ? false
 , withLibresolv ? !headersOnly
 }:
@@ -41,9 +41,9 @@ appleDerivation' stdenv {
 
     mkdir -p $out/include/os
 
-    cp ${darling.src}/src/libc/os/activity.h $out/include/os
-    cp ${darling.src}/src/libc/os/log.h $out/include/os
-    cp ${darling.src}/src/duct/include/os/trace.h $out/include/os
+    cp ${darling-sandbox.src}/src/libc/os/activity.h $out/include/os
+    cp ${darling-sandbox.src}/src/libc/os/log.h $out/include/os
+    cp ${darling-sandbox.src}/src/duct/include/os/trace.h $out/include/os
 
     cat <<EOF > $out/include/os/availability.h
     #ifndef __OS_AVAILABILITY__
