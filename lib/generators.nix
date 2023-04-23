@@ -428,26 +428,37 @@ ${expr "" v}
       builtins.toJSON v;
 
   /*
-   * Translate a simple Nix expression to Lua representation with occasional
-   * Lua-inlines that can be construted by mkLuaInline function.
-   *
-   * generators.toLua {} {
-   *   cmd = [ "typescript-language-server" "--stdio" ];
-   *   settings.workspace.library = mkLuaInline ''vim.api.nvim_get_runtime_file("", true)'';
-   * }
-   *
-   *> {
-   *>   ["cmd"] = {
-   *>     "typescript-language-server",
-   *>     "--stdio"
-   *>   },
-   *>   ["settings"] = {
-   *>     ["workspace"] = {
-   *>       ["library"] = (vim.api.nvim_get_runtime_file("", true))
-   *>     }
-   *>   }
-   *> }
-   */
+   Translate a simple Nix expression to Lua representation with occasional
+   Lua-inlines that can be construted by mkLuaInline function.
+
+   Configuration:
+     * indent - initial indent.
+
+   Attention:
+     Regardless of multiline parameter there is no trailing newline.
+
+   Example:
+     generators.toLua {}
+       {
+         cmd = [ "typescript-language-server" "--stdio" ];
+         settings.workspace.library = mkLuaInline ''vim.api.nvim_get_runtime_file("", true)'';
+       }
+     ->
+      {
+        ["cmd"] = {
+          "typescript-language-server",
+          "--stdio"
+        },
+        ["settings"] = {
+          ["workspace"] = {
+            ["library"] = (vim.api.nvim_get_runtime_file("", true))
+          }
+        }
+      }
+
+   Type:
+     toLua :: AttrSet -> Any -> String
+  */
   toLua = { indent ? "" }@args: v:
     with builtins;
     let
@@ -478,7 +489,10 @@ ${expr "" v}
       abort "generators.toLua: type ${typeOf v} is unsupported";
 
   /*
-   * Mark string as Lua expression to be inlined when processed by toLua.
-   */
+   Mark string as Lua expression to be inlined when processed by toLua.
+
+   Type:
+     mkLuaInline :: String -> AttrSet
+  */
   mkLuaInline = expr: { _type = "lua-inline"; inherit expr; };
 }
