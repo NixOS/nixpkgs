@@ -10908,6 +10908,8 @@ with pkgs;
 
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
+  papeer = callPackage ../tools/text/papeer { };
+
   papertrail = callPackage ../tools/text/papertrail { };
 
   pappl = callPackage ../applications/printing/pappl { };
