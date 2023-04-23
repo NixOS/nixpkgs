@@ -2208,6 +2208,8 @@ with pkgs;
 
   flycast = callPackage ../applications/emulators/flycast { };
 
+  flix = callPackage ../development/compilers/flix { };
+
   fsrx = callPackage ../tools/misc/fsrx { };
 
   fsuae = callPackage ../applications/emulators/fs-uae { };
