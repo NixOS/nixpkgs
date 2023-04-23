@@ -47,9 +47,11 @@ let
       --add-opens javafx.controls/com.sun.javafx.scene.control=centerdevice.nsmenufx
       --add-opens javafx.graphics/com.sun.javafx.menu=centerdevice.nsmenufx
       --add-opens javafx.graphics/com.sun.glass.ui=com.sparrowwallet.sparrow
+      --add-opens=javafx.graphics/javafx.scene.input=com.sparrowwallet.sparrow
       --add-opens javafx.graphics/com.sun.javafx.application=com.sparrowwallet.sparrow
       --add-opens java.base/java.net=com.sparrowwallet.sparrow
       --add-opens java.base/java.io=com.google.gson
+      --add-opens=java.smartcardio/sun.security.smartcardio=com.sparrowwallet.sparrow
       --add-reads com.sparrowwallet.merged.module=java.desktop
       --add-reads com.sparrowwallet.merged.module=java.sql
       --add-reads com.sparrowwallet.merged.module=com.sparrowwallet.sparrow
@@ -58,6 +60,7 @@ let
       --add-reads com.sparrowwallet.merged.module=com.fasterxml.jackson.annotation
       --add-reads com.sparrowwallet.merged.module=com.fasterxml.jackson.core
       --add-reads com.sparrowwallet.merged.module=co.nstant.in.cbor
+      --add-reads=kotlin.stdlib=kotlinx.coroutines.core.jvm
       -m com.sparrowwallet.sparrow
     )
 
