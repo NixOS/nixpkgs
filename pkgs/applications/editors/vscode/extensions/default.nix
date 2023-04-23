@@ -1366,8 +1366,8 @@ let
         mktplcRef = {
           name = "vscode-github-actions";
           publisher = "github";
-          version = "0.25.3";
-          sha256 = "sha256-0Ag+xXVt+WBfN+7VmWILYU4RsVs+CBDBpMfUTczDCkI=";
+          version = "0.25.6";
+          sha256 = "sha256-HRj/AQI9E6HDkZ2ok/h/+c9HHq1wVXQPAt5mb/Ij+BI=";
         };
         meta = {
           description = "A Visual Studio Code extension for GitHub Actions workflows and runs for github.com hosted repositories";
