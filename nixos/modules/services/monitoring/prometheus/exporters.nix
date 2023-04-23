@@ -35,6 +35,7 @@ let
     "dovecot"
     "fastly"
     "fritzbox"
+    "fronius"
     "graphite"
     "influxdb"
     "ipmi"
