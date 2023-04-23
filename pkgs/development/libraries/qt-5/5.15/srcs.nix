@@ -22,6 +22,17 @@ let
 in
 lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 // {
+  # Has no kde/5.15 branch
+  qtpositioning = rec {
+    version = "5.15.2";
+    src = fetchFromGitHub {
+      owner = "qt";
+      repo = "qtpositioning";
+      rev = "v${version}";
+      hash = "sha256-L/P+yAQItm3taPpCNoOOm7PNdOFZiIwJJYflk6JDWvU=";
+    };
+  };
+
   # qtwebkit does not have an official release tarball on the qt mirror and is
   # mostly maintained by the community.
   qtwebkit = rec {
