@@ -34733,6 +34733,8 @@ with pkgs;
 
   webcord = callPackage ../applications/networking/instant-messengers/webcord { };
 
+  webcord-vencord = callPackage ../applications/networking/instant-messengers/webcord/webcord-vencord { };
+
   webex = callPackage ../applications/networking/instant-messengers/webex { };
 
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs { };
