@@ -282,6 +282,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     redis = callPackage ../development/php-packages/redis { };
 
+    relay = callPackage ../development/php-packages/relay  { inherit php; };
+
     smbclient = callPackage ../development/php-packages/smbclient { };
 
     snuffleupagus = callPackage ../development/php-packages/snuffleupagus { };
