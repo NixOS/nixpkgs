@@ -41,6 +41,7 @@ let
     ## Following options are needed for extra prefs & policies
     # For more information about anti tracking (german website)
     # visit https://wiki.kairaven.de/open/app/firefox
+    , extraBuildCommands ? ""
     , extraPrefs ? ""
     , extraPrefsFiles ? []
     # For more information about policies visit
@@ -392,6 +393,8 @@ let
         #   END EXTRA PREF CHANGES  #
         #                           #
         #############################
+
+        ${extraBuildCommands}
       '';
 
       preferLocalBuild = true;
