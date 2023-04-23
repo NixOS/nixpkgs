@@ -87,7 +87,7 @@ self: super: {
   tasty-hedgehog = doDistribute self.tasty-hedgehog_1_4_0_1;
 
   # v0.1.6 forbids base >= 4.18
-  singleton-bool = assert !(self ? singleton-bool_0_1_7) doDistribute super.singleton-bool_0_1_7;
+  singleton-bool = doDistribute super.singleton-bool_0_1_7;
 
   #
   # Too strict bounds without upstream fix
