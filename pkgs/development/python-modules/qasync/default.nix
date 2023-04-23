@@ -5,6 +5,7 @@
 , diff-cover
 , pytest-mock
 , pytestCheckHook
+, pyqt5
 , pip
 , virtualenv
 }:
@@ -12,19 +13,19 @@
 buildPythonPackage rec {
   pname = "qasync";
   version = "0.24.0";
-  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-brmQtp304VutiZ6oaNxGVyw/dTOXNWY7gd55sG8X65o=";
+    hash = "sha256-5YPRw64g/RLpCN7jWMUncJtIDnjVf7cu5XqUCXMH2Vk=";
   };
 
   nativeBuildInputs = [  ];
 
   propagatedBuildInput = [
     pip
+    pyqt5
   ];
 
   nativeCheckInputs = [
