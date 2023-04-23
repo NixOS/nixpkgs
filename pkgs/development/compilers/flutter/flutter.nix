@@ -1,4 +1,5 @@
 { version
+, engineVersion
 , patches
 , dart
 , src
@@ -29,9 +30,7 @@
 let
   engineArtifactDirectory =
     let
-      engineArtifacts = callPackage ./engine-artifacts {
-        engineVersion = lib.removeSuffix "\n" (builtins.readFile (src + /bin/internal/engine.version));
-      };
+      engineArtifacts = callPackage ./engine-artifacts { inherit engineVersion; };
     in
     runCommandLocal "flutter-engine-artifacts-${version}" { }
       (
@@ -80,6 +79,13 @@ let
       outputs = [ "out" "cache" ];
 
       buildInputs = [ git ];
+
+      preConfigure = ''
+        if [ "$(< bin/internal/engine.version)" != '${engineVersion}' ]; then
+          echo 1>&2 "The given engine version (${engineVersion}) does not match the version required by the Flutter SDK ($(< bin/internal/engine.version))."
+          exit 1
+        fi
+      '';
 
       postPatch = ''
         patchShebangs --build ./bin/
