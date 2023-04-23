@@ -1,4 +1,4 @@
-{ lib, stdenv, curl, jq, xorg, alsa-lib, freetype, p7zip, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper }:
+{ lib, stdenv, curl, jq, htmlq, xorg, alsa-lib, freetype, p7zip, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper }:
 let
   versionForFile = v: builtins.replaceStrings ["."] [""] v;
 
@@ -93,24 +93,32 @@ let
     fetchWithCurlScript {
       inherit name sha256;
       script = ''
+        html=$(
           "''${curl[@]}" --silent --request GET \
             --cookie cookies \
             --header "accept: */*" \
-            https://www.modartt.com/ -o /dev/null
+            'https://www.modartt.com/try?file=${name}'
+        )
 
-          json=$(
-            "''${curl[@]}" --silent --request POST \
-            --cookie cookies \
-            --header "modartt-json: request" \
-            --header "origin: https://www.modartt.com" \
-            --header "content-type: application/json; charset=UTF-8" \
-            --header "accept: application/json, text/javascript, */*" \
-            --data-raw '{"file": "${name}", "get": "url"}' \
-            https://www.modartt.com/api/0/download
-          )
+        signature="$(echo "$html" | ${htmlq}/bin/htmlq '#download-form' --attribute action | cut -f2 -d'&' | cut -f2 -d=)"
 
-          url=$(echo $json | ${jq}/bin/jq -r .url)
-          "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
+        json=$(
+          "''${curl[@]}" --silent --request POST \
+          --cookie cookies \
+          --header "modartt-json: request" \
+          --header "origin: https://www.modartt.com" \
+          --header "content-type: application/json; charset=UTF-8" \
+          --header "accept: application/json, text/javascript, */*" \
+          --data-raw '{"file": "${name}", "get": "url", "signature": "'"$signature"'"}' \
+          https://www.modartt.com/api/0/download
+        )
+
+        url=$(echo $json | ${jq}/bin/jq -r .url)
+        if [ "$url" == "null"  ]; then
+          echo "Could not get download URL, open an issue on https://github.com/NixOS/nixpkgs"
+          return 1
+        fi
+        "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
       '';
     };
 
