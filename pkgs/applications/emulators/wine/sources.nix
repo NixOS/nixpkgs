@@ -56,16 +56,12 @@ in rec {
       ${updateScriptPreamble}
       major=''${UPDATE_NIX_OLD_VERSION%%.*}
       latest_stable=$(get_latest_wine_version "$major.0")
-      latest_gecko=$(get_latest_lib_version wine-gecko)
 
       # Can't use autobump on stable because we don't want the path
       # <source/7.0/wine-7.0.tar.xz> to become <source/7.0.1/wine-7.0.1.tar.xz>.
       if [[ "$UPDATE_NIX_OLD_VERSION" != "$latest_stable" ]]; then
           set_version_and_hash stable "$latest_stable" "$(nix-prefetch-url "$wine_url_base/source/$major.0/wine-$latest_stable.tar.xz")"
       fi
-
-      autobump stable.gecko32 "$latest_gecko"
-      autobump stable.gecko64 "$latest_gecko"
 
       do_update
     '');
@@ -76,8 +72,21 @@ in rec {
     version = "8.5";
     url = "https://dl.winehq.org/wine/source/8.x/wine-${version}.tar.xz";
     hash = "sha256-wJdmQBswu0JeEy4RSyba+kJ2SX5AzL4V+3fnUfsJvhc=";
-    inherit (stable) gecko32 gecko64 patches;
+    inherit (stable) patches;
 
+    ## see http://wiki.winehq.org/Gecko
+    gecko32 = fetchurl rec {
+      version = "2.47.3";
+      url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86.msi";
+      hash = "sha256-5bmwbTzjVWRqjS5y4ETjfh4MjRhGTrGYWtzRh6f0jgE=";
+    };
+    gecko64 = fetchurl rec {
+      version = "2.47.3";
+      url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86_64.msi";
+      hash = "sha256-pT7pVDkrbR/j1oVF9uTiqXr7yNyLA6i0QzSVRc4TlnU=";
+    };
+
+    ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
       version = "7.4.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
@@ -88,6 +97,7 @@ in rec {
       ${updateScriptPreamble}
       major=''${UPDATE_NIX_OLD_VERSION%%.*}
       latest_unstable=$(get_latest_wine_version "$major.x")
+      latest_gecko=$(get_latest_lib_version wine-gecko)
       latest_mono=$(get_latest_lib_version wine-mono)
 
       update_staging() {
@@ -96,6 +106,8 @@ in rec {
       }
 
       autobump unstable "$latest_unstable" "" update_staging
+      autobump unstable.gecko32 "$latest_gecko"
+      autobump unstable.gecko64 "$latest_gecko"
       autobump unstable.mono "$latest_mono"
 
       do_update
