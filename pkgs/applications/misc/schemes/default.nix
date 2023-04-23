@@ -1,18 +1,18 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gtk4
-, libgee
-, libadwaita
-, gtksourceview5
-, wrapGAppsHook4
 , appstream-glib
 , desktop-file-utils
 , glib
+, gtk4
+, gtksourceview5
+, libadwaita
+, libgee
 , libpanel
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "chergert";
     repo = "schemes";
     rev = version;
-    sha256 = "sha256-XUC24KzZSU4+F2JZMsydukvAwEGdMxCnkPG6QHnCw6w=";
+    hash = "sha256-XUC24KzZSU4+F2JZMsydukvAwEGdMxCnkPG6QHnCw6w=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Edit GtkSourceView style-schemes for an application or platform";
     homepage = "https://gitlab.gnome.org/chergert/schemes";
-    mainProgram = "schemes";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ _0xMRTT ];
     platforms = platforms.linux;
