@@ -132,7 +132,6 @@ sub GetFs {
         chomp $fs;
         my @fields = split / /, $fs;
         my $mountPoint = $fields[4];
-        next unless -d $mountPoint;
         my @mountOptions = split /,/, $fields[5];
 
         # Skip the optional fields.
@@ -151,6 +150,11 @@ sub GetFs {
 
         # Is it better than our current match?
         if (length($mountPoint) > length($bestFs->mount)) {
+
+            # Check if it's a real directory. Do this last, because it does a stat(),
+            # which may hang forever on network file systems.
+            next unless -d $mountPoint;
+
             $bestFs = Fs->new(device => $device, type => $fsType, mount => $mountPoint);
         }
     }
