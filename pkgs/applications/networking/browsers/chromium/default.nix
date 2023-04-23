@@ -16,10 +16,11 @@
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
+, pkgsBuildTarget
 }:
 
 let
-  llvmPackages = llvmPackages_16;
+  llvmPackages = pkgsBuildTarget.llvmPackages_16;
   stdenv = llvmPackages.stdenv;
 
   upstream-info = (lib.importJSON ./upstream-info.json).${channel};
