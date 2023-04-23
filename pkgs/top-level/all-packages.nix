@@ -9239,6 +9239,8 @@ with pkgs;
 
   mdbook-cmdrun = callPackage ../tools/text/mdbook-cmdrun { };
 
+  mdbook-d2 = callPackage ../tools/text/mdbook-d2 { };
+
   mdbook-pagetoc = callPackage ../tools/text/mdbook-pagetoc { };
 
   mdbook-graphviz = callPackage ../tools/text/mdbook-graphviz {
@@ -12289,6 +12291,8 @@ with pkgs;
 
   sniffglue = callPackage ../tools/networking/sniffglue { };
 
+  snobol4 = callPackage ../development/interpreters/snobol4 { };
+
   snort = callPackage ../applications/networking/ids/snort { };
 
   so = callPackage ../development/tools/so {
@@ -13159,6 +13163,8 @@ with pkgs;
   udpt = callPackage ../servers/udpt { };
 
   udptunnel = callPackage ../tools/networking/udptunnel { };
+
+  udpx = callPackage ../tools/security/udpx { };
 
   uftrace = callPackage ../development/tools/uftrace { };
 
