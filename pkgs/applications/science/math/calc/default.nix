@@ -26,9 +26,17 @@ stdenv.mkDerivation rec {
       --replace '-install_name ''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}'
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ util-linux ]
-             ++ lib.optionals enableReadline [ readline ncurses ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    util-linux
+  ]
+  ++ lib.optionals enableReadline [
+    ncurses
+    readline
+  ];
 
   makeFlags = [
     "T=$(out)"
@@ -41,7 +49,8 @@ stdenv.mkDerivation rec {
 
     # Handle LDFLAGS defaults in calc
     "DEFAULT_LIB_INSTALL_PATH=$(out)/lib"
-  ] ++ lib.optionals enableReadline [
+  ]
+  ++ lib.optionals enableReadline [
     "READLINE_LIB=-lreadline"
     "USE_READLINE=-DUSE_READLINE"
   ];
