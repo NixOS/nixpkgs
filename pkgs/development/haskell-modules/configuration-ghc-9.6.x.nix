@@ -74,9 +74,7 @@ self: super: {
   th-abstraction = doDistribute self.th-abstraction_0_5_0_0;
   th-desugar = doDistribute self.th-desugar_1_15;
   turtle = doDistribute self.turtle_1_6_1;
-  # Too strict bounds on ghc-prim and template-haskell
-  aeson = doDistribute (doJailbreak self.aeson_2_1_2_1);
-  # Too strict bounds on ghc-prim
+  aeson = doDistribute self.aeson_2_1_2_1;
   memory = doDistribute self.memory_0_18_0;
 
   ghc-lib = doDistribute self.ghc-lib_9_6_1_20230312;
@@ -88,23 +86,20 @@ self: super: {
   # allows base >= 4.18
   tasty-hedgehog = doDistribute self.tasty-hedgehog_1_4_0_1;
 
+  # v0.1.6 forbids base >= 4.18
+  singleton-bool = doDistribute super.singleton-bool_0_1_7;
+
   #
   # Too strict bounds without upstream fix
   #
 
   # Forbids transformers >= 0.6
   quickcheck-classes-base = doJailbreak super.quickcheck-classes-base;
-  # Forbids base >= 4.18
-  singleton-bool = doJailbreak super.singleton-bool;
-  # Forbids base >= 4.18
-  unliftio-core = doJailbreak super.unliftio-core;
   # Forbids mtl >= 2.3
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   # Forbids base >= 4.18
   cabal-install-solver = doJailbreak super.cabal-install-solver;
   cabal-install = doJailbreak super.cabal-install;
-  # Forbids base >= 4.18
-  lukko = doJailbreak super.lukko;
 
   # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
   newtype-generics = jailbreakForCurrentVersion super.newtype-generics "0.6.2";
@@ -178,7 +173,6 @@ self: super: {
   rebase = doJailbreak super.rebase_1_20;
   rerebase = doJailbreak super.rerebase_1_20;
   hiedb = dontCheck super.hiedb;
-  lucid = doJailbreak (dontCheck super.lucid);
   retrie = dontCheck (super.retrie);
 
   ghc-exactprint = unmarkBroken (addBuildDepends (with self.ghc-exactprint.scope; [
