@@ -39,14 +39,16 @@ stdenv.mkDerivation rec {
     "USE_READLINE=-DUSE_READLINE"
   ];
 
-  meta = with lib; {
-    description = "C-style arbitrary precision calculator";
+  meta = {
     homepage = "http://www.isthe.com/chongo/tech/comp/calc/";
+    description = "C-style arbitrary precision calculator";
+    changelog = "https://github.com/lcn2/calc/blob/v${version}/CHANGES";
     # The licensing situation depends on readline (see section 3 of the LGPL)
     # If linked against readline then GPLv2 otherwise LGPLv2.1
-    changelog = "https://github.com/lcn2/calc/blob/v${version}/CHANGES";
-    license = with licenses; if enableReadline then gpl2Only else lgpl21Only;
-    maintainers = with maintainers; [ matthewbauer ];
-    platforms = platforms.all;
+    license = if enableReadline
+              then lib.licenses.gpl2Only
+              else lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ matthewbauer ];
+    platforms = lib.platforms.all;
   };
 }
