@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch, fetchgit
 , bzip2
 , expat
 , libffi
@@ -18,6 +18,7 @@
 , self
 , configd
 , darwin
+, windows
 , autoreconfHook
 , autoconf-archive
 , pkg-config
@@ -44,6 +45,9 @@
 , static ? stdenv.hostPlatform.isStatic
 , enableFramework ? false
 , enableOptimizations ? false
+# these dont build for windows
+, withGdbm ? !stdenv.hostPlatform.isWindows
+, withReadline ? !stdenv.hostPlatform.isWindows
 # enableNoSemanticInterposition is a subset of the enableOptimizations flag that doesn't harm reproducibility.
 # clang starts supporting `-fno-sematic-interposition` with version 10
 , enableNoSemanticInterposition ? (!stdenv.cc.isClang || (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "10"))
@@ -128,12 +132,17 @@ let
   ];
 
   buildInputs = filter (p: p != null) ([
-    zlib bzip2 expat xz libffi libxcrypt gdbm sqlite readline ncurses openssl' ]
+    zlib bzip2 expat xz libffi libxcrypt ]
+    ++ optional withGdbm gdbm
+    ++ [ sqlite ]
+    ++ optional withReadline readline
+    ++ [ ncurses openssl' ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
     ++ optionals stdenv.isDarwin [ configd ])
 
     ++ optionals enableFramework [ Cocoa ]
+    ++ optionals stdenv.hostPlatform.isMinGW [ windows.mingw_w64_pthreads windows.dlfcn ]
     ++ optionals tzdataSupport [ tzdata ];  # `zoneinfo` module
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
@@ -160,6 +169,8 @@ let
   # are not documented, and must be derived from the configure script (see links
   # below).
   sysconfigdataHook = with stdenv.hostPlatform; with passthru; let
+    machdep = if isWindows then "win32" else parsed.kernel.name; # win32 is added by Fedora’s patch
+
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
     # The configure script uses "arm" as the CPU name for all 32-bit ARM
     # variants when cross-compiling, but native builds include the version
@@ -176,7 +187,7 @@ let
         powerpc64 = "ppc64";
         powerpc64le = "ppc64le";
       }.${parsed.cpu.name} or parsed.cpu.name;
-    in "${parsed.kernel.name}-${cpu}";
+    in "${machdep}-${cpu}";
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
     multiarchCpu =
@@ -205,12 +216,13 @@ let
       else "gnu";
     multiarch =
       if isDarwin then "darwin"
-      else "${multiarchCpu}-${parsed.kernel.name}-${pythonAbiName}";
+      else if isWindows then ""
+      else "${multiarchCpu}-${machdep}-${pythonAbiName}";
 
     abiFlags = optionalString isPy37 "m";
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
-    pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${parsed.kernel.name}_${multiarch}";
+    pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${machdep}_${multiarch}";
   in ''
     sysconfigdataHook() {
       if [ "$1" = '${placeholder "out"}' ]; then
@@ -222,12 +234,13 @@ let
     addEnvHooks "$hostOffset" sysconfigdataHook
   '';
 
+  execSuffix = stdenv.hostPlatform.extensions.executable;
 in with passthru; stdenv.mkDerivation {
   pname = "python3";
   inherit src version;
 
   inherit nativeBuildInputs;
-  buildInputs = [ bash ] ++ buildInputs; # bash is only for patchShebangs
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [ bash ] ++ buildInputs; # bash is only used for patchShebangs
 
 
   prePatch = optionalString stdenv.isDarwin ''
@@ -295,9 +308,19 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals stdenv.hostPlatform.isLoongArch64 [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
-  ];
+  ] ++ optionals (stdenv.hostPlatform.isMinGW) (let
+    # https://src.fedoraproject.org/rpms/mingw-python3
+    mingw-patch = fetchgit {
+      name = "mingw-python-patches";
+      url = "https://src.fedoraproject.org/rpms/mingw-python3.git";
+      rev = "45c45833ab9e5480ad0ae00778a05ebf35812ed4"; # for python 3.11.5 at the time of writing.
+      sha256 = "sha256-KIyNvO6MlYTrmSy9V/DbzXm5OsIuyT/BEpuo7Umm9DI=";
+    };
+  in [
+    "${mingw-patch}/*.patch"
+  ]);
 
-  postPatch = ''
+  postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
     substituteInPlace Lib/subprocess.py \
       --replace "'/bin/sh'" "'${bash}/bin/sh'"
   '' + optionalString mimetypesSupport ''
@@ -360,8 +383,9 @@ in with passthru; stdenv.mkDerivation {
     "ac_cv_have_long_long_format=yes"
     "ac_cv_have_size_t_format=yes"
     "ac_cv_computed_gotos=yes"
-    "ac_cv_file__dev_ptmx=yes"
-    "ac_cv_file__dev_ptc=yes"
+    # Both fail when building for windows, normally configure checks this by itself but on other platforms this is set to yes always.
+    "ac_cv_file__dev_ptmx=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
+    "ac_cv_file__dev_ptc=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
     "--with-build-python=${pythonForBuildInterpreter}"
   ] ++ optionals stdenv.hostPlatform.isLinux [
@@ -370,7 +394,8 @@ in with passthru; stdenv.mkDerivation {
     "ac_cv_func_lchmod=no"
   ] ++ optionals tzdataSupport [
     "--with-tzpath=${tzdata}/share/zoneinfo"
-  ] ++ optional static "LDFLAGS=-static";
+  ] ++ optional static "LDFLAGS=-static"
+  ++ optional (execSuffix != "") "--with-suffix=${execSuffix}";
 
   preConfigure = optionalString (pythonOlder "3.12") ''
     for i in /usr /sw /opt /pkg; do	# improve purity
@@ -438,7 +463,7 @@ in with passthru; stdenv.mkDerivation {
     # Use Python3 as default python
     ln -s "$out/bin/idle3" "$out/bin/idle"
     ln -s "$out/bin/pydoc3" "$out/bin/pydoc"
-    ln -s "$out/bin/python3" "$out/bin/python"
+    ln -s "$out/bin/python3${execSuffix}" "$out/bin/python${execSuffix}"
     ln -s "$out/bin/python3-config" "$out/bin/python-config"
     ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
     ln -sL "$out/share/man/man1/python3.1.gz" "$out/share/man/man1/python.1.gz"
@@ -504,6 +529,14 @@ in with passthru; stdenv.mkDerivation {
      To use Python with Nix and nixpkgs, have a look at the online documentation:
      <https://nixos.org/manual/nixpkgs/stable/#python>.
     EXTERNALLY_MANAGED
+  '' + optionalString stdenv.hostPlatform.isWindows ''
+    # Shebang files that link against the build python. Shebang don’t work on windows
+    rm $out/bin/2to3*
+    rm $out/bin/idle*
+    rm $out/bin/pydoc*
+
+    echo linking DLLs for python’s compiled librairies
+    linkDLLsInfolder $out/lib/python*/lib-dynload/
   '';
 
   preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -573,7 +606,7 @@ in with passthru; stdenv.mkDerivation {
       high level dynamic data types.
     '';
     license = licenses.psfl;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
     maintainers = with maintainers; [ fridh ];
     mainProgram = executable;
   };
