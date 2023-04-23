@@ -10892,6 +10892,8 @@ self: super: with self; {
 
   sip_4 = callPackage ../development/python-modules/sip/4.x.nix { };
 
+  sipyco = callPackage ../development/python-modules/sipyco { };
+
   siuba = callPackage ../development/python-modules/siuba { };
 
   six = callPackage ../development/python-modules/six { };
