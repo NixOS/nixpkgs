@@ -12,6 +12,7 @@
 , pyqt5_sip
 , pyqt-builder
 , libsForQt5
+, enableVerbose ? true
 , withConnectivity ? false
 , withMultimedia ? false
 , withWebKit ? false
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   # be more verbose
   ''
     cat >> pyproject.toml <<EOF
+  '' + lib.optionalString enableVerbose ''
     [tool.sip.project]
     verbose = true
   ''
@@ -67,6 +69,11 @@ buildPythonPackage rec {
   postUnpack = ''
     export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
   '';
+
+  # tons of warnings from subpackages, no point in playing whack-a-mole
+  env = lib.optionalAttrs (!enableVerbose) {
+    NIX_CFLAGS_COMPILE = "-w";
+  };
 
   outputs = [ "out" "dev" ];
 
