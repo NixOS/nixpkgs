@@ -6,7 +6,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , gnome
 , accountsservice
 , fontconfig
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     systemd
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

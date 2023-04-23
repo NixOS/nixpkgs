@@ -18,7 +18,7 @@
 , python3
 , rustPlatform
 , shared-mime-info
-, wrapGAppsHook4
+, wrapGAppsHook
 , AudioUnit
 }:
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
     shared-mime-info # For update-mime-database
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   dontUseCmakeConfigure = true;

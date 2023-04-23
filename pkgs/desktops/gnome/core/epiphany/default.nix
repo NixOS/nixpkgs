@@ -8,7 +8,7 @@
 , gtk4
 , glib
 , icu
-, wrapGAppsHook4
+, wrapGAppsHook
 , gnome
 , libportal-gtk4
 , libxml2
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     buildPackages.glib
     buildPackages.gtk4
   ];

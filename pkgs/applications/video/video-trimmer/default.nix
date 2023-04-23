@@ -4,7 +4,7 @@
 , rustPlatform
 , pkg-config
 , meson
-, wrapGAppsHook4
+, wrapGAppsHook
 , desktop-file-utils
 , blueprint-compiler
 , ninja
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     meson
-    wrapGAppsHook4
+    wrapGAppsHook
     desktop-file-utils
     blueprint-compiler
     ninja

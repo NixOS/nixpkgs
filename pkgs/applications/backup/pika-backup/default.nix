@@ -10,7 +10,7 @@
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook4
+, wrapGAppsHook
 , borgbackup
 , gtk4
 , libadwaita
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook4
+    wrapGAppsHook
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo

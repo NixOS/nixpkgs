@@ -16,7 +16,7 @@
 , gstreamer
 , gst-plugins-base
 , gst-plugins-bad
-, wrapGAppsHook4
+, wrapGAppsHook
 , appstream-glib
 , desktop-file-utils
 }:
@@ -43,7 +43,7 @@ clangStdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     appstream-glib
     desktop-file-utils
   ] ++ (with rustPlatform; [

@@ -22,7 +22,7 @@
 , gobject-introspection
 , appstream-glib
 , gnome
-, wrapGAppsHook4
+, wrapGAppsHook
 , telepathy-logger
 , gspell
 , gsettings-desktop-schemas
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     pkg-config
     itstool
     gettext
-    wrapGAppsHook4
+    wrapGAppsHook
     libxml2
     desktop-file-utils
     gobject-introspection

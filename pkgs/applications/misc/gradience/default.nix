@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, wrapGAppsHook4
+, wrapGAppsHook
 , meson
 , ninja
 , pkg-config
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     sassc
   ];
 

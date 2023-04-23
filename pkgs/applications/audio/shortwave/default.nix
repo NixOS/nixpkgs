@@ -16,7 +16,7 @@
 , pkg-config
 , rustPlatform
 , sqlite
-, wrapGAppsHook4
+, wrapGAppsHook
 , cmake
 , libshumate
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     rustPlatform.rust.cargo
     rustPlatform.cargoSetupHook
     rustPlatform.rust.rustc
-    wrapGAppsHook4
+    wrapGAppsHook
     cmake
   ];
 

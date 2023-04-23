@@ -9,7 +9,7 @@
 , pkg-config
 , reuse
 , m4
-, wrapGAppsHook4
+, wrapGAppsHook
 , glib
 , gtk4
 , gst_all_1
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     pkg-config
     reuse
     m4
-    wrapGAppsHook4
+    wrapGAppsHook
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo

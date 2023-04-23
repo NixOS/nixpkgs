@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, wrapGAppsHook4
+, wrapGAppsHook
 , libadwaita
 , meson
 , ninja
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

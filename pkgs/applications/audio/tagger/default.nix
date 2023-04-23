@@ -11,7 +11,7 @@
 , glib
 , gtk4
 , libadwaita
-, wrapGAppsHook4
+, wrapGAppsHook
 , desktop-file-utils
 , chromaprint # fpcalc
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     desktop-file-utils
   ];
 

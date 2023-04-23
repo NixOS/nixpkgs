@@ -9,7 +9,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , gobject-introspection
 , libadwaita
 , librsvg
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     gobject-introspection
     gtk4 # for gtk4-update-icon-cache
   ];

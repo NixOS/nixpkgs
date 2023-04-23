@@ -3,7 +3,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , desktop-file-utils
 , appstream-glib
 , python3Packages
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     desktop-file-utils
     gobject-introspection
   ];

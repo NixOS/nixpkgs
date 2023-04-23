@@ -7,7 +7,7 @@
 , ninja
 , gettext
 , gnome
-, wrapGAppsHook4
+, wrapGAppsHook
 , packagekit
 , ostree
 , glib
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
-    wrapGAppsHook4
+    wrapGAppsHook
     libxslt
     docbook_xml_dtd_42
     docbook_xml_dtd_43

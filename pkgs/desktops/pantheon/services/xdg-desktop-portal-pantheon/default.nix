@@ -6,7 +6,7 @@
 , ninja
 , pkg-config
 , vala
-, wrapGAppsHook4
+, wrapGAppsHook
 , glib
 , granite7
 , gtk4
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

@@ -4,7 +4,7 @@
 , pkg-config
 , gobject-introspection
 , itstool
-, wrapGAppsHook4
+, wrapGAppsHook
 , glib
 , accountsservice
 , dbus
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     itstool
     desktop-file-utils
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

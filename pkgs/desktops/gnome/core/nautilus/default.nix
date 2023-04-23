@@ -10,7 +10,7 @@
 , gettext
 , libxml2
 , desktop-file-utils
-, wrapGAppsHook4
+, wrapGAppsHook
 , gtk4
 , libadwaita
 , libportal-gtk4
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gi-docgen
     docbook-xsl-nons
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

@@ -14,7 +14,7 @@
 , libsoup_3
 , libsecret
 , libadwaita
-, wrapGAppsHook4
+, wrapGAppsHook
 , libgpg-error
 , json-glib
 , duplicity
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     desktop-file-utils
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

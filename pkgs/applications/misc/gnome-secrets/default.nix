@@ -5,7 +5,7 @@
 , gettext
 , fetchFromGitLab
 , python3Packages
-, wrapGAppsHook4
+, wrapGAppsHook
 , gtk4
 , glib
 , gdk-pixbuf
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     ninja
     gettext
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     desktop-file-utils
     appstream-glib
     gobject-introspection

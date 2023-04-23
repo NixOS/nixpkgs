@@ -14,7 +14,7 @@
 , rustPlatform
 , stdenv
 , testers
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "citations";
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

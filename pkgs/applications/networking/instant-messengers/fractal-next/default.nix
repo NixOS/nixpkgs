@@ -18,7 +18,7 @@
 , openssl
 , pipewire
 , libshumate
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     rustPlatform.rust.rustc
     desktop-file-utils
     appstream-glib
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

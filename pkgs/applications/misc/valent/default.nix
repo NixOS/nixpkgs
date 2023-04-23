@@ -6,7 +6,7 @@
 , ninja
 , pkg-config
 , vala
-, wrapGAppsHook4
+, wrapGAppsHook
 , evolution-data-server-gtk4
 , glib
 , glib-networking
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

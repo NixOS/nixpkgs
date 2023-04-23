@@ -7,7 +7,7 @@
 , gtk4
 , libadwaita
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , glib
 , shared-mime-info
 , python3
@@ -39,7 +39,7 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     glib # For glib-compile-resources
     shared-mime-info # For update-mime-database
     python3

@@ -30,7 +30,7 @@
 , speex
 , speexdsp
 , tbb
-, wrapGAppsHook4
+, wrapGAppsHook
 , zam-plugins
 , zita-convolver
 }:
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

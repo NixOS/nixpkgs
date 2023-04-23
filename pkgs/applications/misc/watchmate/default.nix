@@ -7,7 +7,7 @@
 , bluez
 , dbus
 , openssl
-, wrapGAppsHook4
+, wrapGAppsHook
 , glib
 }:
 
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     glib
   ];
   buildInputs = [

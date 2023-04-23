@@ -13,7 +13,7 @@
 , gettext
 , gsettings-desktop-schemas
 , gobject-introspection
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   propagatedBuildInputs = [

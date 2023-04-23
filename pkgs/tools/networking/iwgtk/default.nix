@@ -5,7 +5,7 @@
 , ninja
 , pkg-config
 , scdoc
-, wrapGAppsHook4
+, wrapGAppsHook
 , gtk4
 , qrencode
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # patch systemd service to pass necessary environments and use absolute paths
   patches = [ ./systemd-service.patch ];
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wrapGAppsHook4 ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wrapGAppsHook ];
 
   buildInputs = [ gtk4 qrencode ];
 

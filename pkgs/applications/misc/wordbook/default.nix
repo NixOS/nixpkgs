@@ -10,7 +10,7 @@
 , librsvg
 , espeak-ng
 , gobject-introspection
-, wrapGAppsHook4
+, wrapGAppsHook
 , appstream-glib
 , desktop-file-utils
 }:
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     appstream-glib
     desktop-file-utils
     gobject-introspection

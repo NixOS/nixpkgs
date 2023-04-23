@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , gettext
 , gnome
 , glib
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
-    wrapGAppsHook4
+    wrapGAppsHook
     itstool
   ];
 

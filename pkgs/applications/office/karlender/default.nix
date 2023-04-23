@@ -4,7 +4,7 @@
 , pkg-config
 , gtk4
 , libadwaita
-, wrapGAppsHook4
+, wrapGAppsHook
 , glib
 , tzdata
 }:
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     glib
   ];
 

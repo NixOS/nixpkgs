@@ -4,7 +4,6 @@
 , makeWrapper
 , gobject-introspection
 , isGraphical ? true
-, gtk3
 , librsvg
 , dconf
 , callPackage

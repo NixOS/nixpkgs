@@ -4,7 +4,7 @@
 , pkg-config
 , alsa-lib
 , gtk4
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=\${out}" "PREFIX=''" ];
   sourceRoot = "source/src";
-  nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [ gtk4 alsa-lib ];
 
   meta = with lib; {

@@ -13,7 +13,7 @@
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook4
+, wrapGAppsHook
 , nix-update-script
 }:
 
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     gettext
     glib # for glib-compile-resources
     desktop-file-utils

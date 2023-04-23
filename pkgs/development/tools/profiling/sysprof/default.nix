@@ -17,7 +17,7 @@
 , polkit
 , shared-mime-info
 , systemd
-, wrapGAppsHook4
+, wrapGAppsHook
 , gnome
 }:
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     shared-mime-info
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [
