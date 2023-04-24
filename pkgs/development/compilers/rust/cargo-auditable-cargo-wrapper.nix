@@ -1,6 +1,6 @@
 { lib, runCommand, makeBinaryWrapper, cargo, cargo-auditable }:
 
-runCommand "cargo" {
+runCommand "auditable-${cargo.name}" {
   nativeBuildInputs = [ makeBinaryWrapper ];
   meta = cargo-auditable.meta // {
     mainProgram = "cargo";
