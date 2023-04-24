@@ -54,4 +54,15 @@ in
       assert "MediaWiki has been installed" in page
     '';
   };
+
+  nohttpd = testLib.makeTest {
+    name = "mediawiki-nohttpd";
+    nodes.machine = {
+      services.mediawiki.webserver = "none";
+    };
+    testScript = ''
+      start_all()
+      machine.wait_for_unit("phpfpm-mediawiki.service")
+    '';
+  };
 }
