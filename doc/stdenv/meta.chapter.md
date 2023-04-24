@@ -182,7 +182,26 @@ meta.hydraPlatforms = [];
 
 ### `broken` {#var-meta-broken}
 
-If set to `true`, the package is marked as "broken", meaning that it won’t show up in `nix-env -qa`, and cannot be built or installed. Such packages should be removed from Nixpkgs eventually unless they are fixed.
+If set to `true`, the package is marked as "broken", meaning that it won’t show up in [search.nixos.org](https://search.nixos.org/packages), and cannot be built or installed unless the environment variable [`NIXPKGS_ALLOW_BROKEN`](#opt-allowBroken) is set.
+Such unconditionally-broken packages should be removed from Nixpkgs eventually unless they are fixed.
+
+The value of this attribute can depend on a package's arguments, including `stdenv`.
+This means that `broken` can be used to express constraints, for example:
+
+- Does not cross compile
+
+  ```nix
+   meta.broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+  ```
+
+- Broken if all of a certain set of its dependencies are broken
+
+  ```nix
+  meta.broken = lib.all (map (p: p.meta.broken) [ glibc musl ])
+  ```
+
+This makes `broken` strictly more powerful than `meta.badPlatforms`.
+However `meta.availableOn` currently examines only `meta.platforms` and `meta.badPlatforms`, so `meta.broken` does not influence the default values for optional dependencies.
 
 ## Licenses {#sec-meta-license}
 
