@@ -23960,6 +23960,8 @@ with pkgs;
 
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
 
+  mullvad-browser = callPackage ../applications/networking/browsers/mullvad-browser { };
+
   mycorrhiza = callPackage ../servers/mycorrhiza { };
 
   napalm = with python3Packages; toPythonApplication (
