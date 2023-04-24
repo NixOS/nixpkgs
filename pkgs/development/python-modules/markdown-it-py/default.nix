@@ -16,6 +16,7 @@
 , sphinx-book-theme
 , sphinx-copybutton
 , sphinx-design
+, stdenv
 , pytest-regressions
 , pytestCheckHook
 , pythonOlder
