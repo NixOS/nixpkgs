@@ -73,7 +73,7 @@ let
       $wgScriptPath = "";
 
       ## The protocol and server name to use in fully-qualified URLs
-      $wgServer = "${if cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL then "https" else "http"}://${cfg.virtualHost.hostName}";
+      $wgServer = "${if cfg.httpd.virtualHost.addSSL || cfg.httpd.virtualHost.forceSSL || cfg.httpd.virtualHost.onlySSL then "https" else "http"}://${cfg.httpd.virtualHost.hostName}";
 
       ## The URL path to static resources (images, scripts, etc.)
       $wgResourceBasePath = $wgScriptPath;
@@ -87,7 +87,7 @@ let
       $wgEnableEmail = true;
       $wgEnableUserEmail = true; # UPO
 
-      $wgEmergencyContact = "${if cfg.virtualHost.adminAddr != null then cfg.virtualHost.adminAddr else config.services.httpd.adminAddr}";
+      $wgEmergencyContact = "${if cfg.httpd.virtualHost.adminAddr != null then cfg.httpd.virtualHost.adminAddr else config.services.httpd.adminAddr}";
       $wgPasswordSender = $wgEmergencyContact;
 
       $wgEnotifUserTalk = false; # UPO
@@ -318,7 +318,7 @@ in
         };
       };
 
-      virtualHost = mkOption {
+      httpd.virtualHost = mkOption {
         type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
         example = literalExpression ''
           {
@@ -365,6 +365,10 @@ in
 
     };
   };
+
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "mediawiki" "virtualHost" ] [ "services" "mediawiki" "httpd" "virtualHost" ])
+  ];
 
   # implementation
   config = mkIf cfg.enable {
@@ -421,7 +425,7 @@ in
     services.httpd = {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
+      virtualHosts.${cfg.httpd.virtualHost.hostName} = mkMerge [ cfg.httpd.virtualHost {
         documentRoot = mkForce "${pkg}/share/mediawiki";
         extraConfig = ''
           <Directory "${pkg}/share/mediawiki">

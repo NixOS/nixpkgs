@@ -7,8 +7,8 @@
 let
   shared = {
     services.mediawiki.enable = true;
-    services.mediawiki.virtualHost.hostName = "localhost";
-    services.mediawiki.virtualHost.adminAddr = "root@example.com";
+    services.mediawiki.httpd.virtualHost.hostName = "localhost";
+    services.mediawiki.httpd.virtualHost.adminAddr = "root@example.com";
     services.mediawiki.passwordFile = pkgs.writeText "password" "correcthorsebatterystaple";
     services.mediawiki.extensions = {
       Matomo = pkgs.fetchzip {
