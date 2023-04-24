@@ -45,23 +45,23 @@ The exact schema these fields follow is a bit ill-defined due to a long and conv
 `config`
 
 : This is a 3-, 4-, or 5-component shorthand for the platform.
- 
+
   Format:
-  
+
   - `[cpu]-[vendor]-[os]`
   - `[cpu]-[vendor]-[os]-[abi]`
   - `[cpu]-[vendor]-[os]-[libc][abi]`
 
   :::{.note}
   There is no hyphen separating the `[libc]` field from the `[abi]` field.
-  :::  
+  :::
 
   Examples:
-  
+
   - `aarch64-apple-darwin14`
   - `x86_64-unknown-linux-gnux32`
   - `mips64el-unknown-linux-muslabin32`
-  
+
   This is a standard format [pioneered by autoconf](https://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/System-Type.html#System-Type) and [adopted by LLVM](https://clang.llvm.org/docs/CrossCompilation.html#target-triple).
   It is strictly more informative than the platform string `[cpu]-[os]` used by Nix.
   <!-- TODO: link to a specification of the platform string used by Nix in the Nix manual, once such a thing exists -->
