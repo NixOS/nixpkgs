@@ -31535,6 +31535,8 @@ with pkgs;
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
+  kubecm = callPackage ../applications/networking/cluster/kubecm { };
+
   ktunnel = callPackage ../applications/networking/cluster/ktunnel { };
 
   pinniped = callPackage ../applications/networking/cluster/pinniped { };
