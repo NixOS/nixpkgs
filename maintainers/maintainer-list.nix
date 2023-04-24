@@ -6118,6 +6118,12 @@
     githubId = 2405974;
     name = "Sébastian Méric de Bellefon";
   };
+  hellwolf = {
+    email = "zhicheng.miao@gmail.com";
+    github = "hellwolf";
+    githubId = 186660;
+    name = "Miao, ZhiCheng";
+  };
   henkery = {
     email = "jim@reupload.nl";
     github = "henkery";
