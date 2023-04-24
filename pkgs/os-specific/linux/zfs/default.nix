@@ -227,13 +227,19 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelOlder "6.2";
-    latestCompatibleLinuxPackages = linuxPackages_6_1;
+    kernelCompatible =
+      if stdenv'.isx86_64
+      then kernel.kernelOlder "6.3"
+      else kernel.kernelOlder "6.2";
+    latestCompatibleLinuxPackages =
+      if stdenv'.isx86_64
+      then linuxPackages_6_2
+      else linuxPackages_6_1;
 
     # this package should point to the latest release.
-    version = "2.1.9";
+    version = "2.1.11";
 
-    sha256 = "RT2ijcXhdw5rbz1niDjrqg6G/uOjyrJiTlS4qijiWqc=";
+    sha256 = "tJLwyqUj1l5F0WKZDeMGrEFa8fc/axKqm31xtN51a5M=";
   };
 
   zfsUnstable = common {
@@ -254,19 +260,11 @@ in {
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.10-staging-2023-03-15";
-    rev = "a5c469c5f380b09705ad0bee15e2ca7a5f78213c";
+    version = "2.1.12-staging-2023-04-18";
+    rev = "e25f9131d679692704c11dc0c1df6d4585b70c35";
 
-    sha256 = "sha256-CdPuyZMXFzANEdnsr/rB5ckkT8X5uziniY5vmRCKl1U=";
+    sha256 = "tJLwyqUj1l5F0WKZDeMGrEFa8fc/axKqm31xtN51a5M=";
 
     isUnstable = true;
-
-    # Necessary for 6.2.8+ and 6.3 compatibility, see https://github.com/openzfs/zfs/issues/14658
-    extraPatches = [
-      (fetchpatch {
-        url = "https://github.com/openzfs/zfs/pull/14668.patch";
-        hash = "sha256-PR7hxxdjLkjszADdw0R0JRmBPfDlsXG6D+VfC7QzEhk=";
-      })
-    ];
   };
 }
