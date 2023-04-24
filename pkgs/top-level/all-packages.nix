@@ -18861,6 +18861,10 @@ with pkgs;
 
   rufo = callPackage ../development/tools/rufo { };
 
+  rye = callPackage ../development/tools/rye {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
+
   samurai = callPackage ../development/tools/build-managers/samurai { };
 
   muon = callPackage ../development/tools/build-managers/muon { };
