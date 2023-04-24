@@ -318,7 +318,7 @@ let
 
       qmake = makeSetupHook {
         name = "qmake-hook";
-        propagatedBuildInputs = [ self.qtbase.dev ];
+        depsTargetTargetPropagated = [ self.qtbase.dev ];
         substitutions = {
           inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;

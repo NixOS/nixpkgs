@@ -18,7 +18,8 @@ mkDerivation (args // {
   inherit pname version src;
   patches = (args.patches or []) ++ (patches.${pname} or []);
 
-  nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
+  nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake self.qtbase.dev ];
+
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
