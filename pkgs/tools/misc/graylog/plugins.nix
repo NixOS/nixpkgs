@@ -1,6 +1,6 @@
-{ pkgs,  lib, stdenv, fetchurl, unzip, graylog }:
+{ lib, stdenv, fetchurl, unzip, graylog-5_0 }:
 
-with pkgs.lib;
+with lib;
 
 let
   glPlugin = a@{
