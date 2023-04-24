@@ -87,8 +87,7 @@ let
       $wgEnableEmail = true;
       $wgEnableUserEmail = true; # UPO
 
-      $wgEmergencyContact = "${if cfg.httpd.virtualHost.adminAddr != null then cfg.httpd.virtualHost.adminAddr else config.services.httpd.adminAddr}";
-      $wgPasswordSender = $wgEmergencyContact;
+      $wgPasswordSender = "${if cfg.httpd.virtualHost.adminAddr != null then cfg.httpd.virtualHost.adminAddr else config.services.httpd.adminAddr}";
 
       $wgEnotifUserTalk = false; # UPO
       $wgEnotifWatchlist = false; # UPO
