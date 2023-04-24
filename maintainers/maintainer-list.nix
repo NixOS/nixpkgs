@@ -5433,17 +5433,17 @@
     githubId = 606000;
     name = "Gabriel Adomnicai";
   };
-  Gabriel439 = {
-    email = "Gabriel439@gmail.com";
-    github = "Gabriella439";
-    githubId = 1313787;
-    name = "Gabriel Gonzalez";
-  };
   GabrielDougherty = {
     email = "contact@gabrieldougherty.com";
     github = "GabrielDougherty";
     githubId = 10541219;
     name = "Gabriel Dougherty";
+  };
+  Gabriella439 = {
+    email = "GenuineGabriella@gmail.com";
+    github = "Gabriella439";
+    githubId = 1313787;
+    name = "Gabriella Gonzalez";
   };
   gador = {
     email = "florian.brandes@posteo.de";
