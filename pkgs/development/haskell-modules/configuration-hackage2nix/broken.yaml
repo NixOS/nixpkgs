@@ -3150,7 +3150,6 @@ broken-packages:
   - ll-picosat
   - llsd
   - llvm-base
-  - llvm-ffi
   - llvm-general-pure
   - llvm-hs
   - llvm-ht
