@@ -98,10 +98,10 @@ meta.platforms = lib.platforms.all;
 meta.badPlatforms = [ lib.systems.inspect.patterns.isStatic ];
 ```
 
-The `lib.meta.availableOn` function can be used to test whether or not a package is available (i.e. buildable) on a given platform.
+The [`lib.meta.availableOn`](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734da3e7be9bf8d94433a5195734b19/lib/meta.nix#L95-L106) function can be used to test whether or not a package is available (i.e. buildable) on a given platform.
 Some packages use this to automatically detect the maximum set of features with which they can be built.
-For example, `systemd` requires dynamic linking, and has a `meta.badPlatforms` setting similar to the one above.
-Packages which can be built with or without `systemd` support will use `lib.meta.availableOn` to detect whether or not `systemd` is available on the `hostPlatform` for which they are being built; if it is not available (e.g. due to a statically-linked host platform like `pkgsStatic`) this support will be disabled by default.
+For example, `systemd` [requires dynamic linking](https://github.com/systemd/systemd/issues/20600#issuecomment-912338965), and [has a `meta.badPlatforms` setting](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734da3e7be9bf8d94433a5195734b19/pkgs/os-specific/linux/systemd/default.nix#L752) similar to the one above.
+Packages which can be built with or without `systemd` support will use `lib.meta.availableOn` to detect whether or not `systemd` is available on the [`hostPlatform`](#ssec-cross-platform-parameters) for which they are being built; if it is not available (e.g. due to a statically-linked host platform like `pkgsStatic`) this support will be disabled by default.
 
 ### `tests` {#var-meta-tests}
 
