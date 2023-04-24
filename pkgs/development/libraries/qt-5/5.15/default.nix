@@ -207,6 +207,7 @@ let
         {
           inherit perl;
           inherit lib;
+          inherit buildPackages;
           # Use a variant of mkDerivation that does not include wrapQtApplications
           # to avoid cyclic dependencies between Qt modules.
           mkDerivation =
