@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, buildFHSEnv, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, buildFHSEnv, installShellFiles, go-task }:
 
 let
 
@@ -17,11 +17,37 @@ let
       installShellFiles
     ];
 
+    nativeCheckInputs = [
+      go-task
+    ];
+
     subPackages = [ "." ];
 
     vendorSha256 = "sha256-+5Cj6wdX25fK+Y9czTwRRqCdY+0iarvii9nD3QMDh+c=";
 
-    doCheck = false;
+    postPatch = let
+      skipTests = [
+        # tries to "go install"
+        "TestDummyMonitor"
+        # try to Get "https://downloads.arduino.cc/libraries/library_index.tar.bz2"
+        "TestDownloadAndChecksums"
+        "TestParseArgs"
+        "TestParseReferenceCores"
+        "TestPlatformSearch"
+        "TestPlatformSearchSorting"
+      ];
+    in ''
+      substituteInPlace Taskfile.yml \
+        --replace "go test" "go test -p $NIX_BUILD_CORES -skip '(${lib.concatStringsSep "|" skipTests})'"
+    '';
+
+    doCheck = stdenv.isLinux;
+
+    checkPhase = ''
+      runHook preCheck
+      task go:test
+      runHook postCheck
+    '';
 
     ldflags = [
       "-s" "-w" "-X github.com/arduino/arduino-cli/version.versionString=${version}" "-X github.com/arduino/arduino-cli/version.commit=unknown"
