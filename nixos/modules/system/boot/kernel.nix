@@ -243,6 +243,15 @@ in
         This option allows modules to specify the kernel config options that
         must be set (or unset) for the module to work. Please use the
         lib.kernelConfig functions to build list elements.
+
+        Important caveats:
+        - This option is completely ignored if the `config.boot.kernelPackages.kernel.features` attribute exists (even if it is the
+          empty list).
+        - These constraints are not checked against the true final kernel configuration:
+          - The constraints are checked *before* boot.kernelPackages.extraStructuredConfig is applied
+          - The constraints are checked *before* any unstructured configuration is applied
+          - Certain combinations of kernel configuration options "imply" others, causing them to be turned on (or off) automatically
+            by `make config` at build time.  The constraints are checked before this happens.
       '';
     };
 
