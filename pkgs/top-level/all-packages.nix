@@ -39137,4 +39137,6 @@ with pkgs;
   resgate = callPackage ../servers/resgate { };
 
   oversteer = callPackage ../applications/misc/oversteer { };
+
+  pecli = callPackage ../development/tools/misc/pecli { };
 }
