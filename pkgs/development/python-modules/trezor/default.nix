@@ -14,7 +14,6 @@
 , mnemonic
 , pillow
 , protobuf
-, pyblake2
 , requests
 , shamir-mnemonic
 , simple-rlp
@@ -47,7 +46,6 @@ buildPythonPackage rec {
     mnemonic
     pillow
     protobuf
-    pyblake2
     requests
     shamir-mnemonic
     simple-rlp

@@ -199,7 +199,7 @@ in
             (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
         serviceConfig = {
-          ExecStart = "@${cfg.package}/bin/consul consul agent -config-dir /etc/consul.d"
+          ExecStart = "@${lib.getExe cfg.package} consul agent -config-dir /etc/consul.d"
             + concatMapStrings (n: " -config-file ${n}") configFiles;
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           PermissionsStartOnly = true;
@@ -207,10 +207,10 @@ in
           Restart = "on-failure";
           TimeoutStartSec = "infinity";
         } // (optionalAttrs (cfg.leaveOnStop) {
-          ExecStop = "${cfg.package}/bin/consul leave";
+          ExecStop = "${lib.getExe cfg.package} leave";
         });
 
-        path = with pkgs; [ iproute2 gnugrep gawk consul ];
+        path = with pkgs; [ iproute2 gawk cfg.package ];
         preStart = let
           family = if cfg.forceAddrFamily == "ipv6" then
             "-6"
@@ -269,7 +269,7 @@ in
 
         serviceConfig = {
           ExecStart = ''
-            ${cfg.alerts.package}/bin/consul-alerts start \
+            ${lib.getExe cfg.alerts.package} start \
               --alert-addr=${cfg.alerts.listenAddr} \
               --consul-addr=${cfg.alerts.consulAddr} \
               ${optionalString cfg.alerts.watchChecks "--watch-checks"} \
