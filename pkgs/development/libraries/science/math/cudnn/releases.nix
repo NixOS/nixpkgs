@@ -1,3 +1,4 @@
+# NOTE: Check https://docs.nvidia.com/deeplearning/cudnn/archives/index.html for support matrices.
 [
   {
     version = "7.4.2.24";

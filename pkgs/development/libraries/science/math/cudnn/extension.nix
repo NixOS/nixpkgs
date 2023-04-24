@@ -43,21 +43,8 @@ final: prev: let
   cudnnReleases = lists.reverseList (builtins.import ./releases.nix);
 
   # Check whether a CUDNN release supports our CUDA version
-  # supportedReleases :: NonEmptyList Release
-  supportedReleases = let
-    filtered = builtins.filter isSupported cudnnReleases;
-    nonEmptyFiltered =
-      trivial.throwIf (filtered == [])
-      ''
-        CUDNN does not support your cuda version ${cudaVersion}
-      ''
-      filtered;
-  in
-    nonEmptyFiltered;
-
-  # The latest release is the first element of the list and will be our default choice
-  # latestReleaseName :: String
-  latestReleaseName = computeName (builtins.head supportedReleases).version;
+  # supportedReleases :: List Release
+  supportedReleases = builtins.filter isSupported cudnnReleases;
 
   # Function to transform our releases into build attributes
   # toBuildAttrs :: Release -> { name: String, value: Derivation }
@@ -70,9 +57,14 @@ final: prev: let
   # allBuilds :: AttrSet String Derivation
   allBuilds = builtins.listToAttrs (builtins.map toBuildAttrs supportedReleases);
 
-  # The latest release will be our default build
-  # defaultBuild :: AttrSet String Derivation
-  defaultBuild.cudnn = allBuilds.${latestReleaseName};
+  defaultBuild = attrsets.optionalAttrs (supportedReleases != []) {
+    cudnn = let
+      # The latest release is the first element of the list and will be our default choice
+      # latestReleaseName :: String
+      latestReleaseName = computeName (builtins.head supportedReleases).version;
+    in
+      allBuilds.${latestReleaseName};
+  };
 
   # builds :: AttrSet String Derivation
   builds = allBuilds // defaultBuild;
