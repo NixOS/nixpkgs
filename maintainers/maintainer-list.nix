@@ -3304,7 +3304,7 @@
     }];
   };
   cyntheticfox = {
-    email = "houstdav000@gmail.com";
+    email = "cyntheticfox@gh0st.sh";
     github = "cyntheticfox";
     githubId = 17628961;
     matrix = "@houstdav000:gh0st.ems.host";
