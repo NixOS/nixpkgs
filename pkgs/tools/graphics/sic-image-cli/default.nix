@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sic-image-cli";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "foresterre";
     repo = "sic";
     rev = "v${version}";
-    sha256 = "sha256-ZKxBanCfPBo5k1EI/cJKpHiWF7M1blZdchWy3DMHrnQ=";
+    sha256 = "sha256-qUhxJw6c1WBJRS1lNg0opux5ePoVlDCLOWUHRCWgkBk=";
   };
 
-  cargoSha256 = "sha256-cj9UAPwgj4ZT+ReZWi9hOBNicMBOt9qdveYYF5CFapw=";
+  cargoSha256 = "sha256-ZhEI6yTOVu1dAIoJhKfE3YiM9QJPnhLd49irmPfNLDM=";
 
   nativeBuildInputs = [ installShellFiles nasm ];
 
