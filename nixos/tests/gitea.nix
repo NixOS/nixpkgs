@@ -72,6 +72,7 @@ let
 
       server.wait_for_unit("gitea.service")
       server.wait_for_open_port(3000)
+      server.wait_for_open_port(22)
       server.succeed("curl --fail http://localhost:3000/")
 
       server.succeed(

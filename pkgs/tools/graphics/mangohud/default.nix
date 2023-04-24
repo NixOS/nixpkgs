@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchFromGitLab
 , fetchFromGitHub
 , fetchurl
 , substituteAll
@@ -13,6 +14,7 @@
 , hwdata
 , mangohud32
 , addOpenGLRunpath
+, appstream
 , glslang
 , mako
 , meson
@@ -32,6 +34,17 @@
 }:
 
 let
+  # Derived from subprojects/cmocka.wrap
+  cmocka = rec {
+    version = "1.81";
+    src = fetchFromGitLab {
+      owner = "cmocka";
+      repo = "cmocka";
+      rev = "59dc0013f9f29fcf212fe4911c78e734263ce24c";
+      hash = "sha256-IbAZOC0Q60PrKlKVWsgg/PFDV0PLb/yy+Iz/4Iziny0=";
+    };
+  };
+
   # Derived from subprojects/imgui.wrap
   imgui = rec {
     version = "1.81";
@@ -79,6 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Unpack subproject sources
   postUnpack = ''(
     cd "$sourceRoot/subprojects"
+    ${lib.optionalString finalAttrs.doCheck ''
+      cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
+    ''}
     cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
     cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
   )'';
@@ -127,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dwith_wayland=enabled"
     "-Duse_system_spdlog=enabled"
-    "-Dtests=disabled" # Tests require AMD GPU
+    "-Dtests=${if finalAttrs.doCheck then "enabled" else "disabled"}"
   ] ++ lib.optionals gamescopeSupport [
     "-Dmangoapp=true"
     "-Dmangoapp_layer=true"
@@ -160,6 +176,12 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXrandr
   ];
 
+  doCheck = true;
+
+  nativeCheckInputs = [
+    appstream
+  ];
+
   # Support 32bit Vulkan applications by linking in 32bit Vulkan layers
   # This is needed for the same reason the 32bit preload workaround is needed.
   postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
@@ -172,11 +194,15 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
   '';
 
-  # Add OpenGL driver path to RUNPATH to support NVIDIA cards
   postFixup = ''
+    # Add OpenGL driver path to RUNPATH to support NVIDIA cards
     addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
     ${lib.optionalString gamescopeSupport ''
       addOpenGLRunpath "$out/bin/mangoapp"
+    ''}
+    ${lib.optionalString finalAttrs.doCheck ''
+      # libcmocka.so is only used for tests
+      rm "$out/lib/libcmocka.so"
     ''}
   '';
 

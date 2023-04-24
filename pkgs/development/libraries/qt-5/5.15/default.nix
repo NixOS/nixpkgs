@@ -164,6 +164,7 @@ let
         inherit gstreamer gst-plugins-base;
       };
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
+      qtpositioning = callPackage ../modules/qtpositioning.nix {};
       qtquick1 = null;
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
