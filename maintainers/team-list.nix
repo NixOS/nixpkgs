@@ -534,6 +534,15 @@ with lib.maintainers; {
     shortName = "Matrix";
   };
 
+  mercury = {
+    members = [
+      _9999years
+      Gabriella439
+    ];
+    scope = "mercury.com engineers working on Haskell.";
+    shortName = "Mercury";
+  };
+
   mobile = {
     members = [
       samueldr
