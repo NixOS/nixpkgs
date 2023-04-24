@@ -1860,9 +1860,6 @@ mapAliases ({
     Its new location is obs-studio-plugins.wlrobs.
   ''; # Added 2021-06-01
 
-  oraclejdk8psu = throw "The *psu versions of oraclejdk are no longer provided by upstream"; # Cleanup before 20.09
-  oraclejre8psu = oraclejdk8psu; # Cleanup before 20.09
-  oraclejdk8psu_distro = oraclejdk8psu; # Cleanup before 20.09
   posix_man_pages = man-pages-posix; # Added 2021-04-15
   riot-desktop = throw "riot-desktop is now element-desktop!"; # Cleanup before 21.05
   riot-web = throw "riot-web is now element-web"; # Cleanup before 21.05
