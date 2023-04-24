@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-stringop-truncation";
   doCheck = true;
   enableParallelBuilding = true;
 
