@@ -37,6 +37,7 @@ let
     dde-session-ui = callPackage ./core/dde-session-ui { };
     dde-polkit-agent = callPackage ./core/dde-polkit-agent { };
     dpa-ext-gnomekeyring = callPackage ./core/dpa-ext-gnomekeyring { };
+    dde-gsettings-schemas = callPackage ./core/dde-gsettings-schemas { };
 
     #### Dtk Application
     deepin-album = callPackage ./apps/deepin-album { };
