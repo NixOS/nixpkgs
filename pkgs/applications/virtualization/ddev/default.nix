@@ -1,34 +1,34 @@
 { lib
-, buildGoPackage
+, bash
+, curl
 , docker
 , docker-compose
 , fetchFromGitHub
+, git
+, go
+, pkgs
+, stdenv
 , testers
 , ddev }:
 
-buildGoPackage rec {
-  pname = "ddev";
-  version = "1.21.4";
-  goPackagePath = "github.com/drud/ddev";
 
+let
+  pname = "ddev";
+  version = "1.21.6";
+in
+
+stdenv.mkDerivation {
+  name = pname;
+  version = version;
   src = fetchFromGitHub {
-    owner = "drud";
+    owner = "ddev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "XmvknKHVN/qebJfdX2bL+CZ/czZ2H0OFJz7/ofySoeU=";
+    sha256 = "sha256-Wjg0Yxo/ulY6R6hhUMFvNZUSwpXENmAHU7GPbgdw7tw=";
   };
-
-  vendorHash = null;
-
-  ldflags = [
-    "-s" "-w"
-    "-X github.com/drud/ddev/pkg/versionconstants.DdevVersion=${src.rev}"
-  ];
-
-  buildInputs = [
-    docker
-    docker-compose
-  ];
+  buildInputs = [ bash curl git go ];
+  makeFLags = [ "SHELL=${bash}/bin/bash" ];
+  buildFlags = ["build"];
 
   passthru.tests.version = testers.testVersion {
     package = ddev;
