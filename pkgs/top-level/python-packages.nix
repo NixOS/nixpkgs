@@ -8016,8 +8016,6 @@ self: super: with self; {
 
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
 
-  pyblake2 = callPackage ../development/python-modules/pyblake2 { };
-
   pyblock = toPythonModule (callPackage ../development/python-modules/pyblock { });
 
   pybluez = callPackage ../development/python-modules/pybluez {
