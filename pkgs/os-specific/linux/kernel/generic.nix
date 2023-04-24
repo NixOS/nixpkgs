@@ -71,7 +71,11 @@
 
 assert stdenv.isLinux;
 
+assert args?extraStructuredConfig ->
+       throw "you passed extraStructuredConfig (nixos name) instead of structuredExtraConfig (nixpkgs name)";
+
 let
+
   # Dirty hack to make sure that `version` & `src` have
   # `<nixpkgs/pkgs/os-specific/linux/kernel/linux-x.y.nix>` as position
   # when using `builtins.unsafeGetAttrPos`.
@@ -105,7 +109,10 @@ let
     + stdenv.hostPlatform.linux-kernel.extraConfig or "";
 
   structuredConfigFromPatches =
-        map ({extraStructuredConfig ? {}, ...}: {settings=extraStructuredConfig;}) kernelPatches;
+    map ({extraStructuredConfig ? {}, ...}@args:
+      assert args?structuredExtraConfig ->
+             throw "you passed structuredExtraConfig (nixpkgs name) instead of extraStructuredConfig (nixos name)";
+      {settings=extraStructuredConfig;}) kernelPatches;
 
   # appends kernel patches extraConfig
   kernelConfigFun = baseConfigStr:
