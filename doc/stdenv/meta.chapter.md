@@ -88,14 +88,20 @@ Attribute Set `lib.platforms` defines [various common lists](https://github.com/
 
 ### `badPlatforms` {#var-meta-badPlatforms}
 
-The list of Nix platform types on which the package is known not to be buildable.  Hydra will never create prebuilt binaries for these platform types, even if they are in `meta.platforms`.  In general it is preferable to set `meta.platforms = lib.platforms.all` and then exclude any platforms on which the package is known not to build.  For example, a package which requires dynamic linking and cannot be linked statically could use this:
+The list of Nix platform types on which the package is known not to be buildable.
+Hydra will never create prebuilt binaries for these platform types, even if they are in `meta.platforms`.
+In general it is preferable to set `meta.platforms = lib.platforms.all` and then exclude any platforms on which the package is known not to build.
+For example, a package which requires dynamic linking and cannot be linked statically could use this:
 
 ```nix
 meta.platforms = lib.platforms.all;
 meta.badPlatforms = [ lib.systems.inspect.patterns.isStatic ];
 ```
 
-The `lib.meta.availableOn` function can be used to test whether or not a package is available (i.e. buildable) on a given platform.  Some packages use this to automatically detect the maximum set of features with which they can be built.  For example, `systemd` requires dynamic linking, and has a `meta.badPlatforms` setting similar to the one above.  Packages which can be built with or without `systemd` support will use `lib.meta.availableOn` to detect whether or not `systemd` is available on the `hostPlatform` for which they are being built; if it is not available (e.g. due to a statically-linked host platform like `pkgsStatic`) this support will be disabled by default.
+The `lib.meta.availableOn` function can be used to test whether or not a package is available (i.e. buildable) on a given platform.
+Some packages use this to automatically detect the maximum set of features with which they can be built.
+For example, `systemd` requires dynamic linking, and has a `meta.badPlatforms` setting similar to the one above.
+Packages which can be built with or without `systemd` support will use `lib.meta.availableOn` to detect whether or not `systemd` is available on the `hostPlatform` for which they are being built; if it is not available (e.g. due to a statically-linked host platform like `pkgsStatic`) this support will be disabled by default.
 
 ### `tests` {#var-meta-tests}
 
