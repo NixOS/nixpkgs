@@ -2510,8 +2510,6 @@ dont-distribute-packages:
  - kit
  - kmeans-par
  - kmeans-vector
- - knead
- - knead-arithmetic
  - knit-haskell
  - koji-install
  - koji-tool
@@ -2638,14 +2636,11 @@ dont-distribute-packages:
  - llvm-base-types
  - llvm-base-util
  - llvm-data-interop
- - llvm-dsl
  - llvm-extension
- - llvm-extra
  - llvm-general
  - llvm-general-quote
  - llvm-hs-pretty
  - llvm-pretty-bc-parser
- - llvm-tf
  - llvm-tools
  - lmonad-yesod
  - lnd-client
@@ -3835,7 +3830,6 @@ dont-distribute-packages:
  - syntax-pretty
  - syntax-printer
  - syntaxnet-haskell
- - synthesizer-llvm
  - sys-process
  - systemstats
  - t3-client
@@ -3901,7 +3895,6 @@ dont-distribute-packages:
  - time-io-access
  - time-warp
  - timeprint
- - timeseries
  - timezone-unix
  - tinkoff-invest-sdk
  - tintin

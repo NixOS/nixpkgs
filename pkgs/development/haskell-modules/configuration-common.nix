@@ -2625,4 +2625,8 @@ self: super: {
   # compatability with other gi- packages.
   # Take another look when gi-webkit2 updates as it may have become compatible with libsoup-3
   gi-soup = assert versions.major self.gi-webkit2.version == "4"; self.gi-soup_2_4_28;
+
+  llvm-ffi = super.llvm-ffi.override {
+    LLVM = pkgs.llvmPackages_13.libllvm;
+  };
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
