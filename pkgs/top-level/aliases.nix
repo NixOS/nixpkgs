@@ -1628,7 +1628,7 @@ mapAliases ({
   torchPackages = throw "torchPackages has been removed, as the upstream project has been abandoned"; # Added 2020-03-28
   trang = throw "'trang' has been renamed to/replaced by 'jing-trang'"; # Converted to throw 2022-02-22
   transfig = fig2dev; # Added 2022-02-15
-  transmission-remote-cli = "transmission-remote-cli has been removed, as the upstream project has been abandoned. Please use tremc instead"; # Added 2020-10-14
+  transmission-remote-cli = throw "transmission-remote-cli has been removed, as the upstream project has been abandoned. Please use tremc instead"; # Added 2020-10-14
   transmission_gtk = throw "'transmission_gtk' has been renamed to/replaced by 'transmission-gtk'"; # Converted to throw 2022-02-22
   transmission_remote_gtk = throw "'transmission_remote_gtk' has been renamed to/replaced by 'transmission-remote-gtk'"; # Converted to throw 2022-02-22
   transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned";
