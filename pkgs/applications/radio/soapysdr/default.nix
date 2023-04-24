@@ -6,6 +6,7 @@
 , ncurses, swig2
 , extraPackages ? []
 , testers
+, buildPackages
 }:
 
 let
@@ -51,7 +52,7 @@ in stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString (lib.length extraPackages != 0) ''
     # Join all plugins via symlinking
     for i in ${toString extraPackages}; do
-      ${lndir}/bin/lndir -silent $i $out
+      ${buildPackages.xorg.lndir}/bin/lndir -silent $i $out
     done
     # Needed for at least the remote plugin server
     for file in $out/bin/*; do
