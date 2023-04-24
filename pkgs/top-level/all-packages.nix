@@ -9113,6 +9113,8 @@ with pkgs;
 
   lfs = callPackage ../tools/filesystems/lfs { };
 
+  linuxwave = callPackage ../tools/audio/linuxwave { };
+
   littlefs-fuse = callPackage ../tools/filesystems/littlefs-fuse { };
 
   lksctp-tools = callPackage ../os-specific/linux/lksctp-tools { };
