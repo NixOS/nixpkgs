@@ -5428,7 +5428,11 @@ self: super: with self; {
 
   ledger_agent = callPackage ../development/python-modules/ledger_agent { };
 
+  ledger-bitcoin = callPackage ../development/python-modules/ledger-bitcoin { };
+
   ledgerblue = callPackage ../development/python-modules/ledgerblue { };
+
+  ledgercomm = callPackage ../development/python-modules/ledgercomm { };
 
   ledgerwallet = callPackage ../development/python-modules/ledgerwallet {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
