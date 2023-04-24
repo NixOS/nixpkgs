@@ -12,6 +12,7 @@ let
     libudev0-shim
     nghttp2
     openssl
+    stdenv.cc.cc.lib
   ];
 in stdenv.mkDerivation rec {
   pname = "insomnia";
