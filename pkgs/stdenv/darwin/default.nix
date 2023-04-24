@@ -63,7 +63,6 @@ rec {
     unset SDKROOT
 
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
-  '' + lib.optionalString localSystem.isx86_64 ''
     stripDebugFlags="-S" # the Darwin "strip" command does something odd with "-p"
   '';
 
