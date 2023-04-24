@@ -16,7 +16,6 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-
   pname = "nmh";
   version = "1.7.1";
   src = fetchFromSavannah {
