@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "yatas";
-  version = "1.3.3";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "padok-team";
     repo = "YATAS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BjcqEO+rDEjPttGgTH07XyQKLcs/O+FarKTWjqXWQOo=";
+    hash = "sha256-gw4aZ7SLUz5WLUb1z4zDtI6Ca0tEWhE5wobp5NRvjkg=";
   };
 
-  vendorHash = "sha256-QOFt9h4Hdt+Mx82yw4mjAoyUXHeprvjRoLYLBnihwJo=";
+  vendorHash = "sha256-zp5EVJe5Q6o6C0CZ8u+oEFEOy0NU5SgVN+cSc6A/jZ4=";
 
   meta = with lib; {
     description = "Tool to audit AWS infrastructure for misconfiguration or potential security issues";
