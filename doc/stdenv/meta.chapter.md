@@ -185,7 +185,7 @@ meta.hydraPlatforms = [];
 If set to `true`, the package is marked as "broken", meaning that it won’t show up in [search.nixos.org](https://search.nixos.org/packages), and cannot be built or installed unless the environment variable [`NIXPKGS_ALLOW_BROKEN`](#opt-allowBroken) is set.
 Such unconditionally-broken packages should be removed from Nixpkgs eventually unless they are fixed.
 
-The value of this attribute can depend on a package's arguments, including `stdenv`. 
+The value of this attribute can depend on a package's arguments, including `stdenv`.
 This means that `broken` can be used to express constraints, for example:
 
 - Does not cross compile
