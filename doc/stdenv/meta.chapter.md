@@ -86,6 +86,23 @@ meta.platforms = lib.platforms.linux;
 
 Attribute Set `lib.platforms` defines [various common lists](https://github.com/NixOS/nixpkgs/blob/master/lib/systems/doubles.nix) of platforms types.
 
+### `badPlatforms` {#var-meta-badPlatforms}
+
+The list of Nix [platform types](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734da3e7be9bf8d94433a5195734b19/lib/meta.nix#L75-L81) on which the package is known not to be buildable.
+Hydra will never create prebuilt binaries for these platform types, even if they are in [`meta.platforms`](#var-meta-platforms).
+In general it is preferable to set `meta.platforms = lib.platforms.all` and then exclude any platforms on which the package is known not to build.
+For example, a package which requires dynamic linking and cannot be linked statically could use this:
+
+```nix
+meta.platforms = lib.platforms.all;
+meta.badPlatforms = [ lib.systems.inspect.patterns.isStatic ];
+```
+
+The [`lib.meta.availableOn`](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734da3e7be9bf8d94433a5195734b19/lib/meta.nix#L95-L106) function can be used to test whether or not a package is available (i.e. buildable) on a given platform.
+Some packages use this to automatically detect the maximum set of features with which they can be built.
+For example, `systemd` [requires dynamic linking](https://github.com/systemd/systemd/issues/20600#issuecomment-912338965), and [has a `meta.badPlatforms` setting](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734da3e7be9bf8d94433a5195734b19/pkgs/os-specific/linux/systemd/default.nix#L752) similar to the one above.
+Packages which can be built with or without `systemd` support will use `lib.meta.availableOn` to detect whether or not `systemd` is available on the [`hostPlatform`](#ssec-cross-platform-parameters) for which they are being built; if it is not available (e.g. due to a statically-linked host platform like `pkgsStatic`) this support will be disabled by default.
+
 ### `tests` {#var-meta-tests}
 
 ::: {.warning}
@@ -173,7 +190,7 @@ To be effective, it must be presented directly to an evaluation process that han
 
 ### `hydraPlatforms` {#var-meta-hydraPlatforms}
 
-The list of Nix platform types for which the Hydra instance at `hydra.nixos.org` will build the package. (Hydra is the Nix-based continuous build system.) It defaults to the value of `meta.platforms`. Thus, the only reason to set `meta.hydraPlatforms` is if you want `hydra.nixos.org` to build the package on a subset of `meta.platforms`, or not at all, e.g.
+The list of Nix platform types for which the [Hydra](https://github.com/nixos/hydra) [instance at `hydra.nixos.org`](https://nixos.org/hydra) will build the package. (Hydra is the Nix-based continuous build system.) It defaults to the value of `meta.platforms`. Thus, the only reason to set `meta.hydraPlatforms` is if you want `hydra.nixos.org` to build the package on a subset of `meta.platforms`, or not at all, e.g.
 
 ```nix
 meta.platforms = lib.platforms.linux;
