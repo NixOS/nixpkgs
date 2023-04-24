@@ -88,8 +88,8 @@ Attribute Set `lib.platforms` defines [various common lists](https://github.com/
 
 ### `badPlatforms` {#var-meta-badPlatforms}
 
-The list of Nix platform types on which the package is known not to be buildable.
-Hydra will never create prebuilt binaries for these platform types, even if they are in `meta.platforms`.
+The list of Nix [platform types](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734da3e7be9bf8d94433a5195734b19/lib/meta.nix#L75-L81) on which the package is known not to be buildable.
+Hydra will never create prebuilt binaries for these platform types, even if they are in [`meta.platforms`](#var-meta-platforms).
 In general it is preferable to set `meta.platforms = lib.platforms.all` and then exclude any platforms on which the package is known not to build.
 For example, a package which requires dynamic linking and cannot be linked statically could use this:
 
@@ -190,7 +190,7 @@ To be effective, it must be presented directly to an evaluation process that han
 
 ### `hydraPlatforms` {#var-meta-hydraPlatforms}
 
-The list of Nix platform types for which the Hydra instance at `hydra.nixos.org` will build the package. (Hydra is the Nix-based continuous build system.) It defaults to the value of `meta.platforms`. Thus, the only reason to set `meta.hydraPlatforms` is if you want `hydra.nixos.org` to build the package on a subset of `meta.platforms`, or not at all, e.g.
+The list of Nix platform types for which the [Hydra](https://github.com/nixos/hydra) [instance at `hydra.nixos.org`](https://nixos.org/hydra) will build the package. (Hydra is the Nix-based continuous build system.) It defaults to the value of `meta.platforms`. Thus, the only reason to set `meta.hydraPlatforms` is if you want `hydra.nixos.org` to build the package on a subset of `meta.platforms`, or not at all, e.g.
 
 ```nix
 meta.platforms = lib.platforms.linux;
