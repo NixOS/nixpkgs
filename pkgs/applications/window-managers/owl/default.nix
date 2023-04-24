@@ -15,7 +15,7 @@ let
   mkDerivation = if stdenv.isDarwin then stdenv.mkDerivation else gnustep.gsmakeDerivation;
 in
 mkDerivation {
-  pname = "owl";
+  pname = "owl-compositor";
   version = "unstable-2021-11-10";
 
   src = fetchFromGitHub {

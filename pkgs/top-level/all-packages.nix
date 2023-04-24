@@ -2525,6 +2525,8 @@ with pkgs;
     fox = fox_1_6;
   };
 
+  xplr = callPackage ../applications/file-managers/xplr { };
+
   ytree = callPackage ../applications/file-managers/ytree { };
 
   ### APPLICATIONS/TERMINAL-EMULATORS
@@ -13142,6 +13144,8 @@ with pkgs;
 
   typst = callPackage ../tools/typesetting/typst { };
 
+  typst-fmt = callPackage ../tools/typesetting/typst-fmt { };
+
   tz = callPackage ../tools/misc/tz { };
 
   u9fs = callPackage ../servers/u9fs { };
@@ -13529,7 +13533,6 @@ with pkgs;
 
   xe = callPackage ../tools/system/xe { };
 
-  xplr = callPackage ../applications/misc/xplr { };
 
   xray = callPackage ../tools/networking/xray { };
 
