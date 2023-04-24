@@ -1,4 +1,6 @@
-{ lib, mkDerivation, perl }:
+{ lib, mkDerivation, perl
+, buildPackages
+}:
 
 let inherit (lib) licenses maintainers platforms; in
 
@@ -18,6 +20,7 @@ mkDerivation (args // {
 
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   outputs = args.outputs or [ "out" "dev" ];
   setOutputFlags = args.setOutputFlags or false;
