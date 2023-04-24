@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, swaybg
+{ lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, swaybg
 , meson, ninja, pkg-config, wayland-scanner, scdoc
 , wayland, libxkbcommon, pcre2, json_c, libevdev
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
@@ -37,6 +37,12 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit swaybg;
+    })
+
+    (fetchpatch {
+      name = "LIBINPUT_CONFIG_ACCEL_PROFILE_CUSTOM.patch";
+      url = "https://github.com/swaywm/sway/commit/dee032d0a0ecd958c902b88302dc59703d703c7f.diff";
+      hash = "sha256-dx+7MpEiAkxTBnJcsT3/1BO8rYRfNLecXmpAvhqGMD0=";
     })
   ] ++ lib.optionals (!isNixOS) [
     # References to /nix/store/... will get GC'ed which causes problems when
