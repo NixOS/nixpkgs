@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cloudflare-warp";
-  version = "2023.1.133";
+  version = "2023.3.398";
 
   src = fetchurl {
-    url = "https://pkg.cloudflareclient.com/uploads/cloudflare_warp_2023_1_133_1_amd64_734c1ff709.deb";
-    sha256 = "sha256-Yo1JnbXi9vbYYAkmwk4S7JZZE45SV4p4dB55Rt+w+LA=";
+    url = "https://pkg.cloudflareclient.com/uploads/cloudflare_warp_2023_3_398_1_amd64_002e48d521.deb";
+    hash = "sha256-1var+/G3WwICRLXsMHke277tmPYRPFW8Yf9b1Ex9OmU=";
   };
 
   nativeBuildInputs = [
