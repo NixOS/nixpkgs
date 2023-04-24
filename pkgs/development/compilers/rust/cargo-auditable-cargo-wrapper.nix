@@ -1,6 +1,7 @@
-{ lib, writeShellScriptBin, cargo, cargo-auditable }:
+{ lib, buildPackages, writeScriptBin, cargo, cargo-auditable }:
 
-(writeShellScriptBin "cargo" ''
+(writeScriptBin "cargo" ''
+  #!${buildPackages.runtimeShell} -e
   export PATH="${lib.makeBinPath [ cargo cargo-auditable ]}:$PATH"
   CARGO_AUDITABLE_IGNORE_UNSUPPORTED=1 exec cargo auditable "$@"
 '') // {
