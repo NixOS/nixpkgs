@@ -41,6 +41,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-edi6/Md6KebKM3wHArZe1htUCg0/BqMVZKA4xEH25GI=";
 
+  # lld: error: unknown argument '-Wl,--undefined=AUDITABLE_VERSION_INFO'
+  auditable = false;
+
   RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = [
