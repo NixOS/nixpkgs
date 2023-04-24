@@ -5163,6 +5163,13 @@
     githubId = 66178592;
     name = "Pavel Zolotarevskiy";
   };
+  flexiondotorg = {
+    name = "Martin Wimpress";
+    email = "martin@wimpress.org";
+    matrix = "@wimpress:matrix.org";
+    github = "flexiondotorg";
+    githubId = 304639;
+  };
   fliegendewurst = {
     email = "arne.keller@posteo.de";
     github = "FliegendeWurst";
