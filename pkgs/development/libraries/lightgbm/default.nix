@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
       cp -r java $out
       cp -r com $out
       cp -r lightgbmlib.jar $out
-    '' + lib.optionals rLibrary ''
+    '' + lib.optionalString rLibrary ''
       mkdir $out
       mkdir $out/tmp
       mkdir $out/library
