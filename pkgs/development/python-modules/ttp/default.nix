@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "ttp";
-  version = "0.9.2";
+  version = "0.9.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-KhQRC4zcLCnYUtQm08wJzb/YwBquOEGR5L0YUmnzheg=";
+    hash = "sha256-iZJ38NQnofW9awisY5cFBIN1rjXinA6CpJYSCCnNaOY=";
   };
 
   nativeBuildInputs = [
@@ -102,6 +102,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/dmulyalin/ttp/releases/tag/${version}";
     description = "Template Text Parser";
     homepage = "https://github.com/dmulyalin/ttp";
     license = licenses.mit;
