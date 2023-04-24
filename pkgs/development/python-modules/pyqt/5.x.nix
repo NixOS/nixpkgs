@@ -55,6 +55,17 @@ buildPythonPackage rec {
     EOF
   '';
 
+  enableParallelBuilding = true;
+  # HACK: paralellize compilation of make calls within pyqt's setup.py
+  # pkgs/stdenv/generic/setup.sh doesn't set this for us because
+  # make gets called by python code and not its build phase
+  # format=pyproject means the pip-build-hook hook gets used to build this project
+  # pkgs/development/interpreters/python/hooks/pip-build-hook.sh
+  # does not use the enableParallelBuilding flag
+  postUnpack = ''
+    export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
+  '';
+
   outputs = [ "out" "dev" ];
 
   dontWrapQtApps = true;
@@ -117,7 +128,7 @@ buildPythonPackage rec {
     ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
     ++ lib.optional withWebKit "PyQt5.QtWebKit"
     ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
-    ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
+    ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
     ++ lib.optional withLocation "PyQt5.QtPositioning"
   ;
 
