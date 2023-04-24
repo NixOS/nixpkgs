@@ -13141,6 +13141,8 @@ with pkgs;
 
   typst = callPackage ../tools/typesetting/typst { };
 
+  typst-fmt = callPackage ../tools/typesetting/typst-fmt { };
+
   tz = callPackage ../tools/misc/tz { };
 
   u9fs = callPackage ../servers/u9fs { };
