@@ -12133,6 +12133,8 @@ self: super: with self; {
 
   virtualenvwrapper = callPackage ../development/python-modules/virtualenvwrapper { };
 
+  virustotal-api = callPackage ../development/python-modules/virustotal-api { };
+
   visitor = callPackage ../development/python-modules/visitor { };
 
   vispy = callPackage ../development/python-modules/vispy { };
