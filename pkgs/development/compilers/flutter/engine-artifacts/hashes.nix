@@ -64,7 +64,7 @@
       "linux-x64-flutter-gtk.zip" = "sha256-boICnuJF4zqGb7kaN5haO/df9hC9KeJidt3uIK06S7M=";
     };
     "linux-x64-profile" = {
-      "linux-x64-flutter-gtk.zip" = "sha256-RAsgupVF18IxLaP8tJ7XRQ8y/um46nlpA8fDITPwLqY=";
+      "linux-x64-flutter-gtk.zip" = "sha256-AnkLMPW3mwiXdiDz3Zo802QZRi+8EMCy4Mx2ODSbMOU=";
     };
     "linux-x64-release" = {
       "linux-x64-flutter-gtk.zip" = "sha256-RAsgupVF18IxLaP8tJ7XRQ8y/um46nlpA8fDITPwLqY=";
