@@ -147,6 +147,78 @@ in runBuildTests {
     '';
   };
 
+  testIniWithGlobalSection = {
+    drv = evalFormat formats.ini { withGlobalSection = true; } {
+      globalSection.xyzzy = true;
+      sections.foo = {
+        bool = true;
+        float = 3.14159;
+      };
+    };
+    expected = ''
+      xyzzy=true
+
+      [foo]
+      bool=true
+      float=3.141590
+    '';
+  };
+
+  testIniWithGlobalSectionListToValue = {
+    drv = evalFormat formats.ini {
+      withGlobalSection = true;
+      listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault {});
+    } {
+      globalSection = {
+        xyzzy = true;
+        bar = [ null true "test" 1.2 10 ];
+      };
+      sections.foo = {
+        bool = true;
+        float = 3.14159;
+        baz = [ 0 0.1 null ];
+      };
+    };
+    expected = ''
+      bar=null, true, test, 1.200000, 10
+      xyzzy=true
+
+      [foo]
+      baz=0, 0.100000, null
+      bool=true
+      float=3.141590
+    '';
+  };
+
+  testIniWithGlobalSectionDuplicateKeys = {
+    drv = evalFormat formats.ini { withGlobalSection = true; listsAsDuplicateKeys = true; } {
+      globalSection = {
+        xyzzy = true;
+        bar = [ null true "test" 1.2 10 ];
+      };
+      sections.foo = {
+        bool = true;
+        float = 3.14159;
+        baz = [ 0 0.1 null ];
+      };
+    };
+    expected = ''
+      bar=null
+      bar=true
+      bar=test
+      bar=1.200000
+      bar=10
+      xyzzy=true
+
+      [foo]
+      baz=0
+      baz=0.100000
+      baz=null
+      bool=true
+      float=3.141590
+    '';
+  };
+
   testKeyValueAtoms = {
     drv = evalFormat formats.keyValue {} {
       bool = true;
