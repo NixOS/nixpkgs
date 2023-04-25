@@ -28,7 +28,7 @@ import ./make-test-python.nix (
             "ppp/pppoe-server-options".text = ''
               lcp-echo-interval 10
               lcp-echo-failure 2
-              plugin rp-pppoe.so
+              plugin pppoe.so
               require-chap
               nobsdcomp
               noccp
@@ -43,7 +43,7 @@ import ./make-test-python.nix (
           enable = true;
           peers.test = {
             config = ''
-              plugin rp-pppoe.so eth1
+              plugin pppoe.so eth1
               name "flynn"
               noipdefault
               persist
