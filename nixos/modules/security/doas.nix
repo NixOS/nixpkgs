@@ -4,8 +4,6 @@ with lib;
 let
   cfg = config.security.doas;
 
-  inherit (pkgs) doas;
-
   mkUsrString = user: toString user;
 
   mkGrpString = group: ":${toString group}";
@@ -50,14 +48,9 @@ in
 
   options.security.doas = {
 
-    enable = mkOption {
-      type = with types; bool;
-      default = false;
-      description = lib.mdDoc ''
-        Whether to enable the {command}`doas` command, which allows
-        non-root users to execute commands as root.
-      '';
-    };
+    enable = mkEnableOption (mdDoc "{command}`doas` command, which allows non-root users to excute commands as root");
+
+    package = mkPackageOptionMD pkgs "doas" {};
 
     wheelNeedsPassword = mkOption {
       type = with types; bool;
@@ -249,11 +242,11 @@ in
       { setuid = true;
         owner = "root";
         group = "root";
-        source = "${doas}/bin/doas";
+        source = "${cfg.package}/bin/doas";
       };
 
     environment.systemPackages = [
-      doas
+      cfg.package
     ];
 
     security.pam.services.doas = {
