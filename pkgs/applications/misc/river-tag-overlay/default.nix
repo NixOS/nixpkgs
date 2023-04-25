@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromSourcehut, nixos, wayland, pixman, pkg-config }:
+{ lib, stdenv, fetchFromSourcehut, wayland, pixman, pkg-config, wayland-scanner }:
 
 stdenv.mkDerivation rec {
   pname = "river-tag-overlay";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pixman wayland ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config wayland-scanner ];
 
   makeFlags = [
     "DESTDIR=${placeholder "out"}"

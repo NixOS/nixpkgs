@@ -1,6 +1,7 @@
 { mkDerivation
 , extra-cmake-modules
 , kdoctools
+, wayland-scanner
 , kcmutils
 , kcrash
 , kdeclarative
@@ -19,7 +20,7 @@
 
 mkDerivation {
   pname = "kscreenlocker";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wayland-scanner ];
   buildInputs = [
     kcmutils
     kcrash

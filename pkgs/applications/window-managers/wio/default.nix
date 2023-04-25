@@ -10,6 +10,7 @@
 , meson
 , ninja
 , pkg-config
+, wayland-scanner
 , udev
 , wayland
 , wayland-protocols
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

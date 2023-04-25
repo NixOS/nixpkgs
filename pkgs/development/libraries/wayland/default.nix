@@ -1,18 +1,14 @@
 { lib
 , stdenv
 , fetchurl
-, substituteAll
 , meson
 , pkg-config
 , ninja
 , wayland-scanner
-, expat
-, libxml2
-, withLibraries ? stdenv.isLinux || stdenv.isDarwin
 , withTests ? stdenv.isLinux
 , libffi
 , epoll-shim
-, withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
+, withDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
 , graphviz-nox
 , doxygen
 , libxslt
@@ -23,15 +19,6 @@
 , docbook_xml_dtd_42
 }:
 
-# Documentation is only built when building libraries.
-assert withDocumentation -> withLibraries;
-
-# Tests are only built when building libraries.
-assert withTests -> withLibraries;
-
-let
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
-in
 stdenv.mkDerivation rec {
   pname = "wayland";
   version = "1.21.0";
@@ -53,13 +40,13 @@ stdenv.mkDerivation rec {
     sed -i '/os-wrappers-test/d' tests/meson.build
   '';
 
-  outputs = [ "out" "bin" "dev" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
+  outputs = [ "out" "dev" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
   separateDebugInfo = true;
 
   mesonFlags = [
     "-Ddocumentation=${lib.boolToString withDocumentation}"
-    "-Dlibraries=${lib.boolToString withLibraries}"
     "-Dtests=${lib.boolToString withTests}"
+    "-Dscanner=false"
   ];
 
   depsBuildBuild = [
@@ -70,7 +57,6 @@ stdenv.mkDerivation rec {
     meson
     pkg-config
     ninja
-  ] ++ lib.optionals isCross [
     wayland-scanner
   ] ++ lib.optionals withDocumentation [
     (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
@@ -83,31 +69,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    expat
-    libxml2
-  ] ++ lib.optionals withLibraries [
     libffi
-  ] ++ lib.optionals (withLibraries && !stdenv.hostPlatform.isLinux) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     epoll-shim
   ] ++ lib.optionals withDocumentation [
     docbook_xsl
     docbook_xml_dtd_45
     docbook_xml_dtd_42
   ];
-
-  postFixup = ''
-    # The pkg-config file is required for cross-compilation:
-    mkdir -p $bin/lib/pkgconfig/
-    cat <<EOF > $bin/lib/pkgconfig/wayland-scanner.pc
-    wayland_scanner=$bin/bin/wayland-scanner
-
-    Name: Wayland Scanner
-    Description: Wayland scanner
-    Version: ${version}
-    EOF
-  '';
-
-  passthru = { inherit withLibraries; };
 
   meta = with lib; {
     description = "Core Wayland window system code and protocol";
@@ -124,6 +93,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
   };
-
-  passthru.version = version;
 }

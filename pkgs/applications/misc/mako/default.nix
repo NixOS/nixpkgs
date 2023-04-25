@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc
 , systemd, pango, cairo, gdk-pixbuf, jq
-, wayland, wayland-protocols
+, wayland, wayland-protocols, wayland-scanner
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson ninja pkg-config scdoc wayland-protocols wayland-scanner wrapGAppsHook
+  ];
   buildInputs = [ systemd pango cairo gdk-pixbuf wayland ];
 
   mesonFlags = [

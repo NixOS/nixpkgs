@@ -5,6 +5,7 @@
 , pkg-config
 , cmake
 , extra-cmake-modules
+, wayland-scanner
 , cairo
 , pango
 , fribidi
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

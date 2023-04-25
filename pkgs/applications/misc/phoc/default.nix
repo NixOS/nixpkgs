@@ -6,6 +6,7 @@
 , ninja
 , pkg-config
 , python3
+, wayland-scanner
 , wrapGAppsHook
 , libinput
 , gnome
@@ -69,6 +70,7 @@ in stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+    wayland-scanner
     wrapGAppsHook
   ];
 

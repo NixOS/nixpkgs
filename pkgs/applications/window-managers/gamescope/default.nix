@@ -4,6 +4,7 @@
 , meson
 , pkg-config
 , ninja
+, wayland-scanner
 , xorg
 , libdrm
 , vulkan-loader
@@ -84,6 +85,7 @@ stdenv.mkDerivation {
     pkg-config
     ninja
     makeBinaryWrapper
+    wayland-scanner
   ];
 
   buildInputs = [

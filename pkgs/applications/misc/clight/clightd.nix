@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, dbus, cmake, pkg-config
+, dbus, cmake, pkg-config, wayland-scanner
 , glib, udev, polkit, libusb1, libjpeg, libmodule
 , pcre, libXdmcp, util-linux, libpthreadstubs
 , enableDdc ? true, ddcutil
@@ -40,13 +40,18 @@ stdenv.mkDerivation rec {
       ++ optional enableScreen     "-DENABLE_SCREEN=1"
       ++ optional enableYoctolight "-DENABLE_YOCTOLIGHT=1";
 
-  nativeBuildInputs = [
-    dbus
-    cmake
+  depsBuildBuild = [
     pkg-config
   ];
 
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wayland-scanner
+  ];
+
   buildInputs = with lib; [
+    dbus
     glib
     udev
     polkit

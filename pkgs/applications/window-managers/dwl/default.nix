@@ -8,6 +8,7 @@
 , libxkbcommon
 , pixman
 , pkg-config
+, wayland-scanner
 , substituteAll
 , wayland-scanner
 , wayland

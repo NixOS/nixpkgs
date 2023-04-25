@@ -25,6 +25,7 @@
 
 , wayland
 , wayland-protocols
+, wayland-scanner
 
 , pipewire
 , pulseaudio
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wayland-scanner ];
 
   buildInputs = [ libGL libX11 freefont_ttf spice-protocol expat libbfd nettle fontconfig libffi ]
     ++ lib.optionals xorgSupport [ libxkbcommon libXi libXScrnSaver libXinerama libXcursor libXpresent libXext libXrandr ]

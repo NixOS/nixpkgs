@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
+, wayland-scanner
 , wayland
 , libinput
 , yaml-cpp
@@ -20,9 +21,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     pkg-config
-    wayland
+    wayland-scanner
   ];
 
   buildInputs = [

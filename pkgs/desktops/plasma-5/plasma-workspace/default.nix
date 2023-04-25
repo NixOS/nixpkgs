@@ -2,6 +2,7 @@
 , lib
 , extra-cmake-modules
 , kdoctools
+, wayland-scanner
 , isocodes
 , libdbusmenu
 , libSM
@@ -73,7 +74,7 @@ mkDerivation {
   pname = "plasma-workspace";
   passthru.providedSessions = [ "plasma" "plasmawayland" ];
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wayland-scanner ];
   buildInputs = [
     isocodes
     libdbusmenu

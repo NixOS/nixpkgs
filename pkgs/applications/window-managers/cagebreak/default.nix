@@ -18,6 +18,7 @@
 , systemd
 , wayland
 , wayland-protocols
+, wayland-scanner
 , withXwayland ? true , xwayland
 , wlroots
 }:
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     scdoc
-    wayland
+    wayland-scanner
   ];
 
   buildInputs = [
