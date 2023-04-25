@@ -9,7 +9,7 @@
 , glibcLocales
 , lib
 , nixosTests
-, nodejs-16_x
+, nodejs_16
 , stdenv
 , which
 }:
@@ -156,7 +156,7 @@ buildDotnetModule rec {
 
   preCheck = ''
     mkdir -p _layout/externals
-    ln -s ${nodejs-16_x} _layout/externals/node16
+    ln -s ${nodejs_16} _layout/externals/node16
   '';
 
   postInstall = ''
@@ -193,7 +193,7 @@ buildDotnetModule rec {
     # externals/node16. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
     mkdir -p $out/lib/externals
-    ln -s ${nodejs-16_x} $out/lib/externals/node16
+    ln -s ${nodejs_16} $out/lib/externals/node16
 
     # Install Nodejs scripts called from workflows
     install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/github-runner/hashFiles/index.js

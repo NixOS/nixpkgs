@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "epoll-shim";
-  version = "unstable-2023-02-05";
+  version = "0.0.20230411";
 
   src = fetchFromGitHub {
     owner = "jiixyj";
     repo = finalAttrs.pname;
-    rev = "702e845d7850e30a7b9e29f759c9c8f7bb40784b";
-    hash = "sha256-QfBnF0/P2KjQggEdJCdqVJDeV/+iaN0OZIwIGyIyr68=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TOfybtUEp+EtY2l/UGwVFIESDe9kELJCZHlcz22Cmi8=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   version = "2.0.2";
 
   src = fetchFromGitHub {
-    owner = "lunaryorn";
+    owner = "swsnr";
     repo = "mdcat";
     rev = "mdcat-${version}";
     sha256 = "sha256-JevndaSGeIzLV/h4ljUwx6vL60aKWYzmKWOgQDPMAaA=";
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "cat for markdown";
-    homepage = "https://github.com/lunaryorn/mdcat";
+    homepage = "https://github.com/swsnr/mdcat";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
