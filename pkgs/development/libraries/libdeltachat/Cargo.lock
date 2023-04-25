@@ -1144,7 +1144,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "1.113.0"
+version = "1.114.0"
 dependencies = [
  "ansi_term",
  "anyhow",
@@ -1175,6 +1175,7 @@ dependencies = [
  "libc",
  "log",
  "mailparse",
+ "mime",
  "num-derive",
  "num-traits",
  "num_cpus",
@@ -1218,7 +1219,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "1.113.0"
+version = "1.114.0"
 dependencies = [
  "anyhow",
  "async-channel",
@@ -1241,7 +1242,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-repl"
-version = "1.113.0"
+version = "1.114.0"
 dependencies = [
  "ansi_term",
  "anyhow",
@@ -1256,7 +1257,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-rpc-server"
-version = "1.113.0"
+version = "1.114.0"
 dependencies = [
  "anyhow",
  "deltachat",
@@ -1281,7 +1282,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat_ffi"
-version = "1.113.0"
+version = "1.114.0"
 dependencies = [
  "anyhow",
  "deltachat",
@@ -2806,9 +2807,9 @@ dependencies = [
 
 [[package]]
 name = "mime"
-version = "0.3.16"
+version = "0.3.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2a60c7ce501c71e03a9c9c0d35b861413ae925bd979cc7a4e30d060069aaac8d"
+checksum = "6877bb514081ee2a7ff5ef9de3281f14a4dd4bceac4c09388074a6b5df8a139a"
 
 [[package]]
 name = "minimal-lexical"
