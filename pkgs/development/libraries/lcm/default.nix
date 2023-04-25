@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lcm";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "lcm-proj";
     repo = "lcm";
     rev = "v${version}";
-    hash = "sha256-ujz52m7JuE5DYGM9QHLwVWVVBcny4w05J6Eu6DI2HBI=";
+    hash = "sha256-IFHoJl5OtnUb+w3gLG5f578yAektjgrY9Uj2eUVoIrc=";
   };
 
   outputs = [ "out" "dev" "man" ];
