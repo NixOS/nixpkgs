@@ -3,7 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , alsa-lib
-, gtk2
+, gtk3
 , libXrandr
 , libXScrnSaver
 , udev
@@ -15,11 +15,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${name}-unwrapped";
-  version = "0.23.2.2";
+  version = "1.0.0.4080";
 
   src = fetchurl {
-    url = "http://dl.clonehero.net/${name}-v${lib.removePrefix "0" version}/${name}-linux.tar.gz";
-    sha256 = "0k9jcnd55yhr42gj8cmysd18yldp4k3cpk4z884p2ww03fyfq7mi";
+    url = "http://pubdl.clonehero.net/${name}-v${lib.removePrefix "0" version}-final/${name}-linux.tar.xz";
+    hash = "sha256-YWLV+wgQ9RfKRSSWh/x0PMjB6tFA4YpHb9WtYOOgZZI=";
   };
 
   outputs = [ "out" "doc" ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # Load-time libraries (loaded from DT_NEEDED section in ELF binary)
-    gtk2
+    gtk3
     stdenv.cc.cc.lib
     zlib
 
@@ -40,12 +40,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p "$out/bin" "$out/share"
+    mkdir -p "$out/bin" "$out/share" "$out/lib"
     install -Dm755 ${name} "$out/bin"
+    install -Dm644 UnityPlayer.so "$out/lib"
     cp -r clonehero_Data "$out/share"
 
     mkdir -p "$doc/share/${name}"
-    cp README.txt "$doc/share/${name}"
+    cp CLONE_HERO_MANUAL.txt "$doc/share/${name}"
+    cp EULA.txt "$doc/share/${name}"
+    cp THIRDPARTY.txt "$doc/share/${name}"
   '';
 
   # Patch required run-time libraries as load-time libraries
@@ -67,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "Clone of Guitar Hero and Rockband-style games";
     homepage = "https://clonehero.net";
     license = licenses.unfree;
-    maintainers = with maintainers; [ kira-bruneau ];
+    maintainers = with maintainers; [ kira-bruneau syboxez ];
     platforms = [ "x86_64-linux" ];
   };
 }
