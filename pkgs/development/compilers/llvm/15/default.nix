@@ -232,6 +232,7 @@ in let
           (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
           "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+      dontWrap = stdenv.targetPlatform.isUefi;
     };
 
     clangNoLibcxx = wrapCCWith rec {
@@ -261,6 +262,7 @@ in let
         "-rtlib=compiler-rt"
         "-B${targetLlvmLibraries.compiler-rt}/lib"
       ];
+      dontWrap = stdenv.targetPlatform.isUefi;
     };
 
     clangNoCompilerRt = wrapCCWith rec {

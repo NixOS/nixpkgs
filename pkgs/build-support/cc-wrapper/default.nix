@@ -18,6 +18,9 @@
 , buildPackages ? {}
 , libcxx ? null
 , grossHackForStagingNext ? false
+# It is sometimes useful to expose naked binaries in the standard "wrapped" format.
+# For UEFI for example.
+, dontWrap ? false
 
 # Whether or not to add `-B` and `-L` to `nix-support/cc-{c,ld}flags`
 , useCcForLibs ?
@@ -235,27 +238,31 @@ stdenv.mkDerivation {
     # We export environment variables pointing to the wrapped nonstandard
     # cmds, lest some lousy configure script use those to guess compiler
     # version.
-    + ''
+    +
+    (let
+      conditionalWrap = dst: src: if dontWrap then "ln -s $ccPath/${src} $out/bin/${dst}" else "wrap ${dst} $wrapper $ccPath/${src}";
+    in
+    ''
       export named_cc=${targetPrefix}cc
       export named_cxx=${targetPrefix}c++
 
       if [ -e $ccPath/${targetPrefix}gcc ]; then
-        wrap ${targetPrefix}gcc $wrapper $ccPath/${targetPrefix}gcc
+        ${conditionalWrap "${targetPrefix}gcc" "${targetPrefix}gcc"}
         ln -s ${targetPrefix}gcc $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}gcc
         export named_cxx=${targetPrefix}g++
       elif [ -e $ccPath/clang ]; then
-        wrap ${targetPrefix}clang $wrapper $ccPath/clang
+        ${conditionalWrap "${targetPrefix}clang" "clang"}
         ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}clang
         export named_cxx=${targetPrefix}clang++
       fi
 
       if [ -e $ccPath/${targetPrefix}g++ ]; then
-        wrap ${targetPrefix}g++ $wrapper $ccPath/${targetPrefix}g++
+        ${conditionalWrap "${targetPrefix}g++" "${targetPrefix}g++"}
         ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
       elif [ -e $ccPath/clang++ ]; then
-        wrap ${targetPrefix}clang++ $wrapper $ccPath/clang++
+        ${conditionalWrap "${targetPrefix}clang++" "clang++"}
         ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
       fi
 
@@ -264,7 +271,7 @@ stdenv.mkDerivation {
       elif [ -e $ccPath/cpp ]; then
         wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
       fi
-    ''
+    '')
 
     # No need to wrap gnat, gnatkr, gnatname or gnatprep; we can just symlink them in
     + optionalString cc.langAda or false ''
@@ -474,7 +481,7 @@ stdenv.mkDerivation {
     ## Hardening support
     ##
     + ''
-      export hardening_unsupported_flags="${builtins.concatStringsSep " " ((cc.hardeningUnsupportedFlags or []) ++ lib.optional targetPlatform.isUefi "pic") /* TODO: where should this go? */}"
+      export hardening_unsupported_flags="${builtins.concatStringsSep " " ((cc.hardeningUnsupportedFlags or []))}"
     ''
 
     # Machine flags. These are necessary to support
@@ -542,6 +549,8 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     '' + optionalString targetPlatform.isMicroBlaze ''
       hardening_unsupported_flags+=" stackprotector"
+    '' + optionalString targetPlatform.isUefi ''
+      hardening_unsupported_flags+=" pic"
     ''
 
     + optionalString (libc != null && targetPlatform.isAvr) ''
