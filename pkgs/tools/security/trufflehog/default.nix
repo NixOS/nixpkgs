@@ -16,6 +16,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-NnYQGbG4R/Ar0goOtymuohHO36t3UQhjg53ufneCFxQ=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/trufflesecurity/trufflehog/v3/pkg/version.BuildVersion=${version}"
+  ];
+
   # Test cases run git clone and require network access
   doCheck = false;
 
