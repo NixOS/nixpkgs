@@ -25,12 +25,12 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
   production = generic {
-    version = "525.105.17";
-    sha256_64bit = "sha256-xjWiGigsm1NIXxnrtkoPS1NqlouU1Nl2KeC8VHpYFCo=";
-    sha256_aarch64 = "sha256-FUbmupHNVab3sM/ShDXPM7pK+5GC2/ri1YW20Hx3vbE=";
-    openSha256 = "sha256-O3XB8tNLmNkzrYoVyJVEE0IcE772lOdr8qn4rQHIupE=";
-    settingsSha256 = "sha256-KUw31Am9Zfwk5QTs6th8+J3C4oUBacNgb7ZUNeV68W4=";
-    persistencedSha256 = "sha256-jhBtsf9MXrkU/SsBndR1ESGUHhgUWiSH7R75swk3m40=";
+    version = "525.116.03";
+    sha256_64bit = "sha256-XClbAuvsLpqewNebqSkutiO0svu6im7WGQYJKaMNBGk=";
+    sha256_aarch64 = "sha256-x4FZxtMDtlSwLvh0rCTdFp8+lCPoxdevCDA+b3I8De4=";
+    openSha256 = "sha256-AiUWHwVjXiii4hckWcFFGPyvSJfWqBlRi+lZKdfGsKM=";
+    settingsSha256 = "sha256-PgyV8YzEtLTER4ucnZuRjA2LkX1kqy+k0am0k9Ci40Q=";
+    persistencedSha256 = "sha256-Ok20+fGlTlmMyROzIPQ+V+cStsM7BTabTVORJTNZDf4=";
 
     ibtSupport = true;
   };
