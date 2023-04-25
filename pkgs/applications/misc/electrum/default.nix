@@ -11,7 +11,7 @@
 }:
 
 let
-  version = "4.3.4";
+  version = "4.4.0";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -28,7 +28,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-0xYGTCk+Sk7LP+E9r2Y7UJZsfbobLe6Yb+x5ZRCN40Y=";
+    sha256 = "sha256-lXMz0U7zgtCApBCGZcpOHvLcyOeGG0yJE/gr7Gv+yBQ=";
 
     postFetch = ''
       mv $out ./all
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-+Z4NZK/unFN6mxCuMleHBxAoD+U1PzVk3/ZnZRmOOxo=";
+    sha256 = "sha256-SHV+fCDhfgIh7s8L7eDbKj8bkHSVm7J2PPQ4CQpp6cI=";
   };
 
   postUnpack = ''
@@ -72,6 +72,7 @@ python3.pkgs.buildPythonApplication {
     tlslite-ng
     # plugins
     btchip-python
+    ledger-bitcoin
     ckcc-protocol
     keepkey
     trezor
@@ -83,7 +84,7 @@ python3.pkgs.buildPythonApplication {
   postPatch = ''
     # make compatible with protobuf4 by easing dependencies ...
     substituteInPlace ./contrib/requirements/requirements.txt \
-      --replace "protobuf>=3.12,<4" "protobuf>=3.12"
+      --replace "protobuf>=3.20,<4" "protobuf>=3.20"
     # ... and regenerating the paymentrequest_pb2.py file
     protoc --python_out=. electrum/paymentrequest.proto
 

@@ -112,6 +112,8 @@ The short version is this:
 * We only do the merge if the [\`mergeable\`](https://hydra.nixos.org/job/nixpkgs/haskell-updates/mergeable) job is succeeding on hydra.
 * If a [\`maintained\`](https://hydra.nixos.org/job/nixpkgs/haskell-updates/maintained) package is still broken at the time of merge, we will only merge if the maintainer has been pinged 7 days in advance. (If you care about a Haskell package, become a maintainer!)
 
+More information about Haskell packages in nixpkgs can be found [in the nixpkgs manual](https://nixos.org/manual/nixpkgs/unstable/#haskell).
+
 ---
 
 This is the follow-up to #${curr_haskell_updates_pr_num}. Come to [#haskell:nixos.org](https://matrix.to/#/#haskell:nixos.org) if you have any questions.

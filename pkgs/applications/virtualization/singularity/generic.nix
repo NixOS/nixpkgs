@@ -36,7 +36,9 @@ in
 , conmon
 , coreutils
 , cryptsetup
+, e2fsprogs
 , fakeroot
+, fuse2fs ? e2fsprogs.fuse2fs
 , go
 , gpgme
 , libseccomp
@@ -46,6 +48,10 @@ in
 , openssl
 , squashfsTools
 , squashfuse
+  # Test dependencies
+, singularity-tools
+, cowsay
+, hello
   # Overridable configurations
 , enableNvidiaContainerCli ? true
   # Compile with seccomp support
@@ -83,7 +89,7 @@ let
     ln -s ${lib.escapeShellArg newgidmapPath} "$out/bin/newgidmap"
   '');
 in
-buildGoModule {
+(buildGoModule {
   inherit pname version src;
 
   # Override vendorHash with the output got from
@@ -113,6 +119,12 @@ buildGoModule {
     which
   ];
 
+  # Search inside the project sources
+  # and see the `control` file of the Debian package from upstream repos
+  # for build-time dependencies and run-time utilities
+  # apptainer/apptainer: https://github.com/apptainer/apptainer/blob/main/dist/debian/control
+  # sylabs/singularity: https://github.com/sylabs/singularity/blob/main/debian/control
+
   buildInputs = [
     bash # To patch /bin/sh shebangs.
     conmon
@@ -120,8 +132,7 @@ buildGoModule {
     gpgme
     libuuid
     openssl
-    squashfsTools
-    squashfuse
+    squashfsTools # Required at build time by SingularityCE
   ]
   ++ lib.optional enableNvidiaContainerCli nvidia-docker
   ++ lib.optional enableSeccomp libseccomp
@@ -144,6 +155,8 @@ buildGoModule {
     bash
     coreutils
     cryptsetup # cryptsetup
+    fakeroot
+    fuse2fs # Mount ext3 filesystems
     go
     privileged-un-utils
     squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
@@ -191,10 +204,7 @@ buildGoModule {
     substituteInPlace "$out/bin/run-singularity" \
       --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
     wrapProgram "$out/bin/${projectName}" \
-      --prefix PATH : "${lib.makeBinPath [
-        fakeroot
-        squashfsTools # Singularity (but not Apptainer) expects unsquashfs from the host PATH
-      ]}"
+      --prefix PATH : "''${defaultPathInputs// /\/bin:}"
     # Make changes in the config file
     ${lib.optionalString enableNvidiaContainerCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
@@ -235,4 +245,14 @@ buildGoModule {
     maintainers = with maintainers; [ jbedo ShamrockLee ];
     mainProgram = projectName;
   } // extraMeta;
-}
+}).overrideAttrs (finalAttrs: prevAttrs: {
+  passthru = prevAttrs.passthru or { } // {
+    tests = {
+      image-hello-cowsay = singularity-tools.buildImage {
+        name = "hello-cowsay";
+        contents = [ hello cowsay ];
+        singularity = finalAttrs.finalPackage;
+      };
+    };
+  };
+})

@@ -78,6 +78,13 @@ in
         '';
       };
 
+      bantime = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        example = "10m";
+        description = lib.mdDoc "Number of seconds that a host is banned.";
+      };
+
       maxretry = mkOption {
         default = 3;
         type = types.ints.unsigned;
@@ -202,6 +209,20 @@ in
        '';
       };
 
+      extraSettings = mkOption {
+        type = with types; attrsOf (oneOf [ bool ints.positive str ]);
+        default = {};
+        description = lib.mdDoc ''
+          Extra default configuration for all jails (i.e. `[DEFAULT]`). See
+          <https://github.com/fail2ban/fail2ban/blob/master/config/jail.conf> for an overview.
+        '';
+        example = literalExpression ''
+          {
+            findtime = "15m";
+          }
+        '';
+      };
+
       jails = mkOption {
         default = { };
         example = literalExpression ''
@@ -320,11 +341,18 @@ in
       ''}
       # Miscellaneous options
       ignoreip    = 127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}
+      ${optionalString (cfg.bantime != null) ''
+        bantime     = ${cfg.bantime}
+      ''}
       maxretry    = ${toString cfg.maxretry}
       backend     = systemd
       # Actions
       banaction   = ${cfg.banaction}
       banaction_allports = ${cfg.banaction-allports}
+      ${optionalString (cfg.extraSettings != {}) ''
+        # Extra settings
+        ${generators.toKeyValue {} cfg.extraSettings}
+      ''}
     '';
     # Block SSH if there are too many failing connection attempts.
     # Benefits from verbose sshd logging to observe failed login attempts,

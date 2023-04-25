@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch2
 , meson
 , ninja
 , pkg-config
@@ -55,6 +56,14 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit tracker;
+    })
+
+    # Fix crash during search after "copy"/"cut" action selection
+    # Can be removed in 44.1
+    # https://gitlab.gnome.org/GNOME/nautilus/-/merge_requests/1155
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/nautilus/-/commit/f0f6c372802aabe7ba098d3af1f81cbc03eba27b.patch";
+      sha256 = "mlrLvNgDQvi4maa81ozu6DsDBVx9NrsgYzWN+oSboVQ=";
     })
   ];
 

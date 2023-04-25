@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "blightmud";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0cvMROnblt9c4d6Kbr5iY/Qobf3hOKIhWHvOVQONhO4=";
+    sha256 = "sha256-sLqkDuohCgHJTMte1WIa2Yu43oWXVvnIpeiDBoQpKY8=";
   };
 
-  cargoSha256 = "sha256-7jSuadpAZXtlYVw4/NBATTIAFO8M6I11FuxfGFQx51Y=";
+  cargoHash = "sha256-ffADKoMysYY2vwX3asHnjR2EiND4RJsf/W334PWvkGs=";
 
   buildFeatures = lib.optional withTTS "tts";
 

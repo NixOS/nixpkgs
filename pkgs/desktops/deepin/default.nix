@@ -28,6 +28,7 @@ let
     dde-calendar = callPackage ./core/dde-calendar { };
     dde-clipboard = callPackage ./core/dde-clipboard { };
     dde-dock = callPackage ./core/dde-dock { };
+    dde-file-manager = callPackage ./core/dde-file-manager { };
     dde-launcher = callPackage ./core/dde-launcher { };
     dde-network-core = callPackage ./core/dde-network-core { };
     dde-session-shell = callPackage ./core/dde-session-shell { };
@@ -47,7 +48,9 @@ let
     deepin-movie-reborn = callPackage ./apps/deepin-movie-reborn { };
     deepin-music = callPackage ./apps/deepin-music { };
     deepin-picker = callPackage ./apps/deepin-picker { };
+    deepin-screen-recorder = callPackage ./apps/deepin-screen-recorder { };
     deepin-shortcut-viewer = callPackage ./apps/deepin-shortcut-viewer { };
+    deepin-system-monitor = callPackage ./apps/deepin-system-monitor { };
     deepin-terminal = callPackage ./apps/deepin-terminal { };
     deepin-reader = callPackage ./apps/deepin-reader { };
     deepin-voice-note = callPackage ./apps/deepin-voice-note { };

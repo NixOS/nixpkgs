@@ -16,14 +16,9 @@ buildOctavePackage rec {
   version = "2.5.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-CFLqlHrTwQzCvpPAtQigCVL3Fs8V05Tmh6nkEsnaV2I=";
+    url = "https://github.com/ltfat/ltfat/releases/download/v${version}/${pname}-${version}-of.tar.gz";
+    sha256 = "sha256-8AqEDEfgYwftKUj8ynFQzBa3G3zTdhNtsZ2bW16DV7Q=";
   };
-
-  patches = [
-    # Fixes a syntax error with performing multiplication.
-    ./syntax-error.patch
-  ];
 
   buildInputs = [
     fftw

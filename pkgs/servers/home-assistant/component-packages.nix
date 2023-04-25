@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.4.2";
+  version = "2023.4.6";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -671,6 +671,7 @@
       pyserial
       pyudev
       scapy
+      securetar
       sqlalchemy
       zeroconf
     ];

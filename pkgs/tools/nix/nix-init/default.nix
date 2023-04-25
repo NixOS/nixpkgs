@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , curl
 , installShellFiles
-, makeWrapper
+, makeBinaryWrapper
 , pkg-config
 , bzip2
 , libgit2_1_5
@@ -26,21 +26,21 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-init";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     rev = "v${version}";
-    hash = "sha256-SvoKw0Ep8NGknu+6qd6xW6hfH261kFD6DjZhPXQpzs0=";
+    hash = "sha256-eiPUJj87PU4EgMQRJ4Yv5d/y94j5AklbP1sVNXNSNPs=";
   };
 
-  cargoHash = "sha256-lm4Y/ZTRMiBp3ECKnHZBvwM8Qso+rilT3BDxzfcnpHQ=";
+  cargoHash = "sha256-OKHW5q8bvJiwJAAEr9AHEWoDCwDKr6ACxsFRtJOTNis=";
 
   nativeBuildInputs = [
     curl
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
   ];
 
@@ -82,8 +82,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion artifacts/nix-init.{bash,fish} --zsh artifacts/_nix-init
   '';
 
-  GEN_ARTIFACTS = "artifacts";
-  ZSTD_SYS_USE_PKG_CONFIG = true;
+  env = {
+    GEN_ARTIFACTS = "artifacts";
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   meta = with lib; {
     description = "Command line tool to generate Nix packages from URLs";

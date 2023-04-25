@@ -108,9 +108,9 @@ in
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
-      machine.succeed("test -e /run/current-system/bootspec/boot.json")
+      machine.succeed("test -e /run/current-system/boot.json")
 
-      bootspec = json.loads(machine.succeed("jq -r '.v1' /run/current-system/bootspec/boot.json"))
+      bootspec = json.loads(machine.succeed("jq -r '.v1' /run/current-system/boot.json"))
 
       assert all(key in bootspec for key in ('initrd', 'initrdSecrets')), "Bootspec should contain initrd or initrdSecrets field when initrd is enabled"
     '';

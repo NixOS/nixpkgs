@@ -17,6 +17,8 @@
 , rustPlatform
 , writeShellScriptBin
 , yarn
+, swift
+, AVKit
 , CoreAudio
 }:
 
@@ -138,12 +140,12 @@ python3.pkgs.buildPythonApplication {
     ninja
     qt6.wrapQtAppsHook
     rsync
-  ];
+  ] ++ lib.optional stdenv.isDarwin swift;
   nativeCheckInputs = with python3.pkgs; [ pytest mock astroid  ];
 
   buildInputs = [
     qt6.qtbase
-  ];
+  ] ++ lib.optional stdenv.isLinux qt6.qtwayland;
   propagatedBuildInputs = with python3.pkgs; [
     # This rather long list came from running:
     #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_4.txt} | \
@@ -186,7 +188,10 @@ python3.pkgs.buildPythonApplication {
     waitress
     werkzeug
     zipp
-  ] ++ lib.optionals stdenv.isDarwin [ CoreAudio ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    AVKit
+    CoreAudio
+  ];
 
   # Activate optimizations
   RELEASE = true;

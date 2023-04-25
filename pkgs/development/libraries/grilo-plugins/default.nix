@@ -8,6 +8,7 @@
 , gperf
 , sqlite
 , libarchive
+, libdmapsharing
 , libsoup_3
 , gnome
 , libxml2
@@ -71,6 +72,7 @@ stdenv.mkDerivation rec {
     gnome-online-accounts
     totem-pl-parser
     libarchive
+    libdmapsharing
     libsoup_3
     gmime
     gom

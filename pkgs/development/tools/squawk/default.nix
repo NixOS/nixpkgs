@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "squawk";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-WhlFqsFJBVtGrB6MWenCZi0eUorglb7PUbOf16JCybk=";
+    hash = "sha256-eic5j/mD4PBCMcATTSTJSKazZFJOxQuW7NyiYPjKCcM=";
   };
 
-  cargoHash = "sha256-Ul5D+xZjNNZl83jQeU4jJId5dZLVWbtZv05c40KMctU=";
+  cargoHash = "sha256-kzb00W9IlshhiV+vUIOlO6BnprHr2XPf8P207WYFP5I=";
 
   nativeBuildInputs = [
     pkg-config

@@ -915,6 +915,72 @@ runTests {
   };
 
 
+  testToLuaEmptyAttrSet = {
+    expr = generators.toLua {} {};
+    expected = ''{}'';
+  };
+
+  testToLuaEmptyList = {
+    expr = generators.toLua {} [];
+    expected = ''{}'';
+  };
+
+  testToLuaListOfVariousTypes = {
+    expr = generators.toLua {} [ null 43 3.14159 true ];
+    expected = ''
+      {
+        nil,
+        43,
+        3.14159,
+        true
+      }'';
+  };
+
+  testToLuaString = {
+    expr = generators.toLua {} ''double-quote (") and single quotes (')'';
+    expected = ''"double-quote (\") and single quotes (')"'';
+  };
+
+  testToLuaAttrsetWithLuaInline = {
+    expr = generators.toLua {} { x = generators.mkLuaInline ''"abc" .. "def"''; };
+    expected = ''
+      {
+        ["x"] = ("abc" .. "def")
+      }'';
+  };
+
+  testToLuaAttrsetWithSpaceInKey = {
+    expr = generators.toLua {} { "some space and double-quote (\")" = 42; };
+    expected = ''
+      {
+        ["some space and double-quote (\")"] = 42
+      }'';
+  };
+
+  testToLuaWithoutMultiline = {
+    expr = generators.toLua { multiline = false; } [ 41 43 ];
+    expected = ''{ 41, 43 }'';
+  };
+
+  testToLuaBasicExample = {
+    expr = generators.toLua {} {
+      cmd = [ "typescript-language-server" "--stdio" ];
+      settings.workspace.library = generators.mkLuaInline ''vim.api.nvim_get_runtime_file("", true)'';
+    };
+    expected = ''
+      {
+        ["cmd"] = {
+          "typescript-language-server",
+          "--stdio"
+        },
+        ["settings"] = {
+          ["workspace"] = {
+            ["library"] = (vim.api.nvim_get_runtime_file("", true))
+          }
+        }
+      }'';
+  };
+
 # CLI
 
   testToGNUCommandLine = {

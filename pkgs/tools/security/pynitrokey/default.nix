@@ -4,12 +4,12 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "pynitrokey";
-  version = "0.4.34";
+  version = "0.4.36";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lMXoDkNiAmGb6e4u/vZMcmXUclwW402YUGihLjWIr+U=";
+    hash = "sha256-Y+6T1iUp9TVYbAjpXVHozC6WT061r0VYv/ifu8lcN6E=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "cryptography"
+    "protobuf"
     "python-dateutil"
     "spsdk"
     "typing_extensions"

@@ -22,6 +22,17 @@ let
 in
 lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 // {
+  # Has no kde/5.15 branch
+  qtpositioning = rec {
+    version = "5.15.2";
+    src = fetchFromGitHub {
+      owner = "qt";
+      repo = "qtpositioning";
+      rev = "v${version}";
+      hash = "sha256-L/P+yAQItm3taPpCNoOOm7PNdOFZiIwJJYflk6JDWvU=";
+    };
+  };
+
   # qtwebkit does not have an official release tarball on the qt mirror and is
   # mostly maintained by the community.
   qtwebkit = rec {
@@ -32,6 +43,17 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
       sha256 = "0x8rng96h19xirn7qkz3lydal6v4vn00bcl0s3brz36dfs0z8wpg";
     };
     version = "5.212.0-alpha4";
+  };
+
+  # qtsystems has no official releases
+  qtsystems = {
+    version = "unstable-2019-01-03";
+    src = fetchFromGitHub {
+      owner = "qt";
+      repo = "qtsystems";
+      rev = "e3332ee38d27a134cef6621fdaf36687af1b6f4a";
+      hash = "sha256-P8MJgWiDDBCYo+icbNva0LODy0W+bmQTS87ggacuMP0=";
+    };
   };
 
   catapult = fetchgit {

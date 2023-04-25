@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "5.0.1";
+  version = "5.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SvZQFbTMmZQEyvA04cFcGrZ1h5XCXWkH/3T127/p9D4=";
+    hash = "sha256-znPKXpVyCechmiI8tx93I1yd8qz00/J/hhujjpSBrFM=";
   };
 
   nativeBuildInputs = [

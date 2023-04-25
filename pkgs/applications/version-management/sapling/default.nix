@@ -43,7 +43,7 @@ let
     owner = "facebook";
     repo = "sapling";
     rev = version;
-    hash = "sha256-e+S5gyyJF3bu6Yo+KjG2lLfjToYzzFj10GTcrPfzxDE=";
+    hash = "sha256-rZLLRcZNeYP7yKAgBujqEJ9TwwDPAct060pZ4aj/7PM=";
   };
 
   addonsSrc = "${src}/addons";
@@ -51,7 +51,7 @@ let
   # Fetches the Yarn modules in Nix to to be used as an offline cache
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${addonsSrc}/yarn.lock";
-    sha256 = "sha256-bJpfa1i3G5Ym5CLVpCt+7q5FNv34CoJBefXaf4qlxNA=";
+    sha256 = "sha256-cEIij7hocCSPw1Q1ESI/t9IFmLM0Nbr/IjSz3HzBdzU=";
   };
 
   # Builds the NodeJS server that runs with `sl web`
@@ -101,11 +101,10 @@ python3Packages.buildPythonApplication {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "abomonation-0.7.3+smallvec1" = "sha256-AxEXR6GC8gHjycIPOfoViP7KceM29p2ZISIt4iwJzvM=";
-      "cloned-0.1.0" = "sha256-WHsvgnbAYrFx22p3rbMzlCIaZ8+BTsMswiTv4h+A/ZI=";
-      "fb303_core-0.0.0" = "sha256-bg4+4kdHfgaEbLzkCftdLH++QKherIAfM7IzlWeOWKI=";
-      "fbthrift-0.0.1+unstable" = "sha256-0qvab0a3PdvlOq2teXKjYrB9UbWLKzMbHgv/3LSsT+4=";
-      "reqwest-0.11.11" = "sha256-uhc8XhkGW22XDNo0qreWdXeFF2cslOOZHfTRQ30IBcE=";
-      "serde_bser-0.3.1" = "sha256-Sk3prRcLr2ExXvq7Px4+NRXbY8ZaRWOYexnaUAqQ4ao=";
+      "cloned-0.1.0" = "sha256-54XxXSeGoS0j0+dDUC15xn1Hvpvl2T7NJ0dZ6/ZSd9s=";
+      "fb303_core-0.0.0" = "sha256-YVPObJaxb5Giu3s70YP5syRSCmtijUK6y9g3UOzgrQU=";
+      "fbthrift-0.0.1+unstable" = "sha256-sfn8EB1hbJGq/jFjgCrf9OyBpXmIBv5qlIsiao071Os=";
+      "serde_bser-0.3.1" = "sha256-mrY6K6hoRo4exyZlStEIh8vuQdzd8XGkaR1MCEgKIP8=";
     };
   };
   postPatch = ''

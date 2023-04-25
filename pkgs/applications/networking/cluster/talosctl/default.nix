@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "talosctl";
-  version = "1.3.7";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "talos";
     rev = "v${version}";
-    hash = "sha256-zJcfx4rHPo8bAN4p0BK0i8Vu1aAaUynj9Aj7bBQoVKU=";
+    hash = "sha256-EJrzq6fChNA1N3TTkwD5/1TdLDso9jGuTgWUG4RwqGA=";
   };
 
-  vendorHash = "sha256-m7w6ItXGAtoT/ZqNOXbDackXV6cHtpAMBi4jfVhQa9A=";
+  vendorHash = "sha256-Thkj8Zhj/HXAnRcFxuCEVd94CMrt8Bsq2FHx6siH6Ww=";
 
   ldflags = [ "-s" "-w" ];
 

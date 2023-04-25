@@ -247,6 +247,9 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
+  # 2023-04-17: https://gitlab.haskell.org/ghc/ghc-debug/-/issues/20
+  ghc-debug-brick = doJailbreak super.ghc-debug-brick;
+
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
@@ -284,7 +287,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "sha256-fZUQ/3q8w6BkFZRaezT7rpKQtAEGBR5qEc4rMm9I36c=";
+      sha256 = "0mz1b3vnschsndv42787mm6kybpb2yskkdss3rcm7xc6jjh815ik";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -741,9 +744,6 @@ self: super: {
   Win32 = overrideCabal (drv: { broken = !pkgs.stdenv.isCygwin; }) super.Win32;
   inline-c-win32 = dontDistribute super.inline-c-win32;
   Southpaw = dontDistribute super.Southpaw;
-
-  # Hydra no longer allows building texlive packages.
-  lhs2tex = dontDistribute super.lhs2tex;
 
   # https://ghc.haskell.org/trac/ghc/ticket/9825
   vimus = overrideCabal (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; }) super.vimus;
@@ -1359,15 +1359,8 @@ self: super: {
   # 2022-08-31: Jailbreak is done to allow aeson 2.0.*:
   # https://github.com/haskell-CI/haskell-ci/commit/6ad0d5d701cbe101013335d597acaf5feadd3ab9#r82681900
   cabal-install-parsers = doJailbreak (dontCheck (super.cabal-install-parsers.override {
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_10_1_0;
   }));
-  cabal-install-parsers_0_4_5 = doDistribute (
-    dontCheck (
-      super.cabal-install-parsers_0_4_5.override {
-        Cabal = self.Cabal_3_6_3_0;
-      }
-    )
-  );
 
   # 2022-03-12: Pick patches from master for compat with Stackage Nightly
   # 2022-12-07: Lift bounds to allow dependencies shipped with LTS-20
@@ -1430,12 +1423,21 @@ self: super: {
     });
   };
 
-  jsaddle-webkit2gtk = overrideCabal (old: {
-    postPatch = old.postPatch or "" + ''
-      sed -i 's/bytestring.*0.11/bytestring/' jsaddle-webkit2gtk.cabal
-    '';
-  }) super.jsaddle-webkit2gtk;
 
+  # 2023-04-16: https://github.com/ghcjs/jsaddle/pull/137
+  jsaddle-webkit2gtk = lib.pipe super.jsaddle-webkit2gtk
+    [
+      (appendPatch (fetchpatch {
+        url = "https://github.com/ghcjs/jsaddle/commit/f990366f19d23a8008d482572d52351c1a6f7215.patch";
+        hash = "sha256-IbkJrlyG6q5rqMIhn//Dt3u6T314Pug+mQMwwe0LK5w=";
+        relative = "jsaddle-webkit2gtk";
+      }))
+      (overrideCabal (old: {
+        postPatch = old.postPatch or "" + ''
+          sed -i 's/bytestring.*0.11/bytestring/' jsaddle-webkit2gtk.cabal
+        '';
+      }))
+    ];
 
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
@@ -2067,14 +2069,9 @@ self: super: {
   gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
-  # 2022-01-16 haskell-ci needs Cabal 3.6
-  haskell-ci = (appendPatches [
-    # Allow building with optparse-applicative 0.17* and ShellCheck 0.8.0
-    ./patches/haskell-ci-optparse-applicative-0.17-ShellCheck-0.8.patch
-  ] super.haskell-ci).overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_3_0;
-    cabal-install-parsers = self.cabal-install-parsers_0_4_5;
-    ShellCheck = self.ShellCheck_0_8_0;
+  # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
+  haskell-ci = super.haskell-ci.overrideScope (self: super: {
+    Cabal-syntax = self.Cabal-syntax_3_10_1_0;
   });
 
   large-hashable = lib.pipe (super.large-hashable.override {
@@ -2489,7 +2486,7 @@ self: super: {
   # 2022-11-15: Needs newer witch package and brick 1.3 which in turn works with text-zipper 0.12
   # Other dependencies are resolved with doJailbreak for both swarm and brick_1_3
   swarm = doJailbreak (super.swarm.override {
-    brick = doJailbreak (dontCheck super.brick_1_6);
+    brick = doJailbreak (dontCheck super.brick_1_7);
   });
 
   # Too strict upper bound on bytestring
@@ -2553,6 +2550,15 @@ self: super: {
   emanote = super.emanote.overrideScope (lself: lsuper: {
     commonmark-extensions = lself.commonmark-extensions_0_2_3_2;
   });
+
+  # Test files missing from sdist
+  # https://github.com/tweag/webauthn/issues/166
+  webauthn = dontCheck super.webauthn;
+
+  # Too strict lower bound on hspec
+  wai-token-bucket-ratelimiter =
+    assert lib.versionOlder self.hspec.version "2.10";
+    doJailbreak super.wai-token-bucket-ratelimiter;
 
   # doctest <0.19
   polysemy = doJailbreak super.polysemy;

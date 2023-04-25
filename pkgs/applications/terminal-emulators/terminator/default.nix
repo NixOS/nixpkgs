@@ -14,13 +14,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terminator";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "gnome-terminator";
     repo = "terminator";
     rev = "v${version}";
-    hash = "sha256-dN9+6VGIdIyY52nm2BMONeb+WV7UGL68frjnHRxRzTU=";
+    hash = "sha256-Kx0z9oheA7Ihgsyg6zgPcGFMrqlXoIpQcL/dMqPB2qA=";
   };
 
   nativeBuildInputs = [

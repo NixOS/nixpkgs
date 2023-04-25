@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, help2man
 , installShellFiles
 , pkg-config
 , bzip2

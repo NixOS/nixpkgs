@@ -204,11 +204,11 @@
     };
   };
   kwin = {
-    version = "5.27.4";
+    version = "5.27.4.1";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.27.4/kwin-5.27.4.tar.xz";
-      sha256 = "1d76m6vp9kg4qgr62ppb5wyi7g49j84kzb75zqkq5racsr9r0i2q";
-      name = "kwin-5.27.4.tar.xz";
+      url = "${mirror}/stable/plasma/5.27.4/kwin-5.27.4.1.tar.xz";
+      sha256 = "1c821szi4vvxc0aw49nb2xbdgnkc1pl5hadpvc9m4l18qly1v7xk";
+      name = "kwin-5.27.4.1.tar.xz";
     };
   };
   kwrited = {

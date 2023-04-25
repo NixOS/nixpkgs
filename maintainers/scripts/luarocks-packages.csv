@@ -40,6 +40,7 @@ lrexlib-pcre,,,,,,vyp
 lrexlib-posix,,,,,,
 lua-cjson,,,,,,
 lua-cmsgpack,,,,,,
+lua-curl,,,,,,
 lua-iconv,,,,,,
 lua-lsp,,,,,,
 lua-messagepack,,,,,,

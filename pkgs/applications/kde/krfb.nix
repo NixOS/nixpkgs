@@ -1,7 +1,7 @@
 { mkDerivation, lib
 , extra-cmake-modules, kdoctools
 , kconfig, kcoreaddons, kcrash, kdbusaddons, kdnssd, knotifications, kwallet
-, kwidgetsaddons, kwindowsystem, kxmlgui, kwayland
+, kwidgetsaddons, kwindowsystem, kxmlgui, kwayland, kpipewire
 , libvncserver, libXtst, libXdamage
 , qtx11extras, pipewire, plasma-wayland-protocols, wayland
 }:
@@ -18,7 +18,7 @@ mkDerivation {
   buildInputs = [
     libvncserver libXtst libXdamage
     kconfig kcoreaddons kcrash kdbusaddons knotifications kwallet kwidgetsaddons
-    kwindowsystem kxmlgui kwayland
+    kwindowsystem kxmlgui kwayland kpipewire
     qtx11extras
     pipewire
     plasma-wayland-protocols

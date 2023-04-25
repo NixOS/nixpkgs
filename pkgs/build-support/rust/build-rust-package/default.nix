@@ -11,7 +11,7 @@
 , cargoSetupHook
 , cargo
 , cargo-auditable
-, cargo-auditable-cargo-wrapper
+, buildPackages
 , rustc
 , libiconv
 , windows
@@ -121,7 +121,7 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   patchRegistryDeps = ./patch-registry-deps;
 
   nativeBuildInputs = nativeBuildInputs ++ lib.optionals auditable [
-    (cargo-auditable-cargo-wrapper.override {
+    (buildPackages.cargo-auditable-cargo-wrapper.override {
       inherit cargo cargo-auditable;
     })
   ] ++ [

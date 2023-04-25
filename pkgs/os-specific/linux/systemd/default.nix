@@ -98,8 +98,12 @@
 , withImportd ? !stdenv.hostPlatform.isMusl
 , withKmod ? true
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
-    && stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6" # assumes hard floats
+    && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+    # buildPackages.targetPackages.llvmPackages is the same as llvmPackages,
+    # but we do it this way to avoid taking llvmPackages as an input, and
+    # risking making it too easy to ignore the above comment about llvmPackages.
+    && lib.meta.availableOn stdenv.hostPlatform buildPackages.targetPackages.llvmPackages.compiler-rt
 , withLibidn2 ? true
 , withLocaled ? true
 , withLogind ? true
@@ -736,7 +740,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       inherit (nixosTests) switchTest;
-      cross = pkgsCross.aarch64-multiplatform.systemd;
+      cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
     };
   };
 

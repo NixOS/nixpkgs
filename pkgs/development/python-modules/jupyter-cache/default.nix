@@ -3,6 +3,7 @@
 , fetchPypi
 , attrs
 , click
+, flit-core
 , importlib-metadata
 , nbclient
 , nbformat
@@ -10,25 +11,22 @@
 , sqlalchemy
 , tabulate
 , pythonOlder
-, setuptools
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-cache";
-  version = "0.5.0";
-  format = "pyproject";
+  version = "0.6.1";
+  format = "flit";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "87408030a4c8c14fe3f8fe62e6ceeb24c84e544c7ced20bfee45968053d07801";
+    sha256 = "sha256-Jvg5ARQ+30ry8/9akeLSrSmORuLO4DyAcdN6I6Y8y/w=";
   };
 
   nativeBuildInputs = [
-    setuptools
-    pythonRelaxDepsHook
+    flit-core
   ];
 
   propagatedBuildInputs = [
@@ -40,11 +38,6 @@ buildPythonPackage rec {
     pyyaml
     sqlalchemy
     tabulate
-  ];
-
-  pythonRelaxDeps = [
-    "nbclient"
-    "sqlalchemy" # See https://github.com/executablebooks/jupyter-cache/pull/93
   ];
 
   pythonImportsCheck = [ "jupyter_cache" ];

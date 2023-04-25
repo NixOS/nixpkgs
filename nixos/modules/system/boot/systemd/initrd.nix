@@ -1,4 +1,4 @@
-{ lib, config, utils, pkgs, ... }:
+{ lib, options, config, utils, pkgs, ... }:
 
 with lib;
 
@@ -72,15 +72,6 @@ let
     "systemd-tmpfiles-setup.service"
     "timers.target"
     "umount.target"
-
-    # TODO: Networking
-    # "network-online.target"
-    # "network-pre.target"
-    # "network.target"
-    # "nss-lookup.target"
-    # "nss-user-lookup.target"
-    # "remote-fs-pre.target"
-    # "remote-fs.target"
   ] ++ cfg.additionalUpstreamUnits;
 
   upstreamWants = [
@@ -135,18 +126,20 @@ in {
   options.boot.initrd.systemd = {
     enable = mkEnableOption (lib.mdDoc "systemd in initrd") // {
       description = lib.mdDoc ''
-        Whether to enable systemd in initrd.
+        Whether to enable systemd in initrd. The unit options such as
+        {option}`boot.initrd.systemd.services` are the same as their
+        stage 2 counterparts such as {option}`systemd.services`,
+        except that `restartTriggers` and `reloadTriggers` are not
+        supported.
 
-        Note: This is in very early development and is highly
-        experimental. Most of the features NixOS supports in initrd are
-        not yet supported by the intrd generated with this option.
+        Note: This is experimental. Some of the `boot.initrd` options
+        are not supported when this is enabled, and the options under
+        `boot.initrd.systemd` are subject to change.
       '';
     };
 
-    package = (mkPackageOptionMD pkgs "systemd" {
+    package = mkPackageOptionMD pkgs "systemd" {
       default = "systemdStage1";
-    }) // {
-      visible = false;
     };
 
     extraConfig = mkOption {
@@ -176,7 +169,6 @@ in {
           "/etc/hostname".text = "mymachine";
         }
       '';
-      visible = false;
       default = {};
       type = utils.systemdUtils.types.initrdContents;
     };
@@ -226,7 +218,6 @@ in {
 
     emergencyAccess = mkOption {
       type = with types; oneOf [ bool (nullOr (passwdEntry str)) ];
-      visible = false;
       description = lib.mdDoc ''
         Set to true for unauthenticated emergency access, and false for
         no emergency access.
@@ -240,7 +231,6 @@ in {
     initrdBin = mkOption {
       type = types.listOf types.package;
       default = [];
-      visible = false;
       description = lib.mdDoc ''
         Packages to include in /bin for the stage 1 emergency shell.
       '';
@@ -249,7 +239,6 @@ in {
     additionalUpstreamUnits = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      visible = false;
       example = [ "debug-shell.service" "systemd-quotacheck.service" ];
       description = lib.mdDoc ''
         Additional units shipped with systemd that shall be enabled.
@@ -260,7 +249,6 @@ in {
       default = [ ];
       type = types.listOf types.str;
       example = [ "systemd-backlight@.service" ];
-      visible = false;
       description = lib.mdDoc ''
         A list of units to skip when generating system systemd configuration directory. This has
         priority over upstream units, {option}`boot.initrd.systemd.units`, and
@@ -273,13 +261,12 @@ in {
     units = mkOption {
       description = lib.mdDoc "Definition of systemd units.";
       default = {};
-      visible = false;
+      visible = "shallow";
       type = systemdUtils.types.units;
     };
 
     packages = mkOption {
       default = [];
-      visible = false;
       type = types.listOf types.package;
       example = literalExpression "[ pkgs.systemd-cryptsetup-generator ]";
       description = lib.mdDoc "Packages providing systemd units and hooks.";
@@ -287,7 +274,7 @@ in {
 
     targets = mkOption {
       default = {};
-      visible = false;
+      visible = "shallow";
       type = systemdUtils.types.initrdTargets;
       description = lib.mdDoc "Definition of systemd target units.";
     };
@@ -295,35 +282,35 @@ in {
     services = mkOption {
       default = {};
       type = systemdUtils.types.initrdServices;
-      visible = false;
+      visible = "shallow";
       description = lib.mdDoc "Definition of systemd service units.";
     };
 
     sockets = mkOption {
       default = {};
       type = systemdUtils.types.initrdSockets;
-      visible = false;
+      visible = "shallow";
       description = lib.mdDoc "Definition of systemd socket units.";
     };
 
     timers = mkOption {
       default = {};
       type = systemdUtils.types.initrdTimers;
-      visible = false;
+      visible = "shallow";
       description = lib.mdDoc "Definition of systemd timer units.";
     };
 
     paths = mkOption {
       default = {};
       type = systemdUtils.types.initrdPaths;
-      visible = false;
+      visible = "shallow";
       description = lib.mdDoc "Definition of systemd path units.";
     };
 
     mounts = mkOption {
       default = [];
       type = systemdUtils.types.initrdMounts;
-      visible = false;
+      visible = "shallow";
       description = lib.mdDoc ''
         Definition of systemd mount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
@@ -334,7 +321,7 @@ in {
     automounts = mkOption {
       default = [];
       type = systemdUtils.types.automounts;
-      visible = false;
+      visible = "shallow";
       description = lib.mdDoc ''
         Definition of systemd automount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
@@ -345,7 +332,7 @@ in {
     slices = mkOption {
       default = {};
       type = systemdUtils.types.slices;
-      visible = false;
+      visible = "shallow";
       description = lib.mdDoc "Definition of slice configurations.";
     };
   };
@@ -378,7 +365,7 @@ in {
 
         "/etc/systemd/system.conf".text = ''
           [Manager]
-          DefaultEnvironment=PATH=/bin:/sbin ${optionalString (isBool cfg.emergencyAccess && cfg.emergencyAccess) "SYSTEMD_SULOGIN_FORCE=1"}
+          DefaultEnvironment=PATH=/bin:/sbin
           ${cfg.extraConfig}
           ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
@@ -388,8 +375,10 @@ in {
 
         "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 
-        "/etc/passwd".source = "${pkgs.fakeNss}/etc/passwd";
-        "/etc/shadow".text = "root:${if isBool cfg.emergencyAccess then "!" else cfg.emergencyAccess}:::::::";
+        # We can use either ! or * to lock the root account in the
+        # console, but some software like OpenSSH won't even allow you
+        # to log in with an SSH key if you use ! so we use * instead
+        "/etc/shadow".text = "root:${if isBool cfg.emergencyAccess then optionalString (!cfg.emergencyAccess) "*" else cfg.emergencyAccess}:::::::";
 
         "/bin".source = "${initrdBinEnv}/bin";
         "/sbin".source = "${initrdBinEnv}/sbin";
