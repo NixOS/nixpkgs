@@ -134,7 +134,7 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   buildInputs = buildInputs
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
-    ++ lib.optionals (stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.libc != null) [ windows.pthreads ]; # TODO: gate for UEFI correctly
+    ++ lib.optionals (stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isUefi) [ windows.pthreads ];
 
   patches = cargoPatches ++ patches;
 
