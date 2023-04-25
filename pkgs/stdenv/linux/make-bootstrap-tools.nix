@@ -162,6 +162,7 @@ in with pkgs; rec {
         # These needed for cross but not native tools because the stdenv
         # GCC has certain things built in statically. See
         # pkgs/stdenv/linux/default.nix for the details.
+        rm $out/lib/libisl*.so*
         cp -d ${isl_0_20.out}/lib/libisl*.so* $out/lib
 
       '' + lib.optionalString (stdenv.hostPlatform.isRiscV) ''
