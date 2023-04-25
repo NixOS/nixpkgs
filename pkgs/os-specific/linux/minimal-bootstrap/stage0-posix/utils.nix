@@ -34,30 +34,18 @@ rec {
 
   writeText = name: text: writeTextFile {inherit name text;};
 
-  mkKaemDerivation = args@{
-    pname ? null,
-    version ? null,
-    name ? null,
-    buildPhase,
-    buildInputs ? [],
-    ...
-  }:
-    assert name == null -> pname != null && version != null;
-    let
-      rname = if name != null then name else "${pname}-${version}";
-    in
+  runCommand = name: env: buildCommand:
     derivation ({
-      inherit system;
-      name = rname;
+      inherit name system;
 
       builder = "${kaem}/bin/kaem";
       args = [
         "--verbose"
         "--strict"
         "--file"
-        (writeText "${rname}-builder" buildPhase)
+        (writeText "${name}-builder" buildCommand)
       ];
 
-      PATH = lib.makeBinPath (buildInputs ++ [ kaem mescc-tools mescc-tools-extra ]);
-    } // (builtins.removeAttrs args [ "pname" "version" "name" "buildPhase" "buildInputs" ]));
+      PATH = lib.makeBinPath ((env.nativeBuildInputs or []) ++ [ kaem mescc-tools mescc-tools-extra ]);
+    } // (builtins.removeAttrs env [ "nativeBuildInputs" ]));
 }

@@ -2,7 +2,7 @@
 # that can be compiled by MesCC
 
 { lib
-, mkKaemDerivation
+, runCommand
 , fetchurl
 , mes
 , buildTinyccN
@@ -15,72 +15,67 @@ let
     sha256 = "1xhn5qgph32dlxp3fkl4d78f21hvlb2r5dpxvh295x8spkbmbrwp";
   };
 
-  mes-tcc = mkKaemDerivation rec {
-    pname = "mes-tcc";
-    version = "0.9.27";
+  mes-tcc = runCommand "mes-tcc-${version}" {} ''
+    # Create config.h
+    catm config.h
 
-    buildPhase = ''
-      # Create config.h
-      catm config.h
+    ${mes}/bin/mes --no-auto-compile -e main ${mes}/bin/mescc.scm -- \
+      -S \
+      -o tcc.s \
+      -I . \
+      -D BOOTSTRAP=1 \
+      -I ${src} \
+      -D TCC_TARGET_I386=1 \
+      -D inline= \
+      -D CONFIG_TCCDIR=\"''${out}/lib\" \
+      -D CONFIG_SYSROOT=\"\" \
+      -D CONFIG_TCC_CRTPREFIX=\"''${out}/lib\" \
+      -D CONFIG_TCC_ELFINTERP=\"/mes/loader\" \
+      -D CONFIG_TCC_SYSINCLUDEPATHS=\"${mes}${mes.mesPrefix}/include\" \
+      -D TCC_LIBGCC=\"${mes}${mes.mesPrefix}/lib/x86-mes/libc.a\" \
+      -D CONFIG_TCC_LIBTCC1_MES=0 \
+      -D CONFIG_TCCBOOT=1 \
+      -D CONFIG_TCC_STATIC=1 \
+      -D CONFIG_USE_LIBGCC=1 \
+      -D TCC_MES_LIBC=1 \
+      -D TCC_VERSION=\"${version}\" \
+      -D ONE_SOURCE=1 \
+      ${src}/tcc.c
 
-      ${mes}/bin/mes --no-auto-compile -e main ${mes}/bin/mescc.scm -- \
-        -S \
-        -o tcc.s \
-        -I . \
-        -D BOOTSTRAP=1 \
-        -I ${src} \
-        -D TCC_TARGET_I386=1 \
-        -D inline= \
-        -D CONFIG_TCCDIR=\"''${out}/lib\" \
-        -D CONFIG_SYSROOT=\"\" \
-        -D CONFIG_TCC_CRTPREFIX=\"''${out}/lib\" \
-        -D CONFIG_TCC_ELFINTERP=\"/mes/loader\" \
-        -D CONFIG_TCC_SYSINCLUDEPATHS=\"${mes}${mes.mesPrefix}/include\" \
-        -D TCC_LIBGCC=\"${mes}${mes.mesPrefix}/lib/x86-mes/libc.a\" \
-        -D CONFIG_TCC_LIBTCC1_MES=0 \
-        -D CONFIG_TCCBOOT=1 \
-        -D CONFIG_TCC_STATIC=1 \
-        -D CONFIG_USE_LIBGCC=1 \
-        -D TCC_MES_LIBC=1 \
-        -D TCC_VERSION=\"${version}\" \
-        -D ONE_SOURCE=1 \
-        ${src}/tcc.c
+    mkdir -p ''${out}/bin
+    ${mes}/bin/mes --no-auto-compile -e main ${mes}/bin/mescc.scm -- \
+      -l c+tcc \
+      -o ''${out}/bin/tcc \
+      tcc.s
 
-      mkdir -p ''${out}/bin
-      ${mes}/bin/mes --no-auto-compile -e main ${mes}/bin/mescc.scm -- \
-        -l c+tcc \
-        -o ''${out}/bin/tcc \
-        tcc.s
+    # Quick test
+    ''${out}/bin/tcc -version
 
-      # Quick test
-      ''${out}/bin/tcc -version
+    # Recompile the mes C library
+    mkdir -p ''${out}/lib
+    cd ${mes}${mes.mesPrefix}
 
-      # Recompile the mes C library
-      mkdir -p ''${out}/lib
-      cd ${mes}${mes.mesPrefix}
+    # crt1.o
+    ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${out}/lib/crt1.o lib/linux/x86-mes-gcc/crt1.c
 
-      # crt1.o
-      ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${out}/lib/crt1.o lib/linux/x86-mes-gcc/crt1.c
+    # crtn.o
+    ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${out}/lib/crtn.o lib/linux/x86-mes-gcc/crtn.c
 
-      # crtn.o
-      ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${out}/lib/crtn.o lib/linux/x86-mes-gcc/crtn.c
+    # crti.o
+    ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${out}/lib/crti.o lib/linux/x86-mes-gcc/crti.c
 
-      # crti.o
-      ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${out}/lib/crti.o lib/linux/x86-mes-gcc/crti.c
+    # libc+gcc.a
+    ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${TMPDIR}/unified-libc.o ${unified-libc}
+    ''${out}/bin/tcc -ar cr ''${out}/lib/libc.a ''${TMPDIR}/unified-libc.o
 
-      # libc+gcc.a
-      ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${TMPDIR}/unified-libc.o ${unified-libc}
-      ''${out}/bin/tcc -ar cr ''${out}/lib/libc.a ''${TMPDIR}/unified-libc.o
+    # libtcc1.a
+    ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${TMPDIR}/libtcc1.o lib/libtcc1.c
+    ''${out}/bin/tcc -ar cr ''${out}/lib/libtcc1.a ''${TMPDIR}/libtcc1.o
 
-      # libtcc1.a
-      ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${TMPDIR}/libtcc1.o lib/libtcc1.c
-      ''${out}/bin/tcc -ar cr ''${out}/lib/libtcc1.a ''${TMPDIR}/libtcc1.o
-
-      # libgetopt.a
-      ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${TMPDIR}/getopt.o lib/posix/getopt.c
-      ''${out}/bin/tcc -ar cr ''${out}/lib/libgetopt.a ''${TMPDIR}/getopt.o
-    '';
-  };
+    # libgetopt.a
+    ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${TMPDIR}/getopt.o lib/posix/getopt.c
+    ''${out}/bin/tcc -ar cr ''${out}/lib/libgetopt.a ''${TMPDIR}/getopt.o
+  '';
 
   boot0-tcc = buildTinyccN {
     pname = "boot0-tcc";
