@@ -11,7 +11,7 @@
 , boost
 , catch2
 , fmt
-, microsoft_gsl
+, microsoft_gsl_3
 , range-v3
 , yaml-cpp
 , ncurses
@@ -62,7 +62,7 @@ mkDerivation rec {
     boost
     catch2
     fmt
-    microsoft_gsl
+    microsoft_gsl_3
     range-v3
     yaml-cpp
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.libs.utmp ];

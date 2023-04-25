@@ -22762,7 +22762,9 @@ with pkgs;
 
   mhddfs = callPackage ../tools/filesystems/mhddfs { };
 
-  microsoft_gsl = callPackage ../development/libraries/microsoft_gsl { };
+  microsoft_gsl = microsoft_gsl_4;
+  microsoft_gsl_4 = callPackage ../development/libraries/microsoft_gsl/4.nix { };
+  microsoft_gsl_3 = callPackage ../development/libraries/microsoft_gsl/3.nix { };
 
   microsoft-edge = callPackage (import ../applications/networking/browsers/microsoft-edge).stable { };
   microsoft-edge-beta = callPackage (import ../applications/networking/browsers/microsoft-edge).beta { };
