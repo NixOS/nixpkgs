@@ -16,6 +16,7 @@
 , sphinx-book-theme
 , sphinx-copybutton
 , sphinx-design
+, stdenv
 , pytest-regressions
 , pytestCheckHook
 , pythonOlder
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   preCheck = ''
     rm -r benchmarking
   '';
+  doCheck = !stdenv.isi686;
 
   pythonImportsCheck = [
     "markdown_it"

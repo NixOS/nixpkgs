@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "ttp-templates";
-  version = "0.3.4";
+  version = "0.3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
