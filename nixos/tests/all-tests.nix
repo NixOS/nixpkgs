@@ -70,6 +70,7 @@ in {
   # Testing the test driver
   nixos-test-driver = {
     extra-python-packages = handleTest ./nixos-test-driver/extra-python-packages.nix {};
+    node-name = runTest ./nixos-test-driver/node-name.nix;
   };
 
   # NixOS vm tests and non-vm unit tests
