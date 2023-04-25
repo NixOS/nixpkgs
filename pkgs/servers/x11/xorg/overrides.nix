@@ -763,6 +763,7 @@ self: super:
             sha256 = "0zm9g0g1jvy79sgkvy0rjm6ywrdba2xjd1nsnjbxjccckbr6i396";
             name = "revert-fb-changes-2.patch";
           })
+          ./darwin/bundle_main.patch
           ./darwin/stub.patch
         ];
 
