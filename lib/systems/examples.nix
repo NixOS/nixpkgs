@@ -191,8 +191,6 @@ rec {
     };
   };
 
-
-
   aarch64-embedded = {
     config = "aarch64-none-elf";
     libc = "newlib";

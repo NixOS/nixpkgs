@@ -6,8 +6,6 @@ with lib.lists;
 let abis_ = abis; in
 let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis_; in
 
-# TODO: isUefi
-
 rec {
   # these patterns are to be matched against {host,build,target}Platform.parsed
   patterns = rec {

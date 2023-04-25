@@ -210,7 +210,7 @@ in let
 
     clangUseLLVM =
     if stdenv.targetPlatform.libc == null then
-      builtins.trace "yo" tools.clangNoLibc # TODO: gate correctly...
+      tools.clangNoLibc
     else wrapCCWith rec {
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
@@ -218,7 +218,7 @@ in let
       extraPackages = [
         libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
-      ] ++ lib.optionals (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.libc != null) [ # TODO: gate on uefi correctly
+      ] ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isUefi) [
         targetLlvmLibraries.libunwind
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -227,7 +227,7 @@ in let
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmLibraries.compiler-rt}/lib"
         ]
-        ++ lib.optional (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.libc != null) "--unwindlib=libunwind" # TODO: gate on UEFI correctly
+        ++ lib.optional (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isUefi) "--unwindlib=libunwind"
         ++ lib.optional
           (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
           "-lunwind"
