@@ -27382,6 +27382,8 @@ with pkgs;
 
   systemd-wait = callPackage ../os-specific/linux/systemd-wait { };
 
+  systemd-lock-handler = callPackage ../os-specific/linux/systemd-lock-handler { };
+
   sysvinit = callPackage ../os-specific/linux/sysvinit { };
 
   sysvtools = sysvinit.override {
