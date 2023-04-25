@@ -36,7 +36,8 @@ in
       type = types.bool;
       default = false;
       description = mdDoc ''
-        Add cap_sys_nice capability to the GameScope binary.
+        Add cap_sys_nice capability to the GameScope
+        binary so that it may renice itself.
       '';
     };
 
