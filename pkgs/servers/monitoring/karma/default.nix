@@ -5,7 +5,7 @@
 , callPackage
 , fetchFromGitHub
 , nixosTests
-, nodejs-18_x
+, nodejs_18
 }:
 
 let
@@ -13,7 +13,7 @@ let
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
     # pin nodejs version
-    nodejs = nodejs-18_x;
+    nodejs = nodejs_18;
    }).nodeDependencies;
 in
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   vendorHash = "sha256-ZsXPA4KyKbc/bwkidyHNDg62mE8KlE+yIssOBZLmHVg=";
 
   nativeBuildInputs = [
-    nodejs-18_x
+    nodejs_18
   ];
 
   postPatch = ''
