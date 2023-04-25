@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
+{ lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper
 , cacert, moreutils, jq, git, pkg-config, yarn, python3
-, esbuild, nodejs-16_x, libsecret, xorg, ripgrep
+, esbuild, nodejs_16, libsecret, xorg, ripgrep
 , AppKit, Cocoa, Security, cctools }:
 
 let
   system = stdenv.hostPlatform.system;
 
-  nodejs = nodejs-16_x;
+  nodejs = nodejs_16;
   yarn' = yarn.override { inherit nodejs; };
   defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
 

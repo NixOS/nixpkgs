@@ -3590,7 +3590,7 @@ with pkgs;
 
   play-with-mpv = callPackage ../tools/video/play-with-mpv { };
 
-  plausible = callPackage ../servers/web-apps/plausible { nodejs = nodejs-16_x; };
+  plausible = callPackage ../servers/web-apps/plausible { nodejs = nodejs_16; };
 
   pam-reattach = callPackage ../os-specific/darwin/pam-reattach { };
 
@@ -6174,9 +6174,9 @@ with pkgs;
 
   hedgedoc = callPackage ../servers/web-apps/hedgedoc {
     inherit (callPackage ../development/tools/yarn2nix-moretea/yarn2nix {
-      nodejs = nodejs-16_x;
+      nodejs = nodejs_16;
     }) mkYarnPackage;
-    nodejs = nodejs-16_x;
+    nodejs = nodejs_16;
   };
 
   colord = callPackage ../tools/misc/colord { };
@@ -9400,27 +9400,27 @@ with pkgs;
 
   nodenv = callPackage ../development/tools/nodenv { };
 
-  nodejs = hiPrio nodejs-18_x;
+  nodejs = hiPrio nodejs_18;
 
-  nodejs-slim = nodejs-slim-18_x;
+  nodejs-slim = nodejs-slim_18;
 
-  nodejs-14_x = callPackage ../development/web/nodejs/v14.nix {
+  nodejs_14 = callPackage ../development/web/nodejs/v14.nix {
     openssl = openssl_1_1;
   };
-  nodejs-slim-14_x = callPackage ../development/web/nodejs/v14.nix {
+  nodejs-slim_14 = callPackage ../development/web/nodejs/v14.nix {
     openssl = openssl_1_1;
     enableNpm = false;
   };
-  nodejs-16_x = callPackage ../development/web/nodejs/v16.nix { };
-  nodejs-slim-16_x = callPackage ../development/web/nodejs/v16.nix {
+  nodejs_16 = callPackage ../development/web/nodejs/v16.nix { };
+  nodejs-slim_16 = callPackage ../development/web/nodejs/v16.nix {
     enableNpm = false;
   };
-  nodejs-18_x = callPackage ../development/web/nodejs/v18.nix { };
-  nodejs-slim-18_x = callPackage ../development/web/nodejs/v18.nix {
+  nodejs_18 = callPackage ../development/web/nodejs/v18.nix { };
+  nodejs-slim_18 = callPackage ../development/web/nodejs/v18.nix {
     enableNpm = false;
   };
-  nodejs-19_x = callPackage ../development/web/nodejs/v19.nix { };
-  nodejs-slim-19_x = callPackage ../development/web/nodejs/v19.nix {
+  nodejs_19 = callPackage ../development/web/nodejs/v19.nix { };
+  nodejs-slim_19 = callPackage ../development/web/nodejs/v19.nix {
     enableNpm = false;
   };
   nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
@@ -9987,10 +9987,10 @@ with pkgs;
   };
 
   mirakurun = callPackage ../applications/video/mirakurun {
-    yarn = yarn.override { nodejs = nodejs-16_x; };
+    yarn = yarn.override { nodejs = nodejs_16; };
     inherit (callPackage ../development/tools/yarn2nix-moretea/yarn2nix {
-      nodejs = nodejs-16_x;
-      yarn = yarn.override { nodejs = nodejs-16_x; };
+      nodejs = nodejs_16;
+      yarn = yarn.override { nodejs = nodejs_16; };
     }) mkYarnPackage;
   };
 
@@ -20961,7 +20961,7 @@ with pkgs;
   };
 
   isso = callPackage ../servers/isso {
-    nodejs = nodejs-14_x;
+    nodejs = nodejs_14;
   };
 
   itk_5_2 = callPackage ../development/libraries/itk/5.2.x.nix {
@@ -25225,7 +25225,7 @@ with pkgs;
   };
 
   lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix {
-    nodejs = nodejs-14_x;
+    nodejs = nodejs_14;
   };
 
   lightgbm = callPackage ../development/libraries/lightgbm { };
@@ -25423,7 +25423,7 @@ with pkgs;
   outline = callPackage ../servers/web-apps/outline (lib.fix (super: {
     yarn2nix-moretea = yarn2nix-moretea.override { inherit (super) nodejs yarn; };
     yarn = yarn.override { inherit (super) nodejs; };
-    nodejs = nodejs-16_x;
+    nodejs = nodejs_16;
   }));
 
   openbgpd = callPackage ../servers/openbgpd { };
@@ -29876,7 +29876,7 @@ with pkgs;
   epeg = callPackage ../applications/graphics/epeg { };
 
   epgstation = callPackage ../applications/video/epgstation {
-    nodejs = nodejs-16_x;
+    nodejs = nodejs_16;
   };
 
   inherit (gnome) epiphany;
@@ -33001,7 +33001,7 @@ with pkgs;
   peek = callPackage ../applications/video/peek { };
 
   peertube = callPackage ../servers/peertube {
-    nodejs = nodejs-16_x;
+    nodejs = nodejs_16;
   };
 
   peroxide = callPackage ../applications/networking/peroxide { };

@@ -1,11 +1,11 @@
 { stdenv
 , pkgs
 , lib
-, nodejs-14_x
+, nodejs_14
 }:
 
 let
-  nodejs = nodejs-14_x;
+  nodejs = nodejs_14;
 
   nodePackages = import ./node-packages.nix {
     inherit pkgs nodejs;
