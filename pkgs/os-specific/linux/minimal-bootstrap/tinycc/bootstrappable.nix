@@ -3,17 +3,18 @@
 
 { lib
 , runCommand
-, fetchurl
+, fetchtarball
 , mes
 , buildTinyccN
 , unified-libc
 }:
 let
   version = "unstable-2023-04-20";
-  src = builtins.fetchTarball {
-    url = "https://gitlab.com/janneke/tinycc/-/archive/80114c4da6b17fbaabb399cc29f427e368309bc8/tinycc-80114c4da6b17fbaabb399cc29f427e368309bc8.tar.gz";
-    sha256 = "1xhn5qgph32dlxp3fkl4d78f21hvlb2r5dpxvh295x8spkbmbrwp";
-  };
+  rev = "80114c4da6b17fbaabb399cc29f427e368309bc8";
+  src = (fetchtarball {
+    url = "https://gitlab.com/janneke/tinycc/-/archive/${rev}/tinycc-${rev}.tar.gz";
+    sha256 = "1a0cw9a62qc76qqn5sjmp3xrbbvsz2dxrw21lrnx9q0s74mwaxbq";
+  }) + "/tinycc-${rev}";
 
   mes-tcc = runCommand "mes-tcc-${version}" {} ''
     # Create config.h

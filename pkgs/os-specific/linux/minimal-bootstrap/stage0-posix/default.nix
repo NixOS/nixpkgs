@@ -40,7 +40,7 @@ lib.makeScope newScope (self: with self; {
 
   mescc-tools-extra = callPackage ./mescc-tools-extra { };
 
-  inherit (callPackage ./utils.nix { }) writeTextFile writeText runCommand;
+  inherit (callPackage ./utils.nix { }) writeTextFile writeText runCommand fetchtarball;
 
   # Now that mescc-tools-extra is available we can install kaem at /bin/kaem
   # to make it findable in environments

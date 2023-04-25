@@ -1,15 +1,15 @@
 { lib
 , runCommand
-, fetchurl
+, fetchtarball
 , callPackage
 , mes
 }:
 let
   version = "unstable-2023-04-20";
-  src = builtins.fetchTarball {
+  src = (fetchtarball {
     url = "https://repo.or.cz/tinycc.git/snapshot/86f3d8e33105435946383aee52487b5ddf918140.tar.gz";
-    sha256 = "009xvbiskg2ims2xag8w78yksnrqpm33asq5arxaph05hd59yss0";
-  };
+    sha256 = "11idrvbwfgj1d03crv994mpbbbyg63j1k64lw1gjy7mkiifw2xap";
+  }) + "/tinycc-86f3d8e";
 
   unified-libc = runCommand "mes-unified-libc.c" {} ''
     cd ${mes}${mes.mesPrefix}/lib

@@ -10,7 +10,7 @@ lib.makeScope newScope (self: with self; {
     inherit system;
   };
 
-  inherit (callPackage ./stage0-posix { }) kaem m2libc mescc-tools mescc-tools-extra writeTextFile writeText runCommand;
+  inherit (callPackage ./stage0-posix { }) kaem m2libc mescc-tools mescc-tools-extra writeTextFile writeText runCommand fetchtarball;
 
   mes = callPackage ./mes { };
 

@@ -1,5 +1,6 @@
 { runCommand
 , fetchurl
+, fetchtarball
 , writeText
 , m2libc
 , mescc-tools
@@ -14,10 +15,10 @@ let
   };
 
   nyaccVersion = "1.00.2";
-  nyaccModules = builtins.fetchTarball {
-    url = "http://download.savannah.nongnu.org/releases/nyacc/nyacc-${nyaccVersion}.tar.gz";
-    sha256 = "06rg6pn4k8smyydwls1abc9h702cri3z65ac9gvc4rxxklpynslk";
-  };
+  nyaccModules = (fetchtarball {
+    url = "mirror://savannah/nyacc/nyacc-${nyaccVersion}.tar.gz";
+    sha256 = "065ksalfllbdrzl12dz9d9dcxrv97wqxblslngsc6kajvnvlyvpk";
+  }) + "/nyacc-${nyaccVersion}";
 in
 # Adapted from https://github.com/fosslinux/live-bootstrap/blob/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/mes-0.24.2/mes-0.24.2.kaem
 (runCommand "mes-${version}" {} ''
