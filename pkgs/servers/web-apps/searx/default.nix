@@ -1,8 +1,35 @@
-{ lib, nixosTests, python3, python3Packages, fetchFromGitHub, fetchpatch }:
+{ lib, nixosTests, python3, fetchFromGitHub, fetchpatch }:
 
-with python3Packages;
-
-toPythonModule (buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+      # searx depends on flask-babel@2.0.0; when ran with 3.x it fails with
+      # "'Babel' object has no attribute 'localeselector'".
+      flask-babel = super.flask-babel.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.0";
+        src = super.fetchPypi {
+          pname = "Flask-Babel";
+          inherit version;
+          sha256 = "sha256-+fr0XNsuGjLqLsFEA1h9QpUQjzUBenghorGsuM/ZJX0=";
+        };
+        nativeBuildInputs = [ ];
+        format = "setuptools";
+        outputs = [ "out" ];
+      });
+      # Must downgrade babel as well for flask-babel@2.0.0.
+      babel = super.babel.overridePythonAttrs (oldAttrs: rec {
+        version = "2.11.0";
+        src = super.fetchPypi {
+          pname = "Babel";
+          inherit version;
+          hash = "sha256-XvSzImsBgN7d7UIpZRyLDho6aig31FoHMnLzE+TPl/Y=";
+        };
+        propagatedBuildInputs = [ self.pytz ];
+      });
+    };
+  };
+in
+with py.pkgs; toPythonModule (buildPythonApplication rec {
   pname = "searx";
   version = "1.1.0";
 
