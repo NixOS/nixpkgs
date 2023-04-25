@@ -82,8 +82,12 @@ in (buildEnv {
   nativeBuildInputs = [ makeWrapper libfaketime perl bin.texlinks ];
   buildInputs = pkgList.extraInputs;
 
-  # This is set primarily to help find-tarballs.nix to do its job
-  passthru.packages = pkgList.all;
+  passthru = {
+    # This is set primarily to help find-tarballs.nix to do its job
+    packages = pkgList.all;
+    # useful for inclusion in the `fonts.fonts` nixos option or for use in devshells
+    fonts = "${texmfroot}/texmf-dist/fonts";
+  };
 
   postBuild = ''
     TEXMFROOT="${texmfroot}"
