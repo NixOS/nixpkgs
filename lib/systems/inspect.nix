@@ -9,6 +9,14 @@ let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis
 rec {
   # these patterns are to be matched against {host,build,target}Platform.parsed
   patterns = rec {
+    # The patterns below are lists in sum-of-products form.
+    #
+    # Each attribute is list of product conditions; non-list values are treated
+    # as a singleton list.  If *any* product condition in the list matches then
+    # the predicate matches.  Each product condition is tested by
+    # `lib.attrsets.matchAttrs`, which requires a match on *all* attributes of
+    # the product.
+
     isi686         = { cpu = cpuTypes.i686; };
     isx86_32       = { cpu = { family = "x86"; bits = 32; }; };
     isx86_64       = { cpu = { family = "x86"; bits = 64; }; };
