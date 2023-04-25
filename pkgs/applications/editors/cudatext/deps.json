@@ -16,8 +16,8 @@
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2023.04.17",
-    "hash": "sha256-QllXTq9BCKedt/Pv14qOn1UoxZ57qz76OyptnjT92hA="
+    "rev": "2023.04.22",
+    "hash": "sha256-12W0p18s15KFFIopgit8l/Bf1KjMZkP2kCAaeaoqfyQ="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
@@ -26,8 +26,8 @@
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2023.04.17",
-    "hash": "sha256-EdtrKYZTP+1MQU5fLO6vYoU3EjS91PaSQnIxtgAs7TI="
+    "rev": "2023.04.18",
+    "hash": "sha256-Eb8ynxZP3OQ7TGFZMbw8r0HXXvaoR6yotwnwK6nwZxg="
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",

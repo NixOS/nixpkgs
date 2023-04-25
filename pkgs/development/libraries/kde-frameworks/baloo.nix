@@ -1,5 +1,5 @@
 {
-  mkDerivation,
+  mkDerivation, lib,
   extra-cmake-modules,
   kauth, kconfig, kcoreaddons, kcrash, kdbusaddons, kfilemetadata, ki18n,
   kidletime, kio, lmdb, qtbase, qtdeclarative, solid,
@@ -22,4 +22,5 @@ mkDerivation {
     substituteInPlace "$sourceRoot"/src/file/kde-baloo.service.in \
       --replace @KDE_INSTALL_FULL_BINDIR@ /run/current-system/sw/bin
   '';
+  meta.platforms = lib.platforms.linux ++ lib.platforms.freebsd;
 }

@@ -21,7 +21,9 @@ mkDerivation {
   ];
   propagatedBuildInputs = [
     kbookmarks kcompletion kconfig kcoreaddons kitemviews kjobwidgets kservice
-    kxmlgui qtbase qttools solid kded
+    kxmlgui qtbase qttools solid
+  ] ++ lib.optionals stdenv.isLinux [
+    kded
   ];
   outputs = [ "out" "dev" ];
   patches = [
