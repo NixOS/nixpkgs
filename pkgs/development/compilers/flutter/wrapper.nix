@@ -79,7 +79,7 @@ let
   ];
 
   # Nix-specific compiler configuration.
-  pkgConfigDirectories = builtins.filter builtins.pathExists (builtins.concatMap (pkg: map (dir: "${lib.getOutput "dev" pkg}/${dir}/pkgconfig") [ "lib" "share" ]) (appBuildDeps ++ extraPkgConfigPackages));
+  pkgConfigPackages = map (lib.getOutput "dev") (appBuildDeps ++ extraPkgConfigPackages);
   includeFlags = map (pkg: "-isystem ${lib.getOutput "dev" pkg}/include") (appStaticBuildDeps ++ extraIncludes);
   linkerFlags = (map (pkg: "-rpath,${lib.getOutput "lib" pkg}/lib") appRuntimeDeps) ++ extraLinkerFlags;
 in
@@ -94,11 +94,15 @@ in
 
   inherit (flutter) meta;
 } ''
+  for path in ${builtins.concatStringsSep " " (builtins.foldl' (paths: pkg: paths ++ (map (directory: "'${pkg}/${directory}/pkgconfig'") ["lib" "share"])) [ ] pkgConfigPackages)}; do
+    addToSearchPath FLUTTER_PKG_CONFIG_PATH "$path"
+  done
+
   mkdir -p $out/bin
   makeWrapper '${immutableFlutter}' $out/bin/flutter \
     --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
     --prefix PATH : '${lib.makeBinPath (tools ++ buildTools)}' \
-    --prefix PKG_CONFIG_PATH : '${builtins.concatStringsSep ":" pkgConfigDirectories}' \
+    --prefix PKG_CONFIG_PATH : "$FLUTTER_PKG_CONFIG_PATH" \
     --prefix LIBRARY_PATH : '${lib.makeLibraryPath appStaticBuildDeps}' \
     --prefix CXXFLAGS "''\t" '${builtins.concatStringsSep " " (includeFlags ++ extraCxxFlags)}' \
     --prefix CFLAGS "''\t" '${builtins.concatStringsSep " " (includeFlags ++ extraCFlags)}' \
