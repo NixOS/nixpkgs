@@ -4534,6 +4534,7 @@
   };
   elvishjerricco = {
     email = "elvishjerricco@gmail.com";
+    matrix = "@elvishjerricco:matrix.org";
     github = "ElvishJerricco";
     githubId = 1365692;
     name = "Will Fancher";
