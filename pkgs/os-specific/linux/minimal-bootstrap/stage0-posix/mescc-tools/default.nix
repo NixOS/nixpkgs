@@ -5,10 +5,7 @@
 , blood-elf-0
 , hex2
 , m2libc
-, m2-mesoplanet-src
-, m2-planet-src
-, mescc-tools-src
-, mescc-tools-extra-src
+, src
 , version
 }:
 
@@ -30,7 +27,7 @@ let
           -f ''${m2libc}/stdio.c \
           -f ''${m2libc}/string.c \
           -f ''${m2libc}/bootstrappable.c \
-          -f ''${mescc-tools-extra-src}/${name}.c \
+          -f ''${src}/mescc-tools-extra/${name}.c \
           --debug \
           -o ${name}.M1
 
@@ -51,7 +48,7 @@ let
           --base-address ''${BASE_ADDRESS} \
           -o ''${out}
       '';
-      inherit M1 M2 blood-elf-0 hex2 m2libc mescc-tools-extra-src;
+      inherit M1 M2 blood-elf-0 hex2 m2libc src;
     };
   mkdir = buildMesccToolsExtraUtil "mkdir";
   cp = buildMesccToolsExtraUtil "cp";
@@ -62,5 +59,5 @@ mkKaemDerivation0 {
   name = "mescc-tools-${version}";
   script = ./build.kaem;
 
-  inherit M1 M2 blood-elf-0 hex2 mkdir cp chmod replace m2libc m2-mesoplanet-src m2-planet-src mescc-tools-src;
+  inherit M1 M2 blood-elf-0 hex2 mkdir cp chmod replace m2libc src;
 }

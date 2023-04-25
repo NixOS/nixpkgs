@@ -12,12 +12,12 @@ ${chmod} 0555 ${out}/bin/hex2
 # M2-Mesoplanet searches for runtime dependencies in environment variables
 # We can hardcode them with the "replace" utility from mescc-tools-extra
 ${replace} \
-	--file ${m2-mesoplanet-src}/cc.c \
+	--file ${src}/M2-Mesoplanet/cc.c \
 	--output ./cc_patched.c \
 	--match-on "env_lookup(\"M2LIBC_PATH\")" \
 	--replace-with "\"${m2libc}\""
 ${replace} \
-	--file ${m2-mesoplanet-src}/cc_spawn.c \
+	--file ${src}/M2-Mesoplanet/cc_spawn.c \
 	--output ./cc_spawn_patched.c \
 	--match-on "env_lookup(\"PATH\")" \
 	--replace-with "\"${out}/bin:\""
@@ -38,13 +38,13 @@ ${M2} --architecture ${ARCH} \
   -f ${m2libc}/stdio.c \
   -f ${m2libc}/string.c \
   -f ${m2libc}/bootstrappable.c \
-  -f ${m2-mesoplanet-src}/cc.h \
-  -f ${m2-mesoplanet-src}/cc_globals.c \
-  -f ${m2-mesoplanet-src}/cc_env.c \
-  -f ${m2-mesoplanet-src}/cc_reader.c \
+  -f ${src}/M2-Mesoplanet/cc.h \
+  -f ${src}/M2-Mesoplanet/cc_globals.c \
+  -f ${src}/M2-Mesoplanet/cc_env.c \
+  -f ${src}/M2-Mesoplanet/cc_reader.c \
   -f ./cc_spawn_patched.c \
-  -f ${m2-mesoplanet-src}/cc_core.c \
-  -f ${m2-mesoplanet-src}/cc_macro.c \
+  -f ${src}/M2-Mesoplanet/cc_core.c \
+  -f ${src}/M2-Mesoplanet/cc_macro.c \
   -f ./cc_patched.c \
   --debug \
   -o ./M2-Mesoplanet-1.M1
@@ -80,8 +80,8 @@ ${M2} --architecture ${ARCH} \
 	-f ${m2libc}/stdio.h \
 	-f ${m2libc}/stdio.c \
 	-f ${m2libc}/bootstrappable.c \
-	-f ${mescc-tools-src}/stringify.c \
-	-f ${mescc-tools-src}/blood-elf.c \
+	-f ${src}/mescc-tools/stringify.c \
+	-f ${src}/mescc-tools/blood-elf.c \
 	--debug \
 	-o ./blood-elf-1.M1
 
@@ -119,7 +119,7 @@ ${M2} --architecture ${ARCH} \
 	-f ${m2libc}/stdio.h \
 	-f ${m2libc}/stdio.c \
 	-f ${m2libc}/bootstrappable.c \
-	-f ${mescc-tools-src}/get_machine.c \
+	-f ${src}/mescc-tools/get_machine.c \
 	--debug \
 	-o get_machine.M1
 
@@ -154,14 +154,14 @@ ${M2} --architecture ${ARCH} \
 	-f ${m2libc}/stdio.h \
 	-f ${m2libc}/stdio.c \
 	-f ${m2libc}/bootstrappable.c \
-	-f ${m2-planet-src}/cc.h \
-	-f ${m2-planet-src}/cc_globals.c \
-	-f ${m2-planet-src}/cc_reader.c \
-	-f ${m2-planet-src}/cc_strings.c \
-	-f ${m2-planet-src}/cc_types.c \
-	-f ${m2-planet-src}/cc_core.c \
-	-f ${m2-planet-src}/cc_macro.c \
-	-f ${m2-planet-src}/cc.c \
+	-f ${src}/M2-Planet/cc.h \
+	-f ${src}/M2-Planet/cc_globals.c \
+	-f ${src}/M2-Planet/cc_reader.c \
+	-f ${src}/M2-Planet/cc_strings.c \
+	-f ${src}/M2-Planet/cc_types.c \
+	-f ${src}/M2-Planet/cc_core.c \
+	-f ${src}/M2-Planet/cc_macro.c \
+	-f ${src}/M2-Planet/cc.c \
 	--debug \
 	-o ./M2-1.M1
 

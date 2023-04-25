@@ -6,10 +6,8 @@
 
 { system
 , hex0
-, stage0-posix-x86-src
 , m2libc
-, m2-planet-src
-, mescc-tools-src
+, src
 , version
 }:
 rec {
@@ -24,7 +22,7 @@ rec {
   # Phase-1 Build hex1 from hex0 #
   ################################
 
-  hex1 = run "hex1" hex0 ["${stage0-posix-x86-src}/hex1_x86.hex0" out];
+  hex1 = run "hex1" hex0 ["${src}/x86/hex1_x86.hex0" out];
 
   # hex1 adds support for single character labels and is available in various forms
   # in mescc-tools/x86_bootstrap to allow you various ways to verify correctness
@@ -33,7 +31,7 @@ rec {
   # Phase-2 Build hex2 from hex1 #
   ################################
 
-  hex2-0 = run "hex2" hex1 ["${stage0-posix-x86-src}/hex2_x86.hex1" out];
+  hex2-0 = run "hex2" hex1 ["${src}/x86/hex2_x86.hex1" out];
 
   # hex2 adds support for long labels and absolute addresses thus allowing it
   # to function as an effective linker for later stages of the bootstrap
@@ -44,7 +42,7 @@ rec {
   # Phase-2b Build catm from hex2 #
   #################################
 
-  catm = run "catm" hex2-0 ["${stage0-posix-x86-src}/catm_x86.hex2" out];
+  catm = run "catm" hex2-0 ["${src}/x86/catm_x86.hex2" out];
 
   # catm removes the need for cat or shell support for redirection by providing
   # equivalent functionality via catm output_file input1 input2 ... inputN
@@ -53,7 +51,7 @@ rec {
   # Phase-3 Build M0 from hex2 #
   ##############################
 
-  M0_hex2 = run "M0.hex2" catm [out "${stage0-posix-x86-src}/ELF-i386.hex2" "${stage0-posix-x86-src}/M0_x86.hex2"];
+  M0_hex2 = run "M0.hex2" catm [out "${src}/x86/ELF-i386.hex2" "${src}/x86/M0_x86.hex2"];
   M0 = run "M0" hex2-0 [M0_hex2 out];
 
   # M0 is the architecture specific version of M1 and is by design single
@@ -63,8 +61,8 @@ rec {
   # Phase-4 Build cc_x86 from M0 #
   ################################
 
-  cc_x86-0_hex2 = run "cc_x86-0.hex2" M0 ["${stage0-posix-x86-src}/cc_x86.M1" out];
-  cc_x86-1_hex2 = run "cc_x86-1.hex2" catm [out "${stage0-posix-x86-src}/ELF-i386.hex2" cc_x86-0_hex2];
+  cc_x86-0_hex2 = run "cc_x86-0.hex2" M0 ["${src}/x86/cc_x86.M1" out];
+  cc_x86-1_hex2 = run "cc_x86-1.hex2" catm [out "${src}/x86/ELF-i386.hex2" cc_x86-0_hex2];
   cc_x86 = run "cc_x86" hex2-0 [cc_x86-1_hex2 out];
 
   #######################################
@@ -74,20 +72,20 @@ rec {
   M2-0_c = run "M2-0.c" catm [
     out
     "${m2libc}/x86/linux/bootstrap.c"
-    "${m2-planet-src}/cc.h"
+    "${src}/M2-Planet/cc.h"
     "${m2libc}/bootstrappable.c"
-    "${m2-planet-src}/cc_globals.c"
-    "${m2-planet-src}/cc_reader.c"
-    "${m2-planet-src}/cc_strings.c"
-    "${m2-planet-src}/cc_types.c"
-    "${m2-planet-src}/cc_core.c"
-    "${m2-planet-src}/cc_macro.c"
-    "${m2-planet-src}/cc.c"
+    "${src}/M2-Planet/cc_globals.c"
+    "${src}/M2-Planet/cc_reader.c"
+    "${src}/M2-Planet/cc_strings.c"
+    "${src}/M2-Planet/cc_types.c"
+    "${src}/M2-Planet/cc_core.c"
+    "${src}/M2-Planet/cc_macro.c"
+    "${src}/M2-Planet/cc.c"
   ];
   M2-0_M1 = run "M2-0.M1" cc_x86 [M2-0_c out];
-  M2-0-0_M1 = run "M2-0-0.M1" catm [out "${stage0-posix-x86-src}/x86_defs.M1" "${stage0-posix-x86-src}/libc-core.M1" M2-0_M1];
+  M2-0-0_M1 = run "M2-0-0.M1" catm [out "${src}/x86/x86_defs.M1" "${src}/x86/libc-core.M1" M2-0_M1];
   M2-0_hex2 = run "M2-0.hex2" M0 [M2-0-0_M1 out];
-  M2-0-0_hex2 = run "M2-0-0.hex2" catm [out "${stage0-posix-x86-src}/ELF-i386.hex2" M2-0_hex2];
+  M2-0-0_hex2 = run "M2-0-0.hex2" catm [out "${src}/x86/ELF-i386.hex2" M2-0_hex2];
   M2 = run "M2" hex2-0 [M2-0-0_hex2 out];
 
   ############################################
@@ -98,8 +96,8 @@ rec {
     "--architecture" "x86"
     "-f" "${m2libc}/x86/linux/bootstrap.c"
     "-f" "${m2libc}/bootstrappable.c"
-    "-f" "${mescc-tools-src}/stringify.c"
-    "-f" "${mescc-tools-src}/blood-elf.c"
+    "-f" "${src}/mescc-tools/stringify.c"
+    "-f" "${src}/mescc-tools/blood-elf.c"
     "--bootstrap-mode"
     "-o" out
   ];
@@ -120,8 +118,8 @@ rec {
     "--architecture" "x86"
     "-f" "${m2libc}/x86/linux/bootstrap.c"
     "-f" "${m2libc}/bootstrappable.c"
-    "-f" "${mescc-tools-src}/stringify.c"
-    "-f" "${mescc-tools-src}/M1-macro.c"
+    "-f" "${src}/mescc-tools/stringify.c"
+    "-f" "${src}/mescc-tools/M1-macro.c"
     "--bootstrap-mode"
     "--debug"
     "-o" out
@@ -153,10 +151,10 @@ rec {
     "-f" "${m2libc}/stdio.h"
     "-f" "${m2libc}/stdio.c"
     "-f" "${m2libc}/bootstrappable.c"
-    "-f" "${mescc-tools-src}/hex2.h"
-    "-f" "${mescc-tools-src}/hex2_linker.c"
-    "-f" "${mescc-tools-src}/hex2_word.c"
-    "-f" "${mescc-tools-src}/hex2.c"
+    "-f" "${src}/mescc-tools/hex2.h"
+    "-f" "${src}/mescc-tools/hex2_linker.c"
+    "-f" "${src}/mescc-tools/hex2_word.c"
+    "-f" "${src}/mescc-tools/hex2.c"
     "--debug"
     "-o" out
   ];
@@ -196,8 +194,8 @@ rec {
     "-f" "${m2libc}/stdio.h"
     "-f" "${m2libc}/stdio.c"
     "-f" "${m2libc}/bootstrappable.c"
-    "-f" "${mescc-tools-src}/stringify.c"
-    "-f" "${mescc-tools-src}/M1-macro.c"
+    "-f" "${src}/mescc-tools/stringify.c"
+    "-f" "${src}/mescc-tools/M1-macro.c"
     "--debug"
     "-o" out
   ];
@@ -239,10 +237,10 @@ rec {
     "-f" "${m2libc}/stdio.h"
     "-f" "${m2libc}/stdio.c"
     "-f" "${m2libc}/bootstrappable.c"
-    "-f" "${mescc-tools-src}/hex2.h"
-    "-f" "${mescc-tools-src}/hex2_linker.c"
-    "-f" "${mescc-tools-src}/hex2_word.c"
-    "-f" "${mescc-tools-src}/hex2.c"
+    "-f" "${src}/mescc-tools/hex2.h"
+    "-f" "${src}/mescc-tools/hex2_linker.c"
+    "-f" "${src}/mescc-tools/hex2_word.c"
+    "-f" "${src}/mescc-tools/hex2.c"
     "--debug"
     "-o" out
   ];
@@ -284,10 +282,10 @@ rec {
     "-f" "${m2libc}/stdio.h"
     "-f" "${m2libc}/stdio.c"
     "-f" "${m2libc}/bootstrappable.c"
-    "-f" "${mescc-tools-src}/Kaem/kaem.h"
-    "-f" "${mescc-tools-src}/Kaem/variable.c"
-    "-f" "${mescc-tools-src}/Kaem/kaem_globals.c"
-    "-f" "${mescc-tools-src}/Kaem/kaem.c"
+    "-f" "${src}/mescc-tools/Kaem/kaem.h"
+    "-f" "${src}/mescc-tools/Kaem/variable.c"
+    "-f" "${src}/mescc-tools/Kaem/kaem_globals.c"
+    "-f" "${src}/mescc-tools/Kaem/kaem.c"
     "--debug"
     "-o" out
   ];

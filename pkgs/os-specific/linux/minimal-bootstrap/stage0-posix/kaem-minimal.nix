@@ -1,5 +1,5 @@
 { system
-, bootstrap-seeds-src
+, src
 , hex0
 , version
 }:
@@ -9,14 +9,14 @@ let
     i686-linux = "x86";
   }.${system} or throwSystem;
 
-  src = "${bootstrap-seeds-src}/POSIX/${arch}/kaem-minimal.hex0";
+  source = "${src}/bootstrap-seeds/POSIX/${arch}/kaem-minimal.hex0";
 in
 derivation {
   inherit system;
   name = "kaem-minimal-${version}";
   builder = hex0;
   args = [
-    src
+    source
     (placeholder "out")
   ];
 }
