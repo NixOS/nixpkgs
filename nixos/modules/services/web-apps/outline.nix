@@ -724,7 +724,6 @@ in
         ''}
 
         cd $RUNTIME_DIRECTORY
-        ${sequelize}/bin/outline-sequelize db:migrate
       '';
 
       script = ''

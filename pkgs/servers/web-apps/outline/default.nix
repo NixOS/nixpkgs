@@ -9,20 +9,20 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.68.1";
+  version = "0.69.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    sha256 = "sha256-pln3cdozZPEodfXeUtTbBvhHb5yqE4uu0VKA95Zv6ro=";
+    sha256 = "02e4QBK1VjXR+FEBwyNfylJgdDeJ1jrZVfBWI5bBQx4=";
   };
 
   nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
   buildInputs = [ yarn nodejs ];
 
-  # Replace the inline call to yarn with our sequalize wrapper. This should be
-  # the only occurrence:
+  # Replace the inline calls to yarn with our sequalize wrapper. These should be
+  # the only two occurrences:
   # https://github.com/outline/outline/search?l=TypeScript&q=yarn
   patches = [ ./sequelize-command.patch ];
 
