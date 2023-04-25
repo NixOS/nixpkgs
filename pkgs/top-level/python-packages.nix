@@ -22,6 +22,8 @@ self: super: with self; {
 
   accessible-pygments = callPackage ../development/python-modules/accessible-pygments { };
 
+  accelerate = callPackage ../development/python-modules/accelerate { };
+
   accuweather = callPackage ../development/python-modules/accuweather { };
 
   accupy = callPackage ../development/python-modules/accupy { };
@@ -7212,6 +7214,8 @@ self: super: with self; {
   peewee-migrate = callPackage ../development/python-modules/peewee-migrate { };
 
   pefile = callPackage ../development/python-modules/pefile { };
+
+  peft = callPackage ../development/python-modules/peft { };
 
   pelican = callPackage ../development/python-modules/pelican {
     inherit (pkgs) glibcLocales git;
