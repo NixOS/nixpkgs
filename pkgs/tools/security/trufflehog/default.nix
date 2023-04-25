@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
+, testers
+, trufflehog
 }:
 
 buildGoModule rec {
@@ -28,6 +30,12 @@ buildGoModule rec {
   postInstall = ''
     rm $out/bin/{generate,snifftest}
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = trufflehog;
+    };
+  };
 
   meta = with lib; {
     description = "Find credentials all over the place";
