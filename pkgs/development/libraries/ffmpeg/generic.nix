@@ -80,7 +80,7 @@
 , withSsh ? withHeadlessDeps # SFTP protocol
 , withSvg ? withFullDeps # SVG protocol
 , withSvtav1 ? withFullDeps && !stdenv.isAarch64 # AV1 encoder/decoder (focused on speed and correctness)
-, withTensorflow ? withFullDeps # Tensorflow dnn backend support
+, withTensorflow ? false # Tensorflow dnn backend support
 , withTheora ? withHeadlessDeps # Theora encoder
 , withV4l2 ? withFullDeps && !stdenv.isDarwin # Video 4 Linux support
 , withV4l2M2m ? withV4l2
