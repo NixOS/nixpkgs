@@ -66,6 +66,14 @@ let
     ;
 
 in {
+
+  # Testing the test driver
+  nixos-test-driver = {
+    extra-python-packages = handleTest ./nixos-test-driver/extra-python-packages.nix {};
+  };
+
+  # NixOS vm tests and non-vm unit tests
+
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
   acme = runTest ./acme.nix;
@@ -218,7 +226,6 @@ in {
   etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
   etebase-server = handleTest ./etebase-server.nix {};
   etesync-dav = handleTest ./etesync-dav.nix {};
-  extra-python-packages = handleTest ./extra-python-packages.nix {};
   evcc = handleTest ./evcc.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
   fcitx5 = handleTest ./fcitx5 {};
