@@ -12,7 +12,7 @@
 , fetchtarball
 , mes
 , buildTinyccN
-, unified-libc
+, mes-libc
 }:
 let
   version = "unstable-2023-04-20";
@@ -72,8 +72,8 @@ let
     ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${out}/lib/crti.o lib/linux/x86-mes-gcc/crti.c
 
     # libc+gcc.a
-    ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${TMPDIR}/unified-libc.o ${unified-libc}
-    ''${out}/bin/tcc -ar cr ''${out}/lib/libc.a ''${TMPDIR}/unified-libc.o
+    ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${TMPDIR}/mes-libc.o ${mes-libc}
+    ''${out}/bin/tcc -ar cr ''${out}/lib/libc.a ''${TMPDIR}/mes-libc.o
 
     # libtcc1.a
     ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${TMPDIR}/libtcc1.o lib/libtcc1.c
