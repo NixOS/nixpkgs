@@ -1,5 +1,28 @@
 # This is a translation of stage0-posix/stage0-posix/x86/mescc-tools-mini-kaem.kaem to nix
 # https://github.com/oriansj/stage0-posix-x86/blob/56e6b8df3e95f4bc04f8b420a4cd8c82c70b9efa/mescc-tools-mini-kaem.kaem
+#
+# We have access to mini-kaem at this point but it doesn't support substituting
+# environment variables. Without variables there's no way of passing in store inputs,
+# or the $out path, other than as command line arguments directly
+
+# Mes --- Maxwell Equations of Software
+# Copyright © 2017,2019 Jan Nieuwenhuizen <janneke@gnu.org>
+# Copyright © 2017,2019 Jeremiah Orians
+#
+# This file is part of Mes.
+#
+# Mes is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or (at
+# your option) any later version.
+#
+# Mes is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Mes.  If not, see <http://www.gnu.org/licenses/>.
 
 # Warning all binaries prior to the use of blood-elf will not be readable by
 # Objdump, you may need to use ndism or gdb to view the assembly in the binary.

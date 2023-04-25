@@ -1,6 +1,12 @@
 # Bootstrappable TCC is a fork from mainline TCC development
 # that can be compiled by MesCC
 
+# Build steps adapted from https://github.com/fosslinux/live-bootstrap/blob/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/tcc-0.9.26/tcc-0.9.26.kaem
+#
+# SPDX-FileCopyrightText: 2021-22 fosslinux <fosslinux@aussies.space>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 { lib
 , runCommand
 , fetchtarball
@@ -77,6 +83,9 @@ let
     ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${TMPDIR}/getopt.o lib/posix/getopt.c
     ''${out}/bin/tcc -ar cr ''${out}/lib/libgetopt.a ''${TMPDIR}/getopt.o
   '';
+
+  # Bootstrap stage build flags obtained from
+  # https://gitlab.com/janneke/tinycc/-/blob/80114c4da6b17fbaabb399cc29f427e368309bc8/boot.sh
 
   boot0-tcc = buildTinyccN {
     pname = "boot0-tcc";

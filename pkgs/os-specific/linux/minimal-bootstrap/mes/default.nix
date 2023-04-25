@@ -1,3 +1,10 @@
+# Build steps adapted from https://github.com/fosslinux/live-bootstrap/blob/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/mes-0.24.2/mes-0.24.2.kaem
+#
+# SPDX-FileCopyrightText: 2020-2022 Andrius Štikonas <andrius@stikonas.eu>
+# SPDX-FileCopyrightText: 2020-2022 fosslinux <fosslinux@aussies.space>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 { runCommand
 , fetchurl
 , fetchtarball
@@ -20,7 +27,6 @@ let
     sha256 = "065ksalfllbdrzl12dz9d9dcxrv97wqxblslngsc6kajvnvlyvpk";
   }) + "/nyacc-${nyaccVersion}";
 in
-# Adapted from https://github.com/fosslinux/live-bootstrap/blob/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/mes-0.24.2/mes-0.24.2.kaem
 (runCommand "mes-${version}" {} ''
   # Unpack source
   ungz --file ${src} --output mes.tar
