@@ -1,7 +1,7 @@
-{ runBareCommand
-, system
+{ system
 , bootstrap-seeds-src
 , hex0
+, version
 }:
 let
   throwSystem = throw "Unsupported system: ${system}";
@@ -11,4 +11,13 @@ let
 
   src = "${bootstrap-seeds-src}/POSIX/${arch}/kaem-minimal.hex0";
 in
-runBareCommand "kaem-minimal" hex0 [ src (placeholder "out") ]
+derivation {
+  inherit system;
+  name = "kaem-minimal-${version}";
+  builder = hex0;
+  args = [
+    src
+    (placeholder "out")
+  ];
+}
+

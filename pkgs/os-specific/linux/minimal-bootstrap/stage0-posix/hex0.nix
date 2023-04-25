@@ -1,6 +1,6 @@
-{ runBareCommand
-, system
+{ system
 , bootstrap-seeds-src
+, version
 }:
 let
   throwSystem = throw "Unsupported system: ${system}";
@@ -11,4 +11,12 @@ let
   seed = "${bootstrap-seeds-src}/POSIX/${arch}/hex0-seed";
   src = "${bootstrap-seeds-src}/POSIX/${arch}/hex0_${arch}.hex0";
 in
-runBareCommand "hex0" seed [ src (placeholder "out") ]
+derivation {
+  inherit system;
+  name = "hex0-${version}";
+  builder = seed;
+  args = [
+    src
+    (placeholder "out")
+  ];
+}

@@ -6,11 +6,6 @@
 lib.makeScope newScope (self: with self; {
   callPackage = self.callPackage;
 
-  runBareCommand = pname: builder: args: derivation {
-    inherit system builder args;
-    name = "${pname}-${version}";
-  };
-
   inherit (callPackage ./sources.nix { }) version bootstrap-seeds-src m2-mesoplanet-src m2-planet-src m2libc mescc-tools-src mescc-tools-extra-src stage0-posix-x86-src;
 
   hex0 = callPackage ./hex0.nix { };
