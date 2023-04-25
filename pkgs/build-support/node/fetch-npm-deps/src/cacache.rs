@@ -72,7 +72,7 @@ impl Cache {
                 &mut p,
                 &hash
                     .into_iter()
-                    .map(|x| format!("{:02x}", x))
+                    .map(|n| format!("{n:02x}"))
                     .collect::<String>(),
             );
 
