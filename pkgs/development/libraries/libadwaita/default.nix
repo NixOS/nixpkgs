@@ -70,10 +70,10 @@ stdenv.mkDerivation rec {
     xvfb-run
   ];
 
-  # Tests had to be disabled on Darwin because they fail with the same error as https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=264947 on Hydra:
+  # Tests had to be disabled on Darwin because test-button-content fails
   #
-  # In file included from ../tests/test-style-manager.c:10:
-  # ../src/adw-settings-private.h:16:10: fatal error: 'adw-enums-private.h' file not found
+  # not ok /Adwaita/ButtonContent/style_class_button - Gdk-FATAL-CRITICAL:
+  # gdk_macos_monitor_get_workarea: assertion 'GDK_IS_MACOS_MONITOR (self)' failed
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
