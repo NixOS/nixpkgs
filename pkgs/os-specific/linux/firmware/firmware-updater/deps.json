@@ -1,0 +1,763 @@
+[
+  {
+    "name": "firmware_updater",
+    "version": "0.0.0",
+    "kind": "root",
+    "source": "root",
+    "dependencies": [
+      "collection",
+      "dio",
+      "flutter",
+      "flutter_html",
+      "flutter_localizations",
+      "fwupd",
+      "path",
+      "provider",
+      "yaru",
+      "yaru_icons",
+      "yaru_widgets",
+      "flutter_lints",
+      "flutter_test"
+    ]
+  },
+  {
+    "name": "flutter_test",
+    "version": "0.0.0",
+    "kind": "dev",
+    "source": "sdk",
+    "dependencies": [
+      "flutter",
+      "test_api",
+      "path",
+      "fake_async",
+      "clock",
+      "stack_trace",
+      "vector_math",
+      "async",
+      "boolean_selector",
+      "characters",
+      "charcode",
+      "collection",
+      "matcher",
+      "material_color_utilities",
+      "meta",
+      "source_span",
+      "stream_channel",
+      "string_scanner",
+      "term_glyph",
+      "typed_data"
+    ]
+  },
+  {
+    "name": "typed_data",
+    "version": "1.3.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection"
+    ]
+  },
+  {
+    "name": "collection",
+    "version": "1.15.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "term_glyph",
+    "version": "1.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "string_scanner",
+    "version": "1.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "charcode",
+      "source_span"
+    ]
+  },
+  {
+    "name": "source_span",
+    "version": "1.8.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "path",
+      "term_glyph"
+    ]
+  },
+  {
+    "name": "path",
+    "version": "1.8.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "charcode",
+    "version": "1.3.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "stream_channel",
+    "version": "2.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async"
+    ]
+  },
+  {
+    "name": "async",
+    "version": "2.8.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta"
+    ]
+  },
+  {
+    "name": "meta",
+    "version": "1.7.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "material_color_utilities",
+    "version": "0.1.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "matcher",
+    "version": "0.12.11",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "stack_trace"
+    ]
+  },
+  {
+    "name": "stack_trace",
+    "version": "1.10.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "path"
+    ]
+  },
+  {
+    "name": "characters",
+    "version": "1.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "boolean_selector",
+    "version": "2.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "source_span",
+      "string_scanner"
+    ]
+  },
+  {
+    "name": "vector_math",
+    "version": "2.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "clock",
+    "version": "1.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "fake_async",
+    "version": "1.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "clock",
+      "collection"
+    ]
+  },
+  {
+    "name": "test_api",
+    "version": "0.4.8",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "boolean_selector",
+      "collection",
+      "meta",
+      "source_span",
+      "stack_trace",
+      "stream_channel",
+      "string_scanner",
+      "term_glyph",
+      "matcher"
+    ]
+  },
+  {
+    "name": "flutter",
+    "version": "0.0.0",
+    "kind": "direct",
+    "source": "sdk",
+    "dependencies": [
+      "characters",
+      "collection",
+      "material_color_utilities",
+      "meta",
+      "typed_data",
+      "vector_math",
+      "sky_engine"
+    ]
+  },
+  {
+    "name": "sky_engine",
+    "version": "0.0.99",
+    "kind": "transitive",
+    "source": "sdk",
+    "dependencies": []
+  },
+  {
+    "name": "flutter_lints",
+    "version": "1.0.4",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "lints"
+    ]
+  },
+  {
+    "name": "lints",
+    "version": "1.0.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "yaru_widgets",
+    "version": "1.0.8",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+    ]
+  },
+  {
+    "name": "yaru_icons",
+    "version": "0.1.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+    ]
+  },
+  {
+    "name": "yaru",
+    "version": "0.2.5",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+    ]
+  },
+  {
+    "name": "provider",
+    "version": "6.0.5",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "flutter",
+      "nested"
+    ]
+  },
+  {
+    "name": "nested",
+    "version": "1.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+    ]
+  },
+  {
+    "name": "fwupd",
+    "version": "0.2.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "dbus",
+      "meta"
+    ]
+  },
+  {
+    "name": "dbus",
+    "version": "0.7.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "ffi",
+      "meta",
+      "xml"
+    ]
+  },
+  {
+    "name": "xml",
+    "version": "5.3.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "meta",
+      "petitparser"
+    ]
+  },
+  {
+    "name": "petitparser",
+    "version": "4.4.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "ffi",
+    "version": "1.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "args",
+    "version": "2.3.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "flutter_localizations",
+    "version": "0.0.0",
+    "kind": "direct",
+    "source": "sdk",
+    "dependencies": [
+      "flutter",
+      "intl",
+      "characters",
+      "clock",
+      "collection",
+      "material_color_utilities",
+      "meta",
+      "path",
+      "typed_data",
+      "vector_math"
+    ]
+  },
+  {
+    "name": "intl",
+    "version": "0.17.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "clock",
+      "path"
+    ]
+  },
+  {
+    "name": "flutter_html",
+    "version": "2.2.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "html",
+      "csslib",
+      "flutter_layout_grid",
+      "video_player",
+      "chewie",
+      "webview_flutter",
+      "chewie_audio",
+      "flutter_svg",
+      "flutter_math_fork",
+      "collection",
+      "numerus",
+      "flutter"
+    ]
+  },
+  {
+    "name": "numerus",
+    "version": "1.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "flutter_math_fork",
+    "version": "0.5.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_svg",
+      "provider",
+      "meta",
+      "collection",
+      "tuple"
+    ]
+  },
+  {
+    "name": "tuple",
+    "version": "2.0.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "flutter_svg",
+    "version": "0.23.0+1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "meta",
+      "path_drawing",
+      "vector_math",
+      "xml"
+    ]
+  },
+  {
+    "name": "path_drawing",
+    "version": "0.5.1+1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "vector_math",
+      "meta",
+      "path_parsing",
+      "flutter"
+    ]
+  },
+  {
+    "name": "path_parsing",
+    "version": "0.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "vector_math",
+      "meta"
+    ]
+  },
+  {
+    "name": "chewie_audio",
+    "version": "1.3.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "cupertino_icons",
+      "flutter",
+      "video_player"
+    ]
+  },
+  {
+    "name": "video_player",
+    "version": "2.5.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "html",
+      "video_player_android",
+      "video_player_avfoundation",
+      "video_player_platform_interface",
+      "video_player_web"
+    ]
+  },
+  {
+    "name": "video_player_web",
+    "version": "2.0.13",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_web_plugins",
+      "video_player_platform_interface"
+    ]
+  },
+  {
+    "name": "video_player_platform_interface",
+    "version": "6.0.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "plugin_platform_interface"
+    ]
+  },
+  {
+    "name": "plugin_platform_interface",
+    "version": "2.1.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "flutter_web_plugins",
+    "version": "0.0.0",
+    "kind": "transitive",
+    "source": "sdk",
+    "dependencies": [
+      "flutter",
+      "js",
+      "characters",
+      "collection",
+      "material_color_utilities",
+      "meta",
+      "typed_data",
+      "vector_math"
+    ]
+  },
+  {
+    "name": "js",
+    "version": "0.6.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "video_player_avfoundation",
+    "version": "2.3.8",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "video_player_platform_interface"
+    ]
+  },
+  {
+    "name": "video_player_android",
+    "version": "2.3.10",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "video_player_platform_interface"
+    ]
+  },
+  {
+    "name": "html",
+    "version": "0.15.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "csslib",
+      "source_span"
+    ]
+  },
+  {
+    "name": "csslib",
+    "version": "0.17.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "source_span"
+    ]
+  },
+  {
+    "name": "cupertino_icons",
+    "version": "1.0.5",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "webview_flutter",
+    "version": "2.8.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "webview_flutter_android",
+      "webview_flutter_platform_interface",
+      "webview_flutter_wkwebview"
+    ]
+  },
+  {
+    "name": "webview_flutter_wkwebview",
+    "version": "2.7.5",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "path",
+      "webview_flutter_platform_interface"
+    ]
+  },
+  {
+    "name": "webview_flutter_platform_interface",
+    "version": "1.9.5",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "meta",
+      "plugin_platform_interface"
+    ]
+  },
+  {
+    "name": "webview_flutter_android",
+    "version": "2.8.14",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "webview_flutter_platform_interface"
+    ]
+  },
+  {
+    "name": "chewie",
+    "version": "1.4.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "cupertino_icons",
+      "flutter",
+      "provider",
+      "video_player",
+      "wakelock"
+    ]
+  },
+  {
+    "name": "wakelock",
+    "version": "0.6.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "meta",
+      "wakelock_macos",
+      "wakelock_platform_interface",
+      "wakelock_web",
+      "wakelock_windows"
+    ]
+  },
+  {
+    "name": "wakelock_windows",
+    "version": "0.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "wakelock_platform_interface",
+      "win32"
+    ]
+  },
+  {
+    "name": "win32",
+    "version": "2.5.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "ffi"
+    ]
+  },
+  {
+    "name": "wakelock_platform_interface",
+    "version": "0.3.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "meta"
+    ]
+  },
+  {
+    "name": "wakelock_web",
+    "version": "0.4.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_web_plugins",
+      "js",
+      "wakelock_platform_interface"
+    ]
+  },
+  {
+    "name": "wakelock_macos",
+    "version": "0.4.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_web_plugins",
+      "wakelock_platform_interface"
+    ]
+  },
+  {
+    "name": "flutter_layout_grid",
+    "version": "1.0.6",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "collection",
+      "meta",
+      "quiver"
+    ]
+  },
+  {
+    "name": "quiver",
+    "version": "3.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "matcher"
+    ]
+  },
+  {
+    "name": "dio",
+    "version": "4.0.6",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "http_parser",
+      "path"
+    ]
+  },
+  {
+    "name": "http_parser",
+    "version": "4.0.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "source_span",
+      "string_scanner",
+      "typed_data"
+    ]
+  }
+]
