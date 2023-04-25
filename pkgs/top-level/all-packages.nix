@@ -28563,6 +28563,7 @@ with pkgs;
     ubootOdroidC2
     ubootOdroidXU3
     ubootOlimexA64Olinuxino
+    ubootOrangePiR1PlusLts
     ubootOrangePi3
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5

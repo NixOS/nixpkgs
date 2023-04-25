@@ -391,6 +391,103 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootOrangePiR1PlusLts = let
+    rkbin = fetchFromGitHub {
+      owner = "armbian";
+      repo = "rkbin";
+      rev = "5d409529dbbc12959111787e77c349b3e832bc52";
+      sha256 = "09r4dzxsbs3pff4sh70qnyp30s3rc7pkc46v1m3152s7jqjasp31";
+    };
+  in buildUBoot {
+    version = "2022.07";
+    src = fetchFromGitHub {
+      owner = "u-boot";
+      repo = "u-boot";
+      rev = "v2022.07";
+      sha256 = "1EONRmYLsD0uxo+kpE6mLIYkYMU09Yt0EvSbHhj5prw=";
+    };
+    defconfig = "orangepi_r1_plus_lts_rk3328_defconfig";
+    extraMakeFlags = [ "u-boot-dtb.bin" ];
+    extraPatches = [
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/add-board-orangepi-r1-plus-0.patch";
+        sha256 = "sha256-x7dUMiBJWwD7nM/eqRWODNHw5OMSsNsRH6IEclii9TQ=";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/add-board-orangepi-r1-plus-lts.patch";
+        sha256 = "sha256-T3hAKZFyp4yJ0BGyfHsT0MPSOdA8mFqvcBW2Kb8pa7s=";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/add-trust-ini.patch";
+        sha256 = "sha256-bfceynwI4d4bLJvkg8OwUY2N65C02Yl3KFmpE7N6kAk=";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/enable-DT-overlays-support.patch";
+        sha256 = "sha256-xm4/yZlCNDyi9QfdUnpOqjsEeIFFc+BDkYy2qnblD74=";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/general-add-xtx-spi-nor-chips.patch";
+        sha256 = "sha256-fHaTwUXDO8CcX6RRyMgEyZ7CZX0LzEha/IKulGRQbzw=";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/general-dwc-otg-usb-fix.patch";
+        sha256 = "sha256-e1MsmAxkSXB2qHmSkD7DSv56VhcEJmIN1c2XuLZPMKM=";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/general-set-eth1addr.patch";
+        sha256 = "sha256-u/kiWf0vz3Yw+rEgAO+BPw/PkKom3SM2F9jOS/6/Nu0=";
+      })
+        (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/general-support-recovery-button.patch";
+        sha256 = "sha256-uP1eLOALtxS7Ue9heVAkYFDwvW0lTZdQfhVioh5oBNc=";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/general-support-rmii-integrated-phy.patch";
+        sha256 = "sha256-y4FaQ1OQGVvkD8Sot0jNJMuGO6p9o2u03JiL5MKihm4=";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/rk3328-efuse-driver.patch";
+        sha256 = "sha256-ly2dJb1BRXuITfNYCiqqIxqErWQnrdonhpaLwmeKAm4=";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/rk3328-resets-for-mmc-controllers.patch";
+        sha256 = "sha256-abd2V0D2Cm5hw+JiWa80c7kmhcV8G6wbyyxw/ZAWu+0=";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/rk3328-sdmmc_ext-node.patch";
+        sha256 = "sha256-EHS/aBik4V4pbEU9GHhCXCBgdoExbVvUzB01KDx4zM8=";
+      })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/armbian/build/420f16c7ead971f1c443314ef41d9a02473cf260/patch/u-boot/u-boot-rockchip64/sdmmc-force-fifo-mode-in-spl.patch";
+        sha256 = "sha256-+oy6kG/wAvd89M+ZS6a2xlKWzzdHV6UCtd1SaTmLJaI=";
+      })
+    ];
+    extraMeta = {
+      platforms = [ "aarch64-linux" ];
+      license = lib.licenses.unfreeRedistributableFirmware;
+    };
+    BL31 = "${armTrustedFirmwareRK3328}/bl31.elf";
+    filesToInstall = [ "u-boot.img" "idbloader.img" "trust.bin" ];
+    postBuild = ''
+      # deduced from https://github.com/armbian/build/blob/420f16c7ead971f1c443314ef41d9a02473cf260/config/boards/orangepi-r1plus-lts.conf#L4
+      # and https://github.com/armbian/build/blob/420f16c7ead971f1c443314ef41d9a02473cf260/config/sources/families/include/rockchip64_common.inc#L42
+      BOOT_SOC=rk3328
+
+      # see https://github.com/orangepi-xunlong/orangepi-build/blob/f00cd197b4a9873f36093d4f4748b733642059a7/external/config/sources/families/include/rockchip64_common.inc#L29-L35
+      # or rather https://github.com/armbian/build/blob/420f16c7ead971f1c443314ef41d9a02473cf260/config/sources/families/include/rockchip64_common.inc#L70-L75
+      DDR_BLOB=${rkbin}/rk33/rk3328_ddr_333MHz_v1.16.bin
+      MINILOADER_BLOB=${rkbin}/rk33/rk322xh_miniloader_v2.50.bin
+      BL31_BLOB=${rkbin}/rk33/rk322xh_bl31_v1.44.elf
+
+      # see https://github.com/armbian/build/blob/420f16c7ead971f1c443314ef41d9a02473cf260/config/sources/families/include/rockchip64_common.inc#L213-L216
+      ./tools/mkimage -n $BOOT_SOC -T rksd -d $DDR_BLOB idbloader.img
+      cat $MINILOADER_BLOB >> idbloader.img
+
+      ${pkgs.ubootRockchipTools}/bin/loaderimage --pack --uboot ./u-boot-dtb.bin u-boot.img 0x200000
+      ${pkgs.ubootRockchipTools}/bin/trust_merger --verbose --replace bl31.elf $BL31_BLOB trust.ini
+    '';
+  };
+
   ubootOrangePi3 = buildUBoot {
     defconfig = "orangepi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
