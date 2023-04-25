@@ -2,6 +2,8 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, testers
+, supabase-cli
 , nix-update-script
 }:
 
@@ -38,7 +40,12 @@ buildGoModule rec {
       --zsh <($out/bin/supabase completion zsh)
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.version = testers.testVersion {
+      package = supabase-cli;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "A CLI for interacting with supabase";
