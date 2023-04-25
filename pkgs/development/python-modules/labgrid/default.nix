@@ -23,22 +23,34 @@
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "0.4.1";
+  version = "23.0.1";
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     rev = "v${version}";
-    sha256 = "0ih04lh1q3dysps4vfmk2rhqqrsimssadsxvbxdsnim2yihrrw47";
+    sha256 = "sha256-k/ReNr4GVrR/ghyzyQAo8NB6Eklno1/0fVMTyZk69SI=";
   };
-
-  patches = [
-    # Pyserial within Nixpkgs already includes the necessary fix, remove the
-    # pyserial version check from labgrid.
-    ./0001-serialdriver-remove-pyserial-version-check.patch
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'ansicolors==1.1.8' 'ansicolors>=1.1.8' \
+      --replace '"attrs==21.4.0"' '"attrs>=21.4.0"' \
+      --replace '"autobahn==21.3.1"' '"autobahn>=21.3.1"' \
+      --replace '"jinja2==3.0.2"' '"jinja2>=3.0.2"' \
+      --replace '"packaging==21.0"' '"packaging>=21.0"' \
+      --replace '"pexpect==4.8.0"' '"pexpect>=4.8.0"' \
+      --replace '"pyserial-labgrid>=3.4.0.1"' '"pyserial>=3.4"' \
+      --replace '"pytest==7.2.2",' "" \
+      --replace '"pyudev==0.22.0"' '"pyudev>=0.22.0"' \
+      --replace '"pyusb==1.2.1"' '"pyusb>=1.2.1"' \
+      --replace '"PyYAML==5.4.1"' '"PyYAML>=5.4.1"' \
+      --replace '"requests==2.26.0"' '"requests>=2.26.0"' \
+      --replace '"xmodem==0.4.6"' '"xmodem>=0.4.6"'
+  '';
 
   nativeBuildInputs = [ setuptools-scm ];
+
+  format = "pyproject";
 
   propagatedBuildInputs = [
     ansicolors
