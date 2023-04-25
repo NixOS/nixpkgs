@@ -14,6 +14,14 @@
 , potrace
 , openxr-loader
 , embree, gmp, libharu
+, libdecor
+, pkg-config
+, libxkbcommon
+#, waylandpp
+, wayland-scanner
+, wayland-protocols
+, wayland
+, libffi
 }:
 
 let
@@ -36,7 +44,7 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
-  nativeBuildInputs = [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev ]
+  nativeBuildInputs = [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev pkg-config wayland-scanner ]
     ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
@@ -50,6 +58,12 @@ stdenv.mkDerivation rec {
       potrace
       libharu
       libepoxy
+      libdecor
+#      waylandpp
+      wayland
+      wayland-protocols
+      libffi
+      libxkbcommon
     ]
     ++ lib.optionals (!stdenv.isAarch64) [
       openimagedenoise
@@ -98,6 +112,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
+      "-DWITH_GHOST_WAYLAND=ON"
+#      "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
+      "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
       "-DWITH_ALEMBIC=ON"
       # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
       "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
