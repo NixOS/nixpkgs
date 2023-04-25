@@ -18,7 +18,11 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-j2iEeAn+4Tn3h8lVKoaYE+6W4R/q+JaAWXxHllZGLNs=";
 
-  ldflags = [ "-s" "-w" "-X" "github.com/supabase/cli/cmd.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/supabase/cli/internal/utils.Version=${version}"
+  ];
 
   doCheck = false; # tests are trying to connect to localhost
 
