@@ -346,6 +346,7 @@
   ./services/blockchain/ethereum/erigon.nix
   ./services/blockchain/ethereum/geth.nix
   ./services/blockchain/ethereum/lighthouse.nix
+  ./services/blockchain/ethereum/nimbus/beacon-node.nix
   ./services/cluster/corosync/default.nix
   ./services/cluster/hadoop/default.nix
   ./services/cluster/k3s/default.nix

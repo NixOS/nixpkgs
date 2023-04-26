@@ -35484,6 +35484,16 @@ with pkgs;
 
   nbxplorer = callPackage ../applications/blockchains/nbxplorer { };
 
+  nimbus = callPackage ../applications/blockchains/nimbus {
+    nim = nim.overrideAttrs (_: rec {
+      version = "1.6.10";
+      src = fetchurl {
+        url = "https://nim-lang.org/download/nim-${version}.tar.xz";
+        hash = "sha256-E9dwL4tXCHur6M0FHBO8VqMXFBi6hntJxrvQmynST+o=";
+      };
+    });
+  };
+
   pivx = libsForQt5.callPackage ../applications/blockchains/pivx { withGui = true; };
   pivxd = callPackage ../applications/blockchains/pivx {
     withGui = false;
