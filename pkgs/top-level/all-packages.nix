@@ -39619,6 +39619,8 @@ with pkgs;
 
   yadm = callPackage ../applications/version-management/yadm { };
 
+  yai = callPackage ../tools/misc/yai { };
+
   yamale = with python3Packages; toPythonApplication yamale;
 
   yamdi = callPackage ../tools/video/yamdi { };
