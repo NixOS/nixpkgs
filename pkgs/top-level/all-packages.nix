@@ -37533,6 +37533,8 @@ with pkgs;
 
   jags = callPackage ../applications/science/math/jags { };
 
+  labplot = libsForQt5.callPackage ../applications/science/math/labplot { };
+
   lapack = callPackage ../build-support/alternatives/lapack { };
 
   lapack-ilp64 = lapack.override { isILP64 = true; };
