@@ -1,4 +1,4 @@
-{ stdenv, fetchYarnDeps, fixup_yarn_lock, callPackage, nodejs-16_x }:
+{ stdenv, fetchYarnDeps, fixup_yarn_lock, callPackage, nodejs_16 }:
 let
   common = callPackage ./common.nix { };
 in
@@ -16,8 +16,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     fixup_yarn_lock
     # Use Node JS 16 because of @achrinza/node-ipc@9.2.2
-    nodejs-16_x
-    nodejs-16_x.pkgs.yarn
+    nodejs_16
+    nodejs_16.pkgs.yarn
   ];
 
   configurePhase = ''

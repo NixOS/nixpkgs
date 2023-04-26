@@ -25,7 +25,7 @@ let
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
-      rev = version;
+      rev = "v${version}";
       hash = "sha256-bvXZtgFZx94Sw9Tst620HAhi9kmG8PjtWnghdw2ZF84=";
     };
     cargoDeps = rustPlatform.importCargoLock {

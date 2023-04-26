@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p nodePackages.node2nix nodejs-18_x gnused wget
+#! nix-shell -i bash -p nodePackages.node2nix nodejs_18 gnused wget
 
 # Usage: ./generate-dependencies.sh <version>
 # Use the same version format as in ./default.nix (without the 'v')

@@ -782,7 +782,7 @@ mapAliases ({
   keepnote = throw "keepnote has been removed from nixpkgs, as it is stuck on python2"; # Added 2022-01-01
   kerberos = libkrb5; # moved from top-level 2021-03-14
   kexectools = kexec-tools; # Added 2021-09-03
-  kexpand = "kexpand awless has been dropped due to the lack of maintanence from upstream since 2017"; # Added 2022-06-01
+  kexpand = throw "kexpand awless has been dropped due to the lack of maintanence from upstream since 2017"; # Added 2022-06-01
   keybase-go = throw "'keybase-go' has been renamed to/replaced by 'keybase'"; # Converted to throw 2022-02-22
   keysmith = libsForQt5.kdeGear.keysmith; # Added 2021-07-14
   kgx = gnome-console; # Added 2022-02-19
@@ -814,9 +814,9 @@ mapAliases ({
   letsencrypt = throw "'letsencrypt' has been renamed to/replaced by 'certbot'"; # Converted to throw 2022-02-22
   libGL_driver = throw "'libGL_driver' has been renamed to/replaced by 'mesa.drivers'"; # Converted to throw 2022-02-22
   libaudit = throw "'libaudit' has been renamed to/replaced by 'audit'"; # Converted to throw 2022-02-22
-  libayatana-indicator-gtk2 = "'libayatana-indicator-gtk2' has been removed from nixpkgs, as gtk2 is deprecated"; # Added 2022-10-18
+  libayatana-indicator-gtk2 = throw "'libayatana-indicator-gtk2' has been removed from nixpkgs, as gtk2 is deprecated"; # Added 2022-10-18
   libayatana-indicator-gtk3 = libayatana-indicator; # Added 2022-10-18
-  libayatana-appindicator-gtk2 = "'libayatana-appindicator-gtk2' has been removed from nixpkgs, as gtk2 is deprecated"; # Added 2022-10-18
+  libayatana-appindicator-gtk2 = throw "'libayatana-appindicator-gtk2' has been removed from nixpkgs, as gtk2 is deprecated"; # Added 2022-10-18
   libayatana-appindicator-gtk3 = libayatana-appindicator; # Added 2022-10-18
   libbencodetools = bencodetools; # Added 2022-07-30
   libbluedevil = throw "'libbluedevil' (Qt4) is unmaintained and unused since 'kde4.bluedevil's removal in 2017"; # Added 2022-06-14
@@ -1121,9 +1121,19 @@ mapAliases ({
   nmap-unfree = nmap; # Added 2021-04-06
   nmap-graphical = throw "nmap graphical support has been removed due to its python2 dependency"; # Added 2022-04-26
   nmap_graphical = throw "nmap graphical support has been removed due to its python2 dependency"; # Modified 2022-04-26
-  nodejs-10_x = throw "nodejs-10_x has been removed. Use a newer version instead."; # Added 2022-05-31
-  nodejs-12_x = throw "nodejs-12_x has been removed. Use a newer version instead."; # Added 2022-07-04
+  nodejs_10 = throw "nodejs-10_x has been removed. Use a newer version instead."; # Added 2022-05-31
+  nodejs-10_x = nodejs_10; # Added 2022-11-06
+  nodejs_12 = throw "nodejs-12_x has been removed. Use a newer version instead."; # Added 2022-07-04
+  nodejs-12_x = nodejs_12; # Added 2022-11-06
+  nodejs-14_x = nodejs_14; # Added 2022-11-06
+  nodejs-slim-14_x = nodejs-slim_14; # Added 2022-11-06
+  nodejs-16_x = nodejs_16; # Added 2022-11-06
   nodejs-16_x-openssl_1_1 = throw "nodejs-16_x-openssl_1_1 has been removed."; # Added 2023-02-04
+  nodejs-slim-16_x = nodejs-slim_16; # Added 2022-11-06
+  nodejs-18_x = nodejs_18; # Added 2022-11-06
+  nodejs-slim-18_x = nodejs-slim_18; # Added 2022-11-06
+  nodejs-19_x = nodejs_19; # Added 2022-11-06
+  nodejs-slim-19_x = nodejs-slim_19; # Added 2022-11-06
   nologin = throw "'nologin' has been renamed to/replaced by 'shadow'"; # Converted to throw 2022-02-22
   nomad_1_1 = throw "nomad_1_1 has been removed because it's outdated. Use a a newer version instead"; # Added 2022-05-22
   nordic-polar = throw "nordic-polar was removed on 2021-05-27, now integrated in nordic"; # Added 2021-05-27
@@ -1628,7 +1638,7 @@ mapAliases ({
   torchPackages = throw "torchPackages has been removed, as the upstream project has been abandoned"; # Added 2020-03-28
   trang = throw "'trang' has been renamed to/replaced by 'jing-trang'"; # Converted to throw 2022-02-22
   transfig = fig2dev; # Added 2022-02-15
-  transmission-remote-cli = "transmission-remote-cli has been removed, as the upstream project has been abandoned. Please use tremc instead"; # Added 2020-10-14
+  transmission-remote-cli = throw "transmission-remote-cli has been removed, as the upstream project has been abandoned. Please use tremc instead"; # Added 2020-10-14
   transmission_gtk = throw "'transmission_gtk' has been renamed to/replaced by 'transmission-gtk'"; # Converted to throw 2022-02-22
   transmission_remote_gtk = throw "'transmission_remote_gtk' has been renamed to/replaced by 'transmission-remote-gtk'"; # Converted to throw 2022-02-22
   transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned";
@@ -1823,10 +1833,6 @@ mapAliases ({
   zeromq3 = throw "zeromq3 has been deprecated by zeromq4";
   jzmq = throw "jzmq has been removed from nixpkgs, as it was unmaintained";
 
-  avian = throw ''
-    The package doesn't compile anymore on NixOS and both development &
-    maintenance is abandoned by upstream.
-  ''; # Cleanup before 21.11, Added 2021-05-07
   ant-dracula-theme = throw "ant-dracula-theme is now dracula-theme, and theme name is Dracula instead of Ant-Dracula";
   dina-font-pcf = dina-font; # Added 2020-02-09
   dnscrypt-proxy = throw "dnscrypt-proxy has been removed. Please use dnscrypt-proxy2"; # Added 2020-02-02
@@ -1860,12 +1866,7 @@ mapAliases ({
     Its new location is obs-studio-plugins.wlrobs.
   ''; # Added 2021-06-01
 
-  oraclejdk8psu = throw "The *psu versions of oraclejdk are no longer provided by upstream"; # Cleanup before 20.09
-  oraclejre8psu = oraclejdk8psu; # Cleanup before 20.09
-  oraclejdk8psu_distro = oraclejdk8psu; # Cleanup before 20.09
   posix_man_pages = man-pages-posix; # Added 2021-04-15
-  riot-desktop = throw "riot-desktop is now element-desktop!"; # Cleanup before 21.05
-  riot-web = throw "riot-web is now element-web"; # Cleanup before 21.05
   sqldeveloper_18 = throw "sqldeveloper_18 is not maintained anymore!"; # Added 2020-02-04
   todolist = throw "todolist is now ultralist"; # Added 2020-12-27
   tor-browser-bundle = throw "tor-browser-bundle was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead"; # Added 2020-01-10

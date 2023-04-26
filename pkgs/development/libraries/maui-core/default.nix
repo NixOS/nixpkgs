@@ -39,6 +39,7 @@ mkDerivation rec {
     # Missing license information https://github.com/Nitrux/maui-core/issues/1
     license = licenses.unfree;
     maintainers = with maintainers; [ onny ];
+    platforms = platforms.linux;
   };
 
 }

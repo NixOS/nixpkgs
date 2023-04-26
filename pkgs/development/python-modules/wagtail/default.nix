@@ -23,11 +23,11 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "4.2";
+  version = "4.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VUdVG2YHfH1Q3QGx8Gvg2DuJolxlq6REZmn8fG8xgxw=";
+    sha256 = "sha256-s89gs3H//Dc3k6BLZUC4APyDgiWY9LetWAkI+kXQTf8=";
   };
 
   propagatedBuildInputs = [

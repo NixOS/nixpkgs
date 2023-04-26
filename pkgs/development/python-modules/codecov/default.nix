@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "codecov";
-  version = "2.1.12";
+  version = "2.1.13";
 
   src = fetchFromGitHub {
     owner = "codecov";
     repo = "codecov-python";
-    rev = "v${version}";
-    sha256 = "0bdk1cp3hxydpx9knqfv88ywwzw7yqhywi0inxjd6x53qh75prqy";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-cZEpAw8uv/XGiGzdBZ9MnabNaTP0did2GT+BkKMJM/E=";
   };
 
   propagatedBuildInputs = [
