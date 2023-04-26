@@ -20,13 +20,13 @@ in
 
 stdenvNoCC.mkDerivation rec {
   pname = "kde";
-  version = "0.2.2";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-P5mLLaQzMhG6aHvAj9SizUFQFLjqNKj1T1kQ4dgiacI=";
+    hash = "sha256-w77lzeSisx/PPxctMJKIdRJenq0s8HwR8gLmgNh4SH8=";
   };
 
   installPhase = ''
