@@ -1,4 +1,4 @@
-{ autoPatchelfHook, buildFHSEnv, dpkg, fetchurl, lib, stdenv, sysctl
+{ autoPatchelfHook, buildFHSUserEnv, dpkg, fetchurl, lib, stdenv, sysctl
 , iptables, iproute2, procps, cacert, libxml2, libidn2, zlib, wireguard-tools }:
 
 let
@@ -35,7 +35,7 @@ let
     '';
   };
 
-  nordVPNfhs = buildFHSEnv {
+  nordVPNfhs = buildFHSUserEnv {
     name = "nordvpnd";
     runScript = "nordvpnd";
 
