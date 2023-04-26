@@ -1286,6 +1286,8 @@ self: super: with self; {
 
   bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
 
+  binary = callPackage ../development/python-modules/binary { };
+
   binaryornot = callPackage ../development/python-modules/binaryornot { };
 
   bincopy = callPackage ../development/python-modules/bincopy { };
