@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "appflowy";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy_x86_64-unknown-linux-gnu_ubuntu-20.04.tar.gz";
-    sha256 = "sha256-fOPODq938ejJY4QDJawN/WFv6Ynr9pGgJPWnjWD/rQk=";
+    sha256 = "sha256-dZqnwROrw3ioCzUNvpklGOCr5cyjXU1Iqkp6xBdr3rA=";
     stripRoot = false;
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    cd AppFlowy/
+    cd AppFlowy_x86_64-unknown-linux-gnu_ubuntu-20.04/AppFlowy/
 
     mkdir -p $out/opt/
     mkdir -p $out/bin/
