@@ -168,6 +168,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A cross-platform multimedia library";
     homepage = "http://www.libsdl.org/";
+    changelog = "https://github.com/libsdl-org/SDL/releases/tag/release-${version}";
     license = licenses.zlib;
     platforms = platforms.all;
     maintainers = with maintainers; [ cpages ];
