@@ -30,6 +30,8 @@
 
   obs-multi-rtmp = qt6Packages.callPackage ./obs-multi-rtmp { };
 
+  obs-mute-filter = callPackage ./obs-mute-filter.nix { };
+
   obs-ndi = qt6Packages.callPackage ./obs-ndi { };
 
   obs-nvfbc = callPackage ./obs-nvfbc.nix { };
