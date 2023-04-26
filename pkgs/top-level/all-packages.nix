@@ -7652,6 +7652,7 @@ with pkgs;
     foundationdb52
     foundationdb60
     foundationdb61
+    foundationdb71
   ;
 
   foundationdb = foundationdb61;
