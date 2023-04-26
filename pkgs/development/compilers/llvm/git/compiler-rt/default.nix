@@ -54,8 +54,6 @@ stdenv.mkDerivation {
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
-  ] ++ lib.optionals (useLLVM && !haveLibc) [
-    "-DCMAKE_C_FLAGS=-nodefaultlibs"
   ] ++ lib.optionals (useLLVM) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
@@ -70,6 +68,10 @@ stdenv.mkDerivation {
     # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/base-config-ix.cmake#L153
     "-DCOMPILER_RT_ENABLE_IOS=OFF"
   ];
+
+  preConfigure = lib.optionalString (useLLVM && !haveLibc) ''
+    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
+  '';
 
   outputs = [ "out" "dev" ];
 
