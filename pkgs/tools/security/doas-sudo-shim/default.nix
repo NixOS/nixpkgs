@@ -10,6 +10,7 @@
 , bash
 , makeBinaryWrapper
 , doas-sudo-shim
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,8 @@ stdenv.mkDerivation rec {
       ${doas-sudo-shim}/bin/sudo -h > $out
       grep -q "Execute a command as another user using doas(1)" $out
     '';
+
+    inherit (nixosTests) doas-sudo-shim;
   };
 
   meta = with lib; {
