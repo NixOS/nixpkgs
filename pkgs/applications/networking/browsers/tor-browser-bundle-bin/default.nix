@@ -291,7 +291,7 @@ stdenv.mkDerivation rec {
     export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
 
     # Enter local state directory.
-    REAL_HOME=\$HOME
+    REAL_HOME=\''${HOME%/}
     TBB_HOME=\''${TBB_HOME:-''${XDG_DATA_HOME:-\$REAL_HOME/.local/share}/tor-browser}
     HOME=\$TBB_HOME
 
