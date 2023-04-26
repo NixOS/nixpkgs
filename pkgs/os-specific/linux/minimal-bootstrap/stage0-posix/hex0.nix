@@ -1,22 +1,23 @@
-{ system
+{ lib
+, derivationWithMeta
+, system
 , src
 , version
 }:
-let
-  throwSystem = throw "Unsupported system: ${system}";
-  arch = {
-    i686-linux = "x86";
-  }.${system} or throwSystem;
-
-  seed = "${src}/bootstrap-seeds/POSIX/${arch}/hex0-seed";
-  source = "${src}/bootstrap-seeds/POSIX/${arch}/hex0_${arch}.hex0";
-in
-derivation {
-  inherit system;
-  name = "hex0-${version}";
-  builder = seed;
+derivationWithMeta {
+  inherit system version;
+  pname = "hex0";
+  builder = "${src}/bootstrap-seeds/POSIX/x86/hex0-seed";
   args = [
-    source
+    "${src}/bootstrap-seeds/POSIX/x86/hex0_x86.hex0"
     (placeholder "out")
   ];
+
+  meta = with lib; {
+    description = "Minimal assembler for bootstrapping";
+    homepage = "https://github.com/oriansj/stage0-posix";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = [ "i686-linux" ];
+  };
 }

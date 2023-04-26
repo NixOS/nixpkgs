@@ -27,7 +27,9 @@
 # Warning all binaries prior to the use of blood-elf will not be readable by
 # Objdump, you may need to use ndism or gdb to view the assembly in the binary.
 
-{ system
+{ lib
+, derivationWithMeta
+, system
 , hex0
 , m2libc
 , src
@@ -36,10 +38,18 @@
 rec {
   out = placeholder "out";
 
-  run = pname: builder: args: derivation {
-    inherit system builder args;
-    name = "${pname}-${version}";
-  };
+  run = pname: builder: args:
+    derivationWithMeta {
+      inherit system pname version builder args;
+
+      meta = with lib; {
+        description = "Collection of tools written for use in bootstrapping";
+        homepage = "https://github.com/oriansj/stage0-posix";
+        license = licenses.gpl3Plus;
+        maintainers = with maintainers; [ emilytrau ];
+        platforms = [ "i686-linux" ];
+      };
+    };
 
   ################################
   # Phase-1 Build hex1 from hex0 #

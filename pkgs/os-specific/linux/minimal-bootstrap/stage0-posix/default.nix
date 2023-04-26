@@ -28,12 +28,11 @@ lib.makeScope newScope (self: with self; {
   inherit (callPackage ./stage0-posix-x86.nix { }) blood-elf-0 hex2 kaem-unwrapped M1 M2;
 
   mkKaemDerivation0 = args@{
-    name,
     script,
     ...
   }:
-    derivation ({
-      inherit system name;
+    derivationWithMeta ({
+      inherit system;
       builder = kaem-unwrapped;
       args = [
         "--verbose"
@@ -47,24 +46,32 @@ lib.makeScope newScope (self: with self; {
       BLOOD_FLAG = " ";
       BASE_ADDRESS = "0x8048000";
       ENDIAN_FLAG = "--little-endian";
-    } // (builtins.removeAttrs args [ "name" "script" ]));
+    } // (builtins.removeAttrs args [ "script" ]));
 
   mescc-tools = callPackage ./mescc-tools { };
 
   mescc-tools-extra = callPackage ./mescc-tools-extra { };
 
-  inherit (callPackage ./utils.nix { }) writeTextFile writeText runCommand fetchtarball;
+  inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText runCommand fetchtarball;
 
   # Now that mescc-tools-extra is available we can install kaem at /bin/kaem
   # to make it findable in environments
   kaem = mkKaemDerivation0 {
-    name = "kaem-${version}";
+    pname = "kaem";
     script = builtins.toFile "kaem-wrapper.kaem" ''
       mkdir -p ''${out}/bin
       cp ''${kaem-unwrapped} ''${out}/bin/kaem
       chmod 555 ''${out}/bin/kaem
     '';
     PATH = lib.makeBinPath [ mescc-tools-extra ];
-    inherit kaem-unwrapped;
+    inherit version kaem-unwrapped;
+
+    meta = with lib; {
+      description = "Minimal build tool for running scripts on systems that lack any shell";
+      homepage = "https://github.com/oriansj/mescc-tools";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ emilytrau ];
+      platforms = [ "i686-linux" ];
+    };
   };
 })

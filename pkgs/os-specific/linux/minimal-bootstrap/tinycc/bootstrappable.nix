@@ -22,6 +22,14 @@ let
     sha256 = "1a0cw9a62qc76qqn5sjmp3xrbbvsz2dxrw21lrnx9q0s74mwaxbq";
   }) + "/tinycc-${rev}";
 
+  meta = with lib; {
+    description = "Tiny C Compiler's bootstrappable fork";
+    homepage = "https://gitlab.com/janneke/tinycc";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = [ "i686-linux" ];
+  };
+
   mes-tcc = runCommand "mes-tcc-${version}" {} ''
     # Create config.h
     catm config.h
@@ -89,7 +97,7 @@ let
 
   boot0-tcc = buildTinyccN {
     pname = "boot0-tcc";
-    inherit src version;
+    inherit src version meta;
     prev = mes-tcc;
     buildOptions = [
       "-D HAVE_LONG_LONG_STUB=1"
@@ -102,7 +110,7 @@ let
 
   boot1-tcc = buildTinyccN {
     pname = "boot1-tcc";
-    inherit src version;
+    inherit src version meta;
     prev = boot0-tcc;
     buildOptions = [
       "-D HAVE_BITFIELD=1"
@@ -116,7 +124,7 @@ let
 
   boot2-tcc = buildTinyccN {
     pname = "boot2-tcc";
-    inherit src version;
+    inherit src version meta;
     prev = boot1-tcc;
     buildOptions = [
       "-D HAVE_BITFIELD=1"
@@ -132,7 +140,7 @@ let
 
   boot3-tcc = buildTinyccN {
     pname = "boot3-tcc";
-    inherit src version;
+    inherit src version meta;
     prev = boot2-tcc;
     buildOptions = [
       "-D HAVE_BITFIELD=1"
@@ -148,7 +156,7 @@ let
 
   boot4-tcc = buildTinyccN {
     pname = "boot4-tcc";
-    inherit src version;
+    inherit src version meta;
     prev = boot3-tcc;
     buildOptions = [
       "-D HAVE_BITFIELD=1"

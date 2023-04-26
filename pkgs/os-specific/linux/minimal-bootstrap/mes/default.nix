@@ -5,7 +5,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-{ runCommand
+{ lib
+, runCommand
 , fetchurl
 , fetchtarball
 , writeText
@@ -27,7 +28,17 @@ let
     sha256 = "065ksalfllbdrzl12dz9d9dcxrv97wqxblslngsc6kajvnvlyvpk";
   }) + "/nyacc-${nyaccVersion}";
 in
-(runCommand "mes-${version}" {} ''
+(runCommand "mes-${version}" {
+  pname = "mes";
+  inherit version;
+  meta = with lib; {
+    description = "Scheme interpreter and C compiler for bootstrapping";
+    homepage = "https://www.gnu.org/software/mes";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = [ "i686-linux" ];
+  };
+} ''
   # Unpack source
   ungz --file ${src} --output mes.tar
   mkdir ''${out} ''${out}/bin ''${out}/share

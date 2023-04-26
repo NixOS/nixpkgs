@@ -1,23 +1,25 @@
-{ system
+{ lib
+, derivationWithMeta
+, system
 , src
 , hex0
 , version
 }:
-let
-  throwSystem = throw "Unsupported system: ${system}";
-  arch = {
-    i686-linux = "x86";
-  }.${system} or throwSystem;
-
-  source = "${src}/bootstrap-seeds/POSIX/${arch}/kaem-minimal.hex0";
-in
-derivation {
-  inherit system;
-  name = "kaem-minimal-${version}";
+derivationWithMeta {
+  inherit system version;
+  pname = "kaem-minimal";
   builder = hex0;
   args = [
-    source
+    "${src}/bootstrap-seeds/POSIX/x86/kaem-minimal.hex0"
     (placeholder "out")
   ];
+
+  meta = with lib; {
+    description = "First stage minimal scriptable build tool for bootstrapping";
+    homepage = "https://github.com/oriansj/stage0-posix";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = [ "i686-linux" ];
+  };
 }
 

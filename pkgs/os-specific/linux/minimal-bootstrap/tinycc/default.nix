@@ -17,23 +17,34 @@ let
     sha256 = "11idrvbwfgj1d03crv994mpbbbyg63j1k64lw1gjy7mkiifw2xap";
   }) + "/tinycc-86f3d8e";
 
+  meta = with lib; {
+    description = "Small, fast, and embeddable C compiler and interpreter";
+    homepage = "https://repo.or.cz/w/tinycc.git";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = [ "i686-linux" ];
+  };
+
   mes-libc = runCommand "mes-libc-${version}.c" { MES_PREFIX = "${mes}${mes.mesPrefix}"; } ''
     kaem --verbose --strict --file ${./mes-libc.kaem}
   '';
 
   buildTinyccN = {
     pname,
-    src,
     version,
+    src,
     prev,
     buildOptions,
     libtccBuildOptions,
+    meta
   }:
     let
       options = lib.strings.concatStringsSep " " buildOptions;
       libtccOptions = lib.strings.concatStringsSep " " libtccBuildOptions;
     in
-    runCommand "${pname}-${version}" {} ''
+    runCommand "${pname}-${version}" {
+      inherit pname version meta;
+    } ''
       catm config.h
       mkdir -p ''${out}/bin ''${out}/lib
       ${prev}/bin/tcc \
@@ -87,7 +98,7 @@ let
 
   boot5-tcc = buildTinyccN {
     pname = "boot5-tcc";
-    inherit src version;
+    inherit src version meta;
     prev = boot4-tcc;
     buildOptions = [
       "-D HAVE_BITFIELD=1"
@@ -109,7 +120,7 @@ let
 
   tinycc-with-mes-libc = buildTinyccN {
     pname = "tinycc-with-mes-libc";
-    inherit src version;
+    inherit src version meta;
     prev = boot5-tcc;
     buildOptions = [
       "-std=c99"

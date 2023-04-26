@@ -1,5 +1,7 @@
 { lib
+, stdenv
 , system
+, callPackage
 , mkKaemDerivation0
 , fetchurl
 , kaem
@@ -7,7 +9,24 @@
 , mescc-tools-extra
 }:
 
+let
+  checkMeta = callPackage ../../../../stdenv/generic/check-meta.nix {
+    inherit (stdenv) hostPlatform;
+  };
+in
 rec {
+  derivationWithMeta = attrs:
+    let
+      validity = checkMeta { inherit attrs; };
+      inherit (validity) meta;
+    in
+    lib.extendDerivation
+      validity.handled
+      { inherit meta; }
+      (derivation ({
+        inherit (meta) name;
+      } // (builtins.removeAttrs attrs [ "meta" ])));
+
   writeTextFile =
     { name # the name of the derivation
     , text
@@ -36,7 +55,7 @@ rec {
   writeText = name: text: writeTextFile {inherit name text;};
 
   runCommand = name: env: buildCommand:
-    derivation ({
+    derivationWithMeta ({
       inherit name system;
 
       builder = "${kaem}/bin/kaem";

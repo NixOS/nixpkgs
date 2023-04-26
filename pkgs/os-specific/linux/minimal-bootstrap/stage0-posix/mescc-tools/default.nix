@@ -13,7 +13,7 @@ let
   # We need a few tools from mescc-tools-extra to assemble the output folder
   buildMesccToolsExtraUtil = name:
     mkKaemDerivation0 {
-      name = "mescc-tools-extra-${name}-${version}";
+      pname = "mescc-tools-extra-${name}";
       script = builtins.toFile "build-${name}.kaem" ''
         ''${M2} --architecture ''${ARCH} \
           -f ''${m2libc}/sys/types.h \
@@ -48,7 +48,7 @@ let
           --base-address ''${BASE_ADDRESS} \
           -o ''${out}
       '';
-      inherit M1 M2 blood-elf-0 hex2 m2libc src;
+      inherit version M1 M2 blood-elf-0 hex2 m2libc src;
     };
   mkdir = buildMesccToolsExtraUtil "mkdir";
   cp = buildMesccToolsExtraUtil "cp";
@@ -56,8 +56,15 @@ let
   replace = buildMesccToolsExtraUtil "replace";
 in
 mkKaemDerivation0 {
-  name = "mescc-tools-${version}";
+  pname = "mescc-tools";
   script = ./build.kaem;
+  inherit version M1 M2 blood-elf-0 hex2 mkdir cp chmod replace m2libc src;
 
-  inherit M1 M2 blood-elf-0 hex2 mkdir cp chmod replace m2libc src;
+  meta = with lib; {
+    description = "Collection of tools written for use in bootstrapping";
+    homepage = "https://github.com/oriansj/mescc-tools";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = [ "i686-linux" ];
+  };
 }
