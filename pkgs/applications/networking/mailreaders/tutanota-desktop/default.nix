@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       $out/bin/tutanota-desktop \
       --add-flags $out/share/tutanota-desktop/resources/app.asar \
       --run "mkdir -p /tmp/tutanota" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret stdenv.cc.cc.lib ]}
 
     runHook postInstall
   '';

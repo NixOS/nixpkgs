@@ -3,6 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , wrapGAppsHook
+, makeWrapper
 , gnome
 , libsecret
 , git
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    (wrapGAppsHook.override { inherit makeWrapper; })
   ];
 
   buildInputs = [
@@ -59,6 +60,12 @@ stdenv.mkDerivation rec {
     cp -R $TMP/${pname}/usr/share $out/
     cp -R $TMP/${pname}/usr/lib/${pname}/* $out/opt/
     ln -sf $out/opt/${pname} $out/bin/${pname}
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+    )
   '';
 
   runtimeDependencies = [
