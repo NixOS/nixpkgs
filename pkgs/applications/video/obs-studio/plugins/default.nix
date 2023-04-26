@@ -16,6 +16,8 @@
 
   obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
 
+  obs-command-source = callPackage ./obs-command-source.nix { };
+
   obs-gstreamer = callPackage ./obs-gstreamer.nix { };
 
   obs-hyperion = qt6Packages.callPackage ./obs-hyperion/default.nix { };
