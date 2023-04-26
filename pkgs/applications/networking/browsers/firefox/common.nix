@@ -307,37 +307,37 @@ buildStdenv.mkDerivation ({
     # RBox WASM Sandboxing
     export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
     export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
- '' + lib.optionalString pgoSupport ''
-   if [ -e "$TMPDIR/merged.profdata" ]; then
-     echo "Configuring with profiling data"
-     for i in "''${!configureFlagsArray[@]}"; do
-       if [[ ''${configureFlagsArray[i]} = "--enable-profile-generate=cross" ]]; then
-         unset 'configureFlagsArray[i]'
-       fi
-     done
-     configureFlagsArray+=(
-       "--enable-profile-use=cross"
-       "--with-pgo-profile-path="$TMPDIR/merged.profdata""
-       "--with-pgo-jarlog="$TMPDIR/jarlog""
-     )
-     ${lib.optionalString stdenv.hostPlatform.isMusl ''
-       LDFLAGS="$OLD_LDFLAGS"
-       unset OLD_LDFLAGS
-     ''}
-   else
-     echo "Configuring to generate profiling data"
-     configureFlagsArray+=(
-       "--enable-profile-generate=cross"
-     )
-     ${lib.optionalString stdenv.hostPlatform.isMusl
-     # Set the rpath appropriately for the profiling run
-     # During the profiling run, loading libraries from $out would fail,
-     # since the profiling build has not been installed to $out
-     ''
-       OLD_LDFLAGS="$LDFLAGS"
-       LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
-     ''}
-   fi
+  '' + lib.optionalString pgoSupport ''
+    if [ -e "$TMPDIR/merged.profdata" ]; then
+      echo "Configuring with profiling data"
+      for i in "''${!configureFlagsArray[@]}"; do
+        if [[ ''${configureFlagsArray[i]} = "--enable-profile-generate=cross" ]]; then
+          unset 'configureFlagsArray[i]'
+        fi
+      done
+      configureFlagsArray+=(
+        "--enable-profile-use=cross"
+        "--with-pgo-profile-path="$TMPDIR/merged.profdata""
+        "--with-pgo-jarlog="$TMPDIR/jarlog""
+      )
+      ${lib.optionalString stdenv.hostPlatform.isMusl ''
+        LDFLAGS="$OLD_LDFLAGS"
+        unset OLD_LDFLAGS
+      ''}
+    else
+      echo "Configuring to generate profiling data"
+      configureFlagsArray+=(
+        "--enable-profile-generate=cross"
+      )
+      ${lib.optionalString stdenv.hostPlatform.isMusl
+      # Set the rpath appropriately for the profiling run
+      # During the profiling run, loading libraries from $out would fail,
+      # since the profiling build has not been installed to $out
+      ''
+        OLD_LDFLAGS="$LDFLAGS"
+        LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
+      ''}
+    fi
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
