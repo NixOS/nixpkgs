@@ -1,25 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, curl, perl }:
+{ lib, stdenv, fetchFromGitHub, curl, python3, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "trurl";
-  version = "0.4";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "curl";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-f9z0gPtHcn3iWFA6MT6ngok0nXBcd6zJ8Tjnb5Lzf6c=";
+    hash = "sha256-/Gf7T67LPzVPhjAqTvbLiJOqfKeWvwH/WHelJZTH4ZI=";
   };
 
+  outputs = [ "out" "dev" "man" ];
   separateDebugInfo = stdenv.isLinux;
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ curl ];
   buildInputs = [ curl ];
   makeFlags = [ "PREFIX=$(out)" ];
 
   doCheck = true;
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ python3 python3Packages.packaging ];
   checkTarget = "test";
 
   meta = with lib; {
