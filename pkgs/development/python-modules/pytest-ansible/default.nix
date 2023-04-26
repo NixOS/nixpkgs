@@ -1,46 +1,46 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, ansible
-, pytest
-, mock
+, ansible-core
+, coreutils
+, coverage
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "2.2.4";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "ansible";
-    repo = "pytest-ansible";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0vr015msciwzz20zplxalfmfx5hbg8rkf8vwjdg3z12fba8z8ks4";
+    sha256 = "sha256-kxOp7ScpIIzEbM4VQa+3ByHzkPS8pzdYq82rggF9Fpk=";
   };
 
-  patchPhase = ''
-    sed -i "s/'setuptools-markdown'//g" setup.py
+  postPatch = ''
+    substituteInPlace tests/conftest.py inventory --replace '/usr/bin/env' '${coreutils}/bin/env'
   '';
 
-  buildInputs = [ pytest ];
+  nativeCheckInputs =  [ pytestCheckHook coverage ];
+  propagatedBuildInputs = [ ansible-core ];
 
-  # requires pandoc < 2.0
-  # buildInputs = [ setuptools-markdown ];
-  nativeCheckInputs =  [ mock ];
-  propagatedBuildInputs = [ ansible ];
+  format = "pyproject";
 
-  # tests not included with release, even on github
-  doCheck = false;
-
-  checkPhase = ''
-    HOME=$TMPDIR pytest tests/
-  '';
+  preCheck = "export HOME=$TMPDIR";
+  pytestFlagsArray = [ "tests/" ];
+  disabledTests = [
+    # Host unreachable in the inventory
+    "test_become"
+    # [Errno -3] Temporary failure in name resolution
+    "test_connection_failure_v2"
+    "test_connection_failure_extra_inventory_v2"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/jlaska/pytest-ansible";
     description = "Plugin for py.test to simplify calling ansible modules from tests or fixtures";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
-    # https://github.com/ansible-community/pytest-ansible/blob/v2.2.4/setup.py#L124
-    broken = lib.versionAtLeast ansible.version "2.10";
   };
 }
