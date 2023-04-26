@@ -72,6 +72,7 @@ let
       akonadi-search = callPackage ./akonadi-search.nix {};
       akonadiconsole = callPackage ./akonadiconsole.nix {};
       akregator = callPackage ./akregator.nix {};
+      analitza = callPackage ./analitza.nix {};
       ark = callPackage ./ark {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
       bomber = callPackage ./bomber.nix {};
