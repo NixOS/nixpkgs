@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
       --replace "etc" "$out/etc"
     substituteInPlace ./src/scripts/wihotspot \
       --replace "/usr" "$out"
+    substituteInPlace ./src/desktop/wifihotspot.desktop \
+      --replace "/usr" "$out"
   '';
 
   makeFlags = [
