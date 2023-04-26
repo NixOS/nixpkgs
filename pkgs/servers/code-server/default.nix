@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
 , cacert, moreutils, jq, git, rsync, pkg-config, yarn, python3
 , esbuild, nodejs-14_x, node-gyp, libsecret, xorg, ripgrep
-, AppKit, Cocoa, CoreServices, Security, cctools, xcbuild }:
+, AppKit, Cocoa, CoreServices, Security, cctools, xcbuild, fetchpatch }:
 
 let
   system = stdenv.hostPlatform.system;
@@ -86,6 +86,7 @@ in stdenv.mkDerivation rec {
   patches = [
     # remove download of coder-cloud agent
     ./remove-cloud-agent-download.patch
+    ./CVE-2023-26114.patch
   ];
 
   postPatch = ''
