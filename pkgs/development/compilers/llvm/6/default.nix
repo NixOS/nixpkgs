@@ -78,7 +78,8 @@ let
 
     # pick clang appropriate for package set we are targeting
     clang =
-      /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
+      /**/ if stdenv.targetPlatform.libc == null then tools.clangNoLibc
+      else if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
       else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
       else tools.libcxxClang;
 
