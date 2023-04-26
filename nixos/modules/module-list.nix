@@ -666,6 +666,7 @@
   ./services/misc/mediatomb.nix
   ./services/misc/metabase.nix
   ./services/misc/moonraker.nix
+  ./services/misc/mqtt2influxdb.nix
   ./services/misc/n8n.nix
   ./services/misc/nitter.nix
   ./services/misc/nix-gc.nix
