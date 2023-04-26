@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, pkg-config }:
 
 stdenv.mkDerivation rec {
-  version = "2.11.6";
+  version = "2.11.8";
   pname = "coinutils";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "CoinUtils";
     rev = "releases/${version}";
-    hash = "sha256-avXp7eKSZ/Fe1QmSJiNDMnPQ70LlOHrBeUYb9lhka8c=";
+    hash = "sha256-ZV2nLP/oOLfnBGk1yow+b/oTKpoxyEkcCPHCSNAk+Tk=";
   };
 
   doCheck = true;

@@ -15,7 +15,7 @@ let
 in
 buildPythonPackage rec {
   pname = "playwright";
-  version =  "1.31.1";
+  version =  "1.32.1";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "v${version}";
-    hash = "sha256-zVJiRIJDWmFdMCGK9siewiYgjeeTuOPY1wWxArcZDJg";
+    hash = "sha256-rguobFaepTOL2duHRdFV5o2JSsBlYiA7rY3/RyHvoMc=";
   };
 
   patches = [

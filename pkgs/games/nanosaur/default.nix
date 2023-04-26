@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     mv Nanosaur Data ReadMe.txt "$out/"
     makeWrapper $out/Nanosaur $out/bin/Nanosaur --chdir "$out"
+    install -Dm644 $src/packaging/nanosaur.desktop $out/share/applications/nanosaur.desktop
+    install -Dm644 $src/packaging/nanosaur-desktopicon.png $out/share/pixmaps/nanosaur-desktopicon.png
     runHook postInstall
   '';
 
