@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , qttools
 , pkg-config
@@ -15,22 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-draw";
-  version = "5.11.7";
+  version = "6.0.5";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-oryh1b7/78Hp3JclN9vKvfcKRg58nsfGZQvBx6VyJBs";
+    sha256 = "sha256-WeubXsshN4tUlIwEHTxHXv1L2dvJ2DZ6qtSPyiVtc98=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "chore-use-GNUInstallDirs-in-CmakeLists.patch";
-      url = "https://github.com/linuxdeepin/deepin-draw/commit/dac714fe603e1b77fc39952bfe6949852ee6c2d5.patch";
-      sha256 = "sha256-zajxmKkZJT1lcyvPv/PRPMxcstF69PB1tC50gYKDlWA=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace com.deepin.Draw.service \

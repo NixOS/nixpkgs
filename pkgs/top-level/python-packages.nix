@@ -3716,6 +3716,7 @@ self: super: with self; {
   foundationdb52 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb52; };
   foundationdb60 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb60; };
   foundationdb61 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb61; };
+  foundationdb71 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb71; };
 
   fountains = callPackage ../development/python-modules/fountains { };
 
@@ -10508,6 +10509,8 @@ self: super: with self; {
   ruamel-yaml-clib = callPackage ../development/python-modules/ruamel-yaml-clib { };
 
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
+
+  ruff-lsp = callPackage ../development/python-modules/ruff-lsp { };
 
   ruffus = callPackage ../development/python-modules/ruffus { };
 

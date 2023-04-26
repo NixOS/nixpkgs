@@ -7646,6 +7646,7 @@ with pkgs;
     foundationdb52
     foundationdb60
     foundationdb61
+    foundationdb71
   ;
 
   foundationdb = foundationdb61;
@@ -16277,6 +16278,7 @@ with pkgs;
 
   ograc = callPackage ../development/tools/rust/ograc { };
 
+  ravedude = callPackage ../development/tools/rust/ravedude { };
   rhack = callPackage ../development/tools/rust/rhack { };
   roogle = callPackage ../development/tools/rust/roogle { };
   rustfmt = rustPackages.rustfmt;
@@ -19556,7 +19558,7 @@ with pkgs;
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
   # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
-  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix;
+  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix_1_3_3;
 
   calcium = callPackage ../development/libraries/calcium { };
 
