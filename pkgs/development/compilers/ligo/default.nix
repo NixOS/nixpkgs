@@ -6,6 +6,9 @@
 , ocamlPackages
 , cacert
 , ocaml-crunch
+, jq
+, mustache-go
+, yaml2json
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -21,6 +24,7 @@ ocamlPackages.buildDunePackage rec {
 
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
+  CHANGELOG_PATH = "./changelog.txt";
 
   duneVersion = "3";
 
@@ -33,6 +37,10 @@ ocamlPackages.buildDunePackage rec {
     ocamlPackages.crunch
     ocamlPackages.menhir
     ocamlPackages.ocaml-recovery-parser
+    # deps for changelog
+    jq
+    mustache-go
+    yaml2json
   ];
 
   buildInputs = with ocamlPackages; [
@@ -101,6 +109,13 @@ ocamlPackages.buildDunePackage rec {
     cacert
     ocamlPackages.ca-certs
   ];
+
+  preBuild = ''
+    # The scripts use `nix-shell` in the shebang which seems to fail
+    sed -i -e '1,5d' ./scripts/changelog-generation.sh
+    sed -i -e '1,5d' ./scripts/changelog-json.sh
+    ./scripts/changelog-generation.sh
+  '';
 
   doCheck = false; # Tests fail, but could not determine the reason
 
