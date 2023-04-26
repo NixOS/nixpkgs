@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , dataDir ? "/var/lib/snipe-it"
 , mariadb
+, nixosTests
 }:
 
 let
@@ -41,6 +42,8 @@ in package.override rec {
     rev = "v${version}";
     sha256 = "0c8cjywhyiywfav2syjkah777qj5f1jrckgri70ypqyxbwgb4rpm";
   };
+
+  passthru.tests = nixosTests.snipe-it;
 
   meta = with lib; {
     description = "A free open source IT asset/license management system";
