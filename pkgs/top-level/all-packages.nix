@@ -16230,6 +16230,7 @@ with pkgs;
   cargo-unused-features = callPackage ../development/tools/rust/cargo-unused-features { };
 
   cargo-tauri = callPackage ../development/tools/rust/cargo-tauri { };
+  tauri-mobile = callPackage ../development/tools/rust/tauri-mobile { };
 
   cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
   cargo-vet = callPackage ../development/tools/rust/cargo-vet {
@@ -32821,9 +32822,7 @@ with pkgs;
     boost = boost175;
   };
 
-  openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio {
-    fmt = fmt_8;
-  };
+  openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio { };
 
   openjump = callPackage ../applications/misc/openjump { };
 

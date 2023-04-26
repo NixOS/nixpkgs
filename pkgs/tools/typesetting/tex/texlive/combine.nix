@@ -235,19 +235,13 @@ in (buildEnv {
     ln -sf fmtutil "$out/bin/mktexfmt"
 
     texlinks "$out/bin" && wrapBin
-    FORCE_SOURCE_DATE=1 fmtutil --sys --all | grep '^fmtutil' # too verbose
-    #texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
 
-    # tex intentionally ignores SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
-    # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/0139-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
-    if [[ -f "$TEXMFSYSVAR"/web2c/tex/tex.fmt ]]
-    then
-      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) tex -output-directory "$TEXMFSYSVAR"/web2c/tex -ini -jobname=tex -progname=tex tex.ini
-    fi
-    if [[ -f "$TEXMFSYSVAR"/web2c/luahbtex/lualatex.fmt ]]
-    then
-      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luahbtex --output-directory="$TEXMFSYSVAR"/web2c/luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini
-    fi
+    # many formats still ignore SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
+    # libfaketime fixes non-determinism related to timestamps ignoring FORCE_SOURCE_DATE
+    # we cannot fix further randomness caused by luatex; for further details, see
+    # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/2006-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
+    FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' fmtutil --sys --all | grep '^fmtutil' # too verbose
+    #texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
 
     # Disable unavailable map files
     echo y | updmap --sys --syncwithtrees --force
@@ -298,14 +292,20 @@ in (buildEnv {
 
   # MkIV uses its own lookup mechanism and we need to initialize
   # caches for it.
+  # We use faketime to fix the embedded timestamps and patch the uuids
+  # with some random but constant values.
   ''
     if [[ -e "$out/bin/mtxrun" ]]; then
-      mtxrun --generate
+      substitute "$TEXMFDIST"/scripts/context/lua/mtxrun.lua mtxrun.lua \
+        --replace 'cache_uuid=osuuid()' 'cache_uuid="e2402e51-133d-4c73-a278-006ea4ed734f"' \
+        --replace 'uuid=osuuid(),' 'uuid="242be807-d17e-4792-8e39-aa93326fc871",'
+      FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' luatex --luaonly mtxrun.lua --generate
     fi
   ''
     + bin.cleanBrokenLinks +
   # Get rid of all log files. They are not needed, but take up space
-  # and render the build unreproducible by their embedded timestamps.
+  # and render the build unreproducible by their embedded timestamps
+  # and other non-deterministic diagnostics.
   ''
     find "$TEXMFSYSVAR"/web2c -name '*.log' -delete
   ''

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nawk";
-  version = "unstable-2021-02-15";
+  version = "20220122";
 
   src = fetchFromGitHub {
     owner = "onetrueawk";
     repo = "awk";
-    rev = "c0f4e97e4561ff42544e92512bbaf3d7d1f6a671";
-    sha256 = "kQCvItpSJnDJMDvlB8ruY+i0KdjmAphRDqCKw8f0m/8=";
+    rev = version;
+    hash = "sha256-W5WkGk4WY3g1qSFjJxFBa8KY1k13oK6WAMg5GH6kKU4=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

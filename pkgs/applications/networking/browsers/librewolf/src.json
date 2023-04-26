@@ -1,8 +1,8 @@
 {
-  "packageVersion": "112.0.1-1",
+  "packageVersion": "112.0.1-2",
   "source": {
-    "rev": "112.0.1-1",
-    "sha256": "0bk3idpl11n4gwk8rgfi2pilwx9n56s8dpp7y599h17mlrsw8az4"
+    "rev": "112.0.1-2",
+    "sha256": "1pm4ilc2zx6qx3qqjl7ypl51mcfwq22abi850kq7l3pznb2z0ljw"
   },
   "firefox": {
     "version": "112.0.1",
