@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.29.0";
+  version = "1.31.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZqdV1fvLuIMfGpVoZ2MptbrILDeZW8ya/QSLZFn5+kg=";
+    hash = "sha256-LYPx0S9zPhYqh+BrF2FJ17ucW65Knl/OHHcdf3A/emU=";
   };
 
   propagatedBuildInputs = [
