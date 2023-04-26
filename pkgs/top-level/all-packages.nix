@@ -35925,6 +35925,10 @@ with pkgs;
 
   dhewm3 = callPackage ../games/dhewm3 { };
 
+  diaspora-exastris = callPackage ../games/diaspora-exastris {
+    openjdk = openjdk8;
+  };
+
   domination = callPackage ../games/domination { };
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
