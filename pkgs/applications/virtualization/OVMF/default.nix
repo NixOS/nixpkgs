@@ -41,7 +41,9 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
 
   buildFlags =
-    lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
+    # IPv6 has no reason to be disabled.
+    [ "-D NETWORK_IP6_ENABLE=TRUE" ]
+    ++ lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
     ++ lib.optionals csmSupport [ "-D CSM_ENABLE" "-D FD_SIZE_2MB" ]
     ++ lib.optionals httpSupport [ "-D NETWORK_HTTP_ENABLE=TRUE" "-D NETWORK_HTTP_BOOT_ENABLE=TRUE" ]
     ++ lib.optionals tpmSupport [ "-D TPM_ENABLE" "-D TPM2_ENABLE" "-D TPM2_CONFIG_ENABLE"];
