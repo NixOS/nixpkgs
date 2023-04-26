@@ -14,6 +14,8 @@
 
   looking-glass-obs = callPackage ./looking-glass-obs.nix { };
 
+  obs-3d-effect = callPackage ./obs-3d-effect.nix { };
+
   obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
 
   obs-command-source = callPackage ./obs-command-source.nix { };
