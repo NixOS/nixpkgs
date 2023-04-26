@@ -16,14 +16,14 @@ let
   shas =
     if enableUnfree
     then {
-      x86_64-linux  = "35e50e05fba0240aa5b138bc1c81f67addaf557701f8df41c682b5bc708f7455";
-      x86_64-darwin = "698b6000788e123b647c988993f710c6d9bc44eb8c8e6f97d6b18a695a61f0a6";
-      aarch64-linux = "69694856fde11836eb1613bf3a2ba31fbdc933f58c8527b6180f6122c8bb528b";
+      x86_64-linux  = "a43d592e70f023a594f31a3fba365a9cca6611599bd61f998cb1fc38ddd177d459bce23eaf54f811fe0a87a47cdd4bf4b4d4c8008dab1ac03173371f63b91b6c";
+      x86_64-darwin = "7f7d89f438400da178b30f345b6ebc80f55f87f38b8925ca8c9dea86f0e2f23f70ccab03fdef5b83c085f1441e77592aab05006d163bc2af1920e1cc0ebdfc17";
+      aarch64-linux = "3c74d622c362e3aa72442a477ef34b0eb9131f5b550166d0f7f422bd3678acf07d75c702691d6606e5501f4b40854a352398d1c2813f1fb0a152663d75d5658b";
     }
     else {
-      x86_64-linux  = "3a2da2e63bc08ee1886db29c80103c669d3ed6960290b8b97d771232769f282e";
-      x86_64-darwin = "655ab873e16257827f884f67b66d62c4da40a895d06206faa435615ad0a56796";
-      aarch64-linux = "235cf57afb619801808d5fe1bff7e01a4a9b29f77723566e5371b5f3b2bf8fad";
+      x86_64-linux  = "7c3f9867853582e5d06b9f895b4740abf56a9b6ce34dfbfb624cf9a4b956f489145cd13f3194a7fb16efc52410f55e797c269dc2957a35bdebf9e1aaa3547eaa";
+      x86_64-darwin = "d81c20317a7c163e42f5aad9e148505a64bba8565ff913650a840918b80e6aadde071596e569b0c8f965810b821779ca3d00f9a7cb24a5c86fff571ca9227c38";
+      aarch64-linux = "93d9700fc3dd99bc918be19fe41ef60b9071eadcc6fd57833dbf1fff2e0f2419c62f3493a0454f215b0dfd30cec90f1aca5eeff15c4eb3a583519dc9a69e896a";
     };
   this = stdenv.mkDerivation rec {
     version = elk7Version;
@@ -32,7 +32,7 @@ let
 
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/logstash/${pname}-${version}-${plat}-${arch}.tar.gz";
-      sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
+      sha512 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
     };
 
     dontBuild = true;
