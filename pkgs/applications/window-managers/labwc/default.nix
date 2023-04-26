@@ -8,11 +8,13 @@
 , libxcb
 , libxkbcommon
 , libxml2
+, gettext
 , meson
 , ninja
 , pango
 , pkg-config
 , scdoc
+, wayland-scanner
 , wayland
 , wayland-protocols
 , wlroots_0_16
@@ -35,10 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    gettext
     meson
     ninja
     pkg-config
     scdoc
+    wayland-scanner
   ];
 
   buildInputs = [

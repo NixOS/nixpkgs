@@ -25,6 +25,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # https://github.com/deniskropp/DirectFB/blob/master/src/core/Makefile.am#L15
+    # BUILDTIME is embedded in the result
+    # if switching to cmake then a similar substitution has to be done
+    substituteInPlace src/core/Makefile.am \
+      --replace '`date -u "+%Y-%m-%d %H:%M"`' "`date -u \"+%Y-%m-%d %H:%M\" --date="@''${SOURCE_DATE_EPOCH}"`"
+  '';
+
   nativeBuildInputs = [ autoreconfHook perl pkg-config flux ];
 
   buildInputs = [ zlib libjpeg freetype giflib libpng ]

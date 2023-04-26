@@ -23,7 +23,7 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
-, drmSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, drmSupport ? false
 , libdrm
 , mesa
 , libxkbcommon
@@ -86,13 +86,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals waylandSupport [ wayland wayland-scanner ];
 
-  propagatedBuildInputs = dlopenPropagatedBuildInputs;
-
   dlopenPropagatedBuildInputs = [ ]
     # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
     ++ lib.optional openglSupport libGL
     # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
-    ++ lib.optionals x11Support [ libX11 xorgproto ];
+    ++ lib.optionals x11Support [ libX11 ];
+
+  propagatedBuildInputs = lib.optionals x11Support [ xorgproto ]
+    ++ dlopenPropagatedBuildInputs;
 
   dlopenBuildInputs = lib.optionals alsaSupport [ alsa-lib audiofile ]
     ++ lib.optional dbusSupport dbus
@@ -100,13 +101,14 @@ stdenv.mkDerivation rec {
     ++ lib.optional pipewireSupport pipewire
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional udevSupport udev
-    ++ lib.optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
+    ++ lib.optionals waylandSupport [ wayland libxkbcommon ]
     ++ lib.optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ]
     ++ lib.optionals drmSupport [ libdrm mesa ];
 
   buildInputs = [ libiconv ]
     ++ dlopenBuildInputs
     ++ lib.optional ibusSupport ibus
+    ++ lib.optionals waylandSupport [ wayland-protocols ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   enableParallelBuilding = true;

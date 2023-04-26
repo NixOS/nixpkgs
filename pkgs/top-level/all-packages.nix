@@ -5882,13 +5882,7 @@ with pkgs;
     enableExtraPlugins = true;
   };
 
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor {
-    bundlerApp = bundlerApp.override {
-      # asciidoc supports both ruby 2 and 3,
-      # but we don't want to be stuck on it:
-      ruby = ruby_3_1;
-    };
-  };
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
 
   asciidoctor-with-extensions = callPackage ../tools/typesetting/asciidoctor-with-extensions { };
 
@@ -7920,8 +7914,13 @@ with pkgs;
   gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat;    # use config.packageOverrides if you prefer original gnupg1
+
+  gnupg22 = callPackage ../tools/security/gnupg/22.nix {
+    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry-gtk2;
+    libgcrypt = libgcrypt_1_8;
+  };
+
   gnupg24 = callPackage ../tools/security/gnupg/24.nix {
-    guiSupport = stdenv.isDarwin;
     pinentry = if stdenv.isDarwin then pinentry_mac else pinentry-gtk2;
   };
   gnupg = gnupg24;
@@ -8445,6 +8444,8 @@ with pkgs;
   hostess = callPackage ../development/tools/hostess { };
 
   hostname-debian = callPackage ../tools/networking/hostname-debian { };
+
+  hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };
 
   hotpatch = callPackage ../development/libraries/hotpatch { };
 
@@ -13980,7 +13981,23 @@ with pkgs;
 
   xxv = callPackage ../tools/misc/xxv { };
 
-  xvfb-run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
+  xvfb-run = callPackage ../tools/misc/xvfb-run {
+    inherit (texFunctions) fontsConf;
+
+    # xvfb-run is used by a bunch of things to run tests
+    # and doesn't support hardware accelerated rendering
+    # so remove it from the rebuild heavy path for mesa
+    xorgserver = xorg.xorgserver.overrideAttrs(old: {
+      buildInputs = lib.filter (pkg: lib.getName pkg != "mesa") old.buildInputs;
+      configureFlags = old.configureFlags ++ [
+        "--disable-glamor"
+        "--disable-glx"
+        "--disable-dri"
+        "--disable-dri2"
+        "--disable-dri3"
+      ];
+    });
+  };
 
   xvkbd = callPackage ../tools/X11/xvkbd { };
 
@@ -14943,15 +14960,6 @@ with pkgs;
     profiledCompiler = false;
   });
 
-  gfortran-tmp-noisystem = wrapCCWith { grossHackForStagingNext = true; cc = (gcc.cc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-    disableBootstrap = false;
-  }); };
-
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
     langFortran = true;
@@ -15433,12 +15441,8 @@ with pkgs;
   julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
   julia_18-bin = callPackage ../development/compilers/julia/1.8-bin.nix { };
 
-  julia_18 = callPackage ../development/compilers/julia/1.8.nix {
-    gfortran = gfortran-tmp-noisystem;
-  };
-  julia_19 = callPackage ../development/compilers/julia/1.9.nix {
-    gfortran = gfortran-tmp-noisystem;
-  };
+  julia_18 = callPackage ../development/compilers/julia/1.8.nix { };
+  julia_19 = callPackage ../development/compilers/julia/1.9.nix { };
 
   julia-lts-bin = julia_16-bin;
   julia-stable-bin = julia_18-bin;
@@ -15637,9 +15641,6 @@ with pkgs;
   llvmPackages_latest = llvmPackages_14;
 
   llvmPackages_rocm = recurseIntoAttrs (callPackage ../development/compilers/llvm/rocm { });
-
-  # temporary hack; see PR #225846
-  stdenv-tmpDropB = overrideCC stdenv (wrapCCWith { tmpDropB = true; inherit (stdenv.cc) cc; });
 
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
@@ -17078,8 +17079,8 @@ with pkgs;
     ruby_3_1
     ruby_3_2;
 
-  ruby = ruby_2_7;
-  rubyPackages = rubyPackages_2_7;
+  ruby = ruby_3_1;
+  rubyPackages = rubyPackages_3_1;
 
   rubyPackages_2_7 = recurseIntoAttrs ruby_2_7.gems;
   rubyPackages_3_0 = recurseIntoAttrs ruby_3_0.gems;
@@ -21631,7 +21632,7 @@ with pkgs;
 
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
-  libgcrypt_1_5 = callPackage ../development/libraries/libgcrypt/1.5.nix { };
+  libgcrypt_1_8 = callPackage ../development/libraries/libgcrypt/1.8.nix { };
 
   libgdiplus = callPackage ../development/libraries/libgdiplus {
       inherit (darwin.apple_sdk.frameworks) Carbon;
@@ -22659,27 +22660,17 @@ with pkgs;
   # Default libGLU
   libGLU = mesa_glu;
 
-  # When a new patch is out, add a new mesa attribute with the exact patch version
-  # Remove old mesa attributes when they're unused.
-  # Try to keep the previous version around for a bit in case there are new bugs.
-  mesa_22_3_7 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/22.3.7.nix {
+  # Keep Mesa 22.3 for now because 23.0 does not build on Darwin.
+  # FIXME: remove, also investigate why we even need Mesa on Darwin.
+  mesa_22_3 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/22.3.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
     inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
-  mesa_23_0_1 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/23.0.1.nix {
+  mesa_23_0 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/23.0.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
     inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
-  # Bump this immediately on patches; wait a bit for minor versions
-  mesa_22 = mesa_22_3_7;
-  mesa_23 = mesa_23_0_1;
-  # Bump on staging only, tonnes of packages depend on it.
-  # See https://github.com/NixOS/nixpkgs/issues/218232
-  # Major versions should be bumped when they have proven to be reasonably stable
-  # FIXME: split up libgbm properly
-  # darwin: deferred until stabilized; e.g. see around:
-  #   https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/21859
-  mesa = if stdenv.isDarwin then mesa_22_3_7 else mesa_23_0_1;
+  mesa = if stdenv.isDarwin then mesa_22_3 else mesa_23_0;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
@@ -24711,7 +24702,11 @@ with pkgs;
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.0"; };
     faslExt = "fasl";
   };
-  sbcl = sbcl_2_3_0;
+  sbcl_2_3_2 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.2"; };
+    faslExt = "fasl";
+  };
+  sbcl = sbcl_2_3_2;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -27352,7 +27347,6 @@ with pkgs;
     withHomed = false;
     withHwdb = false;
     withImportd = false;
-    withKmod = false;
     withLibBPF = false;
     withLibidn2 = false;
     withLocaled = false;
@@ -30070,7 +30064,7 @@ with pkgs;
   flwrap = callPackage ../applications/radio/flwrap { stdenv = gcc10StdenvCompat; };
 
   fluidsynth = callPackage ../applications/audio/fluidsynth {
-    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreMIDI CoreServices;
+    inherit (darwin.apple_sdk.frameworks) AppKit AudioUnit CoreAudio CoreMIDI CoreServices;
   };
 
   fmit = libsForQt5.callPackage ../applications/audio/fmit { };

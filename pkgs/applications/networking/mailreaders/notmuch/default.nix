@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
 
     substituteInPlace lib/Makefile.local \
       --replace '-install_name $(libdir)' "-install_name $out/lib"
+
+    # do not override CFLAGS of the Makefile created by mkmf
+    substituteInPlace bindings/Makefile.local \
+      --replace 'CFLAGS="$(CFLAGS) -pipe -fno-plt -fPIC"' ""
   '' + lib.optionalString withEmacs ''
     substituteInPlace emacs/notmuch-emacs-mua \
       --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \

@@ -167,7 +167,7 @@ class Dependency:
     found: bool = False     # Whether it was found somewhere
 
 
-def auto_patchelf_file(path: Path, runtime_deps: list[Path]) -> list[Dependency]:
+def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: List[Path] = []) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
 
@@ -235,6 +235,8 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path]) -> list[Dependency]
             dependencies.append(Dependency(path, dep, False))
             print(f"    {dep} -> not found!")
 
+    rpath.extend(append_rpaths)
+
     # Dedup the rpath
     rpath_str = ":".join(dict.fromkeys(map(Path.as_posix, rpath)))
 
@@ -251,8 +253,9 @@ def auto_patchelf(
         paths_to_patch: List[Path],
         lib_dirs: List[Path],
         runtime_deps: List[Path],
-        recursive: bool =True,
-        ignore_missing: List[str] = []) -> None:
+        recursive: bool = True,
+        ignore_missing: List[str] = [],
+        append_rpaths: List[Path] = []) -> None:
 
     if not paths_to_patch:
         sys.exit("No paths to patch, stopping.")
@@ -265,7 +268,7 @@ def auto_patchelf(
     dependencies = []
     for path in chain.from_iterable(glob(p, '*', recursive) for p in paths_to_patch):
         if not path.is_symlink() and path.is_file():
-            dependencies += auto_patchelf_file(path, runtime_deps)
+            dependencies += auto_patchelf_file(path, runtime_deps, append_rpaths)
 
     missing = [dep for dep in dependencies if not dep.found]
 
@@ -312,6 +315,12 @@ def main() -> None:
     parser.add_argument(
         "--runtime-dependencies", nargs="*", type=Path,
         help="Paths to prepend to the runtime path of executable binaries.")
+    parser.add_argument(
+        "--append-rpaths",
+        nargs="*",
+        type=Path,
+        help="Paths to append to all runtime paths unconditionally",
+    )
 
     print("automatically fixing dependencies for ELF files")
     args = parser.parse_args()
@@ -322,7 +331,8 @@ def main() -> None:
         args.libs,
         args.runtime_dependencies,
         args.recursive,
-        args.ignore_missing)
+        args.ignore_missing,
+        append_rpaths=args.append_rpaths)
 
 
 interpreter_path: Path  = None # type: ignore
