@@ -6,6 +6,10 @@
    e.g.
 
    $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nixUnstable --arg supportedSystems '[builtins.currentSystem]'
+
+   To build all of the bootstrapFiles bundles on every enabled platform, use:
+
+   $ nix-build --expr 'with import ./pkgs/top-level/release-cross.nix {supportedSystems = [builtins.currentSystem];}; builtins.mapAttrs (k: v: v.build) bootstrapTools'
 */
 
 { # The platforms *from* which we cross compile.
