@@ -26,6 +26,12 @@ python3.pkgs.buildPythonApplication rec  {
     hash = "sha256-5mMV4WinpFR9ihgoQsgIXre0VpBdg9S8GjSkx+7ocLg=";
   };
 
+  patches = [
+    # See https://www.openwall.com/lists/oss-security/2023/04/26/1. Manually adjusted from
+    # https://github.com/linuxmint/warpinator/commit/9aae768522b7bbb09c836419893802a02221d663.
+    ./CVE-2023-29380.patch
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
