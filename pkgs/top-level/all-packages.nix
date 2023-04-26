@@ -1638,6 +1638,8 @@ with pkgs;
 
   sorted-grep = callPackage ../tools/text/sorted-grep { };
 
+  smbmap = callPackage ../tools/security/smbmap { };
+
   smbscan = callPackage ../tools/security/smbscan { };
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
