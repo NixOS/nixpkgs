@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , enableVTK ? true
-, vtk_8
+, vtk
 , ApplicationServices
 , Cocoa
 , enablePython ? false
@@ -18,13 +18,17 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
-    rev = "v${version}";
-    sha256 = "sha256-BmUJCqCGt+BvVpLG4bzCH4lsqmhWHU0gbOIU2CCIMGU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-BmUJCqCGt+BvVpLG4bzCH4lsqmhWHU0gbOIU2CCIMGU=";
   };
 
   cmakeFlags = [
     "-DGDCM_BUILD_APPLICATIONS=ON"
     "-DGDCM_BUILD_SHARED_LIBS=ON"
+    # hack around usual "`RUNTIME_DESTINATION` must not be an absolute path" issue:
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ] ++ lib.optionals enableVTK [
     "-DGDCM_USE_VTK=ON"
   ] ++ lib.optionals enablePython [
@@ -35,7 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = lib.optionals enableVTK [
-    vtk_8
+    vtk
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
     Cocoa
