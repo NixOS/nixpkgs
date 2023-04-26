@@ -85,6 +85,8 @@ let
             "-DOPENSSL_SSL_LIBRARY=${ssl.out}/lib/libssl.so"
           ];
 
+        hardeningDisable = [ "fortify" ];
+
         env.NIX_CFLAGS_COMPILE = toString [
           # Needed with GCC 12
           "-Wno-error=missing-template-keyword"
