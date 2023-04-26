@@ -18,6 +18,7 @@
 , vulkan-loader
 , wayland
 , wayland-protocols
+, wayland-scanner
 , zlib
 }:
 let
@@ -126,13 +127,16 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
+    wayland-scanner
   ];
 
-  # Fix cts cmake not coping with absolute install dirs
   cmakeFlags = [
+    # Fix cts cmake not coping with absolute install dirs
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+
+    "-DWAYLAND_SCANNER=wayland-scanner"
   ];
 
   postInstall = ''
