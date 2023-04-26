@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   dontPatch = true;
 
   installPhase = ''
-    mkdir -p $out
-    cp -r $src/* $out/
+    mkdir -p $out/share/zplug
+    cp -r $src/* $out/share/zplug/
   '';
 
   meta = with lib; {
