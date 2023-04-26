@@ -10,16 +10,17 @@
 }:
 
 let
-  openShiftVersion = "4.12.5";
+  openShiftVersion = "4.12.9";
   okdVersion = "4.12.0-0.okd-2023-02-18-033438";
-  podmanVersion = "4.3.1";
+  podmanVersion = "4.4.1";
+  microshiftVersion = "4.12.9";
   writeKey = "cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
-  gitHash = "sha256-zk/26cG2Rt3jpbhKgprtq2vx7pIQVi7cPUA90uoQa80=";
+  gitHash = "sha256-T2aRzIRcuSWFJcAV/nDIYY35cdfkWCazz1Ks694MAAI=";
 in
 buildGoModule rec {
-  version = "2.15.0";
+  version = "2.17.0";
   pname = "crc";
-  gitCommit = "72256c3cb00ac01519b26658dd5cfb0dd09b37a1";
+  gitCommit = "44e15711937b9bfec4f0447097e3f1fbbfd282ee";
   modRoot = "cmd/crc";
 
   src = fetchFromGitHub {
@@ -48,6 +49,7 @@ buildGoModule rec {
     "-X github.com/crc-org/crc/pkg/crc/version.ocpVersion=${openShiftVersion}"
     "-X github.com/crc-org/crc/pkg/crc/version.okdVersion=${okdVersion}"
     "-X github.com/crc-org/crc/pkg/crc/version.podmanVersion=${podmanVersion}"
+    "-X github.com/crc-org/crc/pkg/crc/version.microshiftVersion=${microshiftVersion}"
     "-X github.com/crc-org/crc/pkg/crc/version.commitSha=${builtins.substring 0 8 gitCommit}"
     "-X github.com/crc-org/crc/pkg/crc/segment.WriteKey=${writeKey}"
   ];
