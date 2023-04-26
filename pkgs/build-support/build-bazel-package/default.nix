@@ -139,7 +139,7 @@ stdenv.mkDerivation (fBuildAttrs // {
       runHook postBuild
     '';
 
-    installPhase = fFetchAttrs.installPhase or ''
+    installPhase = fFetchAttrs.installPhase or (''
       runHook preInstall
 
       # Remove all built in external workspaces, Bazel will recreate them when building
@@ -183,7 +183,7 @@ stdenv.mkDerivation (fBuildAttrs // {
       (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
       runHook postInstall
-    '';
+    '');
 
     dontFixup = true;
     allowedRequisites = [];
