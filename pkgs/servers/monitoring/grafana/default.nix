@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests, tzdata, wire }:
+{ lib, buildGoModule, fetchurl, fetchFromGitHub, fetchpatch, nixosTests, tzdata, wire }:
 
 buildGoModule rec {
   pname = "grafana";
@@ -17,6 +17,14 @@ buildGoModule rec {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
     sha256 = "sha256-HiKr1ier13xUlrwsJrxo60wwqmiPcza2oOLIfMgFWc0=";
   };
+
+  patches = [
+    (fetchpatch { # https://github.com/grafana/grafana/pull/65790
+      name = "fix-TestIntegrationAMConfigAccess.patch";
+      url = "https://github.com/grafana/grafana/commit/8500eb1c180b4d49a8e17bfd6df675d821d038a4.diff";
+      sha256 = "sha256-TWPn9fLjmCbXGXkxAc3NLTN+0XXjsaspaV4gYKg3+Mk=";
+    })
+  ];
 
   vendorSha256 = "sha256-sUvjZTg2/6UGjc2Qv8YO4IWlS4Y/FzGRVOQ9I/wp/aM=";
 
@@ -48,9 +56,6 @@ buildGoModule rec {
     sed -i -e '/it should change folder successfully and return correct result/{N;s/$/\nt.Skip();/}'\
       pkg/services/libraryelements/libraryelements_patch_test.go
 
-    # TODO: investigate?
-    substituteInPlace pkg/tests/api/alerting/api_alertmanager_test.go \
-      --replace TestIntegrationAMConfigAccess DontTestIntegrationAMConfigAccess
 
     # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
     rm -r scripts/go
