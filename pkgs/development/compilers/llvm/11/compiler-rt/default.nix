@@ -41,8 +41,6 @@ stdenv.mkDerivation {
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
-  ] ++ lib.optionals (!haveLibc) [
-    "-DCMAKE_C_FLAGS=-nodefaultlibs"
   ] ++ lib.optionals (useLLVM || isNewDarwinBootstrap) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
@@ -75,6 +73,8 @@ stdenv.mkDerivation {
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cmakeFlagsArray+=("-DCMAKE_LIPO=$(command -v ${stdenv.cc.targetPrefix}lipo)")
+  '' + lib.optionalString (!haveLibc) ''
+    cmakeFlagsArray+=("-DCMAKE_C_FLAGS=-nodefaultlibs -ffreestanding")
   '';
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
