@@ -501,46 +501,8 @@ else let
         lib.mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
 
-  validity = checkMeta { inherit meta attrs; };
-
-  # The meta attribute is passed in the resulting attribute set,
-  # but it's not part of the actual derivation, i.e., it's not
-  # passed to the builder and is not a dependency.  But since we
-  # include it in the result, it *is* available to nix-env for queries.
-  meta = {
-      # `name` above includes cross-compilation cruft,
-      # is under assert, and is sanitized.
-      # Let's have a clean always accessible version here.
-      name = attrs.name or "${attrs.pname}-${attrs.version}";
-
-      # If the packager hasn't specified `outputsToInstall`, choose a default,
-      # which is the name of `p.bin or p.out or p` along with `p.man` when
-      # present.
-      #
-      # If the packager has specified it, it will be overridden below in
-      # `// meta`.
-      #
-      #   Note: This default probably shouldn't be globally configurable.
-      #   Services and users should specify outputs explicitly,
-      #   unless they are comfortable with this default.
-      outputsToInstall =
-        let
-          hasOutput = out: builtins.elem out outputs;
-        in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs) )]
-          ++ lib.optional (hasOutput "man") "man";
-    }
-    // attrs.meta or {}
-    # Fill `meta.position` to identify the source location of the package.
-    // lib.optionalAttrs (pos != null) {
-      position = pos.file + ":" + toString pos.line;
-    } // {
-      # Expose the result of the checks for everyone to see.
-      inherit (validity) unfree broken unsupported insecure;
-      available = validity.valid != "no"
-               && (if config.checkMetaRecursively or false
-                   then lib.all (d: d.meta.available or true) references
-                   else true);
-    };
+  meta = checkMeta.commonMeta { inherit validity attrs pos references; };
+  validity = checkMeta.assertValidity { inherit meta attrs; };
 
   checkedEnv =
     let
@@ -591,7 +553,8 @@ lib.extendDerivation
        disallowedRequisites = [ ];
      });
 
-     inherit meta passthru overrideAttrs;
+     inherit passthru overrideAttrs;
+     inherit meta;
    } //
    # Pass through extra attributes that are not inputs, but
    # should be made available to Nix expressions using the
