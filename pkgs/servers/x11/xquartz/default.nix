@@ -2,6 +2,8 @@
 , quartz-wm, fontconfig, xlsfonts, xfontsel
 , ttf_bitstream_vera, freefont_ttf, liberation_ttf
 , shell ? "${bashInteractive}/bin/bash"
+, unfreeFonts ? false
+, extraFontDirs ? []
 }:
 
 # ------------
@@ -60,15 +62,16 @@ let
     sudo launchctl load -w /Library/LaunchDaemons/$daemonName
   '';
   fontDirs = [
-    xorg.fontbhlucidatypewriter100dpi
-    xorg.fontbhlucidatypewriter75dpi
     ttf_bitstream_vera
     freefont_ttf
     liberation_ttf
-    xorg.fontbh100dpi
     xorg.fontmiscmisc
     xorg.fontcursormisc
-  ];
+  ] ++ lib.optionals unfreeFonts [
+    xorg.fontbhlucidatypewriter100dpi
+    xorg.fontbhlucidatypewriter75dpi
+    xorg.fontbh100dpi
+  ] ++ extraFontDirs;
   fontsConf = makeFontsConf {
     fontDirectories = fontDirs ++ [
       "/Library/Fonts"
