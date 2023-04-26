@@ -1,13 +1,24 @@
 { lib
-, mkKaemDerivation0
-, src
+, system
+, derivationWithMeta
+, kaem-unwrapped
 , mescc-tools
+, src
 , version
 }:
-mkKaemDerivation0 {
-  inherit version src mescc-tools;
+derivationWithMeta {
+  inherit system version src mescc-tools;
   pname = "mescc-tools-extra";
-  script = ./build.kaem;
+  builder = kaem-unwrapped;
+  args = [
+    "--verbose"
+    "--strict"
+    "--file"
+    ./build.kaem
+  ];
+
+  ARCH = "x86";
+  OPERATING_SYSTEM = "linux";
 
   meta = with lib; {
     description = "Collection of tools written for use in bootstrapping";

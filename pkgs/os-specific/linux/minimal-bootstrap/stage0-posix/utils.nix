@@ -2,9 +2,9 @@
 , stdenv
 , system
 , callPackage
-, mkKaemDerivation0
 , fetchurl
 , kaem
+, kaem-unwrapped
 , mescc-tools
 , mescc-tools-extra
 }:
@@ -35,21 +35,28 @@ rec {
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     }:
-    mkKaemDerivation0 {
-      inherit name text executable allowSubstitutes preferLocalBuild;
+    derivationWithMeta {
+      inherit system name text executable allowSubstitutes preferLocalBuild;
       passAsFile = [ "text" ];
 
+      builder = kaem-unwrapped;
+      args = [
+        "--verbose"
+        "--strict"
+        "--file"
+        (builtins.toFile "write-text-file.kaem" ''
+          target=''${out}${destination}
+          if match x${if builtins.dirOf destination == "" then "0" else "1"} x1; then
+            mkdir -p ''${out}${builtins.dirOf destination}
+          fi
+          cp ''${textPath} ''${target}
+          if match x''${executable} x1; then
+            chmod 555 ''${target}
+          fi
+        '')
+      ];
+
       PATH = lib.makeBinPath [ mescc-tools-extra ];
-      script = builtins.toFile "write-text-file.kaem" ''
-        target=''${out}${destination}
-        if match x${if builtins.dirOf destination == "" then "0" else "1"} x1; then
-          mkdir -p ''${out}${builtins.dirOf destination}
-        fi
-        cp ''${textPath} ''${target}
-        if match x''${executable} x1; then
-          chmod 555 ''${target}
-        fi
-      '';
     };
 
   writeText = name: text: writeTextFile {inherit name text;};
