@@ -28,6 +28,10 @@ buildPythonPackage rec {
       "# self.assertRaises(ScheduleValueError, every().day.until, datetime.time(hour=5))"
   '';
 
+  pythonImportsCheck = [
+    "schedule"
+  ];
+
   meta = with lib; {
     description = "Python job scheduling for humans";
     homepage = "https://github.com/dbader/schedule";
