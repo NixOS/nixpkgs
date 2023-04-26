@@ -89,8 +89,8 @@ in with builtins; {
   };
 
   foundationdb71 = cmakeBuild {
-    version = "7.1.26";
-    sha256  = "sha256-IVUFC2Z/nJAeKr/TtEiHAo+1HUeZuSZ2birwJtiYZx0=";
+    version = "7.1.30";
+    sha256  = "sha256-dAnAE1m2NZLHgP4QJvURBPcxArXvWWdhqEYwh3tU+tU";
     boost   = boost178;
     ssl     = openssl;
 
