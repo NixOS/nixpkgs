@@ -68,6 +68,8 @@ ocamlPackages.buildDunePackage rec {
     lambda-term
     tar-unix
     parse-argv
+    linol
+    linol-lwt
 
     # Test helpers deps
     qcheck
