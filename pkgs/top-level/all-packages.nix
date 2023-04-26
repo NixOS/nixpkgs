@@ -32782,6 +32782,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  obs-cli = callPackage ../applications/misc/obs-cli { };
+
   obs-studio = qt6Packages.callPackage ../applications/video/obs-studio {
     ffmpeg_4 = ffmpeg-full;
   };
