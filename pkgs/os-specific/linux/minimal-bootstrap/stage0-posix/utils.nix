@@ -45,9 +45,9 @@ rec {
         "--strict"
         "--file"
         (builtins.toFile "write-text-file.kaem" ''
-          target=''${out}${destination}
-          if match x${if builtins.dirOf destination == "" then "0" else "1"} x1; then
-            mkdir -p ''${out}${builtins.dirOf destination}
+          target=''${out}''${destination}
+          if match x''${mkdirDestination} x1; then
+            mkdir -p ''${out}''${destinationDir}
           fi
           cp ''${textPath} ''${target}
           if match x''${executable} x1; then
@@ -57,6 +57,9 @@ rec {
       ];
 
       PATH = lib.makeBinPath [ mescc-tools-extra ];
+      mkdirDestination = if builtins.dirOf destination == "." then "0" else "1";
+      destinationDir = builtins.dirOf destination;
+      inherit destination;
     };
 
   writeText = name: text: writeTextFile {inherit name text;};
