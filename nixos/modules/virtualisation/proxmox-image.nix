@@ -170,7 +170,7 @@ with lib;
       inherit partitionTableType;
       postVM = let
         # Build qemu with PVE's patch that adds support for the VMA format
-        vma = (pkgs.qemu_kvm.override {
+        vma = (pkgs.qemu.override {
           alsaSupport = false;
           pulseSupport = false;
           sdlSupport = false;
