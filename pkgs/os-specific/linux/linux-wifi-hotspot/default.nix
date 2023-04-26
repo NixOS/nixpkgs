@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
       --replace "/usr" "$out"
     substituteInPlace ./src/desktop/wifihotspot.desktop \
       --replace "/usr" "$out"
+    substituteInPlace ./src/scripts/policies/polkit.policy \
+      --replace "/usr" "$out"
   '';
 
   makeFlags = [
