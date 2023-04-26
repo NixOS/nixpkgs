@@ -11945,6 +11945,8 @@ self: super: with self; {
 
   torchmetrics = callPackage ../development/python-modules/torchmetrics { };
 
+  torchio = callPackage ../development/python-modules/torchio { };
+
   torchinfo = callPackage ../development/python-modules/torchinfo { };
 
   torchlibrosa = callPackage ../development/python-modules/torchlibrosa { };
