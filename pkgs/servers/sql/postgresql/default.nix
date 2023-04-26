@@ -2,9 +2,9 @@ let
 
   generic =
       # dependencies
-      { stdenv, lib, fetchurl, makeWrapper
+      { stdenv, lib, fetchurl, makeWrapper, fetchpatch
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
-      , pkg-config, libxml2, tzdata, libkrb5
+      , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
@@ -103,6 +103,24 @@ let
       ./patches/hardcode-pgxs-path.patch
       ./patches/specify_pkglibdir_at_runtime.patch
       ./patches/findstring.patch
+
+      (substituteAll {
+        src = ./locale-binary-path.patch;
+        locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
+      })
+
+    ] ++ lib.optionals stdenv'.hostPlatform.isMusl [
+      # Fixes for musl libc
+      # These patches are not properly guarded and should NOT be enabled everywhere
+      (fetchpatch {
+        url = "https://git.alpinelinux.org/aports/plain/main/postgresql14/disable-test-collate.icu.utf8.patch?id=56999e6d0265ceff5c5239f85fdd33e146f06cb7";
+        hash = "sha256-pnl+wM3/IUyq5iJzk+h278MDA9R0GQXQX8d4wJcB2z4=";
+      })
+      (fetchpatch {
+        url = "https://git.alpinelinux.org/aports/plain/main/postgresql14/icu-collations-hack.patch?id=56999e6d0265ceff5c5239f85fdd33e146f06cb7";
+        hash = "sha256-Yb6lMBDqeVP/BLMyIr5rmR6OkaVzo68cV/+cL2LOe/M=";
+      })
+
     ] ++ lib.optionals stdenv'.isLinux [
       (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch)
     ];
