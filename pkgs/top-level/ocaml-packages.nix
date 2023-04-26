@@ -845,6 +845,10 @@ let
 
     linksem = callPackage ../development/ocaml-modules/linksem { };
 
+    linol = callPackage ../development/ocaml-modules/linol { };
+
+    linol-lwt = callPackage ../development/ocaml-modules/linol/lwt.nix { };
+
     llvm = callPackage ../development/ocaml-modules/llvm {
       libllvm = pkgs.llvmPackages_10.libllvm;
     };
