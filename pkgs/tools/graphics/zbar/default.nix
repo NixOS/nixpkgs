@@ -26,6 +26,7 @@
 , Foundation
 , bash
 , python3
+, argp-standalone
 }:
 
 stdenv.mkDerivation rec {
@@ -73,6 +74,10 @@ stdenv.mkDerivation rec {
     python3
   ];
 
+  checkInputs = lib.optionals stdenv.isDarwin [
+    argp-standalone
+  ];
+
   # Note: postConfigure instead of postPatch in order to include some
   # autoconf-generated files. The template files for the autogen'd scripts are
   # not chmod +x, so patchShebangs misses them.
@@ -97,7 +102,11 @@ stdenv.mkDerivation rec {
     "--without-qt"
   ]);
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
+
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -largp"
+  '';
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
