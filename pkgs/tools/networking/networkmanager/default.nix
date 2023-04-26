@@ -126,6 +126,12 @@ stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # Support for building with ppp 2.5.0
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/5df19f5b26c5921a401e63fb329e844a02d6b1f2.diff";
+      hash = "sha256-BDm0P2U4HENAtq7OowWVDxqALNbG0nr9k/CLdE61Sck=";
+    })
   ];
 
   buildInputs = [
