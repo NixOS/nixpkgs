@@ -16046,7 +16046,6 @@ with pkgs;
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix {
-    stdenv = gcc10StdenvCompat;
     openssl = openssl_1_1;
   };
 
@@ -25172,6 +25171,8 @@ with pkgs;
     theme-snow = callPackage ../servers/icingaweb2/theme-snow { };
     theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
   };
+
+  irrd = callPackage ../servers/irrd { };
 
   inspircd = callPackage ../servers/irc/inspircd { };
 
