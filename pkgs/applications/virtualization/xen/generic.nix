@@ -244,10 +244,21 @@ stdenv.mkDerivation (rec {
                     + "\nIncludes:\n"
                     + withXenfiles (name: x: "* ${name}: ${x.meta.description or "(No description)"}.");
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ eelco oxij ];
+    maintainers = [ ];
     license = lib.licenses.gpl2;
+    knownVulnerabilities = [
+      # https://www.openwall.com/lists/oss-security/2023/03/21/1
+      # Affects 3.2 (at *least*) - 4.17
+      "CVE-2022-42332"
+      # https://www.openwall.com/lists/oss-security/2023/03/21/2
+      # Affects 4.11 - 4.17
+      "CVE-2022-42333"
+      "CVE-2022-42334"
+      # https://www.openwall.com/lists/oss-security/2023/03/21/3
+      # Affects 4.15 - 4.17
+      "CVE-2022-42331"
     # https://xenbits.xen.org/docs/unstable/support-matrix.html
-    knownVulnerabilities = lib.optionals (lib.versionOlder version "4.13") [
+    ] ++ lib.optionals (lib.versionOlder version "4.15") [
       "This version of Xen has reached its end of life. See https://xenbits.xen.org/docs/unstable/support-matrix.html"
     ];
   } // (config.meta or {});
