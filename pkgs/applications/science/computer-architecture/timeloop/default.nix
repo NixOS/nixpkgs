@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timeloop";
-  version = "unstable-2022-11-29";
+  version = "unstable-2023-04-21";
 
   src = fetchFromGitHub {
     owner = "NVlabs";
     repo = "timeloop";
-    rev = "905ba953432c812772de935d57fd0a674a89d3c1";
-    hash = "sha256-EXiWXf8hdX4vFRNk9wbFSOsix/zVkwrafGUtFrsoAN0=";
+    rev = "e5a31c75f1f1f543d6109d72e84c4b4978509f3a";
+    hash = "sha256-zO+5qdstr8BolMk0XcHQE2rjpb8VkgKHNBif7G8u81U=";
   };
 
   nativeBuildInputs = [ scons ];
@@ -45,38 +45,14 @@ stdenv.mkDerivation rec {
   #see https://github.com/NixOS/nixpkgs/issues/19098
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-lto";
 
-  postPatch = ''
-    # use nix ar/ranlib
-    substituteInPlace ./SConstruct \
-      --replace "env.Replace(AR = \"gcc-ar\")" "" \
-      --replace "env.Replace(RANLIB = \"gcc-ranlib\")" ""
-    '' + lib.optionalString stdenv.isDarwin ''
-    # prevent clang from dying on errors that gcc is fine with
-    substituteInPlace ./src/SConscript --replace "-Werror" "-Wno-inconsistent-missing-override"
-
-    # disable LTO on macos
-    substituteInPlace ./src/SConscript --replace ", '-flto'" ""
-
-    # static builds on mac fail as no static libcrt is provided by apple
-    # see https://stackoverflow.com/questions/3801011/ld-library-not-found-for-lcrt0-o-on-osx-10-6-with-gcc-clang-static-flag
-    substituteInPlace ./src/SConscript \
-      --replace "'-static-libgcc', " "" \
-      --replace "'-static-libstdc++', " "" \
-      --replace "'-Wl,--whole-archive', '-static', " "" \
-      --replace ", '-Wl,--no-whole-archive'" ""
-
+  postPatch = lib.optionalString stdenv.isDarwin ''
     #remove hardcoding of gcc
     sed -i '40i env.Replace(CC = "${stdenv.cc.targetPrefix}cc")' ./SConstruct
     sed -i '40i env.Replace(CXX = "${stdenv.cc.targetPrefix}c++")' ./SConstruct
-
-    #gpm doesn't exist on darwin
-    substituteInPlace ./src/SConscript --replace ", 'gpm'" ""
    '';
 
   sconsFlags =
-    # will fail on clang/darwin on link without --static due to undefined extern
-    # however, will fail with static on linux as nixpkgs deps aren't static
-    lib.optional stdenv.isDarwin "--static"
+    lib.optional stdenv.isDarwin "--clang"
     ++ lib.optional enableAccelergy "--accelergy"
     ++ lib.optional enableISL "--with-isl";
 
