@@ -6,6 +6,7 @@
 , vtk
 , ApplicationServices
 , Cocoa
+, libiconv
 , enablePython ? false
 , python ? null
 , swig
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
     Cocoa
+    libiconv
   ] ++ lib.optionals enablePython [ swig python ];
 
   meta = with lib; {
@@ -54,5 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gdcm.sourceforge.net/";
     license = with licenses; [ bsd3 asl20 ];
     maintainers = with maintainers; [ tfmoraes ];
+    platforms = platforms.all;
   };
 }
