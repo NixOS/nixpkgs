@@ -23,7 +23,8 @@ lib.makeScope newScope (self: with self; {
 
   hex0 = callPackage ./hex0.nix { };
 
-  kaem-minimal = callPackage ./kaem-minimal.nix { };
+  kaem = callPackage ./kaem { };
+  kaem-minimal = callPackage ./kaem/minimal.nix { };
 
   inherit (callPackage ./stage0-posix-x86.nix { }) blood-elf-0 hex2 kaem-unwrapped M1 M2;
 
@@ -32,31 +33,4 @@ lib.makeScope newScope (self: with self; {
   mescc-tools-extra = callPackage ./mescc-tools-extra { };
 
   inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText runCommand fetchtarball;
-
-  # Now that mescc-tools-extra is available we can install kaem at /bin/kaem
-  # to make it findable in environments
-  kaem = derivationWithMeta {
-    inherit system version kaem-unwrapped;
-    pname = "kaem";
-    builder = kaem-unwrapped;
-    args = [
-      "--verbose"
-      "--strict"
-      "--file"
-      (builtins.toFile "kaem-wrapper.kaem" ''
-        mkdir -p ''${out}/bin
-        cp ''${kaem-unwrapped} ''${out}/bin/kaem
-        chmod 555 ''${out}/bin/kaem
-      '')
-    ];
-    PATH = lib.makeBinPath [ mescc-tools-extra ];
-
-    meta = with lib; {
-      description = "Minimal build tool for running scripts on systems that lack any shell";
-      homepage = "https://github.com/oriansj/mescc-tools";
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ emilytrau ];
-      platforms = [ "i686-linux" ];
-    };
-  };
 })
