@@ -44,6 +44,8 @@
 
   obs-source-record = callPackage ./obs-source-record.nix { };
 
+  obs-source-switcher = callPackage ./obs-source-switcher.nix { };
+
   obs-teleport = callPackage ./obs-teleport { };
 
   obs-transition-table = qt6Packages.callPackage ./obs-transition-table.nix { };
