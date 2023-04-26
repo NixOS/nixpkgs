@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library which communicates with ZiGate radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-zigate";
+    changelog = "https://github.com/zigpy/zigpy-zigate/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mvnetbiz ];
     platforms = platforms.linux;
