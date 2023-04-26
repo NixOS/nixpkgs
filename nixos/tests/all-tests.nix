@@ -216,6 +216,7 @@ in {
   dnscrypt-wrapper = handleTestOn ["x86_64-linux"] ./dnscrypt-wrapper {};
   dnsdist = handleTest ./dnsdist.nix {};
   doas = handleTest ./doas.nix {};
+  doas-sudo-shim = handleTest ./doas-sudo-shim.nix {};
   docker = handleTestOn ["aarch64-linux" "x86_64-linux"] ./docker.nix {};
   docker-rootless = handleTestOn ["aarch64-linux" "x86_64-linux"] ./docker-rootless.nix {};
   docker-registry = handleTest ./docker-registry.nix {};

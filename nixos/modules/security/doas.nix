@@ -55,15 +55,20 @@ in
     wheelNeedsPassword = mkOption {
       type = with types; bool;
       default = true;
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Whether users of the `wheel` group must provide a password to
         run commands as super user via {command}`doas`.
       '';
     };
 
+    sudoShim = {
+        enable = mkEnableOption (mdDoc "sudo shim that uses doas");
+        package = mkPackageOptionMD pkgs "doas-sudo-shim" {};
+    };
+
     extraRules = mkOption {
       default = [];
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Define specific rules to be set in the
         {file}`/etc/doas.conf` file. More specific rules should
         come after more general ones in order to yield the expected behavior.
@@ -108,7 +113,7 @@ in
             noPass = mkOption {
               type = with types; bool;
               default = false;
-              description = lib.mdDoc ''
+              description = mdDoc ''
                 If `true`, the user is not required to enter a
                 password.
               '';
@@ -117,7 +122,7 @@ in
             noLog = mkOption {
               type = with types; bool;
               default = false;
-              description = lib.mdDoc ''
+              description = mdDoc ''
                 If `true`, successful executions will not be logged
                 to
                 {manpage}`syslogd(8)`.
@@ -127,7 +132,7 @@ in
             persist = mkOption {
               type = with types; bool;
               default = false;
-              description = lib.mdDoc ''
+              description = mdDoc ''
                 If `true`, do not ask for a password again for some
                 time after the user successfully authenticates.
               '';
@@ -136,7 +141,7 @@ in
             keepEnv = mkOption {
               type = with types; bool;
               default = false;
-              description = lib.mdDoc ''
+              description = mdDoc ''
                 If `true`, environment variables other than those
                 listed in
                 {manpage}`doas(1)`
@@ -147,7 +152,7 @@ in
             setEnv = mkOption {
               type = with types; listOf str;
               default = [];
-              description = lib.mdDoc ''
+              description = mdDoc ''
                 Keep or set the specified variables. Variables may also be
                 removed with a leading '-' or set using
                 `variable=value`. If the first character of
@@ -166,19 +171,19 @@ in
             users = mkOption {
               type = with types; listOf (either str int);
               default = [];
-              description = lib.mdDoc "The usernames / UIDs this rule should apply for.";
+              description = mdDoc "The usernames / UIDs this rule should apply for.";
             };
 
             groups = mkOption {
               type = with types; listOf (either str int);
               default = [];
-              description = lib.mdDoc "The groups / GIDs this rule should apply for.";
+              description = mdDoc "The groups / GIDs this rule should apply for.";
             };
 
             runAs = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = mdDoc ''
                 Which user or group the specified command is allowed to run as.
                 When set to `null` (the default), all users are
                 allowed.
@@ -192,7 +197,7 @@ in
             cmd = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = mdDoc ''
                 The command the user is allowed to run. When set to
                 `null` (the default), all commands are allowed.
 
@@ -205,7 +210,7 @@ in
             args = mkOption {
               type = with types; nullOr (listOf str);
               default = null;
-              description = lib.mdDoc ''
+              description = mdDoc ''
                 Arguments that must be provided to the command. When set to
                 `[]`, the command must be run without any arguments.
               '';
@@ -218,7 +223,7 @@ in
     extraConfig = mkOption {
       type = with types; lines;
       default = "";
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Extra configuration text appended to {file}`doas.conf`. Be aware that
         this option cannot be used to override the behaviour allowing
         passwordless operation for root.
@@ -230,6 +235,12 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !(cfg.sudoShim.enable && config.security.sudo.enable);
+        message = "security.doas.sudoShim.enable conflicts with security.sudo.enable";
+      }
+    ];
 
     security.doas.extraRules = mkOrder 600 [
       {
@@ -247,6 +258,8 @@ in
 
     environment.systemPackages = [
       cfg.package
+    ] ++ optionals cfg.sudoShim.enable [
+      cfg.sudoShim.package
     ];
 
     security.pam.services.doas = {
@@ -255,31 +268,30 @@ in
     };
 
     environment.etc."doas.conf" = {
-      source = pkgs.runCommand "doas-conf"
-        {
-          src = pkgs.writeText "doas-conf-in" ''
-            # To modify this file, set the NixOS options
-            # `security.doas.extraRules` or `security.doas.extraConfig`. To
-            # completely replace the contents of this file, use
-            # `environment.etc."doas.conf"`.
+      source = pkgs.runCommand "doas-conf" {
+        src = pkgs.writeText "doas-conf-in" ''
+          # To modify this file, set the NixOS options `security.doas.extraRules` or `security.doas.extraConfig`.
+          # To completely replace the contents of this file, use `environment.etc."doas.conf"`.
 
-            # extraRules
-            ${concatStringsSep "\n" (lists.flatten (map mkRule cfg.extraRules))}
+          # extraRules
+          ${concatStringsSep "\n" (lists.flatten (map mkRule cfg.extraRules))}
 
-            # extraConfig
-            ${cfg.extraConfig}
+          # extraConfig
+          ${cfg.extraConfig}
 
-            # "root" is allowed to do anything.
-            permit nopass keepenv root
-          '';
-          preferLocalBuild = true;
-        }
+          # "root" is allowed to do anything.
+          permit nopass keepenv root
+        '';
+        nativeBuildInputs = [ cfg.package ];
+        preferLocalBuild = true;
+      } ''
         # Make sure that the doas.conf file is syntactically valid.
-        "${pkgs.buildPackages.doas}/bin/doas -C $src && cp $src $out";
+        doas -C $src
+        cp $src $out
+      '';
       mode = "0440";
     };
-
   };
 
-  meta.maintainers = with maintainers; [ cole-h ];
+  meta.maintainers = with maintainers; [ cole-h dsuetin ];
 }
