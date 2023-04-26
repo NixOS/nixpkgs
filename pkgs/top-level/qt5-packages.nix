@@ -131,7 +131,7 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
   libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix {
-    inherit (pkgs.darwin.apple_sdk.frameworks) AGL Cocoa Foundation;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate AGL Cocoa Foundation;
   };
 
   libqglviewer = callPackage ../development/libraries/libqglviewer {
