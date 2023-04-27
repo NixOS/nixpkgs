@@ -1,36 +1,55 @@
-{ callPackage, fetchzip, dart }:
+{ callPackage, fetchzip, dart, lib, stdenv }:
 let
-  mkFlutter = { version, engineVersion, patches, dart, src }: callPackage ./flutter.nix { inherit version engineVersion patches dart src; };
+  mkCustomFlutter = args: callPackage ./flutter.nix args;
   wrapFlutter = flutter: callPackage ./wrapper.nix { inherit flutter; };
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
     in map (f: dir + ("/" + f)) files;
-  flutterDrv = { version, engineVersion, dartVersion, hash, dartHash, patches }: mkFlutter {
-    inherit version engineVersion patches;
-    dart = dart.override {
-      version = dartVersion;
-      sources = {
-        "${dartVersion}-x86_64-linux" = fetchzip {
-          url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
-          sha256 = dartHash.x86_64-linux;
-        };
-        "${dartVersion}-aarch64-linux" = fetchzip {
-          url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
-          sha256 = dartHash.aarch64-linux;
+  mkFlutter = { version, engineVersion, dartVersion, hash, dartHash, patches }:
+    let args = {
+      inherit version engineVersion patches;
+
+      dart = dart.override {
+        version = dartVersion;
+        sources = {
+          "${dartVersion}-x86_64-linux" = fetchzip {
+            url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-x64-release.zip";
+            sha256 = dartHash.x86_64-linux;
+          };
+          "${dartVersion}-aarch64-linux" = fetchzip {
+            url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
+            sha256 = dartHash.aarch64-linux;
+          };
         };
       };
+      src = fetchzip {
+        url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${version}-stable.tar.xz";
+        sha256 = hash;
+      };
+   }; in (mkCustomFlutter args).overrideAttrs (prev: next: {
+    passthru = next.passthru // rec {
+      inherit wrapFlutter mkCustomFlutter mkFlutter;
+      buildFlutterApplication = callPackage ../../../build-support/flutter {
+        # Package a minimal version of Flutter that only uses Linux desktop release artifacts.
+        flutter = wrapFlutter
+          (mkCustomFlutter (args // {
+            includedEngineArtifacts = {
+              common = [ "flutter_patched_sdk_product" ];
+              platform.linux = lib.optionals stdenv.hostPlatform.isLinux
+                (lib.genAttrs ((lib.optional stdenv.hostPlatform.isx86_64 "x64") ++ (lib.optional stdenv.hostPlatform.isAarch64 "arm64"))
+                  (architecture: [ "release" ]));
+            };
+          }));
+      };
     };
-    src = fetchzip {
-      url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${version}-stable.tar.xz";
-      sha256 = hash;
-    };
-  };
+  });
+
   flutter2Patches = getPatches ./patches/flutter2;
   flutter3Patches = getPatches ./patches/flutter3;
 in
 {
-  inherit mkFlutter wrapFlutter flutterDrv flutter3Patches flutter2Patches;
-  stable = flutterDrv {
+  inherit wrapFlutter;
+  stable = mkFlutter {
     version = "3.7.12";
     engineVersion = "1a65d409c7a1438a34d21b60bf30a6fd5db59314";
     dartVersion = "2.19.6";
@@ -42,7 +61,7 @@ in
     patches = flutter3Patches;
   };
 
-  v2 = flutterDrv {
+  v2 = mkFlutter {
     version = "2.10.5";
     engineVersion = "57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab";
     dartVersion = "2.16.2";
