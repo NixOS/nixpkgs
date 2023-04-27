@@ -1,15 +1,31 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    mail (2.7.1)
+    date (3.3.3)
+    mail (2.8.1)
       mini_mime (>= 0.1.1)
-    mini_mime (1.0.1)
-    taskjuggler (3.6.0)
-      mail (>= 2.4.3)
-      term-ansicolor (>= 1.0.7)
+      net-imap
+      net-pop
+      net-smtp
+    mini_mime (1.1.2)
+    net-imap (0.3.4)
+      date
+      net-protocol
+    net-pop (0.1.2)
+      net-protocol
+    net-protocol (0.2.1)
+      timeout
+    net-smtp (0.3.3)
+      net-protocol
+    sync (0.5.0)
+    taskjuggler (3.7.2)
+      mail (~> 2.7, >= 2.7.1)
+      term-ansicolor (~> 1.7, >= 1.7.1)
     term-ansicolor (1.7.1)
       tins (~> 1.0)
-    tins (1.20.2)
+    timeout (0.3.2)
+    tins (1.32.1)
+      sync
 
 PLATFORMS
   ruby
@@ -18,4 +34,4 @@ DEPENDENCIES
   taskjuggler
 
 BUNDLED WITH
-   2.1.4
+   2.4.12
