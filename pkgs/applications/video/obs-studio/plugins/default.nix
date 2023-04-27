@@ -36,6 +36,8 @@
 
   obs-source-record = callPackage ./obs-source-record.nix { };
 
+  obs-teleport = callPackage ./obs-teleport { };
+
   obs-vaapi = callPackage ./obs-vaapi { };
 
   obs-vkcapture = callPackage ./obs-vkcapture.nix {
