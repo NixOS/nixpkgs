@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "sfeed";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchgit {
     url = "git://git.codemadness.org/sfeed";
     rev = version;
-    sha256 = "sha256-W9AQc3Y3do1M2GM7LQVM5SN07LoWaZL7GTQD+SmQRwQ=";
+    sha256 = "sha256-oosBwLCVZDy29RNxLXie0IPRUxAmT6qJlQGHypWScuk=";
   };
 
   buildInputs = [ ncurses ];
