@@ -543,6 +543,8 @@ with pkgs;
 
   expressvpn = callPackage ../applications/networking/expressvpn { };
 
+  figma-agent = callPackage ../applications/graphics/figma-agent { };
+
   figma-linux = callPackage ../applications/graphics/figma-linux { };
 
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
@@ -1637,6 +1639,8 @@ with pkgs;
   simple-dlna-browser = callPackage ../tools/networking/simple-dlna-browser { };
 
   sorted-grep = callPackage ../tools/text/sorted-grep { };
+
+  smbmap = callPackage ../tools/security/smbmap { };
 
   smbscan = callPackage ../tools/security/smbscan { };
 
@@ -13493,6 +13497,10 @@ with pkgs;
   wire = callPackage ../development/tools/wire { };
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
+
+  wireguard-vanity-address = callPackage ../tools/networking/wireguard-vanity-address {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   wireproxy = callPackage ../tools/networking/wireproxy { };
 
@@ -38858,6 +38866,8 @@ with pkgs;
   nix-index = callPackage ../tools/package-management/nix-index/wrapper.nix { };
 
   nix-linter = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-linter);
+
+  nix-melt = callPackage ../tools/nix/nix-melt { };
 
   nixos-option = callPackage ../tools/nix/nixos-option { nix = nixVersions.nix_2_3; };
 
