@@ -364,6 +364,7 @@ checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-i
 
 # Class checks, evalModules
 checkConfigOutput '^{ }$' config.ok.config ./class-check.nix
+checkConfigOutput '"nixos"' config.ok.configurationClass ./class-check.nix
 checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nixos instead of darwin.' config.fail.config ./class-check.nix
 checkConfigError 'The module foo.nix#darwinModules.default was imported into nixos instead of darwin.' config.fail-anon.config ./class-check.nix
 
