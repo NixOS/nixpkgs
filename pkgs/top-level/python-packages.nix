@@ -10655,6 +10655,8 @@ self: super: with self; {
 
   securetar = callPackage ../development/python-modules/securetar { };
 
+  sectools = callPackage ../development/python-modules/sectools { };
+
   seedir = callPackage ../development/python-modules/seedir { };
 
   seekpath = callPackage ../development/python-modules/seekpath { };
