@@ -15126,6 +15126,13 @@
     githubId = 64192;
     name = "Asumu Takikawa";
   };
+  takov751 = {
+    email = "takov751@protonmail.com";
+    matrix = "@takov751:matrix.org";
+    github = "takov751";
+    githubId = 40316768;
+    name = "Tamas Kovacs";
+  };
   taktoa = {
     email = "taktoa@gmail.com";
     matrix = "@taktoa:matrix.org";

@@ -44,5 +44,7 @@
 
   obs-websocket = throw "obs-websocket has been removed: Functionality has been integrated into obs-studio itself.";
 
+  waveform = callPackage ./waveform.nix { };
+
   wlrobs = callPackage ./wlrobs.nix { };
 }
