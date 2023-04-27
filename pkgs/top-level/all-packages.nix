@@ -33587,6 +33587,8 @@ with pkgs;
 
   sacc = callPackage ../applications/networking/gopher/sacc { };
 
+  savvycan = libsForQt5.callPackage ../applications/networking/sniffers/savvycan {};
+
   sayonara = libsForQt5.callPackage ../applications/audio/sayonara { };
 
   sbagen = callPackage ../applications/misc/sbagen { };
