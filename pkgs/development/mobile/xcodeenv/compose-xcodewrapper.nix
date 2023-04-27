@@ -1,10 +1,13 @@
-{stdenv}:
-{version ? "11.1", xcodeBaseDir ? "/Applications/Xcode.app"}:
+{ stdenv, lib }:
+{ version ? "11.1"
+, allowHigher ? false
+, xcodeBaseDir ? "/Applications/Xcode.app" }:
 
 assert stdenv.isDarwin;
 
 stdenv.mkDerivation {
-  name = "xcode-wrapper-"+version;
+  pname = "xcode-wrapper${lib.optionalString allowHigher "-plus"}";
+  inherit version;
   buildCommand = ''
     mkdir -p $out/bin
     cd $out/bin
@@ -24,9 +27,15 @@ stdenv.mkDerivation {
     ln -s "${xcodeBaseDir}/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs"
 
     # Check if we have the xcodebuild version that we want
-    if [ -z "$($out/bin/xcodebuild -version | grep -x 'Xcode ${version}')" ]
+    currVer=$($out/bin/xcodebuild -version | head -n1)
+    ${if allowHigher then ''
+    if [ -z "$(printf '%s\n' "${version}" "$currVer" | sort -V | head -n1)""" != "${version}" ]
+    '' else ''
+    if [ -z "$(echo $currVer | grep -x 'Xcode ${version}')" ]
+    ''}
     then
-        echo "We require xcodebuild version: ${version}"
+        echo "We require xcodebuild version${if allowHigher then " or higher" else ""}: ${version}"
+        echo "Instead what was found: $currVer"
         exit 1
     fi
   '';
