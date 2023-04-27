@@ -26,9 +26,12 @@ stdenv.mkDerivation rec {
     "-DBUILTIN_FFTW=ON"
   ];
 
-
-  #postInstall = ''
-  #'';
+  postInstall = ''
+    mkdir -p  $out/lib $out/share/obs/obs-plugins
+    mv $out/waveform/bin/64bit $out/lib/obs-plugins
+    mv $out/waveform/data $out/share/obs/obs-plugins/waveform
+    rm -rf $out/waveform
+  '';
 
   meta = with lib; {
     description = "Waveform is an audio spectral analysis plugin for OBS";
