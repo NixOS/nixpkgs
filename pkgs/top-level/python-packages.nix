@@ -12446,6 +12446,8 @@ self: super: with self; {
 
   transitions = callPackage ../development/python-modules/transitions { };
 
+  translatehtml = callPackage ../development/python-modules/translatehtml { };
+
   translatepy = callPackage ../development/python-modules/translatepy { };
 
   translationstring = callPackage ../development/python-modules/translationstring { };
