@@ -11486,7 +11486,7 @@ with pkgs;
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
   rtabmap = libsForQt5.callPackage ../applications/video/rtabmap/default.nix {
-    pcl = pcl.override { vtk = vtk_8_withQt5; };
+    pcl = pcl.override { vtk = vtkWithQt5; };
   };
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio {
@@ -13552,6 +13552,8 @@ with pkgs;
   xray = callPackage ../tools/networking/xray { };
 
   xteve = callPackage ../servers/xteve { };
+
+  termbook = callPackage ../tools/text/termbook { };
 
   testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
 
@@ -33587,6 +33589,8 @@ with pkgs;
 
   sacc = callPackage ../applications/networking/gopher/sacc { };
 
+  savvycan = libsForQt5.callPackage ../applications/networking/sniffers/savvycan {};
+
   sayonara = libsForQt5.callPackage ../applications/audio/sayonara { };
 
   sbagen = callPackage ../applications/misc/sbagen { };
@@ -38296,6 +38300,8 @@ with pkgs;
   atlantis = callPackage ../applications/networking/cluster/atlantis { };
 
   atmos = callPackage ../applications/networking/cluster/atmos { };
+
+  aiac = callPackage ../applications/networking/cluster/aiac { };
 
   fn-cli = callPackage ../applications/networking/cluster/fn-cli { };
 
