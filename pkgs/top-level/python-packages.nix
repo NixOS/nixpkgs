@@ -616,6 +616,8 @@ self: super: with self; {
     ctranslate2-cpp = pkgs.ctranslate2;
   };
 
+  argos-translate-files = callPackage ../development/python-modules/argos-translate-files { };
+
   argparse-addons = callPackage ../development/python-modules/argparse-addons { };
 
   argparse-dataclass = callPackage ../development/python-modules/argparse-dataclass { };
