@@ -16045,11 +16045,11 @@ with pkgs;
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_68 = callPackage ../development/compilers/rust/1_68.nix {
+  rust_1_69 = callPackage ../development/compilers/rust/1_69.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_15 = llvmPackages_15.libllvm;
   };
-  rust = rust_1_68;
+  rust = rust_1_69;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -16057,8 +16057,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_68 = rust_1_68.packages.stable;
-  rustPackages = rustPackages_1_68;
+  rustPackages_1_69 = rust_1_69.packages.stable;
+  rustPackages = rustPackages_1_69;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
 
@@ -19930,6 +19930,8 @@ with pkgs;
   vmmlib = callPackage ../development/libraries/vmmlib {
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   };
+
+  eglexternalplatform = callPackage ../development/libraries/eglexternalplatform { };
 
   egl-wayland = callPackage ../development/libraries/egl-wayland { };
 

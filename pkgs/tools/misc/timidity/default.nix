@@ -42,8 +42,6 @@ stdenv.mkDerivation rec {
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
-  NIX_LDFLAGS = "-ljack -L${libjack2}/lib";
-
   instruments = fetchurl {
     url = "http://www.csee.umbc.edu/pub/midia/instruments.tar.gz";
     sha256 = "0lsh9l8l5h46z0y8ybsjd4pf6c22n33jsjvapfv3rjlfnasnqw67";
