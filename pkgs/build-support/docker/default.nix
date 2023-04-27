@@ -1107,6 +1107,15 @@ rec {
           ''}
         '';
 
+        entrypoint = writeScript "entry.sh" ''
+          #!${shell}
+          [ -e $stdenv/setup ] && source $stdenv/setup
+          PATH=${staticPath}:"$PATH"
+          SHELL=${lib.escapeShellArg shell}
+          BASH=${lib.escapeShellArg shell}
+          exec $@
+        '';
+
         # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/globals.hh#L464-L465
         sandboxBuildDir = "/build";
 
@@ -1218,6 +1227,7 @@ rec {
           else [ shell rcfile ];
         config.WorkingDir = sandboxBuildDir;
         config.Env = lib.mapAttrsToList (name: value: "${name}=${value}") envVars;
+        config.Entrypoint = [entrypoint];
       };
 
   # Wrapper around streamNixShellImage to build an image from the result
