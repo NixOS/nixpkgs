@@ -8,11 +8,11 @@
 let
   enableLibGccOutput = (with stdenv; targetPlatform == hostPlatform) && !langJit && !stdenv.hostPlatform.isDarwin;
 in
-(pkg: pkg.overrideAttrs (previousAttrs: lib.optionalAttrs ((!langC) || langJit || enableLibGccOutput) {
+(pkg: pkg.overrideAttrs (previousAttrs: {
   outputs = previousAttrs.outputs ++ lib.optionals enableLibGccOutput [ "libgcc" ];
   # This is a separate phase because gcc assembles its phase scripts
   # in bash instead of nix (we should fix that).
-  preFixupPhases = (previousAttrs.preFixupPhases or []) ++ lib.optionals ((!langC) || enableLibGccOutput) [ "preFixupLibGccPhase" ];
+  preFixupPhases = (previousAttrs.preFixupPhases or []) ++ [ "preFixupLibGccPhase" ];
   preFixupLibGccPhase =
     # delete extra/unused builds of libgcc_s in non-langC builds
     # (i.e. libgccjit, gnat, etc) to avoid potential confusion
@@ -28,7 +28,7 @@ in
     # - https://github.com/NixOS/nixpkgs/commit/404155c6acfa59456aebe6156b22fe385e7dec6f
     #
     # move `libgcc_s.so` into its own output, `$libgcc`
-    + lib.optionalString enableLibGccOutput (''
+    + lib.optionalString enableLibGccOutput ''
       # move libgcc from lib to its own output (libgcc)
       mkdir -p $libgcc/lib
       mv    $lib/lib/libgcc_s.so      $libgcc/lib/
@@ -90,7 +90,11 @@ in
     #    bootstrap-files).  Copying `libgcc_s.so.1` from one outpath to
     #    another eliminates the ability to make these queries.
     #
-    + ''
+    + lib.optionalString enableLibGccOutput ''
       patchelf --set-rpath "" $libgcc/lib/libgcc_s.so.1
-    '');
+    ''
+    # no-op, to prevent the empty string from being removed from the environment.
+    + ''
+      true
+    '';
 }))
