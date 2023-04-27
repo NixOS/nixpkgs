@@ -51,4 +51,12 @@ backendStdenv.mkDerivation rec {
   installPhase = ''
     install -Dm644 libxmrig-cuda.so $out/lib/libxmrig-cuda.so
   '';
+
+  meta = with lib; {
+    description = "CUDA library for XMRig";
+    homepage = "https://github.com/xmrig/xmrig-cuda";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ mrfoxpro ];
+  };
 }
