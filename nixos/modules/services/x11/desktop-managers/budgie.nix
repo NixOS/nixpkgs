@@ -119,6 +119,9 @@ in {
         # Required by Budgie Menu.
         gnome-menus
 
+        # Required by Budgie Control Center.
+        gnome.zenity
+
         # Provides `gsettings`.
         glib
 
