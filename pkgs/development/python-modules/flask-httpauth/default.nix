@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "flask-httpauth";
-  version = "4.7.0";
+  version = "4.8.0";
   format = "pyproject";
 
   disabled = python.pythonOlder "3";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-HTTPAuth";
     version = version;
-    hash = "sha256-9xmee60g1baLPwtivd/KdjfFUIfp0C9gWuJuDeR5/ZQ=";
+    hash = "sha256-ZlaKBbxzlCxl8eIgGudGKVgW3ACe3YS0gsRMdY11CXo=";
   };
 
   nativeBuildInputs = [
