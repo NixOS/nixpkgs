@@ -379,6 +379,7 @@ in {
   limesurvey = handleTest ./limesurvey.nix {};
   listmonk = handleTest ./listmonk.nix {};
   litestream = handleTest ./litestream.nix {};
+  lldap = handleTest ./lldap.nix {};
   locate = handleTest ./locate.nix {};
   login = handleTest ./login.nix {};
   logrotate = handleTest ./logrotate.nix {};

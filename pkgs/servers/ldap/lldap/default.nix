@@ -2,6 +2,7 @@
 , fetchzip
 , lib
 , lldap
+, nixosTests
 , rustPlatform
 }:
 
@@ -51,6 +52,10 @@ rustPlatform.buildRustPackage rec {
     ln -s --force ${./Cargo.lock} Cargo.lock
     substituteInPlace server/src/infra/tcp_server.rs --subst-var-by frontend '${frontend}'
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) lldap;
+  };
 
   meta = with lib; {
     description = "A lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
