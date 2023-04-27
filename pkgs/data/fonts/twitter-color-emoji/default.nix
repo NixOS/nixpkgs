@@ -14,14 +14,14 @@
 }:
 
 let
-  version = "14.0.0";
+  version = "14.1.2";
 
   twemojiSrc = fetchFromGitHub {
     name = "twemoji";
-    owner = "twitter";
+    owner = "jdecked";
     repo = "twemoji";
     rev = "v${version}";
-    sha256 = "sha256-ar6rBYudMIMngMVe/IowDV3X8wA77JBA6g0x/M7YLMg=";
+    sha256 = "sha256-UQ4PwO4D1kw7JOMf6xSaRBfT822KwrvWBPDmaQjkRVQ=";
   };
 
   pythonEnv =
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
       This font uses Google’s CBDT format making it work on Android and Linux graphical stack.
     '';
-    homepage = "https://twemoji.twitter.com/";
+    homepage = "https://github.com/jdecked/twemoji";
     # In noto-emoji-fonts source
     ## noto-emoji code is in ASL 2.0 license
     ## Emoji fonts are under OFL license
