@@ -7,11 +7,11 @@
 
 buildGraalvmNativeImage rec {
   pname = "babashka";
-  version = "1.3.178";
+  version = "1.3.179";
 
   src = fetchurl {
     url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-ihARaZ8GJsoFmlOd0qtbOAQkbs6a9zohJ9PREJoxdZg=";
+    sha256 = "sha256-tF+SqKY7tcJvmOATVwKIZemR2A3eqrbhvSBvr7tcq5U=";
   };
 
   graalvmDrv = graalvmCEPackages.graalvm19-ce;
