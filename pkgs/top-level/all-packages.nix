@@ -35237,6 +35237,8 @@ with pkgs;
 
   zammad = callPackage ../applications/networking/misc/zammad { };
 
+  zarf = callPackage ../applications/networking/cluster/zarf { };
+
   zathuraPkgs = callPackage ../applications/misc/zathura { };
   zathura = zathuraPkgs.zathuraWrapper;
 
