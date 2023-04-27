@@ -100,6 +100,6 @@ A portion of the configuration tree which is elided from `config`.
 
 A nominal type marker, always `"configuration"`.
 
-#### `configurationClass` {#module-system-lib-evalModules-return-value-_configurationClass}
+#### `class` {#module-system-lib-evalModules-return-value-_configurationClass}
 
-Equal to the [`class` parameter](#module-system-lib-evalModules-param-class).
+The [`class` argument](#module-system-lib-evalModules-param-class).

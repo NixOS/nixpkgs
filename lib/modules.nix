@@ -326,7 +326,7 @@ let
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
         inherit extendModules type;
-        configurationClass = class;
+        class = class;
       };
     in result;
 
