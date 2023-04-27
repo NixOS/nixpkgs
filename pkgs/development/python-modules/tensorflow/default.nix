@@ -397,8 +397,8 @@ let
         then "sha256-rcTPOMoBfmKFuuCanMlhmtFtOQzOICfEXTZey/rQEdM="
         else "sha256-JGLH64F81xwSUl9RCWJhBLNRBQandImsVafEF5s+ap0=";
       aarch64-linux = "sha256-g6JUZQQalCTSjvAarkI7+gq13cPhFg/O9LPQDGNvrII=";
-      x86_64-darwin = "sha256-phmJ71l0DvJUVx1sHGS3nkDqJ18yOO7I3N1ODnfrrYc=";
-      aarch64-darwin = "sha256-qZvqXi6pvIrZpZdR4BcbOh2C/A4ZHJgXgFINhVJmmcs=";
+      x86_64-darwin = "sha256-7O0zPs+damAjWXZn5C5SSWBp35C8QX3y4kCM7tYkM7s=";
+      aarch64-darwin = "sha256-US7uunEBDo2NKI9UHvgThbQ7rA05HjQlUthw0gIINaI=";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 

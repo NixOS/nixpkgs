@@ -83,12 +83,16 @@ let
     inherit (args) src;
     inherit (go) GOOS GOARCH;
 
+    # The following inheritence behavior is not trivial to expect, and some may
+    # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
+    # out in the wild. In anycase, it's documented in:
+    # doc/languages-frameworks/go.section.md
     prePatch = args.prePatch or "";
     patches = args.patches or [];
     patchFlags = args.patchFlags or [];
     postPatch = args.postPatch or "";
     preBuild = args.preBuild or "";
-    postBuild = args.postBuild or "";
+    postBuild = args.modPostBuild or "";
     sourceRoot = args.sourceRoot or "";
 
     GO111MODULE = "on";

@@ -2,11 +2,11 @@
 
 trivialBuild rec {
   pname = "ebuild-mode";
-  version = "1.61";
+  version = "1.63";
 
   src = fetchurl {
     url = "https://dev.gentoo.org/~ulm/emacs/${pname}-${version}.tar.xz";
-    sha256 = "sha256-/n3gs99psdiCA1Kjtljfx9T5anGPphtsMIC2nOCv0wk=";
+    sha256 = "sha256-Ar11zz0IVMu0g9+PN9dXvj8yeKnUGi8M+CTJfGP3bd4=";
   };
 
   meta = with lib; {

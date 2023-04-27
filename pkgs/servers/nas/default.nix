@@ -14,12 +14,12 @@
 , xorgproto
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nas";
   version = "1.9.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nas/nas-${self.version}.tar.gz";
+    url = "mirror://sourceforge/nas/nas-${finalAttrs.version}.tar.gz";
     hash = "sha256-t4hK+zj+7AOhlr07fpxHuAPIMOzRDXRV6cl+Eiw3lEw=";
   };
 

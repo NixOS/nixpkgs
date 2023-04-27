@@ -988,11 +988,13 @@ self: super: builtins.intersectAttrs super {
     hnix-store-core = super.hnix-store-core_0_6_1_0;
   });
 
-  cachix_1_3_3 = super.cachix_1_3_3.override {
+  cachix_1_3_3 = overrideCabal (drv: {
+    hydraPlatforms = pkgs.lib.platforms.all;
+  }) (super.cachix_1_3_3.override {
     nix = self.hercules-ci-cnix-store.nixPackage;
     fsnotify = dontCheck super.fsnotify_0_4_1_0;
     hnix-store-core = super.hnix-store-core_0_6_1_0;
-  };
+  });
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
@@ -1083,11 +1085,11 @@ self: super: builtins.intersectAttrs super {
   }) super.fourmolu;
 
   # Test suite wants to run main executable
-  fourmolu_0_10_0_0 = overrideCabal (drv: {
+  fourmolu_0_10_1_0 = overrideCabal (drv: {
     preCheck = drv.preCheck or "" + ''
       export PATH="$PWD/dist/build/fourmolu:$PATH"
     '';
-  }) super.fourmolu_0_10_0_0;
+  }) super.fourmolu_0_10_1_0;
 
   # Test suite needs to execute 'disco' binary
   disco = overrideCabal (drv: {

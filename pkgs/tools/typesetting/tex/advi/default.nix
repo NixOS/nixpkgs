@@ -34,14 +34,20 @@ ocamlPackages.buildDunePackage rec {
   pname = "advi";
   version = "2.0.0";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.11";
 
   src = fetchurl {
     url = "http://advi.inria.fr/advi-${version}.tar.gz";
     hash = "sha256-c0DQHlvdekJyXCxmR4+Ut/njtoCzmqX6hNazNv8PpBQ=";
   };
+
+  postPatch = ''
+    substituteInPlace ./Makefile \
+      --replace "\$(DUNE) install \$(DUNEROOT) --display=short" \
+      "\$(DUNE) install \$(DUNEROOT) --prefix $out --docdir $out/share/doc --mandir $out/share/man"
+  '';
+
+  duneVersion = "3";
 
   nativeBuildInputs = [ fake-opam kpsexpand makeWrapper texlive.combined.scheme-medium which ];
   buildInputs = with ocamlPackages; [ camlimages ghostscriptX graphics ];

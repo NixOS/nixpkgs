@@ -2,16 +2,16 @@
 
 let
   pname = "localsend";
-  version = "1.8.0";
+  version = "1.9.0";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.AppImage";
-      hash = "sha256-Setxw0urfJCiHI+Ms+Igroi1CLCgB0H5BsV6RkxyBME=";
+      hash = "sha256-i5/haQHsw3BAOFGsHO41oiop1JgMISTr1Dw0tAeYupU=";
     };
     x86_64-darwin = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
-      hash = "sha256-uVZ/ULhr8CiV/wL9Yaw6q2IYAHNqld606ADKab/EVlU=";
+      hash = "sha256-Ibojcg5To288c+v6IKMOjuLz970osiKJU7/K0VnIs8k=";
     };
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -21,7 +21,7 @@ let
   linux = appimageTools.wrapType2 rec {
     inherit pname version src meta;
 
-    extraPkgs = p: [ p.libepoxy ];
+    extraPkgs = p: [ p.ayatana-ido p.libayatana-appindicator p.libayatana-indicator p.libdbusmenu p.libepoxy ];
 
     extraInstallCommands = ''
       mv $out/bin/${pname}-${version} $out/bin/${pname}

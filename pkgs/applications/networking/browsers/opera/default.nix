@@ -137,5 +137,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ kindrowboat ];
   };
 }

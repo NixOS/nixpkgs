@@ -3,7 +3,7 @@
 let
 
   # To control nodejs version we pass down
-  nodejs = pkgs.nodejs-14_x;
+  nodejs = pkgs.nodejs_14;
 
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
 
@@ -116,7 +116,7 @@ let
 
   nodePkgs = pkgs.callPackage ./packages/node-composition.nix {
     inherit pkgs;
-    nodejs = pkgs.nodejs-14_x;
+    nodejs = pkgs.nodejs_14;
     inherit (pkgs.stdenv.hostPlatform) system;
   };
 

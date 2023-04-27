@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-utils";
-  version = "0.15.2";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
     rev = "v${version}";
-    hash = "sha256-U2e7uOGaVpT/c9EXubkaKkROjog073hVfot2bbB34AY=";
+    hash = "sha256-2BS38Ybz/j6QnlI1G9zc/lFJKXj4Bh7+jlvyweUVhfA=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "d3d12-0.6.0" = "sha256-xCazXUriIQWMVa3DOI1aySBATmYwyDqsVYULRV2l/44=";
-      "naga-0.11.0" = "sha256-q5cYmsWUwLcVS2ZmKd6YvEz3Z8IPP1dRCgQhRhgadoE=";
+      "naga-0.12.0" = "sha256-EZ8ZKixOFPT9ZTKIC/UGh2B3F09ENbCTUi+ASamJzMM=";
     };
   };
 

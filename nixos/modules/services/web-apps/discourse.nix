@@ -1025,8 +1025,8 @@ in
 
     services.postfix = lib.mkIf cfg.mail.incoming.enable {
       enable = true;
-      sslCert = if cfg.sslCertificate != null then cfg.sslCertificate else "";
-      sslKey = if cfg.sslCertificateKey != null then cfg.sslCertificateKey else "";
+      sslCert = lib.optionalString (cfg.sslCertificate != null) cfg.sslCertificate;
+      sslKey = lib.optionalString (cfg.sslCertificateKey != null) cfg.sslCertificateKey;
 
       origin = cfg.hostname;
       relayDomains = [ cfg.hostname ];

@@ -22,20 +22,20 @@
 
 stdenv.mkDerivation rec {
   pname = "authenticator";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Authenticator";
     rev = version;
-    hash = "sha256-Nv4QE6gyh42Na/stAgTIapV8GQuUHCdL6IEO//J8dV8=";
+    hash = "sha256-WR5gXGry4wti2M4D/IQvwI7OSak1p+O+XAhr01hdv2Q=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-IS9jdr19VvgX6M1OqM6rjE8veujZcwBuOTuDm5mDXso=";
+    hash = "sha256-ZVDKTJojblVCbbdtnqcL+UVW1vkmu99AXCbgyCGNHCM=";
   };
 
   nativeBuildInputs = [
@@ -67,19 +67,11 @@ stdenv.mkDerivation rec {
     zbar
   ];
 
-  # https://gitlab.gnome.org/World/Authenticator/-/issues/362
-  preBuild = ''
-    export BINDGEN_EXTRA_CLANG_ARGS="$BINDGEN_EXTRA_CLANG_ARGS -DPW_ENABLE_DEPRECATED"
-  '';
-
   meta = {
     description = "Two-factor authentication code generator for GNOME";
     homepage = "https://gitlab.gnome.org/World/Authenticator";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ austinbutler ];
     platforms = lib.platforms.linux;
-    # Fails to build on aarch64 with error
-    # "a label can only be part of a statement and a declaration is not a statement"
-    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

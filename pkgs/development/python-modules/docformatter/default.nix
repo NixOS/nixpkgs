@@ -12,9 +12,9 @@
 
 buildPythonPackage rec {
   pname = "docformatter";
-  version = "1.6.0";
+  version = "1.6.4";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   format = "pyproject";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-CzfJk8EkUKPGIJwaDC/IT4CDCJpQI7XEZFnH+RahURI=";
+    hash = "sha256-OQNE6Is1Pl0uoAkFYh4M+c8oNWL/uIh4X0hv8X0Qt/g=";
   };
 
   patches = [

@@ -22,6 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-lj6NTpAmL/bY3sBy6pcoXcN0ovacrXd29AgqvPah2K4=";
   };
 
+  # https://github.com/gawel/pyquery/issues/248
+  postPatch = ''
+    substituteInPlace tests/test_pyquery.py \
+      --replace test_selector_html skip_test_selector_html
+  '';
+
   propagatedBuildInputs = [
     cssselect
     lxml

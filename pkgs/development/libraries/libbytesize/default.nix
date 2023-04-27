@@ -14,14 +14,14 @@
 , python3
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbytesize";
   version = "2.8";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libbytesize";
-    rev = self.version;
+    rev = finalAttrs.version;
     hash = "sha256-/TVv/srhbotIkne0G77hgBF4j+74INqVUr8zlKsaoM0=";
   };
 

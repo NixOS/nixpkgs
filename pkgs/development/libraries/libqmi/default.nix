@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   pname = "libqmi";
   version = "1.32.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
     python3
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
@@ -68,6 +70,7 @@ stdenv.mkDerivation rec {
     "-Dudevdir=${placeholder "out"}/lib/udev"
     (lib.mesonBool "gtk_doc" (stdenv.buildPlatform == stdenv.hostPlatform))
     (lib.mesonBool "introspection" (stdenv.buildPlatform == stdenv.hostPlatform))
+    (lib.mesonBool "man" (stdenv.buildPlatform == stdenv.hostPlatform))
   ];
 
   doCheck = true;

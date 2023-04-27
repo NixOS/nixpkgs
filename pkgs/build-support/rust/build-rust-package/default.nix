@@ -11,7 +11,7 @@
 , cargoSetupHook
 , cargo
 , cargo-auditable
-, cargo-auditable-cargo-wrapper
+, buildPackages
 , rustc
 , libiconv
 , windows
@@ -121,7 +121,7 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   patchRegistryDeps = ./patch-registry-deps;
 
   nativeBuildInputs = nativeBuildInputs ++ lib.optionals auditable [
-    (cargo-auditable-cargo-wrapper.override {
+    (buildPackages.cargo-auditable-cargo-wrapper.override {
       inherit cargo cargo-auditable;
     })
   ] ++ [
@@ -158,6 +158,15 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   meta = {
     # default to Rust's platforms
-    platforms = rustc.meta.platforms;
+    platforms = rustc.meta.platforms ++ [
+      # Platforms without host tools from
+      # https://doc.rust-lang.org/nightly/rustc/platform-support.html
+      "armv7a-darwin"
+      "armv5tel-linux" "armv6l-linux" "armv7a-linux" "m68k-linux"
+      "riscv32-linux"
+      "armv6l-netbsd"
+      "x86_64-redox"
+      "wasm32-wasi"
+    ];
   } // meta;
 })

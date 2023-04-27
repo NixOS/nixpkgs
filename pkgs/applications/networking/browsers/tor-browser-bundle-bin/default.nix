@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchurl
 , makeDesktopItem
+, writeText
 
 # Common run-time dependencies
 , zlib
@@ -87,7 +88,7 @@ let
   fteLibPath = lib.makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "12.0.4";
+  version = "12.0.5";
 
   lang = "ALL";
 
@@ -99,7 +100,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      hash = "sha256-VT0bD4v8SBq0emFYsxELreY4o+u+FQfyBEnSMzmRd7Y=";
+      hash = "sha256-V4BUs30h0+AKNuNsHuRriDXJ0ZzrIsg2SYn4GPZS6Hs=";
     };
 
     i686-linux = fetchurl {
@@ -109,9 +110,22 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      hash = "sha256-mi8btxI6de5iQ8HzNpvuFdJHjzi03zZJT65dsWEiDHA=";
+      hash = "sha256-TUfS31EjAi/hgVjCKT/T5Jx8iCYXB/3EXPVm1KSqXLk=";
     };
   };
+
+  distributionIni = writeText "distribution.ini" (lib.generators.toINI {} {
+    # Some light branding indicating this build uses our distro preferences
+    Global = {
+      id = "nixos";
+      version = "1.0";
+      about = "Tor Browser for NixOS";
+    };
+  });
+
+  policiesJson = writeText "policies.json" (builtins.toJSON {
+    policies.DisableAppUpdate = true;
+  });
 in
 stdenv.mkDerivation rec {
   pname = "tor-browser-bundle-bin";
@@ -132,7 +146,9 @@ stdenv.mkDerivation rec {
     categories = [ "Network" "WebBrowser" "Security" ];
   };
 
-  buildCommand = ''
+  buildPhase = ''
+    runHook preBuild
+
     # For convenience ...
     TBB_IN_STORE=$out/share/tor-browser
     interp=$(< $NIX_CC/nix-support/dynamic-linker)
@@ -209,7 +225,7 @@ stdenv.mkDerivation rec {
 
     // Insist on using IPC for communicating with Tor
     //
-    // Defaults to creating \$TBB_HOME/TorBrowser/Data/Tor/{socks,control}.socket
+    // Defaults to creating \$XDG_RUNTIME_DIR/Tor/{socks,control}.socket
     lockPref("extensions.torlauncher.control_port_use_ipc", true);
     lockPref("extensions.torlauncher.socks_port_use_ipc", true);
 
@@ -331,6 +347,7 @@ stdenv.mkDerivation rec {
       echo "user_pref(\"extensions.torlauncher.toronionauthdir_path\", \"\$HOME/TorBrowser/Data/Tor/onion-auth\");"
       echo "user_pref(\"extensions.torlauncher.torrc_path\", \"\$HOME/TorBrowser/Data/Tor/torrc\");"
       echo "user_pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/TorBrowser/Data/Tor\");"
+      echo "user_pref(\"network.proxy.socks\", \"file://\$XDG_RUNTIME_DIR/Tor/socks.socket\");"
     } >> "\$HOME/TorBrowser/Data/Browser/profile.default/prefs.js"
 
     # Lift-off
@@ -416,6 +433,18 @@ stdenv.mkDerivation rec {
     echo "Checking tor-browser wrapper ..."
       TBB_HOME=$(mktemp -d) \
       $out/bin/tor-browser --version >/dev/null
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    # Install distribution customizations
+    install -Dvm644 ${distributionIni} $out/share/tor-browser/distribution/distribution.ini
+    install -Dvm644 ${policiesJson} $out/share/tor-browser/distribution/policies.json
+
+    runHook postInstall
   '';
 
   meta = with lib; {

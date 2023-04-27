@@ -32,6 +32,8 @@
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
+  obs-source-clone = callPackage ./obs-source-clone.nix { };
+
   obs-source-record = callPackage ./obs-source-record.nix { };
 
   obs-vaapi = callPackage ./obs-vaapi { };

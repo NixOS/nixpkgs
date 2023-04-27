@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pklaus/brother_ql";
     license = licenses.gpl3;
     maintainers = with maintainers; [ grahamc ];
+    mainProgram = "brother_ql";
   };
 }

@@ -69,7 +69,7 @@ let
     patches = (args.patches or [ ]) ++ [ ./patches/aws-sdk-cpp-TransferManager-ContentEncoding.patch ];
 
     # only a stripped down version is build which takes a lot less resources to build
-    requiredSystemFeatures = null;
+    requiredSystemFeatures = [ ];
   });
 
   aws-sdk-cpp-nix = (aws-sdk-cpp.override {
@@ -77,7 +77,7 @@ let
     customMemoryManagement = false;
   }).overrideAttrs (args: {
     # only a stripped down version is build which takes a lot less resources to build
-    requiredSystemFeatures = null;
+    requiredSystemFeatures = [ ];
   });
 
 

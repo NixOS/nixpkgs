@@ -25,9 +25,14 @@ buildPythonPackage rec {
       hash = "sha256-XjhyajDawN/G1nPtkMbNe66iJCo76UpdA7PqwtxO5ag=";
     })
     # https://github.com/aiortc/aioquic/pull/349, fixes test failure due pyopenssl==22
-    (assert lib.versions.major pyopenssl.version == "22"; fetchpatch {
+    (fetchpatch {
       url = "https://github.com/aiortc/aioquic/commit/c3b72be85868d67ee32d49ab9bd98a4357cbcde9.patch";
       hash = "sha256-AjW+U9DpNXgA5yqKkWnx0OYpY2sZR9KIdQ3pSzxU+uY=";
+    })
+    # AssertionError: 'self-signed certificate' != 'self signed certificate'
+    (fetchpatch {
+      url = "https://github.com/aiortc/aioquic/commit/cfcd3ce12fb27f5b26deb011a82f66b5d68d521a.patch";
+      hash = "sha256-bCW817Z7jCxYySfUukNR4cibURH3qZWEQjeeyvRIqZY=";
     })
   ];
 
@@ -42,6 +47,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "aioquic" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Implementation of QUIC and HTTP/3";

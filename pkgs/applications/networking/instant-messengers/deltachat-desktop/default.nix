@@ -21,12 +21,12 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.112.7";
+    version = "1.112.8";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
-      rev = version;
-      hash = "sha256-zBstNj8IZ8ScwZxzvTxDPwe8R0n2z/EuvjbR+bJepJk=";
+      rev = "v${version}";
+      hash = "sha256-bvXZtgFZx94Sw9Tst620HAhi9kmG8PjtWnghdw2ZF84=";
     };
     cargoDeps = rustPlatform.importCargoLock {
       lockFile = ./Cargo.lock;
@@ -52,16 +52,16 @@ let
   };
 in buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.36.3";
+  version = "1.36.4";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-OmAWABZLTNU8EzXl2Rp/Y4DJcaqXuMt14ReaJbHx/u8=";
+    hash = "sha256-nJF8DPauhEoKC7mibpMJCGsgt9HnwkZp/jiWEEhShBs=";
   };
 
-  npmDepsHash = "sha256-u2hYIhXGMnjAp5T2h4THcTL5Om4Zg8aTO3NpSiphAXc=";
+  npmDepsHash = "sha256-cTvNU4LO74pcw4Ybo9iftEis2yDA2SqGtrs4v+xAi5c=";
 
   nativeBuildInputs = [
     makeWrapper

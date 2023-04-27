@@ -12,11 +12,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.21";
+  version = "7.0";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    hash = "sha256-9ErMhxzixyiwcwcduLP63JfM3rNy0W/3w0b+BbQAjUA=";
+    hash = "sha256-iYsICW9aTG47eWB0g3MlWo5F1BStQLiM84+qxFq7G70=";
   };
 
   yarnDeps = mkYarnModules {
@@ -31,74 +31,6 @@ let
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-    # flask-security-too 4.1.5 is incompatible with flask-babel 3.x
-    flask-babel = prev.flask-babel.overridePythonAttrs (oldAttrs: rec {
-      version = "2.0.0";
-      src = prev.fetchPypi {
-        inherit pname version;
-        hash = "sha256-+fr0XNsuGjLqLsFEA1h9QpUQjzUBenghorGsuM/ZJX0=";
-      };
-      nativeBuildInputs = [ ];
-      format = "setuptools";
-      outputs = [ "out" ];
-      patches = [ ];
-    });
-    # flask-babel 2.0.0 is incompatible with babel > 2.11.0
-    babel = prev.babel.overridePythonAttrs (oldAttrs: rec {
-      version = "2.11.0";
-      src = prev.fetchPypi {
-        pname = "Babel";
-        inherit version;
-        hash = "sha256-XvSzImsBgN7d7UIpZRyLDho6aig31FoHMnLzE+TPl/Y=";
-      };
-      propagatedBuildInputs = [ prev.pytz ];
-    });
-    # pgadmin 6.21 is incompatible with flask 2.2
-    # https://redmine.postgresql.org/issues/7651
-    flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
-      version = "2.1.3";
-      src = oldAttrs.src.override {
-        inherit version;
-        hash = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
-      };
-    });
-    # flask 2.1.3 is incompatible with flask-sqlalchemy > 3
-    flask-sqlalchemy = prev.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-      version = "2.5.1";
-      format = "setuptools";
-      src = oldAttrs.src.override {
-        inherit version;
-        hash = "sha256-K9pEtD58rLFdTgX/PMH4vJeTbMRkYjQkECv8LDXpWRI=";
-      };
-    });
-    # flask-sqlalchemy 2.5.1 is incompatible with sqlalchemy > 1.4.45
-    sqlalchemy = prev.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-      version = "1.4.45";
-      src = oldAttrs.src.override {
-        inherit version;
-        hash = "sha256-/WmFCGAJOj9p/v4KtW0EHt/f4YUQtT2aLq7LovFfp5U=";
-      };
-    });
-    # flask-security-too 4.1.5 is incompatible with flask-wtf > 1.0.1
-    flask-wtf = prev.flask-wtf.overridePythonAttrs (oldAttrs: rec {
-      version = "1.0.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        hash = "sha256-NP5cb+4PabUOMPgaO36haqFJKncf6a0JdNFkYQwJpsk=";
-      };
-    });
-    # pgadmin 6.21 is incompatible with the major flask-security-too update to 5.0.x
-    flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
-      version = "4.1.5";
-      src = oldAttrs.src.override {
-        inherit version;
-        hash = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
-      };
-      propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
-        final.pythonPackages.flask_mail
-        final.pythonPackages.pyqrcode
-      ];
-    });
   });
 
 in
@@ -131,10 +63,13 @@ pythonPackages.buildPythonApplication rec {
 
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
+    #TODO: Can be removed once cryptography>=40 has been merged to master
+    substituteInPlace requirements.txt \
+      --replace "cryptography>=40.0.*" "cryptography>=39.0.*"
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
     substituteInPlace pkg/pip/setup_pip.py \
-      --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req"
+      --replace "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
     ${lib.optionalString (!server-mode) ''
     substituteInPlace web/config.py \
       --replace "SERVER_MODE = True" "SERVER_MODE = False"
@@ -202,7 +137,7 @@ pythonPackages.buildPythonApplication rec {
     wtforms
     flask-paranoid
     psutil
-    psycopg2
+    psycopg
     python-dateutil
     sqlalchemy
     itsdangerous
@@ -233,6 +168,8 @@ pythonPackages.buildPythonApplication rec {
     dnspython
     greenlet
     speaklater3
+    google-auth-oauthlib
+    google-api-python-client
   ];
 
   passthru.tests = {

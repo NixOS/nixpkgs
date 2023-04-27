@@ -6,7 +6,7 @@
 , git
 , lib
 , makeDesktopItem
-, nodejs-16_x
+, nodejs_16
 , stdenvNoCC
 , util-linux
 , zip
@@ -16,7 +16,7 @@ let
   pname = "electron-fiddle";
   version = "0.32.1";
   electron = electron_22;
-  nodejs = nodejs-16_x;
+  nodejs = nodejs_16;
 
   src = fetchFromGitHub {
     owner = "electron";

@@ -17,8 +17,7 @@
 , installShellFiles
 }:
 
-with rustPlatform;
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   version = "0.6.4";
   pname = "ripasso-cursive";
 
