@@ -46,6 +46,8 @@
 
   obs-vaapi = callPackage ./obs-vaapi { };
 
+  obs-vintage-filter = callPackage ./obs-vintage-filter.nix { };
+
   obs-vkcapture = callPackage ./obs-vkcapture.nix {
     obs-vkcapture32 = pkgsi686Linux.obs-studio-plugins.obs-vkcapture;
   };
