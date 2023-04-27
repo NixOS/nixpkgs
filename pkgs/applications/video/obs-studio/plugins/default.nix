@@ -50,6 +50,8 @@
 
   obs-teleport = callPackage ./obs-teleport { };
 
+  obs-text-pthread = callPackage ./obs-text-pthread.nix { };
+
   obs-transition-table = qt6Packages.callPackage ./obs-transition-table.nix { };
 
   obs-vaapi = callPackage ./obs-vaapi { };
