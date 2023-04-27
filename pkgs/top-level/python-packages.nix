@@ -6436,6 +6436,8 @@ self: super: with self; {
 
   moretools = callPackage ../development/python-modules/moretools { };
 
+  morfessor = callPackage ../development/python-modules/morfessor { };
+
   morphys = callPackage ../development/python-modules/morphys { };
 
   mortgage = callPackage ../development/python-modules/mortgage { };
