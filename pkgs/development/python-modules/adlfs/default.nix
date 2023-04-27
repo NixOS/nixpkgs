@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "adlfs";
-  version = "2023.1.0";
+  version = "2023.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-eSfdRiIr8xJEoLMs2114NX0CsBMlku9qjUXA23D5qgY=";
+    hash = "sha256-olXOMmUBfamOrwtS0SEFGW3Z7g+ExWHxON9SKKSxnbc=";
   };
 
   propagatedBuildInputs = [
