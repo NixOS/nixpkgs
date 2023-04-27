@@ -3074,7 +3074,6 @@ broken-packages:
   - lhslatex
   - LibClang
   - libexpect
-  - libfuse3
   - libGenI
   - libhbb
   - libinfluxdb
