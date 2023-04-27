@@ -5,7 +5,7 @@
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscript_headless, harfbuzz
 , makeWrapper, python3, ruby, perl, gnused, gnugrep, coreutils
-, libfaketime
+, libfaketime, makeFontsConf
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
@@ -24,7 +24,7 @@ let
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv lib makeWrapper writeText
-      stdenv python3 ruby perl gnused gnugrep coreutils libfaketime;
+      stdenv python3 ruby perl gnused gnugrep coreutils libfaketime makeFontsConf;
     ghostscript = ghostscript_headless;
   };
 
