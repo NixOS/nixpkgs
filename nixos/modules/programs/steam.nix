@@ -84,6 +84,7 @@ in {
 
     gamescopeSession = mkOption {
       description = mdDoc "Run a GameScope driven Steam session from your display-manager";
+      default = {};
       type = types.submodule {
         options = {
           enable = mkEnableOption (mdDoc "GameScope Session");
