@@ -29,7 +29,6 @@ in
 }).override {
   crashreporterSupport = false;
   enableOfficialBranding = false;
-  pgoSupport = false; # Profiling gets stuck and doesn't terminate.
 }).overrideAttrs (prev: {
   MOZ_REQUIRE_SIGNING = "";
 })
