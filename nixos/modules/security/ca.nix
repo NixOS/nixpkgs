@@ -24,11 +24,11 @@ in
       default = [];
       example = literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
       description = lib.mdDoc ''
-        A list of files containing trusted root certificates in PEM
-        format. These are concatenated to form
-        {file}`/etc/ssl/certs/ca-certificates.crt`, which is
-        used by many programs that use OpenSSL, such as
-        {command}`curl` and {command}`git`.
+        A list of files containing trusted root certificates in PEM format.
+        These are concatenated with the certificates of the Mozilla Trust Store and
+        those listed in {option}`security.pki.certificates`
+        to form  {file}`/etc/ssl/certs/ca-certificates.crt`,
+        which is used by many programs that use OpenSSL, such as {command}`curl` and {command}`git`.
       '';
     };
 
@@ -49,6 +49,9 @@ in
       '';
       description = lib.mdDoc ''
         A list of trusted root certificates in PEM format.
+        These are concatenated with the certificates of the Mozilla Trust Store and
+        those listed in {option}`security.pki.certificateFiles`
+        to form  {file}`/etc/ssl/certs/ca-certificates.crt`,
       '';
     };
 
@@ -61,10 +64,10 @@ in
         "Certification Authority of WoSign G2"
       ];
       description = lib.mdDoc ''
-        A list of blacklisted CA certificate names that won't be imported from
-        the Mozilla Trust Store into
-        {file}`/etc/ssl/certs/ca-certificates.crt`. Use the
-        names from that file.
+        A list of blacklisted CA certificate names that will not be imported from the Mozilla Trust Store into
+        {file}`/etc/ssl/certs/ca-certificates.crt`.
+        Use the names from that file.
+        Additionally to those listed here, the root certificates by TrustCor are always blacklisted.
       '';
     };
 
