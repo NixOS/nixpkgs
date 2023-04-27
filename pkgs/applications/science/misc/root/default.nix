@@ -208,9 +208,6 @@ stdenv.mkDerivation rec {
     # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
     # fatal error: could not build module '_Builtin_intrinsics'
     "-Druntime_cxxmodules=OFF"
-
-    # At least C++17 standard required with root7
-    "-DCMAKE_CXX_STANDARD=17"
   ];
 
   # Workaround the xrootd runpath bug #169677 by prefixing [DY]LD_LIBRARY_PATH with ${lib.makeLibraryPath xrootd}.
