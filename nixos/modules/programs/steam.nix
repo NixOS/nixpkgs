@@ -136,7 +136,7 @@ in {
     environment.systemPackages = [
       cfg.package
       cfg.package.run
-    ];
+    ] ++ lib.optional cfg.gamescopeSession.enable steam-gamescope;
 
     networking.firewall = lib.mkMerge [
       (mkIf cfg.remotePlay.openFirewall {
