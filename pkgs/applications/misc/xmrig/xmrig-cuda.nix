@@ -56,7 +56,7 @@ backendStdenv.mkDerivation rec {
     description = "CUDA library for XMRig";
     homepage = "https://github.com/xmrig/xmrig-cuda";
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ mrfoxpro ];
   };
 }
