@@ -220,16 +220,6 @@ let
               within a configuration, but can be used in module imports.
             '';
           };
-
-          _module.class = mkOption {
-            readOnly = true;
-            internal = true;
-            description = lib.mdDoc ''
-              If the `class` attribute is set and non-`null`, the module system will reject `imports` with a different `class`.
-
-              This option contains the expected `class` attribute of the current module evaluation.
-            '';
-          };
         };
 
         config = {
@@ -237,7 +227,6 @@ let
             inherit extendModules;
             moduleType = type;
           };
-          _module.class = class;
           _module.specialArgs = specialArgs;
         };
       };
@@ -337,6 +326,7 @@ let
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
         inherit extendModules type;
+        configurationClass = class;
       };
     in result;
 

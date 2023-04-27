@@ -95,3 +95,11 @@ If you do reference multiple `config` (or `options`) from before and after `exte
 A portion of the configuration tree which is elided from `config`.
 
 <!-- TODO: when markdown migration is complete, make _module docs visible again and reference _module docs. Maybe move those docs into this chapter? -->
+
+#### `_type` {#module-system-lib-evalModules-return-value-_type}
+
+A nominal type marker, always `"configuration"`.
+
+#### `configurationClass` {#module-system-lib-evalModules-return-value-_configurationClass}
+
+Equal to the [`class` parameter](#module-system-lib-evalModules-param-class).
