@@ -1033,6 +1033,8 @@ with pkgs;
 
   libredirect = callPackage ../build-support/libredirect { };
 
+  livecaptions = callPackage ../applications/misc/livecaptions { };
+
   madonctl = callPackage ../applications/misc/madonctl { };
 
   copyDesktopItems = makeSetupHook {
