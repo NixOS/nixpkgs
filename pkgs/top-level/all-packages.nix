@@ -13553,6 +13553,8 @@ with pkgs;
 
   xteve = callPackage ../servers/xteve { };
 
+  termbook = callPackage ../tools/text/termbook { };
+
   testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
 
   testdisk-qt = testdisk.override { enableQt = true; };
