@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "annoy";
-  version = "1.17.1";
+  version = "1.17.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vxd9vq+4H2OyrB4SRrHyairMguc7pGY4c00p2CWBIto=";
+    hash = "sha256-5nv7uDfRMG2kVVyIOGDHshXLMqhk5AAiKS1YR60foLs=";
   };
 
   nativeBuildInputs = [
