@@ -1,8 +1,8 @@
-{ lib, buildGoModule, fetchurl, fetchFromGitHub, fetchpatch, nixosTests, tzdata, wire }:
+{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests, tzdata, wire }:
 
 buildGoModule rec {
   pname = "grafana";
-  version = "9.4.7";
+  version = "9.4.9";
 
   excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" ];
 
@@ -10,23 +10,15 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-vhGFZjxO20M3fQhXlEDDkad/yOyFOu48sHZ63MEnWIA=";
+    sha256 = "sha256-M6Rm1T/oq5HcMe9CNXjwRkBkhJswMYbDmkEyII/KM0s=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "sha256-HiKr1ier13xUlrwsJrxo60wwqmiPcza2oOLIfMgFWc0=";
+    sha256 = "sha256-EA8MJlwzFwqh6EF3sjaYL8vQ4tj5hbnPftT7IGLgZFQ=";
   };
 
-  patches = [
-    (fetchpatch { # https://github.com/grafana/grafana/pull/65790
-      name = "fix-TestIntegrationAMConfigAccess.patch";
-      url = "https://github.com/grafana/grafana/commit/8500eb1c180b4d49a8e17bfd6df675d821d038a4.diff";
-      sha256 = "sha256-TWPn9fLjmCbXGXkxAc3NLTN+0XXjsaspaV4gYKg3+Mk=";
-    })
-  ];
-
-  vendorSha256 = "sha256-sUvjZTg2/6UGjc2Qv8YO4IWlS4Y/FzGRVOQ9I/wp/aM=";
+  vendorSha256 = "sha256-/Gbs/lYjNDz0brCCmsWA+ntWFNnVX8qykKiWqrMwuKQ=";
 
   nativeBuildInputs = [ wire ];
 
