@@ -4,14 +4,14 @@
 , cmake
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cgreen";
   version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "cgreen-devs";
     repo = "cgreen";
-    rev = self.version;
+    rev = finalAttrs.version;
     sha256 = "sha256-beaCoyDCERb/bdKcKS7dRQHlI0auLOStu3cZr1dhubg=";
   };
 

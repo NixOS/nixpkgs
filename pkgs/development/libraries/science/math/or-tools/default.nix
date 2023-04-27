@@ -47,6 +47,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # or-tools normally attempts to build Protobuf for the build platform when
+  # cross-compiling. Instead, just tell it where to find protoc.
+  postPatch = ''
+    echo "set(PROTOC_PRG $(type -p protoc))" > cmake/host.cmake
+  '';
+
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
     "-DBUILD_PYTHON=ON"
@@ -54,23 +60,25 @@ stdenv.mkDerivation rec {
     "-DFETCH_PYTHON_DEPS=OFF"
     "-DUSE_GLPK=ON"
     "-DUSE_SCIP=OFF"
+    "-DPython3_EXECUTABLE=${python.pythonForBuild.interpreter}"
   ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
   nativeBuildInputs = [
     cmake
     ensureNewerSourcesForZipFilesHook
     pkg-config
-    python
-    python.pkgs.pip
+    python.pythonForBuild
     swig4
     unzip
-  ];
+  ] ++ (with python.pythonForBuild.pkgs; [
+    pip
+    mypy-protobuf
+  ]);
   buildInputs = [
     bzip2
     cbc
     eigen
     glpk
     python.pkgs.absl-py
-    python.pkgs.mypy-protobuf
     python.pkgs.pybind11
     python.pkgs.setuptools
     python.pkgs.wheel
@@ -101,7 +109,7 @@ stdenv.mkDerivation rec {
     pip install --prefix="$python" python/
   '';
 
-  outputs = [ "out" "python" ];
+  outputs = [ "out" "dev" "python" ];
 
   meta = with lib; {
     homepage = "https://github.com/google/or-tools";

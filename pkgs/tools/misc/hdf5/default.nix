@@ -91,11 +91,25 @@ stdenv.mkDerivation rec {
     moveToOutput 'bin/h5pcc' "''${!outputDev}"
   '';
 
+  # Remove reference to /build, which get introduced
+  # into AM_CPPFLAGS since hdf5-1.14.0. Cmake of various
+  # packages using HDF5 gets confused trying access the non-existent path.
+  postFixup = ''
+    for i in h5cc h5pcc h5c++; do
+      if [ -f $dev/bin/$i ]; then
+        substituteInPlace $dev/bin/$i --replace \
+          '-I/build/hdf5-${version}/src/H5FDsubfiling' ""
+      fi
+    done
+  '';
+
+  enableParallelBuilding = true;
+
   passthru.tests = {
     inherit (python3.pkgs) h5py;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Data model, library, and file format for storing and managing data";
     longDescription = ''
       HDF5 supports an unlimited variety of datatypes, and is designed for flexible and efficient
@@ -103,8 +117,9 @@ stdenv.mkDerivation rec {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
-    license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    license = licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    maintainers = [ maintainers.markuskowa ];
     homepage = "https://www.hdfgroup.org/HDF5/";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

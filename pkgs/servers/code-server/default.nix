@@ -34,14 +34,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "code-server";
-  version = "4.8.3";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1h5ng60wf3gpsydfkv20x30xsw1f5zcvv77l1mzrqz1mhcw93lvz";
+    hash = "sha256-PQp5dji2Ynp+LJRWBka41umwe1/IR76C+at/wyOWGcI=";
   };
 
   cloudAgent = buildGoModule rec {
@@ -88,7 +88,7 @@ in stdenv.mkDerivation rec {
     outputHashAlgo = "sha256";
 
     # to get hash values use nix-build -A code-server.prefetchYarnCache
-    outputHash = "0jzzbmmgv1nfq975mi9ii9l6c4f1wy10fyy117xgm4s6vxana7qn";
+    outputHash = "sha256-4Vr9u3+W/IhbbTc39jyDyDNQODlmdF+M/N8oJn0Z4+w=";
   };
 
   nativeBuildInputs = [
@@ -101,8 +101,6 @@ in stdenv.mkDerivation rec {
     ];
 
   patches = [
-    # remove download of coder-cloud agent
-    ./remove-cloud-agent-download.patch
     # remove git calls from vscode build script
     ./build-vscode-nogit.patch
   ];
@@ -128,10 +126,6 @@ in stdenv.mkDerivation rec {
 
     # set offline mirror to yarn cache we created in previous steps
     yarn --offline config set yarn-offline-mirror "${yarnCache}"
-
-    # link coder-cloud agent from nix store
-    mkdir -p lib
-    ln -s "${cloudAgent}/bin/cloud-agent" ./lib/coder-cloud-agent
 
     # skip unnecessary electron download
     export ELECTRON_SKIP_BINARY_DOWNLOAD=1
@@ -221,7 +215,7 @@ in stdenv.mkDerivation rec {
     yarn build
 
     # build vscode
-    yarn build:vscode
+    VERSION=${version} yarn build:vscode
 
     # create release
     yarn release

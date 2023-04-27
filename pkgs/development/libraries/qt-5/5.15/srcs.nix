@@ -1,7 +1,7 @@
 { lib, fetchgit, fetchFromGitHub }:
 
 let
-  version = "5.15.8";
+  version = "5.15.9";
   overrides = {};
 
   mk = name: args:
@@ -64,7 +64,7 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 
   qtwebengine =
     let
-      branchName = "5.15.12";
+      branchName = "5.15.13";
       rev = "v${branchName}-lts";
     in
     {
@@ -72,7 +72,7 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 
       src = fetchgit {
         url = "https://github.com/qt/qtwebengine.git";
-        sha256 = "sha256-8EQqSvxw9rqf+64CIbcCb1VXhNx1GNC8eDIgLyYDyvk=";
+        sha256 = "sha256-gZmhJTA5A3+GeySJoppYGffNC6Ych2pOYlsu3w+fnmw=";
         inherit rev branchName;
         fetchSubmodules = true;
         leaveDotGit = true;

@@ -11,48 +11,26 @@
 let
   py = python3 // {
     pkgs = python3.pkgs.overrideScope (self: super: {
-      ipython = super.ipython.overridePythonAttrs (oldAttrs: rec {
-        pname = "ipython";
-        version = "8.5.0";
-
-        src = self.fetchPypi {
-          inherit pname version;
-          sha256 = "sha256-CXvfXNh1dv0GYXnJ9/IIAE96aGTuGyDzfTRsC8sJn4Q=";
-        };
-
-        disabledTests = [ "testIPythonLexer" ] ++ oldAttrs.disabledTests;
-      });
-
-      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.28";
-        src = self.fetchPypi {
-          pname = "prompt_toolkit";
-          inherit version;
-          hash = "sha256-nxzRax6GwpaPJRnX+zHdnWaZFvUVYSwmnRTp7VK1FlA=";
-        };
-      });
+      # nothing right now
     });
   };
 
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.11.6"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.11.15"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-6VEDGakOx2LJcDbBKicxxfOt0t2tf2iaRXkx1Em0Ieg=";
+    hash = "sha256-2FE5PJxdTqSrAIgkaZPf91B6bI6Bj9tbJjXg2nAaLdo=";
   };
 
   postPatch = ''
     substituteInPlace requirements/bootstrap.txt \
       --replace "pip>=22.0.0,<23.0.0" "pip>=22.0.0,<24.0.0"
-    substituteInPlace pyproject.toml \
-      --replace "distro>=1.5.0,<1.6.0" "distro>=1.5.0" \
-      --replace "cryptography>=3.3.2,<38.0.5" "cryptography>=3.3.2"
   '';
 
   nativeBuildInputs = [

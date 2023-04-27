@@ -1623,6 +1623,34 @@ with self; {
 
   BioExtAlign = callPackage ../development/perl-modules/Bio-Ext-Align { };
 
+  BioDBHTS = buildPerlModule {
+    pname = "Bio-DB-HTS";
+    version = "3.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AV/AVULLO/Bio-DB-HTS-3.01.tar.gz";
+      sha256 = "12a6bc1f579513cac8b9167cce4e363655cc8eba26b7d9fe1170dfe95e044f42";
+    };
+
+    buildInputs = [ pkgs.htslib pkgs.zlib ];
+
+    propagatedBuildInputs = [ BioPerl ];
+    htslibStore = toString pkgs.htslib;
+
+    postPatch = ''
+      # -Wl,-rpath not recognized : replaced by -rpath=
+      sed -i 's/Wl,-rpath,/rpath=/' Build.PL
+    '';
+
+    preBuild = ''
+      export HTSLIB_DIR=${pkgs.htslib}
+    '';
+
+    meta = {
+      description = "Perl interface to HTS library for DNA sequencing";
+      license = lib.licenses.asl20;
+    };
+  };
+
   BioPerl = buildPerlPackage {
     pname = "BioPerl";
     version = "1.7.8";

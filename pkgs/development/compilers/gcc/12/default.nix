@@ -29,7 +29,6 @@
 , buildPackages
 , libxcrypt
 , disableGdbPlugin ? !enablePlugin
-, disableBootstrap ? !stdenv.hostPlatform.isDarwin
 , nukeReferences
 , callPackage
 }:
@@ -57,6 +56,7 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
+    disableBootstrap = !stdenv.hostPlatform.isDarwin;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
