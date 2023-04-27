@@ -14146,6 +14146,8 @@ self: super: with self; {
 
   tempita = callPackage ../development/python-modules/tempita { };
 
+  templateflow = callPackage ../development/python-modules/templateflow { };
+
   tempora = callPackage ../development/python-modules/tempora { };
 
   tenacity = callPackage ../development/python-modules/tenacity { };
