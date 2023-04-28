@@ -27,6 +27,10 @@ buildPythonPackage rec {
     publicsuffix2
   ];
 
+  pythonImportsCheck = [
+    "authheaders"
+  ];
+
   meta = with lib; {
     description = "Python library for the generation of email authentication headers";
     homepage = "https://github.com/ValiMail/authentication-headers";
