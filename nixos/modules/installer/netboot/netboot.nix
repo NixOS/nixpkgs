@@ -19,6 +19,8 @@ with lib;
   };
 
   config = {
+    system.build.netbootRamdisk = lib.warn "`system.build.netbootRamdisk` was a special initrd for netbooting, it is not necessary to use it as `system.build.initialRamdisk` contains everything you need now and is standard across nixpkgs.";
+
     # Don't build the GRUB menu builder script, since we don't need it
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
@@ -72,32 +74,33 @@ with lib;
     # Closures to be copied to the Nix store, namely the init
     # script and the top-level system configuration directory.
     netboot.storeContents =
-      [ config.system.build.toplevel ];
+      [ config.system.build.bootStage2 ];
 
     # Create the squashfs image that contains the Nix store.
     system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
       storeContents = config.netboot.storeContents;
     };
 
-
-    # Create the initrd
-    system.build.netbootRamdisk = pkgs.makeInitrdNG {
-      inherit (config.boot.initrd) compressor;
-      prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
-
-      contents =
-        [ { object = config.system.build.squashfsStore;
-            symlink = "/nix-store.squashfs";
-          }
-        ];
-    };
+    # Append the store to the initrd
+    boot.initrd.prepend =
+    let
+      # We do not compress the squashfs, it's already compressed.
+      nixStoreCpio = pkgs.makeInitrdNG {
+        contents =
+          [ { object = config.system.build.squashfsStore;
+              symlink = "/nix-store.squashfs";
+            }
+          ];
+        };
+    in
+      [ "${nixStoreCpio}/initrd" ];
 
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" ''
       #!ipxe
       # Use the cmdline variable to allow the user to specify custom kernel params
       # when chainloading this script from other iPXE scripts like netboot.xyz
-      kernel ${pkgs.stdenv.hostPlatform.linux-kernel.target} init=${config.system.build.toplevel}/init initrd=initrd ${toString config.boot.kernelParams} ''${cmdline}
-      initrd initrd
+      kernel ${pkgs.stdenv.hostPlatform.linux-kernel.target} init=${config.system.build.toplevel}/init initrd=${config.system.boot.loader.initrdFile} ${toString config.boot.kernelParams} ''${cmdline}
+      initrd ${config.system.boot.loader.initrdFile}
       boot
     '';
 
@@ -120,7 +123,7 @@ with lib;
     system.build.kexecTree = pkgs.linkFarm "kexec-tree" [
       {
         name = "initrd.gz";
-        path = "${config.system.build.netbootRamdisk}/initrd";
+        path = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
       }
       {
         name = "bzImage";

@@ -68,7 +68,7 @@ let
       ipxeBootDir = pkgs.symlinkJoin {
         name = "ipxeBootDir";
         paths = [
-          config.system.build.netbootRamdisk
+          config.system.build.initialRamdisk
           config.system.build.kernel
           config.system.build.netbootIpxeScript
         ];
