@@ -14291,6 +14291,18 @@ final: prev:
     meta.homepage = "https://github.com/mattn/webapi-vim/";
   };
 
+  wgsl-vim = buildVimPluginFrom2Nix {
+    pname = "wgsl.vim";
+    version = "2023-04-12";
+    src = fetchFromGitHub {
+      owner = "DingDean";
+      repo = "wgsl.vim";
+      rev = "b72cb2c28ec9554be240113bceb34198f88484e6";
+      sha256 = "1l1y9dwp33g5gp5mvyq4vkw8q8369r493i0qfn81nmwnmc09rsbn";
+    };
+    meta.homepage = "https://github.com/DingDean/wgsl.vim/";
+  };
+
   which-key-nvim = buildVimPluginFrom2Nix {
     pname = "which-key.nvim";
     version = "2023-04-18";
