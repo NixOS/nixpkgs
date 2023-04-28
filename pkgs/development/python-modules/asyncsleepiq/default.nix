@@ -31,6 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Async interface to SleepIQ API";
     homepage = "https://github.com/kbickar/asyncsleepiq";
+    changelog = "https://github.com/kbickar/asyncsleepiq/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
