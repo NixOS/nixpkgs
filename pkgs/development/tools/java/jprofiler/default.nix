@@ -12,7 +12,7 @@ let
   inherit (stdenv.hostPlatform) system;
   pname = "jprofiler";
 
-  version = "13.0.2";
+  version = "13.0.6";
   nameApp = "JProfiler";
 
   meta = with lib; {
@@ -28,15 +28,15 @@ let
 
   src = if stdenv.isLinux then fetchurl {
     url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_${lib.replaceStrings ["."] ["_"]  version}.tar.gz";
-    sha256 = "sha256-x9I7l2ctquCqUymtlQpFXE6+u0Yg773qE6MvAxvCaEE=";
+    hash = "sha256-orjBSaC7NvKcak+RSEa9V05oL3EZIBnp7TyaX/8XFyg=";
   } else fetchurl {
     url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_${lib.replaceStrings ["."] ["_"]  version}.dmg";
-    sha256 = "sha256-CpuFmvszMZA1+1A51swWA3maK8I8RQEYo8Z3A/CQSlA=";
+    hash = "sha256-OI6NSPqYws5Rv25U5jIPzkyJtB8LF04qHB3NPR9XBWg=";
   };
 
   srcIcon = fetchurl {
     url = "https://www.ej-technologies.com/assets/content/header-product-jprofiler@2x-24bc4d84bd2a4eb641a5c8531758ff7c.png";
-    sha256 = "sha256-XUmuqhnNv7mZ3Gb4A0HLSlfiJd5xbCExVsw3hmXHeVE=";
+    hash = "sha256-XUmuqhnNv7mZ3Gb4A0HLSlfiJd5xbCExVsw3hmXHeVE=";
   };
 
   desktopItems = makeDesktopItem {
