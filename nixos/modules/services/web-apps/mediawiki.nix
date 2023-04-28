@@ -190,6 +190,16 @@ in
         description = lib.mdDoc "Which MediaWiki package to use.";
       };
 
+      finalPackage = mkOption {
+        type = types.package;
+        readOnly = true;
+        default = pkg;
+        defaultText = literalExpression "pkg";
+        description = lib.mdDoc ''
+          The final package used by the module. This is the package that will have extensions and skins installed.
+        '';
+      };
+
       name = mkOption {
         type = types.str;
         default = "MediaWiki";
