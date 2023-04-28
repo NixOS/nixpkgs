@@ -158,6 +158,11 @@ runTests {
     expected = "a\nb\nc\n";
   };
 
+  testDateFormat = {
+    expr = dateFormat "19700101";
+    expected = "1970-01-01";
+  };
+
   testSplitStringsSimple = {
     expr = strings.splitString "." "a.b.c.d";
     expected = [ "a" "b" "c" "d" ];

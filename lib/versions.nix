@@ -61,4 +61,17 @@ rec {
     versionSuffix = lib.removePrefix numericVersion version;
   in lib.concatStringsSep "." (lib.take n (lib.splitVersion numericVersion ++ lib.genList (_: "0") n)) + versionSuffix;
 
+  /* Format date from YYYYMMDD to YYYY-MM-DD. This is usually used with a flake's input lastModifiedDate value.
+
+     Type: dateFormat :: String -> String
+
+     Example:
+       dateFormat "19700101"
+       => "1970-01-01"
+       dateFormat self.lastModifiedDate # (20230426163528)
+       => "2023-04-26"
+  */
+  dateFormat = d:
+    assert lib.assertMsg ((builtins.stringLength d) >= 8) "versions.dateFormat: date string length must be at least 8 characters long!";
+    builtins.concatStringsSep "-" (builtins.match "([0-9]{4})([0-9]{2})([0-9]{2})[0-9]*" d);
 }
