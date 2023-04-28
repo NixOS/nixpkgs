@@ -1,11 +1,12 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , authres
-, dnspython
+, buildPythonPackage
 , dkimpy
+, dnspython
+, fetchFromGitHub
 , publicsuffix2
 , pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-kAzuiKYeZH74Tr38vO4BVDIHRNjsHX1ukmhC9EcoO98=";
+  src = fetchFromGitHub {
+    owner = "ValiMail";
+    repo = "authentication-headers";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vtLt7JUdLF0gBWgMzP65UAR6A9BnTech5n0alFErcSQ=";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +28,10 @@ buildPythonPackage rec {
     dnspython
     dkimpy
     publicsuffix2
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
