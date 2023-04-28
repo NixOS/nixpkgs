@@ -1452,7 +1452,6 @@ let
     rfc7748 = callPackage ../development/ocaml-modules/rfc7748 { };
 
     ringo = callPackage ../development/ocaml-modules/ringo { };
-    ringo-lwt = callPackage ../development/ocaml-modules/ringo/lwt.nix { };
 
     rock = callPackage ../development/ocaml-modules/rock { };
 
