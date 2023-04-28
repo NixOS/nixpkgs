@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ds_store";
+  pname = "ds-store";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "al45tair";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "1zmhnz110dvisydp5h6s0ry2v9qf4rgr60xhhlak0c66zpvlkkl0";
   };
 
