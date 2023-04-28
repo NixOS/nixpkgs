@@ -1,17 +1,31 @@
-{ buildPythonPackage, fetchPypi, lib
-, authres, dnspython, dkimpy, publicsuffix2
+{ lib
+, buildPythonPackage
+, fetchPypi
+, authres
+, dnspython
+, dkimpy
+, publicsuffix2
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "authheaders";
   version = "0.15.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-kAzuiKYeZH74Tr38vO4BVDIHRNjsHX1ukmhC9EcoO98=";
   };
 
-  propagatedBuildInputs = [ authres dnspython dkimpy publicsuffix2 ];
+  propagatedBuildInputs = [
+    authres
+    dnspython
+    dkimpy
+    publicsuffix2
+  ];
 
   meta = with lib; {
     description = "Python library for the generation of email authentication headers";
