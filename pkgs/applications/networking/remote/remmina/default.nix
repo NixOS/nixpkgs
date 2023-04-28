@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
+      --set SSL_CERT_DIR : "/etc/ssl/certs/"
       --prefix LD_LIBRARY_PATH : "${libX11.out}/lib"
     )
   '';
