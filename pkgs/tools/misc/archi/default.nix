@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "Archi";
-  version = "4.7.1";
+  version = "5.0.2";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
-        url = "https://www.archimatetool.com/downloads/archi/Archi-Linux64-${version}.tgz";
-        sha256 = "0sd57cfnh5q2p17sd86c8wgmqyipg29rz6iaa5brq8mwn8ps2fdw";
+        url = "https://www.archimatetool.com/downloads/archi.php?/5.0.2/Archi-Linux64-${version}.tgz";
+        sha256 = "de86a688d5c94ec8ec1e77b5ed045845546cc4b6ae25fa39aa8424cdfa3bb586";
       }
     else if stdenv.hostPlatform.system == "x86_64-darwin" then
       fetchzip {
