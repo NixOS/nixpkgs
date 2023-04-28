@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "fountains";
-  version = "2.0.0";
+  version = "2.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9ASOgqkE1vwCKGAZXEJaHoABMXomIWTGv3jAsNssdsU=";
+    hash = "sha256-gYVguXMVrXxra/xy+R4RXVk9yDGKiKE8u3qWUk8sjt4=";
   };
 
   nativeBuildInputs = [

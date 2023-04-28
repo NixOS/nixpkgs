@@ -37,11 +37,11 @@
     "vendorHash": "sha256-nF/efMhmrXfBlF9w9tC4npHxjX2/299OfqTpvPapfMo="
   },
   "akamai": {
-    "hash": "sha256-ofwJs9rOi8l9O2g9adFr3LI4M4pjIc1GzZ5TD70Lgto=",
+    "hash": "sha256-P/5tLtcPqhf48DqqMKKNCOrvT+I60N9rC1W/4RdFXqY=",
     "homepage": "https://registry.terraform.io/providers/akamai/akamai",
     "owner": "akamai",
     "repo": "terraform-provider-akamai",
-    "rev": "v3.5.0",
+    "rev": "v3.6.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-nwl8GvS/hc07xSzM+wEwOAkT9oQcAuguHaEcM1nWjwg="
   },
@@ -110,20 +110,20 @@
     "vendorHash": null
   },
   "aws": {
-    "hash": "sha256-gI53y6/cbgXnWmFqihVPOZEtq4ZbpLtv1dgLiSxnYo4=",
+    "hash": "sha256-cmE7jJO49CuYdiKjrPaHhNCFoMbT0z4uSnFdC7Fnd9g=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v4.64.0",
+    "rev": "v4.65.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-1eIJCtcrod6MUragxcx2qoTJO9OVbD3n+VErL6xnvmw="
+    "vendorHash": "sha256-UvbuWjxlou7lwvU5D6DaEXuCFvn8ECTbkNvKGrHwsu8="
   },
   "azuread": {
-    "hash": "sha256-bCnCj2pEd29aQVePGeaTbVhH6sF/Y+lj94SEw1+tROc=",
+    "hash": "sha256-YdlH1c2Oeu9wDiZvlzgYhY8CvWCMM3W/ilEkTU3mR1k=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azuread",
     "owner": "hashicorp",
     "repo": "terraform-provider-azuread",
-    "rev": "v2.37.2",
+    "rev": "v2.38.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -466,13 +466,13 @@
     "vendorHash": "sha256-fqVBnAivVekV+4tpkl+E6eNA3wi8mhLevJRCs3W7L2g="
   },
   "grafana": {
-    "hash": "sha256-vfH+KIOv/DXv4fUzUATgoL6s69NqGVP8Dn7aoEPfe8g=",
+    "hash": "sha256-XY3nAaAB3h50IGE0Gp2xsqDppk6fmDIxHVJWstESMkM=",
     "homepage": "https://registry.terraform.io/providers/grafana/grafana",
     "owner": "grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v1.38.0",
+    "rev": "v1.39.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-MlqnDcig8/uiF8pNuEkTveN7kgsGEs4XOe5z4/a+Fm0="
+    "vendorHash": "sha256-+g8Ryb1SgtI074R5vttd2CUneHRv64OvEFgbve+7xL4="
   },
   "gridscale": {
     "hash": "sha256-61LZyXqb+1kWHBk1/lw5C5hmeL4aHwSSS++9/9L/tDw=",
@@ -1044,13 +1044,13 @@
     "vendorHash": "sha256-NO1r/EWLgH1Gogru+qPeZ4sW7FuDENxzNnpLSKstnE8="
   },
   "spotinst": {
-    "hash": "sha256-A9YPAIVH7kNQSirvxZYr8L1N4W5b/AJwWmatt3b/vBk=",
+    "hash": "sha256-KC7A7BgGF2erEZKW/hTiveZB0GaCAkzpmkbsF21Ihsg=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.113.0",
+    "rev": "v1.115.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-pN1GVA63sYs52IKkQ/jfeDOzAlH0fN9a9ZCgRjrQ+8E="
+    "vendorHash": "sha256-6ZxurzzOa/1TXOApQNLFUrY+Ryxc7n+JwZG76JuePGc="
   },
   "stackpath": {
     "hash": "sha256-7KQUddq+M35WYyAIAL8sxBjAaXFcsczBRO1R5HURUZg=",
@@ -1171,13 +1171,13 @@
     "vendorHash": null
   },
   "utils": {
-    "hash": "sha256-nLi6aczJdADzdYNJaZldUOFFjgf3ujDdRrhSCuphIn8=",
+    "hash": "sha256-vxX8r6bbhp/lGeS2GciqAnwetjG3B5qzCLJnTQIWino=",
     "homepage": "https://registry.terraform.io/providers/cloudposse/utils",
     "owner": "cloudposse",
     "repo": "terraform-provider-utils",
-    "rev": "1.7.1",
+    "rev": "1.8.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-yTcroKTdYv0O8cX80A451I1vjYclVjA8P69fsb0wY/U="
+    "vendorHash": "sha256-bNE5HxOcj0K2vdqWPVECeTojnWz0hF9mw0TnRRBhqkQ="
   },
   "vault": {
     "hash": "sha256-oyR9xqEnpt5JoTIe1jgV3aMDxKFdvrDx39UWNc5ECTM=",
@@ -1190,13 +1190,13 @@
     "vendorHash": "sha256-Ox8Onq44NdE/KMrmzbOpKetJKww9T2PvEliLbWU/bLU="
   },
   "vcd": {
-    "hash": "sha256-EG4WSnUZr/QfUT1qqOBOGze5Ztxp0HSB9Q1YYgLXQqk=",
+    "hash": "sha256-AiVmxqktBgvXbMl6jA5sMa86sEAvxD1LjVuxdwdBJvU=",
     "homepage": "https://registry.terraform.io/providers/vmware/vcd",
     "owner": "vmware",
     "repo": "terraform-provider-vcd",
-    "rev": "v3.8.2",
+    "rev": "v3.9.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-fDMS1ne6EKAqQjfE4QT1A0ChloXKCrgZPcftxzN/JwU="
+    "vendorHash": "sha256-dYFLohH/gU+cAiaLLNluxAjfj7giqnk+zQKGVSR1Kws="
   },
   "venafi": {
     "hash": "sha256-/5X/+BilaYwi1Vce7mIvVeHjTpVX/OuYquZ+2BGfxrs=",
