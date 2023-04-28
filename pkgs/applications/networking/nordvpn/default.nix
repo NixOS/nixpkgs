@@ -1,9 +1,9 @@
-{ autoPatchelfHook, buildFHSUserEnv, dpkg, fetchurl, lib, stdenv, sysctl
+{ autoPatchelfHook, buildFHSEnvChroot, dpkg, fetchurl, lib, stdenv, sysctl
 , iptables, iproute2, procps, cacert, libxml2, libidn2, zlib, wireguard-tools }:
 
 let
   pname = "nordvpn";
-  version = "3.15.5";
+  version = "3.16.2";
 
   nordVPNBase = stdenv.mkDerivation {
     inherit pname version;
@@ -11,7 +11,7 @@ let
     src = fetchurl {
       url =
         "https://repo.nordvpn.com/deb/nordvpn/debian/pool/main/nordvpn_${version}_amd64.deb";
-      hash = "sha256-7IvtpWiwVFaOc9/2NzG9mAGaWAeBZXNPdqCumdslawI=";
+      hash = "sha256-6aAslJ2xwj+khF6HOMtkF0iclrUzhBV64xrHgs5Nc2s=";
     };
 
     buildInputs = [ libxml2 libidn2 ];
@@ -22,20 +22,21 @@ let
 
     unpackPhase = ''
       runHook preUnpack
-      dpkg --fsys-tarfile $src | tar --extract
+      dpkg --extract $src .
       runHook postUnpack
     '';
 
     installPhase = ''
       runHook preInstall
-      mv usr/ $out/
+      mkdir -p $out
+      mv usr/* $out/
       mv var/ $out/
       mv etc/ $out/
       runHook postInstall
     '';
   };
 
-  nordVPNfhs = buildFHSUserEnv {
+  nordVPNfhs = buildFHSEnvChroot {
     name = "nordvpnd";
     runScript = "nordvpnd";
 
@@ -64,10 +65,10 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/share $out/lib/systemd/system
+    mkdir -p $out/bin $out/share
     ln -s ${nordVPNBase}/bin/nordvpn $out/bin
     ln -s ${nordVPNfhs}/bin/nordvpnd $out/bin
-    ln -s ${nordVPNBase}/share/{bash-completion,doc,man} $out/share/
+    ln -s ${nordVPNBase}/share/* $out/share/
     ln -s ${nordVPNBase}/var $out/
     runHook postInstall
   '';

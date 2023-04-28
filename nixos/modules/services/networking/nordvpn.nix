@@ -15,12 +15,19 @@ with lib; {
   config = mkIf config.services.nordvpn.enable {
     environment.systemPackages = [ pkgs.nordvpn ];
 
-    users.groups.nordvpn = {};
+    users.groups.nordvpn = { };
     systemd = {
       services.nordvpn = {
         description = "NordVPN daemon.";
         serviceConfig = {
           ExecStart = "${pkgs.nordvpn}/bin/nordvpnd";
+          ExecStartPre = ''
+            ${pkgs.bash}/bin/bash -c '\
+              mkdir -m 700 -p /var/lib/nordvpn; \
+              if [ -z "$(ls -A /var/lib/nordvpn)" ]; then \
+                cp -r ${pkgs.nordvpn}/var/lib/nordvpn/* /var/lib/nordvpn; \
+              fi'
+          '';
           NonBlocking = true;
           KillMode = "process";
           Restart = "on-failure";
@@ -33,18 +40,6 @@ with lib; {
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
       };
-
-      tmpfiles.rules = [
-        "d /run/nordvpn 0770 root nordvpn"
-      ];
     };
-
-    system.activationScripts.nordvpn = ''
-      mkdir -p /run/nordvpn
-      mkdir -m 700 -p /var/lib/nordvpn
-      if [ -z "$(ls -A /var/lib/nordvpn)" ]; then
-        cp -r ${pkgs.nordvpn}/var/lib/nordvpn/* /var/lib/nordvpn
-      fi
-    '';
   };
 }
