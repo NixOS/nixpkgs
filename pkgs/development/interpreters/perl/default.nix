@@ -77,8 +77,8 @@ in rec {
   perldevel = callPackage ./intepreter.nix {
     self = perldevel;
     perlAttr = "perldevel";
-    version = "5.37.0";
-    sha256 = "sha256-8RQO6gtH+WmghqzRafbqAH1MhKv/vJCcvysi7/+T9XI=";
+    version = "5.37.11";
+    sha256 = "sha256-omeBdAHHG6NprPJ3anl4xZZFNX1RZN2Gg4mk4AbDUHM=";
     inherit passthruFun;
   };
 }
