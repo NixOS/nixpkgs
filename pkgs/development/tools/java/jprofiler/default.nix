@@ -4,7 +4,7 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-, undmg
+, _7zz
 , jdk
 }:
 
@@ -12,9 +12,7 @@ let
   inherit (stdenv.hostPlatform) system;
   pname = "jprofiler";
 
-  # 11.1.4 is the last version which can be unpacked by undmg
-  # See: https://github.com/matthewbauer/undmg/issues/9
-  version = if stdenv.isLinux then "13.0.2" else "11.1.4";
+  version = "13.0.2";
   nameApp = "JProfiler";
 
   meta = with lib; {
@@ -33,7 +31,7 @@ let
     sha256 = "sha256-x9I7l2ctquCqUymtlQpFXE6+u0Yg773qE6MvAxvCaEE=";
   } else fetchurl {
     url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_${lib.replaceStrings ["."] ["_"]  version}.dmg";
-    sha256 = "sha256-WDMGrDsMdY1//WMHgr+/YKSxHWt6A1dD1Pd/MuDOaz8=";
+    sha256 = "sha256-CpuFmvszMZA1+1A51swWA3maK8I8RQEYo8Z3A/CQSlA=";
   };
 
   srcIcon = fetchurl {
@@ -80,15 +78,20 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src;
 
-    # Archive extraction via undmg fails for this particular version.
-    nativeBuildInputs = [ makeWrapper undmg ];
+    nativeBuildInputs = [ makeWrapper _7zz ];
 
-    sourceRoot = "${nameApp}.app";
+    unpackPhase = ''
+      runHook preUnpack
+      7zz x $src -x!JProfiler/\[\]
+      runHook postUnpack
+    '';
+
+    sourceRoot = "${nameApp}";
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out/{Applications/${nameApp}.app,bin}
-      cp -R . $out/Applications/${nameApp}.app
+      mkdir -p $out/{Applications,bin}
+      cp -R ${nameApp}.app $out/Applications/
       makeWrapper $out/Applications/${nameApp}.app/Contents/MacOS/JavaApplicationStub $out/bin/${pname}
       runHook postInstall
     '';
