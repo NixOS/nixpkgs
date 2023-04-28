@@ -26,8 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     pyjwt
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ] ++ pyjwt.optional-dependencies.crypto;
 
   nativeCheckInputs = [
     aiohttp
@@ -51,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Auth0 Python SDK";
     homepage = "https://github.com/auth0/auth0-python";
+    changelog = "https://github.com/auth0/auth0-python/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc ];
   };
