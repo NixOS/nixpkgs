@@ -138,7 +138,8 @@ in
             };
 
             source = mkOption {
-              type = types.path;
+              default = null;
+              type = types.nullOr types.path;
               description = lib.mdDoc "Path of the source file.";
             };
 
@@ -160,9 +161,11 @@ in
     environment.etc = listToAttrs (attrValues (mapAttrs
       (name: value: {
         name = "xdg/nvim/${name}";
-        value = value // {
-          target = "xdg/nvim/${value.target}";
-        };
+        value = removeAttrs
+          (value // {
+            target = "xdg/nvim/${value.target}";
+          })
+          (optionals (isNull value.source) [ "source" ]);
       })
       cfg.runtime));
 
