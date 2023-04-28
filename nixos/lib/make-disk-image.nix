@@ -511,7 +511,7 @@ let format' = format; in let
     ${if format == "raw" then ''
       mv $diskImage $out/${filename}
     '' else ''
-      ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
+      ${pkgs.qemu-utils}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
     ''}
     diskImage=$out/${filename}
   '';
