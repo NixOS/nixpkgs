@@ -9,6 +9,8 @@ let
     inherit ocaml;
 
     ### A ###
+    aches = callPackage ../development/ocaml-modules/aches { };
+    aches-lwt = callPackage ../development/ocaml-modules/aches/lwt.nix { };
 
     afl-persistent = callPackage ../development/ocaml-modules/afl-persistent { };
 
