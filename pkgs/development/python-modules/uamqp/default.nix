@@ -40,6 +40,9 @@ buildPythonPackage rec {
     sed -i \
       -e '/#define EVP_PKEY_id/d' \
       src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/adapters/x509_openssl.c
+    sed -z -i \
+      -e 's/OpenSSL 3\nif(LINUX)/OpenSSL 3\nif(1)/' \
+      src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/CMakeLists.txt
   '';
 
   nativeBuildInputs = [

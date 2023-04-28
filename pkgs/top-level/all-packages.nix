@@ -23068,7 +23068,7 @@ with pkgs;
   opensaml-cpp = callPackage ../development/libraries/opensaml-cpp { };
 
   openscenegraph = callPackage ../development/libraries/openscenegraph {
-    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Foundation;
+    inherit (darwin.apple_sdk.frameworks) AGL Accelerate Carbon Cocoa Foundation;
   };
 
   openslide = callPackage ../development/libraries/openslide { };
@@ -30501,6 +30501,19 @@ with pkgs;
 
   freenet = callPackage ../applications/networking/p2p/freenet {
     gradle = gradle_7;
+    jdk = jdk_headless;
+    # Reduce closure size
+    jre = pkgs.jre_minimal.override {
+      modules = [
+        "java.base"
+        "java.logging"
+        "java.naming"
+        "java.sql"
+        "java.desktop"
+        "java.management"
+      ];
+      jdk = jdk_headless;
+    };
   };
 
   freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
@@ -31608,6 +31621,8 @@ with pkgs;
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
+
+  kubecm = callPackage ../applications/networking/cluster/kubecm { };
 
   ktunnel = callPackage ../applications/networking/cluster/ktunnel { };
 
