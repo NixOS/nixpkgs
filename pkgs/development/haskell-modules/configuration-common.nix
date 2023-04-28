@@ -2630,5 +2630,6 @@ self: super: {
     LLVM = pkgs.llvmPackages_13.libllvm;
   };
 
+  # libfuse3 fails to mount fuse file systems within the build environment
   libfuse3 = dontCheck super.libfuse3;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
