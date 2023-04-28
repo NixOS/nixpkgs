@@ -8317,6 +8317,18 @@ final: prev:
     meta.homepage = "https://github.com/darfink/starsearch.vim/";
   };
 
+  statuscol-nvim = buildVimPluginFrom2Nix {
+    pname = "statuscol.nvim";
+    version = "2023-04-23";
+    src = fetchFromGitHub {
+      owner = "luukvbaal";
+      repo = "statuscol.nvim";
+      rev = "b115b5d7a4ea5d4b152d61d89457cc874e08a7d1";
+      sha256 = "026j7m8la14pfz9xqmw13gr1x8c9yx9ykqq4wa8x7cyf3a1s8z13";
+    };
+    meta.homepage = "https://github.com/luukvbaal/statuscol.nvim/";
+  };
+
   stylish-nvim = buildVimPluginFrom2Nix {
     pname = "stylish.nvim";
     version = "2022-02-01";
