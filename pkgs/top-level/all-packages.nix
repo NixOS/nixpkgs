@@ -37866,6 +37866,8 @@ with pkgs;
 
   qucs-s = callPackage ../applications/science/electronics/qucs-s { };
 
+  samacsys-library-loader = callPackage ../applications/science/electronics/samacsys-library-loader { };
+
   xcircuit = callPackage ../applications/science/electronics/xcircuit { };
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
