@@ -1388,6 +1388,8 @@ let
 
     process = callPackage ../development/ocaml-modules/process { };
 
+    prometheus = callPackage ../development/ocaml-modules/prometheus { };
+
     progress = callPackage ../development/ocaml-modules/progress { };
 
     promise_jsoo = callPackage ../development/ocaml-modules/promise_jsoo { };
