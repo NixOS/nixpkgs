@@ -47,9 +47,20 @@ let
   buildSetupcfg = import ../../../build-support/build-setupcfg lib self;
 
   # Check whether a derivation provides a Python module.
-  hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
+  # hasPythonModule :: derivation -> bool
+  hasPythonModule = drv:
+    let
+      isDrv = lib.isDerivation drv;
+      result = drv?pythonModule && drv.pythonModule == python;
+    in
+      lib.warnIfNot
+        isDrv
+        "Calling hasPythonModule with a ${builtins.typeOf drv} instead of a deprecation is deprecated"
+        result;
 
   # Get list of required Python modules given a list of derivations.
+  #
+  # requiredPythonModules :: [ derivation ] -> [ derivation ]
   requiredPythonModules = drvs: let
     modules = lib.filter hasPythonModule drvs;
   in lib.unique ([python] ++ modules ++ lib.concatLists (lib.catAttrs "requiredPythonModules" modules));
