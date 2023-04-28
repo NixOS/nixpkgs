@@ -1311,6 +1311,8 @@ let
       inherit (pkgs) coreutils imagemagick;
     };
 
+    polynomial = callPackage ../development/ocaml-modules/polynomial { };
+
     portaudio = callPackage ../development/ocaml-modules/portaudio {
       inherit (pkgs) portaudio;
     };
