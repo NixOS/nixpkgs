@@ -64,12 +64,14 @@ stdenv.mkDerivation (rec {
 
   patches =
     [
-      # Do not look in /usr etc. for dependencies.
-      ./no-sys-dirs-5.31.patch
-
       # Enable TLS/SSL verification in HTTP::Tiny by default
       ./http-tiny-verify-ssl-by-default.patch
     ]
+
+    # Do not look in /usr etc. for dependencies.
+    ++ lib.optional (lib.versionOlder version "5.38.0") ./no-sys-dirs-5.31.patch
+    ++ lib.optional (lib.versionAtLeast version "5.38.0") ./no-sys-dirs-5.38.0.patch
+
     ++ lib.optional stdenv.isSunOS ./ld-shared.patch
     ++ lib.optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
     ++ lib.optional crossCompiling ./MakeMaker-cross.patch;
