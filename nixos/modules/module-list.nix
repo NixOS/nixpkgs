@@ -1120,6 +1120,7 @@
   ./services/system/saslauthd.nix
   ./services/system/self-deploy.nix
   ./services/system/systembus-notify.nix
+  ./services/system/systemd-lock-handler
   ./services/system/uptimed.nix
   ./services/torrent/deluge.nix
   ./services/torrent/flexget.nix
