@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , perl, flex, bison, python3, autoconf
 , which, cmake, help2man
+, makeWrapper, glibcLocales
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   buildInputs = [ perl ];
-  nativeBuildInputs = [ flex bison python3 autoconf help2man ];
+  nativeBuildInputs = [ makeWrapper flex bison python3 autoconf help2man ];
   nativeCheckInputs = [ which ];
 
   doCheck = stdenv.isLinux; # darwin tests are broken for now...
@@ -26,6 +27,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs bin/* src/{flexfix,vlcovgen} test_regress/{driver.pl,t/*.pl}
+  '';
+
+  postInstall = lib.optionalString stdenv.isLinux ''
+    for x in $(ls $out/bin/verilator*); do
+      wrapProgram "$x" --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
+    done
   '';
 
   meta = with lib; {
