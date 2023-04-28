@@ -232,14 +232,14 @@ stdenv.mkDerivation (rec {
     priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
   };
 } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-  crossVersion = "c876045741f5159318085d2737b0090f35a842ca"; # June 5, 2022
+  crossVersion = "1.4.1"; # Apr 25, 2023
 
   perl-cross-src = fetchFromGitHub {
     name = "perl-cross-unstable-${crossVersion}";
     owner = "arsv";
     repo = "perl-cross";
     rev = crossVersion;
-    sha256 = "sha256-m9UCoTQgXBxSgk9Q1Zv6wl3Qnd0aZm/jEPXkcMKti8U=";
+    sha256 = "sha256-QF4/bs8unsloJGosTsQi6ZCzhNebaRg+iFMscerenms=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
