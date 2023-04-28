@@ -16,17 +16,14 @@ stdenv.mkDerivation {
     hash = "sha256-HbKu3eidDepCsW2VKPiUyNFdrk4ZC1muzHj1qVEnbqs=";
   };
 
-  # Perl is needed for testing
-  nativeBuildInputs = [ perl ] ++ lib.optional stdenv.hostPlatform.isLoongArch64 autoreconfHook;
+  nativeCheckInputs = [ perl ];
   outputs = [ "out" "info" ]; # the man pages are rather small
 
   buildInputs = [ pcre libiconv ];
 
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance
-  # all platforms: timing sensitivity in long-pattern-perf
-  #doCheck = !stdenv.isDarwin && !stdenv.isSunOS && !stdenv.isCygwin && !stdenv.isFreeBSD;
-  doCheck = false;
+  doCheck = !stdenv.isCygwin && !stdenv.isFreeBSD;
 
   # On macOS, force use of mkdir -p, since Grep's fallback
   # (./install-sh) is broken.
