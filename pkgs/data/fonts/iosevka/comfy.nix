@@ -2,18 +2,19 @@
 
 let
   sets = [
-    # The compact, sans-serif set:
-    "comfy"
-    "comfy-fixed"
-    "comfy-duo"
-    # The compact, serif set:
-    "comfy-motion"
-    "comfy-motion-fixed"
-    "comfy-motion-duo"
-    # The wide, sans-serif set:
-    "comfy-wide"
-    "comfy-wide-fixed"
-    "comfy-wide-duo"
+    # Family                  | Shapes | Spacing | Style      | Ligatures |
+    # ------------------------+--------+---------+------------+-----------|
+    "comfy"                   # Sans   | Compact | Monospaced | Yes       |
+    "comfy-fixed"             # Sans   | Compact | Monospaced | No        |
+    "comfy-duo"               # Sans   | Compact | Duospaced  | Yes       |
+    # ------------------------+--------+---------+------------+-----------|
+    "comfy-motion"            # Slab   | Compact | Monospaced | Yes       |
+    "comfy-motion-fixed"      # Slab   | Compact | Monospaced | No        |
+    "comfy-motion-duo"        # Slab   | Compact | Duospaced  | Yes       |
+    # ------------------------+--------+---------+------------+-----------|
+    "comfy-wide"              # Sans   | Wide    | Monospaced | Yes       |
+    "comfy-wide-fixed"        # Sans   | Wide    | Monospaced | No        |
+    "comfy-wide-duo"          # Sans   | Wide    | Duospaced  | Yes       |
   ];
   version = "1.1.0";
   src = fetchFromSourcehut {
