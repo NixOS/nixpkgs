@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "dj-database-url";
-  version = "1.3.0";
+  version = "2.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h75ffEyD2bPYzpS4NPls6hSzmG82KarAl6/dkxjXsJg=";
+    hash = "sha256-o1qfD0N3XKb5DYGdxFYjPve8x2tHN31dkIt1x+syBiQ=";
   };
 
   propagatedBuildInputs = [
