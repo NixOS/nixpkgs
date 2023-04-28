@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "lark"
+    "networkx"
   ];
 
   nativeBuildInputs = [
