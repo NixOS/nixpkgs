@@ -230,8 +230,9 @@ buildStdenv.mkDerivation ({
       url = "https://hg.mozilla.org/mozilla-central/raw-rev/1068e0955cfb";
       hash = "sha256-iPqmofsmgvlFNm+mqVPbdgMKmP68ANuzYu+PzfCpoNA=";
     })
-  ] ++ [
+  ] ++ lib.optionals (lib.versionOlder version "114.0") [
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1830040
+    # https://hg.mozilla.org/mozilla-central/rev/cddb250a28d8
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/community/firefox/avoid-redefinition.patch?id=2f620d205ed0f9072bbd7714b5ec1b7bf6911c12";
       hash = "sha256-fLUYaJwhrC/wF24HkuWn2PHqz7LlAaIZ1HYjRDB2w9A=";
