@@ -5,7 +5,7 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-let version = "3.7"; in
+let version = "3.11"; in
 
 stdenv.mkDerivation {
   pname = "gnugrep";
@@ -13,11 +13,8 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnu/grep/grep-${version}.tar.xz";
-    sha256 = "0g42svbc1nq5bamxfj6x7320wli4dlj86padk0hwgbk04hqxl42w";
+    hash = "sha256-HbKu3eidDepCsW2VKPiUyNFdrk4ZC1muzHj1qVEnbqs=";
   };
-
-  # https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=b50c6442e43d79471a31a2a202d3e50c0557446f
-  patches = lib.optional stdenv.hostPlatform.isLoongArch64 ./sigsegv-loongarch.patch;
 
   # Perl is needed for testing
   nativeBuildInputs = [ perl ] ++ lib.optional stdenv.hostPlatform.isLoongArch64 autoreconfHook;
@@ -62,7 +59,7 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
 
     maintainers = [
-      maintainers.eelco
+      maintainers.das_j
       maintainers.m00wl
     ];
     platforms = platforms.all;
