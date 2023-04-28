@@ -12258,6 +12258,8 @@ with pkgs;
 
   slirp4netns = callPackage ../tools/networking/slirp4netns { };
 
+  slowcgi-portable = callPackage ../servers/slowcgi-portable { };
+
   slowlorust = callPackage ../tools/networking/slowlorust { };
 
   slsa-verifier = callPackage ../tools/security/slsa-verifier { };
