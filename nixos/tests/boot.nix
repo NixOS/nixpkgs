@@ -104,6 +104,15 @@ in {
       bios = uefiBinary;
     };
 
+    directNetboot = makeTest {
+      name = "directboot-netboot";
+      nodes.machine = {
+        imports = [ ../modules/installer/netboot/netboot-minimal.nix ];
+        virtualisation.memorySize = 4096;
+      };
+      testScript = "machine.fail('stat /dev/vda')";
+    };
+
     uefiNetboot = makeNetbootTest "uefi" {
       bios = uefiBinary;
       # Custom ROM is needed for EFI PXE boot. I failed to understand exactly why, because QEMU should still use iPXE for EFI.

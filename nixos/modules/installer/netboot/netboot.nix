@@ -1,7 +1,7 @@
 # This module creates netboot media containing the given NixOS
 # configuration.
 
-{ config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -40,6 +40,34 @@ with lib;
     # !!! Hack - attributes expected by other modules.
     environment.systemPackages = [ pkgs.grub2_efi ]
       ++ (lib.optionals (pkgs.stdenv.hostPlatform.system != "aarch64-linux") [pkgs.grub2 pkgs.syslinux]);
+
+    # We only want to set those options in the context of
+    # the QEMU infrastructure.
+    virtualisation = lib.optionalAttrs (options ? virtualisation.directBoot) {
+      # By default, using netboot images in virtualized contexts
+      # should not create any disk image ideally, except if
+      # asked explicitly.
+      diskImage = mkDefault null;
+      # We do not want to mount the host Nix store in those situations.
+      mountHostNixStore = mkDefault false;
+      # We do not need the nix store image because:
+      # - either we boot through network and we have the squashfs image
+      # - either we direct boot, we have the squashfs image
+      useNixStoreImage = mkDefault false;
+      # Though, we still want a writable store through .rw-store
+      writableStore = mkDefault true;
+      # Ideally, we might not want to test the network / firmware.
+      directBoot = {
+        enable = mkDefault true;
+        # We need to use our netboot initrd which contains a copy of the Nix store.
+        initrd = "${config.system.build.netbootRamdisk}/${config.system.boot.loader.initrdFile}";
+      };
+      # We do not want to use the default filesystems.
+      useDefaultFilesystems = mkDefault false;
+      # Bump the default memory size as we are loading the whole initrd in RAM.
+      memorySize = mkDefault 1536;
+    };
+
 
     fileSystems."/" = mkImageMediaOverride
       { fsType = "tmpfs";
