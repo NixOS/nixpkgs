@@ -18,6 +18,7 @@
 , pythonOlder
 , pretend
 , libiconv
+, libxcrypt
 , iso8601
 , py
 , pytz
@@ -56,7 +57,8 @@ buildPythonPackage rec {
   ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv ]
+    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   propagatedBuildInputs = lib.optionals (!isPyPy) [
     cffi

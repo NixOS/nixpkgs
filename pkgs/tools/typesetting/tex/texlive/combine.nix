@@ -82,8 +82,12 @@ in (buildEnv {
   nativeBuildInputs = [ makeWrapper libfaketime perl bin.texlinks ];
   buildInputs = pkgList.extraInputs;
 
-  # This is set primarily to help find-tarballs.nix to do its job
-  passthru.packages = pkgList.all;
+  passthru = {
+    # This is set primarily to help find-tarballs.nix to do its job
+    packages = pkgList.all;
+    # useful for inclusion in the `fonts.fonts` nixos option or for use in devshells
+    fonts = "${texmfroot}/texmf-dist/fonts";
+  };
 
   postBuild = ''
     TEXMFROOT="${texmfroot}"
@@ -196,7 +200,11 @@ in (buildEnv {
       makeWrapper "$target" "$link" \
         --prefix PATH : "${gnused}/bin:${gnugrep}/bin:${coreutils}/bin:$out/bin:${perl}/bin" \
         --prefix PERL5LIB : "$PERL5LIB" \
-        --set-default TEXMFCNF "$TEXMFCNF"
+        --set-default TEXMFCNF "$TEXMFCNF" \
+        --set-default FONTCONFIG_FILE "${
+          # neccessary for XeTeX to find the fonts distributed with texlive
+          makeFontsConf { fontDirectories = [ "${texmfroot}/texmf-dist/fonts" ]; }
+        }"
 
       # avoid using non-nix shebang in $target by calling interpreter
       if [[ "$(head -c 2 "$target")" = "#!" ]]; then
@@ -311,5 +319,3 @@ in (buildEnv {
   ''
   ;
 }).overrideAttrs (_: { allowSubstitutes = true; })
-# TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file
-#       similarly, deal with xe(la)tex font visibility?

@@ -4859,7 +4859,7 @@
     name = "Eric Evenchick";
   };
   evenbrenden = {
-    email = "evenbrenden@gmail.com";
+    email = "packages@anythingexternal.com";
     github = "evenbrenden";
     githubId = 2512008;
     name = "Even Brenden";

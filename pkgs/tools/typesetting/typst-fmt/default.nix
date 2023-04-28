@@ -1,25 +1,21 @@
 { lib, rustPlatform, fetchFromGitHub }:
 rustPlatform.buildRustPackage rec {
   pname = "typst-fmt";
-  version = "unstable-2023-04-16";
+  version = "unstable-2023-04-26";
 
   src = fetchFromGitHub {
     owner = "astrale-sharp";
     repo = pname;
-    rev = "9ed1fd1656f8e776b6c8d9d326c488f5ba1091eb";
-    hash = "sha256-yHR13n5yx5Yl2atteGQq+qqz21zsy37ZJfGllbvSZcQ=";
+    rev = "cb299645244551bfc91dc4579a2543a0d4cc84b0";
+    hash = "sha256-/+m3HkOsBiOAhOqBfv+hPauvDKqfCrwOWGDtYfW5zJQ=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "typst-0.2.0" = "sha256-+YHyxZTzMG9zpzLV9NgJsMtrXG+/ymPQo5b26HDYJaQ=";
+      "typst-0.2.0" = "sha256-6Uezm3E/qGl9303auqjvfWe3KKsqwsHeXUrjWemjJKU=";
     };
   };
-
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
 
   checkFlags = [
     # test_eof is ignored upstream

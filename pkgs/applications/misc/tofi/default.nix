@@ -6,6 +6,7 @@
 , meson
 , scdoc
 , wayland-protocols
+, wayland-scanner
 , freetype
 , harfbuzz
 , cairo
@@ -25,7 +26,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lokp6Zmdt7WuAyuRnHBkKD4ydbNiQY7pEVY97Z62U90=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols ];
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [
+    meson ninja pkg-config scdoc wayland-protocols wayland-scanner
+  ];
   buildInputs = [ freetype harfbuzz cairo pango wayland libxkbcommon ];
 
   meta = with lib; {
@@ -34,6 +38,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fbergroth ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
   };
 }

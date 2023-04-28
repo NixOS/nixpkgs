@@ -11486,7 +11486,7 @@ with pkgs;
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
   rtabmap = libsForQt5.callPackage ../applications/video/rtabmap/default.nix {
-    pcl = pcl.override { vtk = vtk_8_withQt5; };
+    pcl = pcl.override { vtk = vtkWithQt5; };
   };
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio {
@@ -13552,6 +13552,8 @@ with pkgs;
   xray = callPackage ../tools/networking/xray { };
 
   xteve = callPackage ../servers/xteve { };
+
+  termbook = callPackage ../tools/text/termbook { };
 
   testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
 
@@ -23064,7 +23066,7 @@ with pkgs;
   opensaml-cpp = callPackage ../development/libraries/opensaml-cpp { };
 
   openscenegraph = callPackage ../development/libraries/openscenegraph {
-    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Foundation;
+    inherit (darwin.apple_sdk.frameworks) AGL Accelerate Carbon Cocoa Foundation;
   };
 
   openslide = callPackage ../development/libraries/openslide { };
@@ -30497,6 +30499,19 @@ with pkgs;
 
   freenet = callPackage ../applications/networking/p2p/freenet {
     gradle = gradle_7;
+    jdk = jdk_headless;
+    # Reduce closure size
+    jre = pkgs.jre_minimal.override {
+      modules = [
+        "java.base"
+        "java.logging"
+        "java.naming"
+        "java.sql"
+        "java.desktop"
+        "java.management"
+      ];
+      jdk = jdk_headless;
+    };
   };
 
   freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
@@ -31604,6 +31619,8 @@ with pkgs;
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
+
+  kubecm = callPackage ../applications/networking/cluster/kubecm { };
 
   ktunnel = callPackage ../applications/networking/cluster/ktunnel { };
 
@@ -33584,6 +33601,8 @@ with pkgs;
   udiskie = callPackage ../applications/misc/udiskie { };
 
   sacc = callPackage ../applications/networking/gopher/sacc { };
+
+  savvycan = libsForQt5.callPackage ../applications/networking/sniffers/savvycan {};
 
   sayonara = libsForQt5.callPackage ../applications/audio/sayonara { };
 
@@ -38294,6 +38313,8 @@ with pkgs;
   atlantis = callPackage ../applications/networking/cluster/atlantis { };
 
   atmos = callPackage ../applications/networking/cluster/atmos { };
+
+  aiac = callPackage ../applications/networking/cluster/aiac { };
 
   fn-cli = callPackage ../applications/networking/cluster/fn-cli { };
 

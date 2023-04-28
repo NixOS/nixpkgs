@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     # This patch adds an option to pad filesystems (increasing size) in
     # exchange for better chunking / binary diff calculation.
     ./4k-align.patch
-  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [ which ]
