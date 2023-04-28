@@ -561,8 +561,8 @@ with lib.maintainers; {
       _9999years
       Gabriella439
     ];
-    scope = "mercury.com engineers working on Haskell.";
-    shortName = "Mercury";
+    scope = "Group registry for packages maintained by Mercury";
+    shortName = "Mercury Employees";
   };
 
   mobile = {
