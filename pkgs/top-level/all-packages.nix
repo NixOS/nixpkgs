@@ -34835,10 +34835,6 @@ with pkgs;
     electron = electron_19;
   };
 
-  wio = callPackage ../applications/window-managers/wio {
-    wlroots = wlroots_0_14;
-  };
-
   windowlab = callPackage ../applications/window-managers/windowlab { };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
