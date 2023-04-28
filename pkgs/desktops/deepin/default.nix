@@ -23,6 +23,8 @@ let
     util-dfm = callPackage ./library/util-dfm { };
 
     #### CORE
+    dde-kwin = callPackage ./core/dde-kwin { };
+    deepin-kwin = callPackage ./core/deepin-kwin { };
     dde-app-services = callPackage ./core/dde-app-services { };
     dde-control-center = callPackage ./core/dde-control-center { };
     dde-calendar = callPackage ./core/dde-calendar { };
