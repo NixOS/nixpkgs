@@ -15477,6 +15477,20 @@ with self; {
     };
   };
 
+  ModuleExtractVERSION = buildPerlPackage {
+    pname = "Module-Extract-VERSION";
+    version = "1.116";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Module-Extract-VERSION-1.116.tar.gz";
+      hash = "sha256-QZA6BoUXgoU0X12oVdkluUVO5xCpeV48TDJ7ri9Vdpg=";
+    };
+    meta = {
+      homepage = "https://github.com/briandfoy/module-extract-version";
+      description = "Extract a module version safely";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   ModuleFind = buildPerlPackage {
     pname = "Module-Find";
     version = "0.15";
