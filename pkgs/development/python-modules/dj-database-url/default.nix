@@ -24,6 +24,10 @@ buildPythonPackage rec {
   # Tests access a DB via network
   doCheck = false;
 
+  pythonImportsCheck = [
+    "dj_database_url"
+  ];
+
   meta = with lib; {
     description = "Use Database URLs in your Django Application";
     homepage = "https://github.com/jazzband/dj-database-url";
