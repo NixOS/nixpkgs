@@ -157,7 +157,7 @@ in
         OVERLEAF_SITE_LANGUAGE = "fr";
         OVERLEAF_APP_NAME = "My self-hosted Overleaf instance";
         OVERLEAF_EMAIL_FROM_ADDRESS = "overleaf@example.org";
-        OVERLEAF_EMAIL_SMTP_HOST = "overleaf@example.org";
+        OVERLEAF_EMAIL_SMTP_HOST = "mail.example.org";
         OVERLEAF_EMAIL_SMTP_PORT = "587";
         OVERLEAF_EMAIL_SMTP_SECURE = "true";
         OVERLEAF_EMAIL_SMTP_USER = "overleaf";
@@ -191,7 +191,7 @@ in
       type = with types; listOf package;
       default = [ ];
       example = literalExpression "with pkgs; [ qpdf ]";
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Additional packages to place in the path of the Overleaf services.
       '';
     };
@@ -200,7 +200,7 @@ in
       type = with types; listOf str;
       default = [ ];
       example = literalExpression ''[ "sagetex" ]'';
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Additional engines to execute code when compiling LateX documents. Choose among
         "sagetex", "pythontex" and "knitr".
       '';
@@ -209,7 +209,7 @@ in
     latexmkrc = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Extra contents appended to the LaTeX configuration file,
         .latexmkrc.
       '';
@@ -219,7 +219,7 @@ in
       type = with types; listOf package;
       default = [ ];
       example = literalExpression ''with pkgs.aspellDicts; [ en fr ]'';
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Additional languages to add to overleaf spell check engine,
         based on aspell.
       '';
@@ -229,7 +229,7 @@ in
       type = with types; listOf package;
       default = [ ];
       example = literalExpression ''with pkgs.python3Packages; [ matplotlib ]'';
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Additional packages to add to the ```pythontex``` engine.
       '';
     };
@@ -238,17 +238,24 @@ in
       type = with types; listOf package;
       default = [ ];
       example = literalExpression ''with pkgs.rPackages; [ ggplot2 ]'';
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Additional R packages to use with the ```knitr``` engine.
       '';
     };
+
+    dockerSandboxes.enable = mkEnableOption (mdDoc ''
+      Docker sandboxed compiles, provided the user adds
+        ```virtualization.docker.enable = true;```
+      to their configuration. It avoids read-access to all the filesystem by any Overleaf user.
+    '');
   };
 
   config = mkIf cfg.enable (mkMerge [
     {
       services.overleaf.settings = {
         NODE_ENV = "production";
-        OVERLEAF_CONFIG = "${pkgs.overleaf}/share/server-ce/config/settings.js";
+        # OVERLEAF_CONFIG = "${pkgs.overleaf}/share/server-ce/config/settings.js";
+        OVERLEAF_CONFIG = "/var/lib/overleaf/settings.js";
         DATA_DIR = mkDefault "/var/lib/overleaf";
         OVERLEAF_MONGO_URL = mkDefault "mongodb://localhost:27017/overleaf";
         OVERLEAF_REDIS_PATH = mkDefault "/run/redis-overleaf/redis.sock";
@@ -256,47 +263,54 @@ in
         WEB_API_USER = mkDefault "overleaf";
         GRACEFUL_SHUTDOWN_DELAY = mkDefault "0";
         OVERLEAF_FPH_DISPLAY_NEW_PROJECTS = mkDefault "true";
+        SANDBOXED_COMPILES = mkIf cfg.dockerSandboxes.enable "true";
+        TEX_LIVE_DOCKER_IMAGE = mkIf cfg.dockerSandboxes.enable "texlive/texlive";
       };
 
       systemd.targets.overleaf.requires = map (service: "overleaf-${service}.service") overleafServices;
 
       systemd.services =
-        let activateServices = service: {
-          "overleaf-${service}" = {
-            description = "Overleaf ${service}";
-            wantedBy = [ "overleaf.target" "multi-user.target" ];
-            environment = cfg.settings;
-            path = with pkgs; [ cfg.texlivePackage qpdf (aspellWithDicts (ps: with ps; cfg.dicts)) ] ++ cfg.path;
-            serviceConfig = {
-              Type = "simple";
-              ExecStart = pkgs.writeShellScript "overleaf-${service}" ''
-                # This sources the secrets as environment variables, less secure but avoids a patch:
-                for secret in $(ls $CREDENTIALS_DIRECTORY)
-                do
-                  export $secret=$(cat $CREDENTIALS_DIRECTORY/$secret)
-                done
+        let
+          activateServices = service: {
+            "overleaf-${service}" = {
+              description = "Overleaf ${service}";
+              wantedBy = [ "overleaf.target" "multi-user.target" ];
+              environment = cfg.settings;
+              path = with pkgs; [ cfg.texlivePackage qpdf (aspellWithDicts (ps: with ps; cfg.dicts)) ] ++ cfg.path;
+              serviceConfig = {
+                Type = "simple";
+                ExecStart = pkgs.writeShellScript "overleaf-${service}" ''
+                  # This sources the secrets as environment variables, less secure but avoids a patch:
+                  for secret in $(ls $CREDENTIALS_DIRECTORY)
+                  do
+                    export $secret=$(cat $CREDENTIALS_DIRECTORY/$secret)
+                  done
 
-                # This softlinks the LaTeX configuration files to the home of Overleaf:
-                ${optionalString (cfg.engines != []) "ln -sf ${latexmkrc} /var/lib/overleaf/.latexmkrc"}
+                  # This softlinks the LaTeX configuration files to the home of Overleaf:
+                  ${optionalString (cfg.engines != []) "ln -sf ${latexmkrc} /var/lib/overleaf/.latexmkrc"}
 
-                exec ${pkgs.overleaf}/bin/overleaf-${service}
-              '';
-              StateDirectory = "overleaf";
-              WorkingDirectory = "/var/lib/overleaf";
-              User = "overleaf";
-              LoadCredential = mapAttrsToList (name: path: "${name}:${path}") cfg.secrets;
-              ProtectHome = true;
-              ProtectSystem = true;
-              PrivateDevices = true;
-              ProtectHostname = true;
-              ProtectClock = true;
-              ProtectKernelTunables = true;
-              ProtectKernelModules = true;
-              ProtectKernelLogs = true;
-              ProtectControlGroups = true;
+                  exec ${pkgs.overleaf}/bin/overleaf-${service}
+                '';
+                StateDirectory = "overleaf";
+                WorkingDirectory = "/var/lib/overleaf";
+                User = "overleaf";
+                LoadCredential = mapAttrsToList (name: path: "${name}:${path}") cfg.secrets;
+                SupplementaryGroups = mkIf cfg.dockerSandboxes.enable [ "docker" ];
+                #InaccessibleDirectories = [ "/run" ];
+                #PrivateTmp = true;
+                ProtectHome = true;
+                ProtectSystem = "strict";
+                NoNewPrivileges = true;
+                PrivateDevices = true;
+                ProtectHostname = true;
+                ProtectClock = true;
+                ProtectKernelTunables = true;
+                ProtectKernelModules = true;
+                ProtectKernelLogs = true;
+                ProtectControlGroups = true;
+              };
             };
           };
-        };
         in
         mkMerge (map activateServices overleafServices);
 
@@ -396,4 +410,3 @@ in
     })
   ]);
 }
-
