@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dbx";
-  version = "0.8.8";
+  version = "0.8.11";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "databrickslabs";
     repo = "dbx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nx6fz+atlnB/KxdznnZArHpyv41cuBDQauG0irq1Zyc=";
+    hash = "sha256-dArR1z3wkGDd3Y1WHK0sLjhuaKHAcsx6cCH2rgVdUGs=";
   };
 
   postPatch = ''
@@ -36,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
     retry
     rich
+    tenacity
     typer
     watchdog
   ] ++ typer.optional-dependencies.all;
