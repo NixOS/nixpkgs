@@ -13209,6 +13209,18 @@ final: prev:
     meta.homepage = "https://github.com/honza/vim-snippets/";
   };
 
+  vim-solarized8 = buildVimPluginFrom2Nix {
+    pname = "vim-solarized8";
+    version = "2023-02-25";
+    src = fetchFromGitHub {
+      owner = "lifepillar";
+      repo = "vim-solarized8";
+      rev = "bcd4e74e9850fd59ee0294a5c3ae958ed535cc52";
+      sha256 = "00qhqy511wdcmlsglwhqsd6gffagjmdz0wl5627a3nwmxs8p45sa";
+    };
+    meta.homepage = "https://github.com/lifepillar/vim-solarized8/";
+  };
+
   vim-solidity = buildVimPluginFrom2Nix {
     pname = "vim-solidity";
     version = "2018-04-17";
