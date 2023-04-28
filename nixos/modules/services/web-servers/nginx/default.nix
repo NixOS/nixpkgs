@@ -256,8 +256,6 @@ let
 
       ${proxyCachePathConfig}
 
-      ${vhosts}
-
       ${optionalString cfg.statusPage ''
         server {
           listen ${toString cfg.defaultHTTPListenPort};
@@ -274,6 +272,8 @@ let
           }
         }
       ''}
+
+      ${vhosts}
 
       ${cfg.appendHttpConfig}
     }''}

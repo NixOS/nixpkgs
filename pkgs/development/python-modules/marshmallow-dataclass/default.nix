@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-dataclass";
-  version = "8.5.13";
+  version = "8.5.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "lovasoa";
     repo = "marshmallow_dataclass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zLJMUbiGu+ewY4+IbHKBGWav6UY62aqXQSqLT+oIeI0=";
+    hash = "sha256-ckz2EQj8gtD+YxNCxisswfSu9FcD//ZeSZRrLBhrld0=";
   };
 
   propagatedBuildInputs = [

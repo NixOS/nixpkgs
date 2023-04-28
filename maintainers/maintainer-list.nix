@@ -14840,10 +14840,12 @@
     name = "Stijn DW";
   };
   StillerHarpo = {
-    email = "florianengel39@gmail.com";
+    email = "engelflorian@posteo.de";
     github = "StillerHarpo";
     githubId = 25526706;
     name = "Florian Engel";
+    keys = [{ fingerprint = "4E2D9B26940E0DABF376B7AF76762421D45837DE"; }];
+    matrix = "@qe7ftcyrpg:matrix.org";
   };
   stites = {
     email = "sam@stites.io";
@@ -15264,6 +15266,12 @@
     github = "telotortium";
     githubId = 1755789;
     name = "Robert Irelan";
+  };
+  tennox = {
+    email = "tennox+nix@txlab.io";
+    github = "tennox";
+    githubId = 2084639;
+    name = "Manu";
   };
   teozkr = {
     email = "teo@nullable.se";
