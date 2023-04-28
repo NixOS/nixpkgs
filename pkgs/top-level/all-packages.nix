@@ -23647,10 +23647,7 @@ with pkgs;
 
   serd = callPackage ../development/libraries/serd { };
 
-  serf = callPackage ../development/libraries/serf {
-    openssl = openssl_1_1;
-    aprutil = aprutil.override { openssl = openssl_1_1; };
-  };
+  serf = callPackage ../development/libraries/serf { };
 
   sfsexp = callPackage ../development/libraries/sfsexp { };
 
@@ -33964,7 +33961,6 @@ with pkgs;
     sublime-merge-dev;
 
   inherit (callPackages ../applications/version-management/subversion {
-    openssl = openssl_1_1;
     sasl = cyrus_sasl;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   }) subversion;
