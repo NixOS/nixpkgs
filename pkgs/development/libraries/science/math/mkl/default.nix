@@ -19,47 +19,47 @@ let
   # https://registrationcenter.intel.com/en/products/
   version = "${mklVersion}.${rel}";
 
-  mklVersion = if stdenvNoCC.isDarwin then "2023.1.0" else "2023.0.0";
-  rel = if stdenvNoCC.isDarwin then "43558" else "25398";
+  mklVersion = "2023.1.0";
+  rel = if stdenvNoCC.isDarwin then "43558" else "46342";
 
   # Intel openmp uses its own versioning.
-  openmpVersion = if stdenvNoCC.isDarwin then "2023.1.0" else "2023.0.0";
-  openmpRel = "25370";
+  openmpVersion = "2023.1.0";
+  openmpRel = "46305";
 
   # Thread Building Blocks release.
-  tbbVersion = if stdenvNoCC.isDarwin then "2021.9.0" else "2021.8.0";
-  tbbRel = "25334";
+  tbbVersion = "2021.9.0";
+  tbbRel = "43484";
 
   shlibExt = stdenvNoCC.hostPlatform.extensions.sharedLibrary;
 
   oneapi-mkl = fetchurl {
     url = "https://yum.repos.intel.com/oneapi/intel-oneapi-mkl-${mklVersion}-${mklVersion}-${rel}.x86_64.rpm";
-    hash = "sha256-fiL5TDmQHB+OQb1ERcoDQFpUutpsPe+AqIbMoa85nEk=";
+    hash = "sha256-BeI5zB0rrE6C21dezNc7/WSKmTWpjsZbpg0/y0Y87VQ=";
   };
 
   oneapi-mkl-common = fetchurl {
     url = "https://yum.repos.intel.com/oneapi/intel-oneapi-mkl-common-${mklVersion}-${mklVersion}-${rel}.noarch.rpm";
-    hash = "sha256-AFayUxybi48SgR2mX6mxkNECconIXm1/TWelvE4aqX0=";
+    hash = "sha256-NjIqTeFppwjXFlPYHPHfZa/bWBiHJru3atC4fIMXN0w=";
   };
 
   oneapi-mkl-common-devel = fetchurl {
     url = "https://yum.repos.intel.com/oneapi/intel-oneapi-mkl-common-devel-${mklVersion}-${mklVersion}-${rel}.noarch.rpm";
-    hash = "sha256-riyIO2xWuvTSzfXgB+K6NSKqWLRmxKSnGZaH5nYTYPk=";
+    hash = "sha256-GX19dlvBWRgwSOCmWcEOrnbmp4S2j0448fWpx+iPVWw=";
   };
 
   oneapi-mkl-devel = fetchurl {
     url = "https://yum.repos.intel.com/oneapi/intel-oneapi-mkl-devel-${mklVersion}-${mklVersion}-${rel}.x86_64.rpm";
-    hash = "sha256-2IK0t47FaPNp7Oq9LJ5ZdLmlFFjQluWrh+nhvi8MCd8=";
+    hash = "sha256-F4XxtSPAjNaShEL/l44jJK+JdOOkYI19X/njRB6FkNw=";
   };
 
   oneapi-openmp = fetchurl {
     url = "https://yum.repos.intel.com/oneapi/intel-oneapi-openmp-${mklVersion}-${mklVersion}-${openmpRel}.x86_64.rpm";
-    hash = "sha256-grzVFWqt3Vpwb5K3Bur+sJz8pdKxZ4ISJXF5YAPrwmk=";
+    hash = "sha256-1SlkI01DxFvwGPBJ73phs86ka0SmCrniwiXQ9DJwIXw=";
   };
 
   oneapi-tbb = fetchurl {
     url = "https://yum.repos.intel.com/oneapi/intel-oneapi-tbb-${tbbVersion}-${tbbVersion}-${tbbRel}.x86_64.rpm";
-    hash = "sha256-8hIoRfV36XVElKCqP9UmCkjLCs3l0ZKCHxg+yxNIHc0=";
+    hash = "sha256-wIktdf1p1SS1KrnUlc8LPkm0r9dhZE6cQNr4ZKTWI6A=";
   };
 
 in stdenvNoCC.mkDerivation ({
