@@ -1,10 +1,10 @@
 { lib
-, python
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
 , setuptools
 , flask
+, pythonOlder
  }:
 
 buildPythonPackage rec {
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "4.8.0";
   format = "pyproject";
 
-  disabled = python.pythonOlder "3";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-HTTPAuth";
