@@ -9,6 +9,7 @@
 , mmh3
 , setuptools-scm
 }:
+
 buildPythonPackage rec {
   pname = "pymilvus";
   version = "2.2.6";
@@ -26,14 +27,17 @@ buildPythonPackage rec {
     ujson
     pandas
     mmh3
-  ] ++ lib.optionals stdenv.isLinux [ setuptools-scm ];
+  ] ++ lib.optionals stdenv.isLinux [
+    setuptools-scm
+  ];
 
   doCheck = false;
 
   meta = with lib; {
+    description = "Python SDK for Milvus";
     homepage = "https://github.com/milvus-io/pymilvus";
-    description = "Python SDK for Milvus. ";
+    changelog = "https://github.com/milvus-io/pymilvus/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [happysalada];
+    maintainers = with maintainers; [ happysalada ];
   };
 }
