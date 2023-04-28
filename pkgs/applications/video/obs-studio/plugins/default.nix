@@ -32,6 +32,7 @@
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
+  obs-scale-to-sound = qt6Packages.callPackage ./obs-scale-to-sound.nix { };
   obs-source-clone = callPackage ./obs-source-clone.nix { };
 
   obs-source-record = callPackage ./obs-source-record.nix { };
