@@ -11,6 +11,8 @@ buildPythonPackage {
   pname = "faiss-pytest-suite";
   inherit (faiss) version;
 
+  format = "other";
+
   src = "${faiss.src}/tests";
 
   dontBuild = true;
