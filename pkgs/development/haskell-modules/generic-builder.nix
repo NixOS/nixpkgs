@@ -314,6 +314,8 @@ let
       continue
     fi
   '';
+
+  intermediatesDir = "share/haskell/${ghc.version}/${pname}-${version}/dist";
 in lib.fix (drv:
 
 assert allPkgconfigDepends != [] -> pkg-config != null;
@@ -495,7 +497,7 @@ stdenv.mkDerivation ({
         ''
         mkdir -p dist;
         rm -r dist/build
-        cp -r ${previousIntermediates}/dist/build dist/build
+        cp -r ${previousIntermediates}/${intermediatesDir}/build dist/build
         find dist/build -exec chmod u+w {} +
         find dist/build -exec touch -d '1970-01-01T00:00:00Z' {} +
         ''
@@ -587,9 +589,10 @@ stdenv.mkDerivation ({
 
   ${if doInstallIntermediates then "installIntermediatesPhase" else null} = ''
     runHook preInstallIntermediates
-    installIntermediatesDir=${if enableSeparateIntermediatesOutput then "$intermediates" else "$out"}
-    mkdir -p $installIntermediatesDir/dist
-    cp -r dist/build $installIntermediatesDir/dist
+    intermediatesOutput=${if enableSeparateIntermediatesOutput then "$intermediates" else "$out"}
+    installIntermediatesDir="$intermediatesOutput/${intermediatesDir}"
+    mkdir -p "$installIntermediatesDir"
+    cp -r dist/build "$installIntermediatesDir"
     runHook postInstallIntermediates
   '';
 
