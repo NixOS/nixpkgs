@@ -3156,6 +3156,8 @@ self: super: with self; {
 
   eradicate = callPackage ../development/python-modules/eradicate { };
 
+  es-client = callPackage ../development/python-modules/es-client { };
+
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
