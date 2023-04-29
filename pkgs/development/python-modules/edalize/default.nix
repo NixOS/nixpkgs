@@ -4,6 +4,7 @@
 , coreutils
 , jinja2
 , pandas
+, pyparsing
 , pytestCheckHook
 , pythonOlder
 , which
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "edalize";
-  version = "0.4.1";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "olofk";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-h6b0mdAUR4NsN2SpnLu5OgS9Fy9ZRitG+5Sbon1jlUM=";
+    hash = "sha256-jsrJr/iuezh9/KL0PykWB1XKev4Wr5QeDh0ZWNMZSp8=";
   };
 
   postPatch = ''
@@ -34,12 +35,18 @@ buildPythonPackage rec {
     jinja2
   ];
 
+  passthru.optional-dependencies = {
+    reporting = [
+      pandas
+      pyparsing
+    ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
-    pandas
     which
     yosys
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "edalize"
