@@ -3050,6 +3050,8 @@ self: super: with self; {
 
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
+  elasticsearch8 = callPackage ../development/python-modules/elasticsearch8 { };
+
   elasticsearch-dsl = callPackage ../development/python-modules/elasticsearch-dsl { };
 
   elasticsearchdsl = self.elasticsearch-dsl;
