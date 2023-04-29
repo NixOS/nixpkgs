@@ -39,6 +39,8 @@ final: prev: {
     ];
   };
 
+  "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli;
+
   "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override (oldAttrs: {
     nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
       glib
