@@ -6696,6 +6696,12 @@
     githubId = 55066419;
     name = "Emily Lange";
   };
+  indexyz = {
+    email = "indexyz@pm.me";
+    github = "5aaee9";
+    githubId = 7685264;
+    name = "Indexyz";
+  };
   ineol = {
     email = "leo.stefanesco@gmail.com";
     github = "ineol";
