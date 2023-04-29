@@ -63,6 +63,6 @@ buildGoModule rec {
     description = "GTK4 Discord client in Go, attempt #4.";
     homepage = "https://github.com/diamondburned/gtkcord4";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hmenke urandom ];
+    maintainers = with maintainers; [ hmenke urandom aleksana ];
   };
 }
