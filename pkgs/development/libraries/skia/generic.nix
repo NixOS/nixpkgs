@@ -21,6 +21,7 @@
 , rev
 , hash
 , depSrcs
+, extraHeaders ? [ ]
 }:
 
 stdenv.mkDerivation {
@@ -52,6 +53,13 @@ stdenv.mkDerivation {
     zlib
   ];
 
+  postPatch = ''
+    # Fix references to gn
+    substituteInPlace gn/find_headers.py \
+      --replace "gn              = sys.argv[1]" \
+                "gn = '${gn}/bin/gn'"
+  '';
+
   preConfigure = with depSrcs; ''
     mkdir -p third_party/externals
     ln -s ${angle2} third_party/externals/angle2
@@ -64,11 +72,13 @@ stdenv.mkDerivation {
     "is_debug=false"
     "is_official_build=true"
     "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
+    "skia_enable_tools=true"
   ];
 
   ninjaFlags = [
     "skia"
     "modules"
+    "skia.h"
   ];
 
   installPhase = ''
@@ -80,7 +90,17 @@ stdenv.mkDerivation {
     mkdir -p $out
     cp -r --parents -t $out/ \
       include \
-      out/Release/libskia.a
+      modules/*/include \
+      modules/skottie/src/text/SkottieShaper.h \
+      src/core/SkLRUCache.h \
+      src/core/SkTInternalLList.h \
+      src/utils/SkJSON.h \
+      src/utils/SkJSONWriter.h \
+      out/Release/libskia.a \
+      out/Release/gen/skia.h
+  '' + lib.optionalString (extraHeaders != []) ''
+    cp --parents -t $out/ ${lib.escapeShellArgs extraHeaders}
+  '' + ''
 
     runHook postInstall
   '';
