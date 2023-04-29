@@ -467,7 +467,6 @@ dont-distribute-packages:
  - algorithmic-composition-basic
  - algorithmic-composition-frequency-shift
  - algorithmic-composition-overtones
- - align-audio
  - alms
  - alpha
  - alsa-gui
@@ -698,7 +697,6 @@ dont-distribute-packages:
  - attoparsec-iteratee
  - attoparsec-text-enumerator
  - atuin
- - audacity
  - audiovisual
  - aura
  - authoring
@@ -762,7 +760,6 @@ dont-distribute-packages:
  - batching
  - battlenet-yesod
  - battleplace-api
- - battleship-combinatorics
  - battleships
  - bayes-stack
  - bbi
@@ -812,13 +809,13 @@ dont-distribute-packages:
  - bitcoin-block
  - bitcoin-tx
  - bitcoin-types
+ - bitcoind-regtest
  - bitfield
  - bitly-cli
  - bitmaps
  - bittorrent
  - bla
  - blakesum-demo
- - blas-comfort-array
  - blastxml
  - blatex
  - blaze-builder-enumerator
@@ -1029,10 +1026,6 @@ dont-distribute-packages:
  - columbia
  - columnar
  - comark
- - comfort-array
- - comfort-array-shape
- - comfort-fftw
- - comfort-glpk
  - commsec
  - commsec-keyexchange
  - comonad-random
@@ -2269,7 +2262,6 @@ dont-distribute-packages:
  - hslua-objectorientation_2_3_0
  - hslua-packaging_2_3_0
  - hslua_2_3_0
- - hsndfile-storablevector
  - hspec-expectations-pretty
  - hspec-pg-transact
  - hspec-setup
@@ -2563,7 +2555,6 @@ dont-distribute-packages:
  - language-qux
  - language-spelling
  - lapack
- - lapack-comfort-array
  - lapack-hmatrix
  - large-anon
  - lat
@@ -2650,12 +2641,10 @@ dont-distribute-packages:
  - llvm-data-interop
  - llvm-dsl
  - llvm-extension
- - llvm-extra
  - llvm-general
  - llvm-general-quote
  - llvm-hs-pretty
  - llvm-pretty-bc-parser
- - llvm-tf
  - llvm-tools
  - lmonad-yesod
  - lnd-client
@@ -2769,9 +2758,7 @@ dont-distribute-packages:
  - metronome
  - micro-gateway
  - microformats2-types
- - midi-alsa
  - midimory
- - midisurface
  - mighttpd
  - minecraft-data
  - minesweeper
@@ -2910,7 +2897,6 @@ dont-distribute-packages:
  - net-spider-rpl
  - net-spider-rpl-cli
  - netcore
- - netlib-comfort-array
  - netlines
  - netstring-enumerator
  - nettle-frp
@@ -3208,6 +3194,7 @@ dont-distribute-packages:
  - prolog-graph-lib
  - prologue
  - prolude
+ - proof-assistant-bot
  - propane
  - proplang
  - prosidyc
@@ -3260,6 +3247,7 @@ dont-distribute-packages:
  - quickcheck-relaxng
  - quickcheck-state-machine
  - quickcheck-state-machine-distributed
+ - quickcheck-state-machine_0_7_2
  - quicktest
  - quipper
  - quipper-algorithms
@@ -3702,9 +3690,7 @@ dont-distribute-packages:
  - solr
  - sonic-visualiser
  - souffle-dsl
- - sound-collage
  - source-code-server
- - soxlib
  - sparkle
  - sparrow
  - sparsebit
@@ -3722,7 +3708,6 @@ dont-distribute-packages:
  - spice
  - spike
  - splines
- - split-record
  - sprinkles
  - sproxy
  - sproxy-web
@@ -3767,14 +3752,12 @@ dont-distribute-packages:
  - stm-actor
  - stm-supply
  - stmcontrol
- - storablevector-carray
  - storablevector-streamfusion
  - stratum-tool
  - stratux
  - stratux-demo
  - stratux-http
  - stratux-websockets
- - streamed
  - streaming-fft
  - streaming-process
  - strelka
@@ -3852,13 +3835,7 @@ dont-distribute-packages:
  - syntax-pretty
  - syntax-printer
  - syntaxnet-haskell
- - synthesizer
- - synthesizer-alsa
- - synthesizer-core
- - synthesizer-dimensional
- - synthesizer-filter
  - synthesizer-llvm
- - synthesizer-midi
  - sys-process
  - systemstats
  - t3-client
@@ -3924,7 +3901,6 @@ dont-distribute-packages:
  - time-io-access
  - time-warp
  - timeprint
- - timeseries
  - timezone-unix
  - tinkoff-invest-sdk
  - tintin
