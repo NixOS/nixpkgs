@@ -1,0 +1,19 @@
+diff --git a/src/sound.h b/src/sound.h
+index 52224c3..33afdf9 100644
+--- a/src/sound.h
++++ b/src/sound.h
+@@ -21,14 +21,9 @@
+ #define SOUND_H
+ 
+ #ifdef USE_SOUND
+-#if __APPLE__
+-#include <OpenAL/al.h>
+-#include <OpenAL/alc.h>
+-#else
+ #include <AL/al.h>
+ #include <AL/alc.h>
+ #endif
+-#endif
+ 
+ #include "player.h"
+ 
