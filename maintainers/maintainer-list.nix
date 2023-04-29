@@ -4453,6 +4453,12 @@
     githubId = 103082;
     name = "Ed Brindley";
   };
+  elesiuta = {
+    email = "elesiuta@gmail.com";
+    github = "elesiuta";
+    githubId = 8146662;
+    name = "Eric Lesiuta";
+  };
   eliandoran = {
     email = "contact@eliandoran.me";
     name = "Elian Doran";
