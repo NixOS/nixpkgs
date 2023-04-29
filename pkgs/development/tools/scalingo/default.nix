@@ -5,15 +5,11 @@ buildGoModule rec {
   version = "1.28.2";
 
   src = fetchFromGitHub {
-    owner = "Scalingo";
+    owner = pname;
     repo = "cli";
     rev = version;
     sha256 = "sha256-dMiOGPQ2wodVdB43Sk3GfEFYIU/W2K9DG/4hhVxb1fs=";
   };
-
-  preConfigure = ''
-    export HOME=$TMPDIR
-  '';
 
   vendorHash = null;
 
@@ -22,7 +18,9 @@ buildGoModule rec {
     "-s"
   ];
 
-  DISABLE_UPDATE_CHECKER = "true";
+  preConfigure = ''
+    export HOME=$TMPDIR
+  '';
 
   meta = with lib; {
     description = "Command Line client for Scalingo PaaS";
