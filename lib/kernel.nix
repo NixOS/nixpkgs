@@ -8,9 +8,10 @@ with lib;
   option = x:
       x // { optional = true; };
 
-  yes      = { tristate    = "y"; optional = false; };
-  no       = { tristate    = "n"; optional = false; };
-  module   = { tristate    = "m"; optional = false; };
+  yes      = { tristate    = "y";  optional = false; };
+  no       = { tristate    = "n";  optional = false; };
+  module   = { tristate    = "m";  optional = false; };
+  unset    = { tristate    = null; optional = false; };
   freeform = x: { freeform = x; optional = false; };
 
   /*
