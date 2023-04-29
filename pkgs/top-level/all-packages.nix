@@ -39384,6 +39384,8 @@ with pkgs;
 
   thermald = callPackage ../tools/system/thermald { };
 
+  therion = callPackage ../applications/misc/therion { };
+
   throttled = callPackage ../tools/system/throttled { };
 
   thinkfan = callPackage ../tools/system/thinkfan { };
