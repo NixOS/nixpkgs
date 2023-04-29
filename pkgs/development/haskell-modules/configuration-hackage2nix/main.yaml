@@ -698,6 +698,7 @@ supported-platforms:
   keid-sound-openal:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   keid-ui-dearimgui:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   kqueue:                                       [ platforms.netbsd, platforms.freebsd, platforms.openbsd, platforms.darwin ]
+  libfuse3:                                     [ platforms.linux ]
   linux-evdev:                                  [ platforms.linux ]
   linux-file-extents:                           [ platforms.linux ]
   linux-inotify:                                [ platforms.linux ]
