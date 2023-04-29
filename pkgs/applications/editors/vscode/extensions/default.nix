@@ -19,6 +19,7 @@
 , alejandra
 , millet
 , shfmt
+, typst-lsp
 , autoPatchelfHook
 , zlib
 , stdenv
@@ -2273,6 +2274,14 @@ let
           version = "0.4.1";
           sha256 = "sha256-NZejUb99JDcnqjihLTPkNzVCgpqDkbiwAySbBVZ0esY=";
         };
+
+        nativeBuildInputs = [ jq moreutils ];
+
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."typst-lsp.serverPath".default = "${typst-lsp}/bin/typst-lsp"' package.json | sponge package.json
+        '';
+
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/nvarner.typst-lsp/changelog";
           description = "A VSCode extension for providing a language server for Typst";
