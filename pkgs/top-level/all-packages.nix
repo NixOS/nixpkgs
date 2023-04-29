@@ -2958,7 +2958,7 @@ with pkgs;
 
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
-  brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
+  brewtarget = callPackage ../applications/misc/brewtarget { } ;
 
   bootspec = callPackage ../tools/misc/bootspec { };
 
