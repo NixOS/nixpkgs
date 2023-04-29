@@ -24958,6 +24958,9 @@ with pkgs;
 
   shine = callPackage ../development/libraries/shine { };
 
+  skia_m102 = callPackage ../development/libraries/skia/m102.nix { };
+  skia = skia_m102;
+
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix { };
 
   s2n-tls = callPackage ../development/libraries/s2n-tls { };

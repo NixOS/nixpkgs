@@ -1,4 +1,5 @@
 { fetchgit }:
+# ./make-deps.sh 'angle2|dng_sdk|piex|sfntly' chrome/m102
 {
   angle2 = fetchgit {
     url = "https://chromium.googlesource.com/angle/angle.git";
