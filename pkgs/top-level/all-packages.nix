@@ -1684,6 +1684,8 @@ with pkgs;
 
   ttchat = callPackage ../tools/misc/ttchat { };
 
+  ukmm = callPackage ../tools/games/ukmm { };
+
   unflac = callPackage ../tools/audio/unflac { };
 
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
