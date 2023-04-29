@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "sha256-dMiOGPQ2wodVdB43Sk3GfEFYIU/W2K9DG/4hhVxb1fs=";
   };
 
-  doCheck = false;
+  preConfigure = ''
+    export HOME=$TMPDIR
+  '';
 
   vendorHash = null;
 
