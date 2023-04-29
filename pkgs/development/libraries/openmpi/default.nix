@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openmpi";
-  version = "4.1.6";
+  version = "5.0.0rc11";
 
   src = with lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-90CZRIVRbetjtTEa8SLCZRefUyig2FelZ7hdsAsR5BU=";
+    sha256 = "sha256-AOFcjPZ4fs8N/FkzqfRqUqryY8qfMvHyaOfVdXa4m/A=";
   };
 
   postPatch = ''
@@ -57,7 +57,6 @@ stdenv.mkDerivation rec {
       "--with-libnl=${lib.getDev libnl}"
       "--with-pmix=${lib.getDev pmix}"
       "--with-pmix-libdir=${pmix}/lib"
-      "--enable-mpi-cxx"
     ] ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
