@@ -439,6 +439,7 @@
   ./services/desktops/pipewire/wireplumber.nix
   ./services/desktops/profile-sync-daemon.nix
   ./services/desktops/system-config-printer.nix
+  ./services/desktops/system76-scheduler.nix
   ./services/desktops/telepathy.nix
   ./services/desktops/tumbler.nix
   ./services/desktops/zeitgeist.nix
