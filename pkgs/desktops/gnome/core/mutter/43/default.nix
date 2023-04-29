@@ -45,6 +45,7 @@
 , libcap_ng
 , egl-wayland
 , graphene
+, wayland
 , wayland-protocols
 }:
 
@@ -137,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsysprof-capture
     xkeyboard_config
     xwayland
+    wayland
     wayland-protocols
   ];
 
