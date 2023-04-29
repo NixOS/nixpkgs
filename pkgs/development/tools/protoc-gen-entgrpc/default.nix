@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "protoc-gen-entgrpc";
-  version = "0.3.0";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "ent";
     repo = "contrib";
     rev = "v${version}";
-    sha256 = "sha256-hK4I2LVvw7hkbUKRuDoaRuNX3nwlwipYucnXwzOCcXs=";
+    sha256 = "sha256-5gFdfMSAb0DWCMCzG0nVGU+VWam6yC26QYUPF1YjekM=";
   };
 
-  vendorSha256 = "sha256-bAM+NxD7mNd2fFxRDHCAzJTD7PVfT/9XHF88v9RHKwE=";
+  vendorHash = "sha256-DgqCGXqEnLBxyLZJrTRZIeBIrHYA7TNMV4WTk/3IS8Y=";
 
   subPackages = [ "entproto/cmd/protoc-gen-entgrpc" ];
 
