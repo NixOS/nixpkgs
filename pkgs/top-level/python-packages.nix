@@ -10452,6 +10452,8 @@ self: super: with self; {
 
   ropper = callPackage ../development/python-modules/ropper { };
 
+  rouge-score = callPackage ../development/python-modules/rouge-score { };
+
   routes = callPackage ../development/python-modules/routes { };
 
   rova = callPackage ../development/python-modules/rova { };
