@@ -16,6 +16,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-i/Fvuy9wzXot114BI0rIbLWDW70VEaDKGThTcTZLx1M=";
 
+  subPackages = [ "cmd/httpx" ];
+
+  ldflags = [ "-s" "-w" ];
+
   # Tests require network access
   doCheck = false;
 
