@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rinutils";
-  version = "0.10.1";
+  version = "0.10.2";
 
   meta = with lib; {
     homepage = "https://github.com/shlomif/rinutils";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/shlomif/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-MewljOmd57u+efMzjOcwSNrEVCUEXrK9DWvZLRuLmvs=";
+    sha256 = "sha256-2H/hGZcit/qb1QjhNTg/8HiPvX1lXL75dXwjIS+MIXs=";
   };
 
   nativeBuildInputs = [ cmake perl ];
