@@ -14,7 +14,7 @@ let
   archive_fmt = "tar.gz";
 
   sha256 = {
-    x86_64-linux = "194akxb692xpqppakw49aywp5ma43yfcwv5imw4pm05cna0n06b1";
+    x86_64-linux = "sha256-it6ZcRNoD48VboOVxgMz4tKGbKsff8RgEMLGl179ZVo=";
     x86_64-darwin = "0bgjx54c00v0nb88rzdv09g92yw9qsf2fxd8565g6fsw591va1pa";
     aarch64-linux = "0z07aikjhk9055apbvyaxdp8cgjl291fqgwgfbp9y3826q7s0riq";
     aarch64-darwin = "0garlx458jy6dpqbfd0y2p7xj9hagm815cflybbbxf5yz2v9da01";
@@ -22,7 +22,7 @@ let
 in
   stdenv.mkDerivation (finalAttrs: {
     pname = "infisical";
-    version = "0.3.7";
+    version = "0.4.2";
 
     src = fetchurl {
       url = "https://github.com/Infisical/infisical/releases/download/v${finalAttrs.version}/infisical_${finalAttrs.version}_${plat}.tar.gz";
