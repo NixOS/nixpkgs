@@ -172,15 +172,15 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  Dafny =  buildDotnetModule rec {
+  Dafny = buildDotnetModule rec {
     pname = "Dafny";
-    version = "3.7.3";
+    version = "4.0.0";
 
     src = fetchFromGitHub {
-      owner = "Microsoft";
+      owner = "dafny-lang";
       repo = "dafny";
       rev = "v${version}";
-      sha256 = "1knv6zvpq0bnngmlwkcqgjpdkqsgbiihs6a0cycb8ssn18s4ippr";
+      sha256 = "sha256-7mVFDORbu9KsJ4IH8PrrpXE7xFrWVTyBmRaL8Kt/ghY=";
     };
 
     postPatch = ''
@@ -189,30 +189,32 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         javac $(find -name "*.java" | grep "^./src/main") -d classes
         jar cf build/libs/DafnyRuntime.jar -C classes dafny
       ''} Source/DafnyRuntime/DafnyRuntimeJava/gradlew
+
+      # Needed to fix
+      # "error NETSDK1129: The 'Publish' target is not supported without specifying a target framework. The current project targets multiple frameworks, you must specify the framework for the published application."
+      substituteInPlace Source/DafnyRuntime/DafnyRuntime.csproj \
+        --replace TargetFrameworks TargetFramework \
+        --replace "netstandard2.0;net452" net6.0
     '';
 
-    preBuild = ''
-      ln -s ${pkgs.z3} Binaries/z3
-    '';
-
-    buildInputs = [ Boogie pkgs.jdk11 ];
+    buildInputs = [ pkgs.jdk11 ];
     nugetDeps = ../development/dotnet-modules/dafny-deps.nix;
 
-    projectFile = [ "Source/Dafny.sln" ];
+    # Build just these projects. Building Source/Dafny.sln includes a bunch of
+    # unnecessary components like tests.
+    projectFile = [
+      "Source/Dafny/Dafny.csproj"
+      "Source/DafnyRuntime/DafnyRuntime.csproj"
+      "Source/DafnyLanguageServer/DafnyLanguageServer.csproj"
+    ];
 
-    # Boogie as an input is not enough. Boogie libraries need to be at the same
-    # place as Dafny ones. Same for "*.dll.mdb". No idea why or how to fix.
+    executables = [ "Dafny" ];
+
+    # Help Dafny find z3
+    makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ z3 ]}" ];
+
     postFixup = ''
-      for lib in ${Boogie}/lib/dotnet/${Boogie.pname}/*.dll{,.mdb}; do
-        ln -s $lib $out/lib/dotnet/${pname}/
-      done
-      # We generate our own executable scripts
-      rm -f $out/lib/dotnet/${pname}/dafny{,-server}
-
-      mv "$out/bin/Dafny" "$out/bin/dafny"
-
-      rm -f $out/bin/{coverlet,Microsoft,NUnit3,System}.*
-      rm -f $out/bin/{ThirdPartyNotices.txt,XUnitExtensions}
+      ln -s "$out/bin/Dafny" "$out/bin/dafny" || true
     '';
 
     meta = with lib; {
