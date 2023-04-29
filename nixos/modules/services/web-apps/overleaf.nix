@@ -37,7 +37,8 @@ let
     "real-time"
     "track-changes"
     "web"
-  ] ++ (optional (cfg.dicts != [ ]) "spelling");
+  ] ++ (optional (cfg.dicts != [ ]) "spelling")
+  ++ (optional (cfg.gitBridge.enable != [ ]) "gitbridge");
 
   latexmkrc = pkgs.writeText "latexmkrc" (optionalString (elem "pythontex" cfg.engines) ''
     #############
@@ -81,7 +82,8 @@ let
     #########
     add_cus_dep( 'Rtex', 'tex', 0, 'do_knitr');
     sub do_knitr {
-      Run_subst(qq{Rscript -e 'library("knitr");
+      Run_subst(qq{Rscript -e '
+        library("knitr");
         opts_knit\$set(concordance=T);
         knitr::knit(%S, output=%D);' &> ./knitr.log});
     }
@@ -133,8 +135,8 @@ in
 
     texlivePackage = mkOption {
       type = types.package;
-      default = pkgs.texlive.combined.scheme-basic;
-      defaultText = literalExpression "pkgs.textlive.combined.scheme-basic";
+      default = pkgs.texlive.combined.scheme-medium;
+      defaultText = literalExpression "pkgs.textlive.combined.scheme-medium";
       example = literalExpression "pkgs.texlive.combined.scheme-full";
       description = mdDoc ''
         The package for TeX Live. See
@@ -161,6 +163,7 @@ in
         OVERLEAF_EMAIL_SMTP_PORT = "587";
         OVERLEAF_EMAIL_SMTP_SECURE = "true";
         OVERLEAF_EMAIL_SMTP_USER = "overleaf";
+        OVERLEAF_GITBRIDGE_PORT = "3029";
         ADMIN_PRIVILEGE_AVAILABLE = "true";
       };
       description = mdDoc ''
@@ -248,6 +251,8 @@ in
         ```virtualization.docker.enable = true;```
       to their configuration. It avoids read-access to all the filesystem by any Overleaf user.
     '');
+
+    gitBridge.enable = mkEnableOption (mdDoc ''Bridge between Overleaf CE and git'');
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -265,6 +270,7 @@ in
         OVERLEAF_FPH_DISPLAY_NEW_PROJECTS = mkDefault "true";
         SANDBOXED_COMPILES = mkIf cfg.dockerSandboxes.enable "true";
         TEX_LIVE_DOCKER_IMAGE = mkIf cfg.dockerSandboxes.enable "texlive/texlive";
+        OVERLEAF_GITBRIDGE_PORT = mkIf cfg.gitBridge.enable (mkDefault "3029");
       };
 
       systemd.targets.overleaf.requires = map (service: "overleaf-${service}.service") overleafServices;
@@ -308,6 +314,7 @@ in
                 ProtectKernelModules = true;
                 ProtectKernelLogs = true;
                 ProtectControlGroups = true;
+                Restart = "on-failure";
               };
             };
           };
@@ -340,6 +347,14 @@ in
               proxy_read_timeout 10m;
               proxy_send_timeout 10m;
             '';
+          };
+        };
+        virtualHosts."git.${cfg.hostname}" = mkIf cfg.gitBridge.enable {
+          locations."/" = {
+            proxyPass = "http://localhost:${cfg.settings.OVERLEAF_GITBRIDGE_PORT}";
+          };
+          locations."/project/" = {
+            proxyPass = "http://localhost:${cfg.settings.OVERLEAF_GITBRIDGE_PORT}";
           };
         };
       };
