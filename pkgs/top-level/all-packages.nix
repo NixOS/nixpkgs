@@ -32203,7 +32203,11 @@ with pkgs;
 
   moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
 
-  moonlight-qt = libsForQt5.callPackage ../applications/misc/moonlight-qt { };
+  moonlight-qt = libsForQt5.callPackage ../applications/misc/moonlight-qt {
+    SDL2 = buildPackages.SDL2.override {
+      drmSupport = true;
+    };
+  };
 
   mooSpace = callPackage ../applications/audio/mooSpace { };
 
