@@ -173,13 +173,13 @@
     "vendorHash": "sha256-mnG2CZ/ko4p4CTs0YskJP41sQD9lmEz4dRQLiklim34="
   },
   "brightbox": {
-    "hash": "sha256-e4WvQKtf6zVEZ74c+lE3ZkbX24rPazp8MrJCNQDTz2c=",
+    "hash": "sha256-yKoYjrZs6EOX1pdDuF+LOu/jZ3fidZJBU7yhSp6qSFU=",
     "homepage": "https://registry.terraform.io/providers/brightbox/brightbox",
     "owner": "brightbox",
     "repo": "terraform-provider-brightbox",
-    "rev": "v3.3.0",
+    "rev": "v3.4.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-dm+2SseBeS49/QoepRwJ1VFwPCtU+6VymvyEH/sLkvI="
+    "vendorHash": "sha256-jOscYbwZ8m4smGiAy2vNhPMTAUnINkpuVRQ8E6LpWVw="
   },
   "buildkite": {
     "hash": "sha256-/LTUDnE5XB8Gwbs+CroJW+3pM7opNSVQFWvRQWQjFqc=",
