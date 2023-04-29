@@ -2147,6 +2147,8 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS
 
+  _86Box = callPackage ../applications/emulators/86box { };
+
   atari800 = callPackage ../applications/emulators/atari800 { };
 
   ataripp = callPackage ../applications/emulators/atari++ { };
