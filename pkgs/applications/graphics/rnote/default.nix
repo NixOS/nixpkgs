@@ -59,6 +59,10 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
+  mesonFlags = [
+    (lib.mesonBool "cli" true)
+  ];
+
   buildInputs = [
     glib
     gstreamer

@@ -140,6 +140,7 @@ assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
+assert withUkify -> withEfi;
 
 let
   wantCurl = withRemote || withImportd;
