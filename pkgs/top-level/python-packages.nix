@@ -4268,6 +4268,8 @@ self: super: with self; {
 
   grpcio-tools = callPackage ../development/python-modules/grpcio-tools { };
 
+  grpcio-testing = callPackage ../development/python-modules/grpcio-testing { };
+
   grpclib = callPackage ../development/python-modules/grpclib { };
 
   gruut = callPackage ../development/python-modules/gruut { };
@@ -7665,6 +7667,8 @@ self: super: with self; {
 
   pmw = callPackage ../development/python-modules/pmw { };
 
+  pmdsky-debug-py = callPackage ../development/python-modules/pmdsky-debug-py { };
+
   pnglatex = callPackage ../development/python-modules/pnglatex { };
 
   pocket = callPackage ../development/python-modules/pocket { };
@@ -10122,6 +10126,8 @@ self: super: with self; {
 
   random2 = callPackage ../development/python-modules/random2 { };
 
+  range-typed-integers = callPackage ../development/python-modules/range-typed-integers { };
+
   rangehttpserver = callPackage ../development/python-modules/rangehttpserver { };
 
   rapidfuzz = callPackage ../development/python-modules/rapidfuzz { };
@@ -10709,6 +10715,8 @@ self: super: with self; {
   secure = callPackage ../development/python-modules/secure { };
 
   securetar = callPackage ../development/python-modules/securetar { };
+
+  sectools = callPackage ../development/python-modules/sectools { };
 
   seedir = callPackage ../development/python-modules/seedir { };
 

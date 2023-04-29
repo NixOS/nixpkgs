@@ -651,6 +651,9 @@ in
       preload_link_header = false;
       redirect_avatar_requests = false;
       pg_force_readonly_mode = false;
+      dns_query_timeout_secs = null;
+      regex_timeout_seconds = 2;
+      allow_impersonation = true;
     };
 
     services.redis.servers.discourse =

@@ -61,13 +61,13 @@
 
 stdenv.mkDerivation rec {
   pname = "audacity";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Audacity-${version}";
-    hash = "sha256-OQX3YFUdK9TR7ZuN2dZc6ZAWaqfftk5VH0qoOwbTAuM=";
+    hash = "sha256-4L5ggu1izm9kichZBsJHAFq74q59xWGVYC11gy3K9go=";
   };
 
   postPatch = ''
@@ -150,6 +150,7 @@ stdenv.mkDerivation rec {
     "-Daudacity_conan_enabled=Off"
     "-Daudacity_use_ffmpeg=loaded"
     "-Daudacity_has_vst3=Off"
+    "-Daudacity_has_crashreports=Off"
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"

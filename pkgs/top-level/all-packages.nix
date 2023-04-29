@@ -1367,6 +1367,8 @@ with pkgs;
     wine = null;
   };
 
+  ledfx = callPackage ../applications/audio/ledfx { };
+
   libdislocator = callPackage ../tools/security/afl/libdislocator.nix { };
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
@@ -1406,6 +1408,8 @@ with pkgs;
   airgeddon = callPackage ../tools/networking/airgeddon { };
 
   apache-airflow = with python3.pkgs; toPythonApplication apache-airflow;
+
+  apachetomcatscanner = callPackage ../tools/security/apachetomcatscanner { };
 
   airsonic = callPackage ../servers/misc/airsonic { };
 
@@ -16635,6 +16639,8 @@ with pkgs;
   cliscord = callPackage ../misc/cliscord {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  dart-sass-embedded = callPackage ../misc/dart-sass-embedded { };
 
   clojupyter = callPackage ../applications/editors/jupyter-kernels/clojupyter {
     jre = jre8;
@@ -34835,10 +34841,6 @@ with pkgs;
     electron = electron_19;
   };
 
-  wio = callPackage ../applications/window-managers/wio {
-    wlroots = wlroots_0_14;
-  };
-
   windowlab = callPackage ../applications/window-managers/windowlab { };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
@@ -35432,6 +35434,15 @@ with pkgs;
     boost = boost175;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
+  elementsd-simplicity = elementsd.overrideAttrs (_: rec {
+    version = "unstable-2023-04-18";
+    src = fetchFromGitHub {
+      owner = "ElementsProject";
+      repo = "elements";
+      rev = "ea318a45094ab3d31dd017d7781a6f28f1ffaa33"; # simplicity branch latest
+      sha256 = "ooe+If3HWaJWpr2ux7DpiCTqB9Hv+aXjquEjplDjvhM=";
+    };
+  });
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
@@ -39006,7 +39017,7 @@ with pkgs;
     };
     mysql = mysql;
     pcre = pcre-cpp;
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jre = openjdk19; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   });
 
   r128gain = callPackage ../applications/audio/r128gain { };
