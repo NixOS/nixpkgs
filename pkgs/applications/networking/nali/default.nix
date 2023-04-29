@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
 buildGoModule rec {
   pname = "nali";
@@ -13,6 +13,15 @@ buildGoModule rec {
 
   vendorHash = "sha256-l3Fs1Hd0kXI56uotic1407tb4ltkCSMzqqozFpvobH8=";
   subPackages = [ "." ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd nali \
+      --bash <($out/bin/nali completion bash) \
+      --fish <($out/bin/nali completion fish) \
+      --zsh <($out/bin/nali completion zsh)
+  '';
 
   meta = with lib; {
     description = "An offline tool for querying IP geographic information and CDN provider";
