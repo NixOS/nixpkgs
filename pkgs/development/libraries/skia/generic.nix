@@ -77,7 +77,7 @@ stdenv.mkDerivation {
     mkdir -p $out
     cp -r --parents -t $out/ \
       include \
-      out/Release/*.a
+      out/Release/libskia.a
     runHook postInstall
   '';
 
