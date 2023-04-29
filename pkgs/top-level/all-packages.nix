@@ -19192,7 +19192,7 @@ with pkgs;
 
   unused = callPackage ../development/tools/misc/unused { };
 
-  vagrant = callPackage ../development/tools/vagrant { };
+  vagrant = callPackage ../development/tools/vagrant { ruby = ruby_2_7; };
 
   bashdb = callPackage ../development/tools/misc/bashdb { };
 

@@ -44,7 +44,7 @@ let
 in buildRubyGem rec {
   name = "${gemName}-${version}";
   gemName = "vagrant";
-  inherit version;
+  inherit version ruby;
 
   doInstallCheck = true;
   dontBuild = false;
