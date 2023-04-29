@@ -22,14 +22,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "xdg-utils";
-  version = "unstable-2020-10-21";
+  version = "unstable-2022-11-06";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "xdg-utils";
-    rev = "d11b33ec7f24cfb1546f6b459611d440013bdc72";
-    sha256 = "sha256-8PtXfI8hRneEpnUvIV3M+6ACjlkx0w/NEiJFdGbbHnQ=";
+    rev = "8ae02631a9806da11b34cd6b274af02d28aee5da";
+    sha256 = "sha256-WdnnAiPYbREny633FnBi5tD9hDuF8NCVVbUaAVIKTxM=";
   };
 
   patches = lib.optionals withXdgOpenUsePortalPatch [
