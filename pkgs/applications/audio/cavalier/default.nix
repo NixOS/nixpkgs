@@ -9,7 +9,7 @@
 , gtk4
 , librsvg
 , libadwaita
-, wrapGAppsHook4
+, wrapGAppsHook
 , appstream-glib
 , desktop-file-utils
 , cava
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     ninja
     pkg-config
     gobject-introspection
-    wrapGAppsHook4
+    wrapGAppsHook
     appstream-glib
     desktop-file-utils
   ];

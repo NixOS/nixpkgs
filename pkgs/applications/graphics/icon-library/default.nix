@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, wrapGAppsHook4
+{ lib, stdenv, fetchurl, fetchpatch, wrapGAppsHook
 , cargo, desktop-file-utils, meson, ninja, pkg-config, rustc
 , gdk-pixbuf, glib, gtk4, gtksourceview5, libadwaita, darwin
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cargo desktop-file-utils meson ninja pkg-config rustc wrapGAppsHook4
+    cargo desktop-file-utils meson ninja pkg-config rustc wrapGAppsHook
   ];
   buildInputs = [
     gdk-pixbuf glib gtk4 gtksourceview5 libadwaita

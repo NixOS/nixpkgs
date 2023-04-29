@@ -14,7 +14,7 @@
 , gnome-desktop
 , gnome-online-accounts
 , qrencode
-, wrapGAppsHook4
+, wrapGAppsHook
 , folks
 , libxml2
 , gnome
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_42
     desktop-file-utils
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

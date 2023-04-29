@@ -9,7 +9,7 @@
 , libadwaita
 , rustPlatform
 , desktop-file-utils
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo

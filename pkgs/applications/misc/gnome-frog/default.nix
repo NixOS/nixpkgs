@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , python3Packages
-, wrapGAppsHook4
+, wrapGAppsHook
 , gtk4
 , meson
 , ninja
@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication rec {
     ninja
     pkg-config
     glib
-    wrapGAppsHook4
+    wrapGAppsHook
     gobject-introspection
   ];
 

@@ -12,7 +12,7 @@
 , pango
 , pkg-config
 , rustPlatform
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     rustPlatform.rust.cargo
     rustPlatform.cargoSetupHook
     rustPlatform.rust.rustc
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

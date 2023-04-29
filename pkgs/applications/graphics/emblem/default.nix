@@ -8,7 +8,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , gtk4
 , libadwaita
 , libxml2
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo

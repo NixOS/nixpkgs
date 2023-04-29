@@ -6,7 +6,7 @@
 , substituteAll
 , fetchpatch
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , cairo
 , gdk-pixbuf
 , glib
@@ -82,7 +82,7 @@ in rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

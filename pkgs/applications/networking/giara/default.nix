@@ -6,7 +6,7 @@
 , pkg-config
 , ninja
 , python3
-, wrapGAppsHook4
+, wrapGAppsHook
 , gtk4
 , gdk-pixbuf
 , webkitgtk
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     pkg-config
     ninja
-    wrapGAppsHook4
+    wrapGAppsHook
     blueprint-compiler
   ];
 

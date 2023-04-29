@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , libadwaita
 , gettext
 , glib
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     gettext
     gobject-introspection
-    wrapGAppsHook4
+    wrapGAppsHook
   ] ++ lib.optional stdenv.isDarwin gtk4; # for gtk4-update-icon-cache
 
   buildInputs = [

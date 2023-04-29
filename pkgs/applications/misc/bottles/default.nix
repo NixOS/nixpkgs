@@ -7,7 +7,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , appstream-glib
 , desktop-file-utils
 , librsvg
@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     gtk4 # gtk4-update-icon-cache
     appstream-glib
     desktop-file-utils

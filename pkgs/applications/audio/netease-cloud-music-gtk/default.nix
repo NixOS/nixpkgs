@@ -10,7 +10,7 @@
 , appstream-glib
 , desktop-file-utils
 , libxml2
-, wrapGAppsHook4
+, wrapGAppsHook
 , openssl
 , dbus
 , libadwaita
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     appstream-glib # appstream-util
     desktop-file-utils # update-desktop-database
     libxml2 # xmllint
-    wrapGAppsHook4
+    wrapGAppsHook
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo

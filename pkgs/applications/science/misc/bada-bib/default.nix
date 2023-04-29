@@ -15,7 +15,7 @@
 , libxml2
 , pkg-config
 , python3Packages
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

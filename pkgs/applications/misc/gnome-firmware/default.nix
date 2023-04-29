@@ -15,7 +15,7 @@
 , pkg-config
 , systemd
 , help2man
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

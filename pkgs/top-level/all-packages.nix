@@ -1200,8 +1200,6 @@ with pkgs;
     makeWrapper = makeBinaryWrapper;
   };
 
-  wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = gtk4; };
-
   wrapGAppsNoGuiHook = wrapGAppsHook.override { isGraphical = false; };
 
   separateDebugInfo = makeSetupHook {

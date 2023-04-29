@@ -5,7 +5,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , gdk-pixbuf
 , glib
 , gtk4
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
 
     # Provides setup hook to fix "Unrecognized image file format"
     gdk-pixbuf

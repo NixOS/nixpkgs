@@ -7,7 +7,7 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook4
+, wrapGAppsHook
 , elementary-gtk-theme
 , elementary-icon-theme
 , glib
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

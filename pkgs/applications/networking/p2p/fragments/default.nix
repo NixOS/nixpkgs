@@ -16,7 +16,7 @@
 , rustPlatform
 , sqlite
 , transmission
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 let
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo

@@ -10,7 +10,7 @@
 , librsvg
 , blueprint-compiler
 , gobject-introspection
-, wrapGAppsHook4
+, wrapGAppsHook
 , appstream-glib
 , desktop-file-utils
 }:
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     ninja
     pkg-config
     blueprint-compiler
-    wrapGAppsHook4
+    wrapGAppsHook
     appstream-glib
     desktop-file-utils
   ];

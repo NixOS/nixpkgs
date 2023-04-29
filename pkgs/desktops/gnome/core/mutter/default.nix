@@ -52,7 +52,7 @@
 , gnome-settings-daemon
 , xorgserver
 , python3
-, wrapGAppsHook4
+, wrapGAppsHook
 , gi-docgen
 , sysprof
 , libsysprof-capture
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
-    wrapGAppsHook4
+    wrapGAppsHook
     gi-docgen
     xorgserver
   ];

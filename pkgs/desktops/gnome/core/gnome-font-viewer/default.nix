@@ -11,7 +11,7 @@
 , gnome-desktop
 , libadwaita
 , fribidi
-, wrapGAppsHook4
+, wrapGAppsHook
 , gnome
 , harfbuzz
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
-    wrapGAppsHook4
+    wrapGAppsHook
     libxml2
     glib
   ];

@@ -14,7 +14,7 @@
 , blueprint-compiler
 , gtksourceview5
 , gobject-introspection
-, wrapGAppsHook4
+, wrapGAppsHook
 , appstream-glib
 , desktop-file-utils
 }:
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     pythonEnv
     vala
     blueprint-compiler
-    wrapGAppsHook4
+    wrapGAppsHook
     appstream-glib
     desktop-file-utils
   ];

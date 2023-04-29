@@ -15,7 +15,7 @@
 , glibc
 , pipewire
 , wayland
-, wrapGAppsHook4
+, wrapGAppsHook
 , desktop-file-utils
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     rustPlatform.rust.cargo
     rustPlatform.cargoSetupHook
     rustPlatform.rust.rustc
-    wrapGAppsHook4
+    wrapGAppsHook
     rustPlatform.bindgenHook
     desktop-file-utils
     glib # for glib-compile-schemas

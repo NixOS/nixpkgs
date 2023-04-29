@@ -15,7 +15,7 @@
 , pkg-config
 , rustPlatform
 , wayland
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

@@ -8,7 +8,7 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook4
+, wrapGAppsHook
 , curl
 , dht
 , glib
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

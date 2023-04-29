@@ -11,7 +11,7 @@
 , libadwaita
 , glib
 , libxml2
-, wrapGAppsHook4
+, wrapGAppsHook
 , itstool
 , gnome
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook4
+    wrapGAppsHook
     # Prevents “error: Package `libadwaita-1' not found in specified Vala API
     # directories or GObject-Introspection GIR directories” with strictDeps,
     # even though it should only be a runtime dependency.

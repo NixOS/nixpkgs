@@ -13,7 +13,7 @@
 , nix-update-script
 , pkg-config
 , python3
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, wrapGAppsHook4
+, wrapGAppsHook
 , python3
 , appstream-glib
 , blueprint-compiler
@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

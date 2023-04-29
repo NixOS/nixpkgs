@@ -5,7 +5,7 @@
 , gnome
 , gtk4
 , libadwaita
-, wrapGAppsHook4
+, wrapGAppsHook
 , gjs
 , gobject-introspection
 , libgweather
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
-    wrapGAppsHook4
+    wrapGAppsHook
     python3
     gobject-introspection
     gjs

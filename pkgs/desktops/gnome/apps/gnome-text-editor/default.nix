@@ -8,7 +8,7 @@
 , glib
 , gtksourceview5
 , gsettings-desktop-schemas
-, wrapGAppsHook4
+, wrapGAppsHook
 , ninja
 , gnome
 , cairo
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

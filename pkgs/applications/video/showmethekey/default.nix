@@ -7,7 +7,7 @@
 , json-glib
 , libinput
 , gtk4
-, wrapGAppsHook4
+, wrapGAppsHook
 , libxkbcommon
 , pkg-config
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ninja
     json-glib
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

@@ -8,7 +8,7 @@
 , libxml2
 , python3
 , libnotify
-, wrapGAppsHook4
+, wrapGAppsHook
 , libmediaart
 , gobject-introspection
 , gnome-online-accounts
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     itstool
     pkg-config
     libxml2
-    wrapGAppsHook4
+    wrapGAppsHook
     desktop-file-utils
     appstream-glib
     gobject-introspection

@@ -13,7 +13,7 @@
 , ninja
 , pkg-config
 , stdenv
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 stdenv.mkDerivation rec {
   pname = "raider";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];

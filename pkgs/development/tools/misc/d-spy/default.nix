@@ -9,7 +9,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , gnome
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     desktop-file-utils
-    wrapGAppsHook4
+    wrapGAppsHook
     gettext
     glib
   ];

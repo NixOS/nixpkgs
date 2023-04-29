@@ -5,7 +5,7 @@
 , ninja
 , gettext
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , itstool
 , desktop-file-utils
 , vala
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    wrapGAppsHook4
+    wrapGAppsHook
     desktop-file-utils
     libxml2
     gobject-introspection # for finding vapi files

@@ -13,7 +13,7 @@
 , ninja
 , pkg-config
 , poppler_gi
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

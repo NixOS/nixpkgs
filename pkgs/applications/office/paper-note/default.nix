@@ -10,7 +10,7 @@
 , libadwaita
 , gtksourceview5
 , blueprint-compiler
-, wrapGAppsHook4
+, wrapGAppsHook
 , appstream-glib
 , desktop-file-utils
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     ninja
     vala
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     appstream-glib
     desktop-file-utils
     blueprint-compiler

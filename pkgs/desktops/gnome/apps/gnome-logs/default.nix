@@ -9,7 +9,7 @@
 , glib
 , gtk4
 , desktop-file-utils
-, wrapGAppsHook4
+, wrapGAppsHook
 , gettext
 , itstool
 , libadwaita
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
     gettext
     itstool
     libxml2

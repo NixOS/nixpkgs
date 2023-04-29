@@ -34,7 +34,7 @@
 , vala
 , vte-gtk4
 , webkitgtk_6_0
-, wrapGAppsHook4
+, wrapGAppsHook
 , dbus
 , xvfb-run
 }:
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     python3.pkgs.wrapPython
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

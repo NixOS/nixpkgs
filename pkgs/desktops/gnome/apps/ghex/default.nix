@@ -17,7 +17,7 @@
 , atk
 , gobject-introspection
 , vala
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     gi-docgen
     gobject-introspection
     vala
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, appstream-glib, desktop-file-utils
-, glib, libadwaita, meson, ninja, pkg-config, wrapGAppsHook4, dbus , gtk4, sqlite }:
+, glib, libadwaita, meson, ninja, pkg-config, wrapGAppsHook, dbus , gtk4, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "furtherance";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

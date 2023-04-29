@@ -16,7 +16,7 @@
 , openssh
 , systemd
 , gobject-introspection
-, wrapGAppsHook4
+, wrapGAppsHook
 , vala
 , gi-docgen
 , gnome
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     gi-docgen
-    wrapGAppsHook4
+    wrapGAppsHook
     vala
     gi-docgen
     shared-mime-info

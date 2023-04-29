@@ -5,7 +5,7 @@
 , ninja
 , pkg-config
 , gobject-introspection
-, wrapGAppsHook4
+, wrapGAppsHook
 , appstream-glib
 , desktop-file-utils
 , glib
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     ninja
     pkg-config
     gobject-introspection
-    wrapGAppsHook4
+    wrapGAppsHook
     appstream-glib
     desktop-file-utils
   ];

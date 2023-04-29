@@ -9,7 +9,7 @@
 , ninja
 , pkg-config
 , itstool
-, wrapGAppsHook4
+, wrapGAppsHook
 , gtk4
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     itstool
-    wrapGAppsHook4
+    wrapGAppsHook
     gtk4
   ];
 

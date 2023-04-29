@@ -14,7 +14,7 @@
 , pkg-config
 , sound-theme-freedesktop
 , withLibadwaita ? false
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 buildGoModule rec {
@@ -31,7 +31,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     gobject-introspection
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

@@ -12,7 +12,7 @@
 , desktop-file-utils
 , makeWrapper
 , shared-mime-info
-, wrapGAppsHook4
+, wrapGAppsHook
 , meson
 , gjs
 , gtk4
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     shared-mime-info # for update-mime-database
-    wrapGAppsHook4 # for gsettings
+    wrapGAppsHook # for gsettings
   ];
 
   buildInputs = [

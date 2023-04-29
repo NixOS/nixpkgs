@@ -7,7 +7,7 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook4
+, wrapGAppsHook
 , granite7
 , gtk4
 , libgee
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

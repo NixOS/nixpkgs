@@ -6,7 +6,7 @@
 , ninja
 , python3
 , pkg-config
-, wrapGAppsHook4
+, wrapGAppsHook
 , desktop-file-utils
 , gtk4
 , libadwaita
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     python3
-    wrapGAppsHook4
+    wrapGAppsHook
     desktop-file-utils
   ];
 

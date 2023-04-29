@@ -10,7 +10,7 @@
 , gettext
 , libadwaita
 , itstool
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     libxml2
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

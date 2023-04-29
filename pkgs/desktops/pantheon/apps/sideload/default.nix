@@ -14,7 +14,7 @@
 , python3
 , vala
 , libxml2
-, wrapGAppsHook4
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
   buildInputs = [

@@ -9,7 +9,7 @@
 , glib
 , gtk4
 , pango
-, wrapGAppsHook4
+, wrapGAppsHook
 , desktop-file-utils
 , gobject-introspection
 , gjs
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     desktop-file-utils
-    wrapGAppsHook4
+    wrapGAppsHook
   ];
 
 
