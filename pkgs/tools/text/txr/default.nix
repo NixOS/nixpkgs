@@ -1,8 +1,8 @@
-{ lib,
-  stdenv,
-  fetchurl,
-  coreutils,
-  libffi,
+{ lib
+, stdenv
+, fetchurl
+, coreutils
+, libffi
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     rm ${disabledTests}
   '';
 
-  # TODO: ship vim plugin separately?
   postInstall = ''
     mkdir -p $out/share/vim-plugins/txr/{syntax,ftdetect}
 
@@ -53,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/share/vim-plugins/txr $out/share/nvim/site
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nongnu.org/txr";
     description = "An Original, New Programming Language for Convenient Data Munging";
     longDescription = ''
@@ -67,8 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
       application development in a wide range of areas.
     '';
     changelog = "https://www.kylheku.com/cgit/txr/tree/RELNOTES?h=txr-${finalAttrs.version}";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ AndersonTorres dtzWill ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })
