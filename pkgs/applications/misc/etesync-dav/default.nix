@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchpatch
+, nixosTests
 , python3
 , radicale3
 }:
@@ -70,6 +71,10 @@ in python.pkgs.buildPythonApplication rec {
   ] ++ requests.optional-dependencies.socks;
 
   doCheck = false;
+
+  passthru.tests = {
+    inherit (nixosTests) etesync-dav;
+  };
 
   meta = with lib; {
     homepage = "https://www.etesync.com/";
