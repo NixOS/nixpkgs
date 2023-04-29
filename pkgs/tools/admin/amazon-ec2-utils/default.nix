@@ -5,6 +5,7 @@
 , gawk
 , python3
 , installShellFiles
+, bash
 }:
 stdenv.mkDerivation rec {
   pname = "amazon-ec2-utils";
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   buildInputs = [
     python3
+    bash
   ];
   nativeBuildInputs = [
     installShellFiles
