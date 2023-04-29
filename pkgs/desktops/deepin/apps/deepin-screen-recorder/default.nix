@@ -26,13 +26,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "deepin-screen-recorder";
-  version = "5.11.23";
+  version = "5.12.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yKBF/MmhlgwO5GLwfGgs13ERuzOg8EYjc3bXZ8TvcBU=";
+    sha256 = "sha256-43jqgiBa77UAes0ekMES6IqVOPVXfzfQQjePdxFkNDM=";
   };
 
   patches = [ ./dont_use_libPath.diff ];
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
   qtWrapperArgs = [
     "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev gst_all_1.gstreamer ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev gst_all_1.gstreamer libv4l ]}"
   ];
 
   preFixup = ''

@@ -2975,14 +2975,14 @@ final: prev:
 
   feline-nvim = buildVimPluginFrom2Nix {
     pname = "feline.nvim";
-    version = "2022-12-22";
+    version = "2023-03-29";
     src = fetchFromGitHub {
-      owner = "famiu";
+      owner = "freddiehaddad";
       repo = "feline.nvim";
-      rev = "d48b6f92c6ccdd6654c956f437be49ea160b5b0c";
-      sha256 = "1d3sj499mj63djy2bjp7yx5qyrzsq8gphzy3wl9fnfnni1bzwg4g";
+      rev = "a02bcdde649cdfca0e25d2dd693ba140233b5c3e";
+      sha256 = "0s646hd3pbzv5i8vpsk019hwgyqnrd3qhm6lzilqlydrz3yx3b87";
     };
-    meta.homepage = "https://github.com/famiu/feline.nvim/";
+    meta.homepage = "https://github.com/freddiehaddad/feline.nvim/";
   };
 
   fennel-vim = buildVimPluginFrom2Nix {
@@ -14313,6 +14313,18 @@ final: prev:
       sha256 = "0sqhx4h2qchihf37g5fpa3arpxrnzsfpjj34ca3sdn4db89a0c8n";
     };
     meta.homepage = "https://github.com/mattn/webapi-vim/";
+  };
+
+  wgsl-vim = buildVimPluginFrom2Nix {
+    pname = "wgsl.vim";
+    version = "2023-04-12";
+    src = fetchFromGitHub {
+      owner = "DingDean";
+      repo = "wgsl.vim";
+      rev = "b72cb2c28ec9554be240113bceb34198f88484e6";
+      sha256 = "1l1y9dwp33g5gp5mvyq4vkw8q8369r493i0qfn81nmwnmc09rsbn";
+    };
+    meta.homepage = "https://github.com/DingDean/wgsl.vim/";
   };
 
   which-key-nvim = buildVimPluginFrom2Nix {

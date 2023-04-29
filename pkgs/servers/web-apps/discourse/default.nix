@@ -198,7 +198,7 @@ let
               ./rubyEnv/sass-embedded-static.patch
             ];
             postPatch = ''
-              export SASS_EMBEDDED=${dart-sass-embedded}
+              export SASS_EMBEDDED=${dart-sass-embedded}/bin
             '';
           };
         };
