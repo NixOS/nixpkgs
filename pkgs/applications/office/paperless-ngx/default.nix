@@ -17,13 +17,13 @@
 }:
 
 let
-  version = "1.14.0";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O1Miy0GV34YbE1UrLUWZsatpWyfzFLGvX6fQUJnwbuE=";
+    hash = "sha256-QpSp+8gsFApp4i4PajAQHHYZgwej/gusAw4J3Zetk4M=";
   };
 
   # Use specific package versions required by paperless-ngx
