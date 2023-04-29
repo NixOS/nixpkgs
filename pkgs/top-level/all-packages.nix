@@ -24733,19 +24733,15 @@ with pkgs;
     pkg = callPackage ../development/compilers/sbcl/bootstrap.nix {};
     faslExt = "fasl";
   };
-  sbcl_2_2_11 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.11"; };
-    faslExt = "fasl";
-  };
-  sbcl_2_3_0 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.0"; };
-    faslExt = "fasl";
-  };
   sbcl_2_3_2 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.2"; };
     faslExt = "fasl";
   };
-  sbcl = sbcl_2_3_2;
+  sbcl_2_3_4 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.4"; };
+    faslExt = "fasl";
+  };
+  sbcl = sbcl_2_3_4;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
