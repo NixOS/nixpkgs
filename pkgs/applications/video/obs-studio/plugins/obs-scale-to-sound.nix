@@ -4,10 +4,15 @@
 , cmake
 , qtbase
 , xorg
+, curl
+, procps
 , libxkbcommon
 , libxkbfile
 , obs-studio
 , pkg-config
+, opencv
+, websocketpp
+, asio
 }:
 
 stdenv.mkDerivation rec {
@@ -25,15 +30,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     obs-studio qtbase xorg.libX11 xorg.libXau xorg.libXdmcp xorg.libXtst xorg.libXext
-    xorg.libXi xorg.libXt xorg.libXinerama libxkbcommon libxkbfile
+    xorg.libXi xorg.libXt xorg.libXinerama xorg.libXScrnSaver procps curl opencv websocketpp asio libxkbcommon libxkbfile
   ];
   dontWrapQtApps = true;
 
-  #postInstall = ''
-  #  mkdir $out/lib $out/share
-  #  mv $out/obs-plugins/64bit $out/lib/obs-plugins
-  #  mv $out/data $out/share/obs
-  #'';
+  postInstall = ''
+    mkdir $out/lib $out/share
+    mv $out/obs-plugins/64bit $out/lib/obs-plugins
+    mv $out/data $out/share/obs
+  '';
 
   meta = {
     description = "A plugin for OBS Studio that adds a filter which makes a source scale based on the audio levels of any audio source you choose";
