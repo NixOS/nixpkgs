@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmtp";
-  version = "1.1.20";
+  version = "1.1.21";
 
   src = fetchFromGitHub {
     owner = "libmtp";
     repo = "libmtp";
     rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-/tyCoEW/rCLfZH2HhA3Nxuij9d/ZJgsfyP4fLlfyNRA=";
+    sha256 = "sha256-m9QFVD8udQ3SdGwn276BnIKqGeATA5QuokOK29Ykc1k=";
   };
 
   patches = [
