@@ -4268,6 +4268,8 @@ self: super: with self; {
 
   grpcio-tools = callPackage ../development/python-modules/grpcio-tools { };
 
+  grpcio-testing = callPackage ../development/python-modules/grpcio-testing { };
+
   grpclib = callPackage ../development/python-modules/grpclib { };
 
   gruut = callPackage ../development/python-modules/gruut { };
