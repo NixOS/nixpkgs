@@ -5,6 +5,7 @@
 , jinja2
 , pandas
 , pytestCheckHook
+, pythonOlder
 , which
 , yosys
 }:
@@ -12,6 +13,9 @@
 buildPythonPackage rec {
   pname = "edalize";
   version = "0.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "olofk";
@@ -26,7 +30,9 @@ buildPythonPackage rec {
     patchShebangs tests/mock_commands/vsim
   '';
 
-  propagatedBuildInputs = [ jinja2 ];
+  propagatedBuildInputs = [
+    jinja2
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -35,7 +41,9 @@ buildPythonPackage rec {
     yosys
   ];
 
-  pythonImportsCheck = [ "edalize" ];
+  pythonImportsCheck = [
+    "edalize"
+  ];
 
   disabledTestPaths = [
     "tests/test_questa_formal.py"
