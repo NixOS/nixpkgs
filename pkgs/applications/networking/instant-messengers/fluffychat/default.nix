@@ -6,18 +6,18 @@
 }:
 
 flutter.buildFlutterApplication rec {
-  version = "1.10.0";
+  version = "1.11.0";
   name = "fluffychat";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "fluffychat";
     rev = "v${version}";
-    hash = "sha256-tENYFrVRt0FBgbhR7D4sy6hJhWmYJDhKaAGsCBkAEt0=";
+    hash = "sha256-Z7BOGsirBVQxRJY4kmskCmPeZloc41/bf4/ExoO8VBk=";
   };
 
   depsListFile = ./deps.json;
-  vendorHash = "sha256-VSL3DDOYD2dEu0USFV4FvQweDsNG362TRBdrNGQrsH0=";
+  vendorHash = "sha256-axByNptbzGR7GQT4Gs2yaEyUCkCbI9RQNNOHN7CYd9A=";
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
