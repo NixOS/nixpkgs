@@ -11083,6 +11083,8 @@ self: super: with self; {
 
   sonarr = callPackage ../development/python-modules/sonarr { };
 
+  sonos-websocket = callPackage ../development/python-modules/sonos-websocket { };
+
   sopel = callPackage ../development/python-modules/sopel { };
 
   sorl_thumbnail = callPackage ../development/python-modules/sorl_thumbnail { };
