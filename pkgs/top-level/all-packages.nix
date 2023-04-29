@@ -24958,6 +24958,7 @@ with pkgs;
 
   shine = callPackage ../development/libraries/shine { };
 
+  skia_m87 = callPackage ../development/libraries/skia/m87.nix { };
   skia_m102 = callPackage ../development/libraries/skia/m102.nix { };
   skia = skia_m102;
 

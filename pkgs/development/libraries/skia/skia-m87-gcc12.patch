@@ -1,0 +1,27 @@
+From 791db16a80586500c4841f307cc519b7b38243ab Mon Sep 17 00:00:00 2001
+From: Jordan Williams <jordan@jwillikers.com>
+Date: Tue, 26 Apr 2022 11:44:31 -0500
+Subject: [PATCH] Add missing include for std::begin and std::end in
+ SkParseColor.cpp
+
+(cherry picked from commit cd397f3c4738beb61cfd1c611544d096a6f4fa36)
+---
+ src/utils/SkParseColor.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/utils/SkParseColor.cpp b/src/utils/SkParseColor.cpp
+index 7260365b2c..b5a6aae359 100644
+--- a/src/utils/SkParseColor.cpp
++++ b/src/utils/SkParseColor.cpp
+@@ -8,6 +8,8 @@
+ 
+ #include "include/utils/SkParse.h"
+ 
++#include <iterator>
++
+ static constexpr const char* gColorNames[] = {
+     "aliceblue",
+     "antiquewhite",
+-- 
+2.38.4
+
