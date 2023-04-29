@@ -166,7 +166,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings-desktop-schemas glib gtk3
+    gsettings-desktop-schemas glib gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
     gnome.adwaita-icon-theme

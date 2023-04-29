@@ -8,7 +8,7 @@
 , bundlerEnv
 , callPackage
 
-, ruby_3_1
+, ruby_3_2
 , replace
 , gzip
 , gnutar
@@ -38,21 +38,22 @@
 , fixup_yarn_lock
 , nodePackages
 , nodejs_16
+, dart-sass-embedded
 
 , plugins ? []
 }@args:
 
 let
-  version = "3.1.0.beta2";
+  version = "3.1.0.beta4";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-wkNTm5/QyujPcMUrnc6eWmjhrRQAthhmejmjpy6zmbE=";
+    sha256 = "sha256-22GXFYPjPYL20amR4xFB4L/dCp32H4Z3uf0GLGEghUE=";
   };
 
-  ruby = ruby_3_1;
+  ruby = ruby_3_2;
 
   runtimeDeps = [
     # For backups, themes and assets
@@ -186,6 +187,20 @@ let
               cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
             '';
           };
+          sass-embedded = gems.sass-embedded // {
+            dontBuild = false;
+            # `sass-embedded` depends on `dart-sass-embedded` and tries to
+            # fetch that as `.tar.gz` from GitHub releases. That `.tar.gz`
+            # can also be specified via `SASS_EMBEDDED`. But instead of
+            # compressing our `dart-sass-embedded` just to decompress it
+            # again, we simply patch the Rakefile to symlink that path.
+            patches = [
+              ./rubyEnv/sass-embedded-static.patch
+            ];
+            postPatch = ''
+              export SASS_EMBEDDED=${dart-sass-embedded}
+            '';
+          };
         };
 
     groups = [
@@ -199,7 +214,7 @@ let
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = src + "/app/assets/javascripts/yarn.lock";
-      sha256 = "0ryc4p5s35mzg1p71z98x5fvr5fpldmgghdi1viha4ckbpv153lw";
+      sha256 = "0a20kns4irdpzzx2dvdjbi0m3s754gp737q08z5nlcnffxqvykrk";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -207,6 +222,7 @@ let
       redis
       nodePackages.uglify-js
       nodePackages.terser
+      nodePackages.patch-package
       yarn
       nodejs_16
     ];
@@ -226,6 +242,12 @@ let
       # Fix the rake command used to recursively execute itself in the
       # assets precompilation task.
       ./assets_rake_command.patch
+
+      # `app/assets/javascripts/discourse/package.json`'s postinstall
+      # hook tries to call `../node_modules/.bin/patch-package`, which
+      # hasn't been `patchShebangs`-ed yet. So instead we just use
+      # `patch-package` from `nativeBuildInputs`.
+      ./asserts_patch-package_from_path.patch
     ];
 
     # We have to set up an environment that is close enough to

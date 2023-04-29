@@ -2,25 +2,30 @@
 
 let
   sets = [
-    # The compact, sans-serif set:
-    "comfy"
-    "comfy-fixed"
-    "comfy-duo"
-    # The compact, serif set:
-    "comfy-motion"
-    "comfy-motion-fixed"
-    "comfy-motion-duo"
-    # The wide, sans-serif set:
-    "comfy-wide"
-    "comfy-wide-fixed"
-    "comfy-wide-duo"
+    # Family                  | Shapes | Spacing | Style      | Ligatures |
+    # ------------------------+--------+---------+------------+-----------|
+    "comfy"                   # Sans   | Compact | Monospaced | Yes       |
+    "comfy-fixed"             # Sans   | Compact | Monospaced | No        |
+    "comfy-duo"               # Sans   | Compact | Duospaced  | Yes       |
+    # ------------------------+--------+---------+------------+-----------|
+    "comfy-motion"            # Slab   | Compact | Monospaced | Yes       |
+    "comfy-motion-fixed"      # Slab   | Compact | Monospaced | No        |
+    "comfy-motion-duo"        # Slab   | Compact | Duospaced  | Yes       |
+    # ------------------------+--------+---------+------------+-----------|
+    "comfy-wide"              # Sans   | Wide    | Monospaced | Yes       |
+    "comfy-wide-fixed"        # Sans   | Wide    | Monospaced | No        |
+    "comfy-wide-duo"          # Sans   | Wide    | Duospaced  | Yes       |
+    # ------------------------+--------+---------+------------+-----------|
+    "comfy-wide-motion"       # Slab   | Wide    | Monospaced | Yes       |
+    "comfy-wide-motion-fixed" # Slab   | Wide    | Monospaced | No        |
+    "comfy-wide-motion-duo"   # Slab   | Wide    | Duospaced  | Yes       |
   ];
-  version = "1.1.0";
+  version = "1.2.0";
   src = fetchFromSourcehut {
     owner = "~protesilaos";
     repo = "iosevka-comfy";
     rev = version;
-    sha256 = "1h72my1s9pvxww6yijrvhy7hj9dspnshya60i60p1wlzr6d18v3p";
+    sha256 = "sha256-gHDERf3eDsb59wz+kGa2wLY7RDRWs2woi5P2rZDYjL0=";
   };
   privateBuildPlan = src.outPath + "/private-build-plans.toml";
   makeIosevkaFont = set:
@@ -34,11 +39,11 @@ let
           src = fetchFromGitHub {
             owner = "be5invis";
             repo = "iosevka";
-            rev = "ad1e247a3fb8d2e2561122e8e57dcdc86a23df77";
-            hash = "sha256-sfItIMl9HOUykoZPsNKRGKwgkSWvNGUe3czHE8qFG5w=";
+            rev = "d3b461432137b36922e41322c2e45a2401e727a5";
+            hash = "sha256-Sm+eG6ovVLmvKvQFEZblQV3jCLQRrc9Gga3pukwteLE=";
           };
 
-          npmDepsHash = "sha256-HaO2q1f+hX3LjccuVCQaqQZCdUH9r7+jiFOR+3m8Suw=";
+          npmDepsHash = "sha256-pikpi9eyo1a+AFLr7BMl1kegy3PgYFjzmE3QJqPXpNM=";
 
           meta = with lib; {
             inherit (src.meta) homepage;
