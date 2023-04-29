@@ -412,7 +412,7 @@ with import <nixpkgs> {};
       };
     };
 
-  in python38.withPackages (ps: [ps.numpy my_toolz])
+  in python39.withPackages (ps: [ps.numpy my_toolz])
 ).env
 ```
 
