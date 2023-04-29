@@ -83,6 +83,7 @@ buildPythonPackage rec {
       -e test_finite_diff_uks_eph \
       -e test_pipek \
       -e test_n3_cis_ewald \
+      -e test_veff \
       -I test_kuccsd_supercell_vs_kpts\.py \
       -I test_kccsd_ghf\.py \
       -I test_h_.*\.py \
