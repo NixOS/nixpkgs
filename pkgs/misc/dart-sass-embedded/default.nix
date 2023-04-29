@@ -1,49 +1,74 @@
 { lib
 , stdenvNoCC
-, fetchurl
-, autoPatchelfHook
+, fetchFromGitHub
+, dart
+, buf
+, callPackage
+, runtimeShell
 }:
 
-stdenvNoCC.mkDerivation rec {
+let
+  embedded-protocol = fetchFromGitHub {
+    owner = "sass";
+    repo = "embedded-protocol";
+    rev = "refs/tags/1.2.0";
+    hash = "sha256-OHOWotI+cXjDhEYUNXa36FpMEW7hSIu8gVX3gVRvw2Y=";
+  };
+
+  libExt = stdenvNoCC.hostPlatform.extensions.sharedLibrary;
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dart-sass-embedded";
   version = "1.62.1";
 
-  dontConfigure = true;
-  dontBuild = true;
+  src = fetchFromGitHub {
+    owner = "sass";
+    repo = "dart-sass-embedded";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-GpSus5/QItbzCrOImMvrO6DTAQeODABRNiSYHJlLlIA=";
+  };
 
-  nativeBuildInputs = lib.optional stdenvNoCC.hostPlatform.isLinux autoPatchelfHook;
+  nativeBuildInputs = [
+    buf
+    dart
+    (callPackage ../../build-support/dart/fetch-dart-deps { } {
+      buildDrvArgs = finalAttrs;
+      vendorHash = "sha256-aEBE+z8M5ivMR9zL7kleBJ8c9T+4PGXoec56iwHVT+c=";
+    })
+  ];
 
-  src = let base = "https://github.com/sass/dart-sass-embedded/releases/download/${version}/sass_embedded-${version}"; in
-    fetchurl {
-      "x86_64-linux" = {
-        url = "${base}-linux-x64.tar.gz";
-        hash = "sha256-NXTadacyKlOQNGSLj/hP8syhYuuSTXK2Y9cYzTk28HU=";
-      };
-      "aarch64-linux" = {
-        url = "${base}-linux-arm64.tar.gz";
-        hash = "sha256-DX29U1AjmqVhKFgzP+71vsdoMjQ13IS93PZ1JLOA7bA=";
-      };
-      "x86_64-darwin" = {
-        url = "${base}-macos-x64.tar.gz";
-        hash = "sha256-0oyb9YBKoPNaWFLbIUZOJc5yK11uDYyAKKW4urkmRJQ=";
-      };
-      "aarch64-darwin" = {
-        url = "${base}-macos-arm64.tar.gz";
-        hash = "sha256-dkBcdVbxolK8xXYaOHot0s9FxGmfhMNAEoZqo+2LRfk=";
-      };
-    }."${stdenvNoCC.hostPlatform.system}" or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
+  strictDeps = true;
+
+  configurePhase = ''
+    runHook preConfigure
+    dart pub get --offline
+    mkdir build
+    ln -s ${embedded-protocol} build/embedded-protocol
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+    UPDATE_SASS_PROTOCOL=false HOME="$TMPDIR" dart run grinder protobuf
+    dart run grinder pkg-compile-native
+    runHook postBuild
+  '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -r * $out
-    ln -s $out/dart-sass-embedded $out/bin/dart-sass-embedded
+    runHook preInstall
+    mkdir -p "$out/lib" "$out/bin"
+    cp build/dart-sass-embedded.native "$out/lib/dart-sass-embedded${libExt}"
+    echo '#!${runtimeShell}' > "$out/bin/dart-sass-embedded"
+    echo "exec ${dart}/bin/dartaotruntime $out/lib/dart-sass-embedded${libExt} \"\$@\"" >> "$out/bin/dart-sass-embedded"
+    chmod +x "$out/bin/dart-sass-embedded"
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "A wrapper for Dart Sass that implements the compiler side of the Embedded Sass protocol";
     homepage = "https://github.com/sass/dart-sass-embedded";
-    changelog = "https://github.com/sass/dart-sass-embedded/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sass/dart-sass-embedded/blob/${finalAttrs.version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ shyim ];
   };
-}
+})
