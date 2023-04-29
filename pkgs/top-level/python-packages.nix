@@ -5372,6 +5372,8 @@ self: super: with self; {
 
   labmath = callPackage ../development/python-modules/labmath { };
 
+  lakeside = callPackage ../development/python-modules/lakeside { };
+
   langcodes = callPackage ../development/python-modules/langcodes { };
 
   langdetect = callPackage ../development/python-modules/langdetect { };
