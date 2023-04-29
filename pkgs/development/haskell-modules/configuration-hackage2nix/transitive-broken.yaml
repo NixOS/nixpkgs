@@ -809,6 +809,7 @@ dont-distribute-packages:
  - bitcoin-block
  - bitcoin-tx
  - bitcoin-types
+ - bitcoind-regtest
  - bitfield
  - bitly-cli
  - bitmaps
@@ -2510,6 +2511,8 @@ dont-distribute-packages:
  - kit
  - kmeans-par
  - kmeans-vector
+ - knead
+ - knead-arithmetic
  - knit-haskell
  - koji-install
  - koji-tool
@@ -2636,6 +2639,7 @@ dont-distribute-packages:
  - llvm-base-types
  - llvm-base-util
  - llvm-data-interop
+ - llvm-dsl
  - llvm-extension
  - llvm-general
  - llvm-general-quote
@@ -3190,6 +3194,7 @@ dont-distribute-packages:
  - prolog-graph-lib
  - prologue
  - prolude
+ - proof-assistant-bot
  - propane
  - proplang
  - prosidyc
@@ -3830,6 +3835,7 @@ dont-distribute-packages:
  - syntax-pretty
  - syntax-printer
  - syntaxnet-haskell
+ - synthesizer-llvm
  - sys-process
  - systemstats
  - t3-client
