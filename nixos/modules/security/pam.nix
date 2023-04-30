@@ -1286,6 +1286,12 @@ in
           Only one of users.motd and users.motdFile can be set.
         '';
       }
+      {
+        assertion = config.security.pam.zfs.enable && (config.boot.zfs.enabled || config.boot.zfs.enableUnstable);
+        message = ''
+          `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled` or `boot.zfs.enableUnstable`).
+        '';
+      }
     ];
 
     environment.systemPackages =
