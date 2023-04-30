@@ -93,5 +93,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/elastic/apm-agent-python/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "elasticapm-run";
   };
 }
