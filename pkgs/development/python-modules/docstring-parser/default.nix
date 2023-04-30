@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "docstring-parser";
-  version = "0.14.1";
+  version = "0.15";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "rr-";
     repo = "docstring_parser";
     rev = "${version}";
-    hash = "sha256-NIijq+QR0panVCGDEQrTlkAvHfIexwS0PxFikglxd74=";
+    hash = "sha256-rnDitZn/xI0I9KMQv6gxzVYevWUymDgyFETjAnRlEHw=";
   };
 
   nativeBuildInputs = [
