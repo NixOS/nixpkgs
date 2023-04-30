@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgba";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = finalAttrs.version;
-    hash = "sha256-oWrgYrN7s5tdGJ/GhA2ZaKDVqZq9411fHSoYnLKWDl8=";
+    hash = "sha256-+AwIYhnqp984Banwb7zmB5yzenExfLLU1oGJSxeTl/M=";
   };
 
   nativeBuildInputs = [
