@@ -10,7 +10,7 @@
 , pallets-sphinx-themes
 , sphinxcontrib-log-cabinet
 , sphinx-issues
-, enableDocumentation ? false
+, enableDocumentation ? true
 }:
 
 buildPythonPackage rec {
