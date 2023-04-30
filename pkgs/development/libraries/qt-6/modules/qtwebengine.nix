@@ -6,6 +6,7 @@
 , buildPackages
 , bison
 , coreutils
+, fetchpatch
 , flex
 , git
 , gperf
@@ -135,6 +136,12 @@ qtModule {
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
     ../patches/qtwebengine-xkb-includes.patch
+    # FIXME: remove after 6.5.1 bump; fixes broken hinting in qutebrowser
+    (fetchpatch {
+      url = "https://codereview.qt-project.org/changes/qt%2Fqtwebengine~474114/revisions/4/patch?download";
+      sha256 = "sha256-ral8KJBQD1NCd4MWX4768SQ+AE+iEhyuzTfRMX0+0dw=";
+      decode = "base64 -d";
+    })
   ];
 
   postPatch = ''
