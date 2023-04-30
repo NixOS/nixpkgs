@@ -9197,6 +9197,8 @@ with pkgs;
 
   ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
 
+  lunatask = callPackage ../applications/misc/lunatask { };
+
   lvmsync = callPackage ../tools/backup/lvmsync { };
 
   kapp = callPackage ../tools/networking/kapp { };
@@ -17245,6 +17247,8 @@ with pkgs;
 
   guile-git = callPackage ../development/guile-modules/guile-git { };
 
+  guile-gnutls = callPackage ../development/guile-modules/guile-gnutls { };
+
   guile-json = callPackage ../development/guile-modules/guile-json { };
 
   guile-lib = callPackage ../development/guile-modules/guile-lib { };
@@ -21503,6 +21507,8 @@ with pkgs;
   libfprint-tod = callPackage ../development/libraries/libfprint-tod { };
 
   libfprint-2-tod1-goodix = callPackage ../development/libraries/libfprint-2-tod1-goodix { };
+
+  libfprint-2-tod1-goodix-550a = callPackage ../development/libraries/libfprint-2-tod1-goodix-550a { };
 
   libfprint-2-tod1-vfs0090 = callPackage ../development/libraries/libfprint-2-tod1-vfs0090 { };
 
