@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "docstring_parser";
-    rev = "${version}";
+    rev = "refs/tags/${version}";
     hash = "sha256-rnDitZn/xI0I9KMQv6gxzVYevWUymDgyFETjAnRlEHw=";
   };
 
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Parse Python docstrings in various flavors";
     homepage = "https://github.com/rr-/docstring_parser";
+    changelog = "https://github.com/rr-/docstring_parser/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ SomeoneSerge ];
   };
