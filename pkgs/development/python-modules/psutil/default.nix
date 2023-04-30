@@ -66,6 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Process and system utilization information interface";
     homepage = "https://github.com/giampaolo/psutil";
+    changelog = "https://github.com/giampaolo/psutil/blob/release-${version}/HISTORY.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jonringer ];
   };
