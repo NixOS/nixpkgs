@@ -13,6 +13,8 @@
 , wrapGAppsHook
 , enableWideVine ? false
 , widevine-cdm
+, enableVulkan ? stdenv.isLinux
+, vulkan-loader
 }:
 
 let
@@ -115,6 +117,10 @@ python3.pkgs.buildPythonApplication {
       "''${gappsWrapperArgs[@]}"
       "''${qtWrapperArgs[@]}"
       ${lib.optionalString pipewireSupport ''--prefix LD_LIBRARY_PATH : ${libPath}''}
+      ${lib.optionalString (enableVulkan) ''
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [vulkan-loader]}
+        --set-default QSG_RHI_BACKEND vulkan
+      ''}
       ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"''}
     )
   '';
