@@ -11,9 +11,8 @@ let
   mkOCITest = backend: makeTest {
     name = "oci-containers-${backend}";
 
-    meta = {
-      maintainers = with lib.maintainers; [ adisbladis benley mkaito ] ++ lib.teams.serokell.members;
-    };
+    meta.maintainers = lib.teams.serokell.members
+                       ++ (with lib.maintainers; [ adisbladis benley mkaito ]);
 
     nodes = {
       ${backend} = { pkgs, ... }: {
