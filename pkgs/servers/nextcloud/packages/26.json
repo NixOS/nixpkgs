@@ -39,6 +39,16 @@
       "agpl"
     ]
   },
+  "files_markdown": {
+    "sha256": "14q3xz8fisbimym0hrh4qvfychf15qf0im1japiyihjckq4pwm4b",
+    "url": "https://github.com/icewind1991/files_markdown/releases/download/v2.4.0/files_markdown-v2.4.0.tar.gz",
+    "version": "2.4.0",
+    "description": "Markdown Editor extends the Nextcloud text editor with a live preview for markdown files.\n\nA full list of features can be found [in the README](https://github.com/icewind1991/files_markdown)",
+    "homepage": "https://github.com/icewind1991/files_markdown",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "files_texteditor": {
     "sha256": "0rmk14iw34pd81snp3lm01k07wm5j2nh9spcd4j0m43l20b7kxss",
     "url": "https://github.com/nextcloud-releases/files_texteditor/releases/download/v2.15.0/files_texteditor.tar.gz",
@@ -90,9 +100,9 @@
     ]
   },
   "mail": {
-    "sha256": "1q9vqjmr7mkxszjpwxcbwfqgn6m2qzrzmbxa7rbiy1dnb1frnsks",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.1.0/mail-v3.1.0.tar.gz",
-    "version": "3.1.0",
+    "sha256": "1h2z54jix775hx4dblr55k93d1472ly5lg25kqj8i2334ddmcblw",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.1.1/mail-v3.1.1.tar.gz",
+    "version": "3.1.1",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -140,9 +150,9 @@
     ]
   },
   "polls": {
-    "sha256": "0aqm4wq10py8s6l36yqaa5zsqk7n3wr663zw521ckir5877md86w",
-    "url": "https://github.com/nextcloud/polls/releases/download/v5.0.0/polls.tar.gz",
-    "version": "5.0.0",
+    "sha256": "1zzsjzfihcxb6rpi4fmpndif90bqzvyb9yv8n7lcbwsmik8xw6ar",
+    "url": "https://github.com/nextcloud/polls/releases/download/v5.0.3/polls.tar.gz",
+    "version": "5.0.3",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -150,9 +160,9 @@
     ]
   },
   "previewgenerator": {
-    "sha256": "0vwlx3z80i12f9hm0qrm014a0wybjk2j5is7vyn9wcizhr6mpzjv",
-    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.2.2/previewgenerator-v5.2.2.tar.gz",
-    "version": "5.2.2",
+    "sha256": "0qcilg85rgjj9ygvhbkfcw08lay2y6ijxyk06wv0p6yw66pj8x0w",
+    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.2.4/previewgenerator-v5.2.4.tar.gz",
+    "version": "5.2.4",
     "description": "The Preview Generator app allows admins to pre-generate previews. The app listens to edit events and stores this information. Once a cron job is triggered it will generate start preview generation. This means that you can better utilize your system by pre-generating previews when your system is normally idle and thus putting less load on your machine when the requests are actually served.\n\nThe app does not replace on demand preview generation so if a preview is requested before it is pre-generated it will still be shown.\nThe first time you install this app, before using a cron job, you properly want to generate all previews via:\n**./occ preview:generate-all -vvv**\n\n**Important**: To enable pre-generation of previews you must add **php /var/www/nextcloud/occ preview:pre-generate** to a system cron job that runs at times of your choosing.",
     "homepage": "https://github.com/nextcloud/previewgenerator",
     "licenses": [
@@ -170,9 +180,9 @@
     ]
   },
   "spreed": {
-    "sha256": "15wfbqfif2bnbgva57jkjadx3b7ypx51idcxr3xyn4mraijdll3d",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v16.0.2/spreed-v16.0.2.tar.gz",
-    "version": "16.0.2",
+    "sha256": "0y4qnpmbs0lbxf0cp6flhlmlxd17xi25jxs3acnbsg0dwrhhhhmm",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v16.0.3/spreed-v16.0.3.tar.gz",
+    "version": "16.0.3",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [

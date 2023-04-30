@@ -5773,6 +5773,9 @@
   "foundationdb61": [
     "setuptools"
   ],
+  "foundationdb71": [
+    "setuptools"
+  ],
   "fountains": [
     "setuptools"
   ],

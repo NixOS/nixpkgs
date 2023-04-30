@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/LhKipp/tree-sitter-nu",
+  "rev": "3133b2f391be10698c4fd6bc3d16f94cf2cb39b2",
+  "date": "2023-02-18T19:56:18+01:00",
+  "path": "/nix/store/x4yfa2dvs7gzi62qqs084jx38mhla0ym-tree-sitter-nu",
+  "sha256": "096jz9bb0dihi1civ8x1milyhdmx5chzwyrg84wj1jv94fkfmjk0",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

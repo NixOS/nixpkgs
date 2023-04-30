@@ -25,8 +25,9 @@ stdenv.mkDerivation rec {
     homepage = "https://community.kde.org/Phonon";
     description = "Multimedia API for Qt";
     license = lib.licenses.lgpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ttuegel ];
+    broken = stdenv.isDarwin;
   };
 
   src = fetchurl {

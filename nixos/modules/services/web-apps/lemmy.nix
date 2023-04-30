@@ -156,8 +156,8 @@ in
         };
 
         documentation = [
-          "https://join-lemmy.org/docs/en/administration/from_scratch.html"
-          "https://join-lemmy.org/docs"
+          "https://join-lemmy.org/docs/en/admins/from_scratch.html"
+          "https://join-lemmy.org/docs/en/"
         ];
 
         wantedBy = [ "multi-user.target" ];
@@ -185,8 +185,8 @@ in
         };
 
         documentation = [
-          "https://join-lemmy.org/docs/en/administration/from_scratch.html"
-          "https://join-lemmy.org/docs"
+          "https://join-lemmy.org/docs/en/admins/from_scratch.html"
+          "https://join-lemmy.org/docs/en/"
         ];
 
         wantedBy = [ "multi-user.target" ];

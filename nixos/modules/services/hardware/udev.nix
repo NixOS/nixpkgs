@@ -16,16 +16,6 @@ let
   '';
 
 
-  # networkd link files are used early by udev to set up interfaces early.
-  # This must be done in stage 1 to avoid race conditions between udev and
-  # network daemons.
-  # TODO move this into the initrd-network module when it exists
-  initrdLinkUnits = pkgs.runCommand "initrd-link-units" {} ''
-    mkdir -p $out
-    ln -s ${udev}/lib/systemd/network/*.link $out/
-    ${lib.concatMapStringsSep "\n" (file: "ln -s ${file} $out/") (lib.mapAttrsToList (n: v: "${v.unit}/${n}") (lib.filterAttrs (n: _: hasSuffix ".link" n) config.systemd.network.units))}
-  '';
-
   extraUdevRules = pkgs.writeTextFile {
     name = "extra-udev-rules";
     text = cfg.extraRules;
@@ -398,7 +388,6 @@ in
         systemd = config.boot.initrd.systemd.package;
         binPackages = config.boot.initrd.services.udev.binPackages ++ [ config.boot.initrd.systemd.contents."/bin".source ];
       };
-      "/etc/systemd/network".source = initrdLinkUnits;
     };
     # Insert initrd rules
     boot.initrd.services.udev.packages = [

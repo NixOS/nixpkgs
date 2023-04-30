@@ -216,8 +216,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
   # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { };
 
-  darling = callPackage ../os-specific/darwin/darling/default.nix { };
-
   libtapi = callPackage ../os-specific/darwin/libtapi {};
 
   ios-deploy = callPackage ../os-specific/darwin/ios-deploy {};

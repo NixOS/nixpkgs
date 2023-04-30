@@ -26,7 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus exporter for Redis metrics";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/oliver006/redis_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ eskytthe srhb ma27 ];
     platforms = platforms.unix;

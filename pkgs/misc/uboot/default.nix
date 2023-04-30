@@ -24,10 +24,10 @@
 }:
 
 let
-  defaultVersion = "2022.10";
+  defaultVersion = "2023.01";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-ULRIKlBbwoG6hHDDmaPCbhReKbI1ALw1xQ3r1/pGvfg=";
+    hash = "sha256-aUI7rTgPiaCRZjbonm3L0uRRLVhDCNki0QOdHkMxlQ8=";
   };
   buildUBoot = lib.makeOverridable ({
     version ? null
@@ -421,13 +421,6 @@ in {
 
   ubootQemuRiscv64Smode = buildUBoot {
     defconfig = "qemu-riscv64_smode_defconfig";
-    extraPatches = [
-      # https://patchwork.ozlabs.org/project/uboot/patch/20220128134713.2322800-1-alexandre.ghiti@canonical.com/
-      (fetchpatch {
-        url = "https://patchwork.ozlabs.org/series/283391/mbox/";
-        sha256 = "sha256-V0jDpx6O4bFzuaOQejdrRnLiWb5LBTx47T0TZqNtMXk=";
-      })
-    ];
     extraMeta.platforms = ["riscv64-linux"];
     filesToInstall = ["u-boot.bin"];
   };

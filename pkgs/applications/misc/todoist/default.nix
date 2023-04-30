@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "todoist";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = "todoist";
     rev = "v${version}";
-    sha256 = "sha256-46wNacsK2kGHaq2MgcW4ELI2TIY+4leraGQwU4V7sVo=";
+    sha256 = "sha256-i8q9L8x9LNodL3ilFK5kiq744yclRfsexxS7E0i9JSo=";
   };
 
-  vendorSha256 = "sha256-ly+OcRo8tGeNX4FnqNVaqjPx/A1FALOnScxs04lIOiU=";
+  vendorHash = "sha256-fWFFWFVnLtZivlqMRIi6TjvticiKlyXF2Bx9Munos8M=";
 
   doCheck = false;
 

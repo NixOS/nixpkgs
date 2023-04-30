@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rnp";
-  version = "0.16.2";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "rnpgp";
     repo = "rnp";
     rev = "v${version}";
-    sha256 = "sha256-KHItrpuKXaLGF1mcpju/RJFnm2yPZyYq4eIoRGqf5Y8=";
+    sha256 = "sha256-kM3gBc5rbLJU7UXvWz4a9c+Ahi/d0z8R9S5t0B9Fts0=";
   };
 
   buildInputs = [ zlib bzip2 json_c botan2 ];

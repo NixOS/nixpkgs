@@ -1,16 +1,17 @@
 { stdenv, lib, fetchFromGitHub
 , imagemagick, pkg-config, wayland, wayland-protocols
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation {
   pname = "hello-wayland";
-  version = "unstable-2023-03-16";
+  version = "unstable-2023-04-23";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "hello-wayland";
-    rev = "f6a8203309977af03cda94765dd61367c189bea6";
-    sha256 = "FNtc6OApW/epAFortvujNVWJJVI44IY+Pa0qU0QdecA=";
+    rev = "77e270c19672f3ad863e466093f429cde8eb1f16";
+    sha256 = "NMQE2zU858b6OZhdS2oZnGvLK+eb7yU0nFaMAcpNw04=";
   };
 
   nativeBuildInputs = [ imagemagick pkg-config ];
@@ -22,6 +23,8 @@ stdenv.mkDerivation {
     install hello-wayland $out/bin
     runHook postBuild
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Hello world Wayland client";

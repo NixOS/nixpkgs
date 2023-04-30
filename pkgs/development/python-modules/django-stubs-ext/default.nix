@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "django-stubs-ext";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-T9jNvGjRpCHyG7fg2edtUPaktQTTULp4ZAXa9TbpDCE=";
+    hash = "sha256-mpup4oCHN5Sd6WoPzosFTxLTjkYQEdd+vAdP/oxD38s=";
   };
 
   # setup.cfg tries to pull in nonexistent LICENSE.txt file

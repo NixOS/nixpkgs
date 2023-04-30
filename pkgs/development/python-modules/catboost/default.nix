@@ -5,7 +5,8 @@
 
 buildPythonPackage rec {
   pname = "catboost";
-  version = "1.1.1";
+  # nixpkgs-update: no auto update
+  version = "1.0.5";
 
   disabled = pythonOlder "3.4";
 
@@ -13,7 +14,7 @@ buildPythonPackage rec {
     owner = "catboost";
     repo = "catboost";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bqnUHTTRan/spA5y4LRt/sIUYpP3pxzdN/4wHjzgZVY=";
+    hash = "sha256-ILemeZUBI9jPb9G6F7QX/T1HaVhQ+g6y7YmsT6DFCJk";
   };
 
   nativeBuildInputs = [ clang_12 ];
@@ -40,6 +41,11 @@ buildPythonPackage rec {
   # Tests use custom "ya" tool, not yet supported.
   dontUseSetuptoolsCheck = true;
   pythonImportsCheck = [ "catboost" ];
+
+  passthru = {
+    # Do not update to catboost 1.1.x because the patch doesn't apply cleanly
+    skipBulkUpdate = true;
+  };
 
   meta = with lib; {
     description = "High-performance library for gradient boosting on decision trees.";

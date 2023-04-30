@@ -171,6 +171,7 @@
   ./programs/fuse.nix
   ./programs/fzf.nix
   ./programs/gamemode.nix
+  ./programs/gamescope.nix
   ./programs/geary.nix
   ./programs/git.nix
   ./programs/gnome-disks.nix
@@ -395,6 +396,7 @@
   ./services/databases/hbase-standalone.nix
   ./services/databases/influxdb.nix
   ./services/databases/influxdb2.nix
+  ./services/databases/lldap.nix
   ./services/databases/memcached.nix
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
@@ -959,6 +961,7 @@
   ./services/networking/pdns-recursor.nix
   ./services/networking/pdnsd.nix
   ./services/networking/peroxide.nix
+  ./services/networking/picosnitch.nix
   ./services/networking/pixiecore.nix
   ./services/networking/pleroma.nix
   ./services/networking/polipo.nix
@@ -1243,6 +1246,7 @@
   ./services/web-servers/nginx/gitweb.nix
   ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/pomerium.nix
+  ./services/web-servers/stargazer.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/traefik.nix
   ./services/web-servers/trafficserver/default.nix

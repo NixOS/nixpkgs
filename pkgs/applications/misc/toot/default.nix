@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "toot";
-  version = "0.34.1";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner  = "ihabunek";
     repo   = "toot";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-5LTd3FPodYxMm4zZJsAfO0O1Y0AXUxaz+ZtEh6b5Etw=";
+    sha256 = "sha256-gEQA9PASSKAMqulOaK8ynBXX7BdptY1uwdS1tOf3/Jc=";
   };
 
   nativeCheckInputs = with python3Packages; [ pytest ];

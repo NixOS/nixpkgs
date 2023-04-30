@@ -70,7 +70,12 @@ in
       };
       passwordFile = mkOption {
         type = types.str;
-        description = lib.mdDoc "Password file for the postgresql connection. Must be readable by user `nginx`. Ignored if `database.host` is set to `localhost`, as peer authentication will be used.";
+        description = lib.mdDoc ''
+          Password file for the postgresql connection.
+          Must be formated according to PostgreSQL .pgpass standard (see https://www.postgresql.org/docs/current/libpq-pgpass.html)
+          but only one line, no comments and readable by user `nginx`.
+          Ignored if `database.host` is set to `localhost`, as peer authentication will be used.
+        '';
       };
       dbname = mkOption {
         type = types.str;
@@ -123,7 +128,13 @@ in
     environment.etc."roundcube/config.inc.php".text = ''
       <?php
 
-      ${lib.optionalString (!localDB) "$password = file_get_contents('${cfg.database.passwordFile}');"}
+      ${lib.optionalString (!localDB) ''
+        $password = file('${cfg.database.passwordFile}')[0];
+        $password = preg_split('~\\\\.(*SKIP)(*FAIL)|\:~s', $password);
+        $password = end($password);
+        $password = str_replace("\\:", ":", $password);
+        $password = str_replace("\\\\", "\\", $password);
+      ''}
 
       $config = array();
       $config['db_dsnw'] = 'pgsql://${cfg.database.username}${lib.optionalString (!localDB) ":' . $password . '"}@${if localDB then "unix(/run/postgresql)" else cfg.database.host}/${cfg.database.dbname}';
@@ -223,6 +234,7 @@ in
         path = [ config.services.postgresql.package ];
       })
       {
+        after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         script = let
           psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} ${pkgs.postgresql}/bin/psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";

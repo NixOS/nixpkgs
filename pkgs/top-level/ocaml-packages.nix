@@ -1628,6 +1628,8 @@ let
 
     unionFind = callPackage ../development/ocaml-modules/unionFind { };
 
+    unisim_archisec = callPackage ../development/ocaml-modules/unisim_archisec { };
+
     unix-errno = callPackage ../development/ocaml-modules/unix-errno { };
 
     unstrctrd = callPackage ../development/ocaml-modules/unstrctrd { };

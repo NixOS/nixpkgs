@@ -36,11 +36,11 @@ let
 in
 with localPython.pkgs; buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.20.5";
+  version = "3.20.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EoSEanwGvP3RcemXrVy7iAGrY/vMC6LbwcrXj2OsF8Q=";
+    hash = "sha256-9n6nObYoZlOKgQvSdNqHLRr+RlDoKfR3fgD7Xa9wPzM=";
   };
 
 

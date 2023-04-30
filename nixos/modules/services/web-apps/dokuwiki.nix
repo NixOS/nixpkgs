@@ -3,6 +3,8 @@
 with lib;
 
 let
+  inherit (lib.options) showOption showFiles;
+
   cfg = config.services.dokuwiki;
   eachSite = cfg.sites;
   user = "dokuwiki";
@@ -63,7 +65,6 @@ let
     conf_gen = c: map (v: "$conf${v}") (mkPhpAttrVals c);
   in writePhpFile "local-${hostName}.php" ''
     ${concatStringsSep "\n" (conf_gen cfg.mergedConfig)}
-    ${toString cfg.extraConfig}
   '';
 
   dokuwikiPluginsLocalConfig = hostName: cfg: let
@@ -90,13 +91,13 @@ let
 
       page = mkOption {
         type = types.str;
-        description = "Page or namespace to restrict";
+        description = lib.mdDoc "Page or namespace to restrict";
         example = "start";
       };
 
       actor = mkOption {
         type = types.str;
-        description = "User or group to restrict";
+        description = lib.mdDoc "User or group to restrict";
         example = "@external";
       };
 
@@ -112,38 +113,69 @@ let
       in mkOption {
         type = types.enum ((attrValues available) ++ (attrNames available));
         apply = x: if isInt x then x else available.${x};
-        description = ''
+        description = lib.mdDoc ''
           Permission level to restrict the actor(s) to.
           See <https://www.dokuwiki.org/acl#background_info> for explanation
         '';
         example = "read";
       };
-
     };
   };
 
-  siteOpts = { config, lib, name, ... }:
+  # The current implementations of `doRename`,  `mkRenamedOptionModule` do not provide the full options path when used with submodules.
+  # They would only show `settings.useacl' instead of `services.dokuwiki.sites."site1.local".settings.useacl'
+  # The partial re-implementation of these functions is done to help users in debugging by showing the full path.
+  mkRenamed = from: to: { config, options, name, ... }: let
+    pathPrefix = [ "services" "dokuwiki" "sites" name ];
+    fromPath = pathPrefix  ++ from;
+    fromOpt = getAttrFromPath from options;
+    toOp = getAttrsFromPath to config;
+    toPath = pathPrefix ++ to;
+  in {
+    options = setAttrByPath from (mkOption {
+      visible = false;
+      description = lib.mdDoc "Alias of {option}${showOption toPath}";
+      apply = x: builtins.trace "Obsolete option `${showOption fromPath}' is used. It was renamed to ${showOption toPath}" toOp;
+    });
+    config = mkMerge [
+      {
+        warnings = optional fromOpt.isDefined
+          "The option `${showOption fromPath}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption toPath}'.";
+      }
+      (lib.modules.mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt)
+    ];
+  };
+
+  siteOpts = { options, config, lib, name, ... }:
     {
       imports = [
-        # NOTE: These will sadly not print the absolute argument path but only the name. Related to #96006
-        (mkRenamedOptionModule [ "aclUse" ] [ "settings" "useacl" ] )
-        (mkRenamedOptionModule [ "superUser" ] [ "settings" "superuser" ] )
-        (mkRenamedOptionModule [ "disableActions" ] [ "settings" "disableactions" ] )
-        ({ config, options, name, ...}: {
-          config.warnings =
-            (optional (isString config.pluginsConfig) ''
-              Passing plain strings to services.dokuwiki.sites.${name}.pluginsConfig has been deprecated and will not be continue to be supported in the future.
-              Please pass structured settings instead.
-            '')
-            ++ (optional (isString config.acl) ''
-              Passing a plain string to services.dokuwiki.sites.${name}.acl has been deprecated and will not continue to be supported in the future.
-              Please pass structured settings instead.
-            '')
-            ++ (optional (config.extraConfig != null) ''
-              services.dokuwiki.sites.${name}.extraConfig is deprecated and will be removed in the future.
-              Please pass structured settings to services.dokuwiki.sites.${name}.settings instead.
-            '')
-          ;
+        (mkRenamed [ "aclUse" ] [ "settings" "useacl" ])
+        (mkRenamed [ "superUser" ] [ "settings" "superuser" ])
+        (mkRenamed [ "disableActions" ] [ "settings"  "disableactions" ])
+        ({ config, options, ... }: let
+          showPath = suffix: lib.options.showOption ([ "services" "dokuwiki" "sites" name ] ++ suffix);
+          replaceExtraConfig = "Please use `${showPath ["settings"]}' to pass structured settings instead.";
+          ecOpt = options.extraConfig;
+          ecPath = showPath [ "extraConfig" ];
+        in {
+          options.extraConfig = mkOption {
+            visible = false;
+            apply = x: throw "The option ${ecPath} can no longer be used since it's been removed.\n${replaceExtraConfig}";
+          };
+          config.assertions = [
+            {
+              assertion = !ecOpt.isDefined;
+              message = "The option definition `${ecPath}' in ${showFiles ecOpt.files} no longer has any effect; please remove it.\n${replaceExtraConfig}";
+            }
+            {
+              assertion = config.mergedConfig.useacl -> (config.acl != null || config.aclFile != null);
+              message = "Either ${showPath [ "acl" ]} or ${showPath [ "aclFile" ]} is mandatory if ${showPath [ "settings" "useacl" ]} is true";
+            }
+            {
+              assertion = config.usersFile != null -> config.mergedConfig.useacl != false;
+              message = "${showPath [ "settings" "useacl" ]} is required when ${showPath [ "usersFile" ]} is set (Currently defiend as `${config.usersFile}' in ${showFiles options.usersFile.files}).";
+            }
+          ];
         })
       ];
 
@@ -164,7 +196,7 @@ let
         };
 
         acl = mkOption {
-          type = with types; nullOr (oneOf [ lines (listOf (submodule aclOpts)) ]);
+          type = with types; nullOr (listOf (submodule aclOpts));
           default = null;
           example = literalExpression ''
             [
@@ -203,7 +235,7 @@ let
         };
 
         pluginsConfig = mkOption {
-          type = with types; oneOf [lines (attrsOf bool)];
+          type = with types; attrsOf bool;
           default = {
             authad = false;
             authldap = false;
@@ -370,36 +402,21 @@ let
           '';
         };
 
-        extraConfig = mkOption {
-          # This Option is deprecated and only kept until sometime before 23.05 for compatibility reasons
-          # FIXME (@e1mo): Actually remember removing this before 23.05.
-          visible = false;
-          type = types.nullOr types.lines;
-          default = null;
-          example = ''
-            $conf['title'] = 'My Wiki';
-            $conf['userewrite'] = 1;
-          '';
-          description = lib.mdDoc ''
-            DokuWiki configuration. Refer to
-            <https://www.dokuwiki.org/config>
-            for details on supported values.
-
-            **Note**: Please pass Structured settings via
-            `services.dokuwiki.sites.${name}.settings` instead.
-          '';
-        };
-
       # Required for the mkRenamedOptionModule
       # TODO: Remove me once https://github.com/NixOS/nixpkgs/issues/96006 is fixed
-      # or the aclUse, ... options are removed.
+      # or we don't have any more notes about the removal of extraConfig, ...
       warnings = mkOption {
         type = types.listOf types.unspecified;
         default = [ ];
         visible = false;
         internal = true;
       };
-
+      assertions = mkOption {
+        type = types.listOf types.unspecified;
+        default = [ ];
+        visible = false;
+        internal = true;
+      };
     };
   };
 in
@@ -435,16 +452,7 @@ in
 
     warnings = flatten (mapAttrsToList (_: cfg: cfg.warnings) eachSite);
 
-    assertions = flatten (mapAttrsToList (hostName: cfg:
-    [{
-      assertion = cfg.mergedConfig.useacl -> (cfg.acl != null || cfg.aclFile != null);
-      message = "Either services.dokuwiki.sites.${hostName}.acl or services.dokuwiki.sites.${hostName}.aclFile is mandatory if settings.useacl is true";
-    }
-    {
-      assertion = cfg.usersFile != null -> cfg.mergedConfig.useacl != false;
-      message = "services.dokuwiki.sites.${hostName}.settings.useacl must must be true if usersFile is not null";
-    }
-    ]) eachSite);
+    assertions = flatten (mapAttrsToList (_: cfg: cfg.assertions) eachSite);
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "dokuwiki-${hostName}" {

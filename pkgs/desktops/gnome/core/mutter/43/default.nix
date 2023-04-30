@@ -45,18 +45,19 @@
 , libcap_ng
 , egl-wayland
 , graphene
+, wayland
 , wayland-protocols
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "43.4";
+  version = "43.5";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "FiU2cxEaLsyW/I0tFfrdobVU0B3CioMEE11J1rqHsUA=";
+    sha256 = "/JAP4ahA2aeTyOLSDUTJCqCH1fv9x5Su5wluHYoJZxo=";
   };
 
   patches = [
@@ -66,14 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
       sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
-
-    # GLib 2.76 switches from using its own slice allocator to using the system malloc instead.
-    # This makes dragging window between workspace in multitasking view crashes Pantheon's Gala.
-    # Inspiration https://github.com/mate-desktop/mate-desktop/pull/538
-    # Backtrace https://github.com/elementary/gala/issues/1580
-    # Upstream report https://gitlab.gnome.org/GNOME/mutter/-/issues/2495
-    # The patch will not apply on 44.0+, make sure this is fixed when trying to clean this up.
-    ./glib-2-76-gala-crash.patch
   ];
 
   mesonFlags = [
@@ -137,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsysprof-capture
     xkeyboard_config
     xwayland
+    wayland
     wayland-protocols
   ];
 

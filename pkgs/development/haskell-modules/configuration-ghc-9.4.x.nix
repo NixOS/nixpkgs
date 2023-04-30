@@ -62,8 +62,6 @@ in {
 
   ghc-source-gen = checkAgainAfter super.ghc-source-gen "0.4.3.0" "fails to build" (markBroken super.ghc-source-gen);
 
-  lucid = jailbreakForCurrentVersion super.lucid "2.11.1";
-
   haskell-src-meta = doJailbreak super.haskell-src-meta;
 
   # Tests fail in GHC 9.2
@@ -108,14 +106,6 @@ in {
   # generically needs base-orphans for 9.4 only
   base-orphans = dontCheck (doDistribute super.base-orphans);
   generically = addBuildDepend self.base-orphans super.generically;
-
-  # Note: Any compilation fixes need to be done on the versioned attributes,
-  # since those are used for the internal dependencies between the versioned
-  # hspec packages in configuration-common.nix.
-  hspec = self.hspec_2_10_10;
-  hspec-core = self.hspec-core_2_10_10;
-  hspec-meta = self.hspec-meta_2_10_5;
-  hspec-discover = self.hspec-discover_2_10_10;
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
@@ -211,7 +201,7 @@ in {
   # https://github.com/tweag/ormolu/issues/941
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-  }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_0_0);
+  }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_1_0);
 
   # Apply workaround for Cabal 3.8 bug https://github.com/haskell/cabal/issues/8455
   # by making `pkg-config --static` happy. Note: Cabal 3.9 is also affected, so
@@ -227,4 +217,6 @@ in {
   # failing during the Setup.hs phase: https://github.com/gtk2hs/gtk2hs/issues/323.
   gtk2hs-buildtools = appendPatch ./patches/gtk2hs-buildtools-fix-ghc-9.4.x.patch super.gtk2hs-buildtools;
 
+  # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
+  gtk = doJailbreak super.gtk;
 }

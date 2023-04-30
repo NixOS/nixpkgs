@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "9.4.7";
+  version = "9.5.1";
 
   excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" ];
 
@@ -10,15 +10,15 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-vhGFZjxO20M3fQhXlEDDkad/yOyFOu48sHZ63MEnWIA=";
+    hash = "sha256-uYmbW7+h4dr2LlLpQ2kefcTZ+WdW56JwneTwj9BCIkU=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "sha256-HiKr1ier13xUlrwsJrxo60wwqmiPcza2oOLIfMgFWc0=";
+    hash = "sha256-2bdQXN1CmcGDXDZUf/4uYtOw7HYA3KLGRKBRlXLJw4c=";
   };
 
-  vendorSha256 = "sha256-sUvjZTg2/6UGjc2Qv8YO4IWlS4Y/FzGRVOQ9I/wp/aM=";
+  vendorHash = "sha256-b965ODZM0DgF8ZNrqa+Pwq8NE2qjePI9pBe2TgOVqwQ=";
 
   nativeBuildInputs = [ wire ];
 
@@ -48,9 +48,6 @@ buildGoModule rec {
     sed -i -e '/it should change folder successfully and return correct result/{N;s/$/\nt.Skip();/}'\
       pkg/services/libraryelements/libraryelements_patch_test.go
 
-    # TODO: investigate?
-    substituteInPlace pkg/tests/api/alerting/api_alertmanager_test.go \
-      --replace TestIntegrationAMConfigAccess DontTestIntegrationAMConfigAccess
 
     # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
     rm -r scripts/go

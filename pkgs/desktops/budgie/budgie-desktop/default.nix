@@ -36,15 +36,19 @@
 
 stdenv.mkDerivation rec {
   pname = "budgie-desktop";
-  version = "10.7.1";
+  version = "10.7.2";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-ww65J9plixbxFza6xCfaz1WYtT9giKkLVH1XYxH41+0=";
+    hash = "sha256-fd3B2DMZxCI4Gb9mwdACjIPydKghXx8IkhFpMS/Clps=";
   };
+
+  patches = [
+    ./plugins.patch
+  ];
 
   nativeBuildInputs = [
     docbook-xsl-nons
@@ -67,6 +71,7 @@ stdenv.mkDerivation rec {
     gnome.gnome-bluetooth_1_0
     gnome.gnome-settings-daemon
     gnome.mutter
+    gnome.zenity
     graphene
     gtk3
     ibus
