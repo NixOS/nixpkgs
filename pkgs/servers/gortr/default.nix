@@ -1,4 +1,7 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "gortr";
@@ -13,10 +16,16 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+  ];
+
   meta = with lib; {
     description = "The RPKI-to-Router server used at Cloudflare";
     homepage = "https://github.com/cloudflare/gortr/";
-    license = licenses.gpl3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
 }
