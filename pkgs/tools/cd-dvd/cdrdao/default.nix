@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cdrdao";
-  version = "1.2.3";
+  version = "1.2.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/cdrdao/cdrdao-${version}.tar.bz2";
-    sha256 = "0pmpgx91j984snrsxbq1dgf3ximks2dfh1sqqmic72lrls7wp4w1";
+    hash = "sha256-0ZtnyFPF26JAavqrbNeI53817r5jTKxGeVKEd8e+AbY=";
   };
 
   makeFlags = [ "RM=rm" "LN=ln" "MV=mv" ];
@@ -15,10 +15,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libvorbis libmad libao ];
 
   hardeningDisable = [ "format" ];
-
-  # Adjust some headers to match glibc 2.12 ... patch is a diff between
-  # the cdrdao CVS head and the 1.2.3 release.
-  patches = [ ./adjust-includes-for-glibc-212.patch ];
 
   # we have glibc/include/linux as a symlink to the kernel headers,
   # and the magic '..' points to kernelheaders, and not back to the glibc/include
