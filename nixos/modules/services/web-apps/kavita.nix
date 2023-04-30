@@ -12,12 +12,7 @@ in {
       description = lib.mdDoc "User account under which Kavita runs.";
     };
 
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.kavita;
-      defaultText = "pkgs.kavita";
-      description = lib.mdDoc "Kavita package to use.";
-    };
+    package = lib.mkPackageOptionMD pkgs "kavita" { };
 
     dataDir = lib.mkOption {
       default = "/var/lib/kavita";
@@ -40,8 +35,8 @@ in {
     ipAdresses = lib.mkOption {
       default = ["0.0.0.0" "::"];
       type = lib.types.listOf lib.types.str;
-      description = lib.mdDoc "IP Adresses to bind to. The default is to bind to all IPv4
-      and IPv6 addresses.";
+      description = lib.mdDoc "IP Adresses to bind to. The default is to bind
+      to all IPv4 and IPv6 addresses.";
     };
   };
 
@@ -51,7 +46,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       preStart = ''
-        mkdir -p "${cfg.dataDir}/config"
+        umask u=rwx,g=rx,o=
         cat > "${cfg.dataDir}/config/appsettings.json" <<EOF
         {
           "TokenKey": "$(cat ${cfg.tokenKeyFile})",
@@ -59,7 +54,6 @@ in {
           "IpAddresses": "${lib.concatStringsSep "," cfg.ipAdresses}"
         }
         EOF
-        chmod 640 ${cfg.dataDir}/config/appsettings.json
       '';
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;
@@ -69,13 +63,17 @@ in {
       };
     };
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}'        0750 ${cfg.user} ${cfg.user} - -"
+      "d '${cfg.dataDir}/config' 0750 ${cfg.user} ${cfg.user} - -"
+    ];
+
     users = {
       users.${cfg.user} = {
         description = "kavita service user";
         isSystemUser = true;
         group = cfg.user;
         home = cfg.dataDir;
-        createHome = true;
       };
       groups.${cfg.user} = { };
     };

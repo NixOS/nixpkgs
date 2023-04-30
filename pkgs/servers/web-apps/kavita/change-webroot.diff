@@ -13,7 +13,7 @@ index 2f5d7fce..faaf128a 100644
      public ActionResult Index()
      {
 -        return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML");
-+        return PhysicalFile(Path.Combine("@WEB_ROOT@", "index.html"), "text/HTML");
++        return PhysicalFile(Path.Combine("@web_root@", "index.html"), "text/HTML");
      }
  }
  
@@ -33,7 +33,7 @@ index f84ef638..7eaeb05e 100644
  
          app.UseStaticFiles(new StaticFileOptions
          {
-+            FileProvider = new PhysicalFileProvider("@WEB_ROOT@"),
++            FileProvider = new PhysicalFileProvider("@web_root@"),
              ContentTypeProvider = new FileExtensionContentTypeProvider(),
              HttpsCompression = HttpsCompressionMode.Compress,
              OnPrepareResponse = ctx =>
