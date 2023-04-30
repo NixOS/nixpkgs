@@ -60,24 +60,28 @@ stdenv.mkDerivation {
     ln -s ${sfntly} third_party/externals/sfntly
   '';
 
-  configurePhase = ''
-    runHook preConfigure
-    gn gen out/Release --args="is_debug=false is_official_build=true extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
-    runHook postConfigure
-  '';
+  gnFlags = [
+    "is_debug=false"
+    "is_official_build=true"
+    "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
+  ];
 
-  buildPhase = ''
-    runHook preBuild
-    ninja -C out/Release skia modules
-    runHook postBuild
-  '';
+  ninjaFlags = [
+    "skia"
+    "modules"
+  ];
 
   installPhase = ''
     runHook preInstall
+
+    # gnConfigurePhase leaves us in out/Release, go back up.
+    cd ../..
+
     mkdir -p $out
     cp -r --parents -t $out/ \
       include \
       out/Release/libskia.a
+
     runHook postInstall
   '';
 

@@ -17,6 +17,9 @@ skia_m102.overrideAttrs (oldAttrs: {
     # Glob will match all subdirs.
     shopt -s globstar
 
+    # gnConfigurePhase leaves us in out/Release, go back up.
+    cd ../..
+
     # All these paths are used in some way when building aseprite.
     cp -r --parents -t $out/ \
       include/codec \
