@@ -33,7 +33,7 @@
 }:
 
 let
-  version = "3.00";
+  version = "4.0.3";
 
 in stdenv.mkDerivation {
   pname = "transmission";
