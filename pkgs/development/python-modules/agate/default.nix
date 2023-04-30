@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "agate";
-  version = "1.6.3";
+  version = "1.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "wireservice";
     repo = pname;
     rev = version;
-    hash = "sha256-tuUoLvztCYHIPJTBgw1eByM0zfaHDyc+h7SWsxutKos=";
+    hash = "sha256-7Ew9bgeheymCL8xXSW5li0LdFvGYb/7gPxmC4w6tHvM=";
   };
 
   propagatedBuildInputs = [
