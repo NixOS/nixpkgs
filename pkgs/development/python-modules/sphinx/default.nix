@@ -64,7 +64,7 @@ buildPythonPackage rec {
     alabaster
     docutils
     imagesize
-    (jinja2.override { enableDocumentation = false; })
+    jinja2
     packaging
     pygments
     requests
