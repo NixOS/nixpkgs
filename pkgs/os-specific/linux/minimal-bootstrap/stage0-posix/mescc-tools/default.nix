@@ -1,5 +1,4 @@
 { lib
-, system
 , derivationWithMeta
 , kaem-unwrapped
 , M1
@@ -61,7 +60,7 @@ let
             -o ''${out}
         '')
       ];
-      inherit system version M1 M2 blood-elf-0 hex2 m2libc src ARCH BLOOD_FLAG BASE_ADDRESS ENDIAN_FLAG;
+      inherit version M1 M2 blood-elf-0 hex2 m2libc src ARCH BLOOD_FLAG BASE_ADDRESS ENDIAN_FLAG;
 
 
     };
@@ -79,7 +78,7 @@ derivationWithMeta {
     "--file"
     ./build.kaem
   ];
-  inherit system version M1 M2 blood-elf-0 hex2 mkdir cp chmod replace m2libc src ARCH BLOOD_FLAG BASE_ADDRESS ENDIAN_FLAG;
+  inherit version M1 M2 blood-elf-0 hex2 mkdir cp chmod replace m2libc src ARCH BLOOD_FLAG BASE_ADDRESS ENDIAN_FLAG;
 
   meta = with lib; {
     description = "Collection of tools written for use in bootstrapping";

@@ -1,5 +1,4 @@
 { lib
-, system
 , derivationWithMeta
 , kaem-unwrapped
 , mescc-tools-extra
@@ -9,7 +8,7 @@
 # Once mescc-tools-extra is available we can install kaem at /bin/kaem
 # to make it findable in environments
 derivationWithMeta {
-  inherit system version kaem-unwrapped;
+  inherit version kaem-unwrapped;
   pname = "kaem";
   builder = kaem-unwrapped;
   args = [

@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, system
 , callPackage
 , fetchurl
 , kaem
@@ -25,6 +24,7 @@ rec {
       validity.handled
       ({ inherit meta passthru; } // passthru)
       (derivation ({
+        inherit (stdenv.buildPlatform) system;
         inherit (meta) name;
       } // (builtins.removeAttrs attrs [ "meta" "passthru" ])));
 
@@ -37,7 +37,7 @@ rec {
     , preferLocalBuild ? true
     }:
     derivationWithMeta {
-      inherit system name text executable allowSubstitutes preferLocalBuild;
+      inherit name text executable allowSubstitutes preferLocalBuild;
       passAsFile = [ "text" ];
 
       builder = kaem-unwrapped;
@@ -67,7 +67,7 @@ rec {
 
   runCommand = name: env: buildCommand:
     derivationWithMeta ({
-      inherit name system;
+      inherit name;
 
       builder = "${kaem}/bin/kaem";
       args = [

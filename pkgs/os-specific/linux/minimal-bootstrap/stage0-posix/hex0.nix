@@ -1,11 +1,10 @@
 { lib
 , derivationWithMeta
-, system
 , src
 , version
 }:
 derivationWithMeta {
-  inherit system version;
+  inherit version;
   pname = "hex0";
   builder = "${src}/bootstrap-seeds/POSIX/x86/hex0-seed";
   args = [

@@ -1,5 +1,4 @@
 { lib
-, system
 , derivationWithMeta
 , kaem-unwrapped
 , mescc-tools
@@ -7,7 +6,7 @@
 , version
 }:
 derivationWithMeta {
-  inherit system version src mescc-tools;
+  inherit version src mescc-tools;
   pname = "mescc-tools-extra";
   builder = kaem-unwrapped;
   args = [

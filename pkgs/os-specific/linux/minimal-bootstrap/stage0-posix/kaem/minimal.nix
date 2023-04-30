@@ -1,12 +1,11 @@
 { lib
 , derivationWithMeta
-, system
 , src
 , hex0
 , version
 }:
 derivationWithMeta {
-  inherit system version;
+  inherit version;
   pname = "kaem-minimal";
   builder = hex0;
   args = [

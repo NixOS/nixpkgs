@@ -29,7 +29,6 @@
 
 { lib
 , derivationWithMeta
-, system
 , hex0
 , m2libc
 , src
@@ -40,7 +39,7 @@ rec {
 
   run = pname: builder: args:
     derivationWithMeta {
-      inherit system pname version builder args;
+      inherit pname version builder args;
 
       meta = with lib; {
         description = "Collection of tools written for use in bootstrapping";
