@@ -2,18 +2,20 @@
 
 with lib;
 
-let cfg = config.services.cloud-init;
-    path = with pkgs; [
-      cloud-init
-      iproute2
-      nettools
-      openssh
-      shadow
-      util-linux
-      busybox
-    ] ++ optional cfg.btrfs.enable btrfs-progs
-      ++ optional cfg.ext4.enable e2fsprogs
-    ;
+let
+  cfg = config.services.cloud-init;
+  path = with pkgs; [
+    cloud-init
+    iproute2
+    nettools
+    openssh
+    shadow
+    util-linux
+    busybox
+  ]
+  ++ optional cfg.btrfs.enable btrfs-progs
+  ++ optional cfg.ext4.enable e2fsprogs
+  ;
 in
 {
   options = {
@@ -110,7 +112,7 @@ in
            - phone-home
            - final-message
            - power-state-change
-          '';
+        '';
         description = lib.mdDoc "cloud-init configuration.";
       };
 
@@ -124,73 +126,77 @@ in
 
     systemd.network.enable = cfg.network.enable;
 
-    systemd.services.cloud-init-local =
-      { description = "Initial cloud-init job (pre-networking)";
-        wantedBy = [ "multi-user.target" ];
-        before = ["systemd-networkd.service"];
-        path = path;
-        serviceConfig =
-          { Type = "oneshot";
-            ExecStart = "${pkgs.cloud-init}/bin/cloud-init init --local";
-            RemainAfterExit = "yes";
-            TimeoutSec = "infinity";
-            StandardOutput = "journal+console";
-          };
+    systemd.services.cloud-init-local = {
+      description = "Initial cloud-init job (pre-networking)";
+      wantedBy = [ "multi-user.target" ];
+      before = [ "systemd-networkd.service" ];
+      path = path;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.cloud-init}/bin/cloud-init init --local";
+        RemainAfterExit = "yes";
+        TimeoutSec = "infinity";
+        StandardOutput = "journal+console";
       };
+    };
 
-    systemd.services.cloud-init =
-      { description = "Initial cloud-init job (metadata service crawler)";
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "network-online.target" "cloud-init-local.service"
-                  "sshd.service" "sshd-keygen.service" ];
-        after = [ "network-online.target" "cloud-init-local.service" ];
-        before = [ "sshd.service" "sshd-keygen.service" ];
-        requires = [ "network.target"];
-        path = path;
-        serviceConfig =
-          { Type = "oneshot";
-            ExecStart = "${pkgs.cloud-init}/bin/cloud-init init";
-            RemainAfterExit = "yes";
-            TimeoutSec = "infinity";
-            StandardOutput = "journal+console";
-          };
+    systemd.services.cloud-init = {
+      description = "Initial cloud-init job (metadata service crawler)";
+      wantedBy = [ "multi-user.target" ];
+      wants = [
+        "network-online.target"
+        "cloud-init-local.service"
+        "sshd.service"
+        "sshd-keygen.service"
+      ];
+      after = [ "network-online.target" "cloud-init-local.service" ];
+      before = [ "sshd.service" "sshd-keygen.service" ];
+      requires = [ "network.target" ];
+      path = path;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.cloud-init}/bin/cloud-init init";
+        RemainAfterExit = "yes";
+        TimeoutSec = "infinity";
+        StandardOutput = "journal+console";
       };
+    };
 
-    systemd.services.cloud-config =
-      { description = "Apply the settings specified in cloud-config";
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" "syslog.target" "cloud-config.target" ];
+    systemd.services.cloud-config = {
+      description = "Apply the settings specified in cloud-config";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" "syslog.target" "cloud-config.target" ];
 
-        path = path;
-        serviceConfig =
-          { Type = "oneshot";
-            ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=config";
-            RemainAfterExit = "yes";
-            TimeoutSec = "infinity";
-            StandardOutput = "journal+console";
-          };
+      path = path;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=config";
+        RemainAfterExit = "yes";
+        TimeoutSec = "infinity";
+        StandardOutput = "journal+console";
       };
+    };
 
-    systemd.services.cloud-final =
-      { description = "Execute cloud user/final scripts";
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" "syslog.target" "cloud-config.service" "rc-local.service" ];
-        requires = [ "cloud-config.target" ];
-        path = path;
-        serviceConfig =
-          { Type = "oneshot";
-            ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=final";
-            RemainAfterExit = "yes";
-            TimeoutSec = "infinity";
-            StandardOutput = "journal+console";
-          };
+    systemd.services.cloud-final = {
+      description = "Execute cloud user/final scripts";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" "syslog.target" "cloud-config.service" "rc-local.service" ];
+      requires = [ "cloud-config.target" ];
+      path = path;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=final";
+        RemainAfterExit = "yes";
+        TimeoutSec = "infinity";
+        StandardOutput = "journal+console";
       };
+    };
 
-    systemd.targets.cloud-config =
-      { description = "Cloud-config availability";
-        requires = [ "cloud-init-local.service" "cloud-init.service" ];
-      };
+    systemd.targets.cloud-config = {
+      description = "Cloud-config availability";
+      requires = [ "cloud-init-local.service" "cloud-init.service" ];
+    };
   };
 }
