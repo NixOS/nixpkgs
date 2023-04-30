@@ -19,7 +19,7 @@ from distutils.version import LooseVersion
 from os.path import abspath, dirname
 from urllib.request import urlopen
 
-HISTORY_URL = 'https://omahaproxy.appspot.com/history?os=linux'
+RELEASES_URL = 'https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/all/versions/all/releases'
 DEB_URL = 'https://dl.google.com/linux/chrome/deb/pool/main/g'
 BUCKET_URL = 'https://commondatastorage.googleapis.com/chromium-browser-official'
 
@@ -90,20 +90,24 @@ def get_channel_dependencies(version):
     }
 
 
-def get_latest_ungoogled_chromium_tag():
-    """Returns the latest ungoogled-chromium tag using the GitHub API."""
-    api_tag_url = 'https://api.github.com/repos/Eloston/ungoogled-chromium/tags?per_page=1'
+def get_latest_ungoogled_chromium_tag(linux_stable_versions):
+    """Returns the latest ungoogled-chromium tag for linux using the GitHub API."""
+    api_tag_url = 'https://api.github.com/repos/ungoogled-software/ungoogled-chromium/tags'
     with urlopen(api_tag_url) as http_response:
-        tag_data = json.load(http_response)
-        return tag_data[0]['name']
+        tags = json.load(http_response)
+        for tag in tags:
+            if not tag['name'].split('-')[0] in linux_stable_versions:
+                continue
+
+            return tag['name']
 
 
-def get_latest_ungoogled_chromium_build():
+def get_latest_ungoogled_chromium_build(linux_stable_versions):
     """Returns a dictionary for the latest ungoogled-chromium build."""
-    tag = get_latest_ungoogled_chromium_tag()
+    tag = get_latest_ungoogled_chromium_tag(linux_stable_versions)
     version = tag.split('-')[0]
     return {
-        'channel': 'ungoogled-chromium',
+        'name': 'chrome/platforms/linux/channels/ungoogled-chromium/versions/',
         'version': version,
         'ungoogled_tag': tag
     }
@@ -111,7 +115,7 @@ def get_latest_ungoogled_chromium_build():
 
 def get_ungoogled_chromium_gn_flags(revision):
     """Returns ungoogled-chromium's GN build flags for the given revision."""
-    gn_flags_url = f'https://raw.githubusercontent.com/Eloston/ungoogled-chromium/{revision}/flags.gn'
+    gn_flags_url = f'https://raw.githubusercontent.com/ungoogled-software/ungoogled-chromium/{revision}/flags.gn'
     return urlopen(gn_flags_url).read().decode()
 
 
@@ -159,27 +163,29 @@ channels = {}
 last_channels = load_json(JSON_PATH)
 
 
-print(f'GET {HISTORY_URL}', file=sys.stderr)
-with urlopen(HISTORY_URL) as resp:
-    builds = csv.DictReader(iterdecode(resp, 'utf-8'))
-    builds = list(builds)
-    builds.append(get_latest_ungoogled_chromium_build())
-    for build in builds:
-        channel_name = build['channel']
+print(f'GET {RELEASES_URL}', file=sys.stderr)
+with urlopen(RELEASES_URL) as resp:
+    releases = json.load(resp)['releases']
 
-        # If we've already found a newer build for this channel, we're
+    linux_stable_versions = [release['version'] for release in releases if release['name'].startswith('chrome/platforms/linux/channels/stable/versions/')]
+    releases.append(get_latest_ungoogled_chromium_build(linux_stable_versions))
+
+    for release in releases:
+        channel_name = re.findall("chrome\/platforms\/linux\/channels\/(.*)\/versions\/", release['name'])[0]
+
+        # If we've already found a newer release for this channel, we're
         # no longer interested in it.
         if channel_name in channels:
             continue
 
-        # If we're back at the last build we used, we don't need to
+        # If we're back at the last release we used, we don't need to
         # keep going -- there's no new version available, and we can
         # just reuse the info from last time.
-        if build['version'] == last_channels[channel_name]['version']:
+        if release['version'] == last_channels[channel_name]['version']:
             channels[channel_name] = last_channels[channel_name]
             continue
 
-        channel = {'version': build['version']}
+        channel = {'version': release['version']}
         if channel_name == 'dev':
             google_chrome_suffix = 'unstable'
         elif channel_name == 'ungoogled-chromium':
@@ -188,35 +194,26 @@ with urlopen(HISTORY_URL) as resp:
             google_chrome_suffix = channel_name
 
         try:
-            channel['sha256'] = nix_prefetch_url(f'{BUCKET_URL}/chromium-{build["version"]}.tar.xz')
+            channel['sha256'] = nix_prefetch_url(f'{BUCKET_URL}/chromium-{release["version"]}.tar.xz')
             channel['sha256bin64'] = nix_prefetch_url(
                 f'{DEB_URL}/google-chrome-{google_chrome_suffix}/' +
-                f'google-chrome-{google_chrome_suffix}_{build["version"]}-1_amd64.deb')
+                f'google-chrome-{google_chrome_suffix}_{release["version"]}-1_amd64.deb')
         except subprocess.CalledProcessError:
-            if (channel_name == 'ungoogled-chromium' and 'sha256' in channel and
-                    build['version'].split('.')[0] == last_channels['stable']['version'].split('.')[0]):
-                # Sometimes ungoogled-chromium is updated to a newer tag than
-                # the latest stable Chromium version. In this case we'll set
-                # sha256bin64 to null and the Nixpkgs code will fall back to
-                # the latest stable Google Chrome (only required for
-                # Widevine/DRM which is disabled by default):
-                channel['sha256bin64'] = None
-            else:
-                # This build isn't actually available yet.  Continue to
-                # the next one.
-                continue
+            # This release isn't actually available yet.  Continue to
+            # the next one.
+            continue
 
         channel['deps'] = get_channel_dependencies(channel['version'])
         if channel_name == 'stable':
             channel['chromedriver'] = get_matching_chromedriver(channel['version'])
         elif channel_name == 'ungoogled-chromium':
-            ungoogled_repo_url = 'https://github.com/Eloston/ungoogled-chromium.git'
+            ungoogled_repo_url = 'https://github.com/ungoogled-software/ungoogled-chromium.git'
             channel['deps']['ungoogled-patches'] = {
-                'rev': build['ungoogled_tag'],
-                'sha256': nix_prefetch_git(ungoogled_repo_url, build['ungoogled_tag'])['sha256']
+                'rev': release['ungoogled_tag'],
+                'sha256': nix_prefetch_git(ungoogled_repo_url, release['ungoogled_tag'])['sha256']
             }
             with open(UNGOOGLED_FLAGS_PATH, 'w') as out:
-                out.write(get_ungoogled_chromium_gn_flags(build['ungoogled_tag']))
+                out.write(get_ungoogled_chromium_gn_flags(release['ungoogled_tag']))
 
         channels[channel_name] = channel
 
