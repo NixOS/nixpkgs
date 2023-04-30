@@ -27,23 +27,23 @@ in {
 
       remote = mkOption {
         type = types.nullOr types.str;
-        description = "Remote to fetch from";
+        description = lib.mdDoc "Remote to fetch from";
       };
 
       credentials = mkOption {
         default = null;
-        description = "credentials to access the remote";
+        description = lib.mdDoc "credentials to access the remote";
         type = types.nullOr (types.submodule {
           options = {
             user = mkOption {
               default = null;
               type = types.nullOr types.str;
-              description = "User to authenticate with";
+              description = lib.mdDoc "User to authenticate with";
             };
             passwordFile = mkOption {
               default = null;
               type = types.nullOr types.path;
-              description =
+              description = lib.mdDoc
                 "File which contains the password or access token to connect to the remote";
             };
           };
@@ -51,50 +51,53 @@ in {
       };
       ssh = mkOption {
         default = null;
-        description = "ssh option for ssh remote";
+        description = lib.mdDoc "ssh option for ssh remote";
         type = types.nullOr (types.submodule {
           options = {
             key = mkOption {
               type = types.path;
-              description =
+              description = lib.mdDoc
                 "path to ssh key with access to the remote repository";
             };
             hostKey = mkOption {
               type = types.str;
-              description = "name of host and its public key for fingerprint";
-              example = pkgs.lib.concatStrings [
-                "snakeoil ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHA"
-                "yNTYAAABBBChdA2BmwcG49OrQN33f/sj+OHL5sJhwVl2Qim0vkUJQCry1zFpKTa"
-                "9ZcDMiWaEhoAR6FGoaGI04ff7CS+1yybQ="
-              ];
+              description =
+                lib.mdDoc "name of host and its public key for fingerprint";
             };
           };
         });
       };
       updateBranch = mkOption {
         type = types.str;
-        description = "The branch which should be updated";
+        description = lib.mdDoc "The branch which should be updated";
       };
       mainBranch = mkOption {
         default = "main";
         type = types.str;
-        description = "The branch which should be merged before update";
+        description =
+          lib.mdDoc "The branch which should be merged before update";
       };
       buildAttributes = mkOption {
         type = types.listOf types.str;
-        description =
+        description = lib.mdDoc
           "Attributes to build. This will build until one of them succeeds";
       };
+      updateFlake = mkOption {
+        default = true;
+        type = types.bool;
+        description = lib.mdDoc "Wether to update the flake before building";
+      };
+
       updateScript = mkOption {
-        default = "${nixCommand} flake update --commit-lock-file";
+        default = "";
         type = types.str;
-        description = "Command to update the config";
+        description = lib.mdDoc "Command to update the config";
       };
 
       failLogInCommitMsg = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Wether to append a list of the failed `buildAttributes` to the commit message
         '';
       };
@@ -102,7 +105,7 @@ in {
       postCommands = mkOption {
         default = "";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Commands to be executed after the update
           This can use fail.log, which stores a list of the failed `buildAttributes`, to see which builds failed
         '';
@@ -208,6 +211,9 @@ in {
         ${pkgs.git}/bin/git pull || true
         ${pkgs.git}/bin/git merge origin/${cfg.mainBranch} || true
         rm -f ./*.log
+        ${lib.optionalString cfg.updateFlake ''
+          ${nixCommand} flake update --commit-lock-file
+        ''}
         ${cfg.updateScript}
         ${mkBuilds cfg.buildAttributes}
         ${lib.optionalString cfg.failLogInCommitMsg ''
