@@ -36,6 +36,7 @@
 , openscad
 , pandoc
 , parinfer-rust
+, phpactor
 , ripgrep
 , skim
 , sqlite
@@ -776,6 +777,14 @@ self: super: {
   });
 
   inherit parinfer-rust;
+
+  phpactor = buildVimPluginFrom2Nix {
+    inherit (phpactor) pname src meta version;
+    postPatch = ''
+      substituteInPlace plugin/phpactor.vim \
+        --replace "g:phpactorpath = expand('<sfile>:p:h') . '/..'" "g:phpactorpath = '${phpactor}'"
+    '';
+  };
 
   playground = super.playground.overrideAttrs (old: {
     dependencies = with self; [
