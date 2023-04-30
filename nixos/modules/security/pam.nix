@@ -451,7 +451,7 @@ let
         defaultText = literalExpression "config.security.pam.zfs.enable";
         type = types.bool;
         description = lib.mdDoc ''
-          Enable unlocking and mounting of ZFS home dataset at login.
+          Enable unlocking and mounting of encrypted ZFS home dataset at login.
         '';
       };
 
@@ -1227,7 +1227,7 @@ in
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Enable unlocking and mounting of ZFS home dataset at login.
+          Enable unlocking and mounting of encrypted ZFS home dataset at login.
         '';
       };
 
@@ -1236,7 +1236,7 @@ in
         default = "rpool/home";
         type = types.str;
         description = lib.mdDoc ''
-          Prefix of home datasets. This value will be contacenated with
+          Prefix of home datasets. This value will be concatenated with
           `"/" + <username>` in order to determine the home dataset to unlock.
         '';
       };
