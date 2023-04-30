@@ -2462,6 +2462,8 @@ self: super: with self; {
 
   dicom-numpy = callPackage ../development/python-modules/dicom-numpy { };
 
+  dicomweb-client = callPackage ../development/python-modules/dicomweb-client { };
+
   dict2xml = callPackage ../development/python-modules/dict2xml { };
 
   dictdiffer = callPackage ../development/python-modules/dictdiffer { };
