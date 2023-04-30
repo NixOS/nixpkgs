@@ -198,6 +198,16 @@ let
         fi
       ''}
 
+      ${lib.optionalString cfg.tpm.enable ''
+        NIX_SWTPM_DIR=$(readlink -f "''${NIX_SWTPM_DIR:-${config.system.name}-swtpm}")
+        mkdir -p "$NIX_SWTPM_DIR"
+        ${lib.getExe cfg.tpm.package} \
+          socket \
+          --tpmstate dir="$NIX_SWTPM_DIR" \
+          --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket \
+          "--tpm2" 1>"$NIX_SWTPM_DIR"/stdout 2>"$NIX_SWTPM_DIR"/stderr &
+      ''}
+
       cd "$TMPDIR"
 
       ${lib.optionalString (cfg.emptyDiskImages != []) "idx=0"}
@@ -862,6 +872,32 @@ in
       };
     };
 
+    virtualisation.tpm = {
+      enable = mkEnableOption "a TPM device in the virtual machine with a driver, using swtpm.";
+
+      package = mkPackageOptionMD cfg.host.pkgs "swtpm" { };
+
+      deviceModel = mkOption {
+        type = types.str;
+        default = ({
+          "i686-linux" = "tpm-tis";
+          "x86_64-linux" = "tpm-tis";
+          "ppc64-linux" = "tpm-spapr";
+          "armv7-linux" = "tpm-tis-device";
+          "aarch64-linux" = "tpm-tis-device";
+        }.${pkgs.hostPlatform.system});
+        defaultText = ''({
+          "i686-linux" = "tpm-tis";
+          "x86_64-linux" = "tpm-tis";
+          "ppc64-linux" = "tpm-spapr";
+          "armv7-linux" = "tpm-tis-device";
+          "aarch64-linux" = "tpm-tis-device";
+        }.''${pkgs.hostPlatform.system})'';
+        example = "tpm-tis-device";
+        description = lib.mdDoc "QEMU device model for the TPM, uses the appropriate default based on the system and the package passed.";
+      };
+    };
+
     virtualisation.useDefaultFilesystems =
       mkOption {
         type = types.bool;
@@ -1027,7 +1063,8 @@ in
 
     boot.initrd.availableKernelModules =
       optional cfg.writableStore "overlay"
-      ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
+      ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
+      ++ optional (cfg.tpm.enable) "tpm_tis";
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
@@ -1097,6 +1134,11 @@ in
       ])
       (mkIf (!cfg.graphics) [
         "-nographic"
+      ])
+      (mkIf (cfg.tpm.enable) [
+        "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket"
+        "-tpmdev emulator,id=tpm_dev_0,chardev=chrtpm"
+        "-device ${cfg.tpm.deviceModel},tpmdev=tpm_dev_0"
       ])
     ];
 
