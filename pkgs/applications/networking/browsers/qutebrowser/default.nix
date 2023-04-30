@@ -104,6 +104,8 @@ python3.pkgs.buildPythonApplication {
       # Force the app to use QT_PLUGIN_PATH values from wrapper
       --unset QT_PLUGIN_PATH
       "''${qtWrapperArgs[@]}"
+      # avoid persistant warning on starup
+      --set QT_STYLE_OVERRIDE Fusion
       ${lib.optionalString pipewireSupport ''--prefix LD_LIBRARY_PATH : ${libPath}''}
       ${lib.optionalString (enableVulkan) ''
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [vulkan-loader]}
