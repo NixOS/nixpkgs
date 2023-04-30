@@ -7,11 +7,10 @@
 , harfbuzzFull
 , icu58
 , libX11
-, libglvnd
+, libGL
 , libjpeg
 , libpng
 , libwebp
-, mesa
 , ninja
 , python3
 , zlib
@@ -45,11 +44,10 @@ stdenv.mkDerivation {
     harfbuzzFull
     icu58
     libX11
-    libglvnd
+    libGL
     libjpeg
     libpng
     libwebp
-    mesa
     zlib
   ];
 
