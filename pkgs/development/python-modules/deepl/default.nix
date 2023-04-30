@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A language translation API that allows other computer programs to send texts and documents to DeepL's servers and receive high-quality translations";
     homepage = "https://github.com/DeepLcom/deepl-python";
+    changelog = "https://github.com/DeepLcom/deepl-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ MaskedBelgian ];
   };
