@@ -49,6 +49,10 @@ default-package-overrides:
   # 2023-04-13: latest version requires ghc-events >= 0.19 but it's not on LTS yet
   - eventlog2html < 0.10
 
+  # 2023-04-22: For dhall < 1.42 compatibility
+  - dhall-nixpkgs == 1.0.9
+  - dhall-nix == 1.1.25
+
 extra-packages:
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - Cabal == 2.4.*                      # required for cabal-install etc.
@@ -433,6 +437,120 @@ package-maintainers:
     - rhine-gloss
     - simple-affine-space
     - time-domain
+  thielema:
+    - accelerate-arithmetic
+    - accelerate-fftw
+    - accelerate-fourier
+    - accelerate-utility
+    - align-audio
+    - alsa-core
+    - alsa-pcm
+    - alsa-seq
+    - apportionment
+    - audacity
+    - battleship-combinatorics
+    - bibtex
+    - board-games
+    - buffer-pipe
+    - cabal-flatpak
+    - calendar-recycling
+    - checksum
+    - check-pvp
+    - combinatorial
+    - comfort-graph
+    - comfort-array
+    - comfort-array-shape
+    - comfort-fftw
+    - comfort-glpk
+    - concurrent-split
+    - cutter
+    - data-accessor
+    - data-accessor-mtl
+    - data-accessor-template
+    - data-accessor-transformers
+    - data-ref
+    - doctest-exitcode-stdio
+    - doctest-extract
+    - doctest-lib
+    - dsp
+    - enumset
+    - equal-files
+    - event-list
+    - explicit-exception
+    - fixed-length
+    - fftw-ffi
+    - gnuplot
+    - group-by-date
+    - guarded-allocation
+    - iff
+    - interpolation
+    - jack
+    - latex
+    - lazyio
+    - markov-chain
+    - midi
+    - midi-alsa
+    - midi-music-box
+    - mbox-utility
+    - med-module
+    - monoid-transformer
+    - non-empty
+    - non-negative
+    - numeric-prelude
+    - numeric-quest
+    - pathtype
+    - pooled-io
+    - probability
+    - quickcheck-transformer
+    - reactive-midyim
+    - reactive-balsa
+    - reactive-jack
+    - sample-frame
+    - sample-frame-np
+    - set-cover
+    - shell-utility
+    - sound-collage
+    - sox
+    - soxlib
+    - split-record
+    - spreadsheet
+    - stm-split
+    - storable-record
+    - storable-tuple
+    - storablevector
+    - synthesizer-core
+    - synthesizer-dimensional
+    - synthesizer-alsa
+    - synthesizer-midi
+    - tagchup
+    - tfp
+    - unicode
+    - unique-logic
+    - unique-logic-tf
+    - unsafe
+    - utility-ht
+    - wuerfelschlange
+    - xml-basic
+    - youtube
+    - prelude-compat
+    - fft
+    - carray
+    - lapack-ffi-tools
+    - netlib-ffi
+    - blas-ffi
+    - lapack-ffi
+    - netlib-carray
+    - blas-carray
+    - lapack-carray
+    - netlib-comfort-array
+    - blas-comfort-array
+    - lapack-comfort-array
+    - lapack
+    - lapack-hmatrix
+    - hmm-lapack
+    - magico
+    - resistor-cube
+    - linear-circuit
   utdemir:
     - nix-tree
   zowoq:
@@ -523,6 +641,7 @@ unsupported-platforms:
   spade:                                        [ platforms.darwin ] # depends on sdl2-mixer, which doesn't work on darwin
   synthesizer-alsa:                             [ platforms.darwin ]
   taffybar:                                     [ platforms.darwin ]
+  twirl:                                        [ platforms.darwin ] # depends on sdl2-mixer
   emanote:                                      [ x86_64-darwin ] # Depends on stork which is broken on macOS sdk < 10.14
   termonad:                                     [ platforms.darwin ]
   tokyotyrant-haskell:                          [ platforms.darwin ]
@@ -533,6 +652,7 @@ unsupported-platforms:
   VulkanMemoryAllocator:                        [ i686-linux, armv7l-linux, platforms.darwin ]
   vulkan-utils:                                 [ platforms.darwin ]
   webkit2gtk3-javascriptcore:                   [ platforms.darwin ]
+  wiringPi:                                     [ aarch64-darwin ]
   xattr:                                        [ platforms.darwin ]
   xgboost-haskell:                              [ aarch64-linux, armv7l-linux ]
   xmobar:                                       [ platforms.darwin ]
@@ -578,13 +698,15 @@ supported-platforms:
   keid-sound-openal:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   keid-ui-dearimgui:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   kqueue:                                       [ platforms.netbsd, platforms.freebsd, platforms.openbsd, platforms.darwin ]
+  libfuse3:                                     [ platforms.linux ]
   linux-evdev:                                  [ platforms.linux ]
   linux-file-extents:                           [ platforms.linux ]
   linux-inotify:                                [ platforms.linux ]
   linux-mount:                                  [ platforms.linux ]
   linux-namespaces:                             [ platforms.linux ]
   lxc:                                          [ platforms.linux ]
-  midi-alsa:                                    [ platforms.linux ]
+  midi-alsa:                                    [ platforms.linux ] # alsa-core only supported on linux
+  midisurface:                                  [ platforms.linux ] # alsa-core only supported on linux
   OrderedBits:                                  [ platforms.x86 ] # lacks implementations for non-x86: https://github.com/choener/OrderedBits/blob/401cbbe933b1635aa33e8e9b29a4a570b0a8f044/lib/Data/Bits/Ordered.hs#L316
   password:                                     [ platforms.x86 ] # uses scrypt, which requries x86
   password-instances:                           [ platforms.x86 ] # uses scrypt, which requries x86
@@ -593,6 +715,7 @@ supported-platforms:
   scat:                                         [ platforms.x86 ] # uses scrypt, which requries x86
   scrypt:                                       [ platforms.x86 ] # https://github.com/informatikr/scrypt/issues/8
   seqalign:                                     [ platforms.x86 ] # x86 intrinsics
+  streamed:                                     [ platforms.linux] # alsa-core only supported on linux
   swisstable:                                   [ platforms.x86_64 ] # Needs AVX2
   tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
   udev:                                         [ platforms.linux ]

@@ -4453,6 +4453,12 @@
     githubId = 103082;
     name = "Ed Brindley";
   };
+  elesiuta = {
+    email = "elesiuta@gmail.com";
+    github = "elesiuta";
+    githubId = 8146662;
+    name = "Eric Lesiuta";
+  };
   eliandoran = {
     email = "contact@eliandoran.me";
     name = "Elian Doran";
@@ -6528,6 +6534,11 @@
     github = "icewind1991";
     githubId = 1283854;
   };
+  icyrockcom = {
+    github = "icyrockcom";
+    githubId = 785140;
+    name = "icyrock";
+  };
   icy-thought = {
     name = "Icy-Thought";
     email = "gilganyx@pm.me";
@@ -6690,6 +6701,12 @@
     github = "IndeedNotJames";
     githubId = 55066419;
     name = "Emily Lange";
+  };
+  indexyz = {
+    email = "indexyz@pm.me";
+    github = "5aaee9";
+    githubId = 7685264;
+    name = "Indexyz";
   };
   ineol = {
     email = "leo.stefanesco@gmail.com";
@@ -15513,6 +15530,12 @@
     github = "ThibautMarty";
     githubId = 3268082;
     name = "Thibaut Marty";
+  };
+  thielema = {
+    name = "Henning Thielemann";
+    email = "nix@henning-thielemann.de";
+    github = "thielema";
+    githubId = 898989;
   };
   thled = {
     name = "Thomas Le Duc";

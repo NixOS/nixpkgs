@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.4.1";
+  version = "3.4.2";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
-    sha256 = "sha256-/P6gPLSRGfwEN801cyNrZTpHyZKO+4tU6cFvLz8ERuo=";
+    sha256 = "sha256-I1qtrD94IpMut0a6JUHErHaksoZ+z8/dDG8U68Y5zJE=";
   };
 
   nativeBuildInputs = [
@@ -118,6 +118,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Official Unity3D app to download and manage Unity Projects and installations";
