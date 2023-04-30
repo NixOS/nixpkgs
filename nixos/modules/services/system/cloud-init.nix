@@ -16,6 +16,8 @@ let
   ++ optional cfg.btrfs.enable btrfs-progs
   ++ optional cfg.ext4.enable e2fsprogs
   ;
+  settingsFormat = pkgs.formats.yaml { };
+  cfgfile = settingsFormat.generate "cloud.cfg" cfg.settings;
 in
 {
   options = {
@@ -64,65 +66,90 @@ in
         '';
       };
 
+      settings = mkOption {
+        description = mdDoc ''
+          Structured cloud-init configuration.
+        '';
+        type = types.submodule {
+          freeformType = settingsFormat.type;
+        };
+        default = { };
+      };
+
       config = mkOption {
         type = types.str;
-        default = ''
-          system_info:
-            distro: nixos
-            network:
-              renderers: [ 'networkd' ]
-          users:
-             - root
+        default = "";
+        description = mdDoc ''
+          raw cloud-init configuration.
 
-          disable_root: false
-          preserve_hostname: false
-
-          cloud_init_modules:
-           - migrator
-           - seed_random
-           - bootcmd
-           - write-files
-           - growpart
-           - resizefs
-           - update_hostname
-           - resolv_conf
-           - ca-certs
-           - rsyslog
-           - users-groups
-
-          cloud_config_modules:
-           - disk_setup
-           - mounts
-           - ssh-import-id
-           - set-passwords
-           - timezone
-           - disable-ec2-metadata
-           - runcmd
-           - ssh
-
-          cloud_final_modules:
-           - rightscale_userdata
-           - scripts-vendor
-           - scripts-per-once
-           - scripts-per-boot
-           - scripts-per-instance
-           - scripts-user
-           - ssh-authkey-fingerprints
-           - keys-to-console
-           - phone-home
-           - final-message
-           - power-state-change
+          Takes precedence over the `settings` option if set.
         '';
-        description = mdDoc "cloud-init configuration.";
       };
 
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = {
+    services.cloud-init.settings = {
+      system_info = mkDefault {
+        distro = "nixos";
+        network = {
+          renderers = [ "networkd" ];
+        };
+      };
 
-    environment.etc."cloud/cloud.cfg".text = cfg.config;
+      users = mkDefault [ "root" ];
+      disable_root = mkDefault false;
+      preserve_hostname = mkDefault false;
+
+      cloud_init_modules = mkDefault [
+        "migrator"
+        "seed_random"
+        "bootcmd"
+        "write-files"
+        "growpart"
+        "resizefs"
+        "update_hostname"
+        "resolv_conf"
+        "ca-certs"
+        "rsyslog"
+        "users-groups"
+      ];
+
+      cloud_config_modules = mkDefault [
+        "disk_setup"
+        "mounts"
+        "ssh-import-id"
+        "set-passwords"
+        "timezone"
+        "disable-ec2-metadata"
+        "runcmd"
+        "ssh"
+      ];
+
+      cloud_final_modules = mkDefault [
+        "rightscale_userdata"
+        "scripts-vendor"
+        "scripts-per-once"
+        "scripts-per-boot"
+        "scripts-per-instance"
+        "scripts-user"
+        "ssh-authkey-fingerprints"
+        "keys-to-console"
+        "phone-home"
+        "final-message"
+        "power-state-change"
+      ];
+    };
+  } // (mkIf cfg.enable {
+
+    environment.etc."cloud/cloud.cfg" =
+      if cfg.config == "" then
+        { source = cfgfile; }
+      else
+        { text = cfg.config; }
+    ;
 
     systemd.network.enable = cfg.network.enable;
 
@@ -198,5 +225,5 @@ in
       description = "Cloud-config availability";
       requires = [ "cloud-init-local.service" "cloud-init.service" ];
     };
-  };
+  });
 }
