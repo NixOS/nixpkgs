@@ -1,18 +1,18 @@
 { lib
 , stdenv
+, bc
+, bind # host and dig binary
+, coreutils # date and timeout binary
+, curl
 , fetchFromGitHub
 , file
-, openssl
-, makeWrapper
-, which
-, curl
-, bc
-, coreutils # date and timeout binary
-, bind # host and dig binary
-, nmap
 , iproute2
+, makeWrapper
 , netcat-gnu
+, nmap
+, openssl
 , python3
+, which
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "matteocorti";
     repo = "check_ssl_cert";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-yigg2C1FkdS/O+GCAkbQhXwARO0583V8MREzVCNsoGA=";
   };
 
