@@ -4,12 +4,11 @@ with lib;
 
 let
   cfg = config.services.stargazer;
-  routesFormat = pkgs.formats.ini { };
-  globalFile = pkgs.writeText "global.ini" ''
-    listen = ${concatStringsSep " " cfg.listen}
-    connection-logging = ${boolToString cfg.connectionLogging}
-    log-ip = ${boolToString cfg.ipLog}
-    log-ip-partial = ${boolToString cfg.ipLogPartial}
+  globalSection = ''
+    listen = ${lib.concatStringsSep " " cfg.listen}
+    connection-logging = ${lib.boolToString cfg.connectionLogging}
+    log-ip = ${lib.boolToString cfg.ipLog}
+    log-ip-partial = ${lib.boolToString cfg.ipLogPartial}
     request-timeout = ${toString cfg.requestTimeout}
     response-timeout = ${toString cfg.responseTimeout}
 
@@ -21,10 +20,19 @@ let
     ${optionalString (cfg.certLifetime != "") "cert-lifetime = ${cfg.certLifetime}"}
 
   '';
-  routesFile = routesFormat.generate "router.ini" cfg.routes;
-  configFile = pkgs.runCommand "config.ini" { } ''
-    cat ${globalFile} ${routesFile} > $out
-  '';
+  genINI = lib.generators.toINI { };
+  configFile = pkgs.writeText "config.ini" (lib.strings.concatStrings (
+    [ globalSection ] ++ (lib.lists.forEach cfg.routes (section:
+      let
+        name = section.route;
+        params = builtins.removeAttrs section [ "route" ];
+      in
+      genINI
+        {
+          "${name}" = params;
+        } + "\n"
+    ))
+  ));
 in
 {
   options.services.stargazer = {
@@ -124,27 +132,49 @@ in
     };
 
     routes = lib.mkOption {
-      type = routesFormat.type;
-      default = { };
+      type = lib.types.listOf
+        (lib.types.submodule {
+          freeformType = with lib.types; attrsOf (nullOr
+            (oneOf [
+              bool
+              int
+              float
+              str
+            ]) // {
+            description = "INI atom (null, bool, int, float or string)";
+          });
+          options.route = lib.mkOption {
+            type = lib.types.str;
+            description = lib.mdDoc "Route section name";
+          };
+        });
+      default = [ ];
       description = lib.mdDoc ''
         Routes that Stargazer should server.
 
-        [Refer to upstream docs](https://git.sr.ht/~zethra/stargazer/tree/main/item/doc/stargazer.ini.5.txt)
+        Expressed as a list of attribute sets. Each set must have a key `route`
+        that becomes the section name for that route in the stargazer ini cofig.
+        The remaining keys and vaules become the parameters for that route.
+
+        [Refer to upstream docs for other params](https://git.sr.ht/~zethra/stargazer/tree/main/item/doc/stargazer.ini.5.txt)
       '';
-      example = literalExpression ''
-        {
-          "example.com" = {
-            root = "/srv/gemini/example.com";
-          };
-          "example.com:/man" = {
+      example = lib.literalExpression ''
+        [
+          {
+            route = "example.com";
+            root = "/srv/gemini/example.com"
+          }
+          {
+            route = "example.com:/man";
             root = "/cgi-bin";
             cgi = true;
-          };
-          "other.org~(.*)" = {
+          }
+          {
+            route = "other.org~(.*)";
             redirect = "gemini://example.com";
             rewrite = "\1";
-          };
-        }
+          }
+        ]
       '';
     };
 
