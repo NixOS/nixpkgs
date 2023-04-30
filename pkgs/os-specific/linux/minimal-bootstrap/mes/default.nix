@@ -8,12 +8,13 @@
 { lib
 , runCommand
 , fetchurl
-, fetchtarball
 , writeText
 , m2libc
 , mescc-tools
+, nyacc
 }:
 let
+  pname = "mes";
   version = "0.24.2";
   ARCH = "x86";
 
@@ -22,20 +23,18 @@ let
     sha256 = "0vp8v88zszh1imm3dvdfi3m8cywshdj7xcrsq4cgmss69s2y1nkx";
   };
 
-  nyaccVersion = "1.00.2";
-  nyaccModules = (fetchtarball {
-    url = "mirror://savannah/nyacc/nyacc-${nyaccVersion}.tar.gz";
-    sha256 = "065ksalfllbdrzl12dz9d9dcxrv97wqxblslngsc6kajvnvlyvpk";
-  }) + "/nyacc-${nyaccVersion}";
-
   config_h = builtins.toFile "config.h" ''
     #undef SYSTEM_LIBC
     #define MES_VERSION "${version}"
   '';
 in
-(runCommand "mes-${version}" {
-  pname = "mes";
-  inherit version;
+runCommand "${pname}-${version}" {
+  inherit pname version;
+
+  passthru = {
+    mesPrefix = "/share/mes-${version}";
+  };
+
   meta = with lib; {
     description = "Scheme interpreter and C compiler for bootstrapping";
     homepage = "https://www.gnu.org/software/mes";
@@ -74,7 +73,7 @@ in
   rm x86_defs.M1
 
   # Remove environment impurities
-  __GUILE_LOAD_PATH="\"''${MES_PREFIX}/mes/module:''${MES_PREFIX}/module:${nyaccModules}/module\""
+  __GUILE_LOAD_PATH="\"''${MES_PREFIX}/mes/module:''${MES_PREFIX}/module:${nyacc.guilePath}\""
   boot0_scm=mes/module/mes/boot-0.scm
   guile_mes=mes/module/mes/guile.mes
   replace --file ''${boot0_scm} --output ''${boot0_scm} --match-on "(getenv \"GUILE_LOAD_PATH\")" --replace-with ''${__GUILE_LOAD_PATH}
@@ -309,6 +308,4 @@ in
 
   # Link everything into new mes executable
   ''${out}/bin/mes-m2 -e main ''${out}/bin/mescc.scm -- --base-address 0x08048000 -L ''${MES_PREFIX}/lib -nostdlib -o ''${out}/bin/mes -L . crt1.o builtins.o cc.o core.o display.o eval-apply.o gc.o globals.o hash.o lib.o math.o mes.o module.o posix.o reader.o stack.o string.o struct.o symbol.o vector.o -lc -lmescc
-'') // {
-  mesPrefix = "/share/mes-${version}";
-}
+''
