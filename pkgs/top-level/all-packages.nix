@@ -17555,6 +17555,8 @@ with pkgs;
 
   bam = callPackage ../development/tools/build-managers/bam { };
 
+  bandit = with python3Packages; toPythonApplication bandit;
+
   bazel = bazel_6;
 
   bazel_4 = callPackage ../development/tools/build-managers/bazel/bazel_4 {
