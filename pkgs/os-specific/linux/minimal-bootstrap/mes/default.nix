@@ -27,6 +27,11 @@ let
     url = "mirror://savannah/nyacc/nyacc-${nyaccVersion}.tar.gz";
     sha256 = "065ksalfllbdrzl12dz9d9dcxrv97wqxblslngsc6kajvnvlyvpk";
   }) + "/nyacc-${nyaccVersion}";
+
+  config_h = builtins.toFile "config.h" ''
+    #undef SYSTEM_LIBC
+    #define MES_VERSION "${version}"
+  '';
 in
 (runCommand "mes-${version}" {
   pname = "mes";
@@ -50,8 +55,7 @@ in
 
   cd ''${MES_PREFIX}
 
-  cp ${./config.h} include/mes/config.h
-  replace --file include/mes/config.h --output include/mes/config.h --match-on @VERSION@ --replace-with ${version}
+  cp ${config_h} include/mes/config.h
 
   mkdir include/arch
   cp include/linux/x86/syscall.h include/arch/syscall.h

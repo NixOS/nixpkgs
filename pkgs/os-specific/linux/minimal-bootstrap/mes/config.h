@@ -1,2 +1,0 @@
-#undef SYSTEM_LIBC
-#define MES_VERSION "@VERSION@"
