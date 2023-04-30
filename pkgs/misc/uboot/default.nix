@@ -483,7 +483,6 @@ in {
       sha256 = "0h7xm4ck3p3380c6bqm5ixrkxwcx6z5vysqdwvfa7gcqx5d6x5zz";
     };
   in buildUBoot {
-    extraMakeFlags = [ "all" "u-boot.itb" ];
     defconfig = "rock64-rk3328_defconfig";
     extraMeta = {
       platforms = [ "aarch64-linux" ];
@@ -505,7 +504,6 @@ in {
   };
 
   ubootRockPro64 = buildUBoot {
-    extraMakeFlags = [ "all" "u-boot.itb" ];
     extraPatches = [
       # https://patchwork.ozlabs.org/project/uboot/list/?series=237654&archive=both&state=*
       (fetchpatch {
