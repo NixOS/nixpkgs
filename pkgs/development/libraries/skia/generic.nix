@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     ninja
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     expat
     fontconfig
     harfbuzzFull
