@@ -48,6 +48,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
           };
           updateBranch = "update";
           buildAttributes = [ "attr1" "attr2" ];
+          failLogInCommitMsg = true;
         };
         nixpkgs.overlays = [ nixOverlay ];
       };

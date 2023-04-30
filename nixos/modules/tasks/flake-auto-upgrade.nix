@@ -91,12 +91,16 @@ in {
         description = "Command to update the config";
       };
 
-      postCommands = mkOption {
-        default = ''
-          oldmessage=$(${pkgs.git}/bin/git log -n1 --pretty=%B)
-          faillog=$(cat fail.log | ${pkgs.gawk}/bin/awk '{print $0 " failed"}')
-          ${pkgs.git}/bin/git commit --amend -m "$(echo $oldmessage; printf "\n\n"; echo $faillog)"
+      failLogInCommitMsg = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Wether to append a list of the failed `buildAttributes` to the commit message
         '';
+      };
+
+      postCommands = mkOption {
+        default = "";
         type = types.str;
         description = ''
           Commands to be executed after the update
@@ -206,6 +210,11 @@ in {
         rm -f ./*.log
         ${cfg.updateScript}
         ${mkBuilds cfg.buildAttributes}
+        ${lib.optionalString cfg.failLogInCommitMsg ''
+          oldmessage=$(${pkgs.git}/bin/git log -n1 --pretty=%B)
+          faillog=$(cat fail.log | ${pkgs.gawk}/bin/awk '{print $0 " failed"}')
+          ${pkgs.git}/bin/git commit --amend -m "$(echo $oldmessage; printf "\n\n"; echo $faillog)"
+        ''}
         ${cfg.postCommands}
         ${pkgs.git}/bin/git push || ${pkgs.git}/bin/git push --set-upstream origin ${cfg.updateBranch}
       '';
