@@ -1961,11 +1961,12 @@
       esphome-dashboard-api
       fnvhash
       ifaddr
+      ld2410-ble
       pyserial
       pyudev
       sqlalchemy
       zeroconf
-    ]; # missing inputs: ld2410-ble
+    ];
     "led_ble" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -4680,6 +4681,7 @@
     "launch_library"
     "laundrify"
     "lcn"
+    "ld2410_ble"
     "led_ble"
     "lg_soundbar"
     "lidarr"
