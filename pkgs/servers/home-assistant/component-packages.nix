@@ -1821,7 +1821,8 @@
     "kankun" = ps: with ps; [
     ];
     "keba" = ps: with ps; [
-    ]; # missing inputs: keba-kecontact
+      keba-kecontact
+    ];
     "keenetic_ndms2" = ps: with ps; [
       ndms2-client
     ];
