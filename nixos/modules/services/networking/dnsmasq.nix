@@ -112,7 +112,7 @@ in
           touch ${stateDir}/dnsmasq.leases
           chown -R dnsmasq ${stateDir}
           touch /etc/dnsmasq-{conf,resolv}.conf
-          dnsmasq --test
+          ${dnsmasq} --test
         '';
         serviceConfig = {
           Type = "dbus";
