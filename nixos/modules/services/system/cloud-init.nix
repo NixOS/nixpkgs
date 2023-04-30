@@ -23,7 +23,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Enable the cloud-init service. This services reads
           configuration metadata in a cloud environment and configures
           the machine according to this metadata.
@@ -42,7 +42,7 @@ in
       btrfs.enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Allow the cloud-init service to operate `btrfs` filesystem.
         '';
       };
@@ -50,7 +50,7 @@ in
       ext4.enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Allow the cloud-init service to operate `ext4` filesystem.
         '';
       };
@@ -58,7 +58,7 @@ in
       network.enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = mdDoc ''
           Allow the cloud-init service to configure network interfaces
           through systemd-networkd.
         '';
@@ -113,7 +113,7 @@ in
            - final-message
            - power-state-change
         '';
-        description = lib.mdDoc "cloud-init configuration.";
+        description = mdDoc "cloud-init configuration.";
       };
 
     };
