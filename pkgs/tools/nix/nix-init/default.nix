@@ -26,16 +26,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-init";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     rev = "v${version}";
-    hash = "sha256-eiPUJj87PU4EgMQRJ4Yv5d/y94j5AklbP1sVNXNSNPs=";
+    hash = "sha256-QxGPBGCCjbQ1QbJNoW0dwQS/srwQ0hBR424zmcqdjI8=";
   };
 
-  cargoHash = "sha256-OKHW5q8bvJiwJAAEr9AHEWoDCwDKr6ACxsFRtJOTNis=";
+  cargoHash = "sha256-+Vj3TqNxMgaUmhzCgSEGl58Jh1PLsC6q/DfDbfg2mmo=";
 
   nativeBuildInputs = [
     curl
