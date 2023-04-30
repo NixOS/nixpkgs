@@ -217,5 +217,5 @@ wrapProgramShell() {
       hidden="${hidden}_"
     done
     mv "$prog" "$hidden"
-    makeWrapper "$hidden" "$prog" --inherit-argv0 "${@:2}"
+    makeShellWrapper "$hidden" "$prog" --inherit-argv0 "${@:2}"
 }
