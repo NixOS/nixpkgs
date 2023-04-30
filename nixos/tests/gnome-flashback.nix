@@ -1,12 +1,11 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "gnome-flashback";
-  meta = with lib; {
-    maintainers = teams.gnome.members ++ [ maintainers.chpatrick ];
-  };
+  meta.maintainers = lib.teams.gnome.members ++ [ lib.maintainers.chpatrick ];
 
-  nodes.machine = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
-  in
+  nodes.machine = { nodes, ... }:
+    let
+      user = nodes.machine.config.users.users.alice;
+    in
 
     { imports = [ ./common/user-account.nix ];
 
