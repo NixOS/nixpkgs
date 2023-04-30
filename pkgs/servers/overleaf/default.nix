@@ -15,6 +15,16 @@ let
   pname = "overleaf";
   version = "3.5";
 
+  inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "Unsupported system: ${system}";
+
+  sha256 = {
+    x86_64-linux = "sha256-ci68170df9o3fJuw8AH/qdJR8NZ2o9OeAg8gfjycHd0=";
+    aarch64-linux = "sha256-ci68170df9o3fJuw8AH/qdJR8NZ2o9OeAg8gfjycHd0=";
+    x86_64-darwin = "sha256-Bpfw0Ew8+OfLmsZTqN+joyI+g3jMKPX/d8o7IzUGlVA=";
+    aarch64-darwin = "sha256-Bpfw0Ew8+OfLmsZTqN+joyI+g3jMKPX/d8o7IzUGlVA=";
+  }.${system} or throwSystem;
+
   deps = stdenv.mkDerivation {
     name = "${pname}-${version}-deps";
 
@@ -50,7 +60,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = ./yarn.lock;
-      sha256 = "sha256-ci68170df9o3fJuw8AH/qdJR8NZ2o9OeAg8gfjycHd0=";
+      inherit sha256;
     };
 
     buildPhase = ''
