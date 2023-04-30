@@ -1594,6 +1594,8 @@ with pkgs;
 
   metapixel = callPackage ../tools/graphics/metapixel { };
 
+  memos = callPackage ../servers/memos { };
+
   midimonster = callPackage ../tools/audio/midimonster { };
 
   midi-trigger = callPackage ../applications/audio/midi-trigger { };
@@ -1683,6 +1685,8 @@ with pkgs;
   topicctl = callPackage ../tools/misc/topicctl { };
 
   ttchat = callPackage ../tools/misc/ttchat { };
+
+  ukmm = callPackage ../tools/games/ukmm { };
 
   unflac = callPackage ../tools/audio/unflac { };
 
@@ -2142,6 +2146,8 @@ with pkgs;
   git-revise = with python3Packages; toPythonApplication git-revise;
 
   ### APPLICATIONS/EMULATORS
+
+  _86Box = callPackage ../applications/emulators/86box { };
 
   atari800 = callPackage ../applications/emulators/atari800 { };
 
@@ -21496,6 +21502,8 @@ with pkgs;
 
   libfprint-2-tod1-goodix = callPackage ../development/libraries/libfprint-2-tod1-goodix { };
 
+  libfprint-2-tod1-goodix-550a = callPackage ../development/libraries/libfprint-2-tod1-goodix-550a { };
+
   libfprint-2-tod1-vfs0090 = callPackage ../development/libraries/libfprint-2-tod1-vfs0090 { };
 
   libfpx = callPackage ../development/libraries/libfpx { };
@@ -22608,6 +22616,8 @@ with pkgs;
   manticoresearch = callPackage ../servers/search/manticoresearch { };
 
   marisa = callPackage ../development/libraries/marisa { };
+
+  mathgl = callPackage ../development/libraries/mathgl { };
 
   matio = callPackage ../development/libraries/matio { };
 
@@ -25264,6 +25274,8 @@ with pkgs;
   linx-server = callPackage ../servers/web-apps/linx-server { };
 
   livepeer = callPackage ../servers/livepeer { };
+
+  lldap = callPackage ../servers/ldap/lldap { };
 
   lwan = callPackage ../servers/http/lwan { };
 
@@ -31622,6 +31634,8 @@ with pkgs;
 
   kubectl-images = callPackage ../applications/networking/cluster/kubectl-images { };
 
+  kubectl-ktop = callPackage ../applications/networking/cluster/kubectl-ktop { };
+
   kubectl-node-shell = callPackage ../applications/networking/cluster/kubectl-node-shell { };
 
   kubectl-tree = callPackage ../applications/networking/cluster/kubectl-tree { };
@@ -33084,6 +33098,8 @@ with pkgs;
   };
 
   picoloop = callPackage ../applications/audio/picoloop { };
+
+  picosnitch = callPackage ../tools/networking/picosnitch { };
 
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
     withOpenssl = config.pidgin.openssl or true;

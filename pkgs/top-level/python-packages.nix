@@ -2318,6 +2318,8 @@ self: super: with self; {
 
   dateparser = callPackage ../development/python-modules/dateparser { };
 
+  datetime = callPackage ../development/python-modules/datetime { };
+
   dateutils = callPackage ../development/python-modules/dateutils { };
 
   datrie = callPackage ../development/python-modules/datrie { };
@@ -6168,6 +6170,8 @@ self: super: with self; {
     python3 = python;
     enablePython = true;
   });
+
+  mmcv = callPackage ../development/python-modules/mmcv { };
 
   mmh3 = callPackage ../development/python-modules/mmh3 { };
 
