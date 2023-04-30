@@ -17,15 +17,16 @@ in
 rec {
   derivationWithMeta = attrs:
     let
+      passthru = attrs.passthru or {};
       validity = checkMeta { inherit attrs; };
       inherit (validity) meta;
     in
     lib.extendDerivation
       validity.handled
-      { inherit meta; }
+      ({ inherit meta passthru; } // passthru)
       (derivation ({
         inherit (meta) name;
-      } // (builtins.removeAttrs attrs [ "meta" ])));
+      } // (builtins.removeAttrs attrs [ "meta" "passthru" ])));
 
   writeTextFile =
     { name # the name of the derivation
