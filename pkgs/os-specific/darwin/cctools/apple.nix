@@ -1,118 +1,136 @@
-{ lib, stdenv, fetchurl, symlinkJoin, xcbuildHook, tcsh, libobjc, libtapi, libunwind, llvm, memstreamHook, xar }:
+{
+  dyld,
+  fetchFromGitHub,
+  lib,
+  libobjc,
+  libtapi,
+  libunwind,
+  llvm,
+  memstreamHook,
+  ncurses,
+  stdenv,
+  symlinkJoin,
+  tcsh,
+  xar,
+  xcbuildHook,
+}: let
+  cctools = stdenv.mkDerivation (finalAttrs: {
+    pname = "cctools";
+    version = "986";
 
-let
+    src = fetchFromGitHub {
+      owner = "apple-oss-distributions";
+      repo = finalAttrs.pname;
+      rev = "${finalAttrs.pname}-${finalAttrs.version}";
+      hash = "sha256-Fc9Bmx6/ya8+jJuKKFcqB4gTmiV1P+SScKT6CyCXAbc=";
+    };
 
-cctools = stdenv.mkDerivation rec {
-  pname = "cctools";
-  version = "973.0.1";
+    patches = [
+      ./cctools-add-missing-vtool-libstuff-dep.patch
+    ];
 
-  src = fetchurl {
-    url = "https://opensource.apple.com/tarballs/cctools/cctools-${version}.tar.gz";
-    hash = "sha256-r/6tsyyfi3R/0cLl+lN/B9ZaOaVF+Z7vJ6xj4LzSgiQ=";
-  };
+    postPatch = ''
+      for file in libstuff/writeout.c misc/libtool.c misc/lipo.c; do
+        substituteInPlace "$file" \
+          --replace '__builtin_available(macOS 10.12, *)' '0'
+      done
+      substituteInPlace libmacho/swap.c \
+        --replace '#ifndef RLD' '#if 1'
+    '';
 
-  patches = [
-    ./cctools-add-missing-vtool-libstuff-dep.patch
-  ];
+    nativeBuildInputs = [xcbuildHook memstreamHook];
+    buildInputs = [libobjc llvm ncurses.dev];
 
-  postPatch = ''
-    for file in libstuff/writeout.c misc/libtool.c misc/lipo.c; do
-      substituteInPlace "$file" \
-        --replace '__builtin_available(macOS 10.12, *)' '0'
-    done
-    substituteInPlace libmacho/swap.c \
-      --replace '#ifndef RLD' '#if 1'
-  '';
+    xcbuildFlags = [
+      "MACOSX_DEPLOYMENT_TARGET=10.12"
+    ];
 
-  nativeBuildInputs = [ xcbuildHook memstreamHook ];
-  buildInputs = [ libobjc llvm ];
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
 
-  xcbuildFlags = [
-    "MACOSX_DEPLOYMENT_TARGET=10.12"
-  ];
+      Products/Release/libstuff_test
+      rm Products/Release/libstuff_test
 
-  doCheck = true;
-  checkPhase = ''
-    runHook preCheck
+      runHook postCheck
+    '';
 
-    Products/Release/libstuff_test
-    rm Products/Release/libstuff_test
+    installPhase = ''
+      runHook preInstall
 
-    runHook postCheck
-  '';
+      rm -rf "$out/usr"
+      mkdir -p "$out/bin"
+      find Products/Release -maxdepth 1 -type f -perm 755 -exec cp {} "$out/bin/" \;
+      cp -r include "$out/"
 
-  installPhase = ''
-    runHook preInstall
+      ln -s ./nm-classic "$out"/bin/nm
+      ln -s ./otool-classic "$out"/bin/otool
 
-    rm -rf "$out/usr"
-    mkdir -p "$out/bin"
-    find Products/Release -maxdepth 1 -type f -perm 755 -exec cp {} "$out/bin/" \;
-    cp -r include "$out/"
+      runHook postInstall
+    '';
+  });
 
-    ln -s ./nm-classic "$out"/bin/nm
-    ln -s ./otool-classic "$out"/bin/otool
+  ld64 = stdenv.mkDerivation (finalAttrs: {
+    pname = "ld64";
+    version = "711";
 
-    runHook postInstall
-  '';
-};
+    src = fetchFromGitHub {
+      owner = "apple-oss-distributions";
+      repo = finalAttrs.pname;
+      rev = "${finalAttrs.pname}-${finalAttrs.version}";
+      hash = "sha256-hQ/YID9teDTt7M23CkxJWrHxSPJbO3XFnjPTr96jOrw=";
+    };
 
-ld64 = stdenv.mkDerivation rec {
-  pname = "ld64";
-  version = "609";
+    postPatch = ''
+      substituteInPlace ld64.xcodeproj/project.pbxproj \
+        --replace "/bin/csh" "${tcsh}/bin/tcsh" \
+        --replace 'F9E8D4BE07FCAF2A00FD5801 /* PBXBuildRule */,' "" \
+        --replace 'F9E8D4BD07FCAF2000FD5801 /* PBXBuildRule */,' ""
 
-  src = fetchurl {
-    url = "https://opensource.apple.com/tarballs/ld64/ld64-${version}.tar.gz";
-    hash = "sha256-SqQ7SqmK+uOPijzxOTqtkEu3qYmcth6H7rrQ03R1Q+4=";
-  };
+      sed -i src/ld/Options.cpp -e '1iconst char ldVersionString[] = "${finalAttrs.version}";'
+    '';
 
-  postPatch = ''
-    substituteInPlace ld64.xcodeproj/project.pbxproj \
-      --replace "/bin/csh" "${tcsh}/bin/tcsh" \
-      --replace 'F9E8D4BE07FCAF2A00FD5801 /* PBXBuildRule */,' "" \
-      --replace 'F9E8D4BD07FCAF2000FD5801 /* PBXBuildRule */,' ""
+    nativeBuildInputs = [xcbuildHook];
+    # TODO(@connorbaker): https://github.com/NixOS/nixpkgs/issues/149692#issuecomment-1409604806
+    buildInputs = [
+      # TODO(@connorbaker): What provides <System/machine/cpu_capabilities.h>?
+      #   The System framework doesn't.
+      dyld # for <mach-o/dyld_priv.h>
+      libtapi
+      libunwind
+      llvm
+      xar
+    ];
 
-    sed -i src/ld/Options.cpp -e '1iconst char ldVersionString[] = "${version}";'
-  '';
+    installPhase = ''
+      runHook preInstall
 
-  nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [
-    libtapi
-    libunwind
-    llvm
-    xar
-  ];
+      mkdir -p "$out/bin"
+      find Products/Release-assert -maxdepth 1 -type f -perm 755 -exec cp {} "$out/bin/" \;
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p "$out/bin"
-    find Products/Release-assert -maxdepth 1 -type f -perm 755 -exec cp {} "$out/bin/" \;
-
-    runHook postInstall
-  '';
-};
-
+      runHook postInstall
+    '';
+  });
 in
+  symlinkJoin rec {
+    name = "cctools-${version}";
+    version = "${cctools.version}-${ld64.version}";
 
-symlinkJoin rec {
-  name = "cctools-${version}";
-  version = "${cctools.version}-${ld64.version}";
+    paths = [
+      cctools
+      ld64
+    ];
 
-  paths = [
-    cctools
-    ld64
-  ];
+    # workaround for the fetch-tarballs script
+    passthru = {
+      inherit (cctools) src;
+      ld64_src = ld64.src;
+    };
 
-  # workaround for the fetch-tarballs script
-  passthru = {
-    inherit (cctools) src;
-    ld64_src = ld64.src;
-  };
-
-  meta = with lib; {
-    description = "MacOS Compiler Tools";
-    homepage = "http://www.opensource.apple.com/source/cctools/";
-    license = licenses.apsl20;
-    platforms = platforms.darwin;
-  };
-}
+    meta = with lib; {
+      description = "MacOS Compiler Tools";
+      homepage = "http://www.opensource.apple.com/source/cctools/";
+      license = licenses.apsl20;
+      platforms = platforms.darwin;
+    };
+  }

@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-C7DKwEMYdypfItflMOL7rjbAdXDRsXDNoPlc9j6aBRA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.AppKit
+    darwin.apple_sdk_11_1.frameworks.AppKit
   ];
 
   # device::test_physical_device_name test fails on Darwin

@@ -313,8 +313,8 @@ in {
     inherit passthruFun;
   };
 
-  rustpython = darwin.apple_sdk_11_0.callPackage ./rustpython/default.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) SystemConfiguration;
+  rustpython = darwin.apple_sdk_11_1.callPackage ./rustpython/default.nix {
+    inherit (darwin.apple_sdk_11_1.frameworks) SystemConfiguration;
   };
 
 })

@@ -79,7 +79,7 @@
 }:
 
 let
-  inherit (darwin.apple_sdk_11_0.frameworks)
+  inherit (darwin.apple_sdk_11_1.frameworks)
     AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer Accelerate;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 in stdenv.mkDerivation (finalAttrs: {

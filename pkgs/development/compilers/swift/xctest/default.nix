@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
   '';
 
   preConfigure = ''
-    # On aarch64-darwin, our minimum target is 11.0, but we can target lower,
+    # On aarch64-darwin, our minimum target is 11.1, but we can target lower,
     # and some dependants require a lower target. Harmless on non-Darwin.
     export MACOSX_DEPLOYMENT_TARGET=10.12
   '';

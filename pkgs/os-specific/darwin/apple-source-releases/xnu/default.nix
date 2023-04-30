@@ -77,9 +77,11 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
+  # TODO(@connorbaker): These are out of the way and hard to find. Surely we can avoid listing all
+  #   of these versions by hand?
   preBuild = let macosVersion =
     "10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9 10.10 10.11" +
-    lib.optionalString stdenv.isAarch64 " 10.12 10.13 10.14 10.15 11.0";
+    lib.optionalString stdenv.isAarch64 " 10.12 10.13 10.14 10.15 11.0 11.1 11.3 12.1 12.3 13.1 13.3";
    in ''
     # This is a bit of a hack...
     mkdir -p sdk/usr/local/libexec

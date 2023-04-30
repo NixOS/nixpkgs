@@ -233,22 +233,22 @@ let
         inherit bison cups harfbuzz libGL;
         withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
-        inherit (darwin.apple_sdk_11_0.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
+        inherit (darwin.apple_sdk_11_1.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
-        libobjc = darwin.apple_sdk_11_0.objc4;
-        xcbuild = darwin.apple_sdk_11_0.xcodebuild;
+        libobjc = darwin.apple_sdk_11_1.objc4;
+        xcbuild = darwin.apple_sdk_11_1.xcodebuild;
       };
 
       qt3d = callPackage ../modules/qt3d.nix {};
       qtcharts = callPackage ../modules/qtcharts.nix {};
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) IOBluetooth;
+        inherit (darwin.apple_sdk_11_1.frameworks) IOBluetooth;
       };
       qtdatavis3d = callPackage ../modules/qtdatavis3d.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
       qtgamepad = callPackage ../modules/qtgamepad.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) GameController;
+        inherit (darwin.apple_sdk_11_1.frameworks) GameController;
       };
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
@@ -286,21 +286,21 @@ let
           cp -r ${srcs.catapult} src/3rdparty/chromium/third_party/catapult
         '';
         inherit (darwin) cctools xnu;
-        inherit (darwin.apple_sdk_11_0) libpm libunwind;
-        inherit (darwin.apple_sdk_11_0.libs) sandbox;
-        inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
+        inherit (darwin.apple_sdk_11_1) libpm libunwind;
+        inherit (darwin.apple_sdk_11_1.libs) sandbox;
+        inherit (darwin.apple_sdk_11_1.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
           ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication
           MediaPlayer MediaAccessibility SecurityInterface Vision CoreML OpenDirectory Accelerate;
-        libobjc = darwin.apple_sdk_11_0.objc4;
+        libobjc = darwin.apple_sdk_11_1.objc4;
       };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
       qtwebkit = callPackage ../modules/qtwebkit.nix {
         inherit (darwin) ICU;
-        inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
+        inherit (darwin.apple_sdk_11_1.frameworks) OpenGL;
       };
       qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
       qtwebview = callPackage ../modules/qtwebview.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation WebKit;
+        inherit (darwin.apple_sdk_11_1.frameworks) CoreFoundation WebKit;
       };
       qtx11extras = callPackage ../modules/qtx11extras.nix {};
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};

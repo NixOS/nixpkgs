@@ -9,7 +9,7 @@
 }:
 
 let
-  inherit (darwin.apple_sdk_11_0.frameworks) CoreServices IOKit;
+  inherit (darwin.apple_sdk_11_1.frameworks) CoreServices IOKit;
 in
 stdenv.mkDerivation rec {
   pname = "xmrig-proxy";
