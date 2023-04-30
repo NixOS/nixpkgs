@@ -3721,6 +3721,8 @@ self: super: with self; {
 
   fsspec = callPackage ../development/python-modules/fsspec { };
 
+  fst-pso = callPackage ../development/python-modules/fst-pso { };
+
   ftfy = callPackage ../development/python-modules/ftfy { };
 
   ftputil = callPackage ../development/python-modules/ftputil { };
