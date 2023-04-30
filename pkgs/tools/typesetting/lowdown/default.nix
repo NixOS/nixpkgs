@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       ln -s "$darwinDylib" "$lib/lib/liblowdown.dylib"
     '';
 
-  doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
     echo '# TEST' > test.md
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = true;
   checkTarget = "regress";
 
   meta = with lib; {
