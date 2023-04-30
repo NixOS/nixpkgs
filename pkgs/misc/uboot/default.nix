@@ -65,6 +65,7 @@ let
       (buildPackages.python3.withPackages (p: [
         p.libfdt
         p.setuptools # for pkg_resources
+        p.pyelftools
       ]))
       swig
       which # for scripts/dtc-version.sh
