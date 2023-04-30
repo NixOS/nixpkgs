@@ -64,6 +64,8 @@ stdenv.mkDerivation {
     ln -s ${dng_sdk} third_party/externals/dng_sdk
     ln -s ${piex} third_party/externals/piex
     ln -s ${sfntly} third_party/externals/sfntly
+  '' + lib.optionalString (depSrcs ? wuffs) ''
+    ln -s ${wuffs} third_party/externals/wuffs
   '';
 
   gnFlags = [
@@ -71,6 +73,8 @@ stdenv.mkDerivation {
     "is_official_build=true"
     "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
     "skia_enable_tools=true"
+  ] ++ lib.optionals (depSrcs ? wuffs) [
+    "skia_use_wuffs=true"
   ];
 
   ninjaFlags = [

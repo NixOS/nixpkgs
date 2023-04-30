@@ -1,5 +1,5 @@
 { fetchgit }:
-# ./make-deps.sh 'angle2|dng_sdk|piex|sfntly' chrome/m87
+# ./make-deps.sh 'angle2|dng_sdk|piex|sfntly|wuffs' chrome/m87
 {
   angle2 = fetchgit {
     url = "https://chromium.googlesource.com/angle/angle.git";
@@ -20,5 +20,10 @@
     url = "https://chromium.googlesource.com/external/github.com/googlei18n/sfntly.git";
     rev = "b55ff303ea2f9e26702b514cf6a3196a2e3e2974";
     sha256 = "1qi5rfzmwfrji46x95g6dsb03i1v26700kifl2hpgm3pqhr7afpz";
+  };
+  wuffs = fetchgit {
+    url = "https://skia.googlesource.com/external/github.com/google/wuffs.git";
+    rev = "00cc8a50aa0c86b6bcb37e9ece8fb100047cc17b";
+    sha256 = "0z0shsyf3hycknfd55n9bh4ixsxb8j5v51dbhkkclyz740z5jlzz";
   };
 }
