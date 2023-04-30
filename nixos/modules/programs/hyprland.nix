@@ -57,17 +57,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment = {
-      systemPackages = [ cfg.package ];
-
-    };
+    environment.systemPackages = [ cfg.package ];
 
     fonts.enableDefaultFonts = mkDefault true;
     hardware.opengl.enable = mkDefault true;
 
     programs = {
       dconf.enable = mkDefault true;
-      xwayland.enable = mkDefault true;
+      xwayland.enable = mkDefault cfg.xwayland.enable;
     };
 
     security.polkit.enable = true;

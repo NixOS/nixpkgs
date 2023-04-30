@@ -4,7 +4,7 @@
 
 let
 
-  version = "3.3";
+  version = "3.3.1";
 
   fullMaude = fetchurl {
     url = "https://maude.cs.illinois.edu/w/images/b/bc/Full-Maude-3.2.1.zip";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/SRI-CSL/Maude/archive/refs/tags/Maude${version}.tar.gz";
-    sha256 = "aebf21523ba7999b4594e315d49b92c5feaef7ca5d176e2e62a8ee1b901380c6";
+    sha256 = "ueM8qi3fLogWT8bA+ZyBnd9Zr9oOKuoiu2YpG6o5J1E=";
   };
 
   nativeBuildInputs = [ flex bison unzip makeWrapper ];
@@ -55,10 +55,7 @@ stdenv.mkDerivation {
     install -D -m 444 full-maude.maude $out/share/maude/full-maude.maude
   '';
 
-  # bison -dv surface.yy -o surface.c
-  # mv surface.c surface.cc
-  # mv: cannot stat 'surface.c': No such file or directory
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   meta = {
     broken = stdenv.isDarwin;
