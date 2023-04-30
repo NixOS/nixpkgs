@@ -1,9 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "budgie";
 
-  meta = with lib; {
-    maintainers = [ maintainers.federicoschonborn ];
-  };
+  meta.maintainers = [ lib.maintainers.federicoschonborn ];
 
   nodes.machine = { ... }: {
     imports = [
