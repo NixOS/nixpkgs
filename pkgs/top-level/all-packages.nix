@@ -14624,6 +14624,11 @@ with pkgs;
     inherit (llvmPackages_latest) clang;
   };
 
+  clazy = callPackage ../development/tools/analysis/clazy {
+    llvmPackages = llvmPackages_latest;
+    stdenv = llvmPackages_latest.stdenv;
+  };
+
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
   clang-sierraHack-stdenv = overrideCC stdenv buildPackages.clang-sierraHack;
