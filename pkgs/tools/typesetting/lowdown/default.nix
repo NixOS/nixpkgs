@@ -5,21 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "lowdown";
-  version = "1.0.0";
+  version = "1.0.1";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    sha512 = "2izqgzk677y511kms09c0hgar2ax5cd5hspr8djsa3qykaxq0688xkgfad00bl6j0jpixna714ipvqa0gxm480iz2sma7qhdgr6bl4x";
+    sha512 = "2jsskdrx035vy5kyb371swcn23vj7ww1fmrsalmyp1jc3459vgh2lk4nlvrw74r93z9yyzsq9vra2sspx173cpjlr8lyyqdw5h91lms";
   };
-
-  # Upstream always passes GNU-style "soname", but cctools expects "install_name".
-  # Whatever name is inserted will be replaced by fixDarwinDylibNames.
-  # https://github.com/kristapsdz/lowdown/issues/87
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace soname install_name
-  '';
 
   nativeBuildInputs = [ which ]
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
@@ -49,17 +42,20 @@ stdenv.mkDerivation rec {
     "install_static"
   ];
 
-  # Fix lib extension so that fixDarwinDylibNames detects it
-  # Symlink liblowdown.so to liblowdown.so.1 (or equivalent)
+  # Fix lib extension so that fixDarwinDylibNames detects it, see
+  # <https://github.com/kristapsdz/lowdown/issues/87#issuecomment-1532243650>.
   postInstall =
     let
       inherit (stdenv.hostPlatform.extensions) sharedLibrary;
     in
 
     lib.optionalString (enableShared && stdenv.isDarwin) ''
-      mv $lib/lib/liblowdown.{so.1,1.dylib}
-    '' + lib.optionalString enableShared ''
-      ln -s $lib/lib/liblowdown*${sharedLibrary}* $lib/lib/liblowdown${sharedLibrary}
+      darwinDylib="$lib/lib/liblowdown.2.dylib"
+      mv "$lib/lib/liblowdown.so.2" "$darwinDylib"
+
+      # Make sure we are re-creating a symbolic link here
+      test -L "$lib/lib/liblowdown.so"
+      ln -s "$darwinDylib" "$lib/lib/liblowdown.dylib"
     '';
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
