@@ -7,13 +7,14 @@
     geminiserver = { pkgs, ... }: {
       services.stargazer = {
         enable = true;
-        routes = {
-          "localhost" = {
+        routes = [
+          {
+            route = "localhost";
             root = toString (pkgs.writeTextDir "index.gmi" ''
               # Hello NixOS!
             '');
-          };
-        };
+          }
+        ];
       };
     };
   };
