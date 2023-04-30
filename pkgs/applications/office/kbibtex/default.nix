@@ -74,5 +74,6 @@ mkDerivation rec {
     changelog = "https://invent.kde.org/office/kbibtex/-/raw/v${version}/ChangeLog";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
   };
 }
