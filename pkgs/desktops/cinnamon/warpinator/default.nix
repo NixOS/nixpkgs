@@ -15,7 +15,7 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "warpinator";
-  version = "1.2.15";
+  version = "1.4.5";
 
   format = "other";
 
@@ -23,8 +23,14 @@ python3.pkgs.buildPythonApplication rec  {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-WLeJTSf8906CjvJvBWnmFRVV1ngOuIK0V/3qZ82Bx7s=";
+    hash = "sha256-5mMV4WinpFR9ihgoQsgIXre0VpBdg9S8GjSkx+7ocLg=";
   };
+
+  patches = [
+    # See https://www.openwall.com/lists/oss-security/2023/04/26/1. Manually adjusted from
+    # https://github.com/linuxmint/warpinator/commit/9aae768522b7bbb09c836419893802a02221d663.
+    ./CVE-2023-29380.patch
+  ];
 
   nativeBuildInputs = [
     meson
