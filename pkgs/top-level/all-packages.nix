@@ -11717,6 +11717,8 @@ with pkgs;
 
   rstcheck = with python3Packages; toPythonApplication rstcheck;
 
+  rstfmt = callPackage ../development/tools/rstfmt { };
+
   rt = callPackage ../servers/rt { };
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
