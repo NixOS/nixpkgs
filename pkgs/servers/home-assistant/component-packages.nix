@@ -1008,7 +1008,8 @@
     "etherscan" = ps: with ps; [
     ]; # missing inputs: python-etherscan-api
     "eufy" = ps: with ps; [
-    ]; # missing inputs: lakeside
+      lakeside
+    ];
     "eufylife_ble" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
