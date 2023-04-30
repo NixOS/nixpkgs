@@ -97,10 +97,20 @@ impl fmt::Display for UrlOrString {
 }
 
 #[derive(Debug, PartialEq, Eq)]
-pub(super) struct HashCollection(HashSet<Hash>);
+pub struct HashCollection(HashSet<Hash>);
 
 impl HashCollection {
-    pub(super) fn into_best(self) -> Option<Hash> {
+    pub fn from_str(s: impl AsRef<str>) -> anyhow::Result<HashCollection> {
+        let hashes = s
+            .as_ref()
+            .split_ascii_whitespace()
+            .map(Hash::new)
+            .collect::<anyhow::Result<_>>()?;
+
+        Ok(HashCollection(hashes))
+    }
+
+    pub fn into_best(self) -> Option<Hash> {
         self.0.into_iter().max()
     }
 }
@@ -136,17 +146,11 @@ impl<'de> Visitor<'de> for HashCollectionVisitor {
     where
         E: de::Error,
     {
-        let hashes = value
-            .split_ascii_whitespace()
-            .map(Hash::new)
-            .collect::<anyhow::Result<_>>()
-            .map_err(E::custom)?;
-
-        Ok(HashCollection(hashes))
+        HashCollection::from_str(value).map_err(E::custom)
     }
 }
 
-#[derive(Debug, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Eq, Hash)]
 pub struct Hash(String);
 
 // Hash algorithms, in ascending preference.
@@ -166,11 +170,15 @@ impl Hash {
             Err(anyhow!("unknown hash algorithm {algo:?}"))
         }
     }
+
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
 }
 
 impl fmt::Display for Hash {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.0.fmt(f)
+        self.as_str().fmt(f)
     }
 }
 

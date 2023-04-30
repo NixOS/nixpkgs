@@ -9,7 +9,7 @@ use std::{
 use tempfile::{tempdir, TempDir};
 use url::Url;
 
-mod lock;
+pub mod lock;
 
 pub fn lockfile(content: &str, force_git_deps: bool) -> anyhow::Result<Vec<Package>> {
     let mut packages = lock::packages(content)
