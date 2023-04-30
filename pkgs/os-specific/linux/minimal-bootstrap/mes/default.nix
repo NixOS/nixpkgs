@@ -1,10 +1,3 @@
-# Build steps adapted from https://github.com/fosslinux/live-bootstrap/blob/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/mes-0.24.2/mes-0.24.2.kaem
-#
-# SPDX-FileCopyrightText: 2020-2022 Andrius Štikonas <andrius@stikonas.eu>
-# SPDX-FileCopyrightText: 2020-2022 fosslinux <fosslinux@aussies.space>
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
-
 { lib
 , runCommand
 , fetchurl
@@ -16,7 +9,6 @@
 let
   pname = "mes";
   version = "0.24.2";
-  ARCH = "x86";
 
   src = fetchurl {
     url = "mirror://gnu/mes/mes-${version}.tar.gz";
@@ -27,12 +19,113 @@ let
     #undef SYSTEM_LIBC
     #define MES_VERSION "${version}"
   '';
+
+  # Maintenance note:
+  # Build steps have been adapted from build-aux/bootstrap.sh.in
+  # as well as the live-bootstrap project
+  # https://github.com/fosslinux/live-bootstrap/blob/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/mes-0.24.2/mes-0.24.2.kaem
+
+  # Maintenance note: list of source files derived from build-aux/configure-lib.sh
+  libc_mini_shared_SOURCES = cc: [
+    "lib/mes/eputs.c"
+    "lib/mes/oputs.c"
+    "lib/mes/globals.c"
+    "lib/stdlib/exit.c"
+    "lib/linux/x86-mes-${cc}/_exit.c"
+    "lib/linux/x86-mes-${cc}/_write.c"
+    "lib/stdlib/puts.c"
+    "lib/string/strlen.c"
+  ];
+  libc_mini_SOURCES = cc: libc_mini_shared_SOURCES cc ++ [
+    "lib/mes/mini-write.c"
+  ];
+  libmescc_SOURCES = cc: [
+    "lib/mes/globals.c"
+    "lib/linux/x86-mes-${cc}/syscall-internal.c"
+  ];
+  libmes_SOURCES = cc: libc_mini_shared_SOURCES cc ++ lib.splitString " " (
+    "lib/ctype/isnumber.c lib/mes/abtol.c lib/mes/cast.c lib/mes/eputc.c lib/mes/fdgetc.c "
+    + "lib/mes/fdputc.c lib/mes/fdputs.c lib/mes/fdungetc.c lib/mes/itoa.c lib/mes/ltoa.c "
+    + "lib/mes/ltoab.c lib/mes/mes_open.c lib/mes/ntoab.c lib/mes/oputc.c lib/mes/ultoa.c "
+    + "lib/mes/utoa.c lib/stub/__raise.c lib/ctype/isdigit.c lib/ctype/isspace.c "
+    + "lib/ctype/isxdigit.c lib/mes/assert_msg.c lib/posix/write.c lib/stdlib/atoi.c "
+    + "lib/linux/lseek.c");
+  libc_SOURCES = cc: libmes_SOURCES cc ++ lib.splitString " " (
+    "lib/mes/__assert_fail.c lib/mes/__buffered_read.c lib/mes/__mes_debug.c "
+    + "lib/posix/execv.c lib/posix/getcwd.c lib/posix/getenv.c lib/posix/isatty.c "
+    + "lib/posix/open.c lib/posix/buffered-read.c lib/posix/setenv.c lib/posix/wait.c "
+    + "lib/stdio/fgetc.c lib/stdio/fputc.c lib/stdio/fputs.c lib/stdio/getc.c "
+    + "lib/stdio/getchar.c lib/stdio/putc.c lib/stdio/putchar.c lib/stdio/ungetc.c "
+    + "lib/stdlib/free.c lib/stdlib/realloc.c lib/string/memchr.c lib/string/memcmp.c "
+    + "lib/string/memcpy.c lib/string/memmove.c lib/string/memset.c lib/string/strcmp.c "
+    + "lib/string/strcpy.c lib/string/strncmp.c lib/posix/raise.c "
+    + "lib/linux/access.c lib/linux/brk.c lib/linux/chmod.c lib/linux/clock_gettime.c "
+    + "lib/linux/dup.c lib/linux/dup2.c lib/linux/execve.c lib/linux/fork.c lib/linux/fsync.c "
+    + "lib/linux/_getcwd.c lib/linux/gettimeofday.c lib/linux/ioctl3.c lib/linux/_open3.c "
+    + "lib/linux/malloc.c lib/linux/_read.c lib/linux/time.c lib/linux/unlink.c "
+    + "lib/linux/waitpid.c lib/linux/x86-mes-${cc}/syscall.c lib/linux/getpid.c "
+    + "lib/linux/kill.c");
+  libc_tcc_SOURCES = cc: lib.splitString " " (
+    "lib/ctype/islower.c lib/ctype/isupper.c lib/ctype/tolower.c lib/ctype/toupper.c "
+    + "lib/mes/abtod.c lib/mes/dtoab.c lib/mes/search-path.c lib/posix/execvp.c "
+    + "lib/stdio/fclose.c lib/stdio/fdopen.c lib/stdio/ferror.c lib/stdio/fflush.c "
+    + "lib/stdio/fopen.c lib/stdio/fprintf.c lib/stdio/fread.c lib/stdio/fseek.c "
+    + "lib/stdio/ftell.c lib/stdio/fwrite.c lib/stdio/printf.c lib/stdio/remove.c "
+    + "lib/stdio/snprintf.c lib/stdio/sprintf.c lib/stdio/sscanf.c lib/stdio/vfprintf.c "
+    + "lib/stdio/vprintf.c lib/stdio/vsnprintf.c lib/stdio/vsprintf.c lib/stdio/vsscanf.c "
+    + "lib/stdlib/calloc.c lib/stdlib/qsort.c lib/stdlib/strtod.c lib/stdlib/strtof.c "
+    + "lib/stdlib/strtol.c lib/stdlib/strtold.c lib/stdlib/strtoll.c lib/stdlib/strtoul.c "
+    + "lib/stdlib/strtoull.c lib/string/memmem.c lib/string/strcat.c lib/string/strchr.c "
+    + "lib/string/strlwr.c lib/string/strncpy.c lib/string/strrchr.c lib/string/strstr.c "
+    + "lib/string/strupr.c lib/stub/sigaction.c lib/stub/ldexp.c lib/stub/mprotect.c "
+    + "lib/stub/localtime.c lib/stub/sigemptyset.c lib/x86-mes-${cc}/setjmp.c "
+    + "lib/linux/close.c lib/linux/rmdir.c lib/linux/stat.c");
+  libc_gnu_SOURCES = cc: libc_tcc_SOURCES cc ++ lib.splitString " " (
+    "lib/ctype/isalnum.c lib/ctype/isalpha.c lib/ctype/isascii.c lib/ctype/iscntrl.c "
+    + "lib/ctype/isgraph.c lib/ctype/isprint.c lib/ctype/ispunct.c lib/dirent/__getdirentries.c "
+    + "lib/dirent/closedir.c lib/dirent/opendir.c lib/dirent/readdir.c lib/math/ceil.c "
+    + "lib/math/fabs.c lib/math/floor.c lib/mes/fdgets.c lib/posix/alarm.c lib/posix/execl.c "
+    + "lib/posix/execlp.c lib/posix/mktemp.c lib/posix/sbrk.c lib/posix/sleep.c "
+    + "lib/posix/unsetenv.c lib/stdio/clearerr.c lib/stdio/feof.c lib/stdio/fgets.c "
+    + "lib/stdio/fileno.c lib/stdio/freopen.c lib/stdio/fscanf.c lib/stdio/perror.c "
+    + "lib/stdio/vfscanf.c lib/stdlib/__exit.c lib/stdlib/abort.c lib/stdlib/abs.c "
+    + "lib/stdlib/alloca.c lib/stdlib/atexit.c lib/stdlib/atof.c lib/stdlib/atol.c "
+    + "lib/stdlib/mbstowcs.c lib/string/bcmp.c lib/string/bcopy.c lib/string/bzero.c "
+    + "lib/string/index.c lib/string/rindex.c lib/string/strcspn.c lib/string/strdup.c "
+    + "lib/string/strerror.c lib/string/strncat.c lib/string/strpbrk.c lib/string/strspn.c "
+    + "lib/stub/__cleanup.c lib/stub/atan2.c lib/stub/bsearch.c lib/stub/chown.c "
+    + "lib/stub/cos.c lib/stub/ctime.c lib/stub/exp.c lib/stub/fpurge.c lib/stub/freadahead.c "
+    + "lib/stub/frexp.c lib/stub/getgrgid.c lib/stub/getgrnam.c lib/stub/getlogin.c "
+    + "lib/stub/getpgid.c lib/stub/getpgrp.c lib/stub/getpwnam.c lib/stub/getpwuid.c "
+    + "lib/stub/gmtime.c lib/stub/log.c lib/stub/mktime.c lib/stub/modf.c lib/stub/pclose.c "
+    + "lib/stub/popen.c lib/stub/pow.c lib/stub/rand.c lib/stub/rewind.c lib/stub/setbuf.c "
+    + "lib/stub/setgrent.c lib/stub/setlocale.c lib/stub/setvbuf.c lib/stub/sigaddset.c "
+    + "lib/stub/sigblock.c lib/stub/sigdelset.c lib/stub/sigsetmask.c lib/stub/sin.c "
+    + "lib/stub/sqrt.c lib/stub/strftime.c lib/stub/sys_siglist.c lib/stub/system.c "
+    + "lib/stub/times.c lib/stub/ttyname.c lib/stub/umask.c lib/stub/utime.c "
+    + "lib/linux/chdir.c lib/linux/fcntl.c lib/linux/fstat.c lib/linux/getdents.c "
+    + "lib/linux/getegid.c lib/linux/geteuid.c lib/linux/getgid.c lib/linux/getppid.c "
+    + "lib/linux/getrusage.c lib/linux/getuid.c lib/linux/ioctl.c lib/linux/link.c "
+    + "lib/linux/lstat.c lib/linux/mkdir.c lib/linux/mknod.c lib/linux/nanosleep.c "
+    + "lib/linux/pipe.c lib/linux/readlink.c lib/linux/rename.c lib/linux/setgid.c "
+    + "lib/linux/settimer.c lib/linux/setuid.c lib/linux/signal.c lib/linux/sigprogmask.c "
+    + "lib/linux/symlink.c");
+  mes_SOURCES = cc: lib.splitString " " (
+    "src/builtins.c src/cc.c src/core.c src/display.c src/eval-apply.c src/gc.c "
+    + "src/globals.c src/hash.c src/lib.c src/math.c src/mes.c src/module.c src/posix.c "
+    + "src/reader.c src/stack.c src/string.c src/struct.c src/symbol.c src/vector.c");
+
+  compile = sources: lib.concatMapStringsSep "\n" (f: ''CC -c ''${MES_PREFIX}/${f}'') sources;
+  replaceExt = ext: source: lib.replaceStrings [".c"] [ext] (builtins.baseNameOf source);
+  archive = out: sources: "catm ${out} ${lib.concatMapStringsSep " " (replaceExt ".o") sources}";
+  sourceArchive = out: sources: "catm ${out} ${lib.concatMapStringsSep " " (replaceExt ".s") sources}";
 in
 runCommand "${pname}-${version}" {
   inherit pname version;
 
   passthru = {
     mesPrefix = "/share/mes-${version}";
+    libcSources = libc_SOURCES "gcc" ++ libc_gnu_SOURCES "gcc";
   };
 
   meta = with lib; {
@@ -89,6 +182,7 @@ runCommand "${pname}-${version}" {
   replace --file ''${mes_c} --output ''${mes_c} --match-on "getenv (\"MES_PREFIX\")" --replace-with "\"''${MES_PREFIX}\""
   replace --file ''${mes_c} --output ''${mes_c} --match-on "getenv (\"srcdest\")" --replace-with "\"''${MES_PREFIX}\""
 
+  # Increase runtime resource limits
   gc_c=src/gc.c
   replace --file ''${gc_c} --output ''${gc_c} --match-on "getenv (\"MES_ARENA\")" --replace-with "\"100000000\""
   replace --file ''${gc_c} --output ''${gc_c} --match-on "getenv (\"MES_MAX_ARENA\")" --replace-with "\"100000000\""
@@ -101,14 +195,13 @@ runCommand "${pname}-${version}" {
   replace --file ''${mescc_in} --output ''${mescc_in} --match-on "(getenv \"libdir\")" --replace-with "\"''${MES_PREFIX}/lib\""
   replace --file ''${mescc_in} --output ''${mescc_in} --match-on @prefix@ --replace-with ''${MES_PREFIX}
   replace --file ''${mescc_in} --output ''${mescc_in} --match-on @VERSION@ --replace-with ${version}
-  replace --file ''${mescc_in} --output ''${mescc_in} --match-on @mes_cpu@ --replace-with ${ARCH}
+  replace --file ''${mescc_in} --output ''${mescc_in} --match-on @mes_cpu@ --replace-with x86
   replace --file ''${mescc_in} --output ''${mescc_in} --match-on @mes_kernel@ --replace-with linux
   cp ''${mescc_in} ''${out}/bin/mescc.scm
-  chmod 555 ''${out}/bin/mescc.scm
 
   # Build mes-m2
-  mes_cpu=${ARCH}
-  stage0_cpu=${ARCH}
+  mes_cpu=x86
+  stage0_cpu=x86
   kaem --verbose --strict --file kaem.run
   cp bin/mes-m2 ''${out}/bin/mes-m2
   chmod 555 ''${out}/bin/mes-m2
@@ -116,196 +209,55 @@ runCommand "${pname}-${version}" {
 
   # Recompile Mes and Mes C library using mes-m2 bootstrapped Mes
   cd ''${NIX_BUILD_TOP}
-  alias mescc="''${out}/bin/mes-m2 -e main ''${out}/bin/mescc.scm -D HAVE_CONFIG_H=1 -I ''${MES_PREFIX}/include -I ''${MES_PREFIX}/include/linux/x86 -c"
+  alias CC="''${out}/bin/mes-m2 -e main ''${out}/bin/mescc.scm -- -D HAVE_CONFIG_H=1 -I ''${MES_PREFIX}/include -I ''${MES_PREFIX}/include/linux/x86"
+  mkdir -p ''${LIBDIR}/x86-mes
 
-  # Start with crt1.o
-  mescc ''${MES_PREFIX}/lib/linux/x86-mes-mescc/crt1.c
+  # crt1.o
+  CC -c ''${MES_PREFIX}/lib/linux/x86-mes-mescc/crt1.c
+  cp crt1.o ''${LIBDIR}/x86-mes
+  cp crt1.s ''${LIBDIR}/x86-mes
 
-  # Now for libc-mini.a
-  mescc ''${MES_PREFIX}/lib/mes/eputs.c
-  mescc ''${MES_PREFIX}/lib/mes/oputs.c
-  mescc ''${MES_PREFIX}/lib/mes/globals.c
-  mescc ''${MES_PREFIX}/lib/stdlib/exit.c
-  mescc ''${MES_PREFIX}/lib/linux/x86-mes-mescc/_exit.c
-  mescc ''${MES_PREFIX}/lib/linux/x86-mes-mescc/_write.c
-  mescc ''${MES_PREFIX}/lib/stdlib/puts.c
-  mescc ''${MES_PREFIX}/lib/string/strlen.c
-  mescc ''${MES_PREFIX}/lib/mes/mini-write.c
-  catm libc-mini.a eputs.o oputs.o globals.o exit.o _exit.o _write.o puts.o strlen.o mini-write.o
-  catm libc-mini.s eputs.s oputs.s globals.s exit.s _exit.s _write.s puts.s strlen.s mini-write.s
+  # libc-mini.a
+  ${compile (libc_mini_SOURCES "mescc")}
+  ${archive "libc-mini.a" (libc_mini_SOURCES "mescc")}
+  ${sourceArchive "libc-mini.s" (libc_mini_SOURCES "mescc")}
+  cp libc-mini.a ''${LIBDIR}/x86-mes
+  cp libc-mini.s ''${LIBDIR}/x86-mes
 
   # libmescc.a
-  mescc ''${MES_PREFIX}/lib/linux/x86-mes-mescc/syscall-internal.c
-  catm libmescc.a globals.o syscall-internal.o
-  catm libmescc.s globals.s syscall-internal.s
+  ${compile (libmescc_SOURCES "mescc")}
+  ${archive "libmescc.a" (libmescc_SOURCES "mescc")}
+  ${sourceArchive "libmescc.s" (libmescc_SOURCES "mescc")}
+  cp libmescc.a ''${LIBDIR}/x86-mes
+  cp libmescc.s ''${LIBDIR}/x86-mes
 
   # libc.a
-  mescc ''${MES_PREFIX}/lib/ctype/isnumber.c
-  mescc ''${MES_PREFIX}/lib/mes/abtol.c
-  mescc ''${MES_PREFIX}/lib/mes/cast.c
-  mescc ''${MES_PREFIX}/lib/mes/eputc.c
-  mescc ''${MES_PREFIX}/lib/mes/fdgetc.c
-  mescc ''${MES_PREFIX}/lib/mes/fdputc.c
-  mescc ''${MES_PREFIX}/lib/mes/fdputs.c
-  mescc ''${MES_PREFIX}/lib/mes/fdungetc.c
-  mescc ''${MES_PREFIX}/lib/mes/itoa.c
-  mescc ''${MES_PREFIX}/lib/mes/ltoa.c
-  mescc ''${MES_PREFIX}/lib/mes/ltoab.c
-  mescc ''${MES_PREFIX}/lib/mes/mes_open.c
-  mescc ''${MES_PREFIX}/lib/mes/ntoab.c
-  mescc ''${MES_PREFIX}/lib/mes/oputc.c
-  mescc ''${MES_PREFIX}/lib/mes/ultoa.c
-  mescc ''${MES_PREFIX}/lib/mes/utoa.c
-  mescc ''${MES_PREFIX}/lib/ctype/isdigit.c
-  mescc ''${MES_PREFIX}/lib/ctype/isspace.c
-  mescc ''${MES_PREFIX}/lib/ctype/isxdigit.c
-  mescc ''${MES_PREFIX}/lib/mes/assert_msg.c
-  mescc ''${MES_PREFIX}/lib/posix/write.c
-  mescc ''${MES_PREFIX}/lib/stdlib/atoi.c
-  mescc ''${MES_PREFIX}/lib/linux/lseek.c
-  mescc ''${MES_PREFIX}/lib/mes/__assert_fail.c
-  mescc ''${MES_PREFIX}/lib/mes/__buffered_read.c
-  mescc ''${MES_PREFIX}/lib/mes/__mes_debug.c
-  mescc ''${MES_PREFIX}/lib/posix/execv.c
-  mescc ''${MES_PREFIX}/lib/posix/getcwd.c
-  mescc ''${MES_PREFIX}/lib/posix/getenv.c
-  mescc ''${MES_PREFIX}/lib/posix/isatty.c
-  mescc ''${MES_PREFIX}/lib/posix/open.c
-  mescc ''${MES_PREFIX}/lib/posix/buffered-read.c
-  mescc ''${MES_PREFIX}/lib/posix/setenv.c
-  mescc ''${MES_PREFIX}/lib/posix/wait.c
-  mescc ''${MES_PREFIX}/lib/stdio/fgetc.c
-  mescc ''${MES_PREFIX}/lib/stdio/fputc.c
-  mescc ''${MES_PREFIX}/lib/stdio/fputs.c
-  mescc ''${MES_PREFIX}/lib/stdio/getc.c
-  mescc ''${MES_PREFIX}/lib/stdio/getchar.c
-  mescc ''${MES_PREFIX}/lib/stdio/putc.c
-  mescc ''${MES_PREFIX}/lib/stdio/putchar.c
-  mescc ''${MES_PREFIX}/lib/stdio/ungetc.c
-  mescc ''${MES_PREFIX}/lib/stdlib/free.c
-  mescc ''${MES_PREFIX}/lib/stdlib/realloc.c
-  mescc ''${MES_PREFIX}/lib/string/memchr.c
-  mescc ''${MES_PREFIX}/lib/string/memcmp.c
-  mescc ''${MES_PREFIX}/lib/string/memcpy.c
-  mescc ''${MES_PREFIX}/lib/string/memmove.c
-  mescc ''${MES_PREFIX}/lib/string/memset.c
-  mescc ''${MES_PREFIX}/lib/string/strcmp.c
-  mescc ''${MES_PREFIX}/lib/string/strcpy.c
-  mescc ''${MES_PREFIX}/lib/string/strncmp.c
-  mescc ''${MES_PREFIX}/lib/posix/raise.c
-  mescc ''${MES_PREFIX}/lib/linux/access.c
-  mescc ''${MES_PREFIX}/lib/linux/brk.c
-  mescc ''${MES_PREFIX}/lib/linux/chmod.c
-  mescc ''${MES_PREFIX}/lib/linux/clock_gettime.c
-  mescc ''${MES_PREFIX}/lib/linux/dup.c
-  mescc ''${MES_PREFIX}/lib/linux/dup2.c
-  mescc ''${MES_PREFIX}/lib/linux/execve.c
-  mescc ''${MES_PREFIX}/lib/linux/fork.c
-  mescc ''${MES_PREFIX}/lib/linux/fsync.c
-  mescc ''${MES_PREFIX}/lib/linux/_getcwd.c
-  mescc ''${MES_PREFIX}/lib/linux/gettimeofday.c
-  mescc ''${MES_PREFIX}/lib/linux/ioctl3.c
-  mescc ''${MES_PREFIX}/lib/linux/malloc.c
-  mescc ''${MES_PREFIX}/lib/linux/_open3.c
-  mescc ''${MES_PREFIX}/lib/linux/_read.c
-  mescc ''${MES_PREFIX}/lib/linux/time.c
-  mescc ''${MES_PREFIX}/lib/linux/unlink.c
-  mescc ''${MES_PREFIX}/lib/linux/waitpid.c
-  mescc ''${MES_PREFIX}/lib/linux/x86-mes-mescc/syscall.c
-  mescc ''${MES_PREFIX}/lib/linux/getpid.c
-  mescc ''${MES_PREFIX}/lib/linux/kill.c
-  catm libc.a eputs.o oputs.o globals.o exit.o _exit.o _write.o puts.o strlen.o isnumber.o abtol.o cast.o eputc.o fdgetc.o fdputc.o fdputs.o fdungetc.o itoa.o ltoa.o ltoab.o mes_open.o ntoab.o oputc.o ultoa.o utoa.o isdigit.o isspace.o isxdigit.o assert_msg.o write.o atoi.o lseek.o __assert_fail.o __buffered_read.o __mes_debug.o execv.o getcwd.o getenv.o isatty.o open.o buffered-read.o setenv.o wait.o fgetc.o fputc.o fputs.o getc.o getchar.o putc.o putchar.o ungetc.o free.o malloc.o realloc.o memchr.o memcmp.o memcpy.o memmove.o memset.o strcmp.o strcpy.o strncmp.o raise.o access.o brk.o chmod.o clock_gettime.o dup.o dup2.o execve.o fork.o fsync.o _getcwd.o gettimeofday.o ioctl3.o _open3.o _read.o time.o unlink.o waitpid.o syscall.o getpid.o kill.o
-  catm libc.s eputs.s oputs.s globals.s exit.s _exit.s _write.s puts.s strlen.s isnumber.s abtol.s cast.s eputc.s fdgetc.s fdputc.s fdputs.s fdungetc.s itoa.s ltoa.s ltoab.s mes_open.s ntoab.s oputc.s ultoa.s utoa.s isdigit.s isspace.s isxdigit.s assert_msg.s write.s atoi.s lseek.s __assert_fail.s __buffered_read.s __mes_debug.s execv.s getcwd.s getenv.s isatty.s open.s buffered-read.s setenv.s wait.s fgetc.s fputc.s fputs.s getc.s getchar.s putc.s putchar.s ungetc.s free.s malloc.s realloc.s memchr.s memcmp.s memcpy.s memmove.s memset.s strcmp.s strcpy.s strncmp.s raise.s access.s brk.s chmod.s clock_gettime.s dup.s dup2.s execve.s fork.s fsync.s _getcwd.s gettimeofday.s ioctl3.s _open3.s _read.s time.s unlink.s waitpid.s syscall.s getpid.s kill.s
+  ${compile (libc_SOURCES "mescc")}
+  ${archive "libc.a" (libc_SOURCES "mescc")}
+  ${sourceArchive "libc.s" (libc_SOURCES "mescc")}
+  cp libc.a ''${LIBDIR}/x86-mes
+  cp libc.s ''${LIBDIR}/x86-mes
 
   # libc+tcc.a
-  mescc ''${MES_PREFIX}/lib/ctype/islower.c
-  mescc ''${MES_PREFIX}/lib/ctype/isupper.c
-  mescc ''${MES_PREFIX}/lib/ctype/tolower.c
-  mescc ''${MES_PREFIX}/lib/ctype/toupper.c
-  mescc ''${MES_PREFIX}/lib/mes/abtod.c
-  mescc ''${MES_PREFIX}/lib/mes/dtoab.c
-  mescc ''${MES_PREFIX}/lib/mes/search-path.c
-  mescc ''${MES_PREFIX}/lib/posix/execvp.c
-  mescc ''${MES_PREFIX}/lib/stdio/fclose.c
-  mescc ''${MES_PREFIX}/lib/stdio/fdopen.c
-  mescc ''${MES_PREFIX}/lib/stdio/ferror.c
-  mescc ''${MES_PREFIX}/lib/stdio/fflush.c
-  mescc ''${MES_PREFIX}/lib/stdio/fopen.c
-  mescc ''${MES_PREFIX}/lib/stdio/fprintf.c
-  mescc ''${MES_PREFIX}/lib/stdio/fread.c
-  mescc ''${MES_PREFIX}/lib/stdio/fseek.c
-  mescc ''${MES_PREFIX}/lib/stdio/ftell.c
-  mescc ''${MES_PREFIX}/lib/stdio/fwrite.c
-  mescc ''${MES_PREFIX}/lib/stdio/printf.c
-  mescc ''${MES_PREFIX}/lib/stdio/remove.c
-  mescc ''${MES_PREFIX}/lib/stdio/snprintf.c
-  mescc ''${MES_PREFIX}/lib/stdio/sprintf.c
-  mescc ''${MES_PREFIX}/lib/stdio/sscanf.c
-  mescc ''${MES_PREFIX}/lib/stdio/vfprintf.c
-  mescc ''${MES_PREFIX}/lib/stdio/vprintf.c
-  mescc ''${MES_PREFIX}/lib/stdio/vsnprintf.c
-  mescc ''${MES_PREFIX}/lib/stdio/vsprintf.c
-  mescc ''${MES_PREFIX}/lib/stdio/vsscanf.c
-  mescc ''${MES_PREFIX}/lib/stdlib/calloc.c
-  mescc ''${MES_PREFIX}/lib/stdlib/qsort.c
-  mescc ''${MES_PREFIX}/lib/stdlib/strtod.c
-  mescc ''${MES_PREFIX}/lib/stdlib/strtof.c
-  mescc ''${MES_PREFIX}/lib/stdlib/strtol.c
-  mescc ''${MES_PREFIX}/lib/stdlib/strtold.c
-  mescc ''${MES_PREFIX}/lib/stdlib/strtoll.c
-  mescc ''${MES_PREFIX}/lib/stdlib/strtoul.c
-  mescc ''${MES_PREFIX}/lib/stdlib/strtoull.c
-  mescc ''${MES_PREFIX}/lib/string/memmem.c
-  mescc ''${MES_PREFIX}/lib/string/strcat.c
-  mescc ''${MES_PREFIX}/lib/string/strchr.c
-  mescc ''${MES_PREFIX}/lib/string/strlwr.c
-  mescc ''${MES_PREFIX}/lib/string/strncpy.c
-  mescc ''${MES_PREFIX}/lib/string/strrchr.c
-  mescc ''${MES_PREFIX}/lib/string/strstr.c
-  mescc ''${MES_PREFIX}/lib/string/strupr.c
-  mescc ''${MES_PREFIX}/lib/stub/sigaction.c
-  mescc ''${MES_PREFIX}/lib/stub/ldexp.c
-  mescc ''${MES_PREFIX}/lib/stub/mprotect.c
-  mescc ''${MES_PREFIX}/lib/stub/localtime.c
-  mescc ''${MES_PREFIX}/lib/stub/sigemptyset.c
-  mescc ''${MES_PREFIX}/lib/x86-mes-mescc/setjmp.c
-  mescc ''${MES_PREFIX}/lib/linux/close.c
-  mescc ''${MES_PREFIX}/lib/linux/rmdir.c
-  mescc ''${MES_PREFIX}/lib/linux/stat.c
-  catm libc+tcc.a libc.a islower.o isupper.o tolower.o toupper.o abtod.o dtoab.o search-path.o execvp.o fclose.o fdopen.o ferror.o fflush.o fopen.o fprintf.o fread.o fseek.o ftell.o fwrite.o printf.o remove.o snprintf.o sprintf.o sscanf.o vfprintf.o vprintf.o vsnprintf.o vsprintf.o vsscanf.o calloc.o qsort.o strtod.o strtof.o strtol.o strtold.o strtoll.o strtoul.o strtoull.o memmem.o strcat.o strchr.o strlwr.o strncpy.o strrchr.o strstr.o strupr.o sigaction.o ldexp.o mprotect.o localtime.o sigemptyset.o setjmp.o close.o rmdir.o stat.o
-  catm libc+tcc.s libc.s islower.s isupper.s tolower.s toupper.s abtod.s dtoab.s search-path.s execvp.s fclose.s fdopen.s ferror.s fflush.s fopen.s fprintf.s fread.s fseek.s ftell.s fwrite.s printf.s remove.s snprintf.s sprintf.s sscanf.s vfprintf.s vprintf.s vsnprintf.s vsprintf.s vsscanf.s calloc.s qsort.s strtod.s strtof.s strtol.s strtold.s strtoll.s strtoul.s strtoull.s memmem.s strcat.s strchr.s strlwr.s strncpy.s strrchr.s strstr.s strupr.s sigaction.s ldexp.s mprotect.s localtime.s sigemptyset.s setjmp.s close.s rmdir.s stat.s
+  ${compile (libc_tcc_SOURCES "mescc")}
+  ${archive "libc+tcc.a" ([ "libc.a" ] ++ libc_tcc_SOURCES "mescc")}
+  ${sourceArchive "libc+tcc.s" ([ "libc.s" ] ++ libc_tcc_SOURCES "mescc")}
+  cp libc+tcc.a ''${LIBDIR}/x86-mes
+  cp libc+tcc.s ''${LIBDIR}/x86-mes
 
   # Build mes itself
-  mescc ''${MES_PREFIX}/src/builtins.c
-  mescc ''${MES_PREFIX}/src/cc.c
-  mescc ''${MES_PREFIX}/src/core.c
-  mescc ''${MES_PREFIX}/src/display.c
-  mescc ''${MES_PREFIX}/src/eval-apply.c
-  mescc ''${MES_PREFIX}/src/gc.c
-  mescc ''${MES_PREFIX}/src/globals.c
-  mescc ''${MES_PREFIX}/src/hash.c
-  mescc ''${MES_PREFIX}/src/lib.c
-  mescc ''${MES_PREFIX}/src/math.c
-  mescc ''${MES_PREFIX}/src/mes.c
-  mescc ''${MES_PREFIX}/src/module.c
-  mescc ''${MES_PREFIX}/src/posix.c
-  mescc ''${MES_PREFIX}/src/reader.c
-  mescc ''${MES_PREFIX}/src/stack.c
-  mescc ''${MES_PREFIX}/src/string.c
-  mescc ''${MES_PREFIX}/src/struct.c
-  mescc ''${MES_PREFIX}/src/symbol.c
-  mescc ''${MES_PREFIX}/src/vector.c
+  ${compile (mes_SOURCES "mescc")}
+  ''${out}/bin/mes-m2 -e main ''${out}/bin/mescc.scm -- \
+    --base-address 0x08048000 \
+    -L ''${MES_PREFIX}/lib \
+    -L . \
+    -lc \
+    -lmescc \
+    -nostdlib \
+    -o ''${out}/bin/mes \
+    crt1.o \
+    ${lib.concatMapStringsSep " " (replaceExt ".o") (mes_SOURCES "mescc")}
 
-  # Install libraries
-  cp libc.a ''${MES_PREFIX}/lib/x86-mes/
-  cp libc+tcc.a ''${MES_PREFIX}/lib/x86-mes/
-  cp libmescc.a ''${MES_PREFIX}/lib/x86-mes/
-  cp libc.s ''${MES_PREFIX}/lib/x86-mes/
-  cp libc+tcc.s ''${MES_PREFIX}/lib/x86-mes/
-  cp libmescc.s ''${MES_PREFIX}/lib/x86-mes/
-  cp crt1.o ''${MES_PREFIX}/lib/x86-mes/
-  cp crt1.s ''${MES_PREFIX}/lib/x86-mes/
-
-  # Link everything into new mes executable
-  ''${out}/bin/mes-m2 -e main ''${out}/bin/mescc.scm -- --base-address 0x08048000 -L ''${MES_PREFIX}/lib -nostdlib -o ''${out}/bin/mes -L . crt1.o builtins.o cc.o core.o display.o eval-apply.o gc.o globals.o hash.o lib.o math.o mes.o module.o posix.o reader.o stack.o string.o struct.o symbol.o vector.o -lc -lmescc
+  # Check
+  ''${out}/bin/mes --version
 ''

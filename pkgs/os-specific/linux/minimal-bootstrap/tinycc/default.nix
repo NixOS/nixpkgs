@@ -31,9 +31,18 @@ let
     platforms = [ "i686-linux" ];
   };
 
-  mes-libc = runCommand "mes-libc-${version}.c" { MES_PREFIX = "${mes}${mes.mesPrefix}"; } ''
-    kaem --verbose --strict --file ${./mes-libc.kaem}
-  '';
+  # Concatenate all source files into a convenient bundle
+  mes-libc =
+    let
+      # Passing this many arguments is too much for kaem so we need to
+      # split the operation in two
+      firstLibc = lib.take 100 mes.libcSources;
+      lastLibc = lib.drop 100 mes.libcSources;
+    in runCommand "mes-libc-${version}.c" {} ''
+      cd ${mes}${mes.mesPrefix}
+      catm ''${TMPDIR}/first.c ${lib.concatStringsSep " " firstLibc}
+      catm ''${out} ''${TMPDIR}/first.c ${lib.concatStringsSep " " lastLibc}
+    '';
 
   buildTinyccN = {
     pname,
