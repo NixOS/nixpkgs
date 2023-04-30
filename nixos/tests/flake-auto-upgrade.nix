@@ -131,6 +131,9 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         gitweb.succeed("${pkgs.git}/bin/git config --global user.email \"<>\"")
         gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git commit -m \"Initial commit\"")
         gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git push --set-upstream origin main")
+        gitweb.wait_for_open_port(22)
+        gitweb.wait_for_open_port(80)
+        builderSsh.wait_for_unit("multi-user.target")
         builderSsh.fail("stat /var/lib/flake-auto-upgrade/fakeFlake")
         builderSsh.systemctl("start flake-auto-upgrade")
         # flake is added
@@ -139,10 +142,11 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         builderSsh.wait_until_succeeds("stat /var/lib/flake-auto-upgrade/repo/result1")
         # change own for lighttpd
         gitweb.succeed("chown lighttpd:lighttpd -R ${repohome}")
+        builderHttp.wait_for_unit("multi-user.target")
         builderHttp.systemctl("start flake-auto-upgrade")
         # flake is changed again
         builderHttp.wait_until_succeeds("stat /var/lib/flake-auto-upgrade/repo/fakeFlake")
-        assert "2 /var/lib/flake-auto-upgrade/repo/fakeFlake" in builderHttp.succeed("wc -l /var/lib/flake-auto-upgrade/repo/fakeFlake")
+        assert "2 /var/lib/flake-auto-upgrade/repo/fakeFlake" in builderHttp.wait_until_succeeds("wc -l /var/lib/flake-auto-upgrade/repo/fakeFlake")
         # attr1 is build
         builderHttp.wait_until_succeeds("stat /var/lib/flake-auto-upgrade/repo/result1")
         builderHttp.succeed("touch /var/lib/flake-auto-upgrade/repo/failFile")
