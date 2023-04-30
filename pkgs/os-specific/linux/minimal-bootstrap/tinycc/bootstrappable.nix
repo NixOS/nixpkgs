@@ -9,7 +9,7 @@
 
 { lib
 , runCommand
-, fetchtarball
+, fetchurl
 , mes
 , buildTinyccN
 , mes-libc
@@ -17,10 +17,16 @@
 let
   version = "unstable-2023-04-20";
   rev = "80114c4da6b17fbaabb399cc29f427e368309bc8";
-  src = (fetchtarball {
+  tarball = fetchurl {
     url = "https://gitlab.com/janneke/tinycc/-/archive/${rev}/tinycc-${rev}.tar.gz";
     sha256 = "1a0cw9a62qc76qqn5sjmp3xrbbvsz2dxrw21lrnx9q0s74mwaxbq";
-  }) + "/tinycc-${rev}";
+  };
+  src = (runCommand "tinycc-bootstrappable-${version}-source" {} ''
+    ungz --file ${tarball} --output tinycc.tar
+    mkdir -p ''${out}
+    cd ''${out}
+    untar --file ''${NIX_BUILD_TOP}/tinycc.tar
+  '') + "/tinycc-${rev}";
 
   meta = with lib; {
     description = "Tiny C Compiler's bootstrappable fork";

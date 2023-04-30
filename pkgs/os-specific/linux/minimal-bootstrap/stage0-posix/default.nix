@@ -32,5 +32,5 @@ lib.makeScope newScope (self: with self; {
 
   mescc-tools-extra = callPackage ./mescc-tools-extra { };
 
-  inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText runCommand fetchtarball;
+  inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText runCommand;
 })

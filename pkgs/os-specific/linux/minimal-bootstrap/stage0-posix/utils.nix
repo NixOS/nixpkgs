@@ -80,24 +80,4 @@ rec {
       PATH = lib.makeBinPath ((env.nativeBuildInputs or []) ++ [ kaem mescc-tools mescc-tools-extra ]);
     } // (builtins.removeAttrs env [ "nativeBuildInputs" ]));
 
-  # Fetch and unpack a .tar.gz file. Does not strip top-level directory
-  fetchtarball =
-    { url
-      # Unlike fetchzip, this hash is of the tarball and not the decompressed output
-    , sha256
-    , name ? baseNameOf (toString url)
-    , postFetch ? ""
-    }:
-    let
-      tarball = fetchurl { inherit url sha256; };
-    in
-    runCommand name {} ''
-      cd ''${TMP}
-      ungz --file ${tarball} --output tmp.tar
-      mkdir ''${out}
-      cd ''${out}
-      untar --file ''${TMP}/tmp.tar
-
-      ${postFetch}
-    '';
 }

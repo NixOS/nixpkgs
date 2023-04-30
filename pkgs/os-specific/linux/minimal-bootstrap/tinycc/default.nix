@@ -6,16 +6,22 @@
 
 { lib
 , runCommand
-, fetchtarball
+, fetchurl
 , callPackage
 , mes
 }:
 let
   version = "unstable-2023-04-20";
-  src = (fetchtarball {
+  tarball = fetchurl {
     url = "https://repo.or.cz/tinycc.git/snapshot/86f3d8e33105435946383aee52487b5ddf918140.tar.gz";
     sha256 = "11idrvbwfgj1d03crv994mpbbbyg63j1k64lw1gjy7mkiifw2xap";
-  }) + "/tinycc-86f3d8e";
+  };
+  src = (runCommand "tinycc-${version}-source" {} ''
+    ungz --file ${tarball} --output tinycc.tar
+    mkdir -p ''${out}
+    cd ''${out}
+    untar --file ''${NIX_BUILD_TOP}/tinycc.tar
+  '') + "/tinycc-86f3d8e";
 
   meta = with lib; {
     description = "Small, fast, and embeddable C compiler and interpreter";
