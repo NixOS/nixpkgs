@@ -101,6 +101,8 @@ python3.pkgs.buildPythonApplication {
   in
     ''
     makeWrapperArgs+=(
+      # Force the app to use QT_PLUGIN_PATH values from wrapper
+      --unset QT_PLUGIN_PATH
       "''${qtWrapperArgs[@]}"
       ${lib.optionalString pipewireSupport ''--prefix LD_LIBRARY_PATH : ${libPath}''}
       ${lib.optionalString (enableVulkan) ''
