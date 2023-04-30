@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeShellWrapper, wrapGAppsHook, openssl, freetype
-, glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss, libpng, libnotify
+, glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss_latest, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curlWithGnuTls, zlib, gnome
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
 , pname, meta, harfbuzz
@@ -47,7 +47,7 @@ let
     libpulseaudio
     libxkbcommon
     mesa
-    nss
+    nss_latest
     pango
     stdenv.cc.cc
     systemd
