@@ -11,19 +11,25 @@ buildPythonPackage rec {
   pname = "django-tables2";
   version = "2.5.3";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jieter";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-rM1infxRJEbvhoI4ORbRu3U3RX8VZ65VpinapRIgnQI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rM1infxRJEbvhoI4ORbRu3U3RX8VZ65VpinapRIgnQI=";
   };
 
   propagatedBuildInputs = [
     django
-    tablib
   ];
+
+  passthru.optional-dependencies = {
+    tablib = [
+      tablib
+    ];
+  };
 
   pythonImportsCheck = [
     # Requested setting DJANGO_TABLES2_TEMPLATE, but settings are not configured.
@@ -39,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Django app for creating HTML tables";
     homepage = "https://github.com/jieter/django-tables2";
+    changelog = "https://github.com/jieter/django-tables2/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ hexa ];
   };
