@@ -24392,6 +24392,8 @@ with pkgs;
 
   vcg = callPackage ../development/libraries/vcg { };
 
+  vencord-web-extension = callPackage ../misc/vencord-web-extension { };
+
   vid-stab = callPackage ../development/libraries/vid-stab {
     inherit (llvmPackages) openmp;
   };
