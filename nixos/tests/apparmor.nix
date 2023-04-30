@@ -1,14 +1,11 @@
 import ./make-test-python.nix ({ pkgs, ... } : {
   name = "apparmor";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ julm ];
-  };
+  meta.maintainers = with lib.maintainers; [ julm ];
 
   nodes.machine =
     { lib, pkgs, config, ... }:
-    with lib;
     {
-      security.apparmor.enable = mkDefault true;
+      security.apparmor.enable = lib.mkDefault true;
     };
 
   testScript =
