@@ -92,12 +92,12 @@ in rec {
 
   catppuccin = mkTmuxPlugin {
     pluginName = "catppuccin";
-    version = "unstable-2022-12-14";
+    version = "unstable-2023-04-03";
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "tmux";
-      rev = "e2561decc2a4e77a0f8b7c05caf8d4f2af9714b3";
-      sha256 = "sha256-6UmFGkUDoIe8k+FrzdzsKrDHHMNfkjAk0yyc+HV199M=";
+      rev = "4e48b09a76829edc7b55fbb15467cf0411f07931";
+      sha256 = "sha256-bXEsxt4ozl3cAzV3ZyvbPsnmy0RAdpLxHwN82gvjLdU=";
     };
     postInstall = ''
       sed -i -e 's|''${PLUGIN_DIR}/catppuccin-selected-theme.tmuxtheme|''${TMUX_TMPDIR}/catppuccin-selected-theme.tmuxtheme|g' $target/catppuccin.tmux
