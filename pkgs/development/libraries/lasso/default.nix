@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lasso";
-  version = "2.8.1";
+  version = "2.8.2";
 
   src = fetchurl {
     url = "https://dev.entrouvert.org/lasso/lasso-${version}.tar.gz";
-    hash = "sha256-t9DJj2xmFPruspKhjy2DbAvDeNWaXXSB6BC7bGnsnd8=";
+    hash = "sha256-ahgxv9v49CTHUIq6R7BF1RNB7A/ekSLziwuGsJbvUz4=";
   };
 
   nativeBuildInputs = [
