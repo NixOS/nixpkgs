@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Library for managing Amazon S3 transfers";
     homepage = "https://github.com/boto/s3transfer";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }
