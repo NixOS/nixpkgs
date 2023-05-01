@@ -6858,18 +6858,6 @@ with pkgs;
 
   sl1-to-photon = python3Packages.callPackage ../applications/misc/sl1-to-photon { };
 
-  slade = callPackage ../applications/misc/slade {
-    wxGTK = wxGTK32.override {
-      withWebKit = true;
-    };
-  };
-
-  sladeUnstable = callPackage ../applications/misc/slade/git.nix {
-    wxGTK = wxGTK32.override {
-      withWebKit = true;
-    };
-  };
-
   drive = callPackage ../applications/networking/drive { };
 
   driftnet = callPackage ../tools/networking/driftnet { };
@@ -35758,6 +35746,18 @@ with pkgs;
   rbdoom-3-bfg = callPackage ../games/doom-ports/rbdoom-3-bfg { };
 
   shavee = callPackage ../games/doom-ports/shavee { };
+
+  slade = callPackage ../games/doom-ports/slade {
+    wxGTK = wxGTK32.override {
+      withWebKit = true;
+    };
+  };
+
+  sladeUnstable = callPackage ../games/doom-ports/slade/git.nix {
+    wxGTK = wxGTK32.override {
+      withWebKit = true;
+    };
+  };
 
   zandronum = callPackage ../games/doom-ports/zandronum { };
 
