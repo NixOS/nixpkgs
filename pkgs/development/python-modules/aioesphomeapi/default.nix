@@ -28,8 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     async-timeout
     noiseprotocol
-    protobuf.out
-    protobuf.dev
+    protobuf
     zeroconf
   ];
 
