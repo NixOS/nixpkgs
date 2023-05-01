@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "inform";
-  version = "1.27";
+  version = "1.28";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "inform";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SvE+UAGpUomUBHlH4aYZ1BYmLp3BherRjosKsIaOA/s=";
+    hash = "sha256-RA8/or3HTS/rQmG4A/Eg5j24YElaTEpnHa1yksARVMQ=";
   };
 
   nativeBuildInputs = [
