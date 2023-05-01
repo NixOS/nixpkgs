@@ -11,7 +11,7 @@
 }:
 let
   pname = "plantuml-markdown";
-  version = "3.8.1";
+  version = "3.9.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -20,7 +20,7 @@ buildPythonPackage {
     owner = "mikitex70";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-cDijr9BX7Mqgml76TU5dNWLWeF6LYb/gUeIrIJtqqCo=";
+    hash = "sha256-5+l3JkK/8S1KFXqa0++l3mIQ2KCpHe9+DiVqasBAZA0=";
   };
 
   propagatedBuildInputs = [
