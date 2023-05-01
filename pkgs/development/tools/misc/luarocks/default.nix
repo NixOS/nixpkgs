@@ -6,6 +6,7 @@
 , makeWrapper
 , which
 , unzip
+, glibc
 , lua
 , file
 , nix-prefetch-git
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     for i in "$out"/bin/*; do
         test -L "$i" || {
             wrapProgram "$i" \
+              --append-flags "RT_DIR=${glibc}" \
               --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?.lua" \
               --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
               --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
