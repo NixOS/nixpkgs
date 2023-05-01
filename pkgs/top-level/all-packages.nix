@@ -35717,8 +35717,6 @@ with pkgs;
 
   ezquake = callPackage ../games/ezquake { };
 
-  fmodex = callPackage ../games/zandronum/fmod.nix { };
-
   freedroid = callPackage ../games/freedroid { };
 
   freedroidrpg = callPackage ../games/freedroidrpg { };
@@ -35760,6 +35758,14 @@ with pkgs;
   prboom-plus = callPackage ../games/doom-ports/prboom-plus { };
 
   rbdoom-3-bfg = callPackage ../games/doom-ports/rbdoom-3-bfg { };
+
+  zandronum = callPackage ../games/doom-ports/zandronum { };
+
+  zandronum-server = zandronum.override {
+    serverOnly = true;
+  };
+
+  fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
 
   ### GAMES/LGAMES
 
@@ -36928,12 +36934,6 @@ with pkgs;
     yquake2-ground-zero
     yquake2-the-reckoning
     yquake2-all-games;
-
-  zandronum = callPackage ../games/zandronum { };
-
-  zandronum-server = zandronum.override {
-    serverOnly = true;
-  };
 
   zaz = callPackage ../games/zaz { };
 
