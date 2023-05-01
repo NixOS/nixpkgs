@@ -20,7 +20,7 @@ in with pkgs; rec {
   tarMinimal = gnutar.override { acl = null; };
 
   busyboxMinimal = busybox.override {
-    useMusl = !stdenv.targetPlatform.isRiscV;
+    useMusl = lib.meta.availableOn stdenv.hostPlatform musl;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
