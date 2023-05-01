@@ -10,7 +10,7 @@
 , configText ? ""
 }:
 let
-  version = "2206";
+  version = "2303";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -19,9 +19,12 @@ let
 
   # For USB support, ensure that /var/run/vmware/<YOUR-UID>
   # exists and is owned by you. Then run vmware-usbarbitrator as root.
-  bins = [ "vmware-view" "vmware-view-legacy" "vmware-usbarbitrator" ];
+  bins = [
+    "vmware-view"
+    "vmware-usbarbitrator"
+  ];
 
-  mainProgram = "vmware-view-legacy";
+  mainProgram = "vmware-view";
 
   # This forces the default GTK theme (Adwaita) because Horizon is prone to
   # UI usability issues when using non-default themes, such as Adwaita-dark.
@@ -36,8 +39,8 @@ let
     pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/CART23FQ2_LIN_2206_TARBALL/VMware-Horizon-Client-Linux-2206-8.6.0-20094634.tar.gz";
-      sha256 = "9819eae5708bf0d71156b81283e3a70100e2e22de9db827a8956ca8e83b2414a";
+      url = "https://download3.vmware.com/software/CART24FQ1_LIN_2303_TARBALL/VMware-Horizon-Client-Linux-2303-8.9.0-21435420.tar.gz";
+      sha256 = "a4dcc6afc0be7641e10e922ccbbab0a10adbf8f2a83e4b5372dfba095091fb78";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -93,6 +96,7 @@ let
       pixman
       vmwareHorizonClientFiles
       xorg.libX11
+      xorg.libXau
       xorg.libXcursor
       xorg.libXext
       xorg.libXi
