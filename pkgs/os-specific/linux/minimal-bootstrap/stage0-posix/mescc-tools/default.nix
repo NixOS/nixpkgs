@@ -61,8 +61,6 @@ let
         '')
       ];
       inherit version M1 M2 blood-elf-0 hex2 m2libc src ARCH BLOOD_FLAG BASE_ADDRESS ENDIAN_FLAG;
-
-
     };
   mkdir = buildMesccToolsExtraUtil "mkdir";
   cp = buildMesccToolsExtraUtil "cp";
