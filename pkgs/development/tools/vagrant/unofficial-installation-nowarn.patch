@@ -1,16 +1,16 @@
 diff --git a/bin/vagrant b/bin/vagrant
-index 0e6abdc..cb36e9c 100755
+index 7ca30b391..d3f4ea61a 100755
 --- a/bin/vagrant
 +++ b/bin/vagrant
-@@ -155,11 +155,6 @@ begin
+@@ -221,11 +221,6 @@ begin
+       end
      end
-   end
  
--  if !Vagrant.in_installer? && !Vagrant.very_quiet?
--    # If we're not in the installer, warn.
--    env.ui.warn(I18n.t("vagrant.general.not_in_installer") + "\n", prefix: false)
--  end
+-    if !Vagrant.in_installer? && !Vagrant.very_quiet?
+-      # If we're not in the installer, warn.
+-      env.ui.warn(I18n.t("vagrant.general.not_in_installer") + "\n", prefix: false)
+-    end
 -
-   # Acceptable experimental flag values include:
-   #
-   # Unset  - Disables experimental features
+     # Acceptable experimental flag values include:
+     #
+     # Unset  - Disables experimental features

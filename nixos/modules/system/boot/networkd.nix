@@ -6,8 +6,6 @@ with lib;
 
 let
 
-  cfg = config.systemd.network;
-
   check = {
 
     global = {
@@ -2941,16 +2939,14 @@ let
         + def.extraConfig;
     };
 
-  unitFiles = listToAttrs (map (name: {
-    name = "systemd/network/${name}";
+  mkUnitFiles = prefix: cfg: listToAttrs (map (name: {
+    name = "${prefix}systemd/network/${name}";
     value.source = "${cfg.units.${name}.unit}/${name}";
   }) (attrNames cfg.units));
-in
 
-{
-  options = {
+  commonOptions = visible: {
 
-    systemd.network.enable = mkOption {
+    enable = mkOption {
       default = false;
       type = types.bool;
       description = lib.mdDoc ''
@@ -2958,31 +2954,35 @@ in
       '';
     };
 
-    systemd.network.links = mkOption {
+    links = mkOption {
       default = {};
+      inherit visible;
       type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
       description = lib.mdDoc "Definition of systemd network links.";
     };
 
-    systemd.network.netdevs = mkOption {
+    netdevs = mkOption {
       default = {};
+      inherit visible;
       type = with types; attrsOf (submodule [ { options = netdevOptions; } ]);
       description = lib.mdDoc "Definition of systemd network devices.";
     };
 
-    systemd.network.networks = mkOption {
+    networks = mkOption {
       default = {};
+      inherit visible;
       type = with types; attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
       description = lib.mdDoc "Definition of systemd networks.";
     };
 
-    systemd.network.config = mkOption {
+    config = mkOption {
       default = {};
+      inherit visible;
       type = with types; submodule [ { options = networkdOptions; } networkdConfig ];
       description = lib.mdDoc "Definition of global systemd network config.";
     };
 
-    systemd.network.units = mkOption {
+    units = mkOption {
       description = lib.mdDoc "Definition of networkd units.";
       default = {};
       internal = true;
@@ -2995,7 +2995,7 @@ in
         }));
     };
 
-    systemd.network.wait-online = {
+    wait-online = {
       enable = mkOption {
         type = types.bool;
         default = true;
@@ -3051,12 +3051,11 @@ in
 
   };
 
-  config = mkMerge [
+  commonConfig = config: let cfg = config.systemd.network; in mkMerge [
 
     # .link units are honored by udev, no matter if systemd-networkd is enabled or not.
     {
       systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links;
-      environment.etc = unitFiles;
 
       systemd.network.wait-online.extraArgs =
         [ "--timeout=${toString cfg.wait-online.timeout}" ]
@@ -3066,14 +3065,6 @@ in
 
     (mkIf config.systemd.network.enable {
 
-      users.users.systemd-network.group = "systemd-network";
-
-      systemd.additionalUpstreamSystemUnits = [
-        "systemd-networkd-wait-online.service"
-        "systemd-networkd.service"
-        "systemd-networkd.socket"
-      ];
-
       systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
         // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
 
@@ -3081,14 +3072,6 @@ in
       # messages. It is important to have systemd buffer those on behalf of
       # networkd.
       systemd.sockets.systemd-networkd.wantedBy = [ "sockets.target" ];
-
-      systemd.services.systemd-networkd = {
-        wantedBy = [ "multi-user.target" ];
-        aliases = [ "dbus-org.freedesktop.network1.service" ];
-        restartTriggers = map (x: x.source) (attrValues unitFiles) ++ [
-          config.environment.etc."systemd/networkd.conf".source
-        ];
-      };
 
       systemd.services.systemd-networkd-wait-online = {
         inherit (cfg.wait-online) enable;
@@ -3111,7 +3094,36 @@ in
         };
       };
 
+    })
+  ];
+
+  stage2Config = let
+    cfg = config.systemd.network;
+    unitFiles = mkUnitFiles "" cfg;
+  in mkMerge [
+    (commonConfig config)
+
+    { environment.etc = unitFiles; }
+
+    (mkIf config.systemd.network.enable {
+
+      users.users.systemd-network.group = "systemd-network";
+
+      systemd.additionalUpstreamSystemUnits = [
+        "systemd-networkd-wait-online.service"
+        "systemd-networkd.service"
+        "systemd-networkd.socket"
+      ];
+
       environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
+
+      systemd.services.systemd-networkd = {
+        wantedBy = [ "multi-user.target" ];
+        restartTriggers = map (x: x.source) (attrValues unitFiles) ++ [
+          config.environment.etc."systemd/networkd.conf".source
+        ];
+        aliases = [ "dbus-org.freedesktop.network1.service" ];
+      };
 
       networking.iproute2 = mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {
         enable = mkDefault true;
@@ -3123,6 +3135,117 @@ in
       };
 
       services.resolved.enable = mkDefault true;
+
+    })
+  ];
+
+  stage1Config = let
+    cfg = config.boot.initrd.systemd.network;
+  in mkMerge [
+    (commonConfig config.boot.initrd)
+
+    {
+      systemd.network.enable = mkDefault config.boot.initrd.network.enable;
+      systemd.contents = mkUnitFiles "/etc/" cfg;
+
+      # Networkd link files are used early by udev to set up interfaces early.
+      # This must be done in stage 1 to avoid race conditions between udev and
+      # network daemons.
+      systemd.network.units = lib.filterAttrs (n: _: hasSuffix ".link" n) config.systemd.network.units;
+      systemd.storePaths = ["${config.boot.initrd.systemd.package}/lib/systemd/network/99-default.link"];
+    }
+
+    (mkIf cfg.enable {
+
+      systemd.package = pkgs.systemdStage1Network;
+
+      # For networkctl
+      systemd.dbus.enable = mkDefault true;
+
+      systemd.additionalUpstreamUnits = [
+        "systemd-networkd-wait-online.service"
+        "systemd-networkd.service"
+        "systemd-networkd.socket"
+        "systemd-network-generator.service"
+        "network-online.target"
+        "network-pre.target"
+        "network.target"
+        "nss-lookup.target"
+        "nss-user-lookup.target"
+        "remote-fs-pre.target"
+        "remote-fs.target"
+      ];
+      systemd.users.systemd-network = {};
+      systemd.groups.systemd-network = {};
+
+      systemd.contents."/etc/systemd/networkd.conf" = renderConfig cfg.config;
+
+      systemd.services.systemd-networkd.wantedBy = [ "initrd.target" ];
+      systemd.services.systemd-network-generator.wantedBy = [ "sysinit.target" ];
+
+      systemd.storePaths = [
+        "${config.boot.initrd.systemd.package}/lib/systemd/systemd-networkd"
+        "${config.boot.initrd.systemd.package}/lib/systemd/systemd-networkd-wait-online"
+        "${config.boot.initrd.systemd.package}/lib/systemd/systemd-network-generator"
+      ];
+      kernelModules = [ "af_packet" ];
+
+      systemd.services.nixos-flush-networkd = mkIf config.boot.initrd.network.flushBeforeStage2 {
+        description = "Flush Network Configuration";
+        wantedBy = ["initrd.target"];
+        after = ["systemd-networkd.service" "dbus.socket" "dbus.service"];
+        before = ["shutdown.target" "initrd-switch-root.target"];
+        conflicts = ["shutdown.target" "initrd-switch-root.target"];
+        unitConfig.DefaultDependencies = false;
+        serviceConfig = {
+          # This service does nothing when starting, but brings down
+          # interfaces when switching root. This is the easiest way to
+          # ensure proper ordering while stopping. See systemd.unit(5)
+          # section on Before= and After=. The important part is that
+          # we are stopped before units we need, like dbus.service,
+          # and that we are stopped before starting units like
+          # initrd-switch-root.target
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "/bin/true";
+        };
+        # systemd-networkd doesn't bring down interfaces on its own
+        # when it exits (see: systemd-networkd(8)), so we have to do
+        # it ourselves. The networkctl command doesn't have a way to
+        # bring all interfaces down, so we have to iterate over the
+        # list and filter out unmanaged interfaces to bring them down
+        # individually.
+        preStop = ''
+          networkctl list --full --no-legend | while read _idx link _type _operational setup _; do
+            [ "$setup" = unmanaged ] && continue
+            networkctl down "$link"
+          done
+        '';
+      };
+
+    })
+  ];
+
+in
+
+{
+  options = {
+    systemd.network = commonOptions true;
+    boot.initrd.systemd.network = commonOptions "shallow";
+  };
+
+  config = mkMerge [
+    stage2Config
+    (mkIf config.boot.initrd.systemd.enable {
+      assertions = [{
+        assertion = config.boot.initrd.network.udhcpc.extraArgs == [];
+        message = ''
+          boot.initrd.network.udhcpc.extraArgs is not supported when
+          boot.initrd.systemd.enable is enabled
+        '';
+      }];
+
+      boot.initrd = stage1Config;
     })
   ];
 }

@@ -12,6 +12,7 @@ let
     libudev0-shim
     nghttp2
     openssl
+    stdenv.cc.cc.lib
   ];
 in stdenv.mkDerivation rec {
   pname = "insomnia";
@@ -81,7 +82,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    wrapProgram "$out/bin/insomnia" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
+    wrapProgram "$out/bin/insomnia" "''${gappsWrapperArgs[@]}" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
   '';
 
   meta = with lib; {

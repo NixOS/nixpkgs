@@ -1,34 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, SDL_compat }:
+{ lib, stdenv, fetchFromGitHub, SDL_compat, libX11, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "rvvm";
-  version = "unstable-2023-01-25";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "LekKit";
     repo = "RVVM";
-    rev = "4de27d7083db34bd074b4f056d6eb3871ccf5c10";
-    sha256 = "sha256-FjEcXfweL6FzA6iLxl9XnKaD4Fh/wZuRTJzZzHkc/B4=";
+    rev = "v${version}";
+    sha256 = "sha256-1wAKijRYB0FGBe4cSHUynkO4ePVG4QvVIgSoWzNbqtE=";
   };
 
-  buildInputs = [ SDL_compat ];
+  buildInputs = if stdenv.isDarwin then [ SDL_compat ] else [ libX11 libXext ];
 
-  makeFlags =
-    [ "BUILDDIR=out" "BINARY=rvvm" "USE_SDL=1" "GIT_COMMIT=${src.rev}" "all" "lib" ]
+  buildFlags = [ "all" "lib" ];
+
+  makeFlags = [ "PREFIX=$(out)" ]
     # work around https://github.com/NixOS/nixpkgs/issues/19098
     ++ lib.optional (stdenv.cc.isClang && stdenv.isDarwin) "CFLAGS=-fno-lto";
-
-  installPhase = ''
-    runHook preInstall
-
-    install -d    $out/{bin,lib,include/devices}
-    install -m755 out/rvvm           -t $out/bin
-    install -m755 out/librvvm.{a,so} -t $out/lib
-    install -m644 src/rvvmlib.h      -t $out/include
-    install -m644 src/devices/*.h    -t $out/include/devices
-
-    runHook postInstall
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/LekKit/RVVM";

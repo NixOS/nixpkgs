@@ -34,7 +34,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-JHxMEignDJAQ9HIcmFy1tiirUKvPnyZ4Ywc3FC7rkcM=";
   };
 
-  patches = lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [
+    # remove with 3.5.X
+    ./blender-numpy.patch
+  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   nativeBuildInputs = [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev ]
     ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
@@ -51,7 +54,7 @@ stdenv.mkDerivation rec {
       libharu
       libepoxy
     ]
-    ++ lib.optional (!stdenv.isAarch64) [
+    ++ lib.optionals (!stdenv.isAarch64) [
       openimagedenoise
       embree
     ]
@@ -73,6 +76,8 @@ stdenv.mkDerivation rec {
   pythonPath = with python310Packages; [ numpy requests ];
 
   postPatch = ''
+    # allow usage of dynamically linked embree
+    rm build_files/cmake/Modules/FindEmbree.cmake
   '' +
     (if stdenv.isDarwin then ''
       : > build_files/cmake/platform/platform_apple_xcode.cmake

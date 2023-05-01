@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "p2pool";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
     rev = "v${version}";
-    sha256 = "sha256-yHxg/9QhaDNlUFzylftsJEk+pJoSoTfA0rJfcolBdTs=";
+    sha256 = "sha256-KJ7KE1Joma4KXSqNQi3z+Q3hhc3HLNEaQjunu79qjUs=";
     fetchSubmodules = true;
   };
 

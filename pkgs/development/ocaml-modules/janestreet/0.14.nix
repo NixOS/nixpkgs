@@ -871,6 +871,7 @@ with self;
 
   vcaml = janePackage {
     pname = "vcaml";
+    duneVersion = "3";
     hash = "0ykwrn8bvwx26ad4wb36jw9xnlwsdpnnx88396laxvcfimrp13qs";
     meta.description = "OCaml bindings for the Neovim API";
     propagatedBuildInputs = [ angstrom-async async_extra faraday ];

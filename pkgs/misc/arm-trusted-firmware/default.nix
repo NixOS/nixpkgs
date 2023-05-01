@@ -114,6 +114,12 @@ in {
     filesToInstall = ["build/${platform}/release/bl31.bin"];
   };
 
+  armTrustedFirmwareAllwinnerH6 = buildArmTrustedFirmware rec {
+    platform = "sun50i_h6";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["build/${platform}/release/bl31.bin"];
+  };
+
   armTrustedFirmwareQemu = buildArmTrustedFirmware rec {
     platform = "qemu";
     extraMeta.platforms = ["aarch64-linux"];

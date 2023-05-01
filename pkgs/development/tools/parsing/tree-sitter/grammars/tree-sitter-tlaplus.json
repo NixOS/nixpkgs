@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/tlaplus-community/tree-sitter-tlaplus",
-  "rev": "deaf0e5c573ad4e2bbfc9a29abb7b6dcb572556e",
-  "date": "2022-07-26T16:48:02-04:00",
-  "path": "/nix/store/40jlhkwlrvzdg3s95w132kvs5rax8mbj-tree-sitter-tlaplus",
-  "sha256": "01nsi5403vxcc725x9rvd0ff6xfkg2lw5350i1w5998jbs9kd00g",
+  "rev": "c54aebd31e2ac394a0aa70b510724c99144119f1",
+  "date": "2023-02-04T13:10:02-05:00",
+  "path": "/nix/store/p4jybbcwfv9x1s3kxp9bzifl2zsd3nil-tree-sitter-tlaplus",
+  "sha256": "06sshz8ia27ypzbwy5isx7ndyi9sc6x4xyr8r50njcpy3av4d7wn",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

@@ -9,6 +9,8 @@
 , libX11
 , lib
 , stdenv
+, libgcrypt
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation {
@@ -33,10 +35,12 @@ stdenv.mkDerivation {
     stdenv.cc.cc.lib
     libGL
     libX11
+    libgcrypt
   ];
 
   nativeBuildInputs = [
     autoPatchelfHook
+    wrapGAppsHook
   ];
 
   installPhase = ''

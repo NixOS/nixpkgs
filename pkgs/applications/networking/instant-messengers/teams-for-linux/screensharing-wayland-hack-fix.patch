@@ -1,0 +1,28 @@
+diff --git a/app/index.js b/app/index.js
+index 20ccf43..b251f62 100644
+--- a/app/index.js
++++ b/app/index.js
+@@ -1,4 +1,4 @@
+-const { app, ipcMain, desktopCapturer, systemPreferences, powerMonitor } = require('electron');
++const { app, ipcMain, desktopCapturer, nativeImage, systemPreferences, powerMonitor } = require('electron');
+ const path = require('path');
+ const { LucidLog } = require('lucid-log');
+ const isDev = require('electron-is-dev');
+@@ -93,7 +93,16 @@ if (!gotTheLock) {
+ 	ipcMain.handle('getSystemIdleState', handleGetSystemIdleState);
+ 	ipcMain.handle('getZoomLevel', handleGetZoomLevel);
+ 	ipcMain.handle('saveZoomLevel', handleSaveZoomLevel);
+-	ipcMain.handle('desktopCapturerGetSources', (event, opts) => desktopCapturer.getSources(opts));
++	ipcMain.handle('desktopCapturerGetSources', (event, opts) => process.env.XDG_SESSION_TYPE == 'wayland' ?
++		// Port wayland electron 22+ screenshare "fix" from webcord
++		Promise.resolve([{
++			id: "screen:1:0",
++			appIcon: nativeImage.createEmpty(),
++			display_id: "",
++			name: "Entire Screen",
++			thumbnail: nativeImage.createEmpty()
++		}])
++		: desktopCapturer.getSources(opts));
+ 	ipcMain.on('play-notification-sound', playNotificationSound);
+ }
+ 

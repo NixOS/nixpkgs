@@ -288,7 +288,6 @@ with lib.maintainers; {
 
   golang = {
     members = [
-      c00w
       kalbasit
       mic92
       zowoq
@@ -432,6 +431,7 @@ with lib.maintainers; {
       lukego
       nagy
       uthar
+      hraban
     ];
     githubTeams = [
       "lisp"

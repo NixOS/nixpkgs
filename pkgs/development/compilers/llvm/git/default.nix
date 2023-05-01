@@ -3,6 +3,7 @@
 , libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
+, targetLlvm
 # This is the default binutils, but with *this* version of LLD rather
 # than the default LLVM verion's, if LLD is the choice. We use these for
 # the `useLLVM` bootstrapping below.
@@ -15,23 +16,71 @@
     then null
     else pkgs.bintools
 , darwin
+# LLVM release information; specify one of these but not both:
+, gitRelease ? null
+  # i.e.:
+  # {
+  #   version = /* i.e. "15.0.0" */;
+  #   rev = /* commit SHA */;
+  #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
+  #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
+  # }
+, officialRelease ? { version = "15.0.7"; sha256 = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s="; }
+  # i.e.:
+  # {
+  #   version = /* i.e. "15.0.0" */;
+  #   candidate = /* optional; if specified, should be: "rcN" */
+  #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
+  # }
+# By default, we'll try to fetch a release from `github:llvm/llvm-project`
+# corresponding to the `gitRelease` or `officialRelease` specified.
+#
+# You can provide your own LLVM source by specifying this arg but then it's up
+# to you to make sure that the LLVM repo given matches the release configuration
+# specified.
+, monorepoSrc ? null
 }:
-
+assert let
+  int = a: if a then 1 else 0;
+  xor = a: b: ((builtins.bitXor (int a) (int b)) == 1);
+in
+  lib.assertMsg
+    (xor
+      (gitRelease != null)
+      (officialRelease != null))
+    ("must specify `gitRelease` or `officialRelease`" +
+      (lib.optionalString (gitRelease != null) " — not both"));
 let
-  release_version = "15.0.0";
-  candidate = ""; # empty or "rcN"
-  dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  rev = "a5640968f2f7485b2aa4919f5fa68fd8f23e2d1f"; # When using a Git commit
-  rev-version = "unstable-2022-26-07"; # When using a Git commit
-  version = if rev != "" then rev-version else "${release_version}${dash-candidate}";
-  targetConfig = stdenv.targetPlatform.config;
+  monorepoSrc' = monorepoSrc;
+in let
+  releaseInfo = if gitRelease != null then rec {
+    original = gitRelease;
+    release_version = original.version;
+    version = gitRelease.rev-version;
+  } else rec {
+    original = officialRelease;
+    release_version = original.version;
+    version = if original ? candidate then
+      "${release_version}-${original.candidate}"
+    else
+      release_version;
+  };
 
-  monorepoSrc = fetchFromGitHub {
+  monorepoSrc = if monorepoSrc' != null then
+    monorepoSrc'
+  else let
+    sha256 = releaseInfo.original.sha256;
+    rev = if gitRelease != null then
+      gitRelease.rev
+    else
+      "llvmorg-${releaseInfo.version}";
+  in fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "1sh5xihdfdn2hp7ds3lkaq1bfrl4alj36gl1aidmhlw65p5rdvl7";
+    inherit rev sha256;
   };
+
+  inherit (releaseInfo) release_version version;
 
   llvm_meta = {
     license     = lib.licenses.ncsa;
@@ -296,7 +345,7 @@ let
     };
 
     openmp = callPackage ./openmp {
-      inherit llvm_meta;
+      inherit llvm_meta targetLlvm;
     };
   });
 

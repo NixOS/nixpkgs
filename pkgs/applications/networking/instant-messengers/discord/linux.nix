@@ -6,9 +6,10 @@
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
 , pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, python3, runCommand
 , libunity
+, speechd
 , wayland
 , branch
-, common-updater-scripts, withOpenASAR ? false }:
+, common-updater-scripts, withOpenASAR ? false, withTTS ? false }:
 
 let
   disableBreakingUpdates = runCommand "disable-breaking-updates.py"
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  libPath = lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath ([
     libcxx
     systemd
     libpulseaudio
@@ -87,7 +88,7 @@ stdenv.mkDerivation rec {
     libappindicator-gtk3
     libdbusmenu
     wayland
-  ];
+  ] ++ lib.optional withTTS speechd);
 
   installPhase = ''
     runHook preInstall
@@ -102,6 +103,7 @@ stdenv.mkDerivation rec {
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
+        ${lib.strings.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
         --run "${lib.getExe disableBreakingUpdates}"

@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Command-line copy/paste utilities for Wayland";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,0 +1,31 @@
+From ed5090b237bca768dbf7dfc3b4414b955879f15e Mon Sep 17 00:00:00 2001
+From: Euan Kemp <euank@euank.com>
+Date: Fri, 7 Apr 2023 20:22:34 +0900
+Subject: [PATCH 3/3] Skip formatting python code
+
+---
+ pylib/tools/hookslib.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pylib/tools/hookslib.py b/pylib/tools/hookslib.py
+index 6361c633e..95ecb64a2 100644
+--- a/pylib/tools/hookslib.py
++++ b/pylib/tools/hookslib.py
+@@ -82,7 +82,7 @@ class Hook:
+         code = f"""\
+ class {self.classname()}:
+ {classdoc}{self.list_code()}
+-    
++
+     def append(self, callback: {self.callable()}) -> None:
+         '''{appenddoc}'''
+         self._hooks.append(callback)
+@@ -208,4 +208,4 @@ def write_file(path: str, hooks: list[Hook], prefix: str, suffix: str):
+         os.environ["USERPROFILE"] = os.environ["HOME"]
+     with open(path, "wb") as file:
+         file.write(code.encode("utf8"))
+-    subprocess.run([sys.executable, "-m", "black", "-q", path], check=True)
++    # subprocess.run([sys.executable, "-m", "black", "-q", path], check=True)
+-- 
+2.39.2
+

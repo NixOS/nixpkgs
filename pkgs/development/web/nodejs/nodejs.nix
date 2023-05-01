@@ -96,6 +96,14 @@ let
 
     enableParallelBuilding = true;
 
+    # Don't allow enabling content addressed conversion as `nodejs`
+    # checksums it's image before conversion happens and image loading
+    # breaks:
+    #   $ nix build -f. nodejs --arg config '{ contentAddressedByDefault = true; }'
+    #   $ ./result/bin/node
+    #   Check failed: VerifyChecksum(blob).
+    __contentAddressed = false;
+
     passthru.interpreterName = "nodejs";
 
     passthru.pkgs = callPackage ../../node-packages/default.nix {

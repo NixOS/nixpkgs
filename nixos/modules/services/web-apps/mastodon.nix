@@ -48,6 +48,8 @@ let
     # User and group
     User = cfg.user;
     Group = cfg.group;
+    # Working directory
+    WorkingDirectory = cfg.package;
     # State directory and mode
     StateDirectory = "mastodon";
     StateDirectoryMode = "0750";
@@ -109,6 +111,37 @@ let
     fi
     $sudo ${cfg.package}/bin/tootctl "$@"
   '';
+
+  sidekiqUnits = lib.attrsets.mapAttrs' (name: processCfg:
+    lib.nameValuePair "mastodon-sidekiq-${name}" (let
+      jobClassArgs = toString (builtins.map (c: "-q ${c}") processCfg.jobClasses);
+      jobClassLabel = toString ([""] ++ processCfg.jobClasses);
+      threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
+    in {
+      after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+      requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+      description = "Mastodon sidekiq${jobClassLabel}";
+      wantedBy = [ "mastodon.target" ];
+      environment = env // {
+        PORT = toString(cfg.sidekiqPort);
+        DB_POOL = threads;
+      };
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/sidekiq ${jobClassArgs} -c ${threads} -r ${cfg.package}";
+        Restart = "always";
+        RestartSec = 20;
+        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
+        WorkingDirectory = cfg.package;
+        # System Call Filtering
+        SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
+      } // cfgService;
+      path = with pkgs; [ file imagemagick ffmpeg ];
+    })
+  ) cfg.sidekiqProcesses;
 
 in {
 
@@ -195,10 +228,51 @@ in {
         type = lib.types.port;
         default = 55002;
       };
+
       sidekiqThreads = lib.mkOption {
-        description = lib.mdDoc "Worker threads used by the mastodon-sidekiq service.";
+        description = lib.mdDoc "Worker threads used by the mastodon-sidekiq-all service. If `sidekiqProcesses` is configured and any processes specify null `threads`, this value is used.";
         type = lib.types.int;
         default = 25;
+      };
+
+      sidekiqProcesses = lib.mkOption {
+        description = lib.mdDoc "How many Sidekiq processes should be used to handle background jobs, and which job classes they handle. *Read the [upstream documentation](https://docs.joinmastodon.org/admin/scaling/#sidekiq) before configuring this!*";
+        type = with lib.types; attrsOf (submodule {
+          options = {
+            jobClasses = lib.mkOption {
+              type = listOf (enum [ "default" "push" "pull" "mailers" "scheduler" "ingress" ]);
+              description = lib.mdDoc "If not empty, which job classes should be executed by this process. *Only one process should handle the 'scheduler' class. If left empty, this process will handle the 'scheduler' class.*";
+            };
+            threads = lib.mkOption {
+              type = nullOr int;
+              description = lib.mdDoc "Number of threads this process should use for executing jobs. If null, the configured `sidekiqThreads` are used.";
+            };
+          };
+        });
+        default = {
+          all = {
+            jobClasses = [ ];
+            threads = null;
+          };
+        };
+        example = {
+          all = {
+            jobClasses = [ ];
+            threads = null;
+          };
+          ingress = {
+            jobClasses = [ "ingress" ];
+            threads = 5;
+          };
+          default = {
+            jobClasses = [ "default" ];
+            threads = 10;
+          };
+          push-pull = {
+            jobClasses = [ "push" "pull" ];
+            threads = 5;
+          };
+        };
       };
 
       vapidPublicKeyFile = lib.mkOption {
@@ -482,7 +556,7 @@ in {
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.enable (lib.mkMerge [{
     assertions = [
       {
         assertion = databaseActuallyCreateLocally -> (cfg.user == cfg.database.user);
@@ -513,9 +587,22 @@ in {
             <option>services.mastodon.smtp.authenticate</option> is enabled.
         '';
       }
+      {
+        assertion = 1 == builtins.length
+          (lib.mapAttrsToList
+            (_: v: builtins.elem "scheduler" v.jobClasses || v.jobClasses == [ ])
+            cfg.sidekiqProcesses);
+        message = "There must be one and only one Sidekiq queue in services.mastodon.sidekiqProcesses with jobClass \"scheduler\".";
+      }
     ];
 
     environment.systemPackages = [ mastodonTootctl ];
+
+    systemd.targets.mastodon = {
+      description = "Target for all Mastodon services";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+    };
 
     systemd.services.mastodon-init-dirs = {
       script = ''
@@ -551,7 +638,7 @@ in {
       environment = env;
       serviceConfig = {
         Type = "oneshot";
-        WorkingDirectory = cfg.package;
+        SyslogIdentifier = "mastodon-init-dirs";
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ])) "@chown" "pipe" "pipe2" ];
       } // cfgService;
@@ -609,7 +696,7 @@ in {
       requires = [ "mastodon-init-dirs.service" ]
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "mastodon.target" ];
       description = "Mastodon streaming";
       environment = env // (if cfg.enableUnixSocket
         then { SOCKET = "/run/mastodon-streaming/streaming.socket"; }
@@ -636,7 +723,7 @@ in {
       requires = [ "mastodon-init-dirs.service" ]
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "mastodon.target" ];
       description = "Mastodon web";
       environment = env // (if cfg.enableUnixSocket
         then { SOCKET = "/run/mastodon-web/web.socket"; }
@@ -651,31 +738,6 @@ in {
         # Runtime directory and mode
         RuntimeDirectory = "mastodon-web";
         RuntimeDirectoryMode = "0750";
-        # System Call Filtering
-        SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
-      } // cfgService;
-      path = with pkgs; [ file imagemagick ffmpeg ];
-    };
-
-    systemd.services.mastodon-sidekiq = {
-      after = [ "network.target" "mastodon-init-dirs.service" ]
-        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
-      requires = [ "mastodon-init-dirs.service" ]
-        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
-      wantedBy = [ "multi-user.target" ];
-      description = "Mastodon sidekiq";
-      environment = env // {
-        PORT = toString(cfg.sidekiqPort);
-        DB_POOL = toString cfg.sidekiqThreads;
-      };
-      serviceConfig = {
-        ExecStart = "${cfg.package}/bin/sidekiq -c ${toString cfg.sidekiqThreads} -r ${cfg.package}";
-        Restart = "always";
-        RestartSec = 20;
-        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
-        WorkingDirectory = cfg.package;
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
       } // cfgService;
@@ -757,7 +819,9 @@ in {
     ];
 
     users.groups.${cfg.group}.members = lib.optional cfg.configureNginx config.services.nginx.user;
-  };
+  }
+  { systemd.services = sidekiqUnits; }
+  ]);
 
   meta.maintainers = with lib.maintainers; [ happy-river erictapen ];
 

@@ -35,27 +35,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "43.0";
+  version = "44.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "x6x0WNUz8p2VUBHHS3YiTXnqMbzBLp1tDOe2w3BNCOE=";
+    sha256 = "544hA5fTxigJxs1VIdpuzLShHd6lvyr4YypH9Npcgp4=";
   };
 
   patches = [
     ./installed-tests-path.patch
-
-    # Support babel 0.1.100
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/gnome-photos/-/commit/64c6f733a44bac5b7f08445a686c000681f93f5f.patch";
-      hash = "sha256-iB5qCcDEH8pEX42ypEGJ9QMJWE8VXirv5JfdC1jP218=";
-    })
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/gnome-photos/-/commit/9db32c3508a8c5d357a053d5f8278c34b4df18f3.patch";
-      hash = "sha256-iz6gSu5rUBZ3Ki5GSRVuLcwX0LRQvJT17XmXQ7WJSmI=";
-    })
   ];
 
   nativeBuildInputs = [

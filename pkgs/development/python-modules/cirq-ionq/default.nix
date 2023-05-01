@@ -31,4 +31,9 @@ buildPythonPackage rec {
     # No need to test the version number
     "cirq_ionq/_version_test.py"
   ];
+
+  disabledTests = [
+    # DeprecationWarning: decompose_to_device was used but is deprecated.
+    "test_decompose_operation_deprecated"
+  ];
 }

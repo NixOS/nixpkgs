@@ -229,7 +229,7 @@ See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
 #### Pitfalls {#javascript-node2nix-pitfalls}
 
 - If upstream package.json does not have a "version" attribute, `node2nix` will crash. You will need to add it like shown in [the package.json section](#javascript-upstream-package-json).
-- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from NPM distributed with `nodejs-16_x`.
+- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from NPM distributed with `nodejs_16`.
 - `node2nix` does not like missing packages from NPM. If you see something like `Cannot resolve version: vue-loader-v16@undefined` then you might want to try another tool. The package might have been pulled off of NPM.
 
 ### yarn2nix {#javascript-yarn2nix}

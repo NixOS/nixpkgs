@@ -203,6 +203,27 @@ let
       patches = [ ./patches/math-no-compile-time-directory.patch ];
       nativeLibs = [ pkgs.fontconfig ];
     });
+    mcclim-fonts = super.mcclim-fonts.overrideLispAttrs (o: {
+      lispLibs = o.lispLibs ++ [
+        super.cl-dejavu
+        super.zpb-ttf
+        super.cl-vectors
+        super.cl-paths-ttf
+        super.flexi-streams
+      ];
+      systems = [ "mcclim-fonts" "mcclim-fonts/truetype" ];
+    });
+    mcclim-render = super.mcclim-render.overrideLispAttrs (o: {
+      lispLibs = o.lispLibs ++ [
+        self.mcclim-fonts
+      ];
+    });
+    mcclim-layouts = super.mcclim-layouts.overrideLispAttrs (o: {
+      systems = [ "mcclim-layouts" "mcclim-layouts/tab" ];
+      lispLibs = o.lispLibs ++ [
+        self.mcclim
+      ];
+});
   });
 
   qlpkgs =

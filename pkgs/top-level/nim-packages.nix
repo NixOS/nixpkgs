@@ -49,6 +49,8 @@ lib.makeScope newScope (self:
 
     illwill = callPackage ../development/nim-packages/illwill { };
 
+    illwillwidgets = callPackage ../development/nim-packages/illwillwidgets { };
+
     jester = callPackage ../development/nim-packages/jester { };
 
     jsonschema = callPackage ../development/nim-packages/jsonschema { };

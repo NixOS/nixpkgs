@@ -58,7 +58,7 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.12.1";
+  version = "0.13.3";
 
   disabled = pythonOlder "3.7";
 
@@ -66,13 +66,15 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "python-v${version}";
-    hash = "sha256-XIXKgcqa6ToAH4OkyaaJALOS9F+sD8d5Z71RttRcIsw=";
+    hash = "sha256-QZG5jmr3vbyQs4mVBjwVDR31O66dUM+p39R0htJ1umk=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src sourceRoot;
-    name = "${pname}-${version}";
-    hash = "sha256-Euvf0LNMa2Od+6gY1Ldge/7VPrH5mJoZduRRsb+lM/E=";
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
 
   sourceRoot = "source/bindings/python";

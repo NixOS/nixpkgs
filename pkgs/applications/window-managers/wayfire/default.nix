@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir /etc"
     "-Duse_system_wlroots=enabled"
     "-Duse_system_wfconfig=enabled"
+    (lib.mesonEnable "wf-touch:tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
   ];
 
   passthru.providedSessions = [ "wayfire" ];

@@ -24,6 +24,7 @@ python3Packages.buildPythonApplication {
       --replace 'python-dotenv = "^0.21.1"' 'python-dotenv = "*"' \
       --replace 'python-multipart = "^0.0.6"' 'python-multipart = "^0.0.5"' \
       --replace 'tiktoken = "^0.2.0"' 'tiktoken = "^0.3.0"' \
+      --replace 'redis = "4.5.1"' 'redis = "^4.5.1"' \
       --replace 'packages = [{include = "server"}]' 'packages = [{include = "server"}, {include = "models"}, {include = "datastore"}, {include = "services"}]'
 
     substituteInPlace server/main.py \

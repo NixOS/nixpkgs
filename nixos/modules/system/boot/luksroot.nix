@@ -1024,13 +1024,12 @@ in
         copy_bin_and_libs ${pkgs.gnupg}/libexec/scdaemon
 
         ${concatMapStringsSep "\n" (x:
-          if x.gpgCard != null then
+          optionalString (x.gpgCard != null)
             ''
               mkdir -p $out/secrets/gpg-keys/${x.device}
               cp -a ${x.gpgCard.encryptedPass} $out/secrets/gpg-keys/${x.device}/cryptkey.gpg
               cp -a ${x.gpgCard.publicKey} $out/secrets/gpg-keys/${x.device}/pubkey.asc
             ''
-          else ""
           ) (attrValues luks.devices)
         }
       ''}

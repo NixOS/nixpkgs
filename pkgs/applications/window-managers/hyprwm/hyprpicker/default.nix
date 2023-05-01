@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
-  version = "unstable-2023-03-09";
+  version = "unstable-2023-03-31";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpicker";
-    rev = "234c2da51a71941c0cd2ee380f42de365f90dd6f";
-    hash = "sha256-wb1oXsaM0AkThPJGjn0Ytxt8vbBQG+mg2AGY0uxhUJ0=";
+    rev = "cc6b3234b2966acd61c8a2e5caae947774666601";
+    hash = "sha256-8Tc8am5+iQvzRdnTYIpD3Ewge6TIctrm8tr0H+RvcsE=";
   };
 
   cmakeFlags = lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";

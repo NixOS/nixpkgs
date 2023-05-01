@@ -1,4 +1,4 @@
-{
+{ stdenv,
   backendStdenv,
   lib,
   zlib,
@@ -26,7 +26,6 @@
   maxCudaVersion,
 }:
 assert useCudatoolkitRunfile || (libcublas != null); let
-  inherit (backendStdenv) cc;
   inherit (lib) lists strings trivial versions;
 
   # majorMinorPatch :: String -> String
@@ -63,7 +62,10 @@ in
 
     # Used by autoPatchelfHook
     buildInputs = [
-      cc.cc.lib # libstdc++
+      # Note this libstdc++ isn't from the (possibly older) nvcc-compatible
+      # stdenv, but from the (newer) stdenv that the rest of nixpkgs uses
+      stdenv.cc.cc.lib
+
       zlib
       cudatoolkit_root
     ];

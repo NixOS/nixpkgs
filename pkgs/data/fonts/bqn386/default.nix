@@ -11,20 +11,22 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-f0MbrxdkEiOqod41U07BvdDFDbFCqJuGyDIcx2Y24D0=";
   };
 
+  outputs = [ "out" "woff2" ];
+
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 -t $out/share/fonts/truetype *.ttf
-    install -Dm644 -t $out/share/fonts/woff2 *.woff2
+    install -Dm444 -t $out/share/fonts/truetype *.ttf
+    install -Dm444 -t $woff2/share/fonts/woff2 *.woff2
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "An APL and BQN font extending on APL386";
     homepage = "https://dzaima.github.io/BQN386/";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ skykanin ];
-    platforms = platforms.all;
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ skykanin ];
+    platforms = lib.platforms.all;
   };
 }

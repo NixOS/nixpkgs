@@ -1,32 +1,29 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+, installShellFiles
+}:
 
 stdenv.mkDerivation rec {
   pname = "nuttcp";
-  version = "8.1.4";
+  version = "8.2.2";
 
   src = fetchurl {
-    urls = [
-      "http://nuttcp.net/nuttcp/latest/${pname}-${version}.c"
-      "http://nuttcp.net/nuttcp/${pname}-${version}/${pname}-${version}.c"
-      "http://nuttcp.net/nuttcp/beta/${pname}-${version}.c"
-    ];
-    sha256 = "1mygfhwxfi6xg0iycivx98ckak2abc3vwndq74278kpd8g0yyqyh";
+    url = "http://nuttcp.net/nuttcp/nuttcp-${version}.tar.bz2";
+    sha256 = "sha256-fq16ieeqoFnSDjQELFihmMKYHK1ylVDROI3fyQNtOYM=";
   };
 
-  man = fetchurl {
-    url = "http://nuttcp.net/nuttcp/${pname}-${version}/nuttcp.8";
-    sha256 = "1yang94mcdqg362qbi85b63746hk6gczxrk619hyj91v5763n4vx";
-  };
-
-  dontUnpack = true;
-
-  buildPhase = ''
-    cc -O2 -o nuttcp $src
-  '';
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
-    cp nuttcp $out/bin
+    cp nuttcp-${version} $out/bin/nuttcp
+  '';
+
+  postInstall = ''
+    installManPage nuttcp.8
   '';
 
   meta = with lib; {
@@ -43,7 +40,7 @@ stdenv.mkDerivation rec {
       system, and wall-clock time, transmitter and receiver CPU utilization,
       and loss percentage (for UDP transfers).
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "http://nuttcp.net/";
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;

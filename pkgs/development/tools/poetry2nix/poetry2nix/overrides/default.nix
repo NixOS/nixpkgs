@@ -1,7 +1,5 @@
 { pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
-, stdenv ? pkgs.stdenv
-, poetryLib
 }:
 
 let
@@ -384,6 +382,8 @@ lib.composeManyExtensions [
             "38.0.4" = "sha256-BN0kOblUwgHj5QBf52RY2Jx0nBn03lwoN1O5PEohbwY=";
             "39.0.0" = "sha256-clorC0NtGukpE3DnZ84MSdGhJN+qC89DZPITZFuL01Q=";
             "39.0.2" = "sha256-Admz48/GS2t8diz611Ciin1HKQEyMDEwHxTpJ5tZ1ZA=";
+            "40.0.0" = "sha256-/TBANavYria9YrBpMgjtFyqg5feBcloETcYJ8fdBgkI=";
+            "40.0.1" = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
           }.${version} or (
             lib.warn "Unknown cryptography version: '${version}'. Please update getCargoHash." lib.fakeHash
           );
@@ -402,8 +402,11 @@ lib.composeManyExtensions [
                 ++ lib.optionals (lib.versionAtLeast old.version "3.4") [ self.setuptools-rust ]
                 ++ lib.optional (!self.isPyPy) pyBuildPackages.cffi
                 ++ lib.optional (lib.versionAtLeast old.version "3.5" && !isWheel)
-                (with pkgs.rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
+                (with pkgs.rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ])
+                ++ [ pkg-config ]
+              ;
               buildInputs = (old.buildInputs or [ ])
+                ++ [ pkgs.libxcrypt ]
                 ++ [ (if lib.versionAtLeast old.version "37" then pkgs.openssl_3 else pkgs.openssl_1_1) ]
                 ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security pkgs.libiconv ];
               propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [ self.cffi ];
@@ -709,6 +712,8 @@ lib.composeManyExtensions [
             "0.2.4" = "sha256-GdQJvVPsWgC1z7La9h11x2pRAP+L998yImhTFrFT5l8=";
             "0.2.5" = "sha256-vMXMxss77rmXSjoB53eE8XN2jXyIEf03WoQiDfvhDmw=";
             "0.2.6" = "sha256-l9W9+KDg/43mc0toEz1n1pqw+oQdiHdAxGlS+KLIGhw=";
+            "0.3.0" = "sha256-icBjtW8fZjT3mLo43nKWdirMz6GZIy/RghEO95pHJEU=";
+            "0.3.1" = "sha256-EKK+RxkJ//fY43EjvN1Fry7mn2ZLIaNlTyKPJRxyKZs=";
           }.${version};
           sha256 = getRepoHash super.granian.version;
         in
@@ -782,7 +787,7 @@ lib.composeManyExtensions [
               ;
               propagatedBuildInputs =
                 (old.propagatedBuildInputs or [ ])
-                ++ lib.optionals mpiSupport [ self.mpi4py self.openssh ]
+                ++ lib.optionals mpiSupport [ self.mpi4py pkgs.openssh ]
               ;
               preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
               HDF5_DIR = "${pkgs.hdf5}";
@@ -1095,9 +1100,9 @@ lib.composeManyExtensions [
             else if (lib.versionOlder old.version "0.28.0" && lib.versionAtLeast old.version "0.27.0") then
               pkgs.llvmPackages_7.llvm
             else if (lib.versionOlder old.version "0.27.0" && lib.versionAtLeast old.version "0.23.0") then
-              pkgs.llvmPackages_6.llvm
+              pkgs.llvmPackages_6.llvm or throw "LLVM6 has been removed from nixpkgs; upgrade llvmlite or use older nixpkgs"
             else if (lib.versionOlder old.version "0.23.0" && lib.versionAtLeast old.version "0.21.0") then
-              pkgs.llvmPackages_5.llvm
+              pkgs.llvmPackages_5.llvm or throw "LLVM5 has been removed from nixpkgs; upgrade llvmlite or use older nixpkgs"
             else
               pkgs.llvm; # Likely to fail.
         in
@@ -1516,6 +1521,7 @@ lib.composeManyExtensions [
             "3.8.5" = "sha256-JtUCJ3TP9EKGcddeyW1e/72k21uKneq9SnZJeLvn9Os=";
             "3.8.6" = "sha256-8T//q6nQoZhh8oJWDCeQf3gYRew58dXAaxkYELY4CJM=";
             "3.8.7" = "sha256-JBO8nl0sC+XIn17vI7hC8+nA1HYI9jfvZrl9nCE3k1s=";
+            "3.8.8" = "sha256-AK4HtqPKg2O2FeLHCbY9o+N1BV4QFMNaHVE1NaFYHa4=";
           }.${version} or (
             lib.warn "Unknown orjson version: '${version}'. Please update getCargoHash." lib.fakeHash
           );
@@ -2594,6 +2600,7 @@ lib.composeManyExtensions [
         let
           # Watchfiles does not include Cargo.lock in tarball released on PyPi for versions up to 0.17.0
           getRepoHash = version: {
+            "0.19.0" = "sha256-NmmeoaIfFMNKCcjH6tPnkpflkN35bKlT76MqF9W8LBc=";
             "0.18.1" = "sha256-XEhu6M1hFi3/gAKZcei7KJSrIhhlZhlvZvbfyA6VLR4=";
             "0.18.0" = "sha256-biGGn0YAUbSO1hCJ4kU0ZWlqlXl/HRrBS3iIA3myRI8=";
             "0.17.0" = "1swpf265h9qq30cx55iy6jjirba3wml16wzb68k527ynrxr7hvqx";
@@ -2858,12 +2865,20 @@ lib.composeManyExtensions [
         '';
       });
 
-      pyyaml-include = super.pyyaml-include.overridePythonAttrs (old: {
-        SETUPTOOLS_SCM_PRETEND_VERSION = old.version;
-      });
-
       selinux = super.selinux.overridePythonAttrs (old: {
         buildInputs = (old.buildInputs or [ ]) ++ [ self.setuptools-scm-git-archive ];
+      });
+
+      setuptools-scm = super.setuptools-scm.overridePythonAttrs (old: {
+        setupHook = pkgs.writeText "setuptools-scm-setup-hook.sh" ''
+          poetry2nix-setuptools-scm-hook() {
+              if [ -z "''${dontPretendSetuptoolsSCMVersion-}" ]; then
+                export SETUPTOOLS_SCM_PRETEND_VERSION="$version"
+              fi
+          }
+
+          preBuildHooks+=(poetry2nix-setuptools-scm-hook)
+        '';
       });
 
       uwsgi = super.uwsgi.overridePythonAttrs

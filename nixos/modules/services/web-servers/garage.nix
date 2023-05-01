@@ -51,11 +51,11 @@ in
             default = "none";
             type = types.enum ([ "none" "1" "2" "3" 1 2 3 ]);
             apply = v: toString v;
-            description = lib.mdDoc "Garage replication mode, defaults to none, see: <https://garagehq.deuxfleurs.fr/reference_manual/configuration.html#replication_mode> for reference.";
+            description = lib.mdDoc "Garage replication mode, defaults to none, see: <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#replication-mode> for reference.";
           };
         };
       };
-      description = lib.mdDoc "Garage configuration, see <https://garagehq.deuxfleurs.fr/reference_manual/configuration.html> for reference.";
+      description = lib.mdDoc "Garage configuration, see <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/> for reference.";
     };
 
     package = mkOption {
