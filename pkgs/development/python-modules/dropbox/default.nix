@@ -46,6 +46,10 @@ buildPythonPackage rec {
       --replace "'pytest-runner == 5.2.0'," ""
     substituteInPlace test/requirements.txt \
       --replace ">=2.*" ">=2.0"
+    # FIXME: Upstream is slow in fixing this; remove with the next version
+    # https://github.com/dropbox/dropbox-sdk-python/issues/465
+    substituteInPlace dropbox/dropbox_client.py \
+      --replace "__version__ = '0.0.0'" "__version__ = '${version}'"
   '';
 
   doCheck = true;
