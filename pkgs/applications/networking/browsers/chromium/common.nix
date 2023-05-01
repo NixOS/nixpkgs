@@ -129,6 +129,7 @@ let
       python3WithPackages perl
       which
       llvmPackages.bintools
+      bison gperf
     ];
 
     buildInputs = [
@@ -142,7 +143,7 @@ let
       nasm
       nspr nss
       util-linux alsa-lib
-      bison gperf libkrb5
+      libkrb5
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       mesa # required for libgbm
