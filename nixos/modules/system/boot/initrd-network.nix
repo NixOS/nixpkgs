@@ -39,6 +39,7 @@ let
       fi
     '';
 
+  udhcpcHostnameArg = lib.optionalString (cfg.udhcpc.hostName != "") "-x hostname:${cfg.udhcpc.hostName}";
   udhcpcArgs = toString cfg.udhcpc.extraArgs;
 
 in
@@ -76,6 +77,15 @@ in
 
         The default is false when systemd is enabled in initrd,
         because the systemd-networkd documentation suggests it.
+      '';
+    };
+
+    boot.initrd.network.udhcpc.hostName = mkOption {
+      default = config.networking.hostName;
+      defaultText = literalExpression "config.networking.hostName";
+      type = types.str;
+      description = lib.mdDoc ''
+        Hostname to include in the DHCPDISCOVER request (DHCP client option 12).
       '';
     };
 
@@ -133,7 +143,7 @@ in
         # Acquire DHCP leases.
         for iface in ${dhcpIfShellExpr}; do
           echo "acquiring IP address via DHCP on $iface..."
-          udhcpc --quit --now -i $iface -O staticroutes --script ${udhcpcScript} ${udhcpcArgs}
+          udhcpc --quit --now -i $iface -O staticroutes ${udhcpcHostnameArg} --script ${udhcpcScript} ${udhcpcArgs}
         done
       ''
 
