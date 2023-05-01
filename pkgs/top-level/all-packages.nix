@@ -35727,7 +35727,7 @@ with pkgs;
 
   doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
 
-  chocolateDoom = callPackage ../games/doom-ports/chocolate-doom { };
+  chocolate-doom = callPackage ../games/doom-ports/chocolate-doom { };
 
   crispyDoom = callPackage ../games/doom-ports/crispy-doom { };
 
