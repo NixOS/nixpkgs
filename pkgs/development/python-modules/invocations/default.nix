@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "invocations";
-  version = "3.0.1";
+  version = "3.0.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyinvoke";
     repo = pname;
     rev = version;
-    hash = "sha256-G0sl2DCROxlTnW3lWKeGw4qDmnaeRC4xYf27d6YePjE=";
+    hash = "sha256-sXMxTOi0iCz7Zq0lXkpproUtkId5p/GCqP1TvgqYlME=";
   };
 
   postPatch = ''
