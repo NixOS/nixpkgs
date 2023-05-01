@@ -1,104 +1,103 @@
-{ stdenv, lib, fetchurl, rpmextract, autoPatchelfHook, wrapGAppsHook
-
-# Dynamic libraries
-, alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
-, gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
-, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst
-, libxcb, libuuid, libxshmfence, nspr, nss, pango, mesa
-
-, systemd
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, makeDesktopItem
+, copyDesktopItems
+, desktopToDarwinBundle
+, fixup_yarn_lock
+, makeWrapper
+, nodejs
+, yarn
+, electron
 }:
 
 stdenv.mkDerivation rec {
   pname = "drawio";
   version = "21.2.1";
 
-  src = fetchurl {
-    url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/drawio-x86_64-${version}.rpm";
-    sha256 = "sha256-269kMXKGlGig4Dt7cvCTRDGFsBZE5RBoi1ajqT3rIVc=";
+  src = fetchFromGitHub {
+    owner = "jgraph";
+    repo = "drawio-desktop";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-sjJZwVQdFAMWdaGUyQbv1qfdJWE2tN90z7eFYyAW9ko=";
+  };
+
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    hash = "sha256-YlJ84psoEgeDnCX+O8TvwqhTthm5voJ6dfTvTiZlkuk=";
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    rpmextract
-    wrapGAppsHook
-  ];
+    copyDesktopItems
+    fixup_yarn_lock
+    makeWrapper
+    nodejs
+    yarn
+  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
-  buildInputs = [
-    alsa-lib
-    atk
-    at-spi2-atk
-    at-spi2-core
-    cairo
-    cups
-    dbus
-    expat
-    gdk-pixbuf
-    glib
-    gtk3
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libxshmfence
-    libXtst
-    libxcb
-    libuuid
-    mesa # for libgbm
-    nspr
-    nss
-    pango
-    systemd
-  ];
+  ELECTRON_SKIP_BINARY_DOWNLOAD = true;
 
-  runtimeDependencies = [
-    (lib.getLib systemd)
-  ];
+  configurePhase = ''
+    runHook preConfigure
 
-  dontBuild = true;
-  dontConfigure = true;
+    export HOME="$TMPDIR"
+    yarn config --offline set yarn-offline-mirror "$offlineCache"
+    fixup_yarn_lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules/
 
-  unpackPhase = "rpmextract ${src}";
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn --offline run electron-builder --dir \
+      --config electron-builder-linux-mac.json \
+      -c.electronDist=${electron}/lib/electron \
+      -c.electronVersion=${electron.version}
+
+    runHook postBuild
+  '';
 
   installPhase = ''
-    mkdir -p $out/share
-    cp -r opt/drawio $out/share/
+    runHook preInstall
 
-    # Application icon
-    mkdir -p $out/share/icons/hicolor
-    cp -r usr/share/icons/hicolor/* $out/share/icons/hicolor/
+    mkdir -p "$out/share/lib/drawio"
+    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/drawio"
 
-    # XDG desktop item
-    cp -r usr/share/applications $out/share/applications
+    install -Dm644 build/icon.svg "$out/share/icons/hicolor/scalable/apps/drawio.svg"
 
-    # Symlink wrapper
-    mkdir -p $out/bin
-    ln -s $out/share/drawio/drawio $out/bin/drawio
+    makeWrapper '${electron}/bin/electron' "$out/bin/drawio" \
+      --add-flags "$out/share/lib/drawio/resources/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --inherit-argv0
 
-    # Update binary path
-    substituteInPlace $out/share/applications/drawio.desktop \
-      --replace /opt/drawio/drawio $out/bin/drawio
+    runHook postInstall
   '';
 
-  doInstallCheckPhase = true;
-
-  installCheckPhase = ''
-    $out/bin/drawio --help > /dev/null
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      name = "drawio";
+      exec = "drawio %U";
+      icon = "drawio";
+      desktopName = "drawio";
+      comment = "draw.io desktop";
+      mimeTypes = [ "application/vnd.jgraph.mxfile" "application/vnd.visio" ];
+      categories = [ "Graphics" ];
+      startupWMClass = "drawio";
+    })
+  ];
 
   meta = with lib; {
     description = "A desktop application for creating diagrams";
     homepage = "https://about.draw.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ darkonion0 ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ qyliss darkonion0 ];
+    platforms = platforms.darwin ++ platforms.linux;
+    broken = stdenv.isDarwin;
   };
 }
