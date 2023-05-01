@@ -117,6 +117,7 @@ in stdenv.mkDerivation {
     hash = "sha256-SOoLaV7wg33qRHPQXkdMvrY++CvoG85kwd6IU6DkYa0=";
   };
 
+  outputs = [ "out" "sdk" ];
 
   postPatch = ''
     # We have to be careful - Patching everything indiscriminately
@@ -169,6 +170,39 @@ in stdenv.mkDerivation {
 
   # Breaks shebangs of Darwin scripts
   dontPatchShebangs = true;
+
+  postInstall = ''
+    # Install the SDK as a separate output
+    mkdir -p $sdk
+
+    sdkDir=$(readlink -f ../Developer)
+
+    while read -r path; do
+      dst="$sdk/Developer/''${path#$sdkDir}"
+
+      if [[ -L "$path" ]]; then
+        target=$(readlink -m "$path")
+        if [[ -e "$target" && "$target" == "$NIX_BUILD_TOP"* && "$target" != "$sdkDir"* ]]; then
+          # dereference
+          cp -r -L "$path" "$dst"
+        elif [[ -e "$target" ]]; then
+          # preserve symlink
+          cp -d "$path" "$dst"
+        else
+          # ignore symlink
+          >&2 echo "Ignoring symlink $path -> $target"
+        fi
+      elif [[ -f $path ]]; then
+        cp "$path" "$dst"
+      elif [[ -d $path ]]; then
+        mkdir -p "$dst"
+      fi
+    done < <(find $sdkDir)
+
+    mkdir -p $sdk/bin
+    cp src/external/cctools-port/cctools/ld64/src/*-ld $sdk/bin
+    cp src/external/cctools-port/cctools/ar/*-{ar,ranlib} $sdk/bin
+  '';
 
   postFixup = ''
     echo "Checking for references to $NIX_STORE in Darling root..."
