@@ -35665,8 +35665,6 @@ with pkgs;
 
   drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
 
-  eureka-editor = callPackage ../applications/misc/eureka-editor { };
-
   eureka-ideas = callPackage ../applications/misc/eureka-ideas {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -35746,6 +35744,8 @@ with pkgs;
   chocolateDoom = callPackage ../games/doom-ports/chocolate-doom { };
 
   crispyDoom = callPackage ../games/doom-ports/crispy-doom { };
+
+  eureka-editor = callPackage ../games/doom-ports/eureka-editor { };
 
   enyo-launcher = libsForQt5.callPackage ../games/doom-ports/enyo-launcher { };
 
