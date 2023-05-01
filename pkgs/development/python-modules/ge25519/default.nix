@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "ge25519";
-  version = "1.4.0";
+  version = "1.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QDVhvOyTRwOgB9rCpLTpM4floLKa43hAxS2L0h4+HTU=";
+    hash = "sha256-oOvrfRSpvwfCcmpV7FOxcBOW8Ex89d2+otjORrzX4o0=";
   };
 
   nativeBuildInputs = [

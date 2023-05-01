@@ -21,8 +21,8 @@ let
     avalon = fetchFromGitHub {
       owner = "rohdebe1";
       repo = "ava-formake";
-      rev = "AvalonToolkit_2.0.2";
-      hash = "sha256-YI39OknHiSyArNGqRKrSVzEJnFc1xJ0W3UcTZrTKeME=";
+      rev = "AvalonToolkit_2.0.4a";
+      hash = "sha256-ZyhrDBBv9XuXe1NY/Djiad86tGIJwCSTrxEMICHgSqk=";
     };
     yaehmop = fetchFromGitHub {
       owner = "greglandrum";
@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2022.09.5";
+  version = "2023.03.1";
   format = "other";
 
   src =
@@ -51,7 +51,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      hash = "sha256-zsiH4gNCAeXDLjHhDsKwZMkTvVCWG9LwAaEKNOuqV2Q=";
+      hash = "sha256-hiDaPWDAWzALRf3+SAfzghu2K706rcajeZ69tMFplhU=";
     };
 
   unpackPhase = ''
