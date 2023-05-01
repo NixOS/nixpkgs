@@ -35709,8 +35709,6 @@ with pkgs;
 
   colobot = callPackage ../games/colobot { };
 
-  doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
-
   enigma = callPackage ../games/enigma { };
 
   everspace = callPackage ../games/everspace { };
@@ -35766,6 +35764,12 @@ with pkgs;
   };
 
   fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
+
+  doom-bcc = callPackage ../games/doom-ports/zdoom/bcc-git.nix { };
+
+  zdbsp = callPackage ../games/doom-ports/zdoom/zdbsp.nix { };
+
+  zdoom = callPackage ../games/doom-ports/zdoom { };
 
   ### GAMES/LGAMES
 
@@ -36934,10 +36938,6 @@ with pkgs;
     yquake2-all-games;
 
   zaz = callPackage ../games/zaz { };
-
-  zdbsp = callPackage ../games/zdoom/zdbsp.nix { };
-
-  zdoom = callPackage ../games/zdoom { };
 
   zod = callPackage ../games/zod { };
 
