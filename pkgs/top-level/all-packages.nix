@@ -6852,8 +6852,6 @@ with pkgs;
 
   domoticz = callPackage ../servers/domoticz { };
 
-  doomseeker = qt5.callPackage ../applications/misc/doomseeker { };
-
   dorkscout = callPackage ../tools/security/dorkscout { };
 
   downonspot = callPackage ../applications/misc/downonspot { };
@@ -35744,6 +35742,10 @@ with pkgs;
   keeperrl = callPackage ../games/keeperrl { };
 
   rbdoom-3-bfg = callPackage ../games/rbdoom-3-bfg { };
+
+  ### GAMES/DOOM-PORTS
+
+  doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
 
   ### GAMES/LGAMES
 
