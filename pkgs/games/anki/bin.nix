@@ -3,22 +3,22 @@
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "2.1.61";
+  version = "2.1.62";
 
   sources = {
     linux = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
-      sha256 = "sha256-f+PneP2vB7HFxI3mvkrm/kyvdBZgKbu5pYPUNR5XEO4=";
+      sha256 = "sha256-vsuR+pDqjPGejlxrDPCxKVnvTilRDGGhMDDKSQhVxVQ=";
     };
 
     # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
     darwin-x86_64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel-qt6.dmg";
-      sha256 = "sha256-BctUHyy0U1frXRgZ3y8cpiWGnTm8XZdL018RjzhaJDg=";
+      sha256 = "sha256-8TMdNEnnlDQrk+TVlsmvFxoqrsCU2BRY6hnaC3PGdYo=";
     };
     darwin-aarch64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple-qt6.dmg";
-      sha256 = "sha256-lZ4HoVqbIouTmHkxV51mNI5EAfGJd3UmNG5Lqeiu0ys=";
+      sha256 = "sha256-zdrw3AE1ijlJryGf30YLr71TtoT6ANHvi+1BweZiFM8=";
     };
   };
 
