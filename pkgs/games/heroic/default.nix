@@ -10,13 +10,13 @@
 
 mkYarnPackage rec {
   pname = "heroic-unwrapped";
-  version = "2.6.2";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    sha256 = "sha256-QXciJkY5l5Oqzgnj9vV5IwOSUtVeLMH29r2EIQVt2LI=";
+    sha256 = "sha256-l2eVLn1N+1nGxr8Oa2ecQgBmO0w/VJ8AY06GYQ0HiiI=";
   };
 
   packageJSON = ./package.json;
@@ -68,6 +68,7 @@ mkYarnPackage rec {
   meta = with lib; {
     description = "A Native GOG and Epic Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
+    changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aidalgol ];
     platforms = [ "x86_64-linux" ];
