@@ -9306,6 +9306,18 @@ final: prev:
     meta.homepage = "https://github.com/leafgarland/typescript-vim/";
   };
 
+  typescript-nvim = buildVimPluginFrom2Nix {
+    pname = "typescript.nvim";
+    version = "2023-01-03";
+    src = fetchFromGitHub {
+      owner = "jose-elias-alvarez";
+      repo = "typescript.nvim";
+      rev = "f66d4472606cb24615dfb7dbc6557e779d177624";
+      sha256 = "1hm87jpscv250x8hv3vacw0sdhkwa81x21cxyvc6nf2vsbj5hx9w";
+    };
+    meta.homepage = "https://github.com/jose-elias-alvarez/typescript.nvim/";
+  };
+
   ultisnips = buildVimPluginFrom2Nix {
     pname = "ultisnips";
     version = "2023-02-01";
@@ -14614,18 +14626,6 @@ final: prev:
       sha256 = "0gbnwf535mk29yhn39sdy9bifzk2y8x6ldkybn8l3pwjrlr42cks";
     };
     meta.homepage = "https://github.com/nanotee/zoxide.vim/";
-  };
-
-  typescript-nvim = buildVimPluginFrom2Nix {
-    pname = "typescript.nvim";
-    version = "2023-01-03";
-    src = fetchFromGitHub {
-      owner = "jose-elias-alvarez";
-      repo = "typescript.nvim";
-      rev = "f66d4472606cb24615dfb7dbc6557e779d177624";
-      sha256 = "1hm87jpscv250x8hv3vacw0sdhkwa81x21cxyvc6nf2vsbj5hx9w";
-    };
-    meta.homepage = "https://github.com/jose-elias-alvarez/typescript.nvim/";
   };
 
   catppuccin-nvim = buildVimPluginFrom2Nix {
