@@ -9,12 +9,14 @@
 
 { lib
 , runCommand
+, callPackage
 , fetchurl
 , mes
 , mes-libc
-, buildTinyccN
 }:
 let
+  inherit (callPackage ./common.nix { }) buildTinyccMes;
+
   version = "unstable-2023-04-20";
   rev = "80114c4da6b17fbaabb399cc29f427e368309bc8";
 
@@ -85,7 +87,7 @@ let
   # Bootstrap stage build flags obtained from
   # https://gitlab.com/janneke/tinycc/-/blob/80114c4da6b17fbaabb399cc29f427e368309bc8/boot.sh
 
-  tinycc-boot0 = buildTinyccN {
+  tinycc-boot0 = buildTinyccMes {
     pname = "tinycc-boot0";
     inherit src version meta;
     prev = tinycc-boot-mes;
@@ -98,7 +100,7 @@ let
     ];
   };
 
-  tinycc-boot1 = buildTinyccN {
+  tinycc-boot1 = buildTinyccMes {
     pname = "tinycc-boot1";
     inherit src version meta;
     prev = tinycc-boot0;
@@ -112,7 +114,7 @@ let
     ];
   };
 
-  tinycc-boot2 = buildTinyccN {
+  tinycc-boot2 = buildTinyccMes {
     pname = "tinycc-boot2";
     inherit src version meta;
     prev = tinycc-boot1;
@@ -128,7 +130,7 @@ let
     ];
   };
 
-  tinycc-boot3 = buildTinyccN {
+  tinycc-boot3 = buildTinyccMes {
     pname = "tinycc-boot3";
     inherit src version meta;
     prev = tinycc-boot2;
@@ -143,21 +145,19 @@ let
       "-D HAVE_LONG_LONG=1"
     ];
   };
-
-  tinycc-bootstrappable = buildTinyccN {
-    pname = "tinycc-bootstrappable";
-    inherit src version meta;
-    prev = tinycc-boot3;
-    buildOptions = [
-      "-D HAVE_BITFIELD=1"
-      "-D HAVE_FLOAT=1"
-      "-D HAVE_LONG_LONG=1"
-      "-D HAVE_SETJMP=1"
-    ];
-    libtccBuildOptions = [
-      "-D HAVE_FLOAT=1"
-      "-D HAVE_LONG_LONG=1"
-    ];
-  };
 in
-tinycc-bootstrappable
+buildTinyccMes {
+  pname = "tinycc-bootstrappable";
+  inherit src version meta;
+  prev = tinycc-boot3;
+  buildOptions = [
+    "-D HAVE_BITFIELD=1"
+    "-D HAVE_FLOAT=1"
+    "-D HAVE_LONG_LONG=1"
+    "-D HAVE_SETJMP=1"
+  ];
+  libtccBuildOptions = [
+    "-D HAVE_FLOAT=1"
+    "-D HAVE_LONG_LONG=1"
+  ];
+}

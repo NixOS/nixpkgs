@@ -17,5 +17,6 @@ lib.makeScope newScope (self: with self; {
 
   ln-boot = callPackage ./ln-boot { };
 
-  tinycc-mes = callPackage ./tinycc/default.nix { };
+  tinycc-bootstrappable = callPackage ./tinycc/bootstrappable.nix { };
+  tinycc-mes = callPackage ./tinycc/mes.nix { };
 })
