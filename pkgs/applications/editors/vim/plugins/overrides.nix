@@ -642,6 +642,25 @@ self: super: {
     doInstallCheck = true;
     installCheckPhase = ''
       node $out/app/index.js --version
+
+      # check for required app/node_modules deps
+      deps=(
+          "log4js"
+          "@chemzqm/neovim"
+          "socket.io"
+          "tslib"
+      )
+
+      for dep in ''${deps[@]}; do
+        nodeDep="$out/app/node_modules/$dep"
+        if [ ! -d "$nodeDep" ]
+        then
+          echo "$nodeDep is missing"
+          exit 1
+        else
+          echo "$nodeDep exists"
+        fi
+      done
     '';
   });
 
