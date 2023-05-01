@@ -39798,6 +39798,8 @@ with pkgs;
 
   sequelpro = callPackage ../applications/misc/sequelpro { };
 
+  serial-studio = libsForQt5.callPackage ../applications/misc/serial-studio { };
+
   snowsql = callPackage ../applications/misc/snowsql { };
 
   snowmachine = python3Packages.callPackage ../applications/misc/snowmachine { };
