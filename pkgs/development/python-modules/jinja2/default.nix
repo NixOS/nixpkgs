@@ -39,6 +39,22 @@ buildPythonPackage rec {
     sphinx-issues
   ];
 
+  # sphinx brings version of jinja2 with "enableDocumentation = false", so pip
+  # deduces it has nothing to do, jinja2 is already installed, so $out ends up
+  # without any python files.
+  #
+  # I can't use --force-uninstall, since then pip will try to uninstall jinja2
+  # coming from sphinx, and will get permission denied. I found no way to hide
+  # that other jinja2 from pip other than manipulate PYTHONPATH.
+  preInstall = lib.optionalString enableDocumentation ''
+    _saved_PYTHONPATH=$PYTHONPATH
+    PYTHONPATH=$(echo $PYTHONPATH | tr ':' '\n'| grep -iv jinja2 | tr '\n' ':')
+  '';
+
+  postInstall = lib.optionalString enableDocumentation ''
+    PYTHONPATH=$_saved_PYTHONPATH
+  '';
+
   # Multiple tests run out of stack space on 32bit systems with python2.
   # See https://github.com/pallets/jinja/issues/1158
   doCheck = !stdenv.is32bit;
