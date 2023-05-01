@@ -1,12 +1,14 @@
 { lib
 , python3
-, fetchurl
+, fetchFromGitHub
+, fetchYarnDeps
 , zlib
-, mkYarnModules
 , nixosTests
-, pkgs
 , postgresqlTestHook
 , postgresql
+, yarn
+, fixup_yarn_lock
+, nodejs
 , server-mode ? true
 }:
 
@@ -14,24 +16,21 @@ let
   pname = "pgadmin";
   version = "7.0";
 
-  src = fetchurl {
-    url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    hash = "sha256-iYsICW9aTG47eWB0g3MlWo5F1BStQLiM84+qxFq7G70=";
+  src = fetchFromGitHub {
+    owner = "pgadmin-org";
+    repo = "pgadmin4";
+    rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
+    hash = "sha256-m2mO37qNjrznpdKeFHq6yE8cZx4sHBvPB2RHUtS1Uis=";
   };
-
-  yarnDeps = mkYarnModules {
-    pname = "${pname}-yarn-deps";
-    inherit version;
-    packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
-  };
-
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
-  pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-  });
+  pythonPackages = python3.pkgs.overrideScope (final: prev: rec { });
+
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/web/yarn.lock";
+    hash = "sha256-cnn7CJcnT+TUeeZoeJVX3bO85vuJmVrO7CPR/CYTCS0=";
+  };
 
 in
 
@@ -81,14 +80,12 @@ pythonPackages.buildPythonApplication rec {
     echo Creating required directories...
     mkdir -p pip-build/pgadmin4/docs
 
-    # build the documentation
+    echo Building the documentation
     cd docs/en_US
     sphinx-build -W -b html -d _build/doctrees . _build/html
 
     # Build the clean tree
-    cd ../../web
-    cp -r * ../pip-build/pgadmin4
-    cd ../docs
+    cd ..
     cp -r * ../pip-build/pgadmin4/docs
     for DIR in `ls -d ??_??/`
     do
@@ -99,7 +96,20 @@ pythonPackages.buildPythonApplication rec {
     done
     cd ../
 
-    cp -r ${yarnDeps}/* pip-build/pgadmin4
+    # mkYarnModules and mkYarnPackage have problems running the webpacker
+    echo Building the web frontend...
+    cd web
+    export HOME="$TMPDIR"
+    yarn config --offline set yarn-offline-mirror "${offlineCache}"
+    fixup_yarn_lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules/
+    yarn webpacker
+    cp -r * ../pip-build/pgadmin4
+    # save some disk space
+    rm -rf ../pip-build/pgadmin4/node_modules
+
+    cd ..
 
     echo Creating distro config...
     echo HELP_PATH = \'../../docs/en_US/_build/html/\' > pip-build/pgadmin4/config_distro.py
@@ -115,7 +125,7 @@ pythonPackages.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = with pythonPackages; [ cython pip sphinx ];
+  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn fixup_yarn_lock nodejs ];
   buildInputs = [
     zlib
     pythonPackages.wheel
