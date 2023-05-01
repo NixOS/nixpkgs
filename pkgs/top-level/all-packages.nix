@@ -35749,6 +35749,8 @@ with pkgs;
 
   chocolateDoom = callPackage ../games/doom-ports/chocolate-doom { };
 
+  crispyDoom = callPackage ../games/doom-ports/crispy-doom { };
+
   ### GAMES/LGAMES
 
   barrage = callPackage ../games/lgames/barrage { };
@@ -35929,8 +35931,6 @@ with pkgs;
   clonehero-unwrapped = callPackage ../games/clonehero { };
 
   clonehero = callPackage ../games/clonehero/fhs-wrapper.nix { };
-
-  crispyDoom = callPackage ../games/crispy-doom { };
 
   vintagestory = callPackage ../games/vintagestory { };
 
