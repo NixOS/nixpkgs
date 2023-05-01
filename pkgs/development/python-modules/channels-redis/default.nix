@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django";
     repo = "channels_redis";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-Eid9aWlLNnqr3WAnsLe+Pz9gsugCsdDKi0+nFNF02CI=";
   };
 
@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Redis-backed ASGI channel layer implementation";
     homepage = "https://github.com/django/channels_redis/";
+    changelog = "https://github.com/django/channels_redis/blob/${version}/CHANGELOG.txt";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];
   };
