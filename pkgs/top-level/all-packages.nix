@@ -35755,6 +35755,8 @@ with pkgs;
 
   eternity = callPackage ../games/doom-ports/eternity-engine { };
 
+  gzdoom = callPackage ../games/doom-ports/gzdoom { };
+
   ### GAMES/LGAMES
 
   barrage = callPackage ../games/lgames/barrage { };
@@ -36194,8 +36196,6 @@ with pkgs;
   gtypist = callPackage ../games/gtypist { };
 
   gweled = callPackage ../games/gweled { };
-
-  gzdoom = callPackage ../games/gzdoom { };
 
   harmonist = callPackage ../games/harmonist { };
 
