@@ -35751,6 +35751,8 @@ with pkgs;
 
   crispyDoom = callPackage ../games/doom-ports/crispy-doom { };
 
+  enyo-launcher = libsForQt5.callPackage ../games/doom-ports/enyo-launcher { };
+
   ### GAMES/LGAMES
 
   barrage = callPackage ../games/lgames/barrage { };
@@ -36036,8 +36038,6 @@ with pkgs;
   endgame-singularity = callPackage ../games/endgame-singularity { };
 
   endless-sky = callPackage ../games/endless-sky { };
-
-  enyo-launcher = libsForQt5.callPackage ../games/enyo-launcher { };
 
   eternity = callPackage ../games/eternity-engine { };
 
