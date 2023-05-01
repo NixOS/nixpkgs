@@ -223,6 +223,7 @@ mapAliases ({
   cpp-ipfs-api = cpp-ipfs-http-client; # Project has been renamed. Added 2022-05-15
   cratesIO = throw "cratesIO has been removed, use alternatives such as naersk and crate2nix instead"; # Added 2022-11-22
   creddump = throw "creddump has been removed from nixpkgs as the upstream has abandoned the project"; # Added 2022-01-01
+  crispyDoom = crispy-doom; # Added 2023-05-01
 
   # these are for convenience, not for backward compat and shouldn't expire
   clang5Stdenv = lowPrio llvmPackages_5.stdenv;

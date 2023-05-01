@@ -35729,7 +35729,7 @@ with pkgs;
 
   chocolate-doom = callPackage ../games/doom-ports/chocolate-doom { };
 
-  crispyDoom = callPackage ../games/doom-ports/crispy-doom { };
+  crispy-doom = callPackage ../games/doom-ports/crispy-doom { };
 
   eureka-editor = callPackage ../games/doom-ports/eureka-editor { };
 
