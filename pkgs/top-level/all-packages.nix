@@ -12992,6 +12992,8 @@ with pkgs;
 
   tran = callPackage ../tools/networking/tran { };
 
+  trayscale = callPackage ../applications/networking/trayscale { };
+
   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
   tpm-quote-tools = callPackage ../tools/security/tpm-quote-tools { };
