@@ -35759,6 +35759,8 @@ with pkgs;
 
   odamex = callPackage ../games/doom-ports/odamex { };
 
+  prboom-plus = callPackage ../games/doom-ports/prboom-plus { };
+
   ### GAMES/LGAMES
 
   barrage = callPackage ../games/lgames/barrage { };
@@ -36506,8 +36508,6 @@ with pkgs;
   pokete = callPackage ../games/pokete { };
 
   powermanga = callPackage ../games/powermanga { };
-
-  prboom-plus = callPackage ../games/prboom-plus { };
 
   pysolfc = python3Packages.callPackage ../games/pysolfc { };
 
