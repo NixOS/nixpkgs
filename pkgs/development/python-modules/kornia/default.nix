@@ -11,6 +11,7 @@ buildPythonPackage rec {
   pname = "kornia";
   version = "0.6.12";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -47,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://kornia.github.io/kornia";
+    changelog = "https://github.com/kornia/kornia/releases/tag/v${version}";
     description = "Differentiable computer vision library";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
