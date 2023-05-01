@@ -1,4 +1,12 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, systemd, nixosTests }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, grafana-agent
+, nixosTests
+, stdenv
+, systemd
+, testers
+}:
 
 buildGoModule rec {
   pname = "grafana-agent";
@@ -50,7 +58,14 @@ buildGoModule rec {
       $out/bin/grafana-agent
   '';
 
-  passthru.tests.grafana-agent = nixosTests.grafana-agent;
+  passthru.tests = {
+    inherit (nixosTests) grafana-agent;
+    version = testers.testVersion {
+      inherit version;
+      command = "${lib.getExe grafana-agent} --version";
+      package = grafana-agent;
+    };
+  };
 
   meta = with lib; {
     description = "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";
