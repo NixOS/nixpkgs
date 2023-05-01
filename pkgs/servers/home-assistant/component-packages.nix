@@ -1008,7 +1008,8 @@
     "etherscan" = ps: with ps; [
     ]; # missing inputs: python-etherscan-api
     "eufy" = ps: with ps; [
-    ]; # missing inputs: lakeside
+      lakeside
+    ];
     "eufylife_ble" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -1821,7 +1822,8 @@
     "kankun" = ps: with ps; [
     ];
     "keba" = ps: with ps; [
-    ]; # missing inputs: keba-kecontact
+      keba-kecontact
+    ];
     "keenetic_ndms2" = ps: with ps; [
       ndms2-client
     ];
@@ -1961,11 +1963,12 @@
       esphome-dashboard-api
       fnvhash
       ifaddr
+      ld2410-ble
       pyserial
       pyudev
       sqlalchemy
       zeroconf
-    ]; # missing inputs: ld2410-ble
+    ];
     "led_ble" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -4680,6 +4683,7 @@
     "launch_library"
     "laundrify"
     "lcn"
+    "ld2410_ble"
     "led_ble"
     "lg_soundbar"
     "lidarr"
