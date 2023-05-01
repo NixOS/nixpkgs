@@ -55,7 +55,7 @@ let
     in
       lib.warnIfNot
         isDrv
-        "Calling hasPythonModule with a ${builtins.typeOf drv} instead of a deprecation is deprecated"
+        "Calling hasPythonModule with a ${builtins.typeOf drv} instead of a derivation is not supported"
         result;
 
   # Get list of required Python modules given a list of derivations.
