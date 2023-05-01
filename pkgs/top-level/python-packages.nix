@@ -8359,6 +8359,8 @@ self: super: with self; {
 
   pyfttt = callPackage ../development/python-modules/pyfttt { };
 
+  pyfume = callPackage ../development/python-modules/pyfume { };
+
   pyfuse3 = callPackage ../development/python-modules/pyfuse3 { };
 
   pyfxa = callPackage ../development/python-modules/pyfxa { };
