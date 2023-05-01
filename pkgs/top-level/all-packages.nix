@@ -35741,8 +35741,6 @@ with pkgs;
 
   keeperrl = callPackage ../games/keeperrl { };
 
-  rbdoom-3-bfg = callPackage ../games/rbdoom-3-bfg { };
-
   ### GAMES/DOOM-PORTS
 
   doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
@@ -35760,6 +35758,8 @@ with pkgs;
   odamex = callPackage ../games/doom-ports/odamex { };
 
   prboom-plus = callPackage ../games/doom-ports/prboom-plus { };
+
+  rbdoom-3-bfg = callPackage ../games/doom-ports/rbdoom-3-bfg { };
 
   ### GAMES/LGAMES
 
