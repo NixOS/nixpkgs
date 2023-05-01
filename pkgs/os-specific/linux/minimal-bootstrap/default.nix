@@ -15,5 +15,7 @@ lib.makeScope newScope (self: with self; {
   nyacc = callPackage ./mes/nyacc.nix { };
   mes = callPackage ./mes { };
 
+  ln-boot = callPackage ./ln-boot { };
+
   tinycc-with-mes-libc = callPackage ./tinycc/default.nix { };
 })
