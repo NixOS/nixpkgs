@@ -177,5 +177,28 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ cpcloud ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    knownVulnerabilities = [
+      # at least some of
+      "CVE-2023-27579"
+      "CVE-2023-25801"
+      "CVE-2023-25676"
+      "CVE-2023-25675"
+      "CVE-2023-25674"
+      "CVE-2023-25673"
+      "CVE-2023-25671"
+      "CVE-2023-25670"
+      "CVE-2023-25669"
+      "CVE-2023-25668"
+      "CVE-2023-25667"
+      "CVE-2023-25665"
+      "CVE-2023-25666"
+      "CVE-2023-25664"
+      "CVE-2023-25663"
+      "CVE-2023-25662"
+      "CVE-2023-25660"
+      "CVE-2023-25659"
+      "CVE-2023-25658"
+      # and many many more
+    ];
   };
 }
