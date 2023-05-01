@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGDCM_BUILD_APPLICATIONS=ON"
     "-DGDCM_BUILD_SHARED_LIBS=ON"
+    "-DGDCM_BUILD_TESTING=ON"
     # hack around usual "`RUNTIME_DESTINATION` must not be an absolute path" issue:
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -46,6 +47,28 @@ stdenv.mkDerivation rec {
     Cocoa
     libiconv
   ] ++ lib.optionals enablePython [ swig python ];
+
+  disabledTests = [
+    # require networking:
+    "TestEcho"
+    "TestFind"
+    "gdcmscu-echo-dicomserver"
+    "gdcmscu-find-dicomserver"
+    # seemingly ought to be be disabled when the test data submodule is not present:
+    "TestvtkGDCMImageReader2_3"
+    "TestSCUValidation"
+    # errors because 3 classes not wrapped:
+    "TestWrapPython"
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    ctest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+    runHook postCheck
+  '';
+  doCheck = true;
+  # note that when the test data is available to the build via `fetchSubmodules = true`,
+  # a number of additional but much slower tests are enabled
 
   meta = with lib; {
     description = "The grassroots cross-platform DICOM implementation";

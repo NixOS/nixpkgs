@@ -5,11 +5,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shell_gpt";
-  version = "0.8.8";
+  version = "0.9.0";
+  format = "pyproject";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KuaSAiXlqWRhFtX4C6vibbUiq43L83pZX+yM9L7Ej68=";
+    sha256 = "sha256-KzW9yI1TGG2hFKeXHFqqYCLw/PB9+lJoTgyWrXxCHpo=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -24,6 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     distro
     typer
     requests
+    hatchling
   ];
 
   pythonRelaxDeps = [ "requests" "rich" "distro" "typer" ];

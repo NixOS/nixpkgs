@@ -56,7 +56,7 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
-    disableBootstrap = !stdenv.hostPlatform.isDarwin;
+    disableBootstrap = !stdenv.hostPlatform.isDarwin && !profiledCompiler;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -288,6 +288,8 @@ lib.pipe (stdenv.mkDerivation ({
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
   buildFlags =
+    # we do not yet have Nix-driven profiling
+    assert profiledCompiler -> !disableBootstrap;
     let target =
           lib.optionalString (profiledCompiler) "profiled" +
           lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";

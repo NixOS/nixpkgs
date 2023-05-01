@@ -3768,6 +3768,8 @@ self: super: with self; {
 
   fsspec = callPackage ../development/python-modules/fsspec { };
 
+  fst-pso = callPackage ../development/python-modules/fst-pso { };
+
   ftfy = callPackage ../development/python-modules/ftfy { };
 
   ftputil = callPackage ../development/python-modules/ftputil { };
@@ -6111,6 +6113,8 @@ self: super: with self; {
   minidb = callPackage ../development/python-modules/minidb { };
 
   minidump = callPackage ../development/python-modules/minidump { };
+
+  miniful = callPackage ../development/python-modules/miniful { };
 
   minikanren = callPackage ../development/python-modules/minikanren { };
 
@@ -10930,6 +10934,8 @@ self: super: with self; {
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server { };
 
   simplisafe-python = callPackage ../development/python-modules/simplisafe-python { };
+
+  simpful = callPackage ../development/python-modules/simpful { };
 
   simpy = callPackage ../development/python-modules/simpy { };
 
