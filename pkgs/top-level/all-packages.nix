@@ -35747,6 +35747,8 @@ with pkgs;
 
   doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
 
+  chocolateDoom = callPackage ../games/doom-ports/chocolate-doom { };
+
   ### GAMES/LGAMES
 
   barrage = callPackage ../games/lgames/barrage { };
@@ -35923,8 +35925,6 @@ with pkgs;
   chiaki = libsForQt5.callPackage ../games/chiaki { };
 
   chromium-bsu = callPackage ../games/chromium-bsu { };
-
-  chocolateDoom = callPackage ../games/chocolate-doom { };
 
   clonehero-unwrapped = callPackage ../games/clonehero { };
 
