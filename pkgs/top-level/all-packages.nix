@@ -35757,6 +35757,8 @@ with pkgs;
 
   gzdoom = callPackage ../games/doom-ports/gzdoom { };
 
+  odamex = callPackage ../games/doom-ports/odamex { };
+
   ### GAMES/LGAMES
 
   barrage = callPackage ../games/lgames/barrage { };
@@ -36394,8 +36396,6 @@ with pkgs;
   nudoku = callPackage ../games/nudoku { };
 
   nxengine-evo = callPackage ../games/nxengine-evo { };
-
-  odamex = callPackage ../games/odamex { };
 
   oilrush = callPackage ../games/oilrush { };
 
