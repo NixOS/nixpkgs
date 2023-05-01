@@ -14,7 +14,7 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2022";
+  year = toString ((import ./tlpdb.nix)."00texlive.config").year;
   version = year; # keep names simple for now
 
   common = {

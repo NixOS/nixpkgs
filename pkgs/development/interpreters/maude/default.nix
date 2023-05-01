@@ -3,14 +3,7 @@
 }:
 
 let
-
   version = "3.3.1";
-
-  fullMaude = fetchurl {
-    url = "https://maude.cs.illinois.edu/w/images/b/bc/Full-Maude-3.2.1.zip";
-    sha256 = "0751b3c4619283b3f0adf1c3aac113f1d4334a3ca859ed00d66de5f5857563ec";
-  };
-
 in
 
 stdenv.mkDerivation {
@@ -51,8 +44,6 @@ stdenv.mkDerivation {
 
   postInstall = ''
     for n in "$out/bin/"*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
-    unzip ${fullMaude}
-    install -D -m 444 full-maude.maude $out/share/maude/full-maude.maude
   '';
 
   enableParallelBuilding = true;
