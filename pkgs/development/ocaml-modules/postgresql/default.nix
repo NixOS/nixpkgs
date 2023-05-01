@@ -18,7 +18,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ postgresql ];
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ postgresql ];
-  
+
   meta = {
     description = "Bindings to the PostgreSQL library";
     license = lib.licenses.lgpl21Plus;
