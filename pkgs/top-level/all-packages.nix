@@ -13845,6 +13845,8 @@ with pkgs;
 
   vpn-slice = python3Packages.callPackage ../tools/networking/vpn-slice { };
 
+  vpuppr = callPackage ../applications/graphics/vpuppr { };
+
   vp = callPackage ../applications/misc/vp {
     # Enable next line for console graphics. Note that
     # it requires `sixel` enabled terminals such as mlterm
