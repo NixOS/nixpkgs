@@ -33702,8 +33702,6 @@ with pkgs;
 
   shadowfox = callPackage ../tools/networking/shadowfox { };
 
-  shavee = callPackage ../applications/misc/shavee { };
-
   shell_gpt = callPackage ../tools/misc/shell_gpt { };
 
   shfmt = callPackage ../tools/text/shfmt { };
@@ -35758,6 +35756,8 @@ with pkgs;
   prboom-plus = callPackage ../games/doom-ports/prboom-plus { };
 
   rbdoom-3-bfg = callPackage ../games/doom-ports/rbdoom-3-bfg { };
+
+  shavee = callPackage ../games/doom-ports/shavee { };
 
   zandronum = callPackage ../games/doom-ports/zandronum { };
 
