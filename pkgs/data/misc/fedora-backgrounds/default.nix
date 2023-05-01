@@ -56,4 +56,12 @@ in {
       hash = "sha256-bkjxJDDU0dZURKIK1sd+EOnPt9vvJ5HqHkc6OhPBBn0=";
     };
   };
+
+  f38 = fedoraBackground rec {
+    version = "38.1.1";
+    src = fetchurl {
+      url = "https://github.com/fedoradesign/backgrounds/releases/download/v${version}/f${lib.versions.major version}-backgrounds-${version}.tar.xz";
+      hash = "sha256-YSNP7GhS5i5mJDsa4UwsXJm8Tv43r9JxrcYIbkXQKm4=";
+    };
+  };
 }
