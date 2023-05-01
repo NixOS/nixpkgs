@@ -10,8 +10,8 @@ let
   pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" ] // {
     # include a fake "core" package
     core.pkgs = [
-      (bin.core.out // { pname = "core"; version = "0"; tlType = "bin"; })
-      (bin.core.doc // { pname = "core"; version = "0"; tlType = "doc"; })
+      (bin.core.out // { pname = "core"; tlType = "bin"; })
+      (bin.core.doc // { pname = "core"; tlType = "doc"; })
     ];
   };
   pkgList = rec {

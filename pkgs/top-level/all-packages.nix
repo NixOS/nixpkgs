@@ -1520,6 +1520,8 @@ with pkgs;
 
   gen6dns = callPackage ../tools/networking/gen6dns { };
 
+  github-copilot-cli = callPackage ../tools/misc/github-copilot-cli { };
+
   gfshare = callPackage ../tools/security/gfshare { };
 
   gh-actions-cache = callPackage ../tools/misc/gh-actions-cache { };
@@ -17554,6 +17556,8 @@ with pkgs;
   babeltrace = callPackage ../development/tools/misc/babeltrace { };
 
   bam = callPackage ../development/tools/build-managers/bam { };
+
+  bandit = with python3Packages; toPythonApplication bandit;
 
   bazel = bazel_6;
 
