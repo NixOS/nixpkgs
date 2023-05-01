@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchPypi
 , poetry-core
-, pydantic
 , pytestCheckHook
 , pythonOlder
+, python-dotenv
 , pytz
 , requests
+, typing-extensions
 , yarl
 }:
 
@@ -30,11 +30,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pydantic
     requests
+    typing-extensions
   ];
 
   nativeCheckInputs = [
+    python-dotenv
     pytz
     pytestCheckHook
     yarl

@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "14460zhacxhswnzb36qfpd1f2wbk10qvksvm6wyq5hpvdgnw7ymv";
   };
 
+  outputs = [ "out" "dev" ];
+
   patches = [
     (fetchpatch {
       url = "https://github.com/openwrt/packages/raw/openwrt-19.07/libs/libmad/patches/001-mips_removal_h_constraint.patch";

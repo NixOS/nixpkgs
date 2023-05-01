@@ -8185,6 +8185,8 @@ self: super: with self; {
 
   pydantic = callPackage ../development/python-modules/pydantic { };
 
+  pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
+
   pydash = callPackage ../development/python-modules/pydash { };
 
   pydata-google-auth = callPackage ../development/python-modules/pydata-google-auth { };

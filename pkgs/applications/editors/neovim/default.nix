@@ -125,6 +125,8 @@ in
       export VIMRUNTIME=$PWD/runtime
     '';
 
+    separateDebugInfo = true;
+
     meta = with lib; {
       description = "Vim text editor fork focused on extensibility and agility";
       longDescription = ''
