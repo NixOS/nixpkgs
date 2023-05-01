@@ -35739,6 +35739,8 @@ with pkgs;
 
   ### GAMES/DOOM-PORTS
 
+  dhewm3 = callPackage ../games/doom-ports/dhewm3 { };
+
   doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
 
   chocolateDoom = callPackage ../games/doom-ports/chocolate-doom { };
@@ -36014,8 +36016,6 @@ with pkgs;
       withStatic = true;
     };
   };
-
-  dhewm3 = callPackage ../games/dhewm3 { };
 
   domination = callPackage ../games/domination { };
 
