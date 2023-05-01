@@ -37842,6 +37842,8 @@ with pkgs;
 
   keymapviz = callPackage ../tools/misc/keymapviz { };
 
+  killport = darwin.apple_sdk_11_0.callPackage ../tools/misc/killport { };
+
   lean = callPackage ../applications/science/logic/lean { };
   lean2 = callPackage ../applications/science/logic/lean2 { };
   lean3 = lean;
