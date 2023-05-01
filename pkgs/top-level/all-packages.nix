@@ -22107,6 +22107,8 @@ with pkgs;
 
   libosmo-abis = callPackage ../development/libraries/libosmo-abis { };
 
+  libosmo-netif = callPackage ../development/libraries/libosmo-netif { };
+
   libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
 
   libotr = callPackage ../development/libraries/libotr { };
