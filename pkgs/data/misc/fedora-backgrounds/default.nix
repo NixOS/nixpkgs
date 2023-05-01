@@ -31,4 +31,13 @@ in {
     patches = [ ./f34-fix-xfce-path.patch ];
   };
 
+  f35 = fedoraBackground rec {
+    version = "35.0.1";
+    src = fetchurl {
+      url = "https://github.com/fedoradesign/backgrounds/releases/download/v${version}/f${lib.versions.major version}-backgrounds-${version}.tar.xz";
+      hash = "sha256-7t78sQ0BIkzgJ+phO55Bomyz02d8Vx1LAtSkjX8ppgE=";
+    };
+    # Fix broken symlinks in the Xfce background directory.
+    patches = [ ./f35-fix-xfce-path.patch ];
+  };
 }
