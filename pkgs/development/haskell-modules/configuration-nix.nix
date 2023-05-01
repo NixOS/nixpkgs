@@ -1226,4 +1226,7 @@ self: super: builtins.intersectAttrs super {
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 
+  # Disable checks to break dependency loop with SCalendar
+  scalendar = dontCheck super.scalendar;
+
 }
