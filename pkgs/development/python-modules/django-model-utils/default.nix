@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-model-utils";
-  version = "4.2.0";
+  version = "4.3.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-model-utils";
     rev = version;
-    hash = "sha256-TLqvpP/ZaGGFdqnN+UHbhXv1K1YVYTYBkCiWCjYrFh8=";
+    hash = "sha256-p3/JO6wNwZPYX7MIgMj/0caHt5s+uL51Sxa28/VITxo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
