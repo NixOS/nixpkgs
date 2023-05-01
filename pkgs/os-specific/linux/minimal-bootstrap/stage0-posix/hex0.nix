@@ -19,4 +19,9 @@ derivationWithMeta {
     maintainers = with maintainers; [ emilytrau ];
     platforms = [ "i686-linux" ];
   };
+
+  # Ensure the untrusted hex0-seed binary produces a known-good hex0
+  outputHashMode = "recursive";
+  outputHashAlgo = "sha256";
+  outputHash = "sha256-QU3RPGy51W7M2xnfFY1IqruKzusrSLU+L190ztN6JW8=";
 }
