@@ -64,6 +64,7 @@ in {
   boot-ec2-nixops = makeEc2Test {
     name         = "nixops-userdata";
     inherit image;
+    imageFormat = "vpc";  # The .vhd image file is handled by qemu's "vpc" format.
     sshPublicKey = snakeOilPublicKey; # That's right folks! My user's key is also the host key!
 
     userData = ''
@@ -78,7 +79,7 @@ in {
       machine.succeed("grep unknown /etc/ec2-metadata/ami-manifest-path")
 
       # We have no keys configured on the client side yet, so this should fail
-      machine.fail("ssh -o BatchMode=yes localhost exit")
+      machine.fail("ssh -n -o BatchMode=yes localhost exit")
 
       # Let's install our client private key
       machine.succeed("mkdir -p ~/.ssh")
@@ -89,13 +90,14 @@ in {
       machine.succeed("chmod 600 ~/.ssh/id_ed25519")
 
       # We haven't configured the host key yet, so this should still fail
-      machine.fail("ssh -o BatchMode=yes localhost exit")
+      machine.fail("ssh -n -o BatchMode=yes localhost exit")
 
       # Add the host key; ssh should finally succeed
       machine.succeed(
           "echo localhost,127.0.0.1 ${snakeOilPublicKey} > ~/.ssh/known_hosts"
       )
-      machine.succeed("ssh -o BatchMode=yes localhost exit")
+      # ssh's -n option is needed or this call will hang.
+      machine.succeed("ssh -n -o BatchMode=yes localhost exit")
 
       # Test whether the root disk was resized.
       blocks, block_size = map(int, machine.succeed("stat -c %b:%S -f /").split(":"))
