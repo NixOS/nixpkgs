@@ -85,7 +85,7 @@ self: super: {
         (super.guardian.overrideScope (self: super:
           cabalInstallOverlay self super // {
             # Needs at least path-io 1.8.0 due to canonicalizePath changes
-            path-io = self.path-io_1_8_0;
+            path-io = self.path-io_1_8_1;
           }
         ))
         [
