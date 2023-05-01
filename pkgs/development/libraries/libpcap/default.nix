@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libpcap";
-  version = "1.10.3";
+  version = "1.10.4";
 
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-KoiFxANRbPewkz7UsU1sqjDgIFJInr1BTcdaxS51WeY=";
+    hash = "sha256-7RmgOD+tcuOtQ1/SOdfNgNZJFrhyaVUBWdIORxYOvl8=";
   };
 
   buildInputs = lib.optionals stdenv.isLinux [ libnl ]

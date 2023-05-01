@@ -7,13 +7,13 @@
 { stdenv
 , pkgs
 , lib
-, nodejs-14_x
+, nodejs_14
 , fetchzip
 }:
 
 let
-  # nodejs-16_x fails with ENOTCACHED
-  nodejs = nodejs-14_x;
+  # nodejs_16 fails with ENOTCACHED
+  nodejs = nodejs_14;
 
   nodePackages = import ./node-composition.nix {
     inherit pkgs nodejs;

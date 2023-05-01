@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: a78862340cacb90e2d27b6f7ae670387081a0276
-  ref: refs/tags/6.3.12
+  revision: f58dd240e0c900976bc0609096b3b2e9965f70cb
+  ref: refs/tags/6.3.13
   specs:
-    metasploit-framework (6.3.12)
+    metasploit-framework (6.3.13)
       actionpack (~> 7.0)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
@@ -12,6 +12,7 @@ GIT
       aws-sdk-s3
       bcrypt
       bcrypt_pbkdf
+      bootsnap
       bson
       chunky_png
       dnsruby
@@ -32,7 +33,7 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.123)
+      metasploit-payloads (= 2.0.126)
       metasploit_data_models
       metasploit_payloads-mettle (= 1.0.20)
       mqtt
@@ -129,7 +130,7 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.748.0)
+    aws-partitions (1.752.0)
     aws-sdk-core (3.171.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
@@ -144,7 +145,7 @@ GEM
     aws-sdk-kms (1.63.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.120.1)
+    aws-sdk-s3 (1.121.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
@@ -153,6 +154,8 @@ GEM
     bcrypt (3.1.18)
     bcrypt_pbkdf (1.1.0)
     bindata (2.4.15)
+    bootsnap (1.16.0)
+      msgpack (~> 1.2)
     bson (4.15.0)
     builder (3.2.4)
     chunky_png (1.4.0)
@@ -238,7 +241,7 @@ GEM
       activemodel (~> 7.0)
       activesupport (~> 7.0)
       railties (~> 7.0)
-    metasploit-payloads (2.0.123)
+    metasploit-payloads (2.0.126)
     metasploit_data_models (6.0.2)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
@@ -288,9 +291,9 @@ GEM
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
-    pg (1.4.6)
+    pg (1.5.1)
     public_suffix (5.0.1)
-    puma (6.2.1)
+    puma (6.2.2)
       nio4r (~> 2.0)
     racc (1.6.2)
     rack (2.2.6.4)

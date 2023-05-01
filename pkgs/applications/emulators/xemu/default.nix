@@ -25,14 +25,14 @@
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
   version = "0.7.85";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sVUkB2KegdKlHlqMvSwB1nLdJGun2x2x9HxtNHnpp1s=";
     fetchSubmodules = true;
   };
@@ -94,7 +94,7 @@ stdenv.mkDerivation (self: {
     # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
     branch = "master";
     commit = "d8fa50e524c22f85ecb2e43108fd6a5501744351";
-    inherit (self) version;
+    inherit (finalAttrs) version;
   in ''
     patchShebangs .
     configureFlagsArray+=("--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls")
@@ -133,7 +133,7 @@ stdenv.mkDerivation (self: {
       Xbox game console, enabling people to play their original Xbox games on
       Windows, macOS, and Linux systems.
     '';
-    changelog = "https://github.com/xemu-project/xemu/releases/tag/v${self.version}";
+    changelog = "https://github.com/xemu-project/xemu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ AndersonTorres genericnerdyusername ];
     platforms = with lib.platforms; linux;

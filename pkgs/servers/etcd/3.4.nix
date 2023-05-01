@@ -2,9 +2,9 @@
 
 buildGoModule rec {
   pname = "etcd";
-  version = "3.4.24";
+  version = "3.4.25";
 
-  vendorHash = "sha256-8fWiei7hZ4NO1CIMPQaRe4gyBF1CUjcqU5Eghyiy64w=";
+  vendorHash = "sha256-duqOIMIXAuJjvKDM15mDdi+LZUZm0uK0MjTv2Dsl3FA=";
 
   doCheck = false;
 
@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    sha256 = "sha256-jbMwSvCn9y4md60pWd7nF2Ck2XJDkYfg5olr1qVrPd4=";
+    sha256 = "sha256-CReSNWoRN2cBrhVujlAsOaI1gUfws962oLIVGWnLTAQ=";
   };
 
   buildPhase = ''

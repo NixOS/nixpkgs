@@ -210,10 +210,14 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  postInstall = ''
+  installPhase = ''
+    runHook preInstall
+
     # Install distribution customizations
     install -Dvm644 ${distributionIni} $out/share/mullvad-browser/distribution/distribution.ini
     install -Dvm644 ${policiesJson} $out/share/mullvad-browser/distribution/policies.json
+
+    runHook postInstall
   '';
 
   meta = with lib; {

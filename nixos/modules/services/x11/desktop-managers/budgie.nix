@@ -12,10 +12,37 @@ let
     inherit (cfg) extraGSettingsOverrides extraGSettingsOverridePackages;
     inherit nixos-background-dark nixos-background-light;
   };
+
+  nixos-background-info = pkgs.writeTextFile {
+    name = "nixos-background-info";
+    text = ''
+      <?xml version="1.0"?>
+      <!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
+      <wallpapers>
+        <wallpaper deleted="false">
+          <name>Nineish</name>
+          <filename>${nixos-background-light.gnomeFilePath}</filename>
+          <options>zoom</options>
+          <shade_type>solid</shade_type>
+          <pcolor>#d1dcf8</pcolor>
+          <scolor>#e3ebfe</scolor>
+        </wallpaper>
+        <wallpaper deleted="false">
+          <name>Nineish Dark Gray</name>
+          <filename>${nixos-background-dark.gnomeFilePath}</filename>
+          <options>zoom</options>
+          <shade_type>solid</shade_type>
+          <pcolor>#151515</pcolor>
+          <scolor>#262626</scolor>
+        </wallpaper>
+      </wallpapers>
+    '';
+    destination = "/share/gnome-background-properties/nixos.xml";
+  };
 in {
   options = {
     services.xserver.desktopManager.budgie = {
-      enable = mkEnableOption (mdDoc "Budgie desktop");
+      enable = mkEnableOption (mdDoc "the Budgie desktop");
 
       sessionPath = mkOption {
         description = mdDoc "Additional list of packages to be added to the session search path. Useful for GSettings-conditional autostart.";
@@ -33,6 +60,12 @@ in {
       extraGSettingsOverridePackages = mkOption {
         description = mdDoc "List of packages for which GSettings are overridden.";
         type = with types; listOf path;
+        default = [];
+      };
+
+      extraPlugins = mkOption {
+        description = mdDoc "Extra plugins for the Budgie desktop";
+        type = with types; listOf package;
         default = [];
       };
     };
@@ -76,15 +109,18 @@ in {
         # Budgie Desktop.
         budgie.budgie-backgrounds
         budgie.budgie-control-center
-        budgie.budgie-desktop
+        (budgie.budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
         budgie.budgie-desktop-view
         budgie.budgie-screensaver
 
         # Required by the Budgie Desktop session.
-        (gnome.gnome-session.override {gnomeShellSupport = false;})
+        (gnome.gnome-session.override { gnomeShellSupport = false; })
 
         # Required by Budgie Menu.
         gnome-menus
+
+        # Required by Budgie Control Center.
+        gnome.zenity
 
         # Provides `gsettings`.
         glib
@@ -106,6 +142,7 @@ in {
           # Desktop themes.
           qogir-theme
           qogir-icon-theme
+          nixos-background-info
 
           # Default settings.
           nixos-gsettings-overrides

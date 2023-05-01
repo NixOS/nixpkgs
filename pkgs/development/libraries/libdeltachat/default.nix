@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.112.6";
+  version = "1.114.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = "v${version}";
-    hash = "sha256-xadf6N5x3zdefwsKUFaVs71HmLMpJoUq5LL7IENsvC0=";
+    hash = "sha256-fonrf4DZI5HhUY08yZmAHp2SKJYA2OywVBa31W7O1qU=";
   };
 
   patches = [
@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "async-imap-0.6.0" = "sha256-q6ZDm+4i+EtiMgkW/8LQ/TkDO/sj0p7KJhpYE76zAjo=";
       "email-0.0.21" = "sha256-Ys47MiEwVZenRNfenT579Rb17ABQ4QizVFTWUq3+bAY=";
       "encoded-words-0.2.0" = "sha256-KK9st0hLFh4dsrnLd6D8lC6pRFFs8W+WpZSGMGJcosk=";
       "lettre-0.9.2" = "sha256-+hU1cFacyyeC9UGVBpS14BWlJjHy90i/3ynMkKAzclk=";

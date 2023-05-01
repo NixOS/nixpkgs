@@ -36,6 +36,7 @@
 , openscad
 , pandoc
 , parinfer-rust
+, phpactor
 , ripgrep
 , skim
 , sqlite
@@ -777,6 +778,14 @@ self: super: {
 
   inherit parinfer-rust;
 
+  phpactor = buildVimPluginFrom2Nix {
+    inherit (phpactor) pname src meta version;
+    postPatch = ''
+      substituteInPlace plugin/phpactor.vim \
+        --replace "g:phpactorpath = expand('<sfile>:p:h') . '/..'" "g:phpactorpath = '${phpactor}'"
+    '';
+  };
+
   playground = super.playground.overrideAttrs (old: {
     dependencies = with self; [
       # we need the 'query' grammer to make
@@ -850,18 +859,18 @@ self: super: {
 
   sniprun =
     let
-      version = "1.3.0";
+      version = "1.3.1";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        hash = "sha256-6UDjrrEtOuB+lrCZVBO4BcZm78qwq8YbQcXAdjNbicY=";
+        hash = "sha256-grrrqvdqoYTBtlU+HLrSQJsAmMA/+OHbuoVvOwHYPnk=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoSha256 = "sha256-ghXYUgXqXvK9RySG/hQR5zpLsyk6L9Htb/UYgMPyWUk=";
+        cargoSha256 = "sha256-hmZXYJFIeKgYyhT6mSrmX+7M9GQQHHzliYHjsBoHgOc=";
 
         nativeBuildInputs = [ makeWrapper ];
 
@@ -880,11 +889,6 @@ self: super: {
       patches = [ ./patches/sniprun/fix-paths.patch ];
       postPatch = ''
         substituteInPlace lua/sniprun.lua --replace '@sniprun_bin@' ${sniprun-bin}
-      '';
-
-      postInstall = ''
-        mkdir $out/doc
-        ln -s $out/docs/sniprun.txt $out/doc/sniprun.txt
       '';
 
       propagatedBuildInputs = [ sniprun-bin ];

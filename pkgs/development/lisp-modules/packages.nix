@@ -274,9 +274,9 @@ let
       sha256 = "12l7ir3q29v06jx0zng5cvlbmap7p709ka3ik6x29lw334qshm9b";
     };
 
-    buildInputs = [
-      pkgs.makeWrapper
+    nativeBuildInputs = [ pkgs.makeWrapper ];
 
+    buildInputs = [
       # needed for GSETTINGS_SCHEMAS_PATH
       pkgs.gsettings-desktop-schemas pkgs.glib pkgs.gtk3
 
@@ -589,6 +589,23 @@ let
     };
     systems = [ "eu.turtleware.polyclot" "eu.turtleware.polyclot/demo" ];
     lispLibs = with super; [ clim mcclim mcclim-layouts ];
+  };
+
+  kons-9 = build-asdf-system rec {
+    pname = "kons-9";
+    version = "trunk";
+    src = pkgs.fetchFromGitHub {
+      owner = "kaveh808";
+      repo = "kons-9";
+      rev = "95ad44fac0566f445c4b7bd040339dcff75ee992";
+      sha256 = "19rl7372j9f1cv2kl55r8vyf4dhcz4way4hkjgysbxzrb1psp17n";
+    };
+    systems = [ "kons-9" "kons-9/testsuite" ];
+    lispLibs = with super; [
+      closer-mop trivial-main-thread trivial-backtrace cffi cl-opengl cl-glu
+      cl-glfw3 cl-paths-ttf zpb-ttf cl-vectors origin clobber
+      org_dot_melusina_dot_confidence
+    ];
   };
 
   });

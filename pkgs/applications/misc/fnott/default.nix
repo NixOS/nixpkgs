@@ -5,13 +5,14 @@
 , meson
 , ninja
 , scdoc
-, wayland-protocols
-, tllist
+, wayland-scanner
 , fontconfig
 , freetype
 , pixman
 , libpng
+, tllist
 , wayland
+, wayland-protocols
 , dbus
 , fcft
 }:
@@ -28,20 +29,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cJ7XmnC4x8lhZ+JRqobeQxTTps4Oz95zYdlFtr3KC1A=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
   nativeBuildInputs = [
     pkg-config
     meson
     ninja
     scdoc
-    wayland-protocols
-    tllist
+    wayland-scanner
   ];
   buildInputs = [
     fontconfig
     freetype
     pixman
     libpng
+    tllist
     wayland
+    wayland-protocols
     dbus
     fcft
   ];

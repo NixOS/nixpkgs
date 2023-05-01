@@ -426,4 +426,81 @@ ${expr "" v}
       abort "generators.toDhall: cannot convert a null to Dhall"
     else
       builtins.toJSON v;
+
+  /*
+   Translate a simple Nix expression to Lua representation with occasional
+   Lua-inlines that can be construted by mkLuaInline function.
+
+   Configuration:
+     * multiline - by default is true which results in indented block-like view.
+     * indent - initial indent.
+
+   Attention:
+     Regardless of multiline parameter there is no trailing newline.
+
+   Example:
+     generators.toLua {}
+       {
+         cmd = [ "typescript-language-server" "--stdio" ];
+         settings.workspace.library = mkLuaInline ''vim.api.nvim_get_runtime_file("", true)'';
+       }
+     ->
+      {
+        ["cmd"] = {
+          "typescript-language-server",
+          "--stdio"
+        },
+        ["settings"] = {
+          ["workspace"] = {
+            ["library"] = (vim.api.nvim_get_runtime_file("", true))
+          }
+        }
+      }
+
+   Type:
+     toLua :: AttrSet -> Any -> String
+  */
+  toLua = {
+    /* If this option is true, the output is indented with newlines for attribute sets and lists */
+    multiline ? true,
+    /* Initial indentation level */
+    indent ? ""
+  }@args: v:
+    with builtins;
+    let
+      innerIndent = "${indent}  ";
+      introSpace = if multiline then "\n${innerIndent}" else " ";
+      outroSpace = if multiline then "\n${indent}" else " ";
+      innerArgs = args // { indent = innerIndent; };
+      concatItems = concatStringsSep ",${introSpace}";
+      isLuaInline = { _type ? null, ... }: _type == "lua-inline";
+    in
+    if v == null then
+      "nil"
+    else if isInt v || isFloat v || isString v || isBool v then
+      builtins.toJSON v
+    else if isList v then
+      (if v == [ ] then "{}" else
+      "{${introSpace}${concatItems (map (value: "${toLua innerArgs value}") v)}${outroSpace}}")
+    else if isAttrs v then
+      (
+        if isLuaInline v then
+          "(${v.expr})"
+        else if v == { } then
+          "{}"
+        else
+          "{${introSpace}${concatItems (
+            lib.attrsets.mapAttrsToList (key: value: "[${builtins.toJSON key}] = ${toLua innerArgs value}") v
+            )}${outroSpace}}"
+      )
+    else
+      abort "generators.toLua: type ${typeOf v} is unsupported";
+
+  /*
+   Mark string as Lua expression to be inlined when processed by toLua.
+
+   Type:
+     mkLuaInline :: String -> AttrSet
+  */
+  mkLuaInline = expr: { _type = "lua-inline"; inherit expr; };
 }

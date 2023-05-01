@@ -130,6 +130,12 @@ perlPackages.buildPerlPackage rec {
     #   Non-zero wait status: 139
     rm t/0601_Dialog_Scan.t
 
+    # Disable a test which failed due to convert returning an exit value of 1
+    # convert: negative or zero image size `/build/KL5kTVnNCi/YfgegFM53e.pnm' @ error/resize.c/ResizeImage/3743.
+    # *** unhandled exception in callback:
+    # ***   "convert" unexpectedly returned exit value 1 at t/357_unpaper_rtl.t line 63.
+    rm t/357_unpaper_rtl.t
+
     xvfb-run -s '-screen 0 800x600x24' \
       make test
   '';

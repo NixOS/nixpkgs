@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "hound";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "hound-search";
     repo = "hound";
     rev = "v${version}";
-    sha256 = "sha256-M1c4lsD7DQo5+RCCDdyn9FeGuGngMsg1qSrxM2wCzpg=";
+    sha256 = "sha256-FqAPywVSkFsdgFpFe5m2+/Biwi11aYybKAhf6h2b//g=";
   };
 
-  vendorSha256 = "sha256-ZgF/PB3VTPx367JUkhOkSEK1uvqENNG0xuNXvCGENnQ=";
+  vendorSha256 = "sha256-0psvz4bnhGuwwSAXvQp0ju0GebxoUyY2Rjp/D43KF78=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -33,8 +33,8 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) hound; };
 
   meta = with lib; {
-    inherit (src.meta) homepage;
     description = "Lightning fast code searching made easy";
+    homepage = "https://github.com/hound-search/hound";
     license = licenses.mit;
     maintainers = with maintainers; [ grahamc SuperSandro2000 ];
     platforms = platforms.unix;

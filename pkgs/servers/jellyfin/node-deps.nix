@@ -11817,8 +11817,8 @@ let
   args = {
     name = "jellyfin-web";
     packageName = "jellyfin-web";
-    version = "10.8.9";
-    src = ../../../../../../../nix/store/yvn7h8hrydjxiw23fhqj5ya6yilj0d57-source;
+    version = "10.8.10";
+    src = ../../../../../../../nix/store/l77pzlsdcdhb2lyan89wpw111nvf348l-source;
     dependencies = [
       sources."@ampproject/remapping-2.1.2"
       (sources."@apideck/better-ajv-errors-0.3.3" // {

@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     rev = "v${version}";
-    hash = "sha256-3vNJmLmbskAzXVXjiSVDLhRcX1j3ksOgPd53W31YZ0c=";
+    hash = "sha256-Sx4HWs52WycAxAuoJyo8t83CxnMh64P94hbPiedfztc=";
   };
 
   cargoLock = {

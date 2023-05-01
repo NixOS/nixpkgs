@@ -1,22 +1,20 @@
 { lib
-, fetchFromGitHub
 , buildGoModule
-, clangStdenv
+, fetchFromGitHub
 , pkg-config
 , alsa-lib
 , flac
 }:
 
-# gcc only supports objc on darwin
-buildGoModule.override { stdenv = clangStdenv; } rec {
+buildGoModule rec {
   pname = "go-musicfox";
-  version = "4.0.3";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "anhoder";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-6JOD0RsZY79jLYJqPrzc43jgR03XQEfa8B0mGvlIkF4=";
+    hash = "sha256-NAAl/XmJqRnJyOYNJqmMlCIiGsCsSH7gGTMbD46gpss=";
   };
 
   deleteVendor = true;
@@ -45,6 +43,6 @@ buildGoModule.override { stdenv = clangStdenv; } rec {
     homepage = "https://github.com/anhoder/go-musicfox";
     license = licenses.mit;
     mainProgram = "musicfox";
-    maintainers = with maintainers; [ zendo Ruixi-rebirth ];
+    maintainers = with maintainers; [ zendo Ruixi-rebirth aleksana ];
   };
 }

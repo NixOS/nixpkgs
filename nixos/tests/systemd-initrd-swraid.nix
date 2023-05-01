@@ -20,18 +20,18 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       services.swraid = {
         enable = true;
         mdadmConf = ''
-          ARRAY /dev/md0 devices=/dev/vdc,/dev/vdd
+          ARRAY /dev/md0 devices=/dev/vdb,/dev/vdc
         '';
       };
       kernelModules = [ "raid0" ];
     };
 
-    specialisation.boot-swraid.configuration.virtualisation.bootDevice = "/dev/disk/by-label/testraid";
+    specialisation.boot-swraid.configuration.virtualisation.rootDevice = "/dev/disk/by-label/testraid";
   };
 
   testScript = ''
     # Create RAID
-    machine.succeed("mdadm --create --force /dev/md0 -n 2 --level=raid0 /dev/vdc /dev/vdd")
+    machine.succeed("mdadm --create --force /dev/md0 -n 2 --level=raid0 /dev/vdb /dev/vdc")
     machine.succeed("mkfs.ext4 -L testraid /dev/md0")
     machine.succeed("mkdir -p /mnt && mount /dev/md0 /mnt && echo hello > /mnt/test && umount /mnt")
 

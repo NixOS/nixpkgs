@@ -1,7 +1,8 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
+, pythonRelaxDepsHook
 # python dependencies
 , click
 , python-dateutil
@@ -9,6 +10,7 @@
 , filelock
 , funcsigs
 , future
+, looseversion
 , mock
 , networkx
 , nibabel
@@ -26,9 +28,7 @@
 , simplejson
 , traits
 , xvfbwrapper
-, pytest-cov
 , codecov
-, sphinx
 # other dependencies
 , which
 , bash
@@ -40,17 +40,11 @@
 , useNeurdflib ? false
 }:
 
-let
-
- # This is a temporary convenience package for changes waiting to be merged into the primary rdflib repo.
- neurdflib = callPackage ./neurdflib.nix { };
-
-in
-
 buildPythonPackage rec {
   pname = "nipype";
   version = "1.8.5";
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -63,8 +57,10 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    sphinx
+    pythonRelaxDepsHook
   ];
+
+  pythonRelaxDeps = [ "traits" ];
 
   propagatedBuildInputs = [
     click
@@ -73,6 +69,7 @@ buildPythonPackage rec {
     filelock
     funcsigs
     future
+    looseversion
     networkx
     nibabel
     numpy
@@ -80,11 +77,12 @@ buildPythonPackage rec {
     prov
     psutil
     pydot
+    rdflib
     scipy
     simplejson
     traits
     xvfbwrapper
-  ] ++ [ (if useNeurdflib then neurdflib else rdflib) ];
+  ];
 
   nativeCheckInputs = [
     pybids
@@ -94,7 +92,6 @@ buildPythonPackage rec {
     pytest
     pytest-forked
     pytest-xdist
-    pytest-cov
     which
   ];
 
@@ -102,7 +99,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
   # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display'
+    LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display and not test_no_et_multiproc'
   '';
   pythonImportsCheck = [ "nipype" ];
 

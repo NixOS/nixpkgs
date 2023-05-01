@@ -65,7 +65,7 @@ rec {
     so that luaRequireModules can be run later
   */
   toLuaModule = drv:
-    drv.overrideAttrs( oldAttrs: {
+    drv.overrideAttrs(oldAttrs: {
       # Use passthru in order to prevent rebuilds when possible.
       passthru = (oldAttrs.passthru or {}) // {
         luaModule = lua;
@@ -81,8 +81,7 @@ rec {
   };
   */
   generateLuarocksConfig = {
-    externalDeps
-
+      externalDeps
     # a list of lua derivations
     , requiredLuaRocks
     , extraVariables ? {}

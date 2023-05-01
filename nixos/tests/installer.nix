@@ -316,8 +316,9 @@ let
           # installer. This ensures the target disk (/dev/vda) is
           # the same during and after installation.
           virtualisation.emptyDiskImages = [ 512 ];
-          virtualisation.bootDevice =
+          virtualisation.rootDevice =
             if grubVersion == 1 then "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive2" else "/dev/vdb";
+          virtualisation.bootLoaderDevice = "/dev/vda";
           virtualisation.qemu.diskInterface =
             if grubVersion == 1 then "scsi" else "virtio";
 

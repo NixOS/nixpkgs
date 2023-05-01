@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/tracker/-/issues/397
     !stdenv.isAarch64
     # https://gitlab.gnome.org/GNOME/tracker/-/issues/398
-    && !stdenv.isi686;
+    && !stdenv.is32bit;
 
   postPatch = ''
     chmod +x \

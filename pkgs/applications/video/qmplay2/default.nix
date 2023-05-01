@@ -21,14 +21,14 @@
 , wrapQtAppsHook
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qmplay2";
   version = "23.02.05";
 
   src = fetchFromGitHub {
     owner = "zaps166";
     repo = "QMPlay2";
-    rev = self.version;
+    rev = finalAttrs.version;
     sha256 = "sha256-ZDpUgD9qTvjopGFVrwTBSEmrXn+4aKq2zeqoTnXwmI8=";
     fetchSubmodules = true;
   };
@@ -71,7 +71,7 @@ stdenv.mkDerivation (self: {
       files, Rayman 2 music and chiptunes. It contains YouTube and MyFreeMP3
       browser.
     '';
-    changelog = "https://github.com/zaps166/QMPlay2/releases/tag/${self.version}";
+    changelog = "https://github.com/zaps166/QMPlay2/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;

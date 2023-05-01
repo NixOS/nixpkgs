@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "carapace";
-  version = "0.24.1";
+  version = "0.24.4";
 
   src = fetchFromGitHub {
     owner = "rsteube";
     repo = "${pname}-bin";
     rev = "v${version}";
-    sha256 = "sha256-eJD+7J5R+Oomj4QbOj5QHB30F0jpWmnkbl6bhVOEgDU=";
+    sha256 = "sha256-UEvmaUr/3Fq92HSfBPxSpfuo5mp5zMSYGZu2HLZvUq0=";
   };
 
-  vendorHash = "sha256-UMRAyUcGxPsW4Q7o5KtXMmdcuY+DEGhbm4jPBVLOLGQ=";
+  vendorHash = "sha256-4Q8yBDds2EIxt5Caxoq8hk4X6ADwVe04P3Jt3L+Qf0M=";
 
   ldflags = [
     "-s"

@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.3.1";
+  version = "1.3.2";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    hash = "sha256-RIJtlSBZX4+rMOGQaFn31CCEKkWtPjtzO4fcX+iApvs=";
+    hash = "sha256-9Qha8xN3lC/t5dQNYPbgMX6HAKgEk80pyycrd5MGYLo=";
   };
 
   depsBuildBuild = [
@@ -70,10 +70,10 @@ stdenv.mkDerivation rec {
     xvfb-run
   ];
 
-  # Tests had to be disabled on Darwin because they fail with the same error as https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=264947 on Hydra:
+  # Tests had to be disabled on Darwin because test-button-content fails
   #
-  # In file included from ../tests/test-style-manager.c:10:
-  # ../src/adw-settings-private.h:16:10: fatal error: 'adw-enums-private.h' file not found
+  # not ok /Adwaita/ButtonContent/style_class_button - Gdk-FATAL-CRITICAL:
+  # gdk_macos_monitor_get_workarea: assertion 'GDK_IS_MACOS_MONITOR (self)' failed
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''

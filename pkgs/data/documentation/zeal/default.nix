@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i CMakeLists.txt \
       -e 's@^project.*@project(Zeal VERSION ${version})@'
+  '' + lib.optionalString (!isQt5) ''
+    substituteInPlace src/app/CMakeLists.txt \
+      --replace "COMPONENTS Widgets" "COMPONENTS Widgets QmlIntegration"
   '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config wrapQtAppsHook ];

@@ -17,6 +17,7 @@
 , makeRustPlatform
 , llvmPackages_11
 , llvmPackages_15, llvm_15
+, fetchpatch
 } @ args:
 
 import ./default.nix {
@@ -57,7 +58,16 @@ import ./default.nix {
 
   selectRustPackage = pkgs: pkgs.rust_1_68;
 
-  rustcPatches = [ ];
+  rustcPatches = [
+    # Fixes ICE.
+    # https://github.com/rust-lang/rust/pull/107688
+    (fetchpatch {
+      name = "re-erased-regions-are-local.patch";
+      url = "https://github.com/rust-lang/rust/commit/9d110847ab7f6aef56a8cd20cb6cea4fbcc51cd9.patch";
+      excludes = [ "*tests/*" ];
+      hash = "sha256-EZH5K1BEOOfi97xZr1xEHFP4jjvJ1+xqtRMvxBoL8pU=";
+    })
+  ];
 }
 
-(builtins.removeAttrs args [ "pkgsBuildHost" "llvmPackages_11" "llvmPackages_15" "llvm_15"])
+(builtins.removeAttrs args [ "fetchpatch" "pkgsBuildHost" "llvmPackages_11" "llvmPackages_15" "llvm_15"])

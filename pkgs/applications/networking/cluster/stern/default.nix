@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "stern";
-  version = "1.24.0";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "stern";
     repo = "stern";
     rev = "v${version}";
-    sha256 = "sha256-jJxrBBs8PkYg9oH9MY1RLJb262REmbKciHXiwWTqoRc=";
+    sha256 = "sha256-E4Hs9FH+6iQ7kv6CmYUHw9HchtJghMq9tnERO2rpL1g=";
   };
 
-  vendorHash = "sha256-1MhscgCGSJXkcj5Rt29+xbBX1uGfOS0kmab+DNY/Bt4=";
+  vendorHash = "sha256-+B3cAuV+HllmB1NaPeZitNpX9udWuCKfDFv+mOVHw2Y=";
 
   subPackages = [ "." ];
 

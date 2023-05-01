@@ -1,22 +1,25 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, rpmextract, libX11, libXext }:
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, rpmextract
+, libX11
+, libXext
+}:
 
 stdenv.mkDerivation rec {
   pname = "realvnc-vnc-viewer";
-  version = "6.22.515";
+  version = "7.1.0";
 
   src = {
     "x86_64-linux" = fetchurl {
-      url = "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x64.rpm";
-      sha256 = "1l9kfmb1695pv2v9hm8z5yr7y5yhadbbs61s4yf9ksvvfypzwrpn";
-    };
-    "i686-linux" = fetchurl {
-      url = "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x86.rpm";
-      sha256 = "15fi1siwbsxmy7qi6f8r8ym346a8mx3kqcp9mvwvx39wm3ija6dh";
+      url = "https://downloads.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x64.rpm";
+      sha256 = "sha256-Mn4K2HICK7owHcXH85IJUncnpPZ56zNybkHZNiqYkHY=";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ autoPatchelfHook rpmextract ];
-  buildInputs = [ libX11 libXext ];
+  buildInputs = [ libX11 libXext stdenv.cc.cc.libgcc or null ];
 
   unpackPhase = ''
     rpmextract $src
@@ -47,7 +50,7 @@ stdenv.mkDerivation rec {
       url = "https://static.realvnc.com/media/documents/LICENSE-4.0a_en.pdf";
       free = false;
     };
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ emilytrau onedragon ];
+    platforms = [ "x86_64-linux" ];
   };
 }

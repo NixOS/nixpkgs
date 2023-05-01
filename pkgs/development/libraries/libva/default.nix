@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
 
   buildInputs = [ libdrm ]
