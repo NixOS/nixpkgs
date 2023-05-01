@@ -40,4 +40,12 @@ in {
     # Fix broken symlinks in the Xfce background directory.
     patches = [ ./f35-fix-xfce-path.patch ];
   };
+
+  f36 = fedoraBackground rec {
+    version = "36.1.2";
+    src = fetchurl {
+      url = "https://github.com/fedoradesign/backgrounds/releases/download/v${version}/f${lib.versions.major version}-backgrounds-${version}.tar.xz";
+      hash = "sha256-DZr1YHltojl02X/3sErqB/29JBDy/7lDZKnHD+KouHc=";
+    };
+  };
 }
