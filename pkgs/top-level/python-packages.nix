@@ -3804,6 +3804,8 @@ self: super: with self; {
 
   fuzzyfinder = callPackage ../development/python-modules/fuzzyfinder { };
 
+  fuzzytm = callPackage ../development/python-modules/fuzzytm { };
+
   fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
 
   fvs = callPackage ../development/python-modules/fvs { };
