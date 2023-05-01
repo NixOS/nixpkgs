@@ -37248,7 +37248,10 @@ with pkgs;
 
   zcash = callPackage ../applications/blockchains/zcash {
     inherit (darwin.apple_sdk.frameworks) Security;
-    stdenv = llvmPackages_14.stdenv;
+
+    boost = boost183;
+    db = db62;
+    llvmPackages = llvmPackages_15;
   };
 
   zecwallet-lite = callPackage ../applications/blockchains/zecwallet-lite { };
