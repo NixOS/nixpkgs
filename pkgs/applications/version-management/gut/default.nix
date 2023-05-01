@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "gut";
-  version = "0.2.7";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "julien040";
     repo = "gut";
     rev = version;
-    sha256 = "sha256-qmp6QWmyharyTzUVXlX/oJZWbeyegX/u8/vzi/pTSaA=";
+    sha256 = "sha256-18Tqgl84QPCsFNyV2oGQnLRI7WPK24X+4Mxk8Eh3FIQ=";
   };
 
   vendorSha256 = "sha256-E4jr+dskBdVXj/B5RW1AKyxxr+f/+ZW42OTO9XbCLuw=";
