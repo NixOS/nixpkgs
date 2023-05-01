@@ -20,11 +20,11 @@ let
   inherit (lib) optional;
 in stdenv.mkDerivation rec{
   pname = "skribilo";
-  version = "0.9.5";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "http://download.savannah.nongnu.org/releases/skribilo/${pname}-${version}.tar.gz";
-    sha256 = "sha256-AIJqIcRjT7C0EO6J60gGjERdgAglh0ZU49U9XKPwvwk=";
+    sha256 = "sha256-jP9I7hds7f1QMmSaNJpGlSvqUOwGcg+CnBzMopIS9Q4=";
   };
 
   nativeBuildInputs = [
