@@ -340,7 +340,11 @@ let
       '';
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
-    in lib.concatStringsSep "\n" commands;
+    in ''
+      runHook preBuild
+      ${lib.concatStringsSep "\n" commands}
+      runHook postBuild
+    '';
 
     postFixup = ''
       # Make sure that libGLESv2 and libvulkan are found by dlopen.
