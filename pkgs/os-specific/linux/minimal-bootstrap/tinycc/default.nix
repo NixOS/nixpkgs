@@ -9,11 +9,15 @@
 , fetchurl
 , callPackage
 , mes
+, mes-libc
+, ln-boot
 }:
 let
   version = "unstable-2023-04-20";
+  rev = "86f3d8e33105435946383aee52487b5ddf918140";
+
   tarball = fetchurl {
-    url = "https://repo.or.cz/tinycc.git/snapshot/86f3d8e33105435946383aee52487b5ddf918140.tar.gz";
+    url = "https://repo.or.cz/tinycc.git/snapshot/${rev}.tar.gz";
     sha256 = "11idrvbwfgj1d03crv994mpbbbyg63j1k64lw1gjy7mkiifw2xap";
   };
   src = (runCommand "tinycc-${version}-source" {} ''
@@ -21,7 +25,7 @@ let
     mkdir -p ''${out}
     cd ''${out}
     untar --file ''${NIX_BUILD_TOP}/tinycc.tar
-  '') + "/tinycc-86f3d8e";
+  '') + "/tinycc-${builtins.substring 0 7 rev}";
 
   meta = with lib; {
     description = "Small, fast, and embeddable C compiler and interpreter";
@@ -30,19 +34,6 @@ let
     maintainers = with maintainers; [ emilytrau ];
     platforms = [ "i686-linux" ];
   };
-
-  # Concatenate all source files into a convenient bundle
-  mes-libc =
-    let
-      # Passing this many arguments is too much for kaem so we need to
-      # split the operation in two
-      firstLibc = lib.take 100 mes.libcSources;
-      lastLibc = lib.drop 100 mes.libcSources;
-    in runCommand "mes-libc-${version}.c" {} ''
-      cd ${mes}${mes.mesPrefix}
-      catm ''${TMPDIR}/first.c ${lib.concatStringsSep " " firstLibc}
-      catm ''${out} ''${TMPDIR}/first.c ${lib.concatStringsSep " " lastLibc}
-    '';
 
   buildTinyccN = {
     pname,
@@ -59,9 +50,10 @@ let
     in
     runCommand "${pname}-${version}" {
       inherit pname version meta;
+      nativeBuildInputs = [ ln-boot ];
     } ''
       catm config.h
-      mkdir -p ''${out}/bin ''${out}/lib
+      mkdir -p ''${out}/bin
       ${prev}/bin/tcc \
         -g \
         -v \
@@ -76,7 +68,7 @@ let
         -D CONFIG_TCC_CRTPREFIX=\"''${out}/lib\" \
         -D CONFIG_TCC_ELFINTERP=\"\" \
         -D CONFIG_TCC_LIBPATHS=\"''${out}/lib\" \
-        -D CONFIG_TCC_SYSINCLUDEPATHS=\"${mes}${mes.mesPrefix}/include:${src}/include\" \
+        -D CONFIG_TCC_SYSINCLUDEPATHS=\"${mes-libc}/include:${src}/include\" \
         -D TCC_LIBGCC=\"libc.a\" \
         -D TCC_LIBTCC1=\"libtcc1.a\" \
         -D CONFIG_TCCBOOT=1 \
@@ -90,31 +82,34 @@ let
 
       ''${out}/bin/tcc -v
 
-      cd ${mes}${mes.mesPrefix}
       # Recompile libc: crt{1,n,i}, libtcc.a, libc.a, libgetopt.a
-      ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${out}/lib/crt1.o lib/linux/x86-mes-gcc/crt1.c
-      ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${out}/lib/crtn.o lib/linux/x86-mes-gcc/crtn.c
-      ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${out}/lib/crti.o lib/linux/x86-mes-gcc/crti.c
-      ''${out}/bin/tcc -c -D TCC_TARGET_I386=1 ${libtccOptions} -o ''${TMPDIR}/libtcc1.o ${src}/lib/libtcc1.c
-      ''${out}/bin/tcc -ar cr ''${out}/lib/libtcc1.a ''${TMPDIR}/libtcc1.o
-      ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${TMPDIR}/mes-libc.o ${mes-libc}
-      ''${out}/bin/tcc -ar cr ''${out}/lib/libc.a ''${TMPDIR}/mes-libc.o
-      ''${out}/bin/tcc -c -D HAVE_CONFIG_H=1 -I include -I include/linux/x86 -o ''${TMPDIR}/getopt.o lib/posix/getopt.c
-      ''${out}/bin/tcc -ar cr ''${out}/lib/libgetopt.a ''${TMPDIR}/getopt.o
+      mkdir -p ''${out}/lib
+      ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o ''${out}/lib/crt1.o ${mes-libc}/lib/crt1.c
+      ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o ''${out}/lib/crtn.o ${mes-libc}/lib/crtn.c
+      ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o ''${out}/lib/crti.o ${mes-libc}/lib/crti.c
+      ''${out}/bin/tcc -c -D TCC_TARGET_I386=1 ${libtccOptions} -o libtcc1.o ${src}/lib/libtcc1.c
+      ''${out}/bin/tcc -ar cr ''${out}/lib/libtcc1.a libtcc1.o
+      ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o libc.o ${mes-libc}/lib/libc.c
+      ''${out}/bin/tcc -ar cr ''${out}/lib/libc.a libc.o
+      ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o getopt.o ${mes-libc}/lib/getopt.c
+      ''${out}/bin/tcc -ar cr ''${out}/lib/libgetopt.a getopt.o
+
+      # Install headers
+      ln -s ${mes-libc}/include ''${out}/include
     '';
 
-  boot4-tcc = callPackage ./bootstrappable.nix { inherit buildTinyccN mes-libc; };
+  tinycc-bootstrappable = callPackage ./bootstrappable.nix { inherit buildTinyccN; };
 
   tccdefs = runCommand "tccdefs-${version}" {} ''
     mkdir ''${out}
-    ${boot4-tcc}/bin/tcc -static -DC2STR -o c2str ${src}/conftest.c
+    ${tinycc-bootstrappable}/bin/tcc -static -DC2STR -o c2str ${src}/conftest.c
     ./c2str ${src}/include/tccdefs.h ''${out}/tccdefs_.h
   '';
 
-  boot5-tcc = buildTinyccN {
-    pname = "boot5-tcc";
+  tinycc-mes-boot = buildTinyccN {
+    pname = "tinycc-mes-boot";
     inherit src version meta;
-    prev = boot4-tcc;
+    prev = tinycc-bootstrappable;
     buildOptions = [
       "-D HAVE_BITFIELD=1"
       "-D HAVE_FLOAT=1"
@@ -133,10 +128,10 @@ let
     ];
   };
 
-  tinycc-with-mes-libc = buildTinyccN {
-    pname = "tinycc-with-mes-libc";
+  tinycc-mes = buildTinyccN {
+    pname = "tinycc-mes";
     inherit src version meta;
-    prev = boot5-tcc;
+    prev = tinycc-mes-boot;
     buildOptions = [
       "-std=c99"
       "-D HAVE_BITFIELD=1"
@@ -156,4 +151,4 @@ let
     ];
   };
 in
-tinycc-with-mes-libc
+tinycc-mes

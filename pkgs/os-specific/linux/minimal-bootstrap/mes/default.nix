@@ -2,9 +2,9 @@
 , runCommand
 , fetchurl
 , writeText
+, callPackage
 , m2libc
 , mescc-tools
-, nyacc
 }:
 let
   pname = "mes";
@@ -14,6 +14,8 @@ let
     url = "mirror://gnu/mes/mes-${version}.tar.gz";
     sha256 = "0vp8v88zszh1imm3dvdfi3m8cywshdj7xcrsq4cgmss69s2y1nkx";
   };
+
+  nyacc = callPackage ./nyacc.nix { inherit nyacc; };
 
   config_h = builtins.toFile "config.h" ''
     #undef SYSTEM_LIBC
@@ -113,23 +115,34 @@ let
     + "lib/linux/lstat.c lib/linux/mkdir.c lib/linux/mknod.c lib/linux/nanosleep.c "
     + "lib/linux/pipe.c lib/linux/readlink.c lib/linux/rename.c lib/linux/setgid.c "
     + "lib/linux/settimer.c lib/linux/setuid.c lib/linux/signal.c lib/linux/sigprogmask.c "
-    + "lib/linux/symlink.c");
+    # sylink.c already included above in libc_tcc_SOURCES
+    # + "lib/linux/symlink.c"
+  );
   mes_SOURCES = cc: lib.splitString " " (
     "src/builtins.c src/cc.c src/core.c src/display.c src/eval-apply.c src/gc.c "
     + "src/globals.c src/hash.c src/lib.c src/math.c src/mes.c src/module.c src/posix.c "
     + "src/reader.c src/stack.c src/string.c src/struct.c src/symbol.c src/vector.c");
 
-  compile = sources: lib.concatMapStringsSep "\n" (f: ''CC -c ''${MES_PREFIX}/${f}'') sources;
-  replaceExt = ext: source: lib.replaceStrings [".c"] [ext] (builtins.baseNameOf source);
-  archive = out: sources: "catm ${out} ${lib.concatMapStringsSep " " (replaceExt ".o") sources}";
-  sourceArchive = out: sources: "catm ${out} ${lib.concatMapStringsSep " " (replaceExt ".s") sources}";
+  compile = sources:
+    lib.concatMapStringsSep
+      "\n"
+      (f: ''CC -c ''${MES_PREFIX}/${f}'')
+      sources;
+  replaceExt = ext: source:
+    lib.replaceStrings
+      [ ".c" ]
+      [ ext ]
+      (builtins.baseNameOf source);
+  archive = out: sources:
+    "catm ${out} ${lib.concatMapStringsSep " " (replaceExt ".o") sources}";
+  sourceArchive = out: sources:
+    "catm ${out} ${lib.concatMapStringsSep " " (replaceExt ".s") sources}";
 in
 runCommand "${pname}-${version}" {
   inherit pname version;
 
-  passthru = {
-    mesPrefix = "/share/mes-${version}";
-    libcSources = libc_SOURCES "gcc" ++ libc_gnu_SOURCES "gcc";
+  passthru.mes-libc = callPackage ./libc.nix {
+    inherit libc_SOURCES libc_gnu_SOURCES;
   };
 
   meta = with lib; {

@@ -12,10 +12,10 @@ lib.makeScope newScope (self: with self; {
 
   inherit (callPackage ./stage0-posix { }) kaem m2libc mescc-tools mescc-tools-extra writeTextFile writeText runCommand;
 
-  nyacc = callPackage ./mes/nyacc.nix { };
   mes = callPackage ./mes { };
+  inherit (mes) mes-libc;
 
   ln-boot = callPackage ./ln-boot { };
 
-  tinycc-with-mes-libc = callPackage ./tinycc/default.nix { };
+  tinycc-mes = callPackage ./tinycc/default.nix { };
 })
