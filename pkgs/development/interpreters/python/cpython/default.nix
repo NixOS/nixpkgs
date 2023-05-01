@@ -288,6 +288,9 @@ in with passthru; stdenv.mkDerivation {
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
     # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
     ./3.7/fix-finding-headers-when-cross-compiling.patch
+  ] ++ optionals stdenv.hostPlatform.isLoongArch64 [
+    # https://github.com/python/cpython/issues/90656
+    ./loongarch-support.patch
   ];
 
   postPatch = ''
