@@ -17,8 +17,8 @@ rec {
   derivationWithMeta = attrs:
     let
       passthru = attrs.passthru or {};
-      validity = checkMeta { inherit attrs; };
-      inherit (validity) meta;
+      validity = checkMeta.assertValidity { inherit meta attrs; };
+      meta = checkMeta.commonMeta { inherit validity attrs; };
     in
     lib.extendDerivation
       validity.handled
