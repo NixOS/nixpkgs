@@ -26,13 +26,13 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
 stdenvNoCC.mkDerivation
 rec {
   inherit pname;
-  version = "2024-04-08";
+  version = "2023-04-08";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    hash = "sha256-1Yatb5BeRLu4kWm+EAiRYPvGxRNeIo63SAN3/Dp7Na8=";
+    hash = "sha256-/X4Hr2M/7pf6JxTUvPoG5VkQd+rweEPeTNe9glSLh78=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];

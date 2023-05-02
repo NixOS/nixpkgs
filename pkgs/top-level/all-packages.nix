@@ -338,9 +338,7 @@ with pkgs;
 
   breakpad = callPackage ../development/misc/breakpad { };
 
-  brev-cli = callPackage ../development/misc/brev-cli {
-    buildGoModule = buildGo118Module; # build fails with 1.19
-  };
+  brev-cli = callPackage ../development/misc/brev-cli { };
 
   buf = callPackage ../development/tools/buf { };
 
@@ -4890,6 +4888,8 @@ with pkgs;
 
   fuzzel = callPackage ../applications/misc/fuzzel { };
 
+  fuzzylite = callPackage ../development/libraries/fuzzylite { };
+
   flashfocus = callPackage ../misc/flashfocus { };
 
   qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr { };
@@ -6841,7 +6841,7 @@ with pkgs;
   };
 
   doggo = callPackage ../tools/networking/doggo {
-    buildGoModule = buildGo118Module; # build fails with 1.19
+    buildGoModule = buildGo119Module; # build fails with 1.20
   };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
@@ -12991,6 +12991,8 @@ with pkgs;
   trackma-qt = trackma.override { withQT = true; };
 
   tran = callPackage ../tools/networking/tran { };
+
+  trayscale = callPackage ../applications/networking/trayscale { };
 
   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
@@ -39795,6 +39797,8 @@ with pkgs;
   sequeler = callPackage ../applications/misc/sequeler { };
 
   sequelpro = callPackage ../applications/misc/sequelpro { };
+
+  serial-studio = libsForQt5.callPackage ../applications/misc/serial-studio { };
 
   snowsql = callPackage ../applications/misc/snowsql { };
 
