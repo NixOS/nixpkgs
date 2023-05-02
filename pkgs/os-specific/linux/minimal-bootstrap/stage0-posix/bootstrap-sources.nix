@@ -1,8 +1,8 @@
 rec {
   name = "stage0-posix-${version}-${rev}-source";
-  # Pinned from https://github.com/oriansj/stage0-posix/commit/bdd3ee779adb9f4a299059d09e68dfedecfd4226
-  version = "unstable-2023-04-24";
-  rev = "bdd3ee779adb9f4a299059d09e68dfedecfd4226";
+  # Pinned from https://github.com/oriansj/stage0-posix/commit/3189b5f325b7ef8b88e3edec7c1cde4fce73c76c
+  version = "unstable-2023-05-02";
+  rev = "3189b5f325b7ef8b88e3edec7c1cde4fce73c76c";
 
   # This 256 byte seed is the only pre-compiled binary in the bootstrap chain.
   # While it is included in the stage0-posix source bundle and is synced with
@@ -27,8 +27,8 @@ rec {
   # To build see `make-bootstrap-sources.nix`
   src = import <nix/fetchurl.nix> {
     inherit name;
-    url = "https://github.com/emilytrau/bootstrap-tools-nar-mirror/releases/download/2023-04-25/${name}.nar.xz";
-    hash = "sha256-hMLo32yqXiTXPyW1jpR5zprYzZW8lFQy6KMrkNQZ89I=";
+    url = "https://github.com/emilytrau/bootstrap-tools-nar-mirror/releases/download/2023-05-02/${name}.nar.xz";
+    hash = "sha256-ZRG0k49MxL1UTZhuMTvPoEprdSpJRNVy8QhLE6k+etg=";
     unpack = true;
   };
 }

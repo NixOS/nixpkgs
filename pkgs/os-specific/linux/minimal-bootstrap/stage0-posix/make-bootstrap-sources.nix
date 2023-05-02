@@ -23,12 +23,23 @@ let
     owner = "oriansj";
     repo = "stage0-posix";
     inherit rev;
-    sha256 = "hMLo32yqXiTXPyW1jpR5zprYzZW8lFQy6KMrkNQZ89I=";
+    sha256 = "sha256-ZRG0k49MxL1UTZhuMTvPoEprdSpJRNVy8QhLE6k+etg=";
     fetchSubmodules = true;
+    postFetch = ''
+      # Remove vendored/duplicate M2libc's
+      echo "Removing duplicate M2libc"
+      rm -rf \
+        $out/M2-Mesoplanet/M2libc \
+        $out/M2-Planet/M2libc \
+        $out/mescc-tools/M2libc \
+        $out/mescc-tools-extra/M2libc
+    '';
   };
 in
 runCommand name {
   nativeBuildInputs = [ nix xz ];
+
+  passthru = { inherit src; };
 } ''
   mkdir $out
   nix-store --dump ${src} | xz -c > "$out/${name}.nar.xz"
