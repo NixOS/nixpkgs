@@ -45,10 +45,16 @@ with python3.pkgs; buildPythonApplication rec {
     click
     click-completion
     colorama
+    cryptography
+    future
     git
+    idf-component-manager
+    kconfiglib
     lockfile
     marshmallow
+    pip
     pyelftools
+    pyparsing
     pyserial
     requests
     semantic-version
