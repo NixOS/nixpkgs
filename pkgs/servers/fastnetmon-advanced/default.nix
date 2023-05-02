@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     ar xf $src
     tar xf data.tar.xz
 
+    # both clickhouse 2.0.0 and 2.3.0 libs are included, without versioning it will by
+    # default choose the first it finds, but we need 2.3.0 otherwise the fastnetmon
+    # binary will be missing symbols
+    rm -r opt/fastnetmon/libraries/libclickhouse_2_0_0
+
     # unused libraries, which have additional dependencies
     rm opt/fastnetmon/libraries/gcc1210/lib/libgccjit.so.0.0.1
     rm opt/fastnetmon/libraries/poco_1_10_0/lib/libPocoCryptod.so.70
