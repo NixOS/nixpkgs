@@ -13,7 +13,6 @@
 , "@medable/mdctl-cli"
 , "@microsoft/rush"
 , "@nerdwallet/shepherd"
-, "@nestjs/cli"
 , "@shopify/cli"
 , "@squoosh/cli"
 , "@tailwindcss/aspect-ratio"
