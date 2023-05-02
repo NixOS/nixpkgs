@@ -13975,6 +13975,8 @@ with pkgs;
 
   toybox = darwin.apple_sdk_11_0.callPackage ../tools/misc/toybox { };
 
+  tplay = callPackage ../tools/misc/tplay { };
+
   trackma = callPackage ../tools/misc/trackma { };
 
   trackma-curses = trackma.override { withCurses = true; };
