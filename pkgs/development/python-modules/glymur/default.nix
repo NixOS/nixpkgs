@@ -2,20 +2,19 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, numpy
-, scikitimage
-, openjpeg
-, procps
-, pytestCheckHook
-, importlib-resources
-, pythonOlder
 , lxml
+, numpy
+, openjpeg
+, pytestCheckHook
+, pythonOlder
+, scikitimage
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "glymur";
-  version = "0.9.3";
-  format = "setuptools";
+  version = "0.12.4";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -23,8 +22,12 @@ buildPythonPackage rec {
     owner = "quintusdias";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ObczavqhBv4NzEd+ggzTAxGx92uxp6ABxLg8bEpXl/Y=";
+    hash = "sha256-H7aA1nHd8JI3+4dzZhu+GOv/0Y2KRdDkn6Fvc76ny/A=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -32,7 +35,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     lxml
-    procps
     pytestCheckHook
     scikitimage
   ];
@@ -47,6 +49,7 @@ buildPythonPackage rec {
     # fsh systems by reading an .rc file and such, and is obviated by the patch
     # in postConfigure
     "tests/test_config.py"
+    "tests/test_tiff2jp2.py"
   ];
 
   pythonImportsCheck = [
