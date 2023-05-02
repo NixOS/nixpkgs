@@ -1,4 +1,5 @@
 { lib
+, nix-update-script
 , python3
 }:
 
@@ -27,6 +28,8 @@ python3.pkgs.buildPythonApplication rec {
     $out/bin/synadm -h > /dev/null
     runHook postCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Command line admin tool for Synapse";
