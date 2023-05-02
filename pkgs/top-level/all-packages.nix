@@ -23360,6 +23360,8 @@ with pkgs;
 
   sope = callPackage ../development/libraries/sope { };
 
+  sophus = callPackage ../development/libraries/sophus { };
+
   sord = callPackage ../development/libraries/sord { };
 
   soundtouch = callPackage ../development/libraries/soundtouch {};
