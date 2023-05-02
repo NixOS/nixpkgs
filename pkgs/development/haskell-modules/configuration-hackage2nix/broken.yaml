@@ -5106,7 +5106,6 @@ broken-packages:
   - streaming-png
   - streaming-postgresql-simple
   - streaming-sort
-  - streamly-archive
   - streamly-binary
   - streamly-cassava
   - streamly-examples
