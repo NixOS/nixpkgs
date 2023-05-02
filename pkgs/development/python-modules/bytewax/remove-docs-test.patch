@@ -1,10 +1,10 @@
 diff --git a/pyproject.toml b/pyproject.toml
-index 9b6ee4b..4a82c15 100644
+index 41b5c90..e7c7b2d 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -56,5 +56,4 @@ testpaths = [
- 
-     # TODO: Turn back on markdown tests once we stabilize inputs.
- 
+@@ -50,6 +50,5 @@ doctest_optionflags = "NORMALIZE_WHITESPACE"
+ testpaths = [
+     "pytests",
+     "pysrc",
 -    "docs",
  ]
