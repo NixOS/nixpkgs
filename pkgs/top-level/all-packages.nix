@@ -12486,6 +12486,8 @@ with pkgs;
 
   sslmate-agent = callPackage ../development/tools/sslmate-agent { };
 
+  sshocker = callPackage ../tools/security/sshocker { };
+
   sshoogr = callPackage ../tools/networking/sshoogr { };
 
   ssocr = callPackage ../applications/misc/ssocr { };
