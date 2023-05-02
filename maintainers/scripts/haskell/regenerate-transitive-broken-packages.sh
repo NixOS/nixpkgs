@@ -8,7 +8,7 @@ readonly TMP_TEMPLATE
 
 tmpfile=$(mktemp "$TMP_TEMPLATE")
 
-trap 'rm "${tmpfile}"' 0
+trap 'rm -f "${tmpfile}"' 0
 
 config_file=pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml
 
