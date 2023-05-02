@@ -10,27 +10,26 @@
 # To build:
 #
 #   nix-build pkgs/os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix
-#   => ./result/stage0-posix-0000000-source.nar.xz
+#   => ./result/stage0-posix-$version-$rev-source.nar.xz
 #
 
 { pkgs ? import ../../../../.. {} }:
 let
-  inherit (pkgs) runCommand fetchFromGitHub nix xz;
+  inherit (pkgs) callPackage runCommand fetchFromGitHub nix xz;
 
-  pname = "stage0-posix";
-  rev = "bdd3ee779adb9f4a299059d09e68dfedecfd4226";
-  shortHash = builtins.substring 0 7 rev;
+  inherit (import ./bootstrap-sources.nix) name rev;
+
   src = fetchFromGitHub {
     owner = "oriansj";
-    repo = pname;
+    repo = "stage0-posix";
     inherit rev;
     sha256 = "hMLo32yqXiTXPyW1jpR5zprYzZW8lFQy6KMrkNQZ89I=";
     fetchSubmodules = true;
   };
 in
-runCommand "${pname}-${shortHash}-source" {
+runCommand name {
   nativeBuildInputs = [ nix xz ];
 } ''
   mkdir $out
-  nix-store --dump ${src} | xz -c > "$out/${pname}-${shortHash}-source.nar.xz"
+  nix-store --dump ${src} | xz -c > "$out/${name}.nar.xz"
 ''
