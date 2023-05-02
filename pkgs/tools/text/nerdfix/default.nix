@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nerdfix";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "loichyan";
     repo = "nerdfix";
     rev = "v${version}";
-    hash = "sha256-bohN3RXGZObDSDsggKmqKdLx37o8llTwIcpDQIbxEUo=";
+    hash = "sha256-cC8BuDTYpXKAtbIylpLQKZG84N/kMp0jirqJanvEvZo=";
   };
 
-  cargoHash = "sha256-T5t+PvzCKfwiKQR/WWKxcoulSRhTNdiLDfoLnKO2qJ0=";
+  cargoHash = "sha256-K5bZRHce71hFvw7Ipbk4nazg/Wh4I161/MTQmTZakrQ=";
 
   meta = with lib; {
     description = "Nerdfix helps you to find/fix obsolete nerd font icons in your project";
