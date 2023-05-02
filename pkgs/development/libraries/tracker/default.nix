@@ -144,6 +144,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
+    export LANG=${if stdenv.isDarwin then "en_US.UTF-8" else "C.UTF-8"}
     dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
       meson test \
