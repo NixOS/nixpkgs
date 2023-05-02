@@ -108,7 +108,7 @@ let
 
   inherit (lib) concatStringsSep flatten optionalString optionals;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   # Common libraries, referenced during runtime, via the wrapper.
   passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
@@ -121,9 +121,12 @@ stdenv.mkDerivation rec {
   };
 
   inherit pname;
-  version = if (stable) then kicadVersion else builtins.substring 0 10 src.src.rev;
+  version = if (stable)
+    then kicadVersion
+    else builtins.substring 0 10 finalAttrs.src.src.rev
+  ;
 
-  src = base;
+  src = finalAttrs.base;
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
@@ -137,8 +140,8 @@ stdenv.mkDerivation rec {
     [ python.pkgs.wrapPython ];
 
   # We are emulating wrapGAppsHook, along with other variables to the wrapper
-  makeWrapperArgs = with passthru.libraries; [
-    "--prefix XDG_DATA_DIRS : ${base}/share"
+  makeWrapperArgs = with finalAttrs.passthru.libraries; [
+    "--prefix XDG_DATA_DIRS : ${finalAttrs.base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${gnome.adwaita-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
@@ -168,6 +171,7 @@ stdenv.mkDerivation rec {
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
   installPhase =
     let
+      inherit (finalAttrs) base;
       bin = if stdenv.isDarwin then "*.app/Contents/MacOS" else "bin";
       tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
       utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad-cli" ];
@@ -195,10 +199,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share
-    ln -s ${base}/share/applications $out/share/applications
-    ln -s ${base}/share/icons $out/share/icons
-    ln -s ${base}/share/mime $out/share/mime
-    ln -s ${base}/share/metainfo $out/share/metainfo
+    ln -s ${finalAttrs.base}/share/applications $out/share/applications
+    ln -s ${finalAttrs.base}/share/icons $out/share/icons
+    ln -s ${finalAttrs.base}/share/mime $out/share/mime
+    ln -s ${finalAttrs.base}/share/metainfo $out/share/metainfo
   '';
 
   # can't run this for each pname
@@ -232,4 +236,4 @@ stdenv.mkDerivation rec {
 
     mainProgram = "kicad";
   };
-}
+})
