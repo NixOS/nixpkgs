@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flavours";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "Misterio77";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Q2YW9oFqzkmWscoE4p9E43bo1/4bQrTnd8tvPsJqJyQ=";
+    hash = "sha256-48f05kIojCCANxV2rGmyXvGVqID2Wy0uh/YavR8d3XI=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  cargoSha256 = "sha256-IrVcd8ilWbaigGMqT+kaIW3gnE+m+Ik5IyhQ4zPlyPE=";
+  cargoHash = "sha256-YeIiyyGjjXoyuQ2td393LuiyvDmLZdoWf2BGYWqynD4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Misterio77/flavours";
     changelog = "https://github.com/Misterio77/flavours/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ fortuneteller2k misterio77 ];
   };
 }
