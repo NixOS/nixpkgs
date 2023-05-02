@@ -33,7 +33,8 @@ let
       aliases;
 in
 
-mapAliases ({
+mapAliases {
+  "@antora/cli" = pkgs.antora;
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
   "@nestjs/cli" = pkgs.nest-cli;
-})
+}
