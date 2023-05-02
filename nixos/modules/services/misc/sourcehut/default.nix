@@ -786,6 +786,7 @@ in
         extraConfig = ''
           PermitUserEnvironment SRHT_*
         '';
+        startWhenNeeded = false;
       };
       environment.etc."ssh/sourcehut/config.ini".source =
         settingsFormat.generate "sourcehut-dispatch-config.ini"
