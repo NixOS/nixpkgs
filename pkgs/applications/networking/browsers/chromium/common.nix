@@ -331,7 +331,7 @@ let
 
     buildPhase = let
       buildCommand = target: ''
-        ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
+        TERM=dumb ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
         (
           source chrome/installer/linux/common/installer.include
           PACKAGE=$packageName
@@ -341,7 +341,11 @@ let
       '';
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
-    in lib.concatStringsSep "\n" commands;
+    in ''
+      runHook preBuild
+      ${lib.concatStringsSep "\n" commands}
+      runHook postBuild
+    '';
 
     postFixup = ''
       # Make sure that libGLESv2 and libvulkan are found by dlopen.
