@@ -39753,6 +39753,8 @@ with pkgs;
 
   dart = callPackage ../development/compilers/dart { };
 
+  dart-sass = callPackage ../development/tools/misc/dart-sass { };
+
   httrack = callPackage ../tools/backup/httrack { };
 
   httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
