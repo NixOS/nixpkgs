@@ -310,6 +310,10 @@ in
       # top-level pkgs as an override either.
       perl = super.perl.override { enableThreading = false; enableCrypt = false; };
     };
+
+    # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
+    extraNativeBuildInputs =
+      lib.optional (localSystem.isLoongArch64) prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
   # First rebuild of gcc; this is linked against all sorts of junk
@@ -387,6 +391,10 @@ in
             '';
           });
       };
+
+      # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
+      extraNativeBuildInputs =
+        lib.optional (localSystem.isLoongArch64) prevStage.updateAutotoolsGnuConfigScriptsHook;
     })
 
   # 2nd stdenv that contains our own rebuilt binutils and is used for
@@ -469,9 +477,10 @@ in
 
     };
 
+    # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
     # `libtool` comes with obsolete config.sub/config.guess that don't recognize Risc-V.
     extraNativeBuildInputs =
-      lib.optional (localSystem.isRiscV) prevStage.updateAutotoolsGnuConfigScriptsHook;
+      lib.optional (localSystem.isLoongArch64 || localSystem.isRiscV) prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
 

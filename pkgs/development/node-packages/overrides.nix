@@ -626,6 +626,10 @@ final: prev: {
       };
   };
 
+  volar = final."@volar/vue-language-server".override {
+    name = "volar";
+  };
+
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config final.node-pre-gyp ];
     # These dependencies are required by
