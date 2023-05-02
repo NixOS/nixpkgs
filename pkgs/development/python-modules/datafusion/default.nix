@@ -32,21 +32,21 @@ in
 
 buildPythonPackage rec {
   pname = "datafusion";
-  version = "22.0.0";
+  version = "23.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     name = "datafusion-source";
     owner = "apache";
     repo = "arrow-datafusion-python";
-    rev = "22.0.0";
-    hash = "sha256-EKurQ4h5IOTU3JiGN+MHrDciQUadUrywNRhnv9S/9iY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ndee7aNmoTtZyfl9UUXdNVHkp0GAuJWkyfZJyRrGwn8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "datafusion-cargo-deps";
     inherit src pname version;
-    hash = "sha256-0kfavTFqsQ1Uvg5nQw6VFGlvih8ysOyS2KGT4cTIsVI=";
+    hash = "sha256-eDweEc+7dDbF0WBi6M5XAPIiHRjlYAdf2eNJdwj4D7c=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -79,6 +79,7 @@ buildPythonPackage rec {
       that uses Apache Arrow as its in-memory format.
     '';
     homepage = "https://arrow.apache.org/datafusion/";
+    changelog = "https://github.com/apache/arrow-datafusion-python/blob/${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ cpcloud ];
   };
