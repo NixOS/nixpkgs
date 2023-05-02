@@ -37813,7 +37813,13 @@ with pkgs;
     branch = "canary";
   };
 
-  golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah {};
+  discord-development = import ../applications/networking/instant-messengers/discord {
+    inherit lib stdenv;
+    inherit (pkgs) callPackage fetchurl;
+    branch = "development";
+  };
+
+  golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah { };
 
   linkchecker = callPackage ../tools/networking/linkchecker { };
 
