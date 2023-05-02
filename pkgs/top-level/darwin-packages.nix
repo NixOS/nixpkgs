@@ -108,7 +108,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
-  # TODO: remove alias.
+  # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
   cf-private = self.apple_sdk.frameworks.CoreFoundation;
 
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
