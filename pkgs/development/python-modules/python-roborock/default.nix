@@ -3,6 +3,7 @@
 , async-timeout
 , buildPythonPackage
 , click
+, construct
 , dacite
 , fetchFromGitHub
 , paho-mqtt
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "0.8.3";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O7MjxCQ4JwFFC2ibdU8hCPhFPQhV5/LsmDO6vRdyYL0=";
+    hash = "sha256-w3UpbkBBSPcz3872HDp8MduAIgn0+8R+0C0pGU6fDJM=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     aiohttp
     async-timeout
     click
+    construct
     dacite
     paho-mqtt
     pycryptodome
