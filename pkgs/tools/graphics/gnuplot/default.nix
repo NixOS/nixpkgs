@@ -53,11 +53,18 @@ in
 
   CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
 
+  # we'll wrap things ourselves
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
+
+  # binary wrappers don't support --run
   postInstall = lib.optionalString withX ''
-    wrapProgram $out/bin/gnuplot \
+    wrapProgramShell $out/bin/gnuplot \
        --prefix PATH : '${gnused}/bin' \
        --prefix PATH : '${coreutils}/bin' \
        --prefix PATH : '${fontconfig.bin}/bin' \
+       "''${gappsWrapperArgs[@]}" \
+       "''${qtWrapperArgs[@]}" \
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
   '';
 
