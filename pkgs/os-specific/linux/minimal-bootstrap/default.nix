@@ -4,8 +4,6 @@
 }:
 
 lib.makeScope newScope (self: with self; {
-  callPackage = self.callPackage;
-
   fetchurl = import ../../../build-support/fetchurl/boot.nix {
     inherit (stdenv.buildPlatform) system;
   };
