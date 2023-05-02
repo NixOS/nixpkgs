@@ -29898,6 +29898,8 @@ with pkgs;
 
   errbot = callPackage ../applications/networking/errbot { };
 
+  flottbot = callPackage ../applications/networking/flottbot { };
+
   espeak-classic = callPackage ../applications/audio/espeak { };
 
   espeak-ng = callPackage ../applications/audio/espeak-ng { };
