@@ -8,6 +8,7 @@
 , libsodium
 , cffi
 , hypothesis
+, buildPackages
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    sphinxHook
+    buildPackages.python3Packages.sphinxHook
   ];
 
   buildInputs = [
