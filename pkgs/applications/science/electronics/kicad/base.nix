@@ -69,6 +69,12 @@ stdenv.mkDerivation rec {
   patches = [
     # upstream issue 12941 (attempted to upstream, but appreciably unacceptable)
     ./writable.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # See the comment below.
+    #
+    # This is mostly not necessary (we handle the fixups that are actually
+    # required in the `postFixup` hook below).
+    ./macos-disable-bundle-fixup.patch
   ];
 
   # tagged releases don't have "unknown"
@@ -77,6 +83,42 @@ stdenv.mkDerivation rec {
   postPatch = lib.optionalString (!stable) ''
     substituteInPlace cmake/KiCadVersion.cmake \
       --replace "unknown" "${builtins.substring 0 10 src.rev}"
+  '';
+
+  # Normally `fixup_bundle` would take care of this however we patch out the
+  # calls to `fixup_bundle` because CMake seems to runs `otool -l` on every
+  # dylib dep prior to consulting `IGNORE_ITEMS` (unclear).
+  #
+  # This is problematic for us because deps like `/usr/lib/libSystem.B.dylib`
+  # don't actually exist on the file system and are instead provided by the dyld
+  # cache. Calls to `dlopen`, etc with such paths are rerouted by `otool` does
+  # not seem to be aware of this.
+  #
+  # So, we handle patching the dylib paths ourselves. Currently only the plugins
+  # end up having paths relative to the build dir. (though we should probably do
+  # something more robust here or scan the rpaths of all the binaries...)
+
+  # `cmake` rewrites the realpath of `/tmp` (i.e. `/private/tmp` on macOS
+  # builders) to `/tmp` which means we can't just use `pwd` or `NIX_BUILD_TOP`
+  # here:
+  #  - https://github.com/Kitware/CMake/blob/3f3c3d3e71f5aa4840932a96cd9ab90cf22cc9d3/Source/kwsys/SystemTools.cxx#L4926-L4927C7
+  #
+  # So, we ask `otool` for the current path of this dylib.
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for lib in $out/KiCad.app/Contents/Plugins/**/*.so $out/KiCad.app/Contents/Plugins/*.kiface; do
+      buildLibkicad3dsgPath="$(${stdenv.cc.targetPrefix}otool -L $lib \
+        | grep build/kicad/KiCad.app/Contents/Frameworks/libkicad_3dsg \
+        | cut -d'(' -f1 \
+        | xargs
+      )" || :
+
+      if [[ -n "''${buildLibkicad3dsgPath:+x}" ]]; then
+        ${stdenv.cc.targetPrefix}install_name_tool \
+          -change "''${buildLibkicad3dsgPath}" \
+          $out/KiCad.app/Contents/Frameworks/libkicad_3dsg.dylib \
+          $lib
+      fi
+    done
   '';
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
