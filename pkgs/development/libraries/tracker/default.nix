@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
     dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
       meson test \
-        --timeout-multiplier 2 \
+        --timeout-multiplier 0 \
         --print-errorlogs
 
     runHook postCheck
