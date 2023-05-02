@@ -26943,7 +26943,10 @@ with pkgs;
 
   metastore = callPackage ../os-specific/linux/metastore { };
 
-  minimal-bootstrap = recurseIntoAttrs (callPackage ../os-specific/linux/minimal-bootstrap { });
+  minimal-bootstrap = recurseIntoAttrs (import ../os-specific/linux/minimal-bootstrap {
+    inherit (stdenv) buildPlatform hostPlatform;
+    inherit lib config;
+  });
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 

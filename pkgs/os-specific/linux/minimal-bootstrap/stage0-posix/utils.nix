@@ -1,7 +1,6 @@
 { lib
-, stdenv
+, buildPlatform
 , callPackage
-, fetchurl
 , kaem
 , kaem-unwrapped
 , mescc-tools
@@ -9,9 +8,7 @@
 }:
 
 let
-  checkMeta = callPackage ../../../../stdenv/generic/check-meta.nix {
-    inherit (stdenv) hostPlatform;
-  };
+  checkMeta = callPackage ../../../../stdenv/generic/check-meta.nix { };
 in
 rec {
   derivationWithMeta = attrs:
@@ -24,7 +21,7 @@ rec {
       validity.handled
       ({ inherit meta passthru; } // passthru)
       (derivation ({
-        inherit (stdenv.buildPlatform) system;
+        inherit (buildPlatform) system;
         inherit (meta) name;
       } // (builtins.removeAttrs attrs [ "meta" "passthru" ])));
 
