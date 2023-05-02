@@ -17,6 +17,8 @@
 buildPythonPackage rec {
   pname = "imageio";
   version = "2.28.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
