@@ -10,9 +10,7 @@ pipInstallPhase() {
     mkdir -p "$out/@pythonSitePackages@"
     export PYTHONPATH="$out/@pythonSitePackages@:$PYTHONPATH"
 
-    pushd dist || return 1
-    @pythonInterpreter@ -m pip install ./*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache $pipInstallFlags
-    popd || return 1
+    @pythonInterpreter@ -m pip install $pname --find-links dist --no-index --no-warn-script-location --prefix="$out" --no-cache $pipInstallFlags
 
     runHook postInstall
     echo "Finished executing pipInstallPhase"
