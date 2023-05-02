@@ -1,8 +1,6 @@
 [
   "@angular/cli"
 , "@antfu/ni"
-, "@antora/cli"
-, "@antora/site-generator-default"
 , "@astrojs/language-server"
 , "@bitwarden/cli"
 , "@commitlint/cli"
