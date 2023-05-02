@@ -3804,6 +3804,8 @@ self: super: with self; {
 
   fuzzyfinder = callPackage ../development/python-modules/fuzzyfinder { };
 
+  fuzzytm = callPackage ../development/python-modules/fuzzytm { };
+
   fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
 
   fvs = callPackage ../development/python-modules/fvs { };
@@ -8362,6 +8364,8 @@ self: super: with self; {
   pyftpdlib = callPackage ../development/python-modules/pyftpdlib { };
 
   pyfttt = callPackage ../development/python-modules/pyfttt { };
+
+  pyfume = callPackage ../development/python-modules/pyfume { };
 
   pyfuse3 = callPackage ../development/python-modules/pyfuse3 { };
 
