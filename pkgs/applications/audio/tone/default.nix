@@ -1,11 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fetchNuGet, linkFarmFromDrvs, buildDotnetModule, ffmpeg-full, msbuild, dotnetCorePackages }:
+{ lib, fetchFromGitHub, buildDotnetModule, ffmpeg-full, dotnetCorePackages }:
 
-let
-  nugetSource = linkFarmFromDrvs "nuget-packages" (
-    import ./nuget-deps.nix { inherit fetchNuGet; }
-  );
-
-in buildDotnetModule rec {
+buildDotnetModule rec {
   pname = "tone";
   version = "0.1.5";
 
