@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "2.49.0";
+  version = "2.56.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-rDwFOqltj/iR41kQdOOPmcG5jrf4IeHJoBvzZrMFSAE=";
+    hash = "sha256-IpdlNwOuUNWgfphRH2UTQ/IvBHo39PafCqyioju8miI=";
   };
 
   pythonRelaxDeps = [
@@ -46,7 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     dvc-render
     dvc-studio-client
     dvc-task
-    dvclive
     flatten-dict
     flufl_lock
     funcy
@@ -96,6 +95,5 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/iterative/dvc/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai fab ];
-    broken = true; # requires new python package: dvc-studio-client
   };
 }
