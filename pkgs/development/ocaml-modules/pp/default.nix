@@ -1,5 +1,5 @@
 { buildDunePackage
-, fetchzip
+, fetchurl
 , ppx_expect
 , lib
 }:
@@ -8,12 +8,12 @@ buildDunePackage rec {
   pname = "pp";
   version = "1.1.2";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://github.com/ocaml-dune/pp/releases/download/${version}/pp-${version}.tbz";
-    sha256 = "1l1im054pxrkj7zk8m6yj4qfdpxkajpjfvy818ggf0j4nxkaihc5";
+    hash = "sha256-5KTpjZaxu3aVD81tpOk4yG2YnfTX5I8C96RFlfWvHVY=";
   };
 
-  useDune2 = true;
+  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   checkInputs = [ ppx_expect ];
