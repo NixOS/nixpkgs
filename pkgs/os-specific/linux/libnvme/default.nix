@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     "-Ddocs-build=true"
   ];
 
+  preConfigure = ''
+    export KBUILD_BUILD_TIMESTAMP="$(date -u -d @$SOURCE_DATE_EPOCH)"
+  '';
+
   doCheck = true;
 
   meta = with lib; {
