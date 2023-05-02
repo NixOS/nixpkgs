@@ -25,7 +25,7 @@
 , lndir
 , git
 , which
-}@args:
+}:
 
 let
   engineArtifactDirectory =
@@ -160,24 +160,10 @@ let
 
       passthru = {
         inherit dart;
-
         # The derivation containing the original Flutter SDK files.
         # When other derivations wrap this one, any unmodified files
         # found here should be included as-is, for tooling compatibility.
         sdk = unwrapped;
-        buildFlutterApplication = callPackage ../../../build-support/flutter {
-          # Package a minimal version of Flutter that only uses Linux desktop release artifacts.
-          flutter = callPackage ./wrapper.nix {
-            flutter = callPackage ./flutter.nix (args // {
-              includedEngineArtifacts = {
-                common = [ "flutter_patched_sdk_product" ];
-                platform.linux = lib.optionals stdenv.hostPlatform.isLinux
-                  (lib.genAttrs ((lib.optional stdenv.hostPlatform.isx86_64 "x64") ++ (lib.optional stdenv.hostPlatform.isAarch64 "arm64"))
-                    (architecture: [ "release" ]));
-              };
-            });
-          };
-        };
       };
 
       meta = with lib; {
