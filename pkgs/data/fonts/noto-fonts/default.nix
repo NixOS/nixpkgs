@@ -1,6 +1,7 @@
 { stdenv
 , stdenvNoCC
 , lib
+, gitUpdater
 , fetchFromGitHub
 , fetchurl
 , cairo
@@ -73,6 +74,10 @@ rec {
           fi
         done
       '');
+
+      passthru.updateScript = gitUpdater {
+        rev-prefix = "noto-monthly-release-";
+      };
 
       meta = with lib; {
         description = "Beautiful and free fonts for many languages";
