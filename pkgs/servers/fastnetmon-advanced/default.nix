@@ -43,6 +43,13 @@ stdenv.mkDerivation rec {
     addAutoPatchelfSearchPath $out/libexec/fastnetmon/libraries
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    set +o pipefail
+    $out/bin/fastnetmon 2>&1 | grep "Can't open log file"
+    $out/bin/fcli 2>&1 | grep "Please run this tool with root rights"
+  '';
+
   meta = with lib; {
     description = "A high performance DDoS detector / sensor - commercial edition";
     homepage = "https://fastnetmon.com";
