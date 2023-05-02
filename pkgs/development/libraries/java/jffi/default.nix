@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jffi";
-  version = "1.3.10";
+  version = "1.3.11";
 
   src = fetchFromGitHub {
     owner = "jnr";
     repo = "jffi";
     rev = "jffi-${version}";
-    sha256 = "sha256-2Y0l1bDr/f3vxwRjDX62xeC5pUmIbk4XH5prh8c91As=";
+    sha256 = "sha256-fZnZH2j/IXbfsJkJG8s2ArOrWwVE2kgvSREVaSVoDyo=";
   };
 
   nativeBuildInputs = [ jdk ant texinfo pkg-config ];
