@@ -24,6 +24,8 @@
 , with3d ? true
 , withI18n ? true
 , srcs ? { }
+
+, testers
 }:
 
 # The `srcs` parameter can be used to override the kicad source code
@@ -204,6 +206,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${finalAttrs.base}/share/mime $out/share/mime
     ln -s ${finalAttrs.base}/share/metainfo $out/share/metainfo
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "kicad-cli --version";
+  };
 
   # can't run this for each pname
   # stable and unstable are in the same versions.nix
