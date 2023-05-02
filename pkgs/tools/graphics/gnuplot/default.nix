@@ -53,7 +53,11 @@ in
 
   CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
 
-  postInstall = lib.optionalString withX ''
+  postInstall = lib.optionalString (withQt && withX) ''
+    # Ensure that wrapProgram uses makeShellWrapper rather than makeBinaryWrapper
+    # brought in by wrapQtAppsHook. Only makeShellWrapper supports --run.
+    makeWrapper() { makeShellWrapper "$@"; }
+  '' + lib.optionalString withX ''
     wrapProgram $out/bin/gnuplot \
        --prefix PATH : '${gnused}/bin' \
        --prefix PATH : '${coreutils}/bin' \
