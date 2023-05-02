@@ -5,6 +5,8 @@
 , makeWrapper
 , openssh
 , libxcrypt
+, testers
+, shellhub-agent
 }:
 
 buildGo120Module rec {
@@ -28,6 +30,12 @@ buildGo120Module rec {
     updateScript = gitUpdater {
       rev-prefix = "v";
       ignoredVersions = ".(rc|beta).*";
+    };
+
+    tests.version = testers.testVersion {
+      package = shellhub-agent;
+      command = "agent --version";
+      version = "v${version}";
     };
   };
 
