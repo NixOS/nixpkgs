@@ -174,7 +174,15 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase =
     let
       inherit (finalAttrs) base;
-      bin = if stdenv.isDarwin then "*.app/Contents/MacOS" else "bin";
+      bin = toolName: if stdenv.isDarwin
+        then if toolName == "kicad"
+          # The macOS build does surface top-level symlinks for all the apps but
+          # because they search for dylibs at a relative path (and don't
+          # `realpath` argv0 first) the symlink'd apps are broken.
+          then "KiCad.app/Contents/MacOS"
+          else "KiCad.app/Contents/Applications/*.app/Contents/MacOS"
+        else "bin"
+      ;
       tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
       utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad-cli" ];
     in
@@ -186,13 +194,13 @@ stdenv.mkDerivation (finalAttrs: {
 
         # wrap each of the directly usable tools
         (map
-          (tool: "makeWrapper ${base}/${bin}/${tool} $out/bin/${tool} $makeWrapperArgs"
+          (tool: "makeWrapper ${base}/${bin tool}/${tool} $out/bin/${tool} $makeWrapperArgs"
             + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
           )
           tools)
 
         # link in the CLI utils
-        (map (util: "ln -s ${base}/${bin}/${util} $out/bin/${util}") utils)
+        (map (util: "ln -s ${base}/${bin "kicad"}/${util} $out/bin/${util}") utils)
 
         "runHook postInstall"
       ])
