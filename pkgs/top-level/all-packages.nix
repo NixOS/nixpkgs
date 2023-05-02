@@ -33180,7 +33180,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  pineapple-pictures = libsForQt5.callPackage ../applications/graphics/pineapple-pictures { };
+  pineapple-pictures = qt6Packages.callPackage ../applications/graphics/pineapple-pictures { };
 
   pinfo = callPackage ../applications/misc/pinfo { };
 
