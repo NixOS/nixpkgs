@@ -29,6 +29,6 @@ buildDotnetModule rec {
     description = "A cross platform utility to dump and modify audio metadata for a wide variety of formats";
     license = licenses.asl20;
     maintainers = [ maintainers.jvanbruegge ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
