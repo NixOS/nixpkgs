@@ -15528,9 +15528,8 @@ with pkgs;
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
 
   lobster = callPackage ../development/compilers/lobster {
-    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks)
-      Cocoa AudioToolbox OpenGL Foundation ForceFeedback;
+      CoreFoundation Cocoa AudioToolbox OpenGL Foundation ForceFeedback;
   };
 
   lld = llvmPackages.lld;
@@ -36303,6 +36302,8 @@ with pkgs;
   mari0 = callPackage ../games/mari0 { };
 
   manaplus = callPackage ../games/manaplus { stdenv = gcc11Stdenv; };
+
+  marble-marcher-ce = callPackage ../games/marble-marcher-ce { };
 
   mars = callPackage ../games/mars { };
 
