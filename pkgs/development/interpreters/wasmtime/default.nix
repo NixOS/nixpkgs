@@ -21,13 +21,13 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  # We disable tests on x86_64-darwin because Hydra runners do not
-  # support SSE3, SSSE3, SSE4.1 and SSE4.2 at this time. This is
-  # required by wasmtime. Given this is very specific to Hydra
-  # runners, just disable tests on this platform, so we don't get
-  # false positives of this package being broken due to failed runs on
-  # Hydra (e.g. https://hydra.nixos.org/build/187667794/)
-  doCheck = (stdenv.system != "x86_64-darwin");
+  # We only enable x86_64-linux Hydra platform because not all
+  # virtualized Hydra runners support SSE3, SSSE3, SSE4.1 and SSE4.2
+  # at this time. This is required by wasmtime. Given this is very
+  # specific to Hydra runners, only enable tests for this platform, so
+  # we don't get false positives
+  # (e.g. https://hydra.nixos.org/build/187667794/)
+  hydraPlatforms = [ "x86_64-linux" ];
   cargoTestFlags = [
     "--package wasmtime-runtime"
   ];
