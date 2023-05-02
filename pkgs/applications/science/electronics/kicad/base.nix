@@ -75,6 +75,14 @@ stdenv.mkDerivation rec {
     # This is mostly not necessary (we handle the fixups that are actually
     # required in the `postFixup` hook below).
     ./macos-disable-bundle-fixup.patch
+
+    # An `ld-wrapper` hook takes care of codesigning for us.
+    ./macos-disable-codesigning.patch
+
+    # Because we're not copying/symlinking a python interpreter binary + libs
+    # into `KiCad.app/Contents/Frameworks/Python.framework/...` we want to avoid
+    # setting `$PYTHONHOME` to that location.
+    ./macos-dont-set-python-home.patch
   ];
 
   # tagged releases don't have "unknown"
