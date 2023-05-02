@@ -4697,6 +4697,8 @@ self: super: with self; {
 
   idasen = callPackage ../development/python-modules/idasen { };
 
+  idf-component-manager = callPackage ../development/python-modules/idf-component-manager { };
+
   icoextract = callPackage ../development/python-modules/icoextract { };
 
   icontract = callPackage ../development/python-modules/icontract { };
