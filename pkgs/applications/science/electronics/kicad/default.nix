@@ -207,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
     )
   ;
 
-  postInstall = ''
+  postInstall = lib.optional stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share
     ln -s ${finalAttrs.base}/share/applications $out/share/applications
     ln -s ${finalAttrs.base}/share/icons $out/share/icons
