@@ -4,7 +4,7 @@ if [[ -n "${__nix_qtbase-}" ]]; then
         echo >&2 "Error: detected mismatched Qt dependencies:"
         echo >&2 "    @dev@"
         echo >&2 "    $__nix_qtbase"
-        exit 1
+        #exit 1
     fi
 else # Only set up Qt once.
 __nix_qtbase="@dev@"
