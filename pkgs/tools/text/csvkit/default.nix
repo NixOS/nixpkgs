@@ -38,6 +38,7 @@ python.pkgs.buildPythonApplication rec {
     agate-excel
     agate-dbf
     agate-sql
+    setuptools # csvsql imports pkg_resources
   ];
 
   nativeCheckInputs = with python.pkgs; [
