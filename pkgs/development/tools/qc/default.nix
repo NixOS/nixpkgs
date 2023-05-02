@@ -35,6 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/qownnotes/qc";
     license = licenses.mit;
     maintainers = with maintainers; [ pbek totoroot ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }
