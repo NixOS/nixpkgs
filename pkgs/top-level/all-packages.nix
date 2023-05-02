@@ -18826,6 +18826,8 @@ with pkgs;
 
   procodile = callPackage ../tools/system/procodile { };
 
+  proxmove = callPackage ../tools/admin/proxmove { };
+
   pry = callPackage ../development/tools/pry { };
 
   pup = callPackage ../development/tools/pup { };
