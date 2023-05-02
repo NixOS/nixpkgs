@@ -1,38 +1,42 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, numpy
-, scikitimage
-, openjpeg
-, procps
-, pytestCheckHook
-, contextlib2
-, mock
-, importlib-resources
-, isPy27
 , lxml
+, numpy
+, openjpeg
+, pytestCheckHook
+, pythonOlder
+, scikitimage
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "glymur";
-  version = "0.9.3";
+  version = "0.12.4";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "quintusdias";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1xlpax56qg5qqh0s19xidgvv2483sc684zj7rh6zw1m1z9m37drr";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-H7aA1nHd8JI3+4dzZhu+GOv/0Y2KRdDkn6Fvc76ny/A=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy
-  ] ++ lib.optionals isPy27 [ contextlib2 mock importlib-resources ];
+  ];
 
   nativeCheckInputs = [
-    scikitimage
-    procps
-    pytestCheckHook
     lxml
+    pytestCheckHook
+    scikitimage
   ];
 
   postConfigure = ''
@@ -45,13 +49,18 @@ buildPythonPackage rec {
     # fsh systems by reading an .rc file and such, and is obviated by the patch
     # in postConfigure
     "tests/test_config.py"
+    "tests/test_tiff2jp2.py"
   ];
 
+  pythonImportsCheck = [
+    "glymur"
+  ];
 
   meta = with lib; {
     description = "Tools for accessing JPEG2000 files";
     homepage = "https://github.com/quintusdias/glymur";
+    changelog = "https://github.com/quintusdias/glymur/blob/v${version}/CHANGES.txt";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }
