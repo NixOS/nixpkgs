@@ -222,7 +222,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ evils kiwi ];
     # kicad is cross platform
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin;
 
     hydraPlatforms = if (with3d) then [ ] else platforms;
     # We can't download the 3d models on Hydra,
