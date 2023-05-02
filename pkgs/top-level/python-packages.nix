@@ -3086,7 +3086,11 @@ self: super: with self; {
 
   elastic-apm = callPackage ../development/python-modules/elastic-apm { };
 
+  elastic-transport = callPackage ../development/python-modules/elastic-transport { };
+
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
+
+  elasticsearch8 = callPackage ../development/python-modules/elasticsearch8 { };
 
   elasticsearch-dsl = callPackage ../development/python-modules/elasticsearch-dsl { };
 
@@ -3191,6 +3195,8 @@ self: super: with self; {
   epson-projector = callPackage ../development/python-modules/epson-projector { };
 
   eradicate = callPackage ../development/python-modules/eradicate { };
+
+  es-client = callPackage ../development/python-modules/es-client { };
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
@@ -3761,6 +3767,8 @@ self: super: with self; {
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
+
+  fst-pso = callPackage ../development/python-modules/fst-pso { };
 
   ftfy = callPackage ../development/python-modules/ftfy { };
 
@@ -6106,6 +6114,8 @@ self: super: with self; {
 
   minidump = callPackage ../development/python-modules/minidump { };
 
+  miniful = callPackage ../development/python-modules/miniful { };
+
   minikanren = callPackage ../development/python-modules/minikanren { };
 
   minikerberos = callPackage ../development/python-modules/minikerberos { };
@@ -8184,6 +8194,8 @@ self: super: with self; {
   pydanfossair = callPackage ../development/python-modules/pydanfossair { };
 
   pydantic = callPackage ../development/python-modules/pydantic { };
+
+  pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 
   pydash = callPackage ../development/python-modules/pydash { };
 
@@ -10923,6 +10935,8 @@ self: super: with self; {
 
   simplisafe-python = callPackage ../development/python-modules/simplisafe-python { };
 
+  simpful = callPackage ../development/python-modules/simpful { };
+
   simpy = callPackage ../development/python-modules/simpy { };
 
   single-version = callPackage ../development/python-modules/single-version { };
@@ -10936,6 +10950,8 @@ self: super: with self; {
   sip = callPackage ../development/python-modules/sip { };
 
   sip_4 = callPackage ../development/python-modules/sip/4.x.nix { };
+
+  sipyco = callPackage ../development/python-modules/sipyco { };
 
   siuba = callPackage ../development/python-modules/siuba { };
 

@@ -145,6 +145,11 @@ self = stdenv.mkDerivation {
       "get_option('datadir')" "'${placeholder "out"}/share'"
     substituteInPlace src/amd/vulkan/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}/share'"
+  ''
+  # TODO: can be removed >= 23.0.4 (most likely)
+  # https://gitlab.freedesktop.org/mesa/mesa/-/commit/035aa34ed5eb418339c0e2d2
+  + ''
+    sed '/--size_t-is-usize/d' -i src/gallium/frontends/rusticl/meson.build
   '';
 
   outputs = [ "out" "dev" "drivers" ]

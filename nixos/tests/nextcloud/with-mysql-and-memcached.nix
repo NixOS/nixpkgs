@@ -26,22 +26,11 @@ in {
           redis = false;
           memcached = true;
         };
-        database.createLocally = true;
         config = {
           dbtype = "mysql";
-          dbname = "nextcloud";
-          dbuser = "nextcloud";
-          dbhost = "127.0.0.1";
-          dbport = 3306;
-          dbpassFile = "${pkgs.writeText "dbpass" "hunter2" }";
           # Don't inherit adminuser since "root" is supposed to be the default
           adminpassFile = "${pkgs.writeText "adminpass" adminpass}"; # Don't try this at home!
         };
-      };
-
-      systemd.services.nextcloud-setup= {
-        requires = ["mysql.service"];
-        after = ["mysql.service"];
       };
 
       services.memcached.enable = true;

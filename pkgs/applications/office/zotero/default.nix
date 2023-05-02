@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   '';
 
   desktopItem = makeDesktopItem {
-    name = "zotero-${version}";
+    name = "zotero";
     exec = "zotero -url %U";
     icon = "zotero";
     comment = meta.description;
