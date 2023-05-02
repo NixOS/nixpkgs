@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , directx-shader-compiler
 , libGLU
@@ -17,23 +16,20 @@
 
 stdenv.mkDerivation rec {
   pname = "rbdoom-3-bfg";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "RobertBeckebans";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-r/dvTirgFXdBJ+Gjl6zpHoGCTPoo0tRmOCV9oCdnltI=";
+    hash = "sha256-jO1+Evk17JUjvYl6QOVAn+pWwr/G8gWMae5CwMhgYZI=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "remove-jpeg_internals-define.patch";
-      url = "https://github.com/RobertBeckebans/RBDOOM-3-BFG/commit/de6ab9d31ffcd6eba26df69f8c77da38a0ab4722.diff";
-      hash = "sha256-3XbWmQtY/8a90IqDtN5TNT5EOa+i5mFOH+H9tuZqTmU=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace neo/extern/nvrhi/tools/shaderCompiler/CMakeLists.txt \
+      --replace "AppleClang" "Clang"
+  '';
 
   nativeBuildInputs = [
     cmake

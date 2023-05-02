@@ -57,6 +57,9 @@ let
 
   inherit (config.system) stateVersion;
 
+  mysqlLocal = cfg.database.createLocally && cfg.config.dbtype == "mysql";
+  pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
+
 in {
 
   imports = [
@@ -314,13 +317,9 @@ in {
 
       createLocally = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = lib.mdDoc ''
-          Create the database and database user locally. Only available for
-          mysql database.
-          Note that this option will use the latest version of MariaDB which
-          is not officially supported by Nextcloud. As for now a workaround
-          is used to also support MariaDB version >= 10.6.
+          Create the database and database user locally.
         '';
       };
 
@@ -352,12 +351,15 @@ in {
       };
       dbhost = mkOption {
         type = types.nullOr types.str;
-        default = "localhost";
+        default =
+          if pgsqlLocal then "/run/postgresql"
+          else if mysqlLocal then "localhost:/run/mysqld/mysqld.sock"
+          else "localhost";
+        defaultText = "localhost";
         description = lib.mdDoc ''
-          Database host.
-
-          Note: for using Unix authentication with PostgreSQL, this should be
-          set to `/run/postgresql`.
+          Database host or socket path. Defaults to the correct unix socket
+          instead if `services.nextcloud.database.createLocally` is true and
+          `services.nextcloud.config.dbtype` is either `pgsql` or `mysql`.
         '';
       };
       dbport = mkOption {
@@ -737,8 +739,22 @@ in {
     }
 
     { assertions = [
-      { assertion = cfg.database.createLocally -> cfg.config.dbtype == "mysql";
-        message = ''services.nextcloud.config.dbtype must be set to mysql if services.nextcloud.database.createLocally is set to true.'';
+      { assertion = cfg.database.createLocally -> cfg.config.dbpassFile == null;
+        message = ''
+          Using `services.nextcloud.database.createLocally` (that now defaults
+          to true) with database password authentication is no longer
+          supported.
+
+          If you use an external database (or want to use password auth for any
+          other reason), set `services.nextcloud.database.createLocally` to
+          `false`. The database won't be managed for you (use `services.mysql`
+          if you want to set it up).
+
+          If you want this module to manage your nextcloud database for you,
+          unset `services.nextcloud.config.dbpassFile` and
+          `services.nextcloud.config.dbhost` to use socket authentication
+          instead of password.
+        '';
       }
     ]; }
 
@@ -902,6 +918,8 @@ in {
         in {
           wantedBy = [ "multi-user.target" ];
           before = [ "phpfpm-nextcloud.service" ];
+          after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+          requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
           path = [ occ ];
           script = ''
             ${optionalString (c.dbpassFile != null) ''
@@ -1007,7 +1025,7 @@ in {
 
       environment.systemPackages = [ occ ];
 
-      services.mysql = lib.mkIf cfg.database.createLocally {
+      services.mysql = lib.mkIf mysqlLocal {
         enable = true;
         package = lib.mkDefault pkgs.mariadb;
         ensureDatabases = [ cfg.config.dbname ];
@@ -1015,14 +1033,15 @@ in {
           name = cfg.config.dbuser;
           ensurePermissions = { "${cfg.config.dbname}.*" = "ALL PRIVILEGES"; };
         }];
-        initialScript = pkgs.writeText "mysql-init" ''
-          CREATE USER '${cfg.config.dbname}'@'localhost' IDENTIFIED BY '${builtins.readFile( cfg.config.dbpassFile )}';
-          CREATE DATABASE IF NOT EXISTS ${cfg.config.dbname};
-          GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER,
-            CREATE TEMPORARY TABLES ON ${cfg.config.dbname}.* TO '${cfg.config.dbuser}'@'localhost'
-            IDENTIFIED BY '${builtins.readFile( cfg.config.dbpassFile )}';
-          FLUSH privileges;
-        '';
+      };
+
+      services.postgresql = mkIf pgsqlLocal {
+        enable = true;
+        ensureDatabases = [ cfg.config.dbname ];
+        ensureUsers = [{
+          name = cfg.config.dbuser;
+          ensurePermissions = { "DATABASE ${cfg.config.dbname}" = "ALL PRIVILEGES"; };
+        }];
       };
 
       services.nginx.enable = mkDefault true;
