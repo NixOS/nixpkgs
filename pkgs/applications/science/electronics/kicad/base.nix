@@ -135,14 +135,26 @@ stdenv.mkDerivation rec {
   XDG_CACHE_HOME = "$TMP";
   # failing tests still attempt to create $HOME though
 
-  cmakeFlags = [
+  cmakeFlags = let
+    excludedTests = []
+      # https://gitlab.com/kicad/code/kicad/-/issues/12491
+      # should be resolved in the next release
+      ++ lib.optionals stable ["qa_eeschema"]
+      # !!! These tests fail within the sandbox on macOS (but run fine outside of
+      # it).
+      #
+      # `qa_common` and `qa_pcbnew` fail due to wxWidget errors; same error msg
+      # as what's described here: https://gitlab.com/kicad/code/kicad/-/issues/13859
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "qa_common" "qa_python" "qa_pcbnew"
+      ]
+    ;
+  in [
     "-DKICAD_USE_EGL=ON"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
   ]
-  ++ optionals (stable) [
-    # https://gitlab.com/kicad/code/kicad/-/issues/12491
-    # should be resolved in the next release
-    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"
+  ++ optionals (excludedTests != []) [
+    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;\"${builtins.concatStringsSep "|" excludedTests}\"'"
   ]
   ++ optional (stable && !withNgspice) "-DKICAD_SPICE=OFF"
   ++ optionals (!withScripting) [
