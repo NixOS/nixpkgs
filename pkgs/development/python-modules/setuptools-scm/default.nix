@@ -57,6 +57,8 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
     changelog = "https://github.com/pypa/setuptools_scm/blob/${version}/CHANGELOG.md";
     homepage = "https://github.com/pypa/setuptools_scm/";
