@@ -9340,6 +9340,8 @@ self: super: with self; {
 
   pytest-dotenv = callPackage ../development/python-modules/pytest-dotenv { };
 
+  pytest-emoji = callPackage ../development/python-modules/pytest-emoji { };
+
   pytest-env = callPackage ../development/python-modules/pytest-env { };
 
   pytest-error-for-skips = callPackage ../development/python-modules/pytest-error-for-skips { };
