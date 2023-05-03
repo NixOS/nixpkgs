@@ -8,6 +8,8 @@ assert stdenv.isDarwin;
 stdenv.mkDerivation {
   pname = "xcode-wrapper${lib.optionalString allowHigher "-plus"}";
   inherit version;
+  # Fails in sandbox. Use `--option sandbox relaxed` or `--option sandbox false`.
+  __noChroot = true;
   buildCommand = ''
     mkdir -p $out/bin
     cd $out/bin
