@@ -164,6 +164,7 @@ stdenv.mkDerivation rec {
     libde265
     libdvdnav
     libdvdread
+    libnice
     qrencode
     libsndfile
     libusb1
@@ -219,7 +220,6 @@ stdenv.mkDerivation rec {
     flite
     libdrm
     libgudev
-    libnice
     sbc
     spandsp
 
@@ -307,7 +307,6 @@ stdenv.mkDerivation rec {
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
-    "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
     "-Dwildmidi=disabled" # see dependencies above
   ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64) [
     "-Dqsv=disabled" # Linux (and Windows) x86 only
