@@ -5109,7 +5109,6 @@ broken-packages:
   - streamly-binary
   - streamly-cassava
   - streamly-examples
-  - streamly-lmdb
   - streamly-lz4
   - streamly-process
   - stream-monad
