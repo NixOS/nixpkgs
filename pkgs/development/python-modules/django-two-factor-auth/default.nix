@@ -5,13 +5,18 @@
 , django-otp
 , django-phonenumber-field
 , fetchFromGitHub
+, phonenumbers
+, pydantic
 , pythonOlder
+, pythonRelaxDepsHook
 , qrcode
 , setuptools-scm
+, twilio
+, webauthn
 }:
 
 buildPythonPackage rec {
-  pname = "django-payments";
+  pname = "django-two-factor-auth";
   version = "1.15.1";
   format = "setuptools";
 
@@ -24,13 +29,13 @@ buildPythonPackage rec {
     hash = "sha256-+E6kSD00ChPiRLT2i43dNlVkbvuR1vKkbSZfD1Bf3qc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "django-phonenumber-field>=1.1.0,<7" "django-phonenumber-field"
-  '';
-
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools-scm
+  ];
+
+  pythonRelaxDeps = [
+    "django-phonenumber-field"
   ];
 
   propagatedBuildInputs = [
@@ -41,12 +46,38 @@ buildPythonPackage rec {
     qrcode
   ];
 
-  # require internet connection
+  passthru.optional-dependencies = {
+    call = [
+      twilio
+    ];
+    sms = [
+      twilio
+    ];
+    webauthn = [
+      pydantic
+      webauthn
+    ];
+    # yubikey = [
+    #   django-otp-yubikey
+    # ];
+    phonenumbers = [
+      phonenumbers
+    ];
+    # phonenumberslite = [
+    #   phonenumberslite
+    # ];
+  };
+
+  # Tests require internet connection
   doCheck = false;
 
+  pythonImportsCheck = [
+    "two_factor"
+  ];
+
   meta = with lib; {
-    description = "Complete Two-Factor Authentication for Django.";
-    homepage = "https://github.com/jazzband/django-two-factor-auth/";
+    description = "Complete Two-Factor Authentication for Django";
+    homepage = "https://github.com/jazzband/django-two-factor-auth";
     changelog = "https://github.com/jazzband/django-two-factor-auth/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ derdennisop ];

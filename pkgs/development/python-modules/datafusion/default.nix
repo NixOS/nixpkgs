@@ -9,6 +9,7 @@
 , numpy
 , protobuf
 , pyarrow
+, Security
 }:
 
 let
@@ -53,7 +54,7 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = [ protobuf ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ protobuf ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   propagatedBuildInputs = [ pyarrow ];
 

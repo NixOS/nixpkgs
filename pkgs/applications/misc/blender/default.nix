@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       libharu
       libepoxy
     ]
-    ++ lib.optional (!stdenv.isAarch64) [
+    ++ lib.optionals (!stdenv.isAarch64) [
       openimagedenoise
       embree
     ]

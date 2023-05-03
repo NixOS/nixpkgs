@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "havoc";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ii8";
     repo = pname;
     rev = version;
-    hash = "sha256-zNKDQqkDeNj5fB5EdMVfAs2H4uBgLh6Fp3uSjiJ1VhQ=";
+    hash = "sha256-jvGm2gFdMS61otETF7gOEpYn6IuLfqI95IpEVfIv+C4=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
     description = "A minimal terminal emulator for Wayland";
     license = with licenses; [ mit publicDomain ];
     platforms = with platforms; unix;
-    broken = stdenv.isDarwin; # no wayland support
     maintainers = with maintainers; [ AndersonTorres ];
+    # fatal error: 'sys/epoll.h' file not found
+    broken = stdenv.isDarwin;
   };
 }

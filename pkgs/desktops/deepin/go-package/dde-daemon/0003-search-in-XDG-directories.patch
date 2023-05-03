@@ -1,22 +1,22 @@
-From 528f590c0c81728c324444fd76e0f7113a2e3dc4 Mon Sep 17 00:00:00 2001
-From: rewine <lhongxu@outlook.com>
-Date: Wed, 5 Apr 2023 23:41:25 +0800
+From a0667a7e82b3176e64122f4d68c43de4fa350780 Mon Sep 17 00:00:00 2001
+From: rewine <luhongxu@deepin.org>
+Date: Tue, 18 Apr 2023 17:04:36 +0800
 Subject: [PATCH 3/4] search-in-XDG-directories
 
 ---
  accounts/manager.go                     |  5 ++++-
  accounts/user.go                        |  8 +++++++-
  appearance/fsnotify.go                  | 21 +++++++++++++++++----
+ appearance/ifc.go                       |  3 ++-
  apps/utils.go                           |  3 ++-
- dock/desktop_file_path.go               |  6 ++++++
  gesture/config.go                       |  4 ++--
  keybinding/shortcuts/system_shortcut.go |  4 +++-
  mime/app_info.go                        |  7 ++++++-
  system/gesture/config.go                |  4 +++-
- 9 files changed, 50 insertions(+), 12 deletions(-)
+ 9 files changed, 46 insertions(+), 13 deletions(-)
 
 diff --git a/accounts/manager.go b/accounts/manager.go
-index a5abb157..3fd7c153 100644
+index 22c26ce7..009d9dd9 100644
 --- a/accounts/manager.go
 +++ b/accounts/manager.go
 @@ -15,6 +15,7 @@ import (
@@ -40,7 +40,7 @@ index a5abb157..3fd7c153 100644
  
  type InterfaceConfig struct {
 diff --git a/accounts/user.go b/accounts/user.go
-index 99138941..56a7731a 100644
+index 900033c6..f8827fb2 100644
 --- a/accounts/user.go
 +++ b/accounts/user.go
 @@ -15,6 +15,7 @@ import (
@@ -51,7 +51,7 @@ index 99138941..56a7731a 100644
  	dbus "github.com/godbus/dbus"
  	"github.com/linuxdeepin/dde-daemon/accounts/users"
  	authenticate "github.com/linuxdeepin/go-dbus-factory/com.deepin.daemon.authenticate"
-@@ -645,7 +646,12 @@ func getUserSession(homeDir string) string {
+@@ -649,7 +650,12 @@ func getUserSession(homeDir string) string {
  }
  
  func getSessionList() []string {
@@ -119,6 +119,27 @@ index a409d0ba..ff674600 100644
  
  	m.watchDirs(iconDirs)
  }
+diff --git a/appearance/ifc.go b/appearance/ifc.go
+index f0bf32a3..6d60ffe4 100644
+--- a/appearance/ifc.go
++++ b/appearance/ifc.go
+@@ -10,6 +10,7 @@ import (
+ 	"strconv"
+ 	"strings"
+ 
++	"github.com/adrg/xdg"
+ 	"github.com/godbus/dbus"
+ 	"github.com/linuxdeepin/dde-daemon/appearance/fonts"
+ 	"github.com/linuxdeepin/dde-daemon/appearance/subthemes"
+@@ -265,7 +266,7 @@ func (m *Manager) thumbnail(ty, name string) (string, error) {
+ 	case TypeGtkTheme:
+ 		fName, ok := gtkThumbnailMap[name]
+ 		if ok {
+-			return filepath.Join("/usr/share/dde-daemon/appearance", fName+".svg"), nil
++			return xdg.SearchDataFile(filepath.Join("dde-daemon/appearance", fName+".svg"))
+ 		}
+ 		return subthemes.GetGtkThumbnail(name)
+ 	case TypeIconTheme:
 diff --git a/apps/utils.go b/apps/utils.go
 index 8863d6c2..dd6f8e16 100644
 --- a/apps/utils.go
@@ -140,30 +161,6 @@ index 8863d6c2..dd6f8e16 100644
  }
  
  // get user home
-diff --git a/dock/desktop_file_path.go b/dock/desktop_file_path.go
-index 7adc9f55..e1a97679 100644
---- a/dock/desktop_file_path.go
-+++ b/dock/desktop_file_path.go
-@@ -7,6 +7,8 @@ package dock
- import (
- 	"path/filepath"
- 	"strings"
-+
-+	"github.com/adrg/xdg"
- )
- 
- var pathDirCodeMap map[string]string
-@@ -20,6 +22,10 @@ func initPathDirCodeMap() {
- 		"/usr/local/share/applications/": "/L@",
- 	}
- 
-+	for _, dataPath := range xdg.DataDirs {
-+		pathDirCodeMap[dataPath] = "/S@"
-+	}
-+
- 	dir := filepath.Join(homeDir, ".local/share/applications")
- 	dir = addDirTrailingSlash(dir)
- 	pathDirCodeMap[dir] = "/H@"
 diff --git a/gesture/config.go b/gesture/config.go
 index bfbd4db7..4ce9d641 100644
 --- a/gesture/config.go
@@ -190,7 +187,7 @@ index bfbd4db7..4ce9d641 100644
  	gsKeyTouchPadEnabled    = "touch-pad-enabled"
  	gsKeyTouchScreenEnabled = "touch-screen-enabled"
 diff --git a/keybinding/shortcuts/system_shortcut.go b/keybinding/shortcuts/system_shortcut.go
-index d33a69f6..c3138099 100644
+index eaec22b5..95e1b222 100644
 --- a/keybinding/shortcuts/system_shortcut.go
 +++ b/keybinding/shortcuts/system_shortcut.go
 @@ -10,6 +10,7 @@ import (
@@ -253,5 +250,5 @@ index d4aebaac..f3fc92c3 100644
 +	return filepath;
  }
 -- 
-2.39.2
+2.38.1
 

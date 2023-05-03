@@ -17,7 +17,7 @@
 , gmp, mpfr, libmpc, gettext, which, patchelf, binutils
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
-, gnatboot ? null
+, gnat-bootstrap ? null
 , zip ? null, unzip ? null, pkg-config ? null
 , gtk2 ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
@@ -45,7 +45,7 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 
-assert langAda -> gnatboot != null;
+assert langAda -> gnat-bootstrap != null;
 
 # threadsCross is just for MinGW
 assert threadsCross != {} -> stdenv.targetPlatform.isWindows;
@@ -151,7 +151,7 @@ let majorVersion = "6";
         flex
         gettext
         gmp
-        gnatboot
+        gnat-bootstrap
         gnused
         gtk2
         isl

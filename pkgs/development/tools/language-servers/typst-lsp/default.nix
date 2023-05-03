@@ -5,20 +5,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst-lsp";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "nvarner";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-WLfGrYrhOXesdlyDwUb2iUgTAHW1ASolT/JjGKq60OU=";
+    hash = "sha256-bjgGJxAHc3D0j+ZIPPzBw9vJJgchW9hy5E/qCmFjDUw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "lipsum-0.8.2" = "sha256-deIbpn4YM7/NeuJ5Co48ivJmxwrcsbLl6c3cP3JZxAQ=";
-      "typst-0.0.0" = "sha256-0fTGbXdpzPadABWqdReQNZf2N7OMZ8cs9U5fmhfN6m4=";
+      "elsa-1.8.1" = "sha256-/85IriplPxx24TE/CsvjIsve100QUZiVqS0TWgPFRbw=";
+      "typst-0.2.0" = "sha256-3vNJmLmbskAzXVXjiSVDLhRcX1j3ksOgPd53W31YZ0c=";
     };
   };
 
@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A brand-new language server for Typst";
     homepage = "https://github.com/nvarner/typst-lsp";
+    changelog = "https://github.com/nvarner/typst-lsp/releases/tag/${src.rev}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ GaetanLepage ];
+    maintainers = with maintainers; [ figsoda GaetanLepage ];
   };
 }

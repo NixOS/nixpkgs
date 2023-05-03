@@ -274,9 +274,9 @@ let
       sha256 = "12l7ir3q29v06jx0zng5cvlbmap7p709ka3ik6x29lw334qshm9b";
     };
 
-    buildInputs = [
-      pkgs.makeWrapper
+    nativeBuildInputs = [ pkgs.makeWrapper ];
 
+    buildInputs = [
       # needed for GSETTINGS_SCHEMAS_PATH
       pkgs.gsettings-desktop-schemas pkgs.glib pkgs.gtk3
 
@@ -577,6 +577,18 @@ let
     nativeLibs = with pkgs; [
       duckdb libffi
     ];
+  };
+
+  polyclot = build-asdf-system {
+    pname = "polyclot";
+    version = "trunk";
+    src = pkgs.fetchfossil {
+      url = "https://fossil.turtleware.eu/polyclot";
+      rev = "e678b3c3e002f53b446780406c9ed13f8451309d22a1dc50ced4dbeedf08a1ec";
+      sha256 = "sha256-J08bU9HSVbzEivYtQsyIYPZJTrugj+jJSa4LglS0Olg=";
+    };
+    systems = [ "eu.turtleware.polyclot" "eu.turtleware.polyclot/demo" ];
+    lispLibs = with super; [ clim mcclim mcclim-layouts ];
   };
 
   });

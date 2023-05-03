@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSEnv
 , extraPkgs ? pkgs: [ ]
 , extraLibs ? pkgs: [ ]
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  fhsEnv = buildFHSUserEnv {
+  fhsEnv = buildFHSEnv {
     name = "${pname}-fhs-env";
     runScript = "";
 

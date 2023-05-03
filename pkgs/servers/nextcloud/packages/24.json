@@ -110,9 +110,9 @@
     ]
   },
   "news": {
-    "sha256": "0l8ps13y00hq3xh1w874f3zx73gpmi4jxd3gzwhggx1r495gxqbh",
-    "url": "https://github.com/nextcloud/news/releases/download/21.2.0-beta2/news.tar.gz",
-    "version": "21.2.0-beta2",
+    "sha256": "1zyn6rs24f5dsb4z65dzx2mdkw8gy8n3adk9dgyyd4cjjhhixhsm",
+    "url": "https://github.com/nextcloud/news/releases/download/21.2.0-beta3/news.tar.gz",
+    "version": "21.2.0-beta3",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [

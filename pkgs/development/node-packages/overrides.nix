@@ -176,6 +176,10 @@ final: prev: {
     '';
   };
 
+  firebase-tools = prev.firebase-tools.override {
+    nativeBuildInputs = lib.optionals stdenv.isDarwin  [ pkgs.xcbuild ];
+  };
+
   flood = prev.flood.override {
     buildInputs = [ final.node-pre-gyp ];
   };
@@ -263,6 +267,8 @@ final: prev: {
       pixman
       cairo
       pango
+    ] ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreText
     ];
   };
 

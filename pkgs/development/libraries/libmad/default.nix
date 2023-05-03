@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoconf }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoconf
+
+# for passthru.tests
+, audacity
+, mpd
+, mpg321
+, normalize
+, ocamlPackages
+, streamripper
+, vlc
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmad";
@@ -52,6 +66,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf ];
 
   preConfigure = "autoconf";
+
+  passthru.tests = {
+    inherit audacity mpd mpg321 normalize streamripper vlc;
+    ocaml-mad = ocamlPackages.mad;
+  };
 
   meta = with lib; {
     homepage    = "https://sourceforge.net/projects/mad/";

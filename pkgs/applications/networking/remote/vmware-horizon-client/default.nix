@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, buildFHSUserEnv
+, buildFHSEnv
 , fetchurl
 , gsettings-desktop-schemas
 , makeDesktopItem
@@ -57,7 +57,7 @@ let
     '';
   };
 
-  vmwareFHSUserEnv = name: buildFHSUserEnv {
+  vmwareFHSUserEnv = name: buildFHSEnv {
     inherit name;
 
     runScript = "${vmwareHorizonClientFiles}/bin/${name}_wrapper";

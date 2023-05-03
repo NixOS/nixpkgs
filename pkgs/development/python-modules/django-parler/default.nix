@@ -2,7 +2,10 @@
 , buildPythonPackage
 , django
 , fetchFromGitHub
+, pytest
+, pytest-django
 , pythonOlder
+, python
 }:
 
 buildPythonPackage rec {
@@ -23,8 +26,11 @@ buildPythonPackage rec {
     django
   ];
 
-  #tests depricated
-  doCheck = false;
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} runtests.py
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Simple Django model translations without nasty hacks";

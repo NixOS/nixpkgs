@@ -1,5 +1,6 @@
 { mkDerivation
 , lib
+, stdenv
 , fetchFromGitHub
 , substituteAll
 , qtbase
@@ -14,11 +15,12 @@
 , kio
 , plasma-framework
 , qttools
+, iconv
 , webviewSupport ? true
 , jsSupport ? true
-, kioPluginSupport ? true
-, plasmoidSupport  ? true
-, systemdSupport ? true
+, kioPluginSupport ? stdenv.isLinux
+, plasmoidSupport  ? stdenv.isLinux
+, systemdSupport ? stdenv.isLinux
 /* It is possible to set via this option an absolute exec path that will be
 written to the `~/.config/autostart/syncthingtray.desktop` file generated
 during runtime. Alternatively, one can edit the desktop file themselves after
@@ -44,7 +46,7 @@ mkDerivation rec {
     qtutilities
     boost
     qtforkawesome
-  ]
+  ] ++ lib.optionals stdenv.isDarwin [ iconv ]
     ++ lib.optionals webviewSupport [ qtwebengine ]
     ++ lib.optionals jsSupport [ qtdeclarative ]
     ++ lib.optionals kioPluginSupport [ kio ]
@@ -59,7 +61,8 @@ mkDerivation rec {
   ;
 
   # No tests are available by upstream, but we test --help anyway
-  doInstallCheck = true;
+  # Don't test on Darwin because output is .app
+  doInstallCheck = !stdenv.isDarwin;
   installCheckPhase = ''
     $out/bin/syncthingtray --help | grep ${version}
   '';
@@ -79,6 +82,6 @@ mkDerivation rec {
     description = "Tray application and Dolphin/Plasma integration for Syncthing";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

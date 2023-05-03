@@ -669,6 +669,8 @@ let
         };
       };
 
+      contextmapper.context-mapper-vscode-extension = callPackage ./contextmapper.context-mapper-vscode-extension { };
+
       coolbear.systemd-unit-file = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "coolbear";
@@ -1657,8 +1659,8 @@ let
         mktplcRef = {
           name = "magit";
           publisher = "kahole";
-          version = "0.6.39";
-          sha256 = "sha256-B9+McdoC7FkfD4yGDIRUtoF0c7cCUfAeIK1r0/zLVVI=";
+          version = "0.6.40";
+          sha256 = "sha256-AwkjfKBlAl6hTRN1nE6UuUuDXMJUXXDK2+3YzUp9drc=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1942,8 +1944,8 @@ let
         mktplcRef = {
           name = "direnv";
           publisher = "mkhl";
-          version = "0.10.1";
-          sha256 = "0m89sx1qqdkwa9pfmd9b11lp8z0dqpi6jn27js5q4ymscyg41bqd";
+          version = "0.12.0";
+          sha256 = "sha256-UMGTWAiPAxSjy5ALUkijD0GE9TW37TZ3UvMmgFBNYsU=";
         };
         meta = {
           description = "direnv support for Visual Studio Code";
@@ -3286,6 +3288,9 @@ let
     };
 
   aliases = super: {
+    _1Password = super."1Password";
+    _2gua = super."2gua";
+    _4ops = super."4ops";
     Arjun.swagger-viewer = super.arjun.swagger-viewer;
     jakebecker.elixir-ls = super.elixir-lsp.vscode-elixir-ls;
     jpoissonnier.vscode-styled-components = super.styled-components.vscode-styled-components;
@@ -3294,9 +3299,6 @@ let
     ms-vscode.PowerShell = super.ms-vscode.powershell;
     rioj7.commandOnAllFiles = super.rioj7.commandonallfiles;
     WakaTime.vscode-wakatime = super.wakatime.vscode-wakatime;
-    _1Password = throw ''_1Password has been replaced with "1Password"'';
-    _2gua = throw ''_2gua has been replaced with "2gua"'';
-    _4ops = throw ''_4ops has been replaced with "4ops"'';
   };
 
   # TODO: add overrides overlay, so that we can have a generated.nix

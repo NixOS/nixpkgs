@@ -191,7 +191,7 @@ stdenv.mkDerivation rec {
     "-Dpythia6=OFF"
     "-Dpythia8=OFF"
     "-Drfio=OFF"
-    "-Droot7=OFF"
+    "-Droot7=ON"
     "-Dsqlite=OFF"
     "-Dssl=ON"
     "-Dtmva=ON"

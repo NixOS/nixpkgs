@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     automake
     autoconf
     gettext
+    pkg-config
   ];
 
   buildInputs = [
@@ -88,7 +89,6 @@ stdenv.mkDerivation rec {
     sasl
     curl
     xmlrpc_c
-    pkg-config
     ding-libs
     p11-kit
     python3

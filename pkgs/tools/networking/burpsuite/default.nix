@@ -1,4 +1,4 @@
-{ lib, fetchurl, jdk, buildFHSUserEnv, unzip, makeDesktopItem }:
+{ lib, fetchurl, jdk, buildFHSEnv, unzip, makeDesktopItem }:
 let
   version = "2023.2.4";
 
@@ -23,7 +23,7 @@ let
   };
 
 in
-buildFHSUserEnv {
+buildFHSEnv {
   inherit name;
 
   runScript = "${jdk}/bin/java -jar ${src}";

@@ -26,7 +26,10 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs = [ dbus ];
+  buildInputs = [
+    dbus
+    stdenv.cc.cc.lib
+  ];
 
   desktopItems = [
     (makeDesktopItem {

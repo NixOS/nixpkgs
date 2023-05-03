@@ -221,12 +221,13 @@ buildStdenv.mkDerivation ({
     "profilingPhase"
   ];
 
-  patches = lib.optionals (lib.versionOlder version "102.6.0") [
+  patches = lib.optionals (lib.versionAtLeast version "112.0" && lib.versionOlder version "113.0") [
     (fetchpatch {
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1773259
-      name = "rust-cbindgen-0.24.2-compat.patch";
-      url = "https://raw.githubusercontent.com/canonical/firefox-snap/5622734942524846fb0eb7108918c8cd8557fde3/patches/fix-ftbfs-newer-cbindgen.patch";
-      hash = "sha256-+wNZhkDB3HSknPRD4N6cQXY7zMT/DzNXx29jQH0Gb1o=";
+      # Crash when desktop scaling does not divide window scale on Wayland
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1803016
+      name = "mozbz1803016.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/1068e0955cfb";
+      hash = "sha256-iPqmofsmgvlFNm+mqVPbdgMKmP68ANuzYu+PzfCpoNA=";
     })
   ]
   ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch

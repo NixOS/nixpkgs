@@ -37,7 +37,7 @@ in buildNpmPackage {
   buildInputs = [ util-linux ];
 
   dontNpmBuild = true;
-  npmInstallFlags = "--only-production";
+  npmInstallFlags = [ "--only-production" ];
   npmDepsHash = "sha256-0PFeXiS8RSffhrocrHODNpb6d9+nbpulCW5qYIrytDI=";
 
   installPhase = ''

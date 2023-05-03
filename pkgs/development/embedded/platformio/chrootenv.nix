@@ -1,4 +1,4 @@
-{ lib, buildFHSUserEnv, platformio-core }:
+{ lib, buildFHSEnv, platformio-core }:
 
 let
   pio-pkgs = pkgs:
@@ -19,7 +19,7 @@ let
     ]);
 
 in
-buildFHSUserEnv {
+buildFHSEnv {
   name = "platformio";
 
   targetPkgs = pio-pkgs;

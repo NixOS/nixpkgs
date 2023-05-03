@@ -2,42 +2,43 @@
 , stdenv
 , fetchFromGitLab
 , rustPlatform
-, pkg-config
-, meson
-, ninja
-, glib
-, gobject-introspection
-, libadwaita
-, libxml2
-, librsvg
-, wrapGAppsHook4
 , appstream-glib
 , desktop-file-utils
+, glib
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, gtk4
+, libadwaita
+, libxml2
+, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "emblem";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
-    owner = "World/design";
-    repo = pname;
+    group = "World";
+    owner = "design";
+    repo = "emblem";
     rev = version;
-    sha256 = "sha256-kNPV1SHkNTBXbMzDJGuDbaGz1WkBqMpVgZKjsh7ejmo=";
+    sha256 = "sha256-sgo6rGwmybouTTBTPFrPJv8Wo9I6dcoT7sUVQGFUqkQ=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "librsvg-2.55.90" = "sha256-IegUvM1HcsRiYS6woaP1aeWKtgBxim9FkdZY9BSscPY=";
+      "librsvg-2.56.0" = "sha256-PIrec3nfeMo94bkYUrp6B7lie9O1RtiBdPMFUKKLtTQ=";
     };
   };
 
   nativeBuildInputs = [
     appstream-glib
+    desktop-file-utils
     glib
-    gobject-introspection
     meson
     ninja
     pkg-config
@@ -49,17 +50,18 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = [
-    desktop-file-utils
+    gtk4
     libadwaita
-    librsvg
     libxml2
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
   ];
 
   meta = with lib; {
     description = "Generate project icons and avatars from a symbolic icon";
     homepage = "https://gitlab.gnome.org/World/design/emblem";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ figsoda foo-dogsquared ];
   };
 }

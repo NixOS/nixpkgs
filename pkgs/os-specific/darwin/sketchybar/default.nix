@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, DisplayServices, SkyLight }:
+{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, CoreWLAN, DisplayServices, SkyLight }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -10,16 +10,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sketchybar";
-  version = "2.14.1";
+  version = "2.14.4";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${version}";
-    hash = "sha256-TTpOFupLyCko5+EZJ3kJWu6OD35qfLpM8N7zq+eMvMM=";
+    hash = "sha256-snB1DII04OeoPbLzblfgdaM1hdXL62u/g/0CNLmqrxo=";
   };
 
-  buildInputs = [ Carbon Cocoa DisplayServices SkyLight ];
+  buildInputs = [ Carbon Cocoa CoreWLAN DisplayServices SkyLight ];
 
   makeFlags = [
     target

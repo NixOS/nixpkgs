@@ -91,28 +91,6 @@ super: lib.trivial.pipe super [
     ];
   }))
 
-  (patchExtension "screen-autorotate@kosmospredanie.yandex.ru" (old: {
-    # Requires gjs
-    # https://github.com/NixOS/nixpkgs/issues/164865
-    postPatch = ''
-      for file in *.js; do
-        substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
-      done
-    '';
-  }))
-
-  (patchExtension "shell-volume-mixer@derhofbauer.at" (old: {
-    patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/shell-volume-mixer_at_derhofbauer.at.patch;
-        inherit pulseaudio;
-        inherit python3;
-      })
-    ];
-
-    meta.maintainers = with lib.maintainers; [ rhoriguchi ];
-  }))
-
   (patchExtension "tophat@fflewddur.github.io" (old: {
     patches = [
       (substituteAll {

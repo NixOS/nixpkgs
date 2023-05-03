@@ -62,8 +62,6 @@ in {
 
   ghc-source-gen = checkAgainAfter super.ghc-source-gen "0.4.3.0" "fails to build" (markBroken super.ghc-source-gen);
 
-  lucid = jailbreakForCurrentVersion super.lucid "2.11.1";
-
   haskell-src-meta = doJailbreak super.haskell-src-meta;
 
   # Tests fail in GHC 9.2
@@ -211,7 +209,7 @@ in {
   # https://github.com/tweag/ormolu/issues/941
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
-  }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_0_0);
+  }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_1_0);
 
   # Apply workaround for Cabal 3.8 bug https://github.com/haskell/cabal/issues/8455
   # by making `pkg-config --static` happy. Note: Cabal 3.9 is also affected, so

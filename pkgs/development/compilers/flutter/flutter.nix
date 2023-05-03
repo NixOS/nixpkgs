@@ -6,7 +6,7 @@
 }:
 
 { bash
-, buildFHSUserEnv
+, buildFHSEnv
 , cacert
 , git
 , runCommand
@@ -100,7 +100,7 @@ let
 
   # Wrap flutter inside an fhs user env to allow execution of binary,
   # like adb from $ANDROID_HOME or java from android-studio.
-  fhsEnv = buildFHSUserEnv {
+  fhsEnv = buildFHSEnv {
     name = "${drvName}-fhs-env";
     multiPkgs = pkgs: [
       # Flutter only use these certificates

@@ -810,11 +810,8 @@ dont-distribute-packages:
  - bitcoin-api
  - bitcoin-api-extra
  - bitcoin-block
- - bitcoin-compact-filters
  - bitcoin-tx
  - bitcoin-types
- - bitcoind-regtest
- - bitcoind-rpc
  - bitfield
  - bitly-cli
  - bitmaps
@@ -933,6 +930,7 @@ dont-distribute-packages:
  - categorical-algebra
  - category
  - category-extras
+ - cattrap
  - cctools-workqueue
  - cef3-simple
  - ceilometer-common
@@ -1111,6 +1109,7 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
+ - crackNum_3_4
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -1278,6 +1277,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
+ - dl-fedora_0_9_5
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1543,9 +1543,6 @@ dont-distribute-packages:
  - ftshell
  - funbot
  - funbot-git-hook
- - funcons-lambda-cbv-mp
- - funcons-simple
- - funcons-tools
  - function-combine
  - functor
  - functor-combo
@@ -1599,7 +1596,6 @@ dont-distribute-packages:
  - geolite-csv
  - getemx
  - gf
- - ghc-debug-brick
  - ghc-imported-from
  - ghc-instances
  - ghc-mod

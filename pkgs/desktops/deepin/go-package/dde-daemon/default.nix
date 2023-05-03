@@ -58,6 +58,9 @@ buildGoPackage rec {
   ];
 
   postPatch = ''
+    substituteInPlace dock/desktop_file_path.go \
+      --replace "/usr/share" "/run/current-system/sw/share"
+
     substituteInPlace session/eventlog/{app_event.go,login_event.go} accounts/users/users_test.go \
       --replace "/bin/bash" "${runtimeShell}"
 

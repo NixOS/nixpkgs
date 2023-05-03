@@ -1,4 +1,4 @@
-From d612c1d7161f95864b9383df84b16d8c24fbcc9b Mon Sep 17 00:00:00 2001
+From dd0dfc9cf87966f5d7493a943ec04c665be83cb6 Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Fri, 14 Apr 2023 09:35:25 +0800
 Subject: [PATCH 4/6] qtbase: fix locating tzdir on NixOS
@@ -8,7 +8,7 @@ Subject: [PATCH 4/6] qtbase: fix locating tzdir on NixOS
  1 file changed, 17 insertions(+), 10 deletions(-)
 
 diff --git a/src/corelib/time/qtimezoneprivate_tz.cpp b/src/corelib/time/qtimezoneprivate_tz.cpp
-index e87e34f76d..39bd79d4a4 100644
+index 960a0944185..a5186acbd91 100644
 --- a/src/corelib/time/qtimezoneprivate_tz.cpp
 +++ b/src/corelib/time/qtimezoneprivate_tz.cpp
 @@ -51,7 +51,11 @@ typedef QHash<QByteArray, QTzTimeZone> QTzTimeZoneHash;
@@ -24,7 +24,7 @@ index e87e34f76d..39bd79d4a4 100644
      if (!QFile::exists(path))
          path = QStringLiteral("/usr/lib/zoneinfo/zone.tab");
  
-@@ -729,18 +733,21 @@ QTzTimeZoneCacheEntry QTzTimeZoneCache::findEntry(const QByteArray &ianaId)
+@@ -730,18 +734,21 @@ QTzTimeZoneCacheEntry QTzTimeZoneCache::findEntry(const QByteArray &ianaId)
          if (!tzif.open(QIODevice::ReadOnly))
              return ret;
      } else {

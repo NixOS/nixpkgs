@@ -200,7 +200,7 @@ sub pciCheck {
     }
 
     # In case this is a virtio scsi device, we need to explicitly make this available.
-    if ($vendor eq "0x1af4" && $device eq "0x1004") {
+    if ($vendor eq "0x1af4" && ($device eq "0x1004" || $device eq "0x1048") ) {
         push @initrdAvailableKernelModules, "virtio_scsi";
     }
 

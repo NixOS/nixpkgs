@@ -40,6 +40,8 @@ in
       sha256 = "sha256-cc8YjrMsYZqgmwp5+AA+HsqzjxzFcTT/ga31NQz/OWc=";
     };
     jdk = jdk11;
+
+    broken = true; # Bad hash, probably unstable
   };
 
   pdfstudio2021 = callPackage ./common.nix rec {
@@ -66,5 +68,7 @@ in
       (lib.getLib stdenv.cc.cc)  # for libstdc++.so.6 and libgomp.so.1
     ];
     jdk = jdk17;
+
+    broken = true; # URL 404s, probably unstable
   };
 }.${pname}

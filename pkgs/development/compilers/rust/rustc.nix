@@ -79,11 +79,19 @@ in stdenv.mkDerivation rec {
     "--enable-vendor"
     "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
     "--host=${rust.toRustTargetSpec stdenv.hostPlatform}"
-    # std is built for all platforms in --target. When building a cross-compiler
-    # we need to add the host platform as well so rustc can compile build.rs
-    # scripts.
+    # std is built for all platforms in --target.
     "--target=${concatStringsSep "," ([
       (rust.toRustTargetSpec stdenv.targetPlatform)
+
+    # (build!=target): When cross-building a compiler we need to add
+    # the build platform as well so rustc can compile build.rs
+    # scripts.
+    ] ++ optionals (stdenv.buildPlatform != stdenv.targetPlatform) [
+      (rust.toRustTargetSpec stdenv.buildPlatform)
+
+    # (host!=target): When building a cross-targeting compiler we
+    # need to add the host platform as well so rustc can compile
+    # build.rs scripts.
     ] ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform) [
       (rust.toRustTargetSpec stdenv.hostPlatform)
     ])}"

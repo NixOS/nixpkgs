@@ -9,6 +9,7 @@
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , enableDebuginfod ? false, elfutils
 , guile ? null
+, hostCpuOnly ? false
 , safePaths ? [
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
    "$debugdir" "$datadir/auto-load"
@@ -27,7 +28,7 @@ in
 assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
-  pname = targetPrefix + basename;
+  pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
   version = "13.1";
 
   src = fetchurl {
@@ -94,7 +95,8 @@ stdenv.mkDerivation rec {
     "--program-prefix=${targetPrefix}"
 
     "--disable-werror"
-    "--enable-targets=all" "--enable-64-bit-bfd"
+  ] ++ lib.optional (!hostCpuOnly) "--enable-targets=all" ++ [
+    "--enable-64-bit-bfd"
     "--disable-install-libbfd"
     "--disable-shared" "--enable-static"
     "--with-system-zlib"

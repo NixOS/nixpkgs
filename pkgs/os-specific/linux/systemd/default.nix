@@ -98,7 +98,7 @@
 , withImportd ? !stdenv.hostPlatform.isMusl
 , withKmod ? true
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
-    && stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6" # assumes hard floats
+    && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
 , withLibidn2 ? true
 , withLocaled ? true
@@ -736,7 +736,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       inherit (nixosTests) switchTest;
-      cross = pkgsCross.aarch64-multiplatform.systemd;
+      cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
     };
   };
 

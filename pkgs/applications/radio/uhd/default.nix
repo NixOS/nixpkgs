@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
   ]
     # If both enableLibuhd_Python_api and enableUtils are off, we don't need
     # pythonEnv in buildInputs as it's a 'build' dependency and not a runtime

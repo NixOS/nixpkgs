@@ -1,4 +1,4 @@
-{ lib, stdenv, nix, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, nix, jq, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "nixos-shell";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/nixos-shell \
-      --prefix PATH : ${lib.makeBinPath [ nix ]}
+      --prefix PATH : ${lib.makeBinPath [ nix jq ]}
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];

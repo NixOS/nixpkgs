@@ -1,6 +1,6 @@
-{ lib, stdenv, writeScript, callPackage, buildFHSUserEnv, unwrapped ? callPackage ./runtime.nix {} }:
+{ lib, stdenv, writeScript, callPackage, buildFHSEnv, unwrapped ? callPackage ./runtime.nix {} }:
 
-buildFHSUserEnv rec {
+buildFHSEnv rec {
   name = "houdini-${unwrapped.version}";
 
   targetPkgs = pkgs: with pkgs; [

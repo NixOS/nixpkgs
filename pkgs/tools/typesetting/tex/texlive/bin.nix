@@ -486,7 +486,7 @@ xindy = stdenv.mkDerivation {
     pkg-config perl
     (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
   ];
-  buildInputs = [ clisp libiconv ];
+  buildInputs = [ clisp libiconv perl ];
 
   configureFlags = [ "--with-clisp-runtime=system" "--disable-xindy-docs" ];
 
