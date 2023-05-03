@@ -19,11 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9FzMyBIR2u1zXHtTWJABM6RF1+OyjYdEPlRwtig9blI=";
   };
 
+  # remove large unneeded files
+  postUnpack = ''
+    find -name "lib*.so" -delete
+  '';
+
   nativeBuildInputs = [ wrapGAppsHook unzip ];
 
   buildInputs = [ gsettings-desktop-schemas gtk3 ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin \
              $out/opt/${pname}
 
@@ -32,6 +38,7 @@ stdenv.mkDerivation rec {
     cp -r ${desktopItem}/share/applications $out/share/
 
     makeWrapper ${nwjs}/bin/nw $out/bin/${pname} --add-flags $out/opt/${pname}
+    runHook postInstall
   '';
 
   meta = with lib; {
