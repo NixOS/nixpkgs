@@ -21,6 +21,7 @@
 , armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
 , buildPackages
+, pkgs
 }:
 
 let
@@ -144,6 +145,30 @@ in {
       "tools/mkimage"
     ];
   };
+
+  ubootRockchipTools = stdenv.mkDerivation ({
+    src = fetchFromGitHub {
+      owner = "rockchip-linux";
+      repo = "u-boot";
+      rev = "ef1dd650042f61915c4859ecc94623a09a3529fa";
+      sha256 = "sha256-w0hp1UGxCtSBlu9YJx6KUjeHfPCB+QqoNDlLp7AshoM=";
+    };
+
+    name = "uboot-rockchip-tools";
+    configurePhase = "make allnoconfig";
+    makeFlags = "CONFIG_ARCH_ROCKCHIP=y NO_SDL=1 tools";
+    installPhase = ''
+      mkdir -p $out/bin
+      cp tools/loaderimage tools/trust_merger $out/bin
+    '';
+
+    meta = with lib; {
+      homepage = "https://opensource.rock-chips.com/wiki_U-Boot";
+      description = "Tools required to create u-boot images for rockchip based boards";
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ zauberpony ];
+    };
+  });
 
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";
