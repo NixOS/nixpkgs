@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, mkDerivation
 , fetchurl
 , dpkg
 , wrapGAppsHook
@@ -13,7 +12,6 @@
 , libtiff
 , cups
 , xorg
-, steam-run
 , makeWrapper
 , useChineseVersion ? false
 }:
@@ -54,8 +52,9 @@ stdenv.mkDerivation rec {
     nspr
     mesa
     libtiff
-    cups.lib
   ];
+
+  runtimeDependencies = [ cups.lib ];
 
   installPhase = ''
     runHook preInstall
@@ -70,12 +69,6 @@ stdenv.mkDerivation rec {
     for i in $out/share/applications/*;do
       substituteInPlace $i \
         --replace /usr/bin $out/bin
-    done
-    for i in wps wpp et wpspdf; do
-      mv $out/bin/$i $out/bin/.$i-orig
-      makeWrapper ${steam-run}/bin/steam-run $out/bin/$i \
-        --add-flags $out/bin/.$i-orig \
-        --argv0 $i
     done
     runHook postInstall
   '';
