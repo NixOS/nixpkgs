@@ -368,9 +368,6 @@ package-maintainers:
     - taffybar
     - arbtt
     - lentil
-  shlok:
-    - streamly-archive
-    - streamly-lmdb
   sorki:
     - cayenne-lpp
     - blockfrost-client
