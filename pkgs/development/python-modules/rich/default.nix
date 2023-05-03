@@ -42,7 +42,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "rich" ];
+  pythonImportsCheck = [
+    "rich"
+  ];
 
   passthru.tests = {
     inherit enrich httpie rich-rst textual;

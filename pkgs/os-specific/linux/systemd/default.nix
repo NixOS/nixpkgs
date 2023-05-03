@@ -117,6 +117,7 @@
 , withTimedated ? true
 , withTimesyncd ? true
 , withTpm2Tss ? true
+, withUkify ? false  # adds python to closure which is too much by default
 , withUserDb ? true
 , withUtmp ? !stdenv.hostPlatform.isMusl
   # tests assume too much system access for them to be feasible for us right now
@@ -139,7 +140,7 @@ assert withHomed -> withPam;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "253.1";
+  version = "253.2";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -156,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-PyAhkLxDkT5gVocCXh8bst6PBgguASjnA82xinQOtjw=";
+    hash = "sha256-gtJEHLSeJoOSFnutn/+wM27sV9JiV5afsykyUd+XDKQ=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -350,7 +351,7 @@ stdenv.mkDerivation (finalAttrs: {
   # when cross-compiling.
   + ''
     shopt -s extglob
-    patchShebangs tools test src/!(rpm|kernel-install) src/kernel-install/test-kernel-install.sh
+    patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
   '';
 
   outputs = [ "out" "man" "dev" ];
@@ -415,6 +416,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
     ++ lib.optional withTpm2Tss tpm2-tss
+    ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
   ;
 
   #dontAddPrefix = true;
@@ -511,11 +513,10 @@ stdenv.mkDerivation (finalAttrs: {
     # more frequent development builds
     "-Dman=true"
 
-    # Temporary disable the ukify tool. see https://github.com/NixOS/nixpkgs/pull/216826#issuecomment-1465228824
-    "-Dukify=false"
-
     "-Defi=${lib.boolToString withEfi}"
     "-Dgnu-efi=${lib.boolToString withEfi}"
+
+    "-Dukify=${lib.boolToString withUkify}"
   ] ++ lib.optionals withEfi [
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"

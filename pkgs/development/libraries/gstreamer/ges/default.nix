@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     gobject-introspection
-    gst-devtools
     python3
     flex
 
@@ -47,6 +46,8 @@ stdenv.mkDerivation rec {
     bash-completion
     libxml2
     gobject-introspection
+    gst-devtools
+    python3
   ];
 
   propagatedBuildInputs = [

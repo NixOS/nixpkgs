@@ -451,6 +451,7 @@ with self;
 
   jsonaf = janePackage {
     pname = "jsonaf";
+    duneVersion = "3";
     hash = "1j9rn8vsvfpgmdpmdqb5qhvss5171j8n3ii1bcgnavqinchbvqa6";
     meta.description = "A library for parsing, manipulating, and serializing data structured as JSON";
     propagatedBuildInputs = [ base ppx_jane angstrom faraday ];
@@ -690,6 +691,7 @@ with self;
 
   ppx_jsonaf_conv = janePackage {
     pname = "ppx_jsonaf_conv";
+    duneVersion = "3";
     version = "0.15.1";
     hash = "0wprs7qmscklyskj4famhaqqisi6jypy414aqba14qdyi43w0cv3";
     minimumOCamlVersion = "4.08";
@@ -898,6 +900,7 @@ with self;
 
   sexp = janePackage {
     pname = "sexp";
+    duneVersion = "3";
     hash = "00xlsymm1mpgs8cqkb6c36vh5hfw0saghvwiqh7jry65qc5nvv9z";
     propagatedBuildInputs = [
       async
@@ -1062,6 +1065,7 @@ with self;
   };
 
   vcaml = janePackage {
+    duneVersion = "3";
     pname = "vcaml";
     hash = "12fd29x9dgf4f14xrx7z4y1bm1wbfynrs3jismjbiqnckfpbqrib";
     meta.description = "OCaml bindings for the Neovim API";

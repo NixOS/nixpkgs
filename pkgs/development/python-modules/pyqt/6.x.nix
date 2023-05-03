@@ -20,6 +20,8 @@
 #, withLocation ? true
 # Not currently part of PyQt6
 #, withConnectivity ? true
+, withPrintSupport ? true
+, cups
 }:
 
 buildPythonPackage rec {
@@ -102,6 +104,10 @@ buildPythonPackage rec {
     dbus-python
     pyqt6-sip
     setuptools
+  ]
+  # ld: library not found for -lcups
+  ++ lib.optionals (withPrintSupport && stdenv.isDarwin) [
+    cups
   ];
 
   passthru = {

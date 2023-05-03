@@ -27,13 +27,13 @@ assert !(pulseaudioSupport && portaudioSupport);
 
 gnuradio3_8Minimal.pkgs.mkDerivation rec {
   pname = "gqrx";
-  version = "2.15.9";
+  version = "2.15.10";
 
   src = fetchFromGitHub {
     owner = "gqrx-sdr";
     repo = "gqrx";
     rev = "v${version}";
-    hash = "sha256-KQBtYVEfOXpzfxNMgTu6Hup7XpjubrpvZazcFlml4Kg=";
+    hash = "sha256-oynon3bInIBZxGo2PjNY6jMGzJp82mqM2Yo9wI8fOjA=";
   };
 
   nativeBuildInputs = [

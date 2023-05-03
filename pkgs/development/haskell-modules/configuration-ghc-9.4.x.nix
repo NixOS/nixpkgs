@@ -207,8 +207,8 @@ in {
     relative = "cborg";
   }) super.cborg;
 
-  # https://github.com/tweag/ormolu/issues/941
   ormolu = doDistribute self.ormolu_0_5_3_0;
+  # https://github.com/tweag/ormolu/issues/941
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
   }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_0_0);

@@ -32,8 +32,6 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  auditable = true; # TODO: remove when this is the default
-
   nativeBuildInputs = [
     makeWrapper
   ] ++ lib.optionals stdenv.isLinux [

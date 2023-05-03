@@ -9,14 +9,14 @@
 , gobject-introspection
 , buildPackages
 , withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, vala
 , python3
-, docbook-xsl-nons
-, docbook_xml_dtd_45
+, gi-docgen
+, graphviz
 , libxml2
 , glib
 , wrapGAppsNoGuiHook
 , sqlite
-, libxslt
 , libstemmer
 , gnome
 , icu
@@ -31,18 +31,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.4.2";
+  version = "3.5.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Tm3xQqT3BIePypjrtaIkdQ5epUaqKqq6pyanNUC9FzE=";
+    sha256 = "EylCddu7rZY0s6g5DAjm8Svr/oT2zK+3Kyewwjuo2i8=";
   };
-
-  postPatch = ''
-    patchShebangs utils/data-generators/cc/generate
-  '';
 
   strictDeps = true;
 
@@ -57,13 +53,13 @@ stdenv.mkDerivation rec {
     asciidoc
     gettext
     glib
-    libxslt
     wrapGAppsNoGuiHook
-    docbook-xsl-nons
-    docbook_xml_dtd_45
+    gi-docgen
+    graphviz
     (python3.pythonForBuild.withPackages (p: [ p.pygobject3 ]))
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
+    vala
   ];
 
   buildInputs = [
@@ -88,6 +84,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddocs=true"
     (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "vapi" withIntrospection)
     (lib.mesonBool "test_utils" withIntrospection)
   ] ++ (
     let
@@ -104,7 +101,21 @@ stdenv.mkDerivation rec {
     "-Dsystemd_user_services=false"
   ];
 
-  doCheck = true;
+  doCheck =
+    # https://gitlab.gnome.org/GNOME/tracker/-/issues/397
+    !stdenv.isAarch64
+    # https://gitlab.gnome.org/GNOME/tracker/-/issues/398
+    && !stdenv.isi686;
+
+  postPatch = ''
+    chmod +x \
+      docs/reference/libtracker-sparql/embed-files.py \
+      docs/reference/libtracker-sparql/generate-svgs.sh
+    patchShebangs \
+      utils/data-generators/cc/generate \
+      docs/reference/libtracker-sparql/embed-files.py \
+      docs/reference/libtracker-sparql/generate-svgs.sh
+  '';
 
   preCheck =
     let
@@ -139,6 +150,11 @@ stdenv.mkDerivation rec {
   postCheck = ''
     # Clean up out symlinks
     rm -r $out/lib
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

@@ -17,25 +17,24 @@
 
 stdenv.mkDerivation rec {
   pname = "warp";
-  version = "0.4";
+  version = "0.5.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-c8X0kedfM8DPTEQAbh8cXIfEvxG2cdUD3twVHs0/k7U";
+    hash = "sha256-VtmLWbZXKTv+sjICnaBt2EPbtDwIVZym/PZdL2N7UQo=";
   };
 
   postPatch = ''
     patchShebangs build-aux
   '';
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tempfile-3.3.0" = "sha256-zVbGZOEYEmOJGtl5Ko8rYIW9NY16lq5+zMzJ/TSkfsc=";
-    };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-NT6reZUsieqMTX7HW9QmrjcgBpqxZOUfzht9b7suNeY=";
   };
 
   nativeBuildInputs = [

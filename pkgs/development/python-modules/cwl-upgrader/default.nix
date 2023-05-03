@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, mypy-extensions
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    mypy-extensions
     ruamel-yaml
     schema-salad
   ];

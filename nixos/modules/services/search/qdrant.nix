@@ -100,6 +100,7 @@ in {
       after = [ "network.target" ];
 
       serviceConfig = {
+        LimitNOFILE=65536;
         ExecStart = "${pkgs.qdrant}/bin/qdrant --config-path ${configFile}";
         DynamicUser = true;
         Restart = "on-failure";

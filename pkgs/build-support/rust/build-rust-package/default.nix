@@ -45,7 +45,7 @@
 , buildFeatures ? [ ]
 , checkFeatures ? buildFeatures
 , useNextest ? false
-, auditable ? false # TODO: change to true
+, auditable ? true
 
 , depsExtraArgs ? {}
 

@@ -5,7 +5,6 @@
 , fetchpatch
 , makeSetupHook
 , makeWrapper
-, cmake
 , gst_all_1
 , libglvnd
 , darwin
@@ -27,11 +26,6 @@ let
       callPackage = self.newScope ({
         inherit qtModule srcs;
         stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-        cmake = cmake.overrideAttrs (attrs: {
-          patches = attrs.patches ++ [
-            ./patches/cmake.patch
-          ];
-        });
       });
     in
     {
@@ -44,18 +38,15 @@ let
         withGtk3 = true;
         inherit (srcs.qtbase) src version;
         inherit developerBuild;
-        inherit (darwin.apple_sdk_11_0.frameworks) AGL AVFoundation AppKit GSS MetalKit;
+        inherit (darwin.apple_sdk_11_0.frameworks)
+          AGL AVFoundation AppKit Contacts CoreBluetooth EventKit GSS MetalKit;
         patches = [
-          ./patches/qtbase-qmake-mkspecs-mac.patch
-          ./patches/qtbase-qmake-pkg-config.patch
-          ./patches/qtbase-tzdir.patch
-          ./patches/qtbase-variable-fonts.patch
-          # Remove symlink check causing build to bail out and fail.
-          # https://gitlab.kitware.com/cmake/cmake/-/issues/23251
-          (fetchpatch {
-            url = "https://github.com/Homebrew/formula-patches/raw/c363f0edf9e90598d54bc3f4f1bacf95abbda282/qt/qt_internal_check_if_path_has_symlinks.patch";
-            sha256 = "sha256-Gv2L8ymZSbJxcmUijKlT2NnkIB3bVH9D7YSsDX2noTU=";
-          })
+          ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
+          ./patches/0002-qtbase-qmake-fix-mkspecs-for-darwin.patch
+          ./patches/0003-qtbase-qmake-fix-includedir-in-generated-pkg-config.patch
+          ./patches/0004-qtbase-fix-locating-tzdir-on-NixOS.patch
+          ./patches/0005-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
+          ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
         ];
       };
       env = callPackage ./qt-env.nix { };
@@ -91,7 +82,7 @@ let
       qt5compat = callPackage ./modules/qt5compat.nix { };
       qtcharts = callPackage ./modules/qtcharts.nix { };
       qtconnectivity = callPackage ./modules/qtconnectivity.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) PCSC;
+        inherit (darwin.apple_sdk_11_0.frameworks) IOBluetooth PCSC;
       };
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
@@ -124,7 +115,16 @@ let
       qtvirtualkeyboard = callPackage ./modules/qtvirtualkeyboard.nix { };
       qtwayland = callPackage ./modules/qtwayland.nix { };
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
-      qtwebengine = callPackage ./modules/qtwebengine.nix { };
+      qtwebengine = callPackage ./modules/qtwebengine.nix {
+        inherit (darwin) bootstrap_cmds cctools xnu;
+        inherit (darwin.apple_sdk_11_0) libpm libunwind;
+        inherit (darwin.apple_sdk_11_0.libs) sandbox;
+        inherit (darwin.apple_sdk_11_0.frameworks)
+          AGL AVFoundation Accelerate Cocoa CoreLocation CoreML ForceFeedback
+          GameController ImageCaptureCore LocalAuthentication
+          MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
+          ReplayKit SecurityInterface Vision;
+      };
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
       qtwebview = callPackage ./modules/qtwebview.nix {
         inherit (darwin.apple_sdk_11_0.frameworks) WebKit;

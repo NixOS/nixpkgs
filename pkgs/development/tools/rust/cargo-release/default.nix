@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-release";
-  version = "0.24.8";
+  version = "0.24.9";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "cargo-release";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cnewZXIgNUtzJk7GQZKdqUZCbp46xYULZKh0A7/La4k=";
+    hash = "sha256-J71TfOG9gagp2YbsEq2z8fCwBTMJmkYhY5Gl4lB+cDI=";
   };
 
   cargoLock = {

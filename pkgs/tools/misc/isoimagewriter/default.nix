@@ -2,11 +2,11 @@
 karchive, kcoreaddons, kcrash, kiconthemes, kwidgetsaddons, solid, qgpgme }:
 mkDerivation rec {
   pname = "isoimagewriter";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "mirror://kde/unstable/${pname}/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-09e9R8OvMTlBlETM7/DIFYc86ROw7wBzdus+Zo1TO7M=";
+    hash = "sha256-c6cHnGVKPOw/cGXlKWsc40/1ZbiUJH/H+XmffE0MQcU=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];

@@ -90,9 +90,7 @@
 , makeWrapper
 , procps
 
-  # vim-clap dependencies
-, libgit2
-, libiconv
+  # sg-nvim dependencies
 , openssl
 , pkg-config
 
@@ -852,18 +850,18 @@ self: super: {
 
   sniprun =
     let
-      version = "1.2.13";
+      version = "1.3.0";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        hash = "sha256-VDLBktZChRgorJt/V/wuFQn/SL4yOZIElmntEQEi8Tc=";
+        hash = "sha256-6UDjrrEtOuB+lrCZVBO4BcZm78qwq8YbQcXAdjNbicY=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoSha256 = "sha256-cJwmuwsC81fSH36TRU7xGzlR4pVdjsw73uRaH1uWY+0=";
+        cargoSha256 = "sha256-ghXYUgXqXvK9RySG/hQR5zpLsyk6L9Htb/UYgMPyWUk=";
 
         nativeBuildInputs = [ makeWrapper ];
 
@@ -882,6 +880,11 @@ self: super: {
       patches = [ ./patches/sniprun/fix-paths.patch ];
       postPatch = ''
         substituteInPlace lua/sniprun.lua --replace '@sniprun_bin@' ${sniprun-bin}
+      '';
+
+      postInstall = ''
+        mkdir $out/doc
+        ln -s $out/docs/sniprun.txt $out/doc/sniprun.txt
       '';
 
       propagatedBuildInputs = [ sniprun-bin ];
@@ -1154,35 +1157,7 @@ self: super: {
     passthru.python3Dependencies = ps: with ps; [ beancount ];
   });
 
-  vim-clap = super.vim-clap.overrideAttrs (old: {
-    preFixup =
-      let
-        maple-bin = rustPlatform.buildRustPackage {
-          name = "maple";
-          inherit (old) src;
-
-          nativeBuildInputs = [
-            pkg-config
-          ];
-
-          buildInputs = [
-            openssl
-          ] ++ lib.optionals stdenv.isDarwin [
-            CoreServices
-            curl
-            libgit2
-            libiconv
-          ];
-
-          cargoHash = "sha256-BFUC6fQ5LpTKx2ztCuFVzXTWzSDl03VYsmVcxBXbiT4=";
-        };
-      in
-      ''
-        ln -s ${maple-bin}/bin/maple $target/bin/maple
-      '';
-
-    meta.platforms = lib.platforms.all;
-  });
+  vim-clap = callPackage ./vim-clap { };
 
   vim-codefmt = super.vim-codefmt.overrideAttrs (old: {
     dependencies = with self; [ vim-maktaba ];

@@ -63,7 +63,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.8.3";
+  version = "4.10.1";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -75,8 +75,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "s2L5aNCFtNPZNA1NOMcGN33tnVN05pSitrfmKS48unQ=";
+    sha256 = "6PysBLx3FbnaZnyRGl7o8mLiANHWpQrfI2RcqM/NAxE=";
   };
+
+  patches = [
+    # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1501059486
+    ./patches/4.0-fix-darwin-build.patch
+  ];
 
   depsBuildBuild = [
     pkg-config

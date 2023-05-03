@@ -1,10 +1,21 @@
-{ stdenv, lib, buildEnv, writeText, writeShellScriptBin, pkgs, pkgsi686Linux }:
-
-args@{ name, profile ? ""
-, targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
-, extraBuildCommands ? "", extraBuildCommandsMulti ? ""
-, extraOutputsToInstall ? []
+{ lib
+, stdenv
+, runCommandLocal
+, buildEnv
+, writeText
+, writeShellScriptBin
+, pkgs
+, pkgsi686Linux
 }:
+
+{ name ? null
+, profile ? ""
+, targetPkgs ? pkgs: []
+, multiPkgs ? pkgs: []
+, extraBuildCommands ? ""
+, extraBuildCommandsMulti ? ""
+, extraOutputsToInstall ? []
+} @ args:
 
 # HOWTO:
 # All packages (most likely programs) returned from targetPkgs will only be
@@ -78,19 +89,16 @@ let
   '';
 
   # Compose /etc for the chroot environment
-  etcPkg = stdenv.mkDerivation {
-    name         = "${name}-chrootenv-etc";
-    buildCommand = ''
-      mkdir -p $out/etc
-      cd $out/etc
+  etcPkg = runCommandLocal "${name}-chrootenv-etc" { } ''
+    mkdir -p $out/etc
+    cd $out/etc
 
-      # environment variables
-      ln -s ${etcProfile} profile
+    # environment variables
+    ln -s ${etcProfile} profile
 
-      # symlink /etc/mtab -> /proc/mounts (compat for old userspace progs)
-      ln -s /proc/mounts mtab
-    '';
-  };
+    # symlink /etc/mtab -> /proc/mounts (compat for old userspace progs)
+    ln -s /proc/mounts mtab
+  '';
 
   # Composes a /usr-like directory structure
   staticUsrProfileTarget = buildEnv {
@@ -163,8 +171,9 @@ let
     ln -Ls ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
   '';
 
-  setupLibDirs = if isTargetBuild then setupLibDirsTarget
-                                  else setupLibDirsMulti;
+  setupLibDirs = if isTargetBuild
+                 then setupLibDirsTarget
+                 else setupLibDirsMulti;
 
   # the target profile is the actual profile that will be used for the chroot
   setupTargetProfile = ''
@@ -203,21 +212,16 @@ let
     done
   '';
 
-in stdenv.mkDerivation {
-  name         = "${name}-fhs";
-  buildCommand = ''
-    mkdir -p $out
-    cd $out
-    ${setupTargetProfile}
-    cd $out
-    ${extraBuildCommands}
-    cd $out
-    ${lib.optionalString isMultiBuild extraBuildCommandsMulti}
-  '';
-  preferLocalBuild = true;
-  allowSubstitutes = false;
-
+in runCommandLocal "${name}-fhs" {
   passthru = {
     inherit args multiPaths targetPaths;
   };
-}
+} ''
+  mkdir -p $out
+  cd $out
+  ${setupTargetProfile}
+  cd $out
+  ${extraBuildCommands}
+  cd $out
+  ${lib.optionalString isMultiBuild extraBuildCommandsMulti}
+''

@@ -70,3 +70,27 @@ index ff1b8e3..4f876c0 100644
  	strv = g_settings_get_strv (settings, "labels");
  
  	for (ii = 0; strv && strv[ii]; ii++) {
+diff --git a/src/Microsoft365/common/e-m365-tz-utils.c b/src/Microsoft365/common/e-m365-tz-utils.c
+index 7a1d7f4..3c0d5e1 100644
+--- a/src/Microsoft365/common/e-m365-tz-utils.c
++++ b/src/Microsoft365/common/e-m365-tz-utils.c
+@@ -192,7 +192,18 @@ e_m365_tz_utils_get_user_timezone (void)
+ 	gchar *location;
+ 	ICalTimezone *zone = NULL;
+ 
+-	settings = g_settings_new ("org.gnome.evolution.calendar");
++	{
++		g_autoptr(GSettingsSchemaSource) schema_source;
++		g_autoptr(GSettingsSchema) schema;
++		schema_source = g_settings_schema_source_new_from_directory("@evo@",
++									    g_settings_schema_source_get_default(),
++									    TRUE,
++									    NULL);
++		schema = g_settings_schema_source_lookup(schema_source,
++							 "org.gnome.evolution.calendar",
++							 FALSE);
++		settings = g_settings_new_full(schema, NULL, NULL);
++	}
+ 
+ 	if (g_settings_get_boolean (settings, "use-system-timezone"))
+ 		location = e_cal_util_get_system_timezone_location ();

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aioswitcher";
-  version = "3.2.2";
+  version = "3.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "TomerFi";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-17LTNQjI2UfgtlNNkSRSWMNnhgokBXn/7KGuKo5Ai4E=";
+    hash = "sha256-dg3oGSwRoOFkX97ZBk7fgOv0fZjOZ+FRXNO9DKEU6Zk=";
   };
 
   nativeBuildInputs = [

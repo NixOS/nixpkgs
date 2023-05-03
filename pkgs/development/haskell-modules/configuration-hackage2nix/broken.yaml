@@ -1546,6 +1546,7 @@ broken-packages:
   - fixer
   - fixfile
   - fixie
+  - fix-imports # dependency missing in job https://hydra.nixos.org/build/215306368 at 2023-04-11
   - fix-symbols-gitit
   - fizzbuzz
   - fizzbuzz-as-a-service
@@ -1707,6 +1708,7 @@ broken-packages:
   - generic-match
   - generic-maybe
   - generic-override
+  - generic-persistence #  failure  in job https://hydra.nixos.org/build/215303659 at 2023-04-11
   - generic-pretty
   - generic-pretty-instances
   - generic-records
@@ -4243,6 +4245,7 @@ broken-packages:
   - Proper
   - properties
   - property-list
+  - proquint #  failure  in job https://hydra.nixos.org/build/215308028 at 2023-04-11
   - prosidy
   - prosper
   - proteaaudio

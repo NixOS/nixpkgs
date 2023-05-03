@@ -1064,6 +1064,16 @@ src:
     };
     version = "1.7.0";
   };
+  date = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "03skfikihpx37rc27vr3hwrb057gxnmdzxhmzd4bf4jpkl0r55w1";
+      type = "gem";
+    };
+    version = "3.3.3";
+  };
   dead_end = {
     groups = ["default" "test"];
     platforms = [];
@@ -3416,15 +3426,15 @@ src:
     version = "1.2.7";
   };
   mail = {
-    dependencies = ["mini_mime"];
+    dependencies = ["mini_mime" "net-imap" "net-pop" "net-smtp"];
     groups = ["default" "development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "00wwz6ys0502dpk8xprwcqfwyf3hmnx6lgxaiq6vj43mkx43sapc";
+      sha256 = "1bf9pysw1jfgynv692hhaycfxa8ckay1gjw5hz3madrbrynryfzc";
       type = "gem";
     };
-    version = "2.7.1";
+    version = "2.8.1";
   };
   mail-smtp_pool = {
     dependencies = ["connection_pool" "mail"];
@@ -3739,6 +3749,17 @@ src:
     };
     version = "4.0.1";
   };
+  net-imap = {
+    dependencies = ["date" "net-protocol"];
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1d996zf3g8xz244791b0qsl9vr7zg4lqnnmf9k2kshr9lki5jam8";
+      type = "gem";
+    };
+    version = "0.3.4";
+  };
   net-ldap = {
     groups = ["default"];
     platforms = [];
@@ -3758,6 +3779,17 @@ src:
       type = "gem";
     };
     version = "2.1.3";
+  };
+  net-pop = {
+    dependencies = ["net-protocol"];
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1wyz41jd4zpjn0v1xsf9j778qx1vfrl24yc20cpmph8k42c4x2w4";
+      type = "gem";
+    };
+    version = "0.1.2";
   };
   net-protocol = {
     dependencies = ["timeout"];
@@ -3780,6 +3812,17 @@ src:
       type = "gem";
     };
     version = "3.0.0";
+  };
+  net-smtp = {
+    dependencies = ["net-protocol"];
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1c6md06hm5bf6rv53sk54dl2vg038pg8kglwv3rayx0vk2mdql9x";
+      type = "gem";
+    };
+    version = "0.3.3";
   };
   net-ssh = {
     groups = ["default"];

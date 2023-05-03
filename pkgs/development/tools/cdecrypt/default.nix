@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/VitaSmith/cdecrypt/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hughobrien ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

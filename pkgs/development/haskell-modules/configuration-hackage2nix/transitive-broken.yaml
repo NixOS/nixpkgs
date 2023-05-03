@@ -330,6 +330,7 @@ dont-distribute-packages:
  - RNAlien
  - RNAwolf
  - Ranka
+ - ReplaceUmlaut
  - RollingDirectory
  - S3
  - SBench
@@ -1145,6 +1146,7 @@ dont-distribute-packages:
  - cuckoo
  - cv-combinators
  - cypher
+ - daino
  - dapi
  - darcs-benchmark
  - darcs-beta
@@ -2168,6 +2170,7 @@ dont-distribute-packages:
  - hist-pl-lmf
  - hit
  - hit-graph
+ - hix
  - hjsonschema
  - hjugement-cli
  - hlcm
@@ -3189,6 +3192,7 @@ dont-distribute-packages:
  - prefork
  - prelate
  - presto-hdbc
+ - prettychart
  - preview
  - primal-memory
  - primitive-containers
@@ -3819,8 +3823,10 @@ dont-distribute-packages:
  - sydtest-amqp
  - sydtest-autodocodec
  - sydtest-hedgehog
+ - sydtest-hedgehog_0_4_0_0
  - sydtest-hedis
  - sydtest-hspec
+ - sydtest-hspec_0_4_0_0
  - sydtest-mongo
  - sydtest-persistent
  - sydtest-persistent-postgresql
@@ -3927,6 +3933,7 @@ dont-distribute-packages:
  - tinkoff-invest-sdk
  - tintin
  - tinytools
+ - tinytools-vty
  - tip-haskell-frontend
  - tip-lib
  - titan

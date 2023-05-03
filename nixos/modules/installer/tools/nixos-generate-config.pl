@@ -473,7 +473,7 @@ EOF
     }
 
     # Don't emit tmpfs entry for /tmp, because it most likely comes from the
-    # boot.tmpOnTmpfs option in configuration.nix (managed declaratively).
+    # boot.tmp.useTmpfs option in configuration.nix (managed declaratively).
     next if ($mountPoint eq "/tmp" && $fsType eq "tmpfs");
 
     # Emit the filesystem.

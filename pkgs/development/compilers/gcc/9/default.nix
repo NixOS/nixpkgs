@@ -56,6 +56,7 @@ let majorVersion = "9";
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches = [
+      ./fix-struct-redefinition-on-glibc-2.36.patch
       # Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
       (fetchurl {
         name = "fix-bug-80431.patch";

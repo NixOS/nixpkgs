@@ -49,7 +49,7 @@
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
+  inherit (cudaPackages) backendStdenv cudatoolkit cudaFlags cudnn nccl;
 
   pname = "jaxlib";
   version = "0.3.22";
@@ -81,7 +81,7 @@ let
   cudatoolkit_cc_joined = symlinkJoin {
     name = "${cudatoolkit.cc.name}-merged";
     paths = [
-      cudatoolkit.cc
+      backendStdenv.cc
       binutils.bintools # for ar, dwp, nm, objcopy, objdump, strip
     ];
   };
@@ -271,6 +271,7 @@ let
           sed -i 's@include/pybind11@pybind11@g' $src
         done
       '' + lib.optionalString cudaSupport ''
+        export NIX_LDFLAGS+=" -L${backendStdenv.nixpkgsCompatibleLibstdcxx}/lib"
         patchShebangs ../output/external/org_tensorflow/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
       '' + lib.optionalString stdenv.isDarwin ''
         # Framework search paths aren't added by bintools hook

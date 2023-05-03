@@ -83,22 +83,19 @@ let
     pname = "playwright-browsers";
     version = driverVersion;
 
-    src = runCommand "playwright-browsers-base" {
-      outputHashMode = "recursive";
-      outputHashAlgo = "sha256";
-      outputHash = {
-        x86_64-darwin = "0z2kww4iby1izkwn6z2ai94y87bkjvwak8awdmjm8sgg00pa9l1a";
-      }.${system} or throwSystem;
-    } ''
+    dontUnpack = true;
+
+    installPhase = ''
+      runHook preInstall
+
       export PLAYWRIGHT_BROWSERS_PATH=$out
       ${driver}/bin/playwright install
       rm -r $out/.links
+
+      runHook postInstall
     '';
 
-    installPhase = ''
-      mkdir $out
-      cp -r * $out/
-    '';
+    meta.platforms = lib.platforms.darwin;
   };
 
   browsers-linux = { withFirefox ? true, withChromium ? true }: let

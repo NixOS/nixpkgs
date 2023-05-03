@@ -29,6 +29,9 @@
 , buildPackages
 , libxcrypt
 , disableGdbPlugin ? !enablePlugin
+, disableBootstrap ? !stdenv.hostPlatform.isDarwin
+, nukeReferences
+, callPackage
 }:
 
 # Make sure we get GNU sed.
@@ -54,7 +57,6 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
-    disableBootstrap = !(with stdenv; targetPlatform == hostPlatform && hostPlatform == buildPlatform);
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -177,6 +179,7 @@ let majorVersion = "12";
         mpfr
         name
         noSysDirs
+        nukeReferences
         patchelf
         perl
         profiledCompiler
@@ -194,7 +197,7 @@ let majorVersion = "12";
 
 in
 
-stdenv.mkDerivation ({
+lib.pipe (stdenv.mkDerivation ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -344,4 +347,9 @@ stdenv.mkDerivation ({
 }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
-)
+))
+[
+  (callPackage ../common/libgcc.nix   { inherit langC langCC langJit; })
+  (callPackage ../common/checksum.nix { inherit langC langCC; })
+]
+

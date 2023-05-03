@@ -34,6 +34,17 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
     version = "5.212.0-alpha4";
   };
 
+  # qtsystems has no official releases
+  qtsystems = {
+    version = "unstable-2019-01-03";
+    src = fetchFromGitHub {
+      owner = "qt";
+      repo = "qtsystems";
+      rev = "e3332ee38d27a134cef6621fdaf36687af1b6f4a";
+      hash = "sha256-P8MJgWiDDBCYo+icbNva0LODy0W+bmQTS87ggacuMP0=";
+    };
+  };
+
   catapult = fetchgit {
     url = "https://chromium.googlesource.com/catapult";
     rev = "5eedfe23148a234211ba477f76fc2ea2e8529189";

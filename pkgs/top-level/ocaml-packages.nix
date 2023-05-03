@@ -609,6 +609,8 @@ let
 
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
+    headache = callPackage ../development/ocaml-modules/headache { };
+
     hex = callPackage ../development/ocaml-modules/hex { };
 
     hidapi = callPackage ../development/ocaml-modules/hidapi { };
@@ -1039,6 +1041,8 @@ let
     mm = callPackage ../development/ocaml-modules/mm { };
 
     mmap =  callPackage ../development/ocaml-modules/mmap { };
+
+    morbig = callPackage ../development/ocaml-modules/morbig { };
 
     mparser =  callPackage ../development/ocaml-modules/mparser { };
 

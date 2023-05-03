@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-efcZC+/FH3ZXMgDL3K5RIzKeD0Ow1ci096cXkTsP8SQ=";
   };
 
-  auditable = true; # TODO: remove when this is the default
-
   cargoBuildFlags = [ "--bin" "rust-analyzer" "--bin" "rust-analyzer-proc-macro-srv" ];
   cargoTestFlags = [ "--package" "rust-analyzer" "--package" "proc-macro-srv-cli" ];
 

@@ -9,7 +9,7 @@
 , python3
 , openblas
 , zlib
-, gfortran
+, gfortran-tmp-noisystem
 }:
 
 let
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     python3
-    gfortran
+    gfortran-tmp-noisystem
   ];
 
   buildFlags = [

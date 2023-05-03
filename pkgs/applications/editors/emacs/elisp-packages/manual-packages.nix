@@ -25,8 +25,6 @@ in
 
   emacspeak = callPackage ./manual-packages/emacspeak { };
 
-  ement = callPackage ./manual-packages/ement { };
-
   ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
   evil-markdown = callPackage ./manual-packages/evil-markdown { };

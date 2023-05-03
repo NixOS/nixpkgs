@@ -65,7 +65,6 @@ buildPythonPackage rec {
     description = "Distributed computation in Python";
     homepage = "https://distributed.readthedocs.io/";
     license = licenses.bsd3;
-    platforms = platforms.x86; # fails on aarch64
     maintainers = with maintainers; [ teh costrouc ];
   };
 }

@@ -1,41 +1,40 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
-, cachetools
-, pyasn1-modules
-, rsa
-, six
 , aiohttp
-, cryptography
-, pyopenssl
-, pyu2f
-, requests
-, pythonOlder
 , aioresponses
-, asynctest
+, cachetools
+, cryptography
+, fetchPypi
 , flask
 , freezegun
 , grpcio
 , mock
 , oauth2client
+, pyasn1-modules
+, pyopenssl
 , pytest-asyncio
 , pytest-localserver
 , pytestCheckHook
+, pythonOlder
+, pyu2f
+, requests
 , responses
+, rsa
+, six
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.16.1";
+  version = "2.17.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X9FwmGvOa/17tchFxLg2LtseDLqQHgYhlug/i7XV0yw=";
+    hash = "sha256-jzebRrrTga0qC5id+wwTrSjTwqefJzSCE/iUah0V1Vo=";
   };
 
   propagatedBuildInputs = [
@@ -67,7 +66,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
-    asynctest
     flask
     freezegun
     grpcio

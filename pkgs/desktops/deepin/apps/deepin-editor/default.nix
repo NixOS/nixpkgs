@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      name = "chore: use GNUInstallDirs in CmakeLists";
+      name = "chore-use-GNUInstallDirs-in-CmakeLists.patch";
       url = "https://github.com/linuxdeepin/deepin-editor/commit/7f4314f386a3c8f5cdea3618591b8eb027d034c3.patch";
       sha256 = "sha256-/aSBa2nILc/YrFchUyhBHHs2c7Mv6N1juwD5Sdc39Uo=";
     })
