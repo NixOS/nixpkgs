@@ -1,17 +1,20 @@
 { lib
 , buildPythonPackage
-, dvc-render
+, dvc
+, dvc-studio-client
 , fetchFromGitHub
+, funcy
 , pytestCheckHook
 , pythonOlder
 , ruamel-yaml
-, setuptools
+, scmrepo
+, setuptools-scm
 , tabulate
 }:
 
 buildPythonPackage rec {
   pname = "dvclive";
-  version = "2.1.0";
+  version = "2.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,17 +23,22 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-n3JjZrh2ImpjW1MUTwag716qaVjSChrYqNJuNp6K1s8=";
+    hash = "sha256-Wb0347y+oDFOctKjJUYPtqIFdsRm2wt16ZlQWDgjr7g=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    dvc-render
+    dvc
+    dvc-studio-client
+    funcy
     ruamel-yaml
-  ] ++ dvc-render.optional-dependencies.table;
+    scmrepo
+  ];
 
   # Circular dependency with dvc
   doCheck = false;

@@ -118,56 +118,56 @@ in
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Allows to use database for searching of previously banned ip's to increase
-          a default ban time using special formula, default it is banTime * 1, 2, 4, 8, 16, 32...
+          "bantime.increment" allows to use database for searching of previously banned ip's to increase
+          a default ban time using special formula, default it is banTime * 1, 2, 4, 8, 16, 32 ...
         '';
       };
 
       bantime-increment.rndtime = mkOption {
-        default = "4m";
-        type = types.str;
+        default = null;
+        type = types.nullOr types.str;
         example = "8m";
         description = lib.mdDoc ''
-          "bantime-increment.rndtime" is the max number of seconds using for mixing with random time
+          "bantime.rndtime" is the max number of seconds using for mixing with random time
           to prevent "clever" botnets calculate exact time IP can be unbanned again
         '';
       };
 
       bantime-increment.maxtime = mkOption {
-        default = "10h";
-        type = types.str;
+        default = null;
+        type = types.nullOr types.str;
         example = "48h";
         description = lib.mdDoc ''
-          "bantime-increment.maxtime" is the max number of seconds using the ban time can reach (don't grows further)
+          "bantime.maxtime" is the max number of seconds using the ban time can reach (don't grows further)
         '';
       };
 
       bantime-increment.factor = mkOption {
-        default = "1";
-        type = types.str;
+        default = null;
+        type = types.nullOr types.str;
         example = "4";
         description = lib.mdDoc ''
-          "bantime-increment.factor" is a coefficient to calculate exponent growing of the formula or common multiplier,
+          "bantime.factor" is a coefficient to calculate exponent growing of the formula or common multiplier,
           default value of factor is 1 and with default value of formula, the ban time grows by 1, 2, 4, 8, 16 ...
         '';
       };
 
       bantime-increment.formula = mkOption {
-        default = "ban.Time * (1<<(ban.Count if ban.Count<20 else 20)) * banFactor";
-        type = types.str;
+        default = null;
+        type = types.nullOr types.str;
         example = "ban.Time * math.exp(float(ban.Count+1)*banFactor)/math.exp(1*banFactor)";
         description = lib.mdDoc ''
-          "bantime-increment.formula" used by default to calculate next value of ban time, default value bellow,
-          the same ban time growing will be reached by multipliers 1, 2, 4, 8, 16, 32...
+          "bantime.formula" used by default to calculate next value of ban time, default value bellow,
+          the same ban time growing will be reached by multipliers 1, 2, 4, 8, 16, 32 ...
         '';
       };
 
       bantime-increment.multipliers = mkOption {
-        default = "1 2 4 8 16 32 64";
-        type = types.str;
-        example = "2 4 16 128";
+        default = null;
+        type = types.nullOr types.str;
+        example = "1 2 4 8 16 32 64";
         description = lib.mdDoc ''
-          "bantime-increment.multipliers" used to calculate next value of ban time instead of formula, corresponding
+          "bantime.multipliers" used to calculate next value of ban time instead of formula, corresponding
           previously ban count and given "bantime.factor" (for multipliers default is 1);
           following example grows ban time by 1, 2, 4, 8, 16 ... and if last ban count greater as multipliers count,
           always used last multiplier (64 in example), for factor '1' and original ban time 600 - 10.6 hours
@@ -175,11 +175,11 @@ in
       };
 
       bantime-increment.overalljails = mkOption {
-        default = false;
-        type = types.bool;
+        default = null;
+        type = types.nullOr types.bool;
         example = true;
         description = lib.mdDoc ''
-          "bantime-increment.overalljails"  (if true) specifies the search of IP in the database will be executed
+          "bantime.overalljails" (if true) specifies the search of IP in the database will be executed
           cross over all jails, if false (default), only current jail of the ban IP will be searched
         '';
       };
@@ -276,8 +276,16 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = (cfg.bantime-increment.formula == null || cfg.bantime-increment.multipliers == null);
+        message = ''
+          Options `services.fail2ban.bantime-increment.formula` and `services.fail2ban.bantime-increment.multipliers` cannot be both specified.
+        '';
+      }
+    ];
 
-    warnings = mkIf (config.networking.firewall.enable == false && config.networking.nftables.enable == false) [
+    warnings = mkIf (!config.networking.firewall.enable && !config.networking.nftables.enable) [
       "fail2ban can not be used without a firewall"
     ];
 
@@ -330,15 +338,14 @@ in
     # Add some reasonable default jails.  The special "DEFAULT" jail
     # sets default values for all other jails.
     services.fail2ban.jails.DEFAULT = ''
-      ${optionalString cfg.bantime-increment.enable ''
-        # Bantime incremental
-        bantime.increment    = ${boolToString cfg.bantime-increment.enable}
-        bantime.maxtime      = ${cfg.bantime-increment.maxtime}
-        bantime.factor       = ${cfg.bantime-increment.factor}
-        bantime.formula      = ${cfg.bantime-increment.formula}
-        bantime.multipliers  = ${cfg.bantime-increment.multipliers}
-        bantime.overalljails = ${boolToString cfg.bantime-increment.overalljails}
-      ''}
+      # Bantime increment options
+      bantime.increment = ${boolToString cfg.bantime-increment.enable}
+      ${optionalString (cfg.bantime-increment.rndtime != null) "bantime.rndtime = ${cfg.bantime-increment.rndtime}"}
+      ${optionalString (cfg.bantime-increment.maxtime != null) "bantime.maxtime = ${cfg.bantime-increment.maxtime}"}
+      ${optionalString (cfg.bantime-increment.factor != null) "bantime.factor = ${cfg.bantime-increment.factor}"}
+      ${optionalString (cfg.bantime-increment.formula != null) "bantime.formula = ${cfg.bantime-increment.formula}"}
+      ${optionalString (cfg.bantime-increment.multipliers != null) "bantime.multipliers = ${cfg.bantime-increment.multipliers}"}
+      ${optionalString (cfg.bantime-increment.overalljails != null) "bantime.overalljails = ${boolToString cfg.bantime-increment.overalljails}"}
       # Miscellaneous options
       ignoreip    = 127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}
       ${optionalString (cfg.bantime != null) ''

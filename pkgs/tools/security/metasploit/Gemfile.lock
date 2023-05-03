@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: f58dd240e0c900976bc0609096b3b2e9965f70cb
-  ref: refs/tags/6.3.13
+  revision: 44a9a761be544d3435963076dcbbeb8a4fa0e47f
+  ref: refs/tags/6.3.14
   specs:
-    metasploit-framework (6.3.13)
+    metasploit-framework (6.3.14)
       actionpack (~> 7.0)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
@@ -33,7 +33,7 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.126)
+      metasploit-payloads (= 2.0.127)
       metasploit_data_models
       metasploit_payloads-mettle (= 1.0.20)
       mqtt
@@ -130,19 +130,19 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.752.0)
+    aws-partitions (1.759.0)
     aws-sdk-core (3.171.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.375.0)
+    aws-sdk-ec2 (1.377.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.77.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.63.0)
+    aws-sdk-kms (1.64.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.121.0)
@@ -205,7 +205,7 @@ GEM
       domain_name (~> 0.5)
     http_parser.rb (0.8.0)
     httpclient (2.8.3)
-    i18n (1.12.0)
+    i18n (1.13.0)
       concurrent-ruby (~> 1.0)
     io-console (0.6.0)
     irb (1.6.4)
@@ -241,7 +241,7 @@ GEM
       activemodel (~> 7.0)
       activesupport (~> 7.0)
       railties (~> 7.0)
-    metasploit-payloads (2.0.126)
+    metasploit-payloads (2.0.127)
     metasploit_data_models (6.0.2)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
@@ -254,7 +254,7 @@ GEM
       webrick
     metasploit_payloads-mettle (1.0.20)
     method_source (1.0.0)
-    mini_portile2 (2.8.1)
+    mini_portile2 (2.8.2)
     minitest (5.18.0)
     mqtt (0.6.0)
     msgpack (1.7.0)
@@ -291,12 +291,12 @@ GEM
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
-    pg (1.5.1)
+    pg (1.5.3)
     public_suffix (5.0.1)
     puma (6.2.2)
       nio4r (~> 2.0)
     racc (1.6.2)
-    rack (2.2.6.4)
+    rack (2.2.7)
     rack-protection (3.0.6)
       rack
     rack-test (2.1.0)
@@ -330,7 +330,7 @@ GEM
       rex-core
       rex-struct2
       rex-text
-    rex-core (0.1.30)
+    rex-core (0.1.31)
     rex-encoder (0.1.6)
       metasm
       rex-arch
@@ -360,7 +360,7 @@ GEM
       metasm
       rex-core
       rex-text
-    rex-socket (0.1.49)
+    rex-socket (0.1.50)
       rex-core
     rex-sslscan (0.1.9)
       rex-core
@@ -436,7 +436,7 @@ GEM
       activesupport (>= 4.2, < 8.0)
     xmlrpc (0.3.2)
       webrick
-    zeitwerk (2.6.7)
+    zeitwerk (2.6.8)
 
 PLATFORMS
   ruby
@@ -445,4 +445,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.4.10
+   2.4.12
