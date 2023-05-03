@@ -29433,9 +29433,7 @@ with pkgs;
 
   cardo = callPackage ../data/fonts/cardo { };
 
-  cage = callPackage ../applications/window-managers/cage {
-    wlroots = wlroots_0_14;
-  };
+  cage = callPackage ../applications/window-managers/cage { };
 
   calf = callPackage ../applications/audio/calf {
       inherit (gnome2) libglade;
