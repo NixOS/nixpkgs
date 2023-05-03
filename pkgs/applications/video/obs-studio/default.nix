@@ -25,7 +25,7 @@
 , wrapGAppsHook
 , scriptingSupport ? true
 , luajit
-, swig
+, swig4
 , python3
 , alsaSupport ? stdenv.isLinux
 , alsa-lib
@@ -42,6 +42,9 @@
 , srt
 , qtwayland
 , wrapQtAppsHook
+, nlohmann_json
+, websocketpp
+, asio
 }:
 
 let
@@ -50,20 +53,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "obs-studio";
-  version = "29.0.2";
+  version = "29.1.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "sha256-TIUSjyPEsKRNTSLQXuLJGEgD989hJ5GhOsqJ4nkKVsY=";
+    sha256 = "sha256-x/oSUDr4QRXIVukr4gPhyaQDi0psaTx11RrhA3VuAN8=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
-    ./Provide-runtime-plugin-destination-as-relative-path.patch
   ];
 
   nativeBuildInputs = [
@@ -73,9 +75,12 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     wrapQtAppsHook
   ]
-  ++ optional scriptingSupport swig;
+  ++ optional scriptingSupport swig4;
 
   buildInputs = [
+    nlohmann_json
+    asio
+    websocketpp
     curl
     fdk_aac
     ffmpeg_4
