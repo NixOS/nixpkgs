@@ -130,6 +130,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7de8ce5e0f9f8d88245311066a578d72b7af3e7088f32783804676302df237e4"
 
 [[package]]
+name = "argfile"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "265f5108974489a217d5098cd81666b60480c8dd67302acbbe7cbdd8aa09d638"
+dependencies = [
+ "os_str_bytes",
+]
+
+[[package]]
 name = "ascii"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -832,7 +841,7 @@ checksum = "0ce7134b9999ecaf8bcd65542e436736ef32ddca1b3e06094cb6ec5755203b80"
 
 [[package]]
 name = "flake8-to-ruff"
-version = "0.0.263"
+version = "0.0.264"
 dependencies = [
  "anyhow",
  "clap 4.2.4",
@@ -1503,6 +1512,9 @@ name = "os_str_bytes"
 version = "6.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ceedf44fb00f2d1984b0bc98102627ce622e083e49a5bacdb3e514fa4238e267"
+dependencies = [
+ "memchr",
+]
 
 [[package]]
 name = "output_vt100"
@@ -1992,7 +2004,7 @@ dependencies = [
 
 [[package]]
 name = "ruff"
-version = "0.0.263"
+version = "0.0.264"
 dependencies = [
  "annotate-snippets 0.9.1",
  "anyhow",
@@ -2081,10 +2093,11 @@ dependencies = [
 
 [[package]]
 name = "ruff_cli"
-version = "0.0.263"
+version = "0.0.264"
 dependencies = [
  "annotate-snippets 0.9.1",
  "anyhow",
+ "argfile",
  "assert_cmd",
  "atty",
  "bincode",
@@ -2110,6 +2123,7 @@ dependencies = [
  "ruff_diagnostics",
  "ruff_python_ast",
  "ruff_python_stdlib",
+ "ruff_text_size",
  "rustc-hash",
  "serde",
  "serde_json",
@@ -2152,8 +2166,7 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "log",
- "ruff_python_ast",
- "rustpython-parser",
+ "ruff_text_size",
  "serde",
 ]
 
@@ -2191,6 +2204,7 @@ dependencies = [
  "is-macro",
  "itertools",
  "log",
+ "memchr",
  "num-bigint",
  "num-traits",
  "once_cell",
@@ -2235,6 +2249,7 @@ dependencies = [
  "nohash-hasher",
  "ruff_python_ast",
  "ruff_python_stdlib",
+ "ruff_text_size",
  "rustc-hash",
  "rustpython-parser",
  "smallvec",
@@ -2271,11 +2286,10 @@ dependencies = [
 [[package]]
 name = "ruff_text_size"
 version = "0.0.0"
+source = "git+https://github.com/charliermarsh/RustPython.git?rev=c3147d2c1524ebd0e90cf1c2938d770314fd5a5a#c3147d2c1524ebd0e90cf1c2938d770314fd5a5a"
 dependencies = [
  "schemars",
  "serde",
- "serde_test",
- "static_assertions",
 ]
 
 [[package]]
@@ -2343,27 +2357,28 @@ dependencies = [
 [[package]]
 name = "rustpython-ast"
 version = "0.2.0"
-source = "git+https://github.com/RustPython/RustPython.git?rev=c15f670f2c30cfae6b41a1874893590148c74bc4#c15f670f2c30cfae6b41a1874893590148c74bc4"
+source = "git+https://github.com/charliermarsh/RustPython.git?rev=c3147d2c1524ebd0e90cf1c2938d770314fd5a5a#c3147d2c1524ebd0e90cf1c2938d770314fd5a5a"
 dependencies = [
  "num-bigint",
- "rustpython-compiler-core",
+ "ruff_text_size",
 ]
 
 [[package]]
 name = "rustpython-common"
 version = "0.2.0"
-source = "git+https://github.com/RustPython/RustPython.git?rev=c15f670f2c30cfae6b41a1874893590148c74bc4#c15f670f2c30cfae6b41a1874893590148c74bc4"
+source = "git+https://github.com/charliermarsh/RustPython.git?rev=c3147d2c1524ebd0e90cf1c2938d770314fd5a5a#c3147d2c1524ebd0e90cf1c2938d770314fd5a5a"
 dependencies = [
  "ascii",
  "bitflags 1.3.2",
+ "bstr 0.2.17",
  "cfg-if",
+ "getrandom",
  "hexf-parse",
  "itertools",
  "lexical-parse-float",
  "libc",
  "lock_api",
  "num-bigint",
- "num-complex",
  "num-traits",
  "once_cell",
  "radium",
@@ -2377,23 +2392,21 @@ dependencies = [
 [[package]]
 name = "rustpython-compiler-core"
 version = "0.2.0"
-source = "git+https://github.com/RustPython/RustPython.git?rev=c15f670f2c30cfae6b41a1874893590148c74bc4#c15f670f2c30cfae6b41a1874893590148c74bc4"
+source = "git+https://github.com/charliermarsh/RustPython.git?rev=c3147d2c1524ebd0e90cf1c2938d770314fd5a5a#c3147d2c1524ebd0e90cf1c2938d770314fd5a5a"
 dependencies = [
  "bitflags 1.3.2",
- "bstr 0.2.17",
  "itertools",
  "lz4_flex",
  "num-bigint",
  "num-complex",
- "serde",
+ "ruff_text_size",
 ]
 
 [[package]]
 name = "rustpython-parser"
 version = "0.2.0"
-source = "git+https://github.com/RustPython/RustPython.git?rev=c15f670f2c30cfae6b41a1874893590148c74bc4#c15f670f2c30cfae6b41a1874893590148c74bc4"
+source = "git+https://github.com/charliermarsh/RustPython.git?rev=c3147d2c1524ebd0e90cf1c2938d770314fd5a5a#c3147d2c1524ebd0e90cf1c2938d770314fd5a5a"
 dependencies = [
- "ahash",
  "anyhow",
  "itertools",
  "lalrpop",
@@ -2403,10 +2416,10 @@ dependencies = [
  "num-traits",
  "phf",
  "phf_codegen",
+ "ruff_text_size",
  "rustc-hash",
  "rustpython-ast",
  "rustpython-compiler-core",
- "serde",
  "tiny-keccak",
  "unic-emoji-char",
  "unic-ucd-ident",
@@ -2551,15 +2564,6 @@ name = "serde_spanned"
 version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0efd8caf556a6cebd3b285caf480045fcc1ac04f6bd786b09a6f11af30c4fcf4"
-dependencies = [
- "serde",
-]
-
-[[package]]
-name = "serde_test"
-version = "1.0.160"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3c95a500e3923258f7fc3a16bf29934e403aef5ca1096e184d85e3b1926675e8"
 dependencies = [
  "serde",
 ]
