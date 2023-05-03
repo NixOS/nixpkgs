@@ -54,6 +54,10 @@ _overrideFirst outputInclude "$outputDev"
 # so-libs are often among the main things to keep, and so go to $out
 _overrideFirst outputLib "lib" "out"
 
+# static library files shouldn't be installed adjacent to dynamic libs, since
+# they are only ever used at build-time. Put them in $dev.
+_overrideFirst outputStatic "static" "$outputDev"
+
 _overrideFirst outputDoc "doc" "out"
 _overrideFirst outputDevdoc "devdoc" REMOVE # documentation for developers
 # man and info pages are small and often useful to distribute with binaries
@@ -166,6 +170,7 @@ _multioutDocs() {
 _multioutDevs() {
     if [ "$(getAllOutputNames)" = "out" ] || [ -z "${moveToDev-1}" ]; then return; fi;
     moveToOutput include "${!outputInclude}"
+    moveToOutput "lib/*.a" "${!outputStatic}"
     # these files are sometimes provided even without using the corresponding tool
     moveToOutput lib/pkgconfig "${!outputDev}"
     moveToOutput share/pkgconfig "${!outputDev}"
