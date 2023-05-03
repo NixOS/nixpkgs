@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , python3
 , par2cmdline
@@ -10,28 +11,29 @@
 }:
 
 let
-  pythonEnv = python3.withPackages(ps: with ps; [
+  pythonEnv = python3.withPackages (ps: with ps; [
     chardet
     cheetah3
     cherrypy
     cryptography
     configobj
     feedparser
-    sabyenc3
+    sabctools
     puremagic
     guessit
     pysocks
   ]);
   path = lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
-in stdenv.mkDerivation rec {
-  version = "3.7.2";
+in
+stdenv.mkDerivation rec {
+  version = "4.0.1";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-1gGvdc6TJrkFIrN+TUL/7EejApgpgAQxnQbp8RMknHQ=";
+    hash = "sha256-7g+a0J9AnfowXYRw2JvY5EJ9aOB5IA4Fks84jIAv9Hc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
