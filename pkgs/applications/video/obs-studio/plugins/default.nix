@@ -52,6 +52,8 @@
 
   obs-vaapi = callPackage ./obs-vaapi { };
 
+  obs-vertical-canvas = qt6Packages.callPackage ./obs-vertical-canvas.nix { };
+
   obs-vintage-filter = callPackage ./obs-vintage-filter.nix { };
 
   obs-vkcapture = callPackage ./obs-vkcapture.nix {
