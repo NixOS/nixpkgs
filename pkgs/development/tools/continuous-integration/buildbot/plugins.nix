@@ -1,12 +1,14 @@
 { lib, buildPythonPackage, fetchPypi, callPackage, mock, cairosvg, klein, jinja2, buildbot-pkg }:
 {
+  # this is exposed for potential plugins to use and for nix-update
+  inherit buildbot-pkg;
   www = buildPythonPackage rec {
     pname = "buildbot-www";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-t4xHfox6h5PY4+phdCQbClHd77+WfpUWErMZCEcMxu0=";
+      hash = "sha256-6hLJADdd84LTpxVB8C+i8rea9/65QfcCPuZC/7+55Co=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -33,7 +35,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-JySn7QO+SgoXjVeV4wYwc9twr0Q2c/wsEspqeq038+k=";
+      hash = "sha256-JA+3WnZAN4224LbrluHJcnTmQ8VnuAmoEqqLtw0H10M=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -55,7 +57,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-935eeF2kpT68lK/UMg8MZQOYEj7D8FaT9iSs/lNahYA=";
+      hash = "sha256-NwLb9aQQwOxo9AqvsYbl/g8mNUeufdPrCwFMJNzdfQM=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -77,7 +79,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-3pHSiVoOZj2iCGfiz+tMWWMPHSBH5Ggp6e3+a8topsg=";
+      hash = "sha256-hIBH8+RvZ53Txxl2FyrCs+ZFzRAAbK2th5Im2gZCs3c=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -99,7 +101,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-5Qr1FeYIJG/qaFaTB7ScFN9uca+joHKE6FlfKwhubfo=";
+      hash = "sha256-iK9MwE5Nzc0tHMui0LquCqTFIPbRTEYeHam+5hiOQJE=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -121,7 +123,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-H0Dn+uTtFyZgyqbk3QQEc5t7CJovyzU+XuCoTe4Ajug=";
+      hash = "sha256-HtVleYQE+pfwso7oBNucRjHEkwjgQSZJ6Ts1x7ncLsA=";
     };
 
     buildInputs = [ buildbot-pkg ];
