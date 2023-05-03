@@ -1276,6 +1276,8 @@ with pkgs;
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
 
+  amdgpu_top = callPackage ../tools/system/amdgpu_top { };
+
   acquire = with python3Packages; toPythonApplication acquire;
 
   act = callPackage ../development/tools/misc/act { };
@@ -10922,8 +10924,6 @@ with pkgs;
   pandoc-lua-filters = callPackage ../tools/misc/pandoc-lua-filters { };
 
   pamtester = callPackage ../tools/security/pamtester { };
-
-  paper-note = callPackage ../applications/office/paper-note { };
 
   paperless-ngx = callPackage ../applications/office/paperless-ngx { };
 
@@ -35732,6 +35732,8 @@ with pkgs;
 
   doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
 
+  doomretro = callPackage ../games/doom-ports/doomretro { };
+
   chocolate-doom = callPackage ../games/doom-ports/chocolate-doom { };
 
   crispy-doom = callPackage ../games/doom-ports/crispy-doom { };
@@ -39609,7 +39611,8 @@ with pkgs;
 
   wmutils-opt = callPackage ../tools/X11/wmutils-opt { };
 
-  inherit (callPackage ../servers/web-apps/wordpress {}) wordpress wordpress6_1;
+  inherit (callPackage ../servers/web-apps/wordpress {})
+    wordpress wordpress6_1 wordpress6_2;
 
   wordpressPackages = ( callPackage ../servers/web-apps/wordpress/packages {
     plugins = lib.importJSON ../servers/web-apps/wordpress/packages/plugins.json;
