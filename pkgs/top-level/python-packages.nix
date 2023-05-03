@@ -284,6 +284,8 @@ self: super: with self; {
 
   aioopenssl = callPackage ../development/python-modules/aioopenssl { };
 
+  aiooss2 = callPackage ../development/python-modules/aiooss2 { };
+
   aiopg = callPackage ../development/python-modules/aiopg { };
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
