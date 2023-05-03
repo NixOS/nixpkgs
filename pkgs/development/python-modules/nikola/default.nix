@@ -41,13 +41,13 @@
 
 buildPythonPackage rec {
   pname = "nikola";
-  version = "8.2.3";
+  version = "8.2.4";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Nikola";
     inherit version;
-    hash = "sha256-c8eadkmYWS88nGwi6QwPqHg7FBXlkdazKSrbWDMw/UA=";
+    hash = "sha256-LNVk2zfNwY4CC4qulqfNXwi3mWyFxzWIeMykh6gFOL8=";
   };
 
   propagatedBuildInputs = [
