@@ -856,6 +856,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  ocamlLgplLinkingException = {
+    spdxId = "OCaml-LGPL-linking-exception";
+    fullName = "OCaml LGPL Linking Exception";
+  };
+
   ocamlpro_nc = {
     fullName = "OCamlPro Non Commercial license version 1";
     url = "https://alt-ergo.ocamlpro.com/http/alt-ergo-2.2.0/OCamlPro-Non-Commercial-License.pdf";
