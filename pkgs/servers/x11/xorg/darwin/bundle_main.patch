@@ -1,0 +1,84 @@
+This patch makes it possible (and necessary) to specify the default
+shell, xterm client, and startx script from environment variables. These
+defaults are used when launching the XQuartz.app, which in turn needs to know
+how to start the X server. `startx' comes from the `xinit' package,
+which also has a dependency on `xorg-server', so we can't hardcode
+sane defaults. If the environment variables are specified, they
+override any value in the preferences settings.
+
+When developing an installable package for XQuartz/XQuartz.app, we'll
+need to set an `LSEnvironment' entry in the plist for the XQuartz.app.
+(See stub.patch for more details.).
+
+diff --git a/hw/xquartz/mach-startup/bundle-main.c b/hw/xquartz/mach-startup/bundle-main.c
+index de82e2280..da58a5d44 100644
+--- a/hw/xquartz/mach-startup/bundle-main.c
++++ b/hw/xquartz/mach-startup/bundle-main.c
+@@ -76,8 +76,6 @@ extern int noPanoramiXExtension;
+ extern Bool noCompositeExtension;
+ #endif
+ 
+-#define DEFAULT_CLIENT X11BINDIR "/xterm"
+-#define DEFAULT_STARTX X11BINDIR "/startx -- " X11BINDIR "/Xquartz"
+ #define DEFAULT_SHELL  "/bin/sh"
+ 
+ #define _STRINGIZE(s) #s
+@@ -108,7 +106,7 @@ server_main(int argc, char **argv, char **envp);
+ static int
+ execute(const char *command);
+ static char *
+-command_from_prefs(const char *key, const char *default_value);
++command_from_prefs(const char *key, const char *env_name, const char *default_value);
+ 
+ static char *pref_app_to_run;
+ static char *pref_login_shell;
+@@ -669,14 +667,19 @@ main(int argc, char **argv, char **envp)
+         pid_t child1, child2;
+         int status;
+ 
+-        pref_app_to_run = command_from_prefs("app_to_run", DEFAULT_CLIENT);
++        pref_app_to_run = command_from_prefs("app_to_run",
++                                             "XQUARTZ_DEFAULT_CLIENT",
++                                             NULL);
+         assert(pref_app_to_run);
+ 
+-        pref_login_shell = command_from_prefs("login_shell", DEFAULT_SHELL);
++        pref_login_shell = command_from_prefs("login_shell",
++                                              "XQUARTZ_DEFAULT_SHELL",
++                                              DEFAULT_SHELL);
+         assert(pref_login_shell);
+ 
+         pref_startx_script = command_from_prefs("startx_script",
+-                                                DEFAULT_STARTX);
++                                                "XQUARTZ_DEFAULT_STARTX",
++                                                NULL);
+         assert(pref_startx_script);
+ 
+         /* Do the fork-twice trick to avoid having to reap zombies */
+@@ -753,7 +756,7 @@ execute(const char *command)
+ }
+ 
+ static char *
+-command_from_prefs(const char *key, const char *default_value)
++command_from_prefs(const char *key, const char *env_name, const char *default_value)
+ {
+     char *command = NULL;
+ 
+@@ -763,6 +766,17 @@ command_from_prefs(const char *key, const char *default_value)
+     if (!key)
+         return NULL;
+ 
++    if (env_name != NULL) {
++        command = getenv(env_name);
++        if (command != NULL) {
++            return strdup(command);
++        }
++    }
++
++    if (!default_value) {
++        return NULL;
++    }
++
+     cfKey = CFStringCreateWithCString(NULL, key, kCFStringEncodingASCII);
+ 
+     if (!cfKey)

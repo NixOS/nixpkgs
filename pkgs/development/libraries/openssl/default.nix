@@ -69,7 +69,9 @@ let
       !(stdenv.hostPlatform.useLLVM or false) &&
       stdenv.cc.isGNU;
 
-    nativeBuildInputs = [ makeWrapper perl ]
+    nativeBuildInputs =
+         lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
+      ++ [ perl ]
       ++ lib.optionals static [ removeReferencesTo ];
     buildInputs = lib.optional withCryptodev cryptodev
       ++ lib.optional withZlib zlib;
@@ -170,12 +172,16 @@ let
       mkdir -p $bin
       mv $out/bin $bin/bin
 
+    '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
+      # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
+    ''
       # c_rehash is a legacy perl script with the same functionality
       # as `openssl rehash`
       # this wrapper script is created to maintain backwards compatibility without
       # depending on perl
       makeWrapper $bin/bin/openssl $bin/bin/c_rehash \
         --add-flags "rehash"
+    '' + ''
 
       mkdir $dev
       mv $out/include $dev/
