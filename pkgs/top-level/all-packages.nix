@@ -10732,6 +10732,8 @@ with pkgs;
 
   tinystatus = callPackage ../tools/networking/tinystatus { };
 
+  toastify = darwin.apple_sdk_11_0.callPackage ../tools/misc/toastify {};
+
   tuc = callPackage ../tools/text/tuc { };
 
   opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh {});
