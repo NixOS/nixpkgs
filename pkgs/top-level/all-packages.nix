@@ -13065,6 +13065,8 @@ with pkgs;
     trilium-server
     ;
 
+  trippy = callPackage ../tools/networking/trippy { };
+
   trousers = callPackage ../tools/security/trousers { };
 
   trueseeing = callPackage ../tools/security/trueseeing { };
