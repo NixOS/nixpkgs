@@ -9,10 +9,10 @@ assert stdenv.cc.libc != null ;
 
 stdenv.mkDerivation rec {
   pname = "gcl";
-  version = "2.6.13pre124";
+  version = "2.6.14";
 
   src = fetchgit {
-    sha256 = "sha256-e4cUQlNSfdz+B3urlZ82pf7fTc6aoloUyDDorAUi5kc=";
+    sha256 = "sha256-5/lPAXwLtks4b/z6ceOJddTyO6Vnn2JR1tR567IANa0=";
     url = "https://git.savannah.gnu.org/r/gcl.git";
     rev = "refs/tags/Version_${builtins.replaceStrings ["."] ["_"] version}";
   };
