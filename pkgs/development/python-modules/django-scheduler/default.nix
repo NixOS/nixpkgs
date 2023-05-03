@@ -2,15 +2,18 @@
 , buildPythonPackage
 , django
 , fetchFromGitHub
-, pythonOlder
-, python-dateutil
-, pytz
 , icalendar
+, pytest
+, pytest-django
+, python
+, python-dateutil
+, pythonOlder
+, pytz
 }:
 
 buildPythonPackage rec {
   pname = "django-scheduler";
-  version = "0.10.1";
+  version = "1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "llazzaro";
     repo = "django-scheduler";
-    rev = "refs/tags/${version}";
-    hash = "sha256-dY2TPo15RRWrv7LheUNJSQl4d/HeptSMM/wQirRSI5w=";
+    rev = "refs/heads/develop";
+    hash = "sha256-dt/6Ktyc24qgodvOwUzAC4UeUyOr0RG6tBJ7jIiol5I=";
   };
 
   propagatedBuildInputs = [
@@ -29,8 +32,11 @@ buildPythonPackage rec {
     icalendar
   ];
 
-  #Test is depricated
-  doCheck = false;
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -m django check --settings=tests.settings
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [
     "schedule"
@@ -39,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A calendar app for Django";
     homepage = "https://github.com/llazzaro/django-scheduler";
-    changelog = "https://github.com/llazzaro/django-scheduler/releases/tag/${version}";
+    changelog = "https://github.com/llazzaro/django-scheduler/releases/tag/v${version}-alpha";
     license = licenses.bsd3;
     maintainers = with maintainers; [ derdennisop ];
   };

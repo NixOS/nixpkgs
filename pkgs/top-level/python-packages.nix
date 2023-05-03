@@ -2706,7 +2706,7 @@ self: super: with self; {
   django-scopes = callPackage ../development/python-modules/django-scopes { };
 
   django-shortuuidfield = callPackage ../development/python-modules/django-shortuuidfield { };
-
+  
   djangoql = callPackage ../development/python-modules/djangoql { };
 
   django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };
