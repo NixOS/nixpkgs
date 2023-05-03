@@ -49,7 +49,6 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isLinux [
     libGL
     libX11
-    libX11
     libXcursor
     libXi
     libXrandr
