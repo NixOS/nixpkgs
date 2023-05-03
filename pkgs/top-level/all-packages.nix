@@ -453,6 +453,8 @@ with pkgs;
 
   colorz = callPackage ../tools/misc/colorz { };
 
+  numary = callPackage ../tools/misc/numary { };
+
   colorpanes = callPackage ../tools/misc/colorpanes { };
 
   colorpicker = callPackage ../tools/misc/colorpicker { };
