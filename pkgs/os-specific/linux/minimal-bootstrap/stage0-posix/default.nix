@@ -17,6 +17,4 @@ lib.makeScope newScope (self: with self; {
   mescc-tools = callPackage ./mescc-tools { };
 
   mescc-tools-extra = callPackage ./mescc-tools-extra { };
-
-  inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText runCommand;
 })

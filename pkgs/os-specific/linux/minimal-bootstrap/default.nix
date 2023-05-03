@@ -10,11 +10,9 @@ lib.makeScope
   # declared here.
   (extra: lib.callPackageWith ({ inherit lib config buildPlatform hostPlatform; } // extra))
   (self: with self; {
-    fetchurl = import ../../../build-support/fetchurl/boot.nix {
-      inherit (buildPlatform) system;
-    };
+    inherit (callPackage ./utils.nix { }) fetchurl derivationWithMeta writeTextFile writeText runCommand;
 
-    inherit (callPackage ./stage0-posix { }) kaem m2libc mescc-tools mescc-tools-extra writeTextFile writeText runCommand;
+    inherit (callPackage ./stage0-posix { }) kaem m2libc mescc-tools mescc-tools-extra;
 
     mes = callPackage ./mes { };
     mes-libc = callPackage ./mes/libc.nix { };

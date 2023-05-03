@@ -2,15 +2,18 @@
 , buildPlatform
 , callPackage
 , kaem
-, kaem-unwrapped
 , mescc-tools
 , mescc-tools-extra
 }:
 
 let
-  checkMeta = callPackage ../../../../stdenv/generic/check-meta.nix { };
+  checkMeta = callPackage ../../../stdenv/generic/check-meta.nix { };
 in
 rec {
+  fetchurl = import ../../../build-support/fetchurl/boot.nix {
+    inherit (buildPlatform) system;
+  };
+
   derivationWithMeta = attrs:
     let
       passthru = attrs.passthru or {};
@@ -37,7 +40,7 @@ rec {
       inherit name text executable allowSubstitutes preferLocalBuild;
       passAsFile = [ "text" ];
 
-      builder = kaem-unwrapped;
+      builder = "${kaem}/bin/kaem";
       args = [
         "--verbose"
         "--strict"
