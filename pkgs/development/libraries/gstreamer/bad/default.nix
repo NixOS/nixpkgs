@@ -90,6 +90,7 @@
 , vo-aacenc
 , libfreeaptx
 , zxing-cpp
+, usrsctp
 , VideoToolbox
 , AudioToolbox
 , AVFoundation
@@ -164,6 +165,7 @@ stdenv.mkDerivation rec {
     libde265
     libdvdnav
     libdvdread
+    libnice
     qrencode
     libsndfile
     libusb1
@@ -192,6 +194,7 @@ stdenv.mkDerivation rec {
     vo-aacenc
     libfreeaptx
     zxing-cpp
+    usrsctp
   ] ++ lib.optionals enableZbar [
     zbar
   ] ++ lib.optionals faacSupport [
@@ -219,7 +222,6 @@ stdenv.mkDerivation rec {
     flite
     libdrm
     libgudev
-    libnice
     sbc
     spandsp
 
@@ -273,7 +275,6 @@ stdenv.mkDerivation rec {
     "-Dmusepack=disabled"
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
-    "-Dsctp=disabled" # required `usrsctp` library not packaged in nixpkgs as of writing
     "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
@@ -307,7 +308,6 @@ stdenv.mkDerivation rec {
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
-    "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
     "-Dwildmidi=disabled" # see dependencies above
   ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64) [
     "-Dqsv=disabled" # Linux (and Windows) x86 only
