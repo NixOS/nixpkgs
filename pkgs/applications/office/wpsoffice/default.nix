@@ -11,6 +11,7 @@
 , mesa
 , libtiff
 , cups
+, udev
 , xorg
 , makeWrapper
 , useChineseVersion ? false
@@ -52,9 +53,12 @@ stdenv.mkDerivation rec {
     nspr
     mesa
     libtiff
+    udev
   ];
 
-  runtimeDependencies = [ cups.lib ];
+  runtimeDependencies = [
+    cups.lib
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -79,6 +83,8 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # The following libraries need libtiff.so.5, but nixpkgs provides libtiff.so.6
     patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/kingsoft/wps-office/office6/{libpdfmain.so,libqpdfpaint.so,qt/plugins/imageformats/libqtiff.so}
+    # dlopen dependency
+    patchelf --add-needed libudev.so.1 $out/opt/kingsoft/wps-office/office6/addons/cef/libcef.so
   '';
 
   postFixup = ''
