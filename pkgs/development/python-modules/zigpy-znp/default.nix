@@ -49,15 +49,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  disabledTests = [
     # https://github.com/zigpy/zigpy-znp/issues/209
-    "--deselect=tests/application/test_joining.py::test_join_device"
-    "--deselect=tests/application/test_joining.py::test_permit_join"
-    "--deselect=tests/application/test_requests.py::test_request_recovery_route_rediscovery_af"
-    "--deselect=tests/application/test_requests.py::test_request_recovery_route_rediscovery_zdo"
-    "--deselect=tests/application/test_requests.py::test_zigpy_request"
-    "--deselect=tests/application/test_requests.py::test_zigpy_request_failure"
-    "--deselect=tests/application/test_zdo_requests.py::test_mgmt_nwk_update_req"
+    "test_join_device"
+    "test_permit_join"
+    "test_request_recovery_route_rediscovery_af"
+    "test_request_recovery_route_rediscovery_zdo"
+    "test_zigpy_request"
+    "test_zigpy_request_failure"
+    "test_mgmt_nwk_update_req"
   ];
 
   pythonImportsCheck = [
@@ -67,6 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for zigpy which communicates with TI ZNP radios";
     homepage = "https://github.com/zigpy/zigpy-znp";
+    changelog = "https://github.com/zigpy/zigpy-znp/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mvnetbiz ];
     platforms = platforms.linux;
