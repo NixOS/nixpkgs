@@ -23,21 +23,22 @@
 , nixosTests
 , go
 , buildGoModule
+, nix-update-script
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.27.1";
+  version = "0.28.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/K/5T15kULTQP1FCLnyrKfhlQjIStayutaxLjmHjHes=";
+    hash = "sha256-pAo+bT10rdQOf9j3imKWCCMFGm8KntUeTQUrEE1wYZc=";
   };
-  vendorHash = "sha256-JLPPNOsoq+ErLhELsX3z3YehYfgp7OGXEXlP3IVcM5k=";
+  vendorHash = "sha256-vq19exqsEtXhN20mgC5GCpYGm8s9AC6nlfCfG1lUiI8=";
 
   buildInputs = [
     harfbuzz
@@ -99,16 +100,16 @@ buildPythonApplication rec {
   CGO_ENABLED = 0;
   GOFLAGS = "-trimpath";
 
-  configurePhase = let
-    goModules = (buildGoModule {
-      pname = "kitty-go-modules";
-      inherit src vendorHash version;
-    }).go-modules;
-  in ''
+  go-modules = (buildGoModule {
+    pname = "kitty-go-modules";
+    inherit src vendorHash version;
+  }).go-modules;
+
+  configurePhase = ''
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH="$TMPDIR/go"
     export GOPROXY=off
-    cp -r --reflink=auto ${goModules} vendor
+    cp -r --reflink=auto ${go-modules} vendor
   '';
 
   buildPhase = let
@@ -161,6 +162,8 @@ buildPythonApplication rec {
       --replace test_ssh_connection_data dont_test_ssh_connection_data
     substituteInPlace kitty_tests/fonts.py \
       --replace 'class Rendering(BaseTest)' 'class Rendering'
+    # theme collection test starts an http server
+    rm tools/themes/collection_test.go
   '';
 
   checkPhase = ''
@@ -216,19 +219,10 @@ buildPythonApplication rec {
     runHook postInstall
   '';
 
-  # Patch shebangs that Nix can't automatically patch
-  preFixup =
-    let
-      pathComponent = if stdenv.isDarwin then "Applications/kitty.app/Contents/Resources" else "lib";
-    in
-    ''
-      substituteInPlace $out/${pathComponent}/kitty/shell-integration/ssh/askpass.py \
-        --replace '/usr/bin/env -S ' $out/bin/
-      substituteInPlace $shell_integration/ssh/askpass.py \
-        --replace '/usr/bin/env -S ' $out/bin/
-    '';
-
-  passthru.tests.test = nixosTests.terminal-emulators.kitty;
+  passthru = {
+    updateScript = nix-update-script {};
+    tests.test = nixosTests.terminal-emulators.kitty;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";

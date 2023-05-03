@@ -567,15 +567,19 @@ rec {
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.${attr}; in
               if !(builtins.isAttrs subtree) then
-                throw ''
-                  You're trying to declare a value of type `${builtins.typeOf subtree}'
-                  rather than an attribute-set for the option
+                throw (if attr == "config" then ''
+                  You're trying to define a value of type `${builtins.typeOf subtree}'
+                  rather than an attribute set for the option
                   `${builtins.concatStringsSep "." prefix}'!
 
                   This usually happens if `${builtins.concatStringsSep "." prefix}' has option
                   definitions inside that are not matched. Please check how to properly define
                   this option by e.g. referring to `man 5 configuration.nix'!
-                ''
+                '' else ''
+                  An option declaration for `${builtins.concatStringsSep "." prefix}' has type
+                  `${builtins.typeOf subtree}' rather than an attribute set.
+                  Did you mean to define this outside of `options'?
+                '')
               else
                 mapAttrs (n: f module) subtree
               ) modules);

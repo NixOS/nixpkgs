@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "fribidi";
   version = "1.0.12";
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   # NOTE: Only URL tarball has "Have pre-generated man pages: true", which works-around upstream usage of some rare ancient `c2man` fossil application.
   src = fetchurl {

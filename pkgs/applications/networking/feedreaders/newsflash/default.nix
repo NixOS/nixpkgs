@@ -22,20 +22,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "2.2.4";
+  version = "unstable-2023-04-11";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
-    rev = "refs/tags/v.${finalAttrs.version}";
-    sha256 = "sha256-civHj8a5LYV3XaAjSJBdn15+8sdO/yLlWBXCNW56plA=";
+    rev = "a7bc8bfdf5e58bd78f0f36516e00be8e1296bc12";
+    sha256 = "sha256-VYIHbOcYopzGTVG+fGyPBS5di7aBayhk+jj9FZh5Tms=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "news-flash-2.2.2" = "sha256-LN5VhJk+NGTR0fohI0LmfeLDS9IkfVE7IFIzmSPF4u0=";
-      "newsblur_api-0.2.0" = "sha256-+3AobEX+RtBRgX1TIr4rRX0ngJvNVp1oXzkbhppi73M=";
+      "javascriptcore6-0.1.0" = "sha256-7w8CDY13dCRlFc77XxJ2/xZqlKSjqM0eiOvILOrJ4ic=";
+      "news-flash-2.2.2" = "sha256-LXKhVsmkdTk1MSB0T5MDOgTJF/MXbNZ6T5cC2iZxsPs=";
+      "newsblur_api-0.2.0" = "sha256-6vnFeJbdFeIau2rpUk9o72DD2ZCqicljmQjFVhY71NI=";
     };
   };
 

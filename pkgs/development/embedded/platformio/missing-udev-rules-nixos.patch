@@ -6,7 +6,5 @@ index ef1d3bab..445174fc 100644
      MESSAGE = (
          "Warning! Please install `99-platformio-udev.rules`. \nMore details: "
          "https://docs.platformio.org/en/latest/core/installation/udev-rules.html"
-+        "On NixOS add the platformio package to services.udev.packages"
++        "On NixOS add the platformio-core.udev package to services.udev.packages"
      )
- 
- 

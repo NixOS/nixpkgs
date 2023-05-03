@@ -10,22 +10,39 @@
 , zlib
 , libiconv
 , Security
+, buildPackages
 }:
 
 let
   rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+
+  # TODO: if another package starts using cargo-c (seems likely),
+  # factor this out into a makeCargoChook expression in
+  # pkgs/build-support/rust/hooks/default.nix
+  ccForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
+  cxxForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
+  ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+  cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
+  rustBuildPlatform = rust.toRustTarget stdenv.buildPlatform;
+  rustTargetPlatform = rust.toRustTarget stdenv.hostPlatform;
+  setEnvVars = ''
+    env \
+      "CC_${rustBuildPlatform}"="${ccForBuild}" \
+      "CXX_${rustBuildPlatform}"="${cxxForBuild}" \
+      "CC_${rustTargetPlatform}"="${ccForHost}" \
+      "CXX_${rustTargetPlatform}"="${cxxForHost}" \
+  '';
+
 in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-XaxxakVwogJlqyZGL275jGSZDLoRLl8SAAg8V+X4cmQ=";
+    sha256 = "sha256-G7o82MAZmMOfs1wp3AVUgXxDW6Txuc0qTm5boRpXF6g=";
   };
 
-  cargoHash = "sha256-66mVkoqMl+KNCXWsGUbu8nBrazgHP+5dTaT2Ye0btWY=";
-
-  auditable = true; # TODO: remove when this is the default
+  cargoHash = "sha256-12bePpI8z35gzCHGKDpaGUVvosQqijP60NCgElHDsyw=";
 
   depsBuildBuild = [ pkg-config ];
 
@@ -40,11 +57,13 @@ in rustPlatform.buildRustPackage rec {
 
   checkType = "debug";
 
-  postBuild = ''
+  postBuild =  ''
+    ${setEnvVars} \
     cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   postInstall = ''
+    ${setEnvVars} \
     cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 

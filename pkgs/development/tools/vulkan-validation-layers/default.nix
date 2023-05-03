@@ -23,20 +23,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.239.0";
+  version = "1.3.249";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
   outputs = ["out" "headers"];
   outputInclude = "headers";
 
-  src = (assert (lib.all (pkg: pkg.version == version) [vulkan-headers glslang spirv-tools spirv-headers]);
-    fetchFromGitHub {
-      owner = "KhronosGroup";
-      repo = "Vulkan-ValidationLayers";
-      rev = "sdk-${version}";
-      hash = "sha256-k/A0TaERQAHSM0Fal2IOaRvTz3FV2Go/17P12FSBG1s=";
-    });
+  src = fetchFromGitHub {
+    owner = "KhronosGroup";
+    repo = "Vulkan-ValidationLayers";
+    rev = "v${version}";
+    hash = "sha256-viVceH8qFz6Cl/RlMMWZnMIdzULELlnIvtPZ87ySs2M=";
+  };
 
   nativeBuildInputs = [
     cmake
@@ -85,5 +84,6 @@ stdenv.mkDerivation rec {
     platforms   = platforms.linux;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];
+    broken = (lib.all (pkg: pkg.version != version) [vulkan-headers glslang spirv-tools spirv-headers]);
   };
 }

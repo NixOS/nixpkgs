@@ -104,16 +104,6 @@ stdenv.mkDerivation rec {
       tests/unittest_inspector.py
   '';
 
-  preInstall = ''
-    # We have pkexec on PATH so Meson will try to use it when installation fails
-    # due to being unable to write to e.g. /etc.
-    # Let’s pretend we already ran pkexec –
-    # the pkexec on PATH would complain it lacks setuid bit,
-    # obscuring the underlying error.
-    # https://github.com/mesonbuild/meson/blob/492cc9bf95d573e037155b588dc5110ded4d9a35/mesonbuild/minstall.py#L558
-    export PKEXEC_UID=-1
-  '';
-
   postCheck = ''
     # Do not contaminate the wrapper with test dependencies.
     unset GI_TYPELIB_PATH

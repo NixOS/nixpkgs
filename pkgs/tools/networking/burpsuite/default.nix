@@ -1,6 +1,6 @@
-{ lib, fetchurl, jdk, buildFHSUserEnv, unzip, makeDesktopItem }:
+{ lib, fetchurl, jdk, buildFHSEnv, unzip, makeDesktopItem }:
 let
-  version = "2023.2.4";
+  version = "2023.3.5";
 
   src = fetchurl {
     name = "burpsuite.jar";
@@ -8,7 +8,7 @@ let
       "https://portswigger.net/burp/releases/download?productId=100&version=${version}&type=Jar"
       "https://web.archive.org/web/https://portswigger.net/burp/releases/download?productId=100&version=${version}&type=Jar"
     ];
-    sha256 = "4e9cd298a03af8684306ca2dfe52e630f032c1df7ca8baecbd329c792137052f";
+    sha256 = "ef1b1094bbe7388b5b4d515b8e42347243efb34a4d8acc27d9d553fe62f45fb5";
   };
 
   name = "burpsuite-${version}";
@@ -23,7 +23,7 @@ let
   };
 
 in
-buildFHSUserEnv {
+buildFHSEnv {
   inherit name;
 
   runScript = "${jdk}/bin/java -jar ${src}";
@@ -74,6 +74,6 @@ buildFHSUserEnv {
     license = licenses.unfree;
     platforms = jdk.meta.platforms;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [ bennofs ];
+    maintainers = with maintainers; [ bennofs stepech ];
   };
 }

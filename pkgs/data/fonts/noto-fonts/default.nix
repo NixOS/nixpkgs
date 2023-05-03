@@ -1,6 +1,7 @@
 { stdenv
 , stdenvNoCC
 , lib
+, gitUpdater
 , fetchFromGitHub
 , fetchurl
 , cairo
@@ -24,50 +25,59 @@ let
     Google’s answer to tofu. The name noto is to convey the idea that
     Google’s goal is to see “no more tofu”.  Noto has multiple styles and
     weights, and freely available to all.
-
-    This package also includes the Arimo, Cousine, and Tinos fonts.
   '';
 in
 rec {
   mkNoto =
     { pname
-    , weights
     , variants ? [ ]
     , longDescription ? notoLongDescription
     }:
     stdenvNoCC.mkDerivation rec {
       inherit pname;
-      version = "20201206-phase3";
+      version = "23.5.1";
 
       src = fetchFromGitHub {
-        owner = "googlefonts";
-        repo = "noto-fonts";
-        rev = "v${version}";
-        hash = "sha256-x60RvCRFLoGe0CNvswROnDkIsUFbWH+/laN8q2qkUPk=";
+        owner = "notofonts";
+        repo = "notofonts.github.io";
+        rev = "noto-monthly-release-${version}";
+        hash = "sha256-tIzn9xBDVFT7h9+p2NltA0v0mvB1OH9rX9+eXvIPhv0=";
       };
 
       _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
 
       installPhase = ''
-        # We copy in reverse preference order -- unhinted first, then
-        # hinted -- to get the "best" version of each font while
+        # We check availability in order of variable -> otf -> ttf
+        # unhinted -- the hinted versions use autohint
         # maintaining maximum coverage.
         #
-        # TODO: install OpenType, variable versions?
-        local out_ttf=$out/share/fonts/truetype/noto
+        # We have a mix of otf and ttf fonts
+        local out_font=$out/share/fonts/noto
       '' + (if _variants == [ ] then ''
-        install -m444 -Dt $out_ttf archive/unhinted/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf archive/hinted/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf unhinted/*/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf hinted/*/*/*-${weights}.ttf
+        for folder in $(ls -d fonts/*/); do
+          if [[ -d "$folder"unhinted/variable-ttf ]]; then
+            install -m444 -Dt $out_font "$folder"unhinted/variable-ttf/*.ttf
+          elif [[ -d "$folder"unhinted/otf ]]; then
+            install -m444 -Dt $out_font "$folder"unhinted/otf/*.otf
+          else
+            install -m444 -Dt $out_font "$folder"unhinted/ttf/*.ttf
+          fi
+        done
       '' else ''
         for variant in $_variants; do
-          install -m444 -Dt $out_ttf archive/unhinted/$variant/*-${weights}.ttf
-          install -m444 -Dt $out_ttf archive/hinted/$variant/*-${weights}.ttf
-          install -m444 -Dt $out_ttf unhinted/*/$variant/*-${weights}.ttf
-          install -m444 -Dt $out_ttf hinted/*/$variant/*-${weights}.ttf
+          if [[ -d fonts/"$variant"/unhinted/variable-ttf ]]; then
+            install -m444 -Dt $out_font fonts/"$variant"/unhinted/variable-ttf/*.ttf
+          elif [[ -d fonts/"$variant"/unhinted/otf ]]; then
+            install -m444 -Dt $out_font fonts/"$variant"/unhinted/otf/*.otf
+          else
+            install -m444 -Dt $out_font fonts/"$variant"/unhinted/ttf/*.ttf
+          fi
         done
       '');
+
+      passthru.updateScript = gitUpdater {
+        rev-prefix = "noto-monthly-release-";
+      };
 
       meta = with lib; {
         description = "Beautiful and free fonts for many languages";
@@ -75,7 +85,7 @@ rec {
         inherit longDescription;
         license = licenses.ofl;
         platforms = platforms.all;
-        maintainers = with maintainers; [ mathnerd314 emily ];
+        maintainers = with maintainers; [ mathnerd314 emily jopejoe1 ];
       };
     };
 
@@ -120,17 +130,13 @@ rec {
 
   noto-fonts = mkNoto {
     pname = "noto-fonts";
-    weights = "{Regular,Bold,Light,Italic,BoldItalic,LightItalic}";
   };
 
   noto-fonts-lgc-plus = mkNoto {
     pname = "noto-fonts-lgc-plus";
-    weights = "{Regular,Bold,Light,Italic,BoldItalic,LightItalic}";
     variants = [
       "Noto Sans"
       "Noto Serif"
-      "Noto Sans Display"
-      "Noto Serif Display"
       "Noto Sans Mono"
       "Noto Music"
       "Noto Sans Symbols"
@@ -143,11 +149,6 @@ rec {
       custom Noto package with custom variants, see the `mkNoto`
       helper function.
     '';
-  };
-
-  noto-fonts-extra = mkNoto {
-    pname = "noto-fonts-extra";
-    weights = "{Black,Condensed,Extra,Medium,Semi,Thin}*";
   };
 
   noto-fonts-cjk-sans = mkNotoCJK {

@@ -11,7 +11,7 @@
 , makeDesktopItem
 , makeWrapper
 , moreutils
-, nodejs-16_x
+, nodejs_16
 , pkg-config
 , python3
 , rustPlatform
@@ -22,21 +22,21 @@ let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
 
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs-16_x; };
+  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_16; };
 
-  version = "2023.2.0";
+  version = "2023.3.2";
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    sha256 = "/k2r+TikxVGlz8cnOq5zF3oUYw4zj31vDAD7OQFQlC4=";
+    sha256 = "sha256-KQDM7XDUA+yRv8y1K//rMCs4J36df42RVsiAXazJeYQ=";
   };
 
-  desktop-native = rustPlatform.buildRustPackage rec {
+  desktop-native = rustPlatform.buildRustPackage {
     pname = "bitwarden-desktop-native";
     inherit src version;
     sourceRoot = "source/apps/desktop/desktop_native";
-    cargoSha256 = "sha256-zLftfmWYYUAaMvIT21qhVsHzxnNdQhFBH0fRBwVduAc=";
+    cargoSha256 = "sha256-XsAmVYWPPnY0cgBzpO2aWx/fh85fKr8kMO98cDMzOKk=";
 
     patchFlags = [ "-p4" ];
 
@@ -91,7 +91,7 @@ buildNpmPackage' {
   npmBuildFlags = [
     "--workspace apps/desktop"
   ];
-  npmDepsHash = "sha256-aFjN1S0+lhHjK3VSYfx0F5X8wSJwRRr6zQpPGt2VpxE=";
+  npmDepsHash = "sha256-RmkTWhakZstCCMLQ3iJ8KD5Yt5ZafXc8NDgncJMLaxs=";
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

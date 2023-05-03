@@ -54,14 +54,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
-  version = "4.16.0";
+  version = "4.17.0";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    hash = "sha256-HrrEbcMv35IGmYD1L1zmdcpYdFM2PLBEqPY+jMJioTA=";
+    hash = "sha256-j0d37C1TTb6ggXk1wTaqEcBKwsxE/B7Io90gTkc2q0M=";
   };
 
   nativeBuildInputs = [

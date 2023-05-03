@@ -1,4 +1,4 @@
-{ lib, stdenv, runtimeShell, writeText, fetchFromGitHub, gradle, openjdk17, git, perl, cmake }:
+{ lib, stdenv, runtimeShell, writeText, fetchFromGitHub, gradle_7, openjdk17, git, perl, cmake }:
 let
   pname = "fastddsgen";
   version = "2.3.0";
@@ -10,6 +10,8 @@ let
     fetchSubmodules = true;
     hash = "sha256-lxMv1hXjHFslJts63/FJPjj0mAKTluY/pNTvf15Oo9o=";
   };
+
+  gradle = gradle_7;
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {

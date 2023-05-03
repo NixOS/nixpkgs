@@ -17,7 +17,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , version
 , nginxVersion ? version
 , src ? null # defaults to upstream nginx ${version}
-, sha256 ? null # when not specifying src
+, hash ? null # when not specifying src
 , configureFlags ? []
 , nativeBuildInputs ? []
 , buildInputs ? []
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
 
   src = if src != null then src else fetchurl {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
 
   nativeBuildInputs = [ removeReferencesTo ]

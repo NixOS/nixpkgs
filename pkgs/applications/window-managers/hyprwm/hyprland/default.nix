@@ -13,6 +13,7 @@
 , libxcb
 , libxkbcommon
 , mesa
+, pango
 , pciutils
 , systemd
 , udis86
@@ -37,13 +38,13 @@ in
 assert assertXWayland;
 stdenv.mkDerivation rec {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.23.0beta";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     rev = "v${version}";
-    hash = "sha256-aPSmhgof4nIJquHmtxxirIMVv439wTYYCwf1ekS96gA=";
+    hash = "sha256-zbtxX0NezuNg46PAKscmDfFfNID4rAq2qGNf1BE3Cqc=";
   };
 
   patches = [
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   outputs = [
@@ -83,7 +85,7 @@ stdenv.mkDerivation rec {
       udis86
       wayland
       wayland-protocols
-      wayland-scanner
+      pango
       pciutils
       (wlroots.override { inherit enableXWayland hidpiXWayland nvidiaPatches; })
     ]

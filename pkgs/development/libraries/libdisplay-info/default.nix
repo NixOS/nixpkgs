@@ -21,9 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7t1CoLus3rPba9paapM7+H3qpdsw7FlzJsSHFwM/2Lk=";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja edid-decode python3 ];
-
-  buildInputs = [ hwdata ];
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ meson pkg-config ninja edid-decode hwdata python3 ];
 
   postPatch = ''
     patchShebangs tool/gen-search-table.py

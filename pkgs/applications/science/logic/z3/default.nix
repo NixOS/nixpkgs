@@ -92,8 +92,8 @@ in
     sha256 = "sha256-ItmtZHDhCeLAVtN7K80dqyAh20o7TM4xk2sTb9QgHvk=";
   };
   z3_4_8 = common {
-    version = "4.8.15";
-    sha256 = "0xkwqz0y5d1lfb6kfqy8wn8n2dqalzf4c8ghmjsajc1bpdl70yc5";
+    version = "4.8.17";
+    sha256 = "sha256-BSwjgOU9EgCcm18Zx0P9mnoPc9ZeYsJwEu0ffnACa+8=";
   };
   z3_4_8_5 = common {
     tag = "Z3";

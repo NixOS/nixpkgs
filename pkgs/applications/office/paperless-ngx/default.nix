@@ -17,13 +17,13 @@
 }:
 
 let
-  version = "1.13.0";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aIJWEZD98tjfNDQjQfxRR1kOJ4P/fxZP8sw1dKy7apw=";
+    hash = "sha256-QpSp+8gsFApp4i4PajAQHHYZgwej/gusAw4J3Zetk4M=";
   };
 
   # Use specific package versions required by paperless-ngx
@@ -36,18 +36,6 @@ let
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
-        };
-      });
-
-      # downgrade redis due to https://github.com/paperless-ngx/paperless-ngx/pull/1802
-      # and https://github.com/django/channels_redis/issues/332
-      channels-redis = super.channels-redis.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.1";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = "channels_redis";
-          rev = version;
-          hash = "sha256-ZQSsE3pkM+nfDhWutNuupcyC5MDikUu6zU4u7Im6bRQ=";
         };
       });
 
@@ -74,6 +62,7 @@ let
           hash = "sha256-KWkMV4L7bA2Eo/u4GGif6lmDNrZAzvYyDiyzyWt9LeI=";
         };
       });
+
     };
   };
 
@@ -93,7 +82,7 @@ let
     pname = "paperless-ngx-frontend";
     inherit version src;
 
-    npmDepsHash = "sha256-es9x7KR5S7E8KjYWq8ie/EwlAy6zrDvySYQi1vy08Wc=";
+    npmDepsHash = "sha256-wUlybMxnXLNmeu2z+RFFOHVEhH12XD3ZfMo5K+HSBpY=";
 
     nativeBuildInputs = [
       python3
@@ -160,7 +149,10 @@ python.pkgs.buildPythonApplication rec {
     django-compression-middleware
     django-extensions
     django-filter
+    django-guardian
+    django-ipware
     django
+    djangorestframework-guardian2
     djangorestframework
     filelock
     gunicorn
@@ -237,6 +229,7 @@ python.pkgs.buildPythonApplication rec {
     whoosh
     zipp
     zope_interface
+    zxing_cpp
   ]
   ++ redis.optional-dependencies.hiredis
   ++ twisted.optional-dependencies.tls

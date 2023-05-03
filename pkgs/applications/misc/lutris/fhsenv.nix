@@ -1,4 +1,4 @@
-{ lib, buildFHSUserEnv, lutris-unwrapped
+{ lib, buildFHSEnv, lutris-unwrapped
 , extraPkgs ? pkgs: [ ]
 , extraLibraries ? pkgs: [ ]
 , steamSupport ? true
@@ -13,7 +13,7 @@ let
     libXxf86vm libXinerama libSM libXv libXaw libXi libXcursor libXcomposite
   ];
 
-in buildFHSUserEnv {
+in buildFHSEnv {
   name = "lutris";
 
   runScript = "lutris";

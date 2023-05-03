@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.14.1-1";
+  version = "0.14.3-1";
 
   src = fetchFromGitHub {
     owner  = "mydumper";
     repo = "mydumper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I8COArsIO8+09SNa3DrgoGpvhLj08I8UvT2H9k9mJNQ=";
+    hash = "sha256-qyJGnrBOElQ3s2VoOWfW1luacd33haanmzKidMBgCpc=";
   };
 
   outputs = [ "out" "doc" "man" ];

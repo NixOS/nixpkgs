@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , django
+, setuptools
 , pytestCheckHook
 , pytest-django
 }:
@@ -9,6 +10,7 @@
 buildPythonPackage rec {
   pname = "django-crispy-forms";
   version = "2.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "django-crispy-forms";
@@ -19,6 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     django
+    setuptools
   ];
 
   # FIXME: RuntimeError: Model class source.crispy_forms.tests.forms.CrispyTestModel doesn't declare an explicit app_label and isn't in an application in INSTALLED_APPS.

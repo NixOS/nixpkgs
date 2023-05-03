@@ -12,7 +12,7 @@ version="$1"
 set -euo pipefail
 
 if [ -z "$version" ]; then
-  version="$(wget -O- "https://api.github.com/repos/vector-im/element-desktop/releases?per_page=1" | jq -r '.[0].tag_name')"
+  version="$(wget -q -O- "https://api.github.com/repos/vector-im/element-desktop/releases?per_page=1" | jq -r '.[0].tag_name')"
 fi
 
 # strip leading "v"
@@ -26,7 +26,7 @@ web_tmpdir=$(mktemp -d)
 trap 'rm -rf "$web_tmpdir"' EXIT
 
 pushd $web_tmpdir
-wget "$web_src/yarn.lock"
+wget -q "$web_src/yarn.lock"
 web_yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 
@@ -38,7 +38,7 @@ desktop_tmpdir=$(mktemp -d)
 trap 'rm -rf "$desktop_tmpdir"' EXIT
 
 pushd $desktop_tmpdir
-wget "$desktop_src/yarn.lock"
+wget -q "$desktop_src/yarn.lock"
 desktop_yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 

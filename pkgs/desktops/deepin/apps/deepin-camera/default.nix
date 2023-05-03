@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-camera";
-  version = "1.4.8";
+  version = "1.4.11";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-p2RCetx1lgLonXZaC3umE+nDgZnp64o3iR2MgQhbisM=";
+    sha256 = "sha256-GQQFwlJNfdsi0GvDRMIorUnlbXrgbYl9H9aBedOm+ZQ=";
   };
 
   # QLibrary and dlopen work with LD_LIBRARY_PATH
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
-      --replace "/usr/share/libimagevisualresult/filter_cube" "${image-editor}/share/libimagevisualresult/filter_cube" \
+      --replace "/usr/share/libimagevisualresult" "${image-editor}/share/libimagevisualresult" \
       --replace "/usr/include/libusb-1.0" "${lib.getDev libusb1}/include/libusb-1.0"
     substituteInPlace src/com.deepin.Camera.service \
       --replace "/usr/bin/qdbus" "${lib.getBin qttools}/bin/qdbus" \
-      --replace "/usr/share/applications/deepin-camera.desktop" "$out/share/applications/deepin-camera.desktop"
+      --replace "/usr/share" "$out/share"
   '';
 
   nativeBuildInputs = [
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dtkwidget
+    qt5integration
     qt5platform-plugins
     image-editor
     qtbase
@@ -70,14 +71,14 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
+  strictDeps = true;
+
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${gst_all_1.gstreamer.dev}/include/gstreamer-1.0"
     "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0"
   ];
 
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
   qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ ffmpeg ffmpegthumbnailer gst_all_1.gstreamer gst_all_1.gst-plugins-base libusb1 libv4l portaudio systemd ]}"
   ];
 

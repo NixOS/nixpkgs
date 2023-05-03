@@ -6,6 +6,8 @@ buildDunePackage {
   pname = "atdgen";
   inherit (atdgen-codec-runtime) version src;
 
+  duneVersion = "3";
+
   buildInputs = [ atd re ];
 
   propagatedBuildInputs = [ atdgen-runtime ];

@@ -34,23 +34,29 @@ stdenv.mkDerivation rec {
     hash = "sha256-JHxMEignDJAQ9HIcmFy1tiirUKvPnyZ4Ywc3FC7rkcM=";
   };
 
-  patches = lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [
+    # remove with 3.5.X
+    ./blender-numpy.patch
+  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   nativeBuildInputs = [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev ]
     ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff libwebp
-      opencolorio openexr openimagedenoise openimageio openjpeg python zlib zstd fftw jemalloc
+      opencolorio openexr openimageio openjpeg python zlib zstd fftw jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
-      embree
       gmp
       pugixml
       potrace
       libharu
       libepoxy
+    ]
+    ++ lib.optionals (!stdenv.isAarch64) [
+      openimagedenoise
+      embree
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
@@ -121,6 +127,9 @@ stdenv.mkDerivation rec {
       "-DWITH_IMAGE_OPENJPEG=ON"
       "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
     ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      "-DWITH_CYCLES_EMBREE=OFF"
+    ]
     ++ lib.optionals stdenv.isDarwin [
       "-DWITH_CYCLES_OSL=OFF" # requires LLVM
       "-DWITH_OPENVDB=OFF" # OpenVDB currently doesn't build on darwin
@@ -171,7 +180,8 @@ stdenv.mkDerivation rec {
     # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
     license = with licenses; [ gpl2Plus ] ++ optional cudaSupport unfree;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ goibhniu veprbl ];
   };
 }

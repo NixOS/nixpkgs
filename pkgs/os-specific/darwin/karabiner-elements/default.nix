@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     cp "$out/Library/Application Support/org.pqrs/Karabiner-Elements/package-version" "$out/Library/Application Support/org.pqrs/Karabiner-Elements/version"
   '';
 
+  passthru.updateScript = ./updater.sh;
+
   meta = with lib; {
     description = "Karabiner-Elements is a powerful utility for keyboard customization on macOS Sierra (10.12) or later.";
     homepage = "https://karabiner-elements.pqrs.org/";

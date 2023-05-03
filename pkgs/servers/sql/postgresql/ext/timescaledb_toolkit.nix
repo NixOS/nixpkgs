@@ -4,9 +4,10 @@
 , postgresql
 , stdenv
 , nixosTests
+, cargo-pgx_0_6_1
 }:
 
-buildPgxExtension rec {
+(buildPgxExtension.override {cargo-pgx = cargo-pgx_0_6_1;})rec {
   inherit postgresql;
 
   pname = "timescaledb_toolkit";

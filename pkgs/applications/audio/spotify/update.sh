@@ -20,7 +20,7 @@
 
 channel="${1:-stable}" # stable/candidate/edge
 nixpkgs="$(git rev-parse --show-toplevel)"
-spotify_nix="$nixpkgs/pkgs/applications/audio/spotify/default.nix"
+spotify_nix="$nixpkgs/pkgs/applications/audio/spotify/linux.nix"
 
 
 #
@@ -78,6 +78,7 @@ sed --regexp-extended \
 # try to build the updated version
 #
 
+export NIXPKGS_ALLOW_UNFREE=1
 if ! nix-build -A spotify "$nixpkgs"; then
   echo "The updated spotify failed to build."
   exit 1

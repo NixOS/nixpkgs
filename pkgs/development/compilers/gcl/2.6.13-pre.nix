@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GNU Common Lisp compiler working via GCC";
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = lib.teams.lisp.members;
     platforms = lib.platforms.linux;
   };
 }

@@ -3,13 +3,13 @@
 , stdenv
 , stdenvNoCC
 , fetchFromGitHub
+, fixDarwinDylibNames
 , genBytecode ? false
 , bqn-path ? null
 , mbqn-source ? null
 , enableReplxx ? false
 , enableSingeli ? stdenv.hostPlatform.avx2Support
-  # No support for macOS' .dylib on the CBQN side
-, enableLibcbqn ? stdenv.hostPlatform.isLinux
+, enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx)
 , libffi
 , pkg-config
 }:
@@ -24,18 +24,18 @@ assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "unstable-2023-02-01";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "05c1270344908e98c9f2d06b3671c3646f8634c3";
-    hash = "sha256-wKeyYWMgTZPr+Ienz3xnsXeD67vwdK4sXbQlW+GpQho=";
+    rev = "v${version}";
+    hash = "sha256-M9GTsm65DySLcMk9QDEhImHnUvWtYGPwiG657wHg3KA=";
   };
 
   nativeBuildInputs = [
     pkg-config
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
     libffi
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i '/SHELL =.*/ d' makefile
+    patchShebangs build/build
   '';
 
   makeFlags = [
@@ -103,7 +104,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk ];
+    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk detegr ];
     platforms = platforms.all;
   };
 }

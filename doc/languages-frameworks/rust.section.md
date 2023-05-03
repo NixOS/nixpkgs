@@ -162,7 +162,7 @@ required to build a rust package. A simple fix is to use:
 
 ```nix
 postPatch = ''
-  cp ${./Cargo.lock} Cargo.lock
+  ln -s ${./Cargo.lock} Cargo.lock
 '';
 ```
 

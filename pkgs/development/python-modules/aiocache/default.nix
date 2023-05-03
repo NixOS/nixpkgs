@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aiocache";
-  version = "0.12.0";
+  version = "0.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jNfU5jT2xLgwVeVp8jXrQ6QQuUDwMOxf+hZ7VFsMFpM=";
+    hash = "sha256-/ruB8/5/oWGlTldOXkgdsPU+mQlXOL1qRcikElEHYNQ=";
   };
 
   passthru.optional-dependencies = {

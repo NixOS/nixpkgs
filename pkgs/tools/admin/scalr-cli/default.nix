@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "scalr-cli";
-  version = "0.14.5";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "Scalr";
     repo = "scalr-cli";
     rev = "v${version}";
-    hash = "sha256-X/fZDM1OYw1a0la8os9TFUrl1h5BnO+C40h2XH32vmw=";
+    hash = "sha256-8KhFF/bD//NYRQ7v+ksGAE6bKVu+nE3o3R119XbHVDA=";
   };
 
-  vendorHash = "sha256-EdDhq6LnxagutxjiOoYElhHVnSKhr/Ekt928gSooPYY=";
+  vendorHash = "sha256-xoxSQ9V9i7yxJzn8wAtIAtWlTn4q/UnNqMT93RyBHII=";
 
   ldflags = [
     "-s" "-w"

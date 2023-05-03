@@ -1,5 +1,6 @@
 { mkDerivation
 , lib
+, stdenv
 , fetchFromGitHub
 , substituteAll
 , qtbase
@@ -14,11 +15,12 @@
 , kio
 , plasma-framework
 , qttools
+, iconv
 , webviewSupport ? true
 , jsSupport ? true
-, kioPluginSupport ? true
-, plasmoidSupport  ? true
-, systemdSupport ? true
+, kioPluginSupport ? stdenv.isLinux
+, plasmoidSupport  ? stdenv.isLinux
+, systemdSupport ? stdenv.isLinux
 /* It is possible to set via this option an absolute exec path that will be
 written to the `~/.config/autostart/syncthingtray.desktop` file generated
 during runtime. Alternatively, one can edit the desktop file themselves after
@@ -28,14 +30,14 @@ https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 }:
 
 mkDerivation rec {
-  version = "1.3.3";
+  version = "1.4.1";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "sha256-6H5pV7/E4MP9UqVpm59DqfcK8Z8GwknO3+oWxAcnIsk=";
+    sha256 = "sha256-6s78vytYxU7FWGQRO56qgmtZBlHbXMz3iVAbBXycDmI=";
   };
 
   buildInputs = [
@@ -44,7 +46,7 @@ mkDerivation rec {
     qtutilities
     boost
     qtforkawesome
-  ]
+  ] ++ lib.optionals stdenv.isDarwin [ iconv ]
     ++ lib.optionals webviewSupport [ qtwebengine ]
     ++ lib.optionals jsSupport [ qtdeclarative ]
     ++ lib.optionals kioPluginSupport [ kio ]
@@ -59,7 +61,8 @@ mkDerivation rec {
   ;
 
   # No tests are available by upstream, but we test --help anyway
-  doInstallCheck = true;
+  # Don't test on Darwin because output is .app
+  doInstallCheck = !stdenv.isDarwin;
   installCheckPhase = ''
     $out/bin/syncthingtray --help | grep ${version}
   '';
@@ -79,6 +82,6 @@ mkDerivation rec {
     description = "Tray application and Dolphin/Plasma integration for Syncthing";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

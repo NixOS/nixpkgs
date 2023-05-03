@@ -1,6 +1,6 @@
 { version, hash }:
 
-{ stdenv, lib, fetchurl
+{ stdenv, lib, fetchurl, fetchpatch
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
@@ -145,6 +145,11 @@ self = stdenv.mkDerivation {
       "get_option('datadir')" "'${placeholder "out"}/share'"
     substituteInPlace src/amd/vulkan/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}/share'"
+  ''
+  # TODO: can be removed >= 23.0.4 (most likely)
+  # https://gitlab.freedesktop.org/mesa/mesa/-/commit/035aa34ed5eb418339c0e2d2
+  + ''
+    sed '/--size_t-is-usize/d' -i src/gallium/frontends/rusticl/meson.build
   '';
 
   outputs = [ "out" "dev" "drivers" ]
@@ -322,6 +327,10 @@ self = stdenv.mkDerivation {
         patchelf --set-rpath "$(patchelf --print-rpath $lib):$drivers/lib" "$lib"
       fi
     done
+    # add RPATH here so Zink can find libvulkan.so
+    ${lib.optionalString haveZink ''
+      patchelf --add-rpath ${vulkan-loader}/lib $drivers/lib/dri/zink_dri.so
+    ''}
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [

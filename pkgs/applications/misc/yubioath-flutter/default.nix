@@ -2,19 +2,13 @@
 , flutter
 , python3
 , fetchFromGitHub
-, stdenv
 , pcre2
 , gnome
 , makeWrapper
 , removeReferencesTo
 }:
-let
-  vendorHashes = {
-    x86_64-linux = "sha256-Upe0cEDG02RJD50Ht9VNMwkelsJHX8zOuJZssAhMuMY=";
-    aarch64-linux = "sha256-lKER4+gcyFqnCvgBl/qdVBCbUpocWUnXGLXsX82MSy4=";
-  };
-in
-flutter.mkFlutterApp rec {
+
+flutter.buildFlutterApplication rec {
   pname = "yubioath-flutter";
   version = "6.1.0";
 
@@ -27,7 +21,8 @@ flutter.mkFlutterApp rec {
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
-  vendorHash = vendorHashes.${stdenv.system};
+  depsListFile = ./deps.json;
+  vendorHash = "sha256-WfZiB7MO4wHUg81xm67BMu4zQdC9CfhN5BQol+AI2S8=";
 
   postPatch = ''
     substituteInPlace linux/CMakeLists.txt \
@@ -89,6 +84,6 @@ flutter.mkFlutterApp rec {
     homepage = "https://github.com/Yubico/yubioath-flutter";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = builtins.attrNames vendorHashes;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

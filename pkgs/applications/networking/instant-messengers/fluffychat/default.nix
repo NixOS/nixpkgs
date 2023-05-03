@@ -1,23 +1,23 @@
 { lib
 , fetchFromGitLab
-, flutter2
-, olm
 , imagemagick
+, flutter
 , makeDesktopItem
 }:
 
-flutter2.mkFlutterApp rec {
-  pname = "fluffychat";
-  version = "1.2.0";
-
-  vendorHash = "sha256-1PDX023WXRmRe/b1L+6Du91BvGwYNp3YATqYSQdPrRY=";
+flutter.buildFlutterApplication rec {
+  version = "1.11.0";
+  name = "fluffychat";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "fluffychat";
     rev = "v${version}";
-    hash = "sha256-PJH3jMQc6u9R6Snn+9rNN8t+8kt6l3Xt7zKPbpqj13E=";
+    hash = "sha256-Z7BOGsirBVQxRJY4kmskCmPeZloc41/bf4/ExoO8VBk=";
   };
+
+  depsListFile = ./deps.json;
+  vendorHash = "sha256-axByNptbzGR7GQT4Gs2yaEyUCkCbI9RQNNOHN7CYd9A=";
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
@@ -27,31 +27,7 @@ flutter2.mkFlutterApp rec {
     genericName = "Chat with your friends (matrix client)";
     categories = [ "Chat" "Network" "InstantMessaging" ];
   };
-
-  buildInputs = [
-    olm
-  ];
-
-  nativeBuildInputs = [
-    imagemagick
-  ];
-
-  flutterExtraFetchCommands = ''
-    M=$(echo $TMP/.pub-cache/hosted/pub.dartlang.org/matrix-*)
-    sed -i $M/scripts/prepare.sh \
-      -e "s|/usr/lib/x86_64-linux-gnu/libolm.so.3|/bin/sh|g"  \
-      -e "s|if which flutter >/dev/null; then|exit; if which flutter >/dev/null; then|g"
-
-    pushd $M
-    bash scripts/prepare.sh
-    popd
-  '';
-
-  # replace olm dummy path
-  postConfigure = ''
-    M=$(echo $depsFolder/.pub-cache/hosted/pub.dartlang.org/matrix-*)
-    ln -sf ${olm}/lib/libolm.so.3 $M/ffi/olm/libolm.so
-  '';
+  nativeBuildInputs = [ imagemagick ];
 
   postInstall = ''
     FAV=$out/app/data/flutter_assets/assets/favicon.png
@@ -60,13 +36,11 @@ flutter2.mkFlutterApp rec {
     install -D $FAV $ICO/fluffychat.png
     mkdir $out/share/applications
     cp $desktopItem/share/applications/*.desktop $out/share/applications
-
-    for s in 24 32 42 64 128 256 512; do
+    for size in 24 32 42 64 128 256 512; do
       D=$ICO/hicolor/''${s}x''${s}/apps
       mkdir -p $D
-      convert $FAV -resize ''${s}x''${s} $D/fluffychat.png
+      convert $FAV -resize ''${size}x''${size} $D/fluffychat.png
     done
-
     substituteInPlace $out/share/applications/*.desktop \
       --subst-var out
   '';
@@ -75,7 +49,8 @@ flutter2.mkFlutterApp rec {
     description = "Chat with your friends (matrix client)";
     homepage = "https://fluffychat.im/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ mkg20001 ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ mkg20001 gilice ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    sourceProvenance = [ sourceTypes.fromSource ];
   };
 }

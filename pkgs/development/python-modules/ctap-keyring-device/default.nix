@@ -14,6 +14,7 @@
 let
   fido2_0 = fido2.overridePythonAttrs (oldAttrs: rec {
     version = "0.9.3";
+    format = "setuptools";
     src = fetchPypi {
       inherit (oldAttrs) pname;
       inherit version;

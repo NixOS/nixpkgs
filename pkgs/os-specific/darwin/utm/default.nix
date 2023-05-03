@@ -1,24 +1,36 @@
 { lib
 , undmg
+, makeWrapper
 , fetchurl
 , stdenvNoCC
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "utm";
-  version = "4.1.5";
+  version = "4.1.6";
 
   src = fetchurl {
     url = "https://github.com/utmapp/UTM/releases/download/v${version}/UTM.dmg";
-    hash = "sha256-YOmTf50UUvvh4noWnmV6WsoWSua0tpWTgLTg+Cdr3bQ=";
+    hash = "sha256-d0xEND95u/PFnKfogLwO2vLgv+tQubMea8XWSJRuZF4=";
   };
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [ undmg makeWrapper ];
 
   sourceRoot = ".";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Applications
     cp -r *.app $out/Applications
+
+    mkdir -p $out/bin
+    for bin in $out/Applications/UTM.app/Contents/MacOS/*; do
+      # Symlinking `UTM` doesn't work; seems to look for files in the wrong
+      # place
+      makeWrapper $bin "$out/bin/$(basename $bin)"
+    done
+
+    runHook postInstall
   '';
 
   meta = with lib; {
