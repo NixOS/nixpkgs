@@ -10580,8 +10580,6 @@ self: super: with self; {
 
   ruffus = callPackage ../development/python-modules/ruffus { };
 
-  runway-python = callPackage ../development/python-modules/runway-python { };
-
   ruuvitag-ble = callPackage ../development/python-modules/ruuvitag-ble { };
 
   ruyaml = callPackage ../development/python-modules/ruyaml { };
