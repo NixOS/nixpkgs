@@ -1,6 +1,8 @@
 { lib, stdenv, fetchurl, fixDarwinDylibNames, which
 , enableShared ? !(stdenv.hostPlatform.isStatic)
 , enableStatic ? stdenv.hostPlatform.isStatic
+# for passthru.tests
+, nix
 }:
 
 stdenv.mkDerivation rec {
@@ -68,6 +70,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "regress";
+
+  passthru.tests = {
+    # most important consumer in nixpkgs
+    inherit nix;
+  };
 
   meta = with lib; {
     homepage = "https://kristaps.bsd.lv/lowdown/";
