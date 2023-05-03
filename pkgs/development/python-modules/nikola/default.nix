@@ -42,6 +42,8 @@
 buildPythonPackage rec {
   pname = "nikola";
   version = "8.2.4";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -110,6 +112,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Static website and blog generator";
     homepage = "https://getnikola.com/";
+    changelog = "https://github.com/getnikola/nikola/blob/v${version}/CHANGES.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
     # All tests fail
