@@ -13592,7 +13592,7 @@ with pkgs;
   clang_13 = llvmPackages_13.clang;
   clang_14 = llvmPackages_14.clang;
   clang_15 = llvmPackages_15.clang;
-  clang_16 = llvmPackages_15.clang;
+  clang_16 = llvmPackages_16.clang;
 
   clang-tools = callPackage ../development/tools/clang-tools {
     llvmPackages = llvmPackages_latest;
