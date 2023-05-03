@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-blezz";
-  version = "unstable-2022-09-07";
+  version = "2022-09-07";
 
   src = fetchFromGitHub {
     owner = "davatorium";
