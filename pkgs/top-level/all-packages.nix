@@ -6178,6 +6178,8 @@ with pkgs;
 
   ondir = callPackage ../tools/misc/ondir { };
 
+  opam-publish = callPackage ../development/tools/ocaml/opam-publish { };
+
   opencomposite = callPackage ../development/libraries/opencomposite { };
 
   opencomposite-helper = callPackage ../development/libraries/opencomposite/helper.nix { };
