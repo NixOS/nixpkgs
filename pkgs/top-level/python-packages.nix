@@ -284,6 +284,8 @@ self: super: with self; {
 
   aioopenssl = callPackage ../development/python-modules/aioopenssl { };
 
+  aiooss2 = callPackage ../development/python-modules/aiooss2 { };
+
   aiopg = callPackage ../development/python-modules/aiopg { };
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
@@ -3804,6 +3806,8 @@ self: super: with self; {
 
   fuzzyfinder = callPackage ../development/python-modules/fuzzyfinder { };
 
+  fuzzytm = callPackage ../development/python-modules/fuzzytm { };
+
   fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
 
   fvs = callPackage ../development/python-modules/fvs { };
@@ -4883,6 +4887,8 @@ self: super: with self; {
 
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
 
+  ipyniivue = callPackage ../development/python-modules/ipyniivue { };
+
   ipykernel = callPackage ../development/python-modules/ipykernel { };
 
   ipympl = callPackage ../development/python-modules/ipympl { };
@@ -5194,6 +5200,8 @@ self: super: with self; {
   jupyter-server-terminals = callPackage ../development/python-modules/jupyter-server-terminals { };
 
   jupyter-server-ydoc = callPackage ../development/python-modules/jupyter-server-ydoc { };
+
+  jupyter-ui-poll = callPackage ../development/python-modules/jupyter-ui-poll { };
 
   jupyter-ydoc = callPackage ../development/python-modules/jupyter-ydoc { };
 
@@ -8359,6 +8367,8 @@ self: super: with self; {
 
   pyfttt = callPackage ../development/python-modules/pyfttt { };
 
+  pyfume = callPackage ../development/python-modules/pyfume { };
+
   pyfuse3 = callPackage ../development/python-modules/pyfuse3 { };
 
   pyfxa = callPackage ../development/python-modules/pyfxa { };
@@ -9331,6 +9341,8 @@ self: super: with self; {
   pytest-doctestplus = callPackage ../development/python-modules/pytest-doctestplus { };
 
   pytest-dotenv = callPackage ../development/python-modules/pytest-dotenv { };
+
+  pytest-emoji = callPackage ../development/python-modules/pytest-emoji { };
 
   pytest-env = callPackage ../development/python-modules/pytest-env { };
 

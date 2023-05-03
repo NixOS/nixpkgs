@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "exportarr";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "onedr0p";
     repo = "exportarr";
     rev = "v${version}";
-    sha256 = "sha256-QZI3tYh2HXBDlZJWHQUAl/Yeyc/qCZGcfyFHbjCHlbU=";
+    hash = "sha256-99ap7B5EfMhuSGmT/JNI+CTPv7lTdjxibC0ndYWyNoA=";
   };
 
   vendorHash = "sha256-2Eb8FhbRu5M5u8HGa2bgAvZZkwHycBu8UiNKHG5/fFw=";
@@ -25,8 +25,10 @@ buildGoModule rec {
 
   tags = lib.optionals stdenv.isLinux [ "netgo" ];
 
-  # There are no tests for this package.
-  doCheck = false;
+  preCheck = ''
+    # Run all tests.
+    unset subPackages
+  '';
 
   meta = with lib; {
     description = "AIO Prometheus Exporter for Sonarr, Radarr or Lidarr";

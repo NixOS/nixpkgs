@@ -19,14 +19,14 @@
 
 mkDerivation rec {
   pname = "arianna";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "arianna";
     rev = "v${version}";
-    hash = "sha256-X3PDGWsQ8Alj5fisZC1tTHQDLPmjtiLw0X9gMvh5KFI=";
+    hash = "sha256-IETqKVIWeICFgqmBSVz8ea8100hHGXIo5S3O0OaIC04=";
   };
 
   nativeBuildInputs = [

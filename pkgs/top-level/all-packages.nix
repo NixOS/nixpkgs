@@ -12563,6 +12563,8 @@ with pkgs;
 
   sslmate-agent = callPackage ../development/tools/sslmate-agent { };
 
+  sshocker = callPackage ../tools/security/sshocker { };
+
   sshoogr = callPackage ../tools/networking/sshoogr { };
 
   ssocr = callPackage ../applications/misc/ssocr { };
@@ -15528,9 +15530,8 @@ with pkgs;
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
 
   lobster = callPackage ../development/compilers/lobster {
-    inherit (darwin) cf-private;
     inherit (darwin.apple_sdk.frameworks)
-      Cocoa AudioToolbox OpenGL Foundation ForceFeedback;
+      CoreFoundation Cocoa AudioToolbox OpenGL Foundation ForceFeedback;
   };
 
   lld = llvmPackages.lld;
@@ -16749,9 +16750,7 @@ with pkgs;
 
   io = callPackage ../development/interpreters/io { };
 
-  ivy = callPackage ../development/interpreters/ivy {
-    buildGoModule = buildGo118Module; # tests fail with 1.19
-  };
+  ivy = callPackage ../development/interpreters/ivy { };
 
   j = callPackage ../development/interpreters/j {
     stdenv = clangStdenv;
@@ -24067,6 +24066,8 @@ with pkgs;
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
   tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
 
+  tkimg = callPackage ../development/libraries/tkimg { };
+
   tkrzw = callPackage ../development/libraries/tkrzw { };
 
   tl-expected = callPackage ../development/libraries/tl-expected { };
@@ -25809,6 +25810,7 @@ with pkgs;
   prometheus-bird-exporter = callPackage ../servers/monitoring/prometheus/bird-exporter.nix { };
   prometheus-bitcoin-exporter = callPackage ../servers/monitoring/prometheus/bitcoin-exporter.nix { };
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
+  prometheus-cloudflare-exporter = callPackage ../servers/monitoring/prometheus/cloudflare-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
   prometheus-consul-exporter = callPackage ../servers/monitoring/prometheus/consul-exporter.nix { };
   prometheus-dnsmasq-exporter = callPackage ../servers/monitoring/prometheus/dnsmasq-exporter.nix { };
@@ -32360,9 +32362,7 @@ with pkgs;
 
   normalize = callPackage ../applications/audio/normalize { };
 
-  norouter = callPackage ../tools/networking/norouter {
-    buildGoModule = buildGo118Module; # tests fail with 1.19
-  };
+  norouter = callPackage ../tools/networking/norouter { };
 
   nqptp = callPackage ../tools/networking/nqptp { };
 
@@ -33909,7 +33909,7 @@ with pkgs;
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
 
   routedns = callPackage ../tools/networking/routedns {
-    buildGoModule = buildGo118Module; # build fails with 1.19
+    buildGoModule = buildGo119Module; # build fails with 1.20
   };
 
   skrooge = libsForQt5.callPackage ../applications/office/skrooge { };
@@ -36306,6 +36306,8 @@ with pkgs;
   mari0 = callPackage ../games/mari0 { };
 
   manaplus = callPackage ../games/manaplus { stdenv = gcc11Stdenv; };
+
+  marble-marcher-ce = callPackage ../games/marble-marcher-ce { };
 
   mars = callPackage ../games/mars { };
 
@@ -39366,6 +39368,8 @@ with pkgs;
 
   terraforming = callPackage ../applications/networking/cluster/terraforming { };
 
+  terraform-backend-git = callPackage ../applications/networking/cluster/terraform-backend-git { };
+
   terraform-compliance = python3Packages.callPackage ../applications/networking/cluster/terraform-compliance { };
 
   terraform-docs = callPackage ../applications/networking/cluster/terraform-docs { };
@@ -39407,6 +39411,8 @@ with pkgs;
   auto-cpufreq = callPackage ../tools/system/auto-cpufreq {  };
 
   thermald = callPackage ../tools/system/thermald { };
+
+  therion = callPackage ../applications/misc/therion { };
 
   throttled = callPackage ../tools/system/throttled { };
 
