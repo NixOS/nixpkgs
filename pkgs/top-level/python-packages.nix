@@ -12932,6 +12932,8 @@ self: super: with self; {
 
   xmodem = callPackage ../development/python-modules/xmodem { };
 
+  xnatpy = callPackage ../development/python-modules/xnatpy { };
+
   xnd = callPackage ../development/python-modules/xnd { };
 
   xpath-expressions = callPackage ../development/python-modules/xpath-expressions { };
