@@ -367,6 +367,23 @@ final: prev: {
     '';
   };
 
+  nodehun = prev.nodehun.override {
+    nativeBuildInputs = [final.node-gyp];
+    disallowedReferences = [ nodejs ];
+    postInstall = ''
+      # Only keep the necessary parts of build/Release to reduce closure size
+      cd $out/lib/node_modules/nodehun
+      mv build build_old
+      mkdir build
+      cp -r build_old/Release build/
+      rm -rf build_old
+      rm -rf build/Release/.deps
+
+      # Remove a development script to eliminate runtime dependency on node
+      rm node_modules/node-addon-api/tools/conversion.js
+    '';
+  };
+
   parcel = prev.parcel.override {
     buildInputs = [ final.node-gyp-build ];
     preRebuild = ''
