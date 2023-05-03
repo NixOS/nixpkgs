@@ -1015,6 +1015,14 @@ self: super: builtins.intersectAttrs super {
     hnix-store-core = super.hnix-store-core_0_6_1_0;
   });
 
+  hercules-ci-api-core =
+    # 2023-05-02: Work around a corrupted file on cache.nixos.org. This is a hash for x86_64-linux. Remove when it has changed.
+    if super.hercules-ci-api-core.drvPath == "/nix/store/dgy3w43zypmdswc7a7zis0njgljqvnq0-hercules-ci-api-core-0.1.5.0.drv"
+    then super.hercules-ci-api-core.overrideAttrs (_: {
+        dummyAttr = 1;
+      })
+    else super.hercules-ci-api-core;
+
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
   hercules-ci-cnix-store = (super.hercules-ci-cnix-store.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; }).overrideAttrs (_: {
