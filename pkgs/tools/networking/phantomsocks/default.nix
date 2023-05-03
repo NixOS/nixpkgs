@@ -1,6 +1,9 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, libpcap
+, pcap ? false
+, rawsocket ? true
 }:
 
 buildGoModule rec {
@@ -15,6 +18,13 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-c0NQfZuMMWz1ASwFBcpMNjxZwXLo++gMYBiNgvT8ZLQ=";
+
+  # we need libpcap to build pcap tags
+  buildInputs = [ libpcap ];
+
+  tags = [ ]
+    ++ lib.optionals pcap [ "pcap" ]
+    ++ lib.optionals rawsocket [ "rawsocket" ];
 
   meta = with lib;{
     homepage = "https://github.com/macronut/phantomsocks";
