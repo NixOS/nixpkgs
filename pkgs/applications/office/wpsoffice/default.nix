@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, mkDerivation
 , fetchurl
 , dpkg
 , wrapGAppsHook
@@ -12,8 +11,8 @@
 , mesa
 , libtiff
 , cups
+, udev
 , xorg
-, steam-run
 , makeWrapper
 , useChineseVersion ? false
 }:
@@ -54,6 +53,10 @@ stdenv.mkDerivation rec {
     nspr
     mesa
     libtiff
+    udev
+  ];
+
+  runtimeDependencies = [
     cups.lib
   ];
 
@@ -71,12 +74,6 @@ stdenv.mkDerivation rec {
       substituteInPlace $i \
         --replace /usr/bin $out/bin
     done
-    for i in wps wpp et wpspdf; do
-      mv $out/bin/$i $out/bin/.$i-orig
-      makeWrapper ${steam-run}/bin/steam-run $out/bin/$i \
-        --add-flags $out/bin/.$i-orig \
-        --argv0 $i
-    done
     runHook postInstall
   '';
 
@@ -86,6 +83,8 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # The following libraries need libtiff.so.5, but nixpkgs provides libtiff.so.6
     patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/kingsoft/wps-office/office6/{libpdfmain.so,libqpdfpaint.so,qt/plugins/imageformats/libqtiff.so}
+    # dlopen dependency
+    patchelf --add-needed libudev.so.1 $out/opt/kingsoft/wps-office/office6/addons/cef/libcef.so
   '';
 
   postFixup = ''
