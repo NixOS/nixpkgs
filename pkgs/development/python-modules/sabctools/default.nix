@@ -5,28 +5,28 @@
 }:
 
 buildPythonPackage rec {
-  pname = "sabyenc3";
-  version = "5.4.4";
+  pname = "sabctools";
+  version = "7.0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-89ZfKnC8sT7xvq4P9rs7aa2uGElwNfjNT/5OWvGqL0E=";
+    hash = "sha256-AB5/McuOIDkhu7rtb3nFaqOTx3zwm92+3NEnH5HjzBo=";
   };
 
   # Tests are not included in pypi distribution
   doCheck = false;
 
   pythonImportsCheck = [
-    "sabyenc3"
+    "sabctools"
   ];
 
   meta = with lib; {
-    description = "yEnc Decoding for Python 3";
-    homepage = "https://github.com/sabnzbd/sabyenc/";
-    license = licenses.lgpl3Plus;
+    description = "C implementations of functions for use within SABnzbd";
+    homepage = "https://github.com/sabnzbd/sabctools";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 ];
   };
 }
