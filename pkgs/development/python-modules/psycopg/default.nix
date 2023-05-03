@@ -30,6 +30,7 @@
 , pproxy
 , pytest-randomly
 , pytestCheckHook
+, postgresqlTestHook
 }:
 
 let
@@ -165,10 +166,6 @@ buildPythonPackage rec {
     pool = [ psycopg-pool ];
   };
 
-  preCheck = ''
-    cd ..
-  '';
-
   nativeCheckInputs = [
     anyio
     pproxy
@@ -176,8 +173,20 @@ buildPythonPackage rec {
     pytestCheckHook
     postgresql
   ]
+  ++ lib.optional (stdenv.isLinux) postgresqlTestHook
   ++ passthru.optional-dependencies.c
   ++ passthru.optional-dependencies.pool;
+
+  env = {
+    postgresqlEnableTCP = 1;
+    PGUSER = "psycopg";
+  };
+
+  preCheck = ''
+    cd ..
+  '' + lib.optionalString (stdenv.isLinux) ''
+    export PSYCOPG_TEST_DSN="host=127.0.0.1 user=$PGUSER"
+  '';
 
   disabledTests = [
     # don't depend on mypy for tests
