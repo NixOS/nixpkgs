@@ -21,7 +21,11 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/plumber-cd/terraform-backend-git/cmd.Version=${version}"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd terraform-backend-git \
