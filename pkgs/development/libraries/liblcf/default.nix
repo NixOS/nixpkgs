@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liblcf";
-  version = "0.7.0";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "liblcf";
     rev = version;
-    sha256 = "sha256-69cYZ8hJ92gK39gueaEoUM0K7BDWIQ/0NvcQ/6e3Sg8=";
+    sha256 = "sha256-jJGIsNw7wplTL5FBWGL8osb9255o9ZaWgl77R+RLDMM=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
