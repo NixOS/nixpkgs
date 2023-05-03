@@ -1276,6 +1276,8 @@ with pkgs;
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
 
+  amdgpu_top = callPackage ../tools/system/amdgpu_top { };
+
   acquire = with python3Packages; toPythonApplication acquire;
 
   act = callPackage ../development/tools/misc/act { };
