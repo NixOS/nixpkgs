@@ -2566,6 +2566,8 @@ self: super: with self; {
   # Current latest
   django_4 = callPackage ../development/python-modules/django/4.nix { };
 
+  django-admin-datta = callPackage ../development/python-modules/django-admin-datta { };
+
   django-admin-sortable2 = callPackage ../development/python-modules/django-admin-sortable2 { };
 
   django-allauth = callPackage ../development/python-modules/django-allauth { };
@@ -2721,6 +2723,8 @@ self: super: with self; {
 
   django-scopes = callPackage ../development/python-modules/django-scopes { };
 
+  django-shortuuidfield = callPackage ../development/python-modules/django-shortuuidfield { };
+
   djangoql = callPackage ../development/python-modules/djangoql { };
 
   django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };
@@ -2734,6 +2738,8 @@ self: super: with self; {
   django-rest-polymorphic = callPackage ../development/python-modules/django-rest-polymorphic { };
 
   django-rest-registration = callPackage ../development/python-modules/django-rest-registration { };
+
+  django-rosetta = callPackage ../development/python-modules/django-rosetta { };
 
   django-rq = callPackage ../development/python-modules/django-rq { };
 
@@ -4827,6 +4833,8 @@ self: super: with self; {
   invisible-watermark = callPackage ../development/python-modules/invisible-watermark { };
 
   invocations = callPackage ../development/python-modules/invocations { };
+
+  invoicegenerator = callPackage ../development/python-modules/invoicegenerator { };
 
   invoke = callPackage ../development/python-modules/invoke { };
 
