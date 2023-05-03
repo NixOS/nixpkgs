@@ -60,18 +60,19 @@
 , libcap_ng
 , egl-wayland
 , graphene
+, wayland
 , wayland-protocols
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "44.0";
+  version = "44.1";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "chSwfhNYnvfB31U8ftEaAnmOQ62mwiiRP056Zm7vusQ=";
+    sha256 = "lzrq+rQvBvk0oJlPyEh4lYzbTSdmpMhnpczcVH3VcFY=";
   };
 
   mesonFlags = [
@@ -134,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     sysprof # for D-Bus interfaces
     libsysprof-capture
     xwayland
+    wayland
     wayland-protocols
   ] ++ [
     # X11 client

@@ -17,6 +17,8 @@
 , rustPlatform
 , writeShellScriptBin
 , yarn
+, swift
+, AVKit
 , CoreAudio
 }:
 
@@ -138,7 +140,7 @@ python3.pkgs.buildPythonApplication {
     ninja
     qt6.wrapQtAppsHook
     rsync
-  ];
+  ] ++ lib.optional stdenv.isDarwin swift;
   nativeCheckInputs = with python3.pkgs; [ pytest mock astroid  ];
 
   buildInputs = [
@@ -186,7 +188,10 @@ python3.pkgs.buildPythonApplication {
     waitress
     werkzeug
     zipp
-  ] ++ lib.optionals stdenv.isDarwin [ CoreAudio ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    AVKit
+    CoreAudio
+  ];
 
   # Activate optimizations
   RELEASE = true;

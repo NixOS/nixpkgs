@@ -5,6 +5,9 @@ let
   doCheck = lib.versionAtLeast ocaml.version "4.04";
 in
 
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "ocamlmod is not available for OCaml ≥ 5.0"
+
 stdenv.mkDerivation {
   pname = "ocamlmod";
   version = "0.0.9";

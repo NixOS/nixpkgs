@@ -22,8 +22,8 @@ let
       (option: ''
         menuentry '${defaults.name} ${
         # Name appended to menuentry defaults to params if no specific name given.
-        option.name or (if option ? params then "(${option.params})" else "")
-        }' ${if option ? class then " --class ${option.class}" else ""} {
+        option.name or (optionalString (option ? params) "(${option.params})")
+        }' ${optionalString (option ? class) " --class ${option.class}"} {
           linux ${defaults.image} \''${isoboot} ${defaults.params} ${
             option.params or ""
           }

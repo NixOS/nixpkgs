@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-later";
-  version = "3.2.2";
+  version = "3.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -33,13 +33,13 @@ buildPythonPackage rec {
     owner = "thegeeklab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-kqvWrNygriFG+jVjezJNe5CwUix38Ge0hQgu351Qyjw=";
+    hash = "sha256-7k81eEcM+BXNrln6+Lu0+1LjsZdYkUidrRQCdlBbQB8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace " --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail" ""
+      --replace " --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --no-cov-on-fail" ""
   '';
 
   pythonRelaxDeps = [

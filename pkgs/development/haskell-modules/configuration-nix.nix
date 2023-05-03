@@ -177,6 +177,15 @@ self: super: builtins.intersectAttrs super {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
+  audacity = enableCabalFlag "buildExamples" (overrideCabal (drv: {
+      executableHaskellDepends = [self.optparse-applicative self.soxlib];
+    }) super.audacity);
+  # 2023-04-27: Deactivating examples for now because they cause a non-trivial build failure.
+  # med-module = enableCabalFlag "buildExamples" super.med-module;
+  spreadsheet = enableCabalFlag "buildExamples" (overrideCabal (drv: {
+      executableHaskellDepends = [self.optparse-applicative self.shell-utility];
+    }) super.spreadsheet);
+
   # fix errors caused by hardening flags
   epanet-haskell = disableHardening ["format"] super.epanet-haskell;
 
@@ -252,14 +261,24 @@ self: super: builtins.intersectAttrs super {
   heist = addTestToolDepend pkgs.pandoc super.heist;
 
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
-  gio = disableHardening ["fortify"] (addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.gio));
+  gio = lib.pipe super.gio
+    [ (disableHardening ["fortify"])
+      (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
+      (addPkgconfigDepends (with pkgs; [ glib pcre2 util-linux pcre ]
+                                       ++ (if pkgs.stdenv.isLinux then [libselinux libsepol] else [])))
+    ];
   glib = disableHardening ["fortify"] (addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.glib));
   gtk3 = disableHardening ["fortify"] (super.gtk3.override { inherit (pkgs) gtk3; });
-  gtk = let gtk1 = addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.gtk;
-            gtk2 = addPkgconfigDepend pkgs.gtk2 gtk1;
-            gtk3 = disableHardening ["fortify"] gtk1;
-            gtk4 = if pkgs.stdenv.isDarwin then appendConfigureFlag "-fhave-quartz-gtk" gtk3 else gtk4;
-        in gtk3;
+  gtk = lib.pipe super.gtk (
+    [ (disableHardening ["fortify"])
+      (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
+      (addPkgconfigDepends (with pkgs; [ gtk2 pcre2 util-linux pcre fribidi
+                                         libthai libdatrie xorg.libXdmcp libdeflate
+                                        ]
+                                       ++ (if pkgs.stdenv.isLinux then [libselinux libsepol] else [])))
+    ] ++
+    ( if pkgs.stdenv.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
+  );
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
 
@@ -988,11 +1007,21 @@ self: super: builtins.intersectAttrs super {
     hnix-store-core = super.hnix-store-core_0_6_1_0;
   });
 
-  cachix_1_3_3 = super.cachix_1_3_3.override {
+  cachix_1_3_3 = overrideCabal (drv: {
+    hydraPlatforms = pkgs.lib.platforms.all;
+  }) (super.cachix_1_3_3.override {
     nix = self.hercules-ci-cnix-store.nixPackage;
     fsnotify = dontCheck super.fsnotify_0_4_1_0;
     hnix-store-core = super.hnix-store-core_0_6_1_0;
-  };
+  });
+
+  hercules-ci-api-core =
+    # 2023-05-02: Work around a corrupted file on cache.nixos.org. This is a hash for x86_64-linux. Remove when it has changed.
+    if super.hercules-ci-api-core.drvPath == "/nix/store/dgy3w43zypmdswc7a7zis0njgljqvnq0-hercules-ci-api-core-0.1.5.0.drv"
+    then super.hercules-ci-api-core.overrideAttrs (_: {
+        dummyAttr = 1;
+      })
+    else super.hercules-ci-api-core;
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
@@ -1083,11 +1112,11 @@ self: super: builtins.intersectAttrs super {
   }) super.fourmolu;
 
   # Test suite wants to run main executable
-  fourmolu_0_10_0_0 = overrideCabal (drv: {
+  fourmolu_0_10_1_0 = overrideCabal (drv: {
     preCheck = drv.preCheck or "" + ''
       export PATH="$PWD/dist/build/fourmolu:$PATH"
     '';
-  }) super.fourmolu_0_10_0_0;
+  }) super.fourmolu_0_10_1_0;
 
   # Test suite needs to execute 'disco' binary
   disco = overrideCabal (drv: {

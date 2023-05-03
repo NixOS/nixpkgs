@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cemu";
-  version = "2.0-32";
+  version = "2.0-36";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
-    hash = "sha256-47uCGN1wFVx3ph/q3+BG+pwJ7nisbmRPUEatOIq0i9M=";
+    hash = "sha256-RO8c9gLK00LLwDzcD8UOS3kh3kwTwFyrpuRlIXcInPo=";
   };
 
   patches = [
@@ -86,9 +86,12 @@ stdenv.mkDerivation rec {
     "-DPORTABLE=OFF"
   ];
 
-  preConfigure = ''
+  preConfigure = with lib; let
+    tag = last (splitString "-" version);
+  in ''
     rm -rf dependencies/imgui
     ln -s ${imgui}/include/imgui dependencies/imgui
+    sed 's/\(EMULATOR_VERSION_SUFFIX\).*experimental.*/\1 "-${tag} (experimental)"/' -i src/Common/version.h
   '';
 
   installPhase = ''

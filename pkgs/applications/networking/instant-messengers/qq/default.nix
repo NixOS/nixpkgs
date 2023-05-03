@@ -6,6 +6,7 @@
 , glib
 , gtk3
 , lib
+, libappindicator
 , libdrm
 , libgcrypt
 , libkrb5
@@ -14,6 +15,7 @@
 , xorg
 , systemd
 , stdenv
+, vips
 , at-spi2-core
 , autoPatchelfHook
 , wrapGAppsHook
@@ -49,18 +51,20 @@ stdenv.mkDerivation {
     alsa-lib
     at-spi2-core
     cups
-    gtk3
     glib
+    gtk3
     libdrm
     libgcrypt
     libkrb5
     mesa
     nss
+    vips
     xorg.libXdamage
   ];
 
-  runtimeDependencies = [
-    (lib.getLib systemd)
+  runtimeDependencies = map lib.getLib [
+    libappindicator
+    systemd
   ];
 
   installPhase = ''
@@ -74,7 +78,14 @@ stdenv.mkDerivation {
       --replace "/usr/share" "$out/share"
     ln -s $out/opt/QQ/qq $out/bin/qq
 
+    # Remove bundled libraries
+    rm -r $out/opt/QQ/resources/app/sharp-lib
+
     runHook postInstall
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ gjs ]}")
   '';
 
   meta = with lib; {

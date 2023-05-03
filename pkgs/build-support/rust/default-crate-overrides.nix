@@ -5,6 +5,7 @@
 , curl
 , darwin
 , libgit2
+, gtk3
 , libssh2
 , openssl
 , sqlite
@@ -143,6 +144,11 @@ in
 
   gdk-pixbuf = attrs: {
     buildInputs = [ gdk-pixbuf ];
+  };
+
+  gtk-sys = attrs: {
+    buildInputs = [ gtk3 ];
+    nativeBuildInputs = [ pkg-config ];
   };
 
   gtk4-sys = attrs: {

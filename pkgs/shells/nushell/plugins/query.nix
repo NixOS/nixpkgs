@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
 
   src = nushell.src;
 
-  cargoHash = "sha256-tHTAz3/4EihdVGXAePCmcOUOjeaqjrY6fIESOGcCW/8=";
+  cargoHash = "sha256-BKeEAgvhHP01K/q8itwFfFIH8BAS9e1dat449i3M4ig=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit CoreFoundation ];
 

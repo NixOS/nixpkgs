@@ -77,3 +77,9 @@ version = "12.0.1"
 url = "https://developer.download.nvidia.com/compute/cuda/12.0.1/local_installers/cuda_12.0.1_525.85.12_linux.run"
 sha256 = "sha256-GyBaBicvFGP0dydv2rkD8/ZmkXwGjlIHOAAeacehh1s="
 gcc = "gcc12"
+
+["12.1"]
+version = "12.1.1"
+url = "https://developer.download.nvidia.com/compute/cuda/12.1.1/local_installers/cuda_12.1.1_530.30.02_linux.run"
+sha256 = "sha256-10Ai1B2AEFMZ36Ib7qObd6W5kZU5wEh6BcqvJEbWpw4="
+gcc = "gcc12"

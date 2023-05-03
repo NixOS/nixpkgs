@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "namaka";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "namaka";
     rev = "v${version}";
-    hash = "sha256-1B9FWdRxDM9PykfK9LKGZcwIc+sJNAZlvBh6G9dCHW4=";
+    hash = "sha256-ZTMqleCWmuNWhZE375gtF1j1JRkaKEUFN1AM43e7h4Y=";
   };
 
-  cargoHash = "sha256-k9FDpugRCdvJ3E+gI1tO73RXRef8lg/txOAPDrE0+XM=";
+  cargoHash = "sha256-QnEiCWC0awE7CUSpfGJGV7ItXRnP1omodPfKAtXSihY=";
 
   nativeBuildInputs = [
     installShellFiles

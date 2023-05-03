@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cloud-hypervisor";
-  version = "31.0";
+  version = "31.1";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "RDHrBu8ePpFkN7BkTbqe2EXNNW7q96zNrjo269K1Zdo=";
+    sha256 = "vQa43ic3pRzRfT8S9LQIO+VIo6AS2tEMT16CDrMw8R0=";
   };
 
   cargoLock = {
@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "acpi_tables-0.1.0" = "sha256-hP9Fi1K6hX0PkOuomjIzY+oOiPO/5YSNzo0Z98Syz2A=";
       "kvm-bindings-0.6.0" = "sha256-wGdAuPwsgRIqx9dh0m+hC9A/Akz9qg9BM+p06Fi5ACM=";
+      "kvm-ioctls-0.13.0" = "sha256-jHnFGwBWnAa2lRu4a5eRNy1Y26NX5MV8alJ86VR++QE=";
       "micro_http-0.1.0" = "sha256-w2witqKXE60P01oQleujmHSnzMKxynUGKWyq5GEh1Ew=";
       "mshv-bindings-0.1.1" = "sha256-NwLPzX23nOe00qGoj1rLCWsJ5xEMmPUEtPVZNAYorWQ=";
       "versionize_derive-0.1.4" = "sha256-BPl294UqjVl8tThuvylXUFjFNjJx8OSfBGJLg8jIkWw=";

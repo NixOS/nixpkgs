@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 , setuptools
 , setuptools-scm
@@ -13,6 +12,7 @@
 , hypothesis
 , mock
 , pytest-mock
+, pytest-xdist
 , pytestCheckHook
 , trio
 , trustme
@@ -55,6 +55,7 @@ buildPythonPackage rec {
     curio
     hypothesis
     pytest-mock
+    pytest-xdist
     pytestCheckHook
     trio
     trustme
@@ -74,6 +75,10 @@ buildPythonPackage rec {
     "test_exception_group_children"
     "test_exception_group_host"
     "test_exception_group_filtering"
+    # regression in python 3.11.3 and 3.10.11
+    # https://github.com/agronholm/anyio/issues/550
+    "TestTLSStream"
+    "TestTLSListener"
   ];
 
   disabledTestPaths = [

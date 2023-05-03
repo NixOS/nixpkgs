@@ -300,7 +300,7 @@ in
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
             backupPaths =
               if (backup.dynamicFilesFrom == null)
-              then if (backup.paths != null) then concatStringsSep " " backup.paths else ""
+              then optionalString (backup.paths != null) (concatStringsSep " " backup.paths)
               else "--files-from ${filesFromTmpFile}";
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
               (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
@@ -339,6 +339,7 @@ in
               RuntimeDirectory = "restic-backups-${name}";
               CacheDirectory = "restic-backups-${name}";
               CacheDirectoryMode = "0700";
+              PrivateTmp = true;
             } // optionalAttrs (backup.environmentFile != null) {
               EnvironmentFile = backup.environmentFile;
             };

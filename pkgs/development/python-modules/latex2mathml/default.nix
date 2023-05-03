@@ -11,15 +11,15 @@
 
 buildPythonPackage rec {
   pname = "latex2mathml";
-  version = "3.75.2";
+  version = "3.75.3";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "roniemartinez";
     repo = pname;
     rev = version;
-    hash = "sha256-i/F1B/Rndg66tiKok1PDMK/rT5c2e8upnQrMSCTUzpU=";
+    hash = "sha256-i1OJ6hmF04cdDOG1gfyseCJu+e0LEr1I3UwLXbdQJqQ=";
   };
 
   format = "pyproject";

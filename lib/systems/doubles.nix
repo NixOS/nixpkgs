@@ -26,7 +26,7 @@ let
 
     # Linux
     "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
-    "armv7l-linux" "i686-linux" "m68k-linux" "microblaze-linux"
+    "armv7l-linux" "i686-linux" "loongarch64-linux" "m68k-linux" "microblaze-linux"
     "microblazeel-linux" "mipsel-linux" "mips64el-linux" "powerpc64-linux"
     "powerpc64le-linux" "riscv32-linux" "riscv64-linux" "s390-linux"
     "s390x-linux" "x86_64-linux"
@@ -86,6 +86,7 @@ in {
   m68k          = filterDoubles predicates.isM68k;
   s390          = filterDoubles predicates.isS390;
   s390x         = filterDoubles predicates.isS390x;
+  loongarch64   = filterDoubles predicates.isLoongArch64;
   js            = filterDoubles predicates.isJavaScript;
 
   bigEndian     = filterDoubles predicates.isBigEndian;

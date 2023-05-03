@@ -26,18 +26,18 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.5.3";
+  version = "3.5.4";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/ow5IclJvlMRsEIXUdZLLxVfyWIHFPHn2QEewcW7N1s=";
+    hash = "sha256-V/1gNgjunT11ErXWIa5hDp2+onPCTequCswwXWD5+9E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-ryvsAT2Ex0jj+v0Bk9qTWaK270wJhMrtZw99TICpyjo=";
+    hash = "sha256-RljuLL8tep42KNGVsS5CxI7xuhxEjRZ90jVn3jUhVYM=";
   };
 
   postPatch = ''

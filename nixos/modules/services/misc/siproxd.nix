@@ -20,7 +20,7 @@ let
     ${optionalString (cfg.hostsAllowReg != []) "hosts_allow_reg = ${concatStringsSep "," cfg.hostsAllowReg}"}
     ${optionalString (cfg.hostsAllowSip != []) "hosts_allow_sip = ${concatStringsSep "," cfg.hostsAllowSip}"}
     ${optionalString (cfg.hostsDenySip != []) "hosts_deny_sip  = ${concatStringsSep "," cfg.hostsDenySip}"}
-    ${if (cfg.passwordFile != "") then "proxy_auth_pwfile = ${cfg.passwordFile}" else ""}
+    ${optionalString (cfg.passwordFile != "") "proxy_auth_pwfile = ${cfg.passwordFile}"}
     ${cfg.extraConfig}
   '';
 

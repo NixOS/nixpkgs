@@ -29,14 +29,14 @@
 , speexdsp
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-staging";
   version = "0.80.1";
 
   src = fetchFromGitHub {
     owner = "dosbox-staging";
     repo = "dosbox-staging";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-I90poBeLSq1c8PXyjrx7/UcbfqFNnnNiXfJdWhLPGMc=";
   };
 

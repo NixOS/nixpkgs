@@ -8,15 +8,15 @@
 buildGoModule rec {
   pname = "bosh-cli";
 
-  version = "7.1.0";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wsCVeCAgZ2RPT6cle1YHB5CZdcPmKOVuUQlA5d3H7iI=";
+    sha256 = "sha256-cSix1muhmPrL7fDGznkFAOAoArZoDvptli7uRo71Dlk=";
   };
-  vendorSha256 = null;
+  vendorHash = null;
 
   postPatch = ''
     substituteInPlace cmd/version.go --replace '[DEV BUILD]' '${version}'

@@ -12,7 +12,7 @@ in
   outputs = previousAttrs.outputs ++ lib.optionals enableLibGccOutput [ "libgcc" ];
   # This is a separate phase because gcc assembles its phase scripts
   # in bash instead of nix (we should fix that).
-  preFixupPhases = (previousAttrs.preFixupPhases or []) ++ [ "preFixupLibGccPhase" ];
+  preFixupPhases = (previousAttrs.preFixupPhases or []) ++ lib.optionals ((!langC) || enableLibGccOutput) [ "preFixupLibGccPhase" ];
   preFixupLibGccPhase =
     # delete extra/unused builds of libgcc_s in non-langC builds
     # (i.e. libgccjit, gnat, etc) to avoid potential confusion

@@ -14,7 +14,7 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2022";
+  year = toString ((import ./tlpdb.nix)."00texlive.config").year;
   version = year; # keep names simple for now
 
   common = {
@@ -38,7 +38,13 @@ let
       # http://mirrors.ctan.org/systems/doc/kpathsea/kpathsea.pdf for more
       # details
       sed -i '/^#define ST_NLINK_TRICK/d' texk/kpathsea/config.h
-    '';
+    '' +
+    # when cross compiling, we must use himktables from PATH
+    # (i.e. from buildPackages.texlive.bin.core.dev)
+    lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)  ''
+      sed -i 's|\./himktables|himktables|' texk/web2c/Makefile.in
+    ''
+;
 
     configureFlags = [
       "--with-banner-add=/nixos.org"
@@ -75,13 +81,15 @@ core = stdenv.mkDerivation rec {
 
   inherit (common) src prePatch;
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "doc" "dev" ];
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # configure: error: tangle was not found but is required when cross-compiling.
+    # dev (himktables) is used when building hitex to generate the additional source file hitables.c
     texlive.bin.core
+    texlive.bin.core.dev
   ];
 
   buildInputs = [
@@ -159,6 +167,9 @@ core = stdenv.mkDerivation rec {
     mv "$out"/share/{man,info} "$doc"/doc
   '' + /* remove manpages for utils that live in texlive.texlive-scripts to avoid a conflict in buildEnv */ ''
     (cd "$doc"/doc/man/man1; rm {fmtutil-sys.1,fmtutil.1,mktexfmt.1,mktexmf.1,mktexpk.1,mktextfm.1,texhash.1,updmap-sys.1,updmap.1})
+  '' + /* install himktables in separate output for use in cross compilation */ ''
+     mkdir -p $dev/bin
+     cp texk/web2c/.libs/himktables $dev/bin/himktables
   '' + cleanBrokenLinks;
 
   setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)
@@ -195,7 +206,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
   hardeningDisable = [ "format" ];
 
-  inherit (core) nativeBuildInputs;
+  inherit (core) nativeBuildInputs depsBuildBuild;
   buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 libX11 ];
 
   configureFlags = common.configureFlags
@@ -210,7 +221,15 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   # we use static libtexlua, because it's only used by a single binary
   postConfigure = let
     luajit = lib.optionalString withLuaJIT ",luajit";
-  in ''
+  in
+  lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform)
+  # without this, the native builds attempt to use the binary
+  # ${target-triple}-gcc, but we need to use the wrapper script.
+  ''
+    export BUILDCC=${buildPackages.stdenv.cc}/bin/cc
+  ''
+  +
+  ''
     mkdir ./WorkDir && cd ./WorkDir
     for path in libs/{pplib,teckit,lua53${luajit}} texk/web2c; do
       (
@@ -219,7 +238,18 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
         else
           extraConfig=""
         fi
-
+  '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+    # results of the tests performed by the configure scripts are
+    # toolchain-dependent, so native components and cross components cannot use
+    # the same cached test results.
+    # Disable the caching for components with native subcomponents.
+  ''
+        if [[ "$path" =~ "libs/luajit" ]] || [[ "$path" =~ "texk/web2c" ]]; then
+          extraConfig="$extraConfig --cache-file=/dev/null"
+        fi
+  ''
+  +
+  ''
         mkdir -p "$path" && cd "$path"
         "../../../$path/configure" $configureFlags $extraConfig
 

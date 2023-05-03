@@ -3,8 +3,8 @@
 , mrustc
 , mrustc-minicargo
 , rust
-, llvm_7
-, llvmPackages_7
+, llvm_12
+, llvmPackages_12
 , libffi
 , cmake
 , python3
@@ -18,12 +18,14 @@
 }:
 
 let
-  rustcVersion = "1.29.0";
+  mrustcTargetVersion = "1.54";
+  rustcVersion = "1.54.0";
   rustcSrc = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${rustcVersion}-src.tar.gz";
-    sha256 = "1sb15znckj8pc8q3g7cq03pijnida6cg64yqmgiayxkzskzk9sx4";
+    sha256 = "0xk9dhfff16caambmwij67zgshd8v9djw6ha0fnnanlv7rii31dc";
   };
   rustcDir = "rustc-${rustcVersion}-src";
+  outputDir = "output-${rustcVersion}";
 in
 
 stdenv.mkDerivation rec {
@@ -37,20 +39,12 @@ stdenv.mkDerivation rec {
   dontFixLibtool = true;
 
   patches = [
-    ./patches/0001-use-shared-llvm.patch
-    ./patches/0002-dont-build-llvm.patch
-    ./patches/0003-echo-newlines.patch
-    ./patches/0004-increase-parallelism.patch
+    ./patches/0001-dont-download-rustc.patch
   ];
 
   postPatch = ''
     echo "applying patch ./rustc-${rustcVersion}-src.patch"
     patch -p0 -d ${rustcDir}/ < rustc-${rustcVersion}-src.patch
-
-    for p in ${lib.concatStringsSep " " llvmPackages_7.compiler-rt.patches}; do
-      echo "applying patch $p"
-      patch -p1 -d ${rustcDir}/src/libcompiler_builtins/compiler-rt < $p
-    done
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
@@ -69,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     # for rustc
-    llvm_7 libffi zlib libxml2
+    llvm_12 libffi zlib libxml2
     # for cargo
     openssl
     (curl.override { inherit openssl; })
@@ -78,8 +72,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     # Use shared mrustc/minicargo/llvm instead of rebuilding them
     "MRUSTC=${mrustc}/bin/mrustc"
-    "MINICARGO=${mrustc-minicargo}/bin/minicargo"
-    "LLVM_CONFIG=${llvm_7.dev}/bin/llvm-config"
+    #"MINICARGO=${mrustc-minicargo}/bin/minicargo"  # FIXME: we need to rebuild minicargo locally so --manifest-overrides is applied
+    "LLVM_CONFIG=${llvm_12.dev}/bin/llvm-config"
     "RUSTC_TARGET=${rust.toRustTarget stdenv.targetPlatform}"
   ];
 
@@ -91,26 +85,27 @@ stdenv.mkDerivation rec {
       ${toString makeFlags}
     )
 
+    touch ${rustcDir}/dl-version
+    export OUTDIR_SUF=-${rustcVersion}
+    export RUSTC_VERSION=${rustcVersion}
+    export MRUSTC_TARGET_VER=${mrustcTargetVersion}
+    export MRUSTC_PATH=${mrustc}/bin/mrustc
+
     echo minicargo.mk: libs
     make -f minicargo.mk "''${flagsArray[@]}" LIBS
 
-    echo minicargo.mk: deps
-    mkdir -p output/cargo-build
-    # minicargo has concurrency issues when running these; let's build them
-    # without parallelism
-    for crate in regex regex-0.2.11 curl-sys
-    do
-      echo "building $crate"
-      minicargo ${rustcDir}/src/vendor/$crate \
-        --vendor-dir ${rustcDir}/src/vendor \
-        --output-dir output/cargo-build -L output/
-    done
+    echo test
+    make "''${flagsArray[@]}" test
+
+    # disabled because it expects ./bin/mrustc
+    #echo local_tests
+    #make "''${flagsArray[@]}" local_tests
 
     echo minicargo.mk: rustc
-    make -f minicargo.mk "''${flagsArray[@]}" output/rustc
+    make -f minicargo.mk "''${flagsArray[@]}" ${outputDir}/rustc
 
     echo minicargo.mk: cargo
-    make -f minicargo.mk "''${flagsArray[@]}" output/cargo
+    make -f minicargo.mk "''${flagsArray[@]}" ${outputDir}/cargo
 
     echo run_rustc
     make -C run_rustc "''${flagsArray[@]}"
@@ -123,17 +118,17 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     runHook preCheck
-    run_rustc/output/prefix/bin/hello_world | grep "hello, world"
+    run_rustc/${outputDir}/prefix/bin/hello_world | grep "hello, world"
     runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin/ $out/lib/
-    cp run_rustc/output/prefix/bin/cargo $out/bin/cargo
-    cp run_rustc/output/prefix/bin/rustc_binary $out/bin/rustc
+    cp run_rustc/${outputDir}/prefix/bin/cargo $out/bin/cargo
+    cp run_rustc/${outputDir}/prefix/bin/rustc_binary $out/bin/rustc
 
-    cp -r run_rustc/output/prefix/lib/* $out/lib/
+    cp -r run_rustc/${outputDir}/prefix/lib/* $out/lib/
     cp $out/lib/rustlib/${rust.toRustTarget stdenv.targetPlatform}/lib/*.so $out/lib/
     runHook postInstall
   '';

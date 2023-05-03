@@ -785,12 +785,13 @@ rec {
   requireFile = { name ? null
                 , sha256 ? null
                 , sha1 ? null
+                , hash ? null
                 , url ? null
                 , message ? null
                 , hashMode ? "flat"
                 } :
     assert (message != null) || (url != null);
-    assert (sha256 != null) || (sha1 != null);
+    assert (sha256 != null) || (sha1 != null) || (hash != null);
     assert (name != null) || (url != null);
     let msg =
       if message != null then message
@@ -802,15 +803,19 @@ rec {
         or
           nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
       '';
-      hashAlgo = if sha256 != null then "sha256" else "sha1";
-      hash = if sha256 != null then sha256 else sha1;
+      hashAlgo = if hash != null then ""
+            else if sha256 != null then "sha256"
+            else "sha1";
+      hash_ = if hash != null then hash
+         else if sha256 != null then sha256
+         else sha1;
       name_ = if name == null then baseNameOf (toString url) else name;
     in
     stdenvNoCC.mkDerivation {
       name = name_;
       outputHashMode = hashMode;
       outputHashAlgo = hashAlgo;
-      outputHash = hash;
+      outputHash = hash_;
       preferLocalBuild = true;
       allowSubstitutes = false;
       builder = writeScript "restrict-message" ''

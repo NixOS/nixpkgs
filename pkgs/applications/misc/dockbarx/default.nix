@@ -11,25 +11,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dockbarx";
-  version = "${ver}-${rev}";
-  ver = "1.0-beta";
-  rev = "d98020ec49f3e3a5692ab2adbb145bbe5a1e80fe";
+  version = "1.0-beta2";
 
   src = fetchFromGitHub {
     owner = "xuzhen";
     repo = "dockbarx";
-    rev = rev;
-    sha256 = "0xwqxh5mr2bi0sk54b848705awp0lfpd91am551811j2bdkbs04m";
+    rev = version;
+    sha256 = "sha256-WMRTtprDHUbOOYVHshx7WpBlYshbiDjI12Rw3tQQuPI=";
   };
 
   nativeBuildInputs = [
     glib.dev
+    gobject-introspection
     python3Packages.polib
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
     libwnck
     keybinder3

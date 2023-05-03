@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-render";
-  version = "0.2.0";
+  version = "0.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-1nXNi++vNNRxoA/ptTDN9PtePP67oWdkAtqAbZpTfDg=";
+    hash = "sha256-bt2jqjhgtGmJsyfYNSzETQZUHFKni/poyeqpQzIJX08=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

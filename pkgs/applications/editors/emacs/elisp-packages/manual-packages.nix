@@ -13,8 +13,6 @@ in
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
-  bqn-mode = callPackage ./manual-packages/bqn-mode { };
-
   cask = callPackage ./manual-packages/cask { };
 
   control-lock = callPackage ./manual-packages/control-lock { };
@@ -49,6 +47,8 @@ in
 
   jam-mode = callPackage ./manual-packages/jam-mode { };
 
+  ligo-mode = callPackage ./manual-packages/ligo-mode { };
+
   llvm-mode = callPackage ./manual-packages/llvm-mode { };
 
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
@@ -80,6 +80,8 @@ in
   urweb-mode = callPackage ./manual-packages/urweb-mode { };
 
   voicemacs = callPackage ./manual-packages/voicemacs { };
+
+  wat-mode = callPackage ./manual-packages/wat-mode { };
 
   yes-no = callPackage ./manual-packages/yes-no { };
 

@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, stdenv-tmpDropB
 , callPackage
 , overrideCC
 , wrapCCWith
@@ -79,8 +78,6 @@ let
 
   # Runtimes
   runtimes = callPackage ./llvm.nix {
-    stdenv = stdenv-tmpDropB;
-
     buildDocs = false;
     buildMan = false;
     buildTests = false;

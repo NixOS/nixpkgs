@@ -1,39 +1,72 @@
 { lib
-, stdenv
 , buildPythonPackage
-, fetchPypi
-, grpcio-tools
-, ujson
+, environs
+, fetchFromGitHub
 , grpcio
-, pandas
+, grpcio-testing
 , mmh3
+, pandas
+, pytestCheckHook
+, python
+, pythonOlder
+, pythonRelaxDepsHook
+, scikit-learn
 , setuptools-scm
+, ujson
 }:
+
 buildPythonPackage rec {
   pname = "pymilvus";
-  version = "2.2.6";
+  version = "2.2.8";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/i3WObwoY6Ffqw+Guij6+uGbKYKET2AJ+d708efmSx0=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "milvus-io";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Oqwa/2UT9jyGaEEzjr/phZZStLOZ6JRj+4ck0tmP0W0=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  propagatedBuildInputs = [
-    grpcio
-    grpcio-tools
-    ujson
-    pandas
-    mmh3
-  ] ++ lib.optionals stdenv.isLinux [ setuptools-scm ];
+  pythonRelaxDeps = [
+    "grpcio"
+  ];
 
-  doCheck = false;
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    environs
+    grpcio
+    mmh3
+    pandas
+    ujson
+  ];
+
+  nativeCheckInputs = [
+    grpcio-testing
+    pytestCheckHook
+    scikit-learn
+  ];
+
+  pythonImportsCheck = [
+    "pymilvus"
+  ];
+
+  disabledTests = [
+    "test_get_commit"
+  ];
 
   meta = with lib; {
+    description = "Python SDK for Milvus";
     homepage = "https://github.com/milvus-io/pymilvus";
-    description = "Python SDK for Milvus. ";
+    changelog = "https://github.com/milvus-io/pymilvus/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [happysalada];
+    maintainers = with maintainers; [ happysalada ];
   };
 }

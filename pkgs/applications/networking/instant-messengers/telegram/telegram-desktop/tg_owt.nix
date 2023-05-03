@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , pkg-config, cmake, ninja, yasm
-, libjpeg, openssl_1_1, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
+, libjpeg, openssl, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
 , openh264, usrsctp, libevent, libvpx
 , libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
 , glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "unstable-2023-03-14";
+  version = "unstable-2023-05-01";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "1a18da2ed4d5ce134e984d1586b915738e0da257";
-    sha256 = "18srnl688ng8grfpmgcjpdyr4cw87yjdvyw94b2jjq5jmnq9n3a3";
+    rev = "dcb5069ff76bd293e86928804208737e6cee2ccc";
+    sha256 = "0c3wnx51kbpzy9x8i9wm0ng16h35kgqsigrygrmwvxxn7zgv72ma";
     fetchSubmodules = true;
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     # Required for linking downstream binaries.
-    abseil-cpp openh264 usrsctp libevent libvpx openssl_1_1
+    abseil-cpp openh264 usrsctp libevent libvpx openssl
   ];
 
   meta = with lib; {

@@ -1,6 +1,6 @@
 { abiCompat ? null,
   callPackage,
-  lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
+  lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages, substitute,
   automake, autoconf, libiconv, libtool, intltool,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
@@ -763,6 +763,11 @@ self: super:
             sha256 = "0zm9g0g1jvy79sgkvy0rjm6ywrdba2xjd1nsnjbxjccckbr6i396";
             name = "revert-fb-changes-2.patch";
           })
+          ./darwin/bundle_main.patch
+          (substitute {
+            src = ./darwin/stub.patch;
+            replacements = ["--subst-var-by" "XQUARTZ_APP" "${placeholder "out"}/Applications/XQuartz.app"];
+          })
         ];
 
         configureFlags = [
@@ -774,6 +779,9 @@ self: super:
           "--with-apple-applications-dir=\${out}/Applications"
           "--with-bundle-id-prefix=org.nixos.xquartz"
           "--with-sha1=CommonCrypto"
+          "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
+          "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
+          "--with-xkb-output=$out/share/X11/xkb/compiled"
           "--without-dtrace" # requires Command Line Tools for Xcode
         ];
         preConfigure = ''

@@ -39,7 +39,7 @@
 , soqt
 , spaceNavSupport ? stdenv.isLinux
 , swig
-, vtk_8
+, vtk
 , wrapQtAppsHook
 , wrapGAppsHook
 , xercesc
@@ -97,7 +97,7 @@ mkDerivation rec {
     shiboken2
     soqt
     swig
-    vtk_8
+    vtk
     xercesc
     zlib
   ] ++ lib.optionals spaceNavSupport [

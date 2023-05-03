@@ -19,16 +19,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
-  version = "0.6.58";
+  version = "0.6.63";
 
   src = fetchFromGitHub {
     owner = "woelper";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Cs7f6RSOoZFOtQWH67l3A6kv/o2lN5NOn+BEasV03RU=";
+    sha256 = "sha256-ynxGpx8LLcd4/n9hz/bbhpZUxqX1sPS7LFYPZ22hTxo=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   nativeBuildInputs = [
     cmake
@@ -63,6 +65,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/woelper/oculante";
     changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya figsoda ];
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , libgpg-error
 , enableCapabilities ? false, libcap
@@ -15,12 +16,20 @@ assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "libgcrypt";
-  version = "1.10.1";
+  version = "1.10.2";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
-    hash = "sha256-7xSuVGsAhM2EJZ9hpV4Ho4w7U6/A9Ua//O8vAbr/6d4=";
+    hash = "sha256-O5wCoAS2jCVq3ZlwHeALODrMzPNxd+DWxYKJZkzODAM=";
   };
+
+  patches = lib.optionals (!stdenv.isLinux) [ # not everywhere to avoid rebuild for now
+    (fetchpatch {
+      name = "getrandom-conditionalize.patch";
+      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=commitdiff_plain;h=d41177937cea4aa1e9042ebcd195a349c40e8071";
+      hash = "sha256-CgQjNtC1qLe5LicIc8rESc6Z1u4fk7ErMUVcG/2G9gM=";
+    })
+  ];
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev";

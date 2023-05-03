@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "devitocodes";
     repo = "devito";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JLfTWfQ9HYb7jsPAuAfNXuIWv7lOomJGE9hBss+AI7o=";
+    hash = "sha256-LzqY//205XEOd3/f8k1g4OYndRHMTVplBogGJf5Forw=";
   };
 
   postPatch = ''

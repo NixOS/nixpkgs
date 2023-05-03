@@ -1336,6 +1336,10 @@ let
     rhdf5= old.rhdf5.overrideAttrs (attrs: {
       patches = [ ./patches/rhdf5.patch ];
     });
+
+    textshaping = old.textshaping.overrideAttrs (attrs: {
+      env.NIX_LDFLAGS = "-lfribidi -lharfbuzz";
+    });
   };
 in
   self

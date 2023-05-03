@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "akkoma-fe";
-  version = "unstable-2023-03-11";
+  version = "unstable-2023-04-14";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma-fe";
-    rev = "85abc622136c2f346f7855824290f6093afe2794";
-    hash = "sha256-EBspufZ92/mLzjdK2R5lpOyrnFataeY/2NabIU0T3Lc=";
+    rev = "9aa64d82c964265133be97b08b0cdf0e75680419";
+    hash = "sha256-WwjpYD8U+JvygPMo8VcQDdsjek3iKbpT18rXSVMPDG8=";
   };
 
   offlineCache = fetchYarnDeps {

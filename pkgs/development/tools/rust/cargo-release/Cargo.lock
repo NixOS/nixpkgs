@@ -165,7 +165,7 @@ dependencies = [
 
 [[package]]
 name = "cargo-release"
-version = "0.24.9"
+version = "0.24.10"
 dependencies = [
  "anyhow",
  "assert_fs",
