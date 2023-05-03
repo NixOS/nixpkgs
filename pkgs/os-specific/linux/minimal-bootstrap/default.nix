@@ -17,7 +17,7 @@ lib.makeScope
     inherit (callPackage ./stage0-posix { }) kaem m2libc mescc-tools mescc-tools-extra writeTextFile writeText runCommand;
 
     mes = callPackage ./mes { };
-    inherit (mes) mes-libc;
+    mes-libc = callPackage ./mes/libc.nix { };
 
     ln-boot = callPackage ./ln-boot { };
 

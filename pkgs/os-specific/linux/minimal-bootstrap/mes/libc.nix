@@ -2,21 +2,25 @@
 , runCommand
 , ln-boot
 , mes
-, libc_SOURCES
-, libc_gnu_SOURCES
 , mes-libc
 }:
 let
   pname = "mes-libc";
   inherit (mes) version;
 
+  sources = (import ./sources.nix).x86.linux.gcc;
+  inherit (sources) libtcc1_SOURCES libc_gnu_SOURCES;
+
+  prefix = "${mes}/share/mes-${version}";
+
   # Concatenate all source files into a convenient bundle
-  # "gcc" variants (eg. "lib/linux/x86-mes-gcc") can also be used with tinycc
-  sources = libc_SOURCES "gcc" ++ libc_gnu_SOURCES "gcc";
+  # "gcc" variants of source files (eg. "lib/linux/x86-mes-gcc") can also be
+  # compiled by tinycc
+  #
   # Passing this many arguments is too much for kaem so we need to split
   # the operation in two
-  firstLibc = lib.take 100 sources;
-  lastLibc = lib.drop 100 sources;
+  firstLibc = lib.take 100 libc_gnu_SOURCES;
+  lastLibc = lib.drop 100 libc_gnu_SOURCES;
 in runCommand "${pname}-${version}" {
   inherit pname version;
 
@@ -32,12 +36,10 @@ in runCommand "${pname}-${version}" {
     platforms = [ "i686-linux" ];
   };
 } ''
-  mkdir -p ''${out}/lib
-  PREFIX=${mes}/share/mes-${version}
-  cd ''${PREFIX}
+  cd ${prefix}
 
   # mescc compiled libc.a
-  mkdir ''${out}/lib/x86-mes
+  mkdir -p ''${out}/lib/x86-mes
   cp lib/x86-mes/libc.a ''${out}/lib/x86-mes
 
   # libc.c
@@ -50,11 +52,11 @@ in runCommand "${pname}-${version}" {
   cp lib/linux/x86-mes-gcc/crti.c ''${out}/lib
 
   # libtcc1.c
-  cp lib/libtcc1.c ''${out}/lib
+  catm ''${out}/lib/libtcc1.c ${lib.concatStringsSep " " libtcc1_SOURCES}
 
   # getopt.c
-  cp lib/posix/getopt.c ''${out}/lib
+  cp lib/posix/getopt.c ''${out}/lib/libgetopt.c
 
   # Install headers
-  ln -s ''${PREFIX}/include ''${out}/include
+  ln -s ${prefix}/include ''${out}/include
 ''

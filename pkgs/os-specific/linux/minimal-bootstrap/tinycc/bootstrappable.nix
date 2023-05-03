@@ -80,8 +80,8 @@ let
     ''${out}/bin/tcc -ar cr ''${out}/lib/libc.a libc.o
     ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o libtcc1.o ${mes-libc}/lib/libtcc1.c
     ''${out}/bin/tcc -ar cr ''${out}/lib/libtcc1.a libtcc1.o
-    ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o getopt.o ${mes-libc}/lib/getopt.c
-    ''${out}/bin/tcc -ar cr ''${out}/lib/libgetopt.a getopt.o
+    ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o libgetopt.o ${mes-libc}/lib/libgetopt.c
+    ''${out}/bin/tcc -ar cr ''${out}/lib/libgetopt.a libgetopt.o
   '';
 
   # Bootstrap stage build flags obtained from
