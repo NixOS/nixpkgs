@@ -58,6 +58,6 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.unix;
     mainProgram = "ipfs";
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ Luflosi fpletz ];
   };
 }
