@@ -75,7 +75,7 @@ let rpath = lib.makeLibraryPath [
 buildType = if debugBuild then "Debug" else "Release";
 
 in stdenv.mkDerivation rec {
-  name = "jcef-jetbrains";
+  pname = "jcef-jetbrains";
   rev = "3dfde2a70f1f914c6a84ba967123a0e38f51053f";
   # This is the commit number
   # Currently from the 231 branch: https://github.com/JetBrains/jcef/tree/231
