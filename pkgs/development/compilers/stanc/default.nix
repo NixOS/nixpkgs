@@ -8,6 +8,7 @@ ocamlPackages.buildDunePackage rec {
   version = "2.32.0";
 
   minimalOCamlVersion = "4.12";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
