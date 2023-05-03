@@ -9,19 +9,19 @@
 , glibcLocales
 , lib
 , nixosTests
-, nodejs-16_x
+, nodejs_16
 , stdenv
 , which
 }:
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.303.0";
+  version = "2.304.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-gGIYlYM4Rf7Ils2rThsQHWIkLDt5Htg4NDuJhxvl1rU=";
+    hash = "sha256-w5MqFIPTCAqQjdsWdscNnH2KNwUOp5SPFesyprXUvNE=";
     # Required to obtain HEAD's Git commit hash
     leaveDotGit = true;
   };
@@ -156,7 +156,7 @@ buildDotnetModule rec {
 
   preCheck = ''
     mkdir -p _layout/externals
-    ln -s ${nodejs-16_x} _layout/externals/node16
+    ln -s ${nodejs_16} _layout/externals/node16
   '';
 
   postInstall = ''
@@ -193,7 +193,7 @@ buildDotnetModule rec {
     # externals/node16. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
     mkdir -p $out/lib/externals
-    ln -s ${nodejs-16_x} $out/lib/externals/node16
+    ln -s ${nodejs_16} $out/lib/externals/node16
 
     # Install Nodejs scripts called from workflows
     install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/github-runner/hashFiles/index.js

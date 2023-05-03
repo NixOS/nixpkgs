@@ -17,11 +17,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-qlCkukVXwl59SERqv96FeVfc31g4X/++Zwug6O+szgU=";
+    hash = "sha256-2WFsRM1sU2if+PBfxpWKaT8uF8NHKo2vg87lXav/gp8=";
   };
 
   patches = [
@@ -71,13 +71,6 @@ python3.pkgs.buildPythonApplication rec {
       excludes = [
         "docs/yaml/objects/dep.yaml"
       ];
-    })
-
-    # tests: avoid unexpected failure when cmake is not installed
-    # https://github.com/mesonbuild/meson/pull/11321
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/a38ad3039d0680f3ac34a6dc487776c79c48acf3.patch";
-      hash = "sha256-9YaXwc+F3Pw4BjuOXqva4MD6DAxX1k5WLbn0xzwuEmw=";
     })
   ];
 

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "openapi-schema-validator";
-  version = "0.4.3";
+  version = "0.4.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-rp0Oq5WWPpna5rHrq/lfRNxjK5/FLgPZ5uzVfDT/YiI=";
+    hash = "sha256-2XTCdp9dfzhNKCpq71pt7yEZm9abiEmFHD/114W+jOQ=";
   };
 
   postPatch = ''

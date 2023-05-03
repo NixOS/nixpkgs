@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "hcloud";
-  version = "1.33.0";
+  version = "1.33.1";
 
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-Itu/VS6wpEHWLmDiGq9m7qyUr6lMr4uQm8SJNAkOPsQ=";
+    sha256 = "sha256-0mbEQwKmhID4luzW1mMThilWR6R8rmF4ZY4/weNkDvs=";
   };
 
   vendorHash = "sha256-gz8vSVWh9wyM91rjJT102UJXBpeDoU895lTrHHZpj3I=";

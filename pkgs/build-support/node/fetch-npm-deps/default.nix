@@ -36,8 +36,8 @@
           '';
         };
 
-        makeTest = { name, src, hash }: testers.invalidateFetcherByDrvHash fetchNpmDeps {
-          inherit name hash;
+        makeTest = { name, src, hash, forceGitDeps ? false }: testers.invalidateFetcherByDrvHash fetchNpmDeps {
+          inherit name hash forceGitDeps;
 
           src = makeTestSrc { inherit name src; };
         };
@@ -108,6 +108,8 @@
           };
 
           hash = "sha256-+KA8/orSBJ4EhuSyQO8IKSxsN/FAsYU3lOzq+awuxNQ=";
+
+          forceGitDeps = true;
         };
       };
 
@@ -121,6 +123,7 @@
   fetchNpmDeps =
     { name ? "npm-deps"
     , hash ? ""
+    , forceGitDeps ? false
     , ...
     } @ args:
     let
@@ -131,6 +134,8 @@
           outputHash = "";
           outputHashAlgo = "sha256";
         };
+
+      forceGitDeps_ = lib.optionalAttrs forceGitDeps { FORCE_GIT_DEPS = true; };
     in
     stdenvNoCC.mkDerivation (args // {
       inherit name;
@@ -161,5 +166,5 @@
       dontInstall = true;
 
       outputHashMode = "recursive";
-    } // hash_);
+    } // hash_ // forceGitDeps_);
 }

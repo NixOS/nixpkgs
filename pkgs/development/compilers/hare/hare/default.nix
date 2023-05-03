@@ -12,7 +12,7 @@
 let
   inherit (harePackages) harec;
 in
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
   version = "unstable-2023-03-15";
 

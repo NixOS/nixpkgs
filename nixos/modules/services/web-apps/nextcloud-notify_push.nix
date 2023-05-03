@@ -76,7 +76,7 @@ in
         export DATABASE_PASSWORD="$(<"${cfg.dbpassFile}")"
       '' + ''
         export DATABASE_URL="${dbUrl}"
-        ${cfg.package}/bin/notify_push --glob-config '${config.services.nextcloud.datadir}/config/config.php'
+        ${cfg.package}/bin/notify_push '${config.services.nextcloud.datadir}/config/config.php'
       '';
       serviceConfig = {
         User = "nextcloud";

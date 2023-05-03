@@ -5,7 +5,7 @@
 , gitUpdater
 , ffmpeg_5
 
-# for daemon
+  # for daemon
 , autoreconfHook
 , perl # for pod2man
 , alsa-lib
@@ -33,7 +33,7 @@
 , webrtc-audio-processing
 , zlib
 
-# for client
+  # for client
 , cmake
 , networkmanager # for libnm
 , python3
@@ -46,16 +46,17 @@
 , qrencode
 , qtmultimedia
 , qtnetworkauth
+, qtpositioning
 , qtsvg
 , qtwebengine
 , qtwebchannel
 , withWebengine ? true
 
-# for pjsip
+  # for pjsip
 , fetchFromGitHub
 , pjsip
 
-# for opendht
+  # for opendht
 , opendht
 }:
 
@@ -64,14 +65,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20230313.0";
+  version = "20230323.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-3kZ4nn6x1xsXWybyuaY9W07tEM6LFvLL4QtDRPRmob4=";
+    hash = "sha256-X8iIT8UtI2Vq0Ne5e2ahSPN4g7QLZGnq3SZV/NY+1pY=";
     fetchSubmodules = true;
   };
 
@@ -169,6 +170,7 @@ stdenv.mkDerivation rec {
     qtnetworkauth
     qtdeclarative
     qtmultimedia
+    qtpositioning
     qtsvg
     qtwebchannel
   ] ++ lib.optionals withWebengine [

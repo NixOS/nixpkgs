@@ -186,6 +186,9 @@ in
   riscv64 = mapTestOnCross lib.systems.examples.riscv64 linuxCommon;
   riscv32 = mapTestOnCross lib.systems.examples.riscv32 linuxCommon;
 
+  /* Linux on LoongArch */
+  loongarch64-linux = mapTestOnCross lib.systems.examples.loongarch64-linux linuxCommon;
+
   m68k = mapTestOnCross lib.systems.examples.m68k linuxCommon;
   s390x = mapTestOnCross lib.systems.examples.s390x linuxCommon;
 

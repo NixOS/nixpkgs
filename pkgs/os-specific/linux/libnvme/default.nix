@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ninja
     perl # for kernel-doc
     pkg-config
-    python3
+    python3.pythonForBuild
     swig
   ];
 
@@ -46,12 +46,17 @@ stdenv.mkDerivation rec {
     json_c
     openssl
     systemd
+    python3
   ];
 
   mesonFlags = [
     "-Ddocs=man"
     "-Ddocs-build=true"
   ];
+
+  preConfigure = ''
+    export KBUILD_BUILD_TIMESTAMP="$(date -u -d @$SOURCE_DATE_EPOCH)"
+  '';
 
   doCheck = true;
 

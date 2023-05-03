@@ -1,34 +1,23 @@
 { lib
-, stdenv
-, fetchzip
+, fetchFromGitLab
 , imagemagick
-, autoPatchelfHook
-, gtk3
-, libsecret
-, jsoncpp
-, wrapGAppsHook
+, flutter
 , makeDesktopItem
-, openssl
-, olm
 }:
 
-let
-  version = "1.10.0";
-  # map of nix platform -> expected url platform
-  platformMap = {
-    x86_64-linux = "linux-x86";
-    aarch64-linux = "linux-arm64";
-  };
-in
-stdenv.mkDerivation {
-  inherit version;
-  pname = "fluffychat";
+flutter.buildFlutterApplication rec {
+  version = "1.11.0";
+  name = "fluffychat";
 
-  src = fetchzip {
-    url = "https://gitlab.com/api/v4/projects/16112282/packages/generic/fluffychat/${version}/fluffychat-${platformMap.${stdenv.hostPlatform.system}}.tar.gz";
-    stripRoot = false;
-    sha256 = "sha256-SbzTEMeJRFEUN0nZF9hL0UEzTWl1VtHVPIx/AGgQvM8=";
+  src = fetchFromGitLab {
+    owner = "famedly";
+    repo = "fluffychat";
+    rev = "v${version}";
+    hash = "sha256-Z7BOGsirBVQxRJY4kmskCmPeZloc41/bf4/ExoO8VBk=";
   };
+
+  depsListFile = ./deps.json;
+  vendorHash = "sha256-axByNptbzGR7GQT4Gs2yaEyUCkCbI9RQNNOHN7CYd9A=";
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
@@ -38,18 +27,10 @@ stdenv.mkDerivation {
     genericName = "Chat with your friends (matrix client)";
     categories = [ "Chat" "Network" "InstantMessaging" ];
   };
-  buildInputs = [ gtk3 libsecret jsoncpp ];
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook imagemagick ];
+  nativeBuildInputs = [ imagemagick ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share
-    mv * $out/share
-
-    makeWrapper "$out/share/fluffychat" "$out/bin/fluffychat" \
-      --prefix "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ openssl olm ]}"
-
-    FAV=$out/share/data/flutter_assets/assets/favicon.png
+  postInstall = ''
+    FAV=$out/app/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons
 
     install -D $FAV $ICO/fluffychat.png
@@ -70,6 +51,6 @@ stdenv.mkDerivation {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ mkg20001 gilice ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.fromSource ];
   };
 }

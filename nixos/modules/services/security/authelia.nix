@@ -336,7 +336,7 @@ in
             ProtectProc = "noaccess";
             ProtectSystem = "strict";
 
-            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
             RestrictNamespaces = true;
             RestrictRealtime = true;
             RestrictSUIDSGID = true;

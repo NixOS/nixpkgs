@@ -1,5 +1,7 @@
 { lib
 , stdenv
+, fetchpatch
+, nixosTests
 , python3
 , radicale3
 }:
@@ -47,6 +49,14 @@ in python.pkgs.buildPythonApplication rec {
     hash = "sha256-pOLug5MnVdKaw5wedABewomID9LU0hZPCf4kZKKU1yA=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "add-missing-comma-in-setup.py.patch";
+      url = "https://github.com/etesync/etesync-dav/commit/040cb7b57205e70515019fb356e508a6414da11e.patch";
+      hash = "sha256-87IpIQ87rgpinvbRwUlWd0xeegn0zfVSiDFYNUqPerg=";
+    })
+  ];
+
   propagatedBuildInputs = with python.pkgs; [
     appdirs
     etebase
@@ -57,9 +67,14 @@ in python.pkgs.buildPythonApplication rec {
     setuptools
     (python.pkgs.toPythonModule (radicale3.override { python3 = python; }))
     requests
+    types-setuptools
   ] ++ requests.optional-dependencies.socks;
 
   doCheck = false;
+
+  passthru.tests = {
+    inherit (nixosTests) etesync-dav;
+  };
 
   meta = with lib; {
     homepage = "https://www.etesync.com/";

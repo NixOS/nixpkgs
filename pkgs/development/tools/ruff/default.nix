@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.262";
+  version = "0.0.264";
 
   src = fetchFromGitHub {
     owner = "charliermarsh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-G+Cz/5dL/5kOOJ1fGGecwGOiONYdwFWOPQ5KV0W2DVA=";
+    hash = "sha256-MDNqoKsXKSM5l351bMs4Z5Voig+HwR2907xlHDFB6x4=";
   };
 
   # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "libcst-0.1.0" = "sha256-jG9jYJP4reACkFLrQBWOYH6nbKniNyFVItD0cTZ+nW0=";
-      "rustpython-ast-0.2.0" = "sha256-0SHtycgDVOtiz7JZwd1v9lv2exxemcntm9lciih+pgc=";
+      "ruff_text_size-0.0.0" = "sha256-+pAsfjJfN6899zIv2sj2gMyCuR8m/Ko928ZUw+X6u7Y=";
       "unicode_names2-0.6.0" = "sha256-eWg9+ISm/vztB0KIdjhq5il2ZnwGJQCleCYfznCI3Wg=";
     };
   };

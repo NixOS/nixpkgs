@@ -23,7 +23,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.243.0";
+  version = "1.3.249";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
-    rev = "sdk-${version}";
+    rev = "v${version}";
     hash = "sha256-viVceH8qFz6Cl/RlMMWZnMIdzULELlnIvtPZ87ySs2M=";
   };
 

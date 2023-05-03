@@ -13,8 +13,6 @@ let
     # configuration here https://github.com/foxcpp/maddy/blob/master/maddy.conf
     # Do not use this in production!
 
-    tls off
-
     auth.pass_table local_authdb {
       table sql_table {
         driver sqlite3
@@ -35,6 +33,7 @@ let
       }
       optional_step file /etc/maddy/aliases
     }
+
     msgpipeline local_routing {
       destination postmaster $(local_domains) {
         modify {
@@ -215,6 +214,63 @@ in {
         '';
       };
 
+      tls = {
+        loader = mkOption {
+          type = with types; nullOr (enum [ "file" "off" ]);
+          default = "off";
+          description = lib.mdDoc ''
+            TLS certificates are obtained by modules called "certificate
+            loaders". Currently only the file loader is supported which reads
+            certificates from files specifying the options `keyPaths` and
+            `certPaths`.
+          '';
+        };
+
+        certificates = mkOption {
+          type = with types; listOf (submodule {
+            options = {
+              keyPath = mkOption {
+                type = types.path;
+                example = "/etc/ssl/mx1.example.org.key";
+                description = lib.mdDoc ''
+                  Path to the private key used for TLS.
+                '';
+              };
+              certPath = mkOption {
+                type = types.path;
+                example = "/etc/ssl/mx1.example.org.crt";
+                description = lib.mdDoc ''
+                  Path to the certificate used for TLS.
+                '';
+              };
+            };
+          });
+          default = [];
+          example = lib.literalExpression ''
+            [{
+              keyPath = "/etc/ssl/mx1.example.org.key";
+              certPath = "/etc/ssl/mx1.example.org.crt";
+            }]
+          '';
+          description = lib.mdDoc ''
+            A list of attribute sets containing paths to TLS certificates and
+            keys. Maddy will use SNI if multiple pairs are selected.
+          '';
+        };
+
+        extraConfig = mkOption {
+          type = with types; nullOr lines;
+          description = lib.mdDoc ''
+            Arguments for the specific certificate loader. Note that Maddy uses
+            secure defaults for the TLS configuration so there is no need to
+            change anything in most cases.
+            See [upstream manual](https://maddy.email/reference/tls/) for
+            available options.
+          '';
+          default = "";
+        };
+      };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -224,7 +280,7 @@ in {
       };
 
       ensureAccounts = mkOption {
-        type = types.listOf types.str;
+        type = with types; listOf str;
         default = [];
         description = lib.mdDoc ''
           List of IMAP accounts which get automatically created. Note that for
@@ -269,6 +325,16 @@ in {
   };
 
   config = mkIf cfg.enable {
+
+    assertions = [{
+      assertion = cfg.tls.loader == "file" -> cfg.tls.certificates != [];
+      message = ''
+        If maddy is configured to use TLS, tls.certificates with attribute sets
+        of certPath and keyPath must be provided.
+        Read more about obtaining TLS certificates here:
+        https://maddy.email/tutorials/setting-up/#tls-certificates
+      '';
+    }];
 
     systemd = {
 
@@ -318,6 +384,17 @@ in {
         $(primary_domain) = ${cfg.primaryDomain}
         $(local_domains) = ${toString cfg.localDomains}
         hostname ${cfg.hostname}
+
+        ${if (cfg.tls.loader == "file") then ''
+          tls file ${concatStringsSep " " (
+            map (x: x.certPath + " " + x.keyPath
+          ) cfg.tls.certificates)} ${optionalString (cfg.tls.extraConfig != "") ''
+            { ${cfg.tls.extraConfig} }
+          ''}
+        '' else if (cfg.tls.loader == "off") then ''
+          tls off
+        '' else ""}
+
         ${cfg.config}
       '';
     };

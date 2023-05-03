@@ -21,14 +21,14 @@ assert withConplay -> !libOnly;
 
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString libOnly "lib"}mpg123";
-  version = "1.31.2";
+  version = "1.31.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/mpg123/mpg123-${version}.tar.bz2";
-    sha256 = "sha256-sX8ikF4x9DtrQB399qce0Ru30Fb2jbRJ1wufmug5x94=";
+    hash = "sha256-HKd9Omml/4RbegU294P+5VThBBE5prl49q/hT1gUrRo=";
   };
 
-  outputs = [ "out" ] ++ lib.optional withConplay "conplay";
+  outputs = [ "out" "dev" "man" ] ++ lib.optional withConplay "conplay";
 
   nativeBuildInputs = lib.optionals (!libOnly) (
     lib.optionals withConplay [ makeWrapper ]

@@ -25,6 +25,13 @@ buildPythonPackage rec {
     hash = "sha256-PVFAy34+UfNQNdzVdfvNiySrCTaKGuepnTINZYkOsuo=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"0.0.0"' '"${version}"' \
+      --replace 'addopts = "--cov"' "" \
+      --replace 'pytz = "^2022.7.1"' 'pytz = "*"'
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -40,12 +47,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"' \
-      --replace 'addopts = "--cov"' ""
-  '';
 
   pythonImportsCheck = [
     "eiswarnung"

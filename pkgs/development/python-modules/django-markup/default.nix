@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-markup";
-  version = "1.6";
+  version = "1.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bartTC";
     repo = "django-markup";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Hh+3KxFE6sSIqRowyZ1Pz6NmBaTbltZaEhSjFrw760Q=";
+    hash = "sha256-P36DYOcjYAvzhSLe5CwzRaIm/KzrpUh0YZjzcwnSBG8=";
   };
 
   postPatch = ''
@@ -59,11 +59,6 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.all_filter_dependencies;
 
   env.DJANGO_SETTINGS_MODULE = "django_markup.tests";
-
-  disabledTests = [
-    # https://github.com/bartTC/django-markup/issues/40
-    "test_rst_with_pygments"
-  ];
 
   meta = with lib; {
     description = "Generic Django application to convert text with specific markup to html.";

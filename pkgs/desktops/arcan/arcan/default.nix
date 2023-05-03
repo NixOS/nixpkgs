@@ -56,14 +56,14 @@ let
   cmakeFeatureFlag = feature: flag:
     "-D${feature}=${if flag then "on" else "off"}";
 in
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "arcan" + lib.optionalString useStaticOpenAL "-static-openal";
   version = "0.6.2.1";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "arcan";
-    rev = self.version;
+    rev = finalAttrs.version;
     hash = "sha256-7H3fVSsW5VANLqwhykY+Q53fPjz65utaGksh/OpZnJM=";
   };
 
@@ -172,7 +172,7 @@ stdenv.mkDerivation (self: {
     "-DBUILD_PRESET=everything"
     # The upstream project recommends tagging the distribution
     "-DDISTR_TAG=Nixpkgs"
-    "-DENGINE_BUILDTAG=${self.version}"
+    "-DENGINE_BUILDTAG=${finalAttrs.version}"
     (cmakeFeatureFlag "HYBRID_SDL" true)
     (cmakeFeatureFlag "BUILTIN_LUA" useBuiltinLua)
     (cmakeFeatureFlag "DISABLE_JIT" useBuiltinLua)

@@ -11,5 +11,4 @@ cat > $config_file << EOF
 dont-distribute-packages:
 EOF
 
-echo "Regenerating list of transitive broken packages ..."
 nix-instantiate --eval --option restrict-eval true -I . --strict --json maintainers/scripts/haskell/transitive-broken-packages.nix | jq -r . | LC_ALL=C.UTF-8 sort -i >> $config_file

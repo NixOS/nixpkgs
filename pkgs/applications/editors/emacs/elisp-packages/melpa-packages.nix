@@ -125,7 +125,7 @@ let
         ligo-mode =
           if super.ligo-mode.version == "0.3"
           then markBroken super.ligo-mode
-          else super.ligo-mode;
+          else null; # auto-updater is failing; use manual one
 
         # upstream issue: missing file header
         link = markBroken super.link;
@@ -314,7 +314,9 @@ let
 
         ivy-rtags = fix-rtags super.ivy-rtags;
 
-        jinx = super.jinx.overrideAttrs (old: {
+        jinx = super.jinx.overrideAttrs (old: let
+          libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+        in {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
             pkgs.pkg-config
           ];
@@ -324,14 +326,14 @@ let
           postBuild = ''
             pushd working/jinx
             NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
-            $CC -shared -o jinx-mod.so jinx-mod.c -lenchant-2
+            $CC -shared -o jinx-mod${libExt} jinx-mod.c -lenchant-2
             popd
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
             pushd source
             outd=$(echo $out/share/emacs/site-lisp/elpa/jinx-*)
-            install -m444 --target-directory=$outd jinx-mod.so
+            install -m444 --target-directory=$outd jinx-mod${libExt}
             rm $outd/jinx-mod.c $outd/emacs-module.h
             popd
           '';

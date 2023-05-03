@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation {
   pname = "gnome-shell-extension-paperwm";
-  version = "unstable-2022-12-14";
+  version = "unstable-2023-04-20";
 
   src = fetchFromGitHub {
     owner = "paperwm";
     repo = "PaperWM";
-    rev = "7c0863c944a02d4e8095034403bff6ade3579091";
-    hash = "sha256-EN0sWW/NymRNKrApeFnqg8ax7Et4hr0gKZuvMF4kJYU=";
+    rev = "1130b663806d6daba1c8355c4b99c287d237e918";
+    hash = "sha256-JlamW5DznVZ8G0REqXcxEt/IlHa3GMN184WFpeclhd4=";
   };
 
   dontConfigure = true;

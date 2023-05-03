@@ -1,5 +1,4 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake
-, stdenv-tmpDropB
 , gccForLibs, preLibcCrossHeaders
 , libxml2, python3, isl, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
@@ -237,14 +236,14 @@ let
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
-               else stdenv-tmpDropB;
+               else stdenv;
     };
 
     compiler-rt-no-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
-               else stdenv-tmpDropB;
+               else stdenv;
     };
 
     # N.B. condition is safe because without useLLVM both are the same.

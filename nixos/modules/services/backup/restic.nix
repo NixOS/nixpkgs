@@ -339,6 +339,7 @@ in
               RuntimeDirectory = "restic-backups-${name}";
               CacheDirectory = "restic-backups-${name}";
               CacheDirectoryMode = "0700";
+              PrivateTmp = true;
             } // optionalAttrs (backup.environmentFile != null) {
               EnvironmentFile = backup.environmentFile;
             };

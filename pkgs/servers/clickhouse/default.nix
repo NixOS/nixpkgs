@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
       $out/etc/clickhouse-server/config.xml
     substituteInPlace $out/etc/clickhouse-server/config.xml \
       --replace "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
+    substituteInPlace $out/etc/clickhouse-server/config.xml \
+      --replace "<level>trace</level>" "<level>warning</level>"
   '';
 
   hardeningDisable = [ "format" ];

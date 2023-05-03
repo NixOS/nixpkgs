@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libhwy";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "highway";
     rev = version;
-    hash = "sha256-CHzDLzOnu/QfejWiRKE9I5UUyRxoEooNtYVe8FQwu7c=";
+    hash = "sha256-bQtfye+gn7GOyzCtji4st5hsV40rPzuaYDP7N1tZ8wg=";
   };
 
   nativeBuildInputs = [ cmake ninja ];

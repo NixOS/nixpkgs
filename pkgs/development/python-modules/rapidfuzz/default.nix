@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "2.15.0";
+  version = "3.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GUwWyOgC8C4GhTcZvd9ccJEsRTkaS0i6rRYU286E7GI=";
+    hash = "sha256-rpUrMHIBr7sb0Cib6WYdLJ3KOPEgRnB0DCV/df1uE1A=";
   };
 
   nativeBuildInputs = [
@@ -75,8 +75,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
+    "rapidfuzz.distance"
     "rapidfuzz.fuzz"
-    "rapidfuzz.string_metric"
     "rapidfuzz.process"
     "rapidfuzz.utils"
   ];

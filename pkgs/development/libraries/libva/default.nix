@@ -6,7 +6,6 @@
 # for passthru.tests
 , intel-compute-runtime
 , intel-media-driver
-, ffmpeg
 , mpv
 , vaapiIntel
 , vlc
@@ -14,16 +13,18 @@
 
 stdenv.mkDerivation rec {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.17.0";
+  version = "2.18.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = version;
-    sha256 = "sha256-Vw62xgWzaaWKQWIZDYpVpOgEUQGUNToImEAo6lwiFFU=";
+    sha256 = "sha256-VD+CTF0QLfzrUr4uFiyDlZux3MqsyyuJF/cXuhOFzwo=";
   };
 
   outputs = [ "dev" "out" ];
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
 

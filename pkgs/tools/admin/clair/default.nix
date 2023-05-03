@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "quay";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-yh617C99WSi//3YBIim5QLJTh8KgVcMkgG6AqRJYVvA=";
+    hash = "sha256-Nd73GQJUYkFMyvMLAUgu/LQuDEW74s9+YKwqnftPoPM=";
   };
 
   vendorHash = "sha256-V9Y+dZv3RKiyzGJB1o4+M4QQeRpBkCtJOr2zyjTCKTY=";

@@ -65,14 +65,14 @@ let
 
   package = buildPythonApplication rec {
     pname = "buildbot";
-    version = "3.7.0";
+    version = "3.8.0";
     format = "setuptools";
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-YMLT1SP6NenJIUVTvr58GVrtNXHw+bhfgMpZu3revG4=";
+      hash = "sha256-Z4BmC6Ed+7y4rJologiLXhkIvucXz65KEBxX3LFqExY=";
     };
 
     propagatedBuildInputs = [
