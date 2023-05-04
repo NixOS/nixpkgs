@@ -19,7 +19,7 @@ let
     hash = "sha256-ojqk6U2caS7Xz4iGUC9aQVHrKb2QNvMlPuQAL/jJat0=";
   };
 in buildPythonPackage rec {
-  pname = "rouge_score";
+  pname = "rouge-score";
   version = "0.1.2";
   format = "setuptools";
   disabled = pythonOlder "3.7";
