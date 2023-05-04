@@ -39880,6 +39880,8 @@ with pkgs;
 
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
+  wamr = callPackage ../development/interpreters/wamr { };
+
   wasmer = callPackage ../development/interpreters/wasmer {
     llvmPackages = llvmPackages_12;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation SystemConfiguration Security;
