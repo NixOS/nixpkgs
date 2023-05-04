@@ -1,5 +1,6 @@
 { buildPackages
 , callPackage
+, dieHook
 , php
 , jq
 , lib
@@ -11,16 +12,15 @@
 }:
 
 {
-  composerSetupHook = makeSetupHook {
-      name = "composer-setup-hook.sh";
-      propagatedBuildInputs = [ php unzip xz git jq ];
-      substitutions = {
-      };
-    } ./composer-setup-hook.sh;
+  composerSetupHook =
+    makeSetupHook
+      {
+        name = "composer-setup-hook.sh";
+        propagatedBuildInputs = [
+          dieHook
+        ];
+      }
+      ./composer-setup-hook.sh;
 
-  composerInstallHook = makeSetupHook {
-      name = "composer-install-hook.sh";
-      propagatedBuildInputs = [ php unzip xz git jq ];
-      substitutions = { };
-    } ./composer-install-hook.sh;
+  fetchComposerDeps = callPackage ./fetch-deps.nix { };
 }
