@@ -24249,6 +24249,11 @@ with pkgs;
     spirv-tools vulkan-extension-layer vulkan-headers vulkan-loader vulkan-tools
     vulkan-tools-lunarg vulkan-validation-layers;
 
+  vulkanPackages_latest = recurseIntoAttrs (import ../development/vulkan {
+    inherit lib pkgs;
+    vulkanVersions = import ../development/vulkan/versions-latest.nix;
+  });
+
   vxl = callPackage ../development/libraries/vxl { };
 
   waffle = callPackage ../development/libraries/waffle { };
