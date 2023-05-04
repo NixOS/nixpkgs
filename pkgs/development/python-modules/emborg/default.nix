@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "emborg";
-  version = "1.34";
+  version = "1.35";
   format = "flit";
 
   disabled = pythonOlder "3.7";
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "emborg";
-    rev = "v${version}";
-    hash = "sha256-bnlELPZzTU9KyVsz5Q0aW9xWvVrgwpowQrjkQvX844g=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-T6RfZNJ4k7ONYByy4J6Iuc7sVLKHlXti7p7x1QKgkNo=";
   };
 
   propagatedBuildInputs = [
