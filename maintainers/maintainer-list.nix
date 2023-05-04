@@ -5866,6 +5866,12 @@
       fingerprint = "7FC7 98AB 390E 1646 ED4D  8F1F 797F 6238 68CD 00C2";
     }];
   };
+  greg = {
+    email = "greg.hellings@gmail.com";
+    github = "greg-hellings";
+    githubId = 273582;
+    name = "greg";
+  };
   greizgh = {
     email = "greizgh@ephax.org";
     github = "greizgh";
