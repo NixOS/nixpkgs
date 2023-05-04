@@ -6500,6 +6500,8 @@ self: super: with self; {
 
   nclib = callPackage ../development/python-modules/nclib { };
 
+  ndeflib = callPackage ../development/python-modules/ndeflib { };
+
   ndg-httpsclient = callPackage ../development/python-modules/ndg-httpsclient { };
 
   ndindex = callPackage ../development/python-modules/ndindex { };
