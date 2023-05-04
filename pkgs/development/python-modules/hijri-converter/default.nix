@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "hijri-converter";
-  version = "2.2.4";
+  version = "2.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nh2fpMIg9oZ9oquxqWJAZ1rpdKu6lRxoangfTvasIY8=";
+    hash = "sha256-BptniSkeCDD0hgp53NNPs87qO5VRbtQBAgK5ZWuhq2E=";
   };
 
   nativeCheckInputs = [
