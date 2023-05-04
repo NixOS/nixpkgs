@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pyrevolve";
-  version = "2.2";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-5a4zvyf2vfz8aI6vFMI2vxekYrcUi/YuPFvZnUOx+Zs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JLDn3WEBcdO8YYzt/MWOHB/1kcmbmZUsiH00/4Uwlxo=";
   };
 
   nativeBuildInputs = [ versioneer cython ];
