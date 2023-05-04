@@ -1,24 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, vulkanVersions
+}:
+
 stdenv.mkDerivation rec {
   pname = "vulkan-headers";
-  version = "1.3.243.0";
+  version = vulkanVersions.vulkanVersion or vulkanVersions.sdkVersion;
 
   nativeBuildInputs = [ cmake ];
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Headers";
-    rev = "sdk-${version}";
-    hash = "sha256-iitEA/x9QpbQrYTcV0OzBgnY6bQFhIm+mVq1ryIQ3+0=";
+    rev = vulkanVersions.vulkanRev or vulkanVersions.sdkRev;
+    hash = vulkanVersions.vulkanHeadersHash;
   };
-
-  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Vulkan Header files and API registry";
-    homepage    = "https://www.lunarg.com";
-    platforms   = platforms.unix ++ platforms.windows;
-    license     = licenses.asl20;
+    homepage = "https://www.lunarg.com";
+    platforms = platforms.unix ++ platforms.windows;
+    license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };
 }

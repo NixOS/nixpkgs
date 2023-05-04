@@ -17,6 +17,7 @@
 , xcbutilwm
 , vulkan-headers
 , vulkan-loader
+, vulkanVersions
 , symlinkJoin
 , vulkan-validation-layers
 , writeText
@@ -25,15 +26,15 @@
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
   # The version must match that in vulkan-headers
-  version = "1.3.243.0";
+  version = vulkanVersions.vulkanToolsVersion or vulkanVersions.sdkVersion;
 
   src = fetchFromGitHub {
-   owner = "LunarG";
-   repo = "VulkanTools";
-   rev = "sdk-${version}";
-   hash = "sha256-mvBP6wD1Z0VNLZ0mC4bA3i2IaBDtDr7K6XjHz4S3UA4=";
-   fetchSubmodules = true;
- };
+    owner = "LunarG";
+    repo = "VulkanTools";
+    rev = vulkanVersions.vulkanToolsRev or vulkanVersions.sdkRev;
+    hash = vulkanVersions.vulkanToolsLunarGHash;
+    fetchSubmodules = true;
+  };
 
   nativeBuildInputs = [ cmake python3 jq which pkg-config ];
 
@@ -102,6 +103,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = [ maintainers.expipiplus1 ];
-    broken = (version != vulkan-headers.version);
   };
 }

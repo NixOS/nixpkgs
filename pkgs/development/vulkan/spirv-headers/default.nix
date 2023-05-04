@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, vulkanVersions
+}:
 
 stdenv.mkDerivation rec {
   pname = "spirv-headers";
-  version = "1.3.243.0";
+  version = vulkanVersions.spirvVersion or vulkanVersions.sdkVersion;
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "sdk-${version}";
-    hash = "sha256-VOq3r6ZcbDGGxjqC4IoPMGC5n1APUPUAs9xcRzxdyfk=";
+    rev = vulkanVersions.spirvRev or vulkanVersions.sdkRev;
+    hash = vulkanVersions.spirvHeadersHash;
   };
 
   nativeBuildInputs = [ cmake ];

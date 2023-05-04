@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , bison
@@ -7,16 +8,18 @@
 , python3
 , spirv-headers
 , spirv-tools
+, vulkanVersions
 }:
+
 stdenv.mkDerivation rec {
   pname = "glslang";
-  version = "12.1.0";
+  version = vulkanVersions.glslangVersion or vulkanVersions.sdkVersion;
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = version;
-    hash = "sha256-U45/7G02o82EP4zh7i2Go0VCnsO1B7vxDwIokjyo5Rk=";
+    rev = vulkanVersions.glslangRev or vulkanVersions.sdkRev;
+    hash = vulkanVersions.glslangHash;
   };
 
   # These get set at all-packages, keep onto them for child drvs

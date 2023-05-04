@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, vulkanVersions
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-cross";
-  version = "1.3.243.0";
+  version = vulkanVersions.spirvVersion or vulkanVersions.sdkVersion;
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Cross";
-    rev = "sdk-${finalAttrs.version}";
-    hash = "sha256-snxbTI4q0YQq8T5NQD3kcsN59iJnhlLiu1Fvr+fCDeQ=";
+    rev = vulkanVersions.spirvRev or vulkanVersions.sdkRev;
+    hash = vulkanVersions.spirvCrossHash;
   };
 
   nativeBuildInputs = [ cmake python3 ];

@@ -15,26 +15,27 @@
 , spirv-headers
 , spirv-tools
 , vulkan-headers
+, vulkanVersions
 , wayland
 }:
 
 let
-  robin-hood-hashing = callPackage ./robin-hood-hashing.nix {};
+  robin-hood-hashing = callPackage ./robin-hood-hashing.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.243.0";
+  version = vulkanVersions.vulkanToolsVersion or vulkanVersions.sdkVersion;
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
-  outputs = ["out" "headers"];
+  outputs = [ "out" "headers" ];
   outputInclude = "headers";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
-    rev = "sdk-${version}";
-    hash = "sha256-viVceH8qFz6Cl/RlMMWZnMIdzULELlnIvtPZ87ySs2M=";
+    rev = vulkanVersions.vulkanToolsRev or vulkanVersions.sdkRev;
+    hash = vulkanVersions.vulkanValidationLayerHash;
   };
 
   nativeBuildInputs = [
@@ -80,10 +81,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The official Khronos Vulkan validation layers";
-    homepage    = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
-    platforms   = platforms.linux;
-    license     = licenses.asl20;
+    homepage = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
+    platforms = platforms.linux;
+    license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
-    broken = (lib.all (pkg: pkg.version != version) [vulkan-headers glslang spirv-tools spirv-headers]);
   };
 }

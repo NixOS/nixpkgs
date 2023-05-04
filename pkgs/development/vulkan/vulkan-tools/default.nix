@@ -12,6 +12,7 @@
 , libXrandr
 , vulkan-headers
 , vulkan-loader
+, vulkanVersions
 , wayland
 , wayland-protocols
 , moltenvk
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.243.0";
+  version = vulkanVersions.vulkanToolsVersion or vulkanVersions.sdkVersion;
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
-    rev = "sdk-${version}";
-    hash = "sha256-8XJON+iBEPRtuQWf1bPXyOJHRkuRLnLXgTIjk7gYQwE=";
+    rev = vulkanVersions.vulkanToolsRev or vulkanVersions.sdkRev;
+    hash = vulkanVersions.vulkanToolsHash;
   };
 
   nativeBuildInputs = [
@@ -98,11 +99,10 @@ stdenv.mkDerivation rec {
       development by enabling developers to verify their applications correct
       use of the Vulkan API.
     '';
-    homepage    = "https://github.com/KhronosGroup/Vulkan-Tools";
+    homepage = "https://github.com/KhronosGroup/Vulkan-Tools";
     hydraPlatforms = [ "x86_64-linux" "i686-linux" ];
-    platforms   = platforms.unix;
-    license     = licenses.asl20;
+    platforms = platforms.unix;
+    license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
-    broken = (version != vulkan-headers.version);
   };
 }
