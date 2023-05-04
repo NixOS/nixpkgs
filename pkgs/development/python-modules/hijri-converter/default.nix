@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "2.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,6 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Accurate Hijri-Gregorian date converter based on the Umm al-Qura calendar";
     homepage = "https://github.com/dralshehri/hijri-converter";
+    changelog = "https://github.com/dralshehri/hijridate/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
