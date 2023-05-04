@@ -1,9 +1,11 @@
 { lib
+, bleak
 , buildPythonPackage
 , ecpy
 , fetchPypi
 , future
 , hidapi
+, nfcpy
 , pillow
 , protobuf
 , pycrypto
@@ -16,20 +18,22 @@
 
 buildPythonPackage rec {
   pname = "ledgerblue";
-  version = "0.1.44";
+  version = "0.1.47";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pOLpeej10G7Br8juTuQOSuCbhMjAP4aY0/JwnmJRblk=";
+    hash = "sha256-xe8ude2JzrdmJqwzqLlxRO697IjcGuQgGG6c3nQ/drg=";
   };
 
   propagatedBuildInputs = [
+    bleak
     ecpy
     future
     hidapi
+    nfcpy
     pillow
     protobuf
     pycrypto
