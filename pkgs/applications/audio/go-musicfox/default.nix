@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "go-musicfox";
-  version = "4.0.5";
+  version = "4.0.6";
 
   src = fetchFromGitHub {
-    owner = "anhoder";
+    owner = "go-musicfox";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NAAl/XmJqRnJyOYNJqmMlCIiGsCsSH7gGTMbD46gpss=";
+    hash = "sha256-ZqB3NL/pLIY1lHl3qMIOciqsOW9jNwjVQAq1j/ydDWs=";
   };
 
   deleteVendor = true;
 
-  vendorHash = null;
+  vendorHash = "sha256-rJlyrPQS9UKinxIwGGo3EHlmWrzTKIm1jM1UDqnmVyg=";
 
   subPackages = [ "cmd/musicfox.go" ];
 
