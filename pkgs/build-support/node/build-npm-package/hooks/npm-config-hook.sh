@@ -56,6 +56,9 @@ npmConfigHook() {
       exit 1
     fi
 
+    export CACHE_MAP_PATH="$TMP/MEOW"
+    @prefetchNpmDeps@ --map-cache
+
     @prefetchNpmDeps@ --fixup-lockfile "$srcLockfile"
 
     local cachePath
@@ -108,6 +111,9 @@ npmConfigHook() {
     fi
 
     patchShebangs node_modules
+
+    rm "$CACHE_MAP_PATH"
+    unset CACHE_MAP_PATH
 
     echo "Finished npmConfigHook"
 }

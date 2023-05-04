@@ -1,7 +1,14 @@
-use anyhow::{bail, Context};
+use anyhow::{anyhow, bail, Context};
 use rayon::slice::ParallelSliceMut;
-use serde::Deserialize;
-use std::{collections::HashMap, fmt};
+use serde::{
+    de::{self, Visitor},
+    Deserialize, Deserializer,
+};
+use std::{
+    cmp::Ordering,
+    collections::{HashMap, HashSet},
+    fmt,
+};
 use url::Url;
 
 pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
@@ -33,6 +40,13 @@ pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
         x.resolved
             .partial_cmp(&y.resolved)
             .expect("resolved should be comparable")
+            .then(
+                // v1 lockfiles can contain multiple references to the same version of a package, with
+                // different integrity values (e.g. a SHA-1 and a SHA-512 in one, but just a SHA-512 in another)
+                y.integrity
+                    .partial_cmp(&x.integrity)
+                    .expect("integrity should be comparable"),
+            )
     });
 
     packages.dedup_by(|x, y| x.resolved == y.resolved);
@@ -54,7 +68,7 @@ struct OldPackage {
     #[serde(default)]
     bundled: bool,
     resolved: Option<UrlOrString>,
-    integrity: Option<String>,
+    integrity: Option<HashCollection>,
     dependencies: Option<HashMap<String, OldPackage>>,
 }
 
@@ -63,7 +77,7 @@ pub(super) struct Package {
     #[serde(default)]
     pub(super) name: Option<String>,
     pub(super) resolved: Option<UrlOrString>,
-    pub(super) integrity: Option<String>,
+    pub(super) integrity: Option<HashCollection>,
 }
 
 #[derive(Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
@@ -79,6 +93,110 @@ impl fmt::Display for UrlOrString {
             UrlOrString::Url(url) => url.fmt(f),
             UrlOrString::String(string) => string.fmt(f),
         }
+    }
+}
+
+#[derive(Debug, PartialEq, Eq)]
+pub struct HashCollection(HashSet<Hash>);
+
+impl HashCollection {
+    pub fn from_str(s: impl AsRef<str>) -> anyhow::Result<HashCollection> {
+        let hashes = s
+            .as_ref()
+            .split_ascii_whitespace()
+            .map(Hash::new)
+            .collect::<anyhow::Result<_>>()?;
+
+        Ok(HashCollection(hashes))
+    }
+
+    pub fn into_best(self) -> Option<Hash> {
+        self.0.into_iter().max()
+    }
+}
+
+impl PartialOrd for HashCollection {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        let lhs = self.0.iter().max()?;
+        let rhs = other.0.iter().max()?;
+
+        lhs.partial_cmp(rhs)
+    }
+}
+
+impl<'de> Deserialize<'de> for HashCollection {
+    fn deserialize<D>(deserializer: D) -> Result<HashCollection, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        deserializer.deserialize_string(HashCollectionVisitor)
+    }
+}
+
+struct HashCollectionVisitor;
+
+impl<'de> Visitor<'de> for HashCollectionVisitor {
+    type Value = HashCollection;
+
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.write_str("a single SRI hash or a collection of them (separated by spaces)")
+    }
+
+    fn visit_str<E>(self, value: &str) -> Result<HashCollection, E>
+    where
+        E: de::Error,
+    {
+        HashCollection::from_str(value).map_err(E::custom)
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, PartialEq, Eq, Hash)]
+pub struct Hash(String);
+
+// Hash algorithms, in ascending preference.
+const ALGOS: &[&str] = &["sha1", "sha512"];
+
+impl Hash {
+    fn new(s: impl AsRef<str>) -> anyhow::Result<Hash> {
+        let algo = s
+            .as_ref()
+            .split_once('-')
+            .ok_or_else(|| anyhow!("expected SRI hash, got {:?}", s.as_ref()))?
+            .0;
+
+        if ALGOS.iter().any(|&a| algo == a) {
+            Ok(Hash(s.as_ref().to_string()))
+        } else {
+            Err(anyhow!("unknown hash algorithm {algo:?}"))
+        }
+    }
+
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+}
+
+impl fmt::Display for Hash {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.as_str().fmt(f)
+    }
+}
+
+impl PartialOrd for Hash {
+    fn partial_cmp(&self, other: &Hash) -> Option<Ordering> {
+        let lhs = self.0.split_once('-')?.0;
+        let rhs = other.0.split_once('-')?.0;
+
+        ALGOS
+            .iter()
+            .position(|&s| lhs == s)?
+            .partial_cmp(&ALGOS.iter().position(|&s| rhs == s)?)
+    }
+}
+
+impl Ord for Hash {
+    fn cmp(&self, other: &Hash) -> Ordering {
+        self.partial_cmp(other).unwrap()
     }
 }
 
@@ -149,8 +267,13 @@ fn get_initial_url() -> anyhow::Result<Url> {
 
 #[cfg(test)]
 mod tests {
-    use super::{get_initial_url, to_new_packages, OldPackage, Package, UrlOrString};
-    use std::collections::HashMap;
+    use super::{
+        get_initial_url, to_new_packages, Hash, HashCollection, OldPackage, Package, UrlOrString,
+    };
+    use std::{
+        cmp::Ordering,
+        collections::{HashMap, HashSet},
+    };
     use url::Url;
 
     #[test]
@@ -187,5 +310,24 @@ mod tests {
         });
 
         Ok(())
+    }
+
+    #[test]
+    fn hash_preference() {
+        assert_eq!(
+            Hash(String::from("sha1-foo")).partial_cmp(&Hash(String::from("sha512-foo"))),
+            Some(Ordering::Less)
+        );
+
+        assert_eq!(
+            HashCollection({
+                let mut set = HashSet::new();
+                set.insert(Hash(String::from("sha512-foo")));
+                set.insert(Hash(String::from("sha1-bar")));
+                set
+            })
+            .into_best(),
+            Some(Hash(String::from("sha512-foo")))
+        );
     }
 }
