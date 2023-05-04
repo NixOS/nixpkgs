@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.249";
+  version = "1.3.243.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
-    rev = "v${version}";
-    hash = "sha256-+d0Yp+e/wzlRmUIs4SffiphkqmM/7avJrt3JNOgO19I=";
+    rev = "sdk-${version}";
+    hash = "sha256-8XJON+iBEPRtuQWf1bPXyOJHRkuRLnLXgTIjk7gYQwE=";
   };
 
   nativeBuildInputs = [
@@ -103,5 +103,6 @@ stdenv.mkDerivation rec {
     platforms   = platforms.unix;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];
+    broken = (version != vulkan-headers.version);
   };
 }
