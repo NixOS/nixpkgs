@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "portal";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "SpatiumPortae";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-80ZWMYGH5D5C5Lw97Sic3duw+oXBzIxQjJ+6uQLBwJQ=";
+    sha256 = "sha256-hGB82a2WirUL1Tph6EuoITOQGYA0Lo4zOeKPC46B5Qk=";
   };
 
-  vendorSha256 = "sha256-SbNFi5DE3zhTUw0rsX6n+dpYcdDsaDh+zVUrfxgo/4g=";
+  vendorHash = "sha256-SbNFi5DE3zhTUw0rsX6n+dpYcdDsaDh+zVUrfxgo/4g=";
   subPackages = [ "cmd/portal/" ];
 
   ldflags = [ "-s -X main.version=${version}" ]; # from: https://github.com/SpatiumPortae/portal/blob/master/Makefile#L3
