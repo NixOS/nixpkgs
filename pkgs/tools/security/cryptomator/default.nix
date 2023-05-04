@@ -6,13 +6,13 @@
 
 let
   pname = "cryptomator";
-  version = "1.6.14";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "sha256-ArOYL3xj2HiXXu1Bymd5mciMsmikCDvxr5M3LMqZgYA=";
+    sha256 = "sha256-4MjF2PDH0JB1biY4HO2wOC0i6EIGSlzkK6tDm8nzvIo=";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
@@ -35,9 +35,8 @@ let
       find $out/.m2 -type f -iname '*.pom' -exec sed -i -e 's/\r\+$//' {} \;
     '';
 
-    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-svpz1mHCHNQGWc+CBroAPvW4cXQdYuqFkK4JSmf6kXE=";
+    outputHash = "sha256-2nCaSL7OlS9f+PZPh0YiMvnjOaAqlQimkKWDSjSP+bQ=";
 
     doCheck = false;
   };
