@@ -15644,10 +15644,11 @@
     githubId = 18621411;
   };
   tilpner = {
-    email = "till@hoeppner.ws";
+    name = "Till Höppner";
+    email = "nixpkgs@tilpner.com";
+    matrix = "@tilpner:tx0.co";
     github = "tilpner";
     githubId = 4322055;
-    name = "Till Höppner";
   };
   timbertson = {
     email = "tim@gfxmonk.net";
