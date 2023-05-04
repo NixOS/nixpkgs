@@ -614,7 +614,7 @@ let
           '' +
           (optionalString (cfg.fprintAuth && cfg.fprintAuthAfterPassword) ''
             auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so
-          '')
+          '') +
           optionalString cfg.otpwAuth ''
             auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so
           '' +
