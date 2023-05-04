@@ -2,6 +2,11 @@
 , buildPythonPackage
 , django
 , fetchFromGitHub
+, mock
+, bower
+, pytestCheckHook
+, pytest-django
+, python
 , pythonOlder
 , six
 }:
@@ -21,13 +26,33 @@ buildPythonPackage rec {
     hash = "sha256-TVsFPwdLZ6sMCbxFpMQH4DKQxAUOd8RTCzhrQaPsgf8=";
   };
 
+  postPatch = ''
+    substituteInPlace djangobower/conf.py \
+      --replace "'bower'" "'${bower}/bin/bower'"
+  '';
+
   propagatedBuildInputs = [
     django
     six
   ];
 
-  #test depricated
-  doCheck = false;
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+    pytest-django
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+    export DJANGO_SETTINGS_MODULE=djangobower.test_settings
+  '';
+
+  disabledTests = [
+    "test_freeze"
+    "test_management_command"
+    "test_find"
+    "test_list"
+  ];
 
   meta = with lib; {
     description = "Easy way to use bower with your Django project";
