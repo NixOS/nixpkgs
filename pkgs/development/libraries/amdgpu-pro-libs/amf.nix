@@ -1,9 +1,9 @@
-{ pkgs, lib, stdenv , libdrm,  dpkg, vulkan-loader, patchelf  }:
+{ pkgs, lib, stdenv, libdrm, dpkg, vulkan-loader, patchelf }:
 
 let
-ver = import ./version.nix {inherit pkgs;};
-suffix = ver.suffix;
-amdbit = ver.amdbit;
+  ver = import ./version.nix { inherit pkgs; };
+  suffix = ver.suffix;
+  amdbit = ver.amdbit;
 in
 stdenv.mkDerivation rec {
   pname = "amdgpu-pro-amf";
@@ -11,23 +11,25 @@ stdenv.mkDerivation rec {
 
 
 
-  src = [(builtins.fetchurl {
+  src = [
+    (builtins.fetchurl {
       url = "https://repo.radeon.com/amdgpu/${ver.repo_folder_ver}/ubuntu/pool/proprietary/a/amf-amdgpu-pro/amf-amdgpu-pro_${ver.amf}-${ver.minor}.${ver.ubuntu_ver}_amd64.deb";
       sha256 = "sha256:038d39lji5n85lg22mbxr7fq3nldwyrslkr5z94hp94g2l8ar5x5";
       name = "amf";
     })
-  (builtins.fetchurl {
+    (builtins.fetchurl {
       url = "https://repo.radeon.com/amdgpu/${ver.repo_folder_ver}/ubuntu/pool/proprietary/liba/libamdenc-amdgpu-pro/libamdenc-amdgpu-pro_1.0-${ver.minor}.${ver.ubuntu_ver}_amd64.deb";
       sha256 = "sha256:0l0bfd2ayfhn15jk8cf8xnl2lgrcwpmc3c70qw3gf53jxrp5h0zs";
       name = "libamdenc";
-    })];
+    })
+  ];
 
-    
+
   dontPatchELF = true;
   sourceRoot = ".";
   nativeBuildInputs = [
-     dpkg
-     patchelf
+    dpkg
+    patchelf
   ];
   buildInputs = [
     vulkan-loader
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
   unpackPhase = ''
     for file in $src; do dpkg -x $file .; done
   '';
-  
+
   installPhase = ''
     mkdir -p $out
     mv opt/amdgpu-pro/lib/x86_64-linux-gnu $out/lib
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "AMD Advanced Multimedia Framework";
     homepage = "https://www.amd.com";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ materus ];
   };
 }

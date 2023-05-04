@@ -19392,7 +19392,7 @@ with pkgs;
     opengl = callPackage ../development/libraries/amdgpu-pro-libs/opengl.nix { };
     prefixes = callPackage ../development/libraries/amdgpu-pro-libs/prefixes.nix { };
   };
-  
+
   amdvlk = callPackage ../development/libraries/amdvlk { };
 
   amf-headers = callPackage ../development/libraries/amf-headers { };

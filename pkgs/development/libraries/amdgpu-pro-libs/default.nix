@@ -1,9 +1,9 @@
-{ pkgs, lib, xorg , stdenv , openssl, libdrm, zlib, dpkg, patchelf }:
+{ pkgs, lib, xorg, stdenv, openssl, libdrm, zlib, dpkg, patchelf }:
 
 let
-ver = import ./version.nix {inherit pkgs;};
-suffix = ver.suffix;
-amdbit = ver.amdbit;
+  ver = import ./version.nix { inherit pkgs; };
+  suffix = ver.suffix;
+  amdbit = ver.amdbit;
 in
 stdenv.mkDerivation rec {
   pname = "amdgpu-pro-vulkan${suffix}";
@@ -11,23 +11,23 @@ stdenv.mkDerivation rec {
 
 
   pkg64 = builtins.fetchurl {
-      url = "https://repo.radeon.com/amdgpu/${ver.repo_folder_ver}/ubuntu/pool/proprietary/v/vulkan-amdgpu-pro/vulkan-amdgpu-pro_${ver.major_short}-${ver.minor}.${ver.ubuntu_ver}_amd64.deb";
-      sha256 = "sha256:02kavnxcccdrqz09v1628l005p1kzgv17wpqgb75nllyfr5103l9";
-      name = "vulkan64";
-    };
+    url = "https://repo.radeon.com/amdgpu/${ver.repo_folder_ver}/ubuntu/pool/proprietary/v/vulkan-amdgpu-pro/vulkan-amdgpu-pro_${ver.major_short}-${ver.minor}.${ver.ubuntu_ver}_amd64.deb";
+    sha256 = "sha256:02kavnxcccdrqz09v1628l005p1kzgv17wpqgb75nllyfr5103l9";
+    name = "vulkan64";
+  };
   pkg32 = builtins.fetchurl {
-       url = "https://repo.radeon.com/amdgpu/${ver.repo_folder_ver}/ubuntu/pool/proprietary/v/vulkan-amdgpu-pro/vulkan-amdgpu-pro_${ver.major_short}-${ver.minor}.${ver.ubuntu_ver}_i386.deb";
-       sha256 = "sha256:143r5vcqbh6s699w3y9wg87lnyl77h2g8kmdikcbl44y3q06xm6r";
-       name = "vulkan32";
+    url = "https://repo.radeon.com/amdgpu/${ver.repo_folder_ver}/ubuntu/pool/proprietary/v/vulkan-amdgpu-pro/vulkan-amdgpu-pro_${ver.major_short}-${ver.minor}.${ver.ubuntu_ver}_i386.deb";
+    sha256 = "sha256:143r5vcqbh6s699w3y9wg87lnyl77h2g8kmdikcbl44y3q06xm6r";
+    name = "vulkan32";
   };
 
   src = if stdenv.system == "x86_64-linux" then pkg64 else pkg32;
-    
+
   dontPatchELF = true;
   sourceRoot = ".";
   nativeBuildInputs = [
-     dpkg
-     patchelf
+    dpkg
+    patchelf
   ];
   buildInputs = [
     libdrm
@@ -37,13 +37,13 @@ stdenv.mkDerivation rec {
     xorg.libxcb
     xorg.libxshmfence
     zlib
-      ];
+  ];
   rpath = lib.makeLibraryPath buildInputs;
-    
+
   unpackPhase = ''
     dpkg -x  $src .
   '';
-  
+
   installPhase = ''
     mkdir -p $out/lib
     mkdir -p $out/share/vulkan/icd.d

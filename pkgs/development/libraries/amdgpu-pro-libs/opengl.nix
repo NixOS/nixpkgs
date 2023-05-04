@@ -1,9 +1,9 @@
-{ pkgs, lib, systemd, xorg ,mesa , stdenv , expat ,openssl, libdrm, zlib, wayland , dpkg, patchelf }:
+{ pkgs, lib, systemd, xorg, mesa, stdenv, expat, openssl, libdrm, zlib, wayland, dpkg, patchelf }:
 
 let
-ver = import ./version.nix {inherit pkgs;};
-suffix = ver.suffix;
-amdbit = ver.amdbit;
+  ver = import ./version.nix { inherit pkgs; };
+  suffix = ver.suffix;
+  amdbit = ver.amdbit;
 in
 stdenv.mkDerivation rec {
   pname = "amdgpu-pro-opengl${suffix}";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       name = "libgles2-64";
     })
 
-    
+
   ];
 
 
@@ -83,8 +83,8 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   sourceRoot = ".";
   nativeBuildInputs = [
-     dpkg
-     patchelf
+    dpkg
+    patchelf
   ];
   buildInputs = [
     libdrm
@@ -101,19 +101,19 @@ stdenv.mkDerivation rec {
     wayland
     systemd
     mesa
-      ];
+  ];
   rpath = lib.makeLibraryPath buildInputs;
   unpackPhase = ''
-  for file in $src; do dpkg -x $file .; done
+    for file in $src; do dpkg -x $file .; done
   '';
   installPhase = ''
-  mkdir $out
-  mv opt/amdgpu/lib/${amdbit} $out/lib
-  mv opt/amdgpu/share $out/share
-  mv opt/amdgpu-pro/lib/${amdbit}/* $out/lib
+    mkdir $out
+    mv opt/amdgpu/lib/${amdbit} $out/lib
+    mv opt/amdgpu/share $out/share
+    mv opt/amdgpu-pro/lib/${amdbit}/* $out/lib
 
-  patchelf --set-rpath "$rpath" $out/lib/dri/amdgpu_dri.so
-  for file in "$out/lib/*.so*"; do patchelf --set-rpath "$rpath" $file; done
+    patchelf --set-rpath "$rpath" $out/lib/dri/amdgpu_dri.so
+    for file in "$out/lib/*.so*"; do patchelf --set-rpath "$rpath" $file; done
   '';
 
   meta = with lib; {
