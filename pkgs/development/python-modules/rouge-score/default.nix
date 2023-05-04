@@ -25,7 +25,8 @@ in buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "rouge_score";
+    inherit version;
     extension = "tar.gz";
     hash = "sha256-x9TaJoPmjJq/ATXvkV1jpGZDZm+EjlWKG59+rRf/DwQ=";
   };
