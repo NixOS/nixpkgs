@@ -5773,6 +5773,9 @@
   "foundationdb61": [
     "setuptools"
   ],
+  "foundationdb71": [
+    "setuptools"
+  ],
   "fountains": [
     "setuptools"
   ],
@@ -7206,9 +7209,6 @@
     "setuptools"
   ],
   "igraph": [
-    "setuptools"
-  ],
-  "ihatemoney": [
     "setuptools"
   ],
   "ijson": [

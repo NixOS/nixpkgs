@@ -14,25 +14,20 @@
 
 stdenv.mkDerivation rec {
   pname = "squashfs";
-  version = "4.5.1";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "plougher";
     repo = "squashfs-tools";
     rev = version;
-    sha256 = "sha256-Y3ZPjeE9HN1F+NtGe6EchYziWrTPVQ4SuKaCvNbXMKI=";
+    hash = "sha256-C/awQpp1Q/0adx3YVNTq6ruEAzcjL5G7SkOCgpvAA50=";
   };
 
   patches = [
-    # remove once https://github.com/plougher/squashfs-tools/pull/177 is merged and in a release
-    (fetchpatch {
-      url = "https://github.com/plougher/squashfs-tools/commit/6100e82c7e7f18f503c003c67c87791025d5f01b.patch";
-      sha256 = "sha256-bMBQsbSKQ4E7r9avns2QaomGAYl3s82m58gYyTQdB08=";
-    })
     # This patch adds an option to pad filesystems (increasing size) in
     # exchange for better chunking / binary diff calculation.
     ./4k-align.patch
-  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [ which ]

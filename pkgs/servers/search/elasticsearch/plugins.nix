@@ -54,8 +54,7 @@ in
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
       sha256 =
-        if version == "7.17.3" then "1pwirciqzz092a30rys2y97mh62pwhlnk4mvv1a8g4640qmql2jx"
-        else if version == "6.8.21" then "0ywvqicxwcd5bn1j6gsdqhiagjmpha373p76p4lc2ric3in4dz3p"
+        if version == "7.17.4" then "sha256-O6GCTwuxRrFFht9pQGg8G0O8wrFP2YnSaG02yy7NZ6I="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -71,7 +70,7 @@ in
     src = fetchurl {
       url = "https://github.com/vhyza/elasticsearch-${pluginName}/releases/download/v${version}/elasticsearch-${pluginName}-${version}-plugin.zip";
       sha256 =
-        if version == "7.17.3" then "1835f374230cb17193859cee22ac90e3d7a67fb41a55fd4578e840d708287a08"
+        if version == "7.17.4" then "sha256-5tg4Lts++kL3QEnP+TM7NGR3EQH17H3KmhGHuhIGVqU="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -167,13 +166,13 @@ in
     pluginName = "search-guard";
     version =
       # https://docs.search-guard.com/latest/search-guard-versions
-      if esVersion == "7.17.3" then "${esVersion}-53.1.0"
+      if esVersion == "7.17.4" then "${esVersion}-53.4.0"
       else throw "unsupported version ${esVersion} for plugin ${pluginName}";
     src =
-      if esVersion == "7.17.3" then
+      if esVersion == "7.17.4" then
         fetchurl {
           url = "https://maven.search-guard.com/search-guard-suite-release/com/floragunn/search-guard-suite-plugin/${version}/search-guard-suite-plugin-${version}.zip";
-          sha256 = "b49b24f7b74043cb5bab93f18316ea71656a7668e61bf063ccaa7b0ee2302a31";
+          sha256 = "sha256-PIRzhkxYryAiPjdjAXeV+g+O4YmQ1oV31m2GMC1PXu0=";
         }
       else throw "unsupported version ${version} for plugin ${pluginName}";
     meta = with lib; {

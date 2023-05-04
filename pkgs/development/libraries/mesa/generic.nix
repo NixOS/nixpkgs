@@ -133,13 +133,6 @@ self = stdenv.mkDerivation {
 
     ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-
-    # FIXME: submitted upstream at https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/22133
-    # Remove when no longer applicable
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/1457f1b752f59258c0b33558619b0063b4ce6280.diff";
-      hash = "sha256-WFemyfmCWY4rJMfGxVZdYeGQvGcOTEDMrRt5OIWp348=";
-    })
   ];
 
   postPatch = ''
@@ -152,6 +145,11 @@ self = stdenv.mkDerivation {
       "get_option('datadir')" "'${placeholder "out"}/share'"
     substituteInPlace src/amd/vulkan/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}/share'"
+  ''
+  # TODO: can be removed >= 23.0.4 (most likely)
+  # https://gitlab.freedesktop.org/mesa/mesa/-/commit/035aa34ed5eb418339c0e2d2
+  + ''
+    sed '/--size_t-is-usize/d' -i src/gallium/frontends/rusticl/meson.build
   '';
 
   outputs = [ "out" "dev" "drivers" ]

@@ -108,5 +108,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.lilyinstarlight ];
     platforms = platforms.unix;
+    mainProgram = "gmic_qt";
   };
 }

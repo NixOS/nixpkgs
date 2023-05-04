@@ -274,9 +274,9 @@ let
       sha256 = "12l7ir3q29v06jx0zng5cvlbmap7p709ka3ik6x29lw334qshm9b";
     };
 
-    buildInputs = [
-      pkgs.makeWrapper
+    nativeBuildInputs = [ pkgs.makeWrapper ];
 
+    buildInputs = [
       # needed for GSETTINGS_SCHEMAS_PATH
       pkgs.gsettings-desktop-schemas pkgs.glib pkgs.gtk3
 
@@ -576,6 +576,35 @@ let
     ];
     nativeLibs = with pkgs; [
       duckdb libffi
+    ];
+  };
+
+  polyclot = build-asdf-system {
+    pname = "polyclot";
+    version = "trunk";
+    src = pkgs.fetchfossil {
+      url = "https://fossil.turtleware.eu/polyclot";
+      rev = "e678b3c3e002f53b446780406c9ed13f8451309d22a1dc50ced4dbeedf08a1ec";
+      sha256 = "sha256-J08bU9HSVbzEivYtQsyIYPZJTrugj+jJSa4LglS0Olg=";
+    };
+    systems = [ "eu.turtleware.polyclot" "eu.turtleware.polyclot/demo" ];
+    lispLibs = with super; [ clim mcclim mcclim-layouts ];
+  };
+
+  kons-9 = build-asdf-system rec {
+    pname = "kons-9";
+    version = "trunk";
+    src = pkgs.fetchFromGitHub {
+      owner = "kaveh808";
+      repo = "kons-9";
+      rev = "95ad44fac0566f445c4b7bd040339dcff75ee992";
+      sha256 = "19rl7372j9f1cv2kl55r8vyf4dhcz4way4hkjgysbxzrb1psp17n";
+    };
+    systems = [ "kons-9" "kons-9/testsuite" ];
+    lispLibs = with super; [
+      closer-mop trivial-main-thread trivial-backtrace cffi cl-opengl cl-glu
+      cl-glfw3 cl-paths-ttf zpb-ttf cl-vectors origin clobber
+      org_dot_melusina_dot_confidence
     ];
   };
 

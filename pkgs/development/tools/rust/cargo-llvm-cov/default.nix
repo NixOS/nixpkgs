@@ -1,18 +1,18 @@
 { stdenv
 , lib
-, fetchzip
+, fetchCrate
 , rustPlatform
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-llvm-cov";
-  version = "0.5.14";
+  version = "0.5.19";
 
-  src = fetchzip {
-    url = "https://crates.io/api/v1/crates/${pname}/${version}/download#${pname}-${version}.tar.gz";
-    sha256 = "sha256-J1oG1lnpdLYBLmBK8UcLhM6xr9q53FDkjM3ihYthznY=";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-5xHDjNFQDmi+SnhxfoCxoBdCqHpZEk/87r2sBKsT+W4=";
   };
-  cargoSha256 = "sha256-4noIfJifszGI5PlvZf8ZkDRuXsGBX+Io2H0blrE0vy4=";
+  cargoSha256 = "sha256-0fj5GJ/gjVBAdfYPHnT33kbnXBIE5+VRONcNBgBSoPc=";
 
   # skip tests which require llvm-tools-preview
   checkFlags = [

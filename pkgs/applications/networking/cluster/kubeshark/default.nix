@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubeshark";
-  version = "39.5";
+  version = "40.0";
 
   src = fetchFromGitHub {
     owner = "kubeshark";
     repo = "kubeshark";
     rev = version;
-    sha256 = "sha256-1SmIL4kA65VlsHw7YUTxklUtXTwMkb12SCpm3Ja24KA=";
+    sha256 = "sha256-Tmk9xbAqEsJ8nffRX6qw3RKKoBbSO2gmVT5Ff4Cn9DA=";
   };
 
-  vendorHash = "sha256-cMX9OYErnnnkvmXgau5xLBSv+wo0VTqgo/rYCBmXYZ4=";
+  vendorHash = "sha256-ckIjmrXkn1AVBQRwM6+wdRwwYHytxKm3rKEe+csORdU=";
 
   ldflags = let t = "github.com/kubeshark/kubeshark"; in [
    "-s" "-w"

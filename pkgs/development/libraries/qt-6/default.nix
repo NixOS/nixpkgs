@@ -55,18 +55,29 @@ let
         qt5compat
         qtcharts
         qtconnectivity
+        qtdatavis3d
         qtdeclarative
         qtdoc
+        qtgrpc
+        qthttpserver
         qtimageformats
+        qtlanguageserver
+        qtlocation
         qtlottie
         qtmultimedia
+        qtmqtt
         qtnetworkauth
         qtpositioning
         qtsensors
         qtserialbus
         qtserialport
         qtshadertools
+        qtspeech
         qtquick3d
+        qtquick3dphysics
+        qtquickeffectmaker
+        qtquicktimeline
+        qtremoteobjects
         qtsvg
         qtscxml
         qttools
@@ -87,14 +98,17 @@ let
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
+      qtgrpc = callPackage ./modules/qtgrpc.nix { };
       qthttpserver = callPackage ./modules/qthttpserver.nix { };
       qtimageformats = callPackage ./modules/qtimageformats.nix { };
       qtlanguageserver = callPackage ./modules/qtlanguageserver.nix { };
+      qtlocation = callPackage ./modules/qtlocation.nix { };
       qtlottie = callPackage ./modules/qtlottie.nix { };
       qtmultimedia = callPackage ./modules/qtmultimedia.nix {
         inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
         inherit (darwin.apple_sdk_11_0.frameworks) VideoToolbox;
       };
+      qtmqtt = callPackage ./modules/qtmqtt.nix { };
       qtnetworkauth = callPackage ./modules/qtnetworkauth.nix { };
       qtpositioning = callPackage ./modules/qtpositioning.nix { };
       qtsensors = callPackage ./modules/qtsensors.nix { };
@@ -106,6 +120,7 @@ let
       };
       qtquick3d = callPackage ./modules/qtquick3d.nix { };
       qtquick3dphysics = callPackage ./modules/qtquick3dphysics.nix { };
+      qtquickeffectmaker = callPackage ./modules/qtquickeffectmaker.nix { };
       qtquicktimeline = callPackage ./modules/qtquicktimeline.nix { };
       qtremoteobjects = callPackage ./modules/qtremoteobjects.nix { };
       qtsvg = callPackage ./modules/qtsvg.nix { };
@@ -115,7 +130,19 @@ let
       qtvirtualkeyboard = callPackage ./modules/qtvirtualkeyboard.nix { };
       qtwayland = callPackage ./modules/qtwayland.nix { };
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
-      qtwebengine = callPackage ./modules/qtwebengine.nix { };
+      qtwebengine = callPackage ./modules/qtwebengine.nix {
+        inherit (darwin) bootstrap_cmds cctools xnu;
+        inherit (darwin.apple_sdk_11_0) libpm libunwind;
+        inherit (darwin.apple_sdk_11_0.libs) sandbox;
+        inherit (darwin.apple_sdk_11_0.frameworks)
+          AGL AVFoundation Accelerate Cocoa CoreLocation CoreML ForceFeedback
+          GameController ImageCaptureCore LocalAuthentication
+          MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
+          ReplayKit SecurityInterface Vision;
+        xcbuild = buildPackages.xcbuild.override {
+          productBuildVer = "20A2408";
+        };
+      };
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
       qtwebview = callPackage ./modules/qtwebview.nix {
         inherit (darwin.apple_sdk_11_0.frameworks) WebKit;
@@ -124,7 +151,7 @@ let
       wrapQtAppsHook = makeSetupHook
         {
           name = "wrap-qt6-apps-hook";
-          propagatedBuildInputs = [ buildPackages.makeWrapper ];
+          propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
         } ./hooks/wrap-qt-apps-hook.sh;
 
       qmake = makeSetupHook

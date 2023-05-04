@@ -1,7 +1,7 @@
-{ lib, stdenv, pkgs, fetchFromGitHub, runCommand, buildNpmPackage, nodejs-16_x, tone, ffmpeg-full, util-linux, libwebp }:
+{ lib, stdenv, pkgs, fetchFromGitHub, runCommand, buildNpmPackage, nodejs_16, tone, ffmpeg-full, util-linux, libwebp }:
 
 let
-  nodejs = nodejs-16_x;
+  nodejs = nodejs_16;
 
   pname = "audiobookshelf";
   version = "2.2.18";
@@ -37,7 +37,7 @@ in buildNpmPackage {
   buildInputs = [ util-linux ];
 
   dontNpmBuild = true;
-  npmInstallFlags = "--only-production";
+  npmInstallFlags = [ "--only-production" ];
   npmDepsHash = "sha256-0PFeXiS8RSffhrocrHODNpb6d9+nbpulCW5qYIrytDI=";
 
   installPhase = ''

@@ -61,15 +61,15 @@ self: super: {
           # not solvable short of recompiling GHC. Instead of adding
           # allowInconsistentDependencies for all reverse dependencies of hspec-core,
           # just upgrade to an hspec version without the offending dependency.
-          hspec-core = cself.hspec-core_2_10_10;
-          hspec-discover = cself.hspec-discover_2_10_10;
-          hspec = cself.hspec_2_10_10;
+          hspec-core = cself.hspec-core_2_11_0;
+          hspec-discover = cself.hspec-discover_2_11_0;
+          hspec = cself.hspec_2_11_0;
 
           # hspec-discover and hspec-core depend on hspec-meta for testing which
           # we need to avoid since it depends on ghc as well. Since hspec*_2_10*
           # are overridden to take the versioned attributes as inputs, we need
           # to make sure to override the versioned attribute with this fix.
-          hspec-discover_2_10_10 = dontCheck csuper.hspec-discover_2_10_10;
+          hspec-discover_2_11_0 = dontCheck csuper.hspec-discover_2_11_0;
 
           # Prevent dependency on doctest which causes an inconsistent dependency
           # due to depending on ghc which depends on directory etc.
@@ -247,6 +247,9 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
+  # 2023-04-17: https://gitlab.haskell.org/ghc/ghc-debug/-/issues/20
+  ghc-debug-brick = doJailbreak super.ghc-debug-brick;
+
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
@@ -412,11 +415,14 @@ self: super: {
   # 2022-01-29: Tests require package to be in ghc-db.
   aeson-schemas = dontCheck super.aeson-schemas;
 
-  # matterhorn-50200.17.0 won't work with brick >= 0.71, brick-skylighting >= 1.0
-  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_70_1;
-    brick-skylighting = self.brick-skylighting_0_3;
-  }));
+  # 2023-04-20: Restrictive bytestring bound in tests.
+  storablevector = doJailbreak super.storablevector;
+
+  # 2023-04-20: Pretends to need brick 1.6 but the commit history here
+  # https://github.com/matterhorn-chat/matterhorn/commits/master/matterhorn.cabal
+  # makes very clear that 1.4 is equally fine.
+  # Generally a slightly packaging hostile bound practice.
+  matterhorn = doJailbreak super.matterhorn;
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   # 2022-11-24: jailbreak as it has too strict bounds on a bunch of things
@@ -624,6 +630,10 @@ self: super: {
     })
   ] (dontCheck super.snappy);
 
+  # 2023-04-22: omfort-fftw 0.0.0.1 contains fixes to the tests. We can drop
+  # this override as soon as stackage advances.
+  comfort-fftw = doDistribute super.comfort-fftw_0_0_0_1;
+
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
 
@@ -741,9 +751,6 @@ self: super: {
   Win32 = overrideCabal (drv: { broken = !pkgs.stdenv.isCygwin; }) super.Win32;
   inline-c-win32 = dontDistribute super.inline-c-win32;
   Southpaw = dontDistribute super.Southpaw;
-
-  # Hydra no longer allows building texlive packages.
-  lhs2tex = dontDistribute super.lhs2tex;
 
   # https://ghc.haskell.org/trac/ghc/ticket/9825
   vimus = overrideCabal (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; }) super.vimus;
@@ -998,12 +1005,12 @@ self: super: {
     testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_10_5 ];
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) (super.sensei.override {
-    hspec = self.hspec_2_10_10;
+    hspec = self.hspec_2_11_0;
     hspec-wai = self.hspec-wai.override {
-      hspec = self.hspec_2_10_10;
+      hspec = self.hspec_2_11_0;
     };
     hspec-contrib = self.hspec-contrib.override {
-      hspec-core = self.hspec-core_2_10_10;
+      hspec-core = self.hspec-core_2_11_0;
     };
     fsnotify = self.fsnotify_0_4_1_0;
   });
@@ -1423,12 +1430,21 @@ self: super: {
     });
   };
 
-  jsaddle-webkit2gtk = overrideCabal (old: {
-    postPatch = old.postPatch or "" + ''
-      sed -i 's/bytestring.*0.11/bytestring/' jsaddle-webkit2gtk.cabal
-    '';
-  }) super.jsaddle-webkit2gtk;
 
+  # 2023-04-16: https://github.com/ghcjs/jsaddle/pull/137
+  jsaddle-webkit2gtk = lib.pipe super.jsaddle-webkit2gtk
+    [
+      (appendPatch (fetchpatch {
+        url = "https://github.com/ghcjs/jsaddle/commit/f990366f19d23a8008d482572d52351c1a6f7215.patch";
+        hash = "sha256-IbkJrlyG6q5rqMIhn//Dt3u6T314Pug+mQMwwe0LK5w=";
+        relative = "jsaddle-webkit2gtk";
+      }))
+      (overrideCabal (old: {
+        postPatch = old.postPatch or "" + ''
+          sed -i 's/bytestring.*0.11/bytestring/' jsaddle-webkit2gtk.cabal
+        '';
+      }))
+    ];
 
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
@@ -1658,16 +1674,16 @@ self: super: {
   servant-openapi3 = dontCheck super.servant-openapi3;
 
   # Give hspec 2.10.* correct dependency versions without overrideScope
-  hspec_2_10_10 = doDistribute (super.hspec_2_10_10.override {
-    hspec-discover = self.hspec-discover_2_10_10;
-    hspec-core = self.hspec-core_2_10_10;
+  hspec_2_11_0 = doDistribute (super.hspec_2_11_0.override {
+    hspec-discover = self.hspec-discover_2_11_0;
+    hspec-core = self.hspec-core_2_11_0;
   });
-  hspec-discover_2_10_10 = doDistribute (super.hspec-discover_2_10_10.override {
+  hspec-discover_2_11_0 = doDistribute (super.hspec-discover_2_11_0.override {
     hspec-meta = self.hspec-meta_2_10_5;
   });
-  # Need to disable tests to prevent an infinite recursion if hspec-core_2_10_10
+  # Need to disable tests to prevent an infinite recursion if hspec-core_2_11_0
   # is overlayed to hspec-core.
-  hspec-core_2_10_10 = doDistribute (dontCheck (super.hspec-core_2_10_10.override {
+  hspec-core_2_11_0 = doDistribute (dontCheck (super.hspec-core_2_11_0.override {
     hspec-meta = self.hspec-meta_2_10_5;
   }));
 
@@ -2477,7 +2493,7 @@ self: super: {
   # 2022-11-15: Needs newer witch package and brick 1.3 which in turn works with text-zipper 0.12
   # Other dependencies are resolved with doJailbreak for both swarm and brick_1_3
   swarm = doJailbreak (super.swarm.override {
-    brick = doJailbreak (dontCheck super.brick_1_6);
+    brick = doJailbreak (dontCheck super.brick_1_7);
   });
 
   # Too strict upper bound on bytestring
@@ -2609,4 +2625,11 @@ self: super: {
   # compatability with other gi- packages.
   # Take another look when gi-webkit2 updates as it may have become compatible with libsoup-3
   gi-soup = assert versions.major self.gi-webkit2.version == "4"; self.gi-soup_2_4_28;
+
+  llvm-ffi = super.llvm-ffi.override {
+    LLVM = pkgs.llvmPackages_13.libllvm;
+  };
+
+  # libfuse3 fails to mount fuse file systems within the build environment
+  libfuse3 = dontCheck super.libfuse3;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

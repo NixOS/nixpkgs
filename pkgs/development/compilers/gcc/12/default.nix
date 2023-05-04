@@ -17,7 +17,7 @@
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , libucontext ? null
-, gnatboot ? null
+, gnat-bootstrap ? null
 , enableMultilib ? false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
@@ -29,7 +29,6 @@
 , buildPackages
 , libxcrypt
 , disableGdbPlugin ? !enablePlugin
-, disableBootstrap ? !stdenv.hostPlatform.isDarwin
 , nukeReferences
 , callPackage
 }:
@@ -39,7 +38,7 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
-assert langAda -> gnatboot != null;
+assert langAda -> gnat-bootstrap != null;
 
 # TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
 #   error: GDC is required to build d
@@ -57,6 +56,7 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
+    disableBootstrap = !stdenv.hostPlatform.isDarwin && !profiledCompiler;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -159,7 +159,7 @@ let majorVersion = "12";
         fetchurl
         gettext
         gmp
-        gnatboot
+        gnat-bootstrap
         gnused
         isl
         langAda
@@ -288,6 +288,8 @@ lib.pipe (stdenv.mkDerivation ({
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
   buildFlags =
+    # we do not yet have Nix-driven profiling
+    assert profiledCompiler -> !disableBootstrap;
     let target =
           lib.optionalString (profiledCompiler) "profiled" +
           lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";

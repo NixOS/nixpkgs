@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nikolay Amiantov <ab@fmap.me>
+Date: Thu, 7 Jul 2016 02:47:13 +0300
+Subject: [PATCH] Fix hwdb paths
+
+Patch by vcunat.
+---
+ src/libsystemd/sd-hwdb/hwdb-internal.h | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/src/libsystemd/sd-hwdb/hwdb-internal.h b/src/libsystemd/sd-hwdb/hwdb-internal.h
+index 5302679a62..39e59a527f 100644
+--- a/src/libsystemd/sd-hwdb/hwdb-internal.h
++++ b/src/libsystemd/sd-hwdb/hwdb-internal.h
+@@ -83,8 +83,4 @@ struct trie_value_entry2_f {
+ } _packed_;
+ 
+ #define hwdb_bin_paths                          \
+-        "/etc/systemd/hwdb/hwdb.bin\0"          \
+-        "/etc/udev/hwdb.bin\0"                  \
+-        "/usr/lib/systemd/hwdb/hwdb.bin\0"      \
+-        _CONF_PATHS_SPLIT_USR_NULSTR("systemd/hwdb/hwdb.bin") \
+-        UDEVLIBEXECDIR "/hwdb.bin\0"
++        "/etc/udev/hwdb.bin\0"

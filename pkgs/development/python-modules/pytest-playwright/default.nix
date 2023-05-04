@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , playwright
+, playwright-driver
 , pytest
 , pytest-base-url
 , pytestCheckHook
@@ -46,7 +47,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   preCheck = ''
-    export PLAYWRIGHT_BROWSERS_PATH=${playwright.browsers}
+    export PLAYWRIGHT_BROWSERS_PATH=${playwright-driver.browsers}
   '';
 
   pythonImportsCheck = [

@@ -72,15 +72,14 @@ let
   } // (getProviderOptions cfg cfg.provider) // cfg.extraConfig;
 
   mapConfig = key: attr:
-  if attr != null && attr != [] then (
+  optionalString (attr != null && attr != []) (
     if isDerivation attr then mapConfig key (toString attr) else
     if (builtins.typeOf attr) == "set" then concatStringsSep " "
       (mapAttrsToList (name: value: mapConfig (key + "-" + name) value) attr) else
     if (builtins.typeOf attr) == "list" then concatMapStringsSep " " (mapConfig key) attr else
     if (builtins.typeOf attr) == "bool" then "--${key}=${boolToString attr}" else
     if (builtins.typeOf attr) == "string" then "--${key}='${attr}'" else
-    "--${key}=${toString attr}")
-    else "";
+    "--${key}=${toString attr}");
 
   configString = concatStringsSep " " (mapAttrsToList mapConfig allConfig);
 in

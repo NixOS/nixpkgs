@@ -3,12 +3,12 @@
 , fetchFromGitHub
 , git
 , nixosTests
-, nodejs-16_x
+, nodejs_16
 , python3
 }:
 
 let
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs-16_x; };
+  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_16; };
 
   version = "2023.3.0b";
 

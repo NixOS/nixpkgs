@@ -16,20 +16,20 @@ let
       filename = "boot.json";
       json =
         pkgs.writeText filename
-          (builtins.toJSON
+        (builtins.toJSON
+          # Merge extensions first to not let them shadow NixOS bootspec data.
+          (cfg.extensions //
           {
-            v1 = {
+            "org.nixos.bootspec.v1" = {
               system = config.boot.kernelPackages.stdenv.hostPlatform.system;
               kernel = "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
               kernelParams = config.boot.kernelParams;
               label = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
-
-              inherit (cfg) extensions;
             } // lib.optionalAttrs config.boot.initrd.enable {
               initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
               initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
             };
-          });
+          }));
 
       generator =
         let
@@ -42,8 +42,8 @@ let
           toplevelInjector = lib.escapeShellArgs [
             "${pkgs.jq}/bin/jq"
             ''
-              .v1.toplevel = $toplevel |
-              .v1.init = $init
+              ."org.nixos.bootspec.v1".toplevel = $toplevel |
+              ."org.nixos.bootspec.v1".init = $init
             ''
             "--sort-keys"
             "--arg" "toplevel" "${placeholder "out"}"
@@ -62,14 +62,10 @@ let
             lib.escapeShellArgs [
               "${pkgs.jq}/bin/jq"
               "--sort-keys"
-              ".v1.specialisation = ($ARGS.named | map_values(. | first | .v1))"
+              ''."org.nixos.specialisation.v1" = ($ARGS.named | map_values(. | first))''
             ] + " ${lib.concatStringsSep " " specialisationLoader}";
         in
-        ''
-          mkdir -p $out/bootspec
-
-          ${toplevelInjector} | ${specialisationInjector} > $out/${filename}
-        '';
+        "${toplevelInjector} | ${specialisationInjector} > $out/${filename}";
 
       validator = pkgs.writeCueValidator ./bootspec.cue {
         document = "Document"; # Universal validator for any version as long the schema is correctly set.
@@ -79,10 +75,17 @@ let
 in
 {
   options.boot.bootspec = {
-    enable = lib.mkEnableOption (lib.mdDoc "Enable generation of RFC-0125 bootspec in $system/bootspec, e.g. /run/current-system/bootspec");
+    enable = lib.mkEnableOption (lib.mdDoc "the generation of RFC-0125 bootspec in $system/boot.json, e.g. /run/current-system/boot.json")
+      // { default = true; internal = true; };
+    enableValidation = lib.mkEnableOption (lib.mdDoc ''the validation of bootspec documents for each build.
+      This will introduce Go in the build-time closure as we are relying on [Cuelang](https://cuelang.org/) for schema validation.
+      Enable this option if you want to ascertain that your documents are correct.
+      ''
+    );
 
     extensions = lib.mkOption {
-      type = lib.types.attrsOf lib.types.attrs; # <namespace>: { ...namespace-specific fields }
+      # NOTE(RaitoBezarius): this is not enough to validate: extensions."osRelease" = drv; those are picked up by cue validation.
+      type = lib.types.attrsOf lib.types.anything; # <namespace>: { ...namespace-specific fields }
       default = { };
       description = lib.mdDoc ''
         User-defined data that extends the bootspec document.
@@ -111,16 +114,5 @@ in
       internal = true;
       default = schemas.v1.filename;
     };
-  };
-
-  config = lib.mkIf (cfg.enable) {
-    warnings = [
-      ''RFC-0125 is not merged yet, this is a feature preview of bootspec.
-        The schema is not definitive and features are not guaranteed to be stable until RFC-0125 is merged.
-        See:
-        - https://github.com/NixOS/nixpkgs/pull/172237 to track merge status in nixpkgs.
-        - https://github.com/NixOS/rfcs/pull/125 to track RFC status.
-      ''
-    ];
   };
 }

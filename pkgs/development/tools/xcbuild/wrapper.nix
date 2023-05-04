@@ -2,7 +2,9 @@
 , CoreServices, ImageIO, CoreGraphics
 , xcodePlatform ? stdenv.targetPlatform.xcodePlatform or "MacOSX"
 , xcodeVer ? stdenv.targetPlatform.xcodeVer or "9.4.1"
-, sdkVer ? stdenv.targetPlatform.darwinSdkVersion or "10.12" }:
+, sdkVer ? stdenv.targetPlatform.darwinSdkVersion or "10.12"
+, productBuildVer ? null
+}:
 
 let
 
@@ -23,8 +25,7 @@ let
   };
 
   sdks = callPackage ./sdks.nix {
-    inherit toolchainName sdkName xcodePlatform;
-    version = sdkVer;
+    inherit toolchainName sdkName xcodePlatform sdkVer productBuildVer;
   };
 
   platforms = callPackage ./platforms.nix {

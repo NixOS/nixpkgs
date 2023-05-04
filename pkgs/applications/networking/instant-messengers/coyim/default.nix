@@ -13,7 +13,7 @@
 
 buildGoPackage rec {
   pname = "coyim";
-  version = "0.4";
+  version = "0.4.1";
 
   goPackagePath = "github.com/coyim/coyim";
 
@@ -21,7 +21,7 @@ buildGoPackage rec {
     owner = "coyim";
     repo = "coyim";
     rev = "v${version}";
-    sha256 = "sha256-dpTU5Tx1pfUGZMt9QNEYDytgArhhvEvh1Yvj6IAjgeI=";
+    sha256 = "sha256-PmB6POaHKEXzIAaz3lAbUOhtVOzrj5oXRk90giYo6SI=";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];

@@ -2,20 +2,20 @@
 
 {
 
-  tlpdb-nix = runCommand "texlive-test-tlpdb-nix" {
+  tlpdbNix = runCommand "texlive-test-tlpdb-nix" {
     nixpkgsTlpdbNix = ../../tools/typesetting/tex/texlive/tlpdb.nix;
-    tlpdbNix = texlive.tlpdb-nix;
+    tlpdbNix = texlive.tlpdb.nix;
   }
   ''
     mkdir -p "$out"
     diff -u "''${nixpkgsTlpdbNix}" "''${tlpdbNix}" | tee "$out/tlpdb.nix.patch"
   '';
 
-  luaotfload-fonts = runCommand "texlive-test-lualatex" {
+  opentype-fonts = runCommand "texlive-test-opentype" {
     nativeBuildInputs = [
       (with texlive; combine { inherit scheme-medium libertinus-fonts; })
     ];
-    input = builtins.toFile "lualatex-testfile.tex" ''
+    input = builtins.toFile "opentype-testfile.tex" ''
       \documentclass{article}
       \usepackage{fontspec}
       \setmainfont{Libertinus Serif}
@@ -26,7 +26,13 @@
   }
   ''
     export HOME="$(mktemp -d)"
+    # We use the same testfile to test two completely different
+    # font discovery mechanisms, both of which were once broken:
+    #  - lualatex uses its own luaotfload script (#220228)
+    #  - xelatex uses fontconfig (#228196)
+    # both of the following two commands need to succeed.
     lualatex -halt-on-error "$input"
+    xelatex -halt-on-error "$input"
     echo success > $out
   '';
 

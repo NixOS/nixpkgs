@@ -129,7 +129,6 @@ broken-packages:
   - alpino-tools
   - alsa
   - alsa-midi
-  - alsa-seq
   - altcomposition
   - alternative-extra
   - alternative-io
@@ -411,6 +410,7 @@ broken-packages:
   - biscuit-haskell
   - bisect-binary
   - bishbosh
+  - bitcoind-rpc # dependency missing in job https://hydra.nixos.org/build/217579845 at 2023-04-29
   - bitcoin-hs
   - bitcoin-keys
   - bitcoin-rpc
@@ -473,6 +473,7 @@ broken-packages:
   - brick-dropdownmenu
   - brick-filetree
   - brick-list-search #  failure  in job https://hydra.nixos.org/build/211236614 at 2023-03-13
+  - brick-list-skip #  failure  in job https://hydra.nixos.org/build/215850872 at 2023-04-17
   - bricks-internal
   - brick-tabular-list
   - brillig
@@ -980,7 +981,6 @@ broken-packages:
   - curryrs
   - curves
   - custom-prelude
-  - cutter
   - cut-the-crap
   - CV
   - d3js
@@ -1117,6 +1117,7 @@ broken-packages:
   - derp-lib
   - describe
   - descriptive
+  - desktop-portal # test failure in job https://hydra.nixos.org/build/217585702 at 2023-04-29
   - deterministic-game-engine
   - detrospector
   - deunicode
@@ -1207,7 +1208,6 @@ broken-packages:
   - docopt
   - docrecords
   - doctest-discover-configurator
-  - doctest-extract
   - doctest-prop
   - docusign-example
   - docvim
@@ -1372,7 +1372,6 @@ broken-packages:
   - epoll
   - epubname
   - Eq
-  - equal-files
   - EqualitySolver
   - equational-reasoning-induction
   - equeue
@@ -1404,7 +1403,6 @@ broken-packages:
   - eved
   - event
   - event-driven
-  - eventlog2html #  failure  in job https://hydra.nixos.org/build/214597490 at 2023-04-07
   - eventsource-api
   - eventsourced
   - eventstore
@@ -1648,6 +1646,7 @@ broken-packages:
   - ftphs
   - full-sessions
   - funbot-client
+  - funcons-lambda-cbv-mp # failure building executable 'lambda-cbv' in job https://hydra.nixos.org/build/217559083 at 2023-04-29
   - functional-arrow
   - function-instances-algebra
   - functor-combinators
@@ -1744,7 +1743,6 @@ broken-packages:
   - ghc-clippy-plugin
   - ghc-core-smallstep
   - ghc-datasize
-  - ghc-debug-client
   - ghc-dump-tree
   - ghc-dup
   - ghc-events-analyze
@@ -1903,7 +1901,6 @@ broken-packages:
   - grm
   - GroteTrap
   - groundhog
-  - group-by-date
   - groups-generic
   - group-theory
   - group-with
@@ -2687,7 +2684,6 @@ broken-packages:
   - ieee-utils
   - iexcloud
   - ifcxt
-  - iff
   - if-instance
   - IFS
   - ig
@@ -3081,7 +3077,6 @@ broken-packages:
   - lhslatex
   - LibClang
   - libexpect
-  - libfuse3
   - libGenI
   - libhbb
   - libinfluxdb
@@ -3157,7 +3152,7 @@ broken-packages:
   - ll-picosat
   - llsd
   - llvm-base
-  - llvm-ffi
+  - llvm-extra # dependency missing in job https://hydra.nixos.org/build/217586045 at 2023-04-29
   - llvm-general-pure
   - llvm-hs
   - llvm-ht
@@ -3288,7 +3283,6 @@ broken-packages:
   - MazesOfMonad
   - MBot
   - mbox-tools
-  - mbox-utility
   - mbug
   - mcl
   - mcm
@@ -3355,6 +3349,7 @@ broken-packages:
   - microsoft-translator
   - mida
   - midi-simple
+  - midisurface # dependency missing in job https://hydra.nixos.org/build/217805409 at 2023-04-29
   - midi-utils
   - mighty-metropolis # test failure in job https://hydra.nixos.org/build/214599789 at 2023-04-07
   - migrant-postgresql-simple
@@ -3465,6 +3460,7 @@ broken-packages:
   - monoidplus
   - monoids
   - monoid-statistics
+  - monomer-flatpak-example #  failure  in job https://hydra.nixos.org/build/215851035 at 2023-04-17
   - monopati
   - monus
   - monzo
@@ -3742,6 +3738,7 @@ broken-packages:
   - opaleye-trans
   - open-adt
   - OpenAFP
+  - openai-hs # failure building library in job https://hydra.nixos.org/build/215850908 at 2023-04-17
   - openapi3
   - openapi3-code-generator
   - openapi-petstore
@@ -3985,6 +3982,7 @@ broken-packages:
   - pg-store
   - pgstream
   - pg-transact
+  - pgvector #  failure  in job https://hydra.nixos.org/build/215851675 at 2023-04-17
   - phasechange
   - phaser
   - phoityne
@@ -4598,6 +4596,7 @@ broken-packages:
   - rustls
   - rws
   - RxHaskell
+  - rzk # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/217574605 at 2023-04-29
   - rz-pipe
   - SableCC2Hs
   - safe-buffer-monad
@@ -4973,6 +4972,7 @@ broken-packages:
   - softfloat-hs
   - solar
   - solga
+  - som # test failure in job https://hydra.nixos.org/build/216744749 at 2023-04-20
   - Sonnex
   - sorted
   - sorting
@@ -5083,7 +5083,6 @@ broken-packages:
   - stooq-api
   - storable
   - storable-static-array
-  - storablevector
   - stp
   - str
   - Strafunski-ATermLib
@@ -5093,6 +5092,7 @@ broken-packages:
   - stratux-types
   - stream
   - streamdeck
+  - streamed # dependency missing in job https://hydra.nixos.org/build/217576821 at 2023-04-29
   - stream-fusion
   - streaming-benchmarks
   - streaming-brotli
@@ -5206,6 +5206,7 @@ broken-packages:
   - sync-mht
   - syntax-trees
   - syntax-trees-fork-bairyn
+  - synthesizer # dependency missing in job https://hydra.nixos.org/build/217577245 at 2023-04-29
   - Sysmon
   - system-canonicalpath
   - system-command
@@ -5226,7 +5227,6 @@ broken-packages:
   - tabloid
   - tabs
   - tag-bits
-  - tagchup
   - tagged-exception-core
   - tagged-timers
   - taggy-lens
@@ -5252,6 +5252,7 @@ broken-packages:
   - tasty-hedgehog-coverage
   - tasty-json
   - tasty-mgolden
+  - tasty-papi # test failure in job https://hydra.nixos.org/build/216756583 at 2023-04-20
   - tasty-stats
   - tasty-test-vector
   - TastyTLT
@@ -5331,7 +5332,6 @@ broken-packages:
   - text-offset
   - text-position
   - text-register-machine
-  - text-time
   - text-trie
   - textual
   - text-utf7
@@ -5401,6 +5401,7 @@ broken-packages:
   - time-quote
   - time-recurrence
   - time-series
+  - timeseries # dependency missing in job https://hydra.nixos.org/build/217565262 at 2023-04-29
   - time-series-lib
   - timeutils
   - time-w3c
@@ -5520,6 +5521,7 @@ broken-packages:
   - twilio
   - twiml
   - twine
+  - twirl # dependency missing in job https://hydra.nixos.org/build/217564808 at 2023-04-29
   - twirp
   - twisty
   - twitchapi
@@ -5699,6 +5701,7 @@ broken-packages:
   - vector-fftw
   - vector-functorlazy
   - vector-heterogenous
+  - vector-quicksort # dependency missing in job https://hydra.nixos.org/build/216753081 at 2023-04-20
   - vector-random
   - vector-read-instances
   - vector-space-map

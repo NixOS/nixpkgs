@@ -1,5 +1,5 @@
 let
-  withGold = platform: platform.parsed.kernel.execFormat.name == "elf" && !platform.isRiscV;
+  withGold = platform: platform.parsed.kernel.execFormat.name == "elf" && !platform.isRiscV && !platform.isLoongArch64;
 in
 
 { stdenv

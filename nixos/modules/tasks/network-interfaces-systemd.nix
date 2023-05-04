@@ -28,11 +28,164 @@ let
     # TODO: warn the user that any address configured on those interfaces will be useless
     ++ concatMap (i: attrNames (filterAttrs (_: config: config.type != "internal") i.interfaces)) (attrValues cfg.vswitches);
 
+  domains = cfg.search ++ (optional (cfg.domain != null) cfg.domain);
+  genericNetwork = override:
+    let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "") cfg.defaultGateway.address
+      ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "") cfg.defaultGateway6.address;
+        makeGateway = gateway: {
+          routeConfig = {
+            Gateway = gateway;
+            GatewayOnLink = false;
+          };
+        };
+    in optionalAttrs (gateway != [ ]) {
+      routes = override (map makeGateway gateway);
+    } // optionalAttrs (domains != [ ]) {
+      domains = override domains;
+    };
+
+  genericDhcpNetworks = initrd: mkIf cfg.useDHCP {
+    networks."99-ethernet-default-dhcp" = {
+      # We want to match physical ethernet interfaces as commonly
+      # found on laptops, desktops and servers, to provide an
+      # "out-of-the-box" setup that works for common cases.  This
+      # heuristic isn't perfect (it could match interfaces with
+      # custom names that _happen_ to start with en or eth), but
+      # should be good enough to make the common case easy and can
+      # be overridden on a case-by-case basis using
+      # higher-priority networks or by disabling useDHCP.
+
+      # Type=ether matches veth interfaces as well, and this is
+      # more likely to result in interfaces being configured to
+      # use DHCP when they shouldn't.
+
+      # When wait-online.anyInterface is enabled, RequiredForOnline really
+      # means "sufficient for online", so we can enable it.
+      # Otherwise, don't block the network coming online because of default networks.
+      matchConfig.Name = ["en*" "eth*"];
+      DHCP = "yes";
+      linkConfig.RequiredForOnline =
+        lib.mkDefault (if initrd
+        then config.boot.initrd.systemd.network.wait-online.anyInterface
+        else config.systemd.network.wait-online.anyInterface);
+      networkConfig.IPv6PrivacyExtensions = "kernel";
+    };
+    networks."99-wireless-client-dhcp" = {
+      # Like above, but this is much more likely to be correct.
+      matchConfig.WLANInterfaceType = "station";
+      DHCP = "yes";
+      linkConfig.RequiredForOnline =
+        lib.mkDefault config.systemd.network.wait-online.anyInterface;
+      networkConfig.IPv6PrivacyExtensions = "kernel";
+      # We also set the route metric to one more than the default
+      # of 1024, so that Ethernet is preferred if both are
+      # available.
+      dhcpV4Config.RouteMetric = 1025;
+      ipv6AcceptRAConfig.RouteMetric = 1025;
+    };
+  };
+
+
+  interfaceNetworks = mkMerge (forEach interfaces (i: {
+    netdevs = mkIf i.virtual ({
+      "40-${i.name}" = {
+        netdevConfig = {
+          Name = i.name;
+          Kind = i.virtualType;
+        };
+        "${i.virtualType}Config" = optionalAttrs (i.virtualOwner != null) {
+          User = i.virtualOwner;
+        };
+      };
+    });
+    networks."40-${i.name}" = mkMerge [ (genericNetwork id) {
+      name = mkDefault i.name;
+      DHCP = mkForce (dhcpStr
+        (if i.useDHCP != null then i.useDHCP else false));
+      address = forEach (interfaceIps i)
+        (ip: "${ip.address}/${toString ip.prefixLength}");
+      routes = forEach (interfaceRoutes i)
+        (route: {
+          # Most of these route options have not been tested.
+          # Please fix or report any mistakes you may find.
+          routeConfig =
+            optionalAttrs (route.address != null && route.prefixLength != null) {
+              Destination = "${route.address}/${toString route.prefixLength}";
+            } //
+            optionalAttrs (route.options ? fastopen_no_cookie) {
+              FastOpenNoCookie = route.options.fastopen_no_cookie;
+            } //
+            optionalAttrs (route.via != null) {
+              Gateway = route.via;
+            } //
+            optionalAttrs (route.type != null) {
+              Type = route.type;
+            } //
+            optionalAttrs (route.options ? onlink) {
+              GatewayOnLink = true;
+            } //
+            optionalAttrs (route.options ? initrwnd) {
+              InitialAdvertisedReceiveWindow = route.options.initrwnd;
+            } //
+            optionalAttrs (route.options ? initcwnd) {
+              InitialCongestionWindow = route.options.initcwnd;
+            } //
+            optionalAttrs (route.options ? pref) {
+              IPv6Preference = route.options.pref;
+            } //
+            optionalAttrs (route.options ? mtu) {
+              MTUBytes = route.options.mtu;
+            } //
+            optionalAttrs (route.options ? metric) {
+              Metric = route.options.metric;
+            } //
+            optionalAttrs (route.options ? src) {
+              PreferredSource = route.options.src;
+            } //
+            optionalAttrs (route.options ? protocol) {
+              Protocol = route.options.protocol;
+            } //
+            optionalAttrs (route.options ? quickack) {
+              QuickAck = route.options.quickack;
+            } //
+            optionalAttrs (route.options ? scope) {
+              Scope = route.options.scope;
+            } //
+            optionalAttrs (route.options ? from) {
+              Source = route.options.from;
+            } //
+            optionalAttrs (route.options ? table) {
+              Table = route.options.table;
+            } //
+            optionalAttrs (route.options ? advmss) {
+              TCPAdvertisedMaximumSegmentSize = route.options.advmss;
+            } //
+            optionalAttrs (route.options ? ttl-propagate) {
+              TTLPropagate = route.options.ttl-propagate == "enabled";
+            };
+        });
+      networkConfig.IPv6PrivacyExtensions = "kernel";
+      linkConfig = optionalAttrs (i.macAddress != null) {
+        MACAddress = i.macAddress;
+      } // optionalAttrs (i.mtu != null) {
+        MTUBytes = toString i.mtu;
+      };
+    }];
+  }));
+
 in
 
 {
+  config = mkMerge [
 
-  config = mkIf cfg.useNetworkd {
+  (mkIf config.boot.initrd.network.enable {
+    # Note this is if initrd.network.enable, not if
+    # initrd.systemd.network.enable. By setting the latter and not the
+    # former, the user retains full control over the configuration.
+    boot.initrd.systemd.network = mkMerge [(genericDhcpNetworks true) interfaceNetworks];
+  })
+
+  (mkIf cfg.useNetworkd {
 
     assertions = [ {
       assertion = cfg.defaultGatewayWindowSize == null;
@@ -54,149 +207,11 @@ in
     networking.dhcpcd.enable = mkDefault false;
 
     systemd.network =
-      let
-        domains = cfg.search ++ (optional (cfg.domain != null) cfg.domain);
-        genericNetwork = override:
-          let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "") cfg.defaultGateway.address
-            ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "") cfg.defaultGateway6.address;
-              makeGateway = gateway: {
-                routeConfig = {
-                  Gateway = gateway;
-                  GatewayOnLink = false;
-                };
-              };
-          in optionalAttrs (gateway != [ ]) {
-            routes = override (map makeGateway gateway);
-          } // optionalAttrs (domains != [ ]) {
-            domains = override domains;
-          };
-      in mkMerge [ {
+      mkMerge [ {
         enable = true;
       }
-      (mkIf cfg.useDHCP {
-        networks."99-ethernet-default-dhcp" = lib.mkIf cfg.useDHCP {
-          # We want to match physical ethernet interfaces as commonly
-          # found on laptops, desktops and servers, to provide an
-          # "out-of-the-box" setup that works for common cases.  This
-          # heuristic isn't perfect (it could match interfaces with
-          # custom names that _happen_ to start with en or eth), but
-          # should be good enough to make the common case easy and can
-          # be overridden on a case-by-case basis using
-          # higher-priority networks or by disabling useDHCP.
-
-          # Type=ether matches veth interfaces as well, and this is
-          # more likely to result in interfaces being configured to
-          # use DHCP when they shouldn't.
-
-          # When wait-online.anyInterface is enabled, RequiredForOnline really
-          # means "sufficient for online", so we can enable it.
-          # Otherwise, don't block the network coming online because of default networks.
-          matchConfig.Name = ["en*" "eth*"];
-          DHCP = "yes";
-          linkConfig.RequiredForOnline =
-            lib.mkDefault config.systemd.network.wait-online.anyInterface;
-          networkConfig.IPv6PrivacyExtensions = "kernel";
-        };
-        networks."99-wireless-client-dhcp" = lib.mkIf cfg.useDHCP {
-          # Like above, but this is much more likely to be correct.
-          matchConfig.WLANInterfaceType = "station";
-          DHCP = "yes";
-          linkConfig.RequiredForOnline =
-            lib.mkDefault config.systemd.network.wait-online.anyInterface;
-          networkConfig.IPv6PrivacyExtensions = "kernel";
-          # We also set the route metric to one more than the default
-          # of 1024, so that Ethernet is preferred if both are
-          # available.
-          dhcpV4Config.RouteMetric = 1025;
-          ipv6AcceptRAConfig.RouteMetric = 1025;
-        };
-      })
-      (mkMerge (forEach interfaces (i: {
-        netdevs = mkIf i.virtual ({
-          "40-${i.name}" = {
-            netdevConfig = {
-              Name = i.name;
-              Kind = i.virtualType;
-            };
-            "${i.virtualType}Config" = optionalAttrs (i.virtualOwner != null) {
-              User = i.virtualOwner;
-            };
-          };
-        });
-        networks."40-${i.name}" = mkMerge [ (genericNetwork id) {
-          name = mkDefault i.name;
-          DHCP = mkForce (dhcpStr
-            (if i.useDHCP != null then i.useDHCP else false));
-          address = forEach (interfaceIps i)
-            (ip: "${ip.address}/${toString ip.prefixLength}");
-          routes = forEach (interfaceRoutes i)
-            (route: {
-              # Most of these route options have not been tested.
-              # Please fix or report any mistakes you may find.
-              routeConfig =
-                optionalAttrs (route.address != null && route.prefixLength != null) {
-                  Destination = "${route.address}/${toString route.prefixLength}";
-                } //
-                optionalAttrs (route.options ? fastopen_no_cookie) {
-                  FastOpenNoCookie = route.options.fastopen_no_cookie;
-                } //
-                optionalAttrs (route.via != null) {
-                  Gateway = route.via;
-                } //
-                optionalAttrs (route.type != null) {
-                  Type = route.type;
-                } //
-                optionalAttrs (route.options ? onlink) {
-                  GatewayOnLink = true;
-                } //
-                optionalAttrs (route.options ? initrwnd) {
-                  InitialAdvertisedReceiveWindow = route.options.initrwnd;
-                } //
-                optionalAttrs (route.options ? initcwnd) {
-                  InitialCongestionWindow = route.options.initcwnd;
-                } //
-                optionalAttrs (route.options ? pref) {
-                  IPv6Preference = route.options.pref;
-                } //
-                optionalAttrs (route.options ? mtu) {
-                  MTUBytes = route.options.mtu;
-                } //
-                optionalAttrs (route.options ? metric) {
-                  Metric = route.options.metric;
-                } //
-                optionalAttrs (route.options ? src) {
-                  PreferredSource = route.options.src;
-                } //
-                optionalAttrs (route.options ? protocol) {
-                  Protocol = route.options.protocol;
-                } //
-                optionalAttrs (route.options ? quickack) {
-                  QuickAck = route.options.quickack;
-                } //
-                optionalAttrs (route.options ? scope) {
-                  Scope = route.options.scope;
-                } //
-                optionalAttrs (route.options ? from) {
-                  Source = route.options.from;
-                } //
-                optionalAttrs (route.options ? table) {
-                  Table = route.options.table;
-                } //
-                optionalAttrs (route.options ? advmss) {
-                  TCPAdvertisedMaximumSegmentSize = route.options.advmss;
-                } //
-                optionalAttrs (route.options ? ttl-propagate) {
-                  TTLPropagate = route.options.ttl-propagate == "enabled";
-                };
-            });
-          networkConfig.IPv6PrivacyExtensions = "kernel";
-          linkConfig = optionalAttrs (i.macAddress != null) {
-            MACAddress = i.macAddress;
-          } // optionalAttrs (i.mtu != null) {
-            MTUBytes = toString i.mtu;
-          };
-        }];
-      })))
+      (genericDhcpNetworks false)
+      interfaceNetworks
       (mkMerge (flip mapAttrsToList cfg.bridges (name: bridge: {
         netdevs."40-${name}" = {
           netdevConfig = {
@@ -437,6 +452,7 @@ in
               bindsTo = [ "systemd-networkd.service" ];
           };
       };
-  };
+  })
 
+  ];
 }

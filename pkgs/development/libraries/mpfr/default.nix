@@ -28,9 +28,13 @@ stdenv.mkDerivation rec {
   # mpfr.h requires gmp.h
   propagatedBuildInputs = [ gmp ];
 
-  configureFlags =
-    lib.optional stdenv.hostPlatform.isSunOS "--disable-thread-safe" ++
-    lib.optional stdenv.hostPlatform.is64bit "--with-pic";
+  configureFlags = lib.optional stdenv.hostPlatform.isSunOS "--disable-thread-safe"
+    ++ lib.optional stdenv.hostPlatform.is64bit "--with-pic"
+    ++ lib.optional stdenv.hostPlatform.isPower64 [
+      # Without this, the `tget_set_d128` test experiences a link
+      # error due to missing `__dpd_trunctdkf`.
+      "--disable-decimal-float"
+    ];
 
   doCheck = true; # not cross;
 
