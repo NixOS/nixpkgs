@@ -6516,6 +6516,8 @@ self: super: with self; {
 
   nclib = callPackage ../development/python-modules/nclib { };
 
+  ndeflib = callPackage ../development/python-modules/ndeflib { };
+
   ndg-httpsclient = callPackage ../development/python-modules/ndg-httpsclient { };
 
   ndindex = callPackage ../development/python-modules/ndindex { };
@@ -6579,6 +6581,8 @@ self: super: with self; {
   nextcord = callPackage ../development/python-modules/nextcord { };
 
   nextdns = callPackage ../development/python-modules/nextdns { };
+
+  nfcpy = callPackage ../development/python-modules/nfcpy { };
 
   nftables = toPythonModule (pkgs.nftables.override {
     python3 = python;
