@@ -612,9 +612,9 @@ let
           optionalString cfg.unixAuth ''
             auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth try_first_pass
           '' +
-          (optionalString (cfg.fprintAuth && cfg.fprintAuthAfterPassword) ''
+          optionalString (cfg.fprintAuth && cfg.fprintAuthAfterPassword) ''
             auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so
-          '') +
+          '' +
           optionalString cfg.otpwAuth ''
             auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so
           '' +
