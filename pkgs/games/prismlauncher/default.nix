@@ -47,10 +47,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     rm -rf source/libraries/libnbtplusplus
-    mkdir source/libraries/libnbtplusplus
-    ln -s ${libnbtplusplus}/* source/libraries/libnbtplusplus
-    chmod -R +r+w source/libraries/libnbtplusplus
-    chown -R $USER: source/libraries/libnbtplusplus
+    ln -s ${libnbtplusplus} source/libraries/libnbtplusplus
   '';
 
   dontWrapQtApps = true;
