@@ -48,8 +48,9 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # Don't keep a reference to RPM headers or manpages
     for f in $out/lib/rpm/platform/*/macros; do
-      substituteInPlace $f --replace "$dev" "/rpm-dev-path-was-here"
-      substituteInPlace $f --replace "$man" "/rpm-man-path-was-here"
+      substituteInPlace "$f" \
+        --replace "$dev" "/rpm-dev-path-was-here" \
+        --replace "$man" "/rpm-man-path-was-here"
     done
 
     # Avoid macros like '%__ld' pointing to absolute paths
@@ -58,9 +59,7 @@ stdenv.mkDerivation rec {
     done
 
     # Avoid helper scripts pointing to absolute paths
-    for tool in find-provides find-requires; do
-      sed -i $out/lib/rpm/$tool -e "s#/usr/lib/rpm/#$out/lib/rpm/#"
-    done
+    substituteInPlace "$out/lib/rpm/"{find-provides,find-requires,check-rpaths-worker,check-rpaths} --replace '/usr/lib/rpm' "$out/lib/rpm"
 
     # symlinks produced by build are incorrect
     ln -sf $out/bin/{rpm,rpmquery}
