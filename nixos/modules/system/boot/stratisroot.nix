@@ -39,13 +39,13 @@ in
           stratis-setup = {
             description = "setup for Stratis root filesystem";
             unitConfig.DefaultDependencies = "no";
-            conflicts = [ "shutdown.target" ];
+            conflicts = [ "shutdown.target" "initrd-switch-root.target" ];
             onFailure = [ "emergency.target" ];
             unitConfig.OnFailureJobMode = "isolate";
-            wants = [ "stratisd-min.service" "plymouth-start.service" "stratis-clevis-setup.service" ];
+            wants = [ "stratisd-min.service" "plymouth-start.service" ];
             wantedBy = [ "initrd.target" ];
             after = [ "paths.target" "plymouth-start.service" "stratisd-min.service" ];
-            before = [ "initrd.target" ];
+            before = [ "initrd.target" "shutdown.target" "initrd-switch-root.target" ];
             environment.STRATIS_ROOTFS_UUID = config.boot.stratis.rootPoolUuid;
             serviceConfig = {
               Type = "oneshot";
