@@ -8178,6 +8178,8 @@ self: super: with self; {
 
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
+  py-partiql-parser = callPackage ../development/python-modules/py-partiql-parser { };
+
   py-pdf-parser = callPackage ../development/python-modules/py-pdf-parser { };
 
   py-serializable = callPackage ../development/python-modules/py-serializable { };
