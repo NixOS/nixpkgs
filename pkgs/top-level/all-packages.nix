@@ -4920,8 +4920,6 @@ with pkgs;
 
   gdu = callPackage ../tools/system/gdu { };
 
-  gfxreconstruct = callPackage ../tools/graphics/gfxreconstruct { };
-
   go-chromecast = callPackage ../applications/video/go-chromecast { };
 
   go-containerregistry = callPackage ../development/tools/go-containerregistry { };
@@ -15309,8 +15307,6 @@ with pkgs;
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
-  glslang = callPackage ../development/compilers/glslang { };
-
   gnostic = callPackage ../development/compilers/gnostic { };
 
   go-junit-report = callPackage ../development/tools/go-junit-report { };
@@ -19045,9 +19041,6 @@ with pkgs;
   spicy-parser-generator = callPackage ../development/tools/parsing/spicy { };
 
   spin = callPackage ../development/tools/analysis/spin { };
-
-  spirv-headers = callPackage ../development/libraries/spirv-headers { };
-  spirv-tools = callPackage ../development/tools/spirv-tools { };
 
   splint = callPackage ../development/tools/analysis/splint {
     flex = flex_2_5_35;
@@ -23905,8 +23898,6 @@ with pkgs;
 
   spicetify-cli = callPackage ../applications/misc/spicetify-cli { };
 
-  spirv-cross = callPackage ../tools/graphics/spirv-cross { };
-
   splat = callPackage ../applications/radio/splat { };
 
   suscan = callPackage ../applications/radio/suscan { };
@@ -24250,15 +24241,13 @@ with pkgs;
 
   vulkan-cts = callPackage ../tools/graphics/vulkan-cts { };
 
-  vulkan-extension-layer = callPackage ../tools/graphics/vulkan-extension-layer { };
-  vulkan-headers = callPackage ../development/libraries/vulkan-headers { };
-  vulkan-loader = callPackage ../development/libraries/vulkan-loader { inherit (darwin) moltenvk; };
-  vulkan-tools = callPackage ../tools/graphics/vulkan-tools {
-    inherit (darwin) moltenvk;
-    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
-  };
-  vulkan-tools-lunarg = callPackage ../tools/graphics/vulkan-tools-lunarg { };
-  vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
+  vulkanPackages_sdk = recurseIntoAttrs (import ../development/vulkan {
+    inherit lib pkgs;
+  });
+
+  inherit (vulkanPackages_sdk) gfxreconstruct glslang spirv-cross spirv-headers
+    spirv-tools vulkan-extension-layer vulkan-headers vulkan-loader vulkan-tools
+    vulkan-tools-lunarg vulkan-validation-layers;
 
   vxl = callPackage ../development/libraries/vxl { };
 
