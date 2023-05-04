@@ -6910,6 +6910,8 @@ self: super: with self; {
 
   openant = callPackage ../development/python-modules/openant { };
 
+  openapi-schema-pydantic = callPackage ../development/python-modules/openapi-schema-pydantic { };
+
   openapi-schema-validator = callPackage ../development/python-modules/openapi-schema-validator { };
 
   openapi-spec-validator = callPackage ../development/python-modules/openapi-spec-validator { };
