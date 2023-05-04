@@ -100,6 +100,9 @@ let
         log-driver = mkOption {
           type = types.str;
           default = if cfg.backend == "podman" then "passthrough" else "journald";
+          defaultText = literalExpression ''
+            if cfg.backend == "podman" then "passthrough" else "journald";
+          '';
           description = lib.mdDoc ''
             Logging driver for the container.  The default of
             `"journald"` means that the container's logs will be
