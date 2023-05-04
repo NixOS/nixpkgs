@@ -345,6 +345,7 @@ let
             (docbook-xsl-ns.override {
               withManOptDedupPatch = true;
             })
+            kbd.dev
             kmod.dev
             libarchive.dev
             libxml2.bin

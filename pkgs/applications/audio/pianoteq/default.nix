@@ -2,7 +2,7 @@
 let
   versionForFile = v: builtins.replaceStrings ["."] [""] v;
 
-  mkPianoteq = { name, src, version, archdir, ... }:
+  mkPianoteq = { name, src, version, archdir ? if (stdenv.hostPlatform.system == "aarch64-linux") then "arm-64bit" else "x86-64bit", ... }:
     stdenv.mkDerivation rec {
       inherit src version;
 
@@ -47,7 +47,7 @@ let
         homepage = "https://www.modartt.com/pianoteq";
         description = "Software synthesizer that features real-time MIDI-control of digital physically modeled pianos and related instruments";
         license = licenses.unfree;
-        platforms = [ "x86_64-linux" ]; # TODO extract binary according to each platform?
+        platforms = [ "x86_64-linux" "aarch64-linux" ];
         maintainers = [ maintainers.mausch ];
       };
     };
@@ -169,7 +169,6 @@ in {
   stage-trial = mkPianoteq rec {
     name = "stage-trial";
     version = "8.0.8";
-    archdir = "x86-64bit";
     src = fetchPianoteqTrial {
       name = "pianoteq_stage_linux_trial_v${versionForFile version}.7z";
       sha256 = "sha256-dp0bTzzh4aQ2KQ3z9zk+3meKQY4YRYQ86rccHd3+hAQ=";
@@ -178,7 +177,6 @@ in {
   standard-trial = mkPianoteq rec {
     name = "standard-trial";
     version = "8.0.8";
-    archdir = "x86-64bit";
     src = fetchPianoteqTrial {
       name = "pianoteq_linux_trial_v${versionForFile version}.7z";
       sha256 = "sha256-LSrnrjkEhsX9TirUUFs9tNqH2A3cTt3I7YTfcTT6EP8=";
@@ -187,7 +185,7 @@ in {
   stage-6 = mkPianoteq rec {
     name = "stage-6";
     version = "6.7.3";
-    archdir = "amd64";
+    archdir = if (stdenv.hostPlatform.system == "aarch64-linux") then throw "Pianoteq stage-6 is not supported on aarch64-linux" else "amd64";
     src = fetchPianoteqWithLogin {
       name = "pianoteq_stage_linux_v${versionForFile version}.7z";
       sha256 = "0jy0hkdynhwv0zhrqkby0hdphgmcc09wxmy74rhg9afm1pzl91jy";
@@ -196,7 +194,6 @@ in {
   stage-7 = mkPianoteq rec {
     name = "stage-7";
     version = "7.3.0";
-    archdir = "x86-64bit";
     src = fetchPianoteqWithLogin {
       name = "pianoteq_stage_linux_v${versionForFile version}.7z";
       sha256 = "05w7sv9v38r6ljz9xai816w5z2qqwx88hcfjm241fvgbs54125hx";

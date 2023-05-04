@@ -10446,8 +10446,6 @@ self: super: with self; {
 
   rlax = callPackage ../development/python-modules/rlax { };
 
-  rl-coach = callPackage ../development/python-modules/rl-coach { };
-
   rlp = callPackage ../development/python-modules/rlp { };
 
   rmcl = callPackage ../development/python-modules/rmcl { };
