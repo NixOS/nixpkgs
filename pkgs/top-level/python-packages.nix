@@ -2063,8 +2063,6 @@ self: super: with self; {
 
   cornice = callPackage ../development/python-modules/cornice { };
 
-  coronavirus = callPackage ../development/python-modules/coronavirus { };
-
   corsair-scan = callPackage ../development/python-modules/corsair-scan { };
 
   cot = callPackage ../development/python-modules/cot { };
@@ -3704,6 +3702,8 @@ self: super: with self; {
   flynt = callPackage ../development/python-modules/flynt { };
 
   fn = callPackage ../development/python-modules/fn { };
+
+  fnv-hash-fast = callPackage ../development/python-modules/fnv-hash-fast { };
 
   fnvhash = callPackage ../development/python-modules/fnvhash { };
 
@@ -6532,6 +6532,8 @@ self: super: with self; {
 
   nclib = callPackage ../development/python-modules/nclib { };
 
+  ndeflib = callPackage ../development/python-modules/ndeflib { };
+
   ndg-httpsclient = callPackage ../development/python-modules/ndg-httpsclient { };
 
   ndindex = callPackage ../development/python-modules/ndindex { };
@@ -6595,6 +6597,8 @@ self: super: with self; {
   nextcord = callPackage ../development/python-modules/nextcord { };
 
   nextdns = callPackage ../development/python-modules/nextdns { };
+
+  nfcpy = callPackage ../development/python-modules/nfcpy { };
 
   nftables = toPythonModule (pkgs.nftables.override {
     python3 = python;
@@ -10461,8 +10465,6 @@ self: super: with self; {
   rkm-codes = callPackage ../development/python-modules/rkm-codes { };
 
   rlax = callPackage ../development/python-modules/rlax { };
-
-  rl-coach = callPackage ../development/python-modules/rl-coach { };
 
   rlp = callPackage ../development/python-modules/rlp { };
 

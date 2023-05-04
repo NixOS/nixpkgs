@@ -130,7 +130,7 @@ let
           ${concatStringsSep " \\\n" ([ "-f qcow2" ]
           ++ optional (cfg.useBootLoader && cfg.useDefaultFilesystems) "-F qcow2 -b ${systemImage}/nixos.qcow2"
           ++ optional (!(cfg.useBootLoader && cfg.useDefaultFilesystems)) "-o size=${toString config.virtualisation.diskSize}M"
-          ++ [ "$NIX_DISK_IMAGE" ])}
+          ++ [ ''"$NIX_DISK_IMAGE"'' ])}
           echo "Virtualisation disk image created."
       fi
 

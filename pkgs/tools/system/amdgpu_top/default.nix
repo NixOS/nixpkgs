@@ -1,4 +1,16 @@
-{ lib, rustPlatform, fetchFromGitHub, libdrm }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, libdrm
+, libX11
+, libGL
+, wayland
+, wayland-protocols
+, libxkbcommon
+, libXrandr
+, libXi
+, libXcursor
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "amdgpu_top";
@@ -13,7 +25,25 @@ rustPlatform.buildRustPackage rec {
 
   cargoLock.lockFile = ./Cargo.lock;
 
-  buildInputs = [ libdrm ];
+  buildInputs = [
+    libdrm
+    libX11
+    libGL
+    wayland
+    wayland-protocols
+    libxkbcommon
+    libXrandr
+    libXi
+    libXcursor
+  ];
+
+  postInstall = ''
+    install -D ./assets/${pname}.desktop -t $out/share/applications/
+  '';
+
+  postFixup = ''
+    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}" $out/bin/${pname}
+  '';
 
   meta = with lib; {
     description = "Tool to display AMDGPU usage";

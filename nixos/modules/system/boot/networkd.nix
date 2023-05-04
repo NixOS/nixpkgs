@@ -2383,7 +2383,7 @@ let
     bridgeVLANConfig = mkOption {
       default = {};
       example = { VLAN = "10-20"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionbridgeVLAN;
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeVLAN;
       description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
         `[BridgeVLAN]` section of the unit.  See
