@@ -6,7 +6,7 @@ The function `buildDartApplication` builds Dart applications managed with pub.
 
 It fetches its Dart dependencies automatically through `fetchDartDeps`, and (through a series of hooks) builds and installs the executables specified in the pubspec file. The hooks can be used in other derivations, if needed. The phases can also be overridden to do something different from installing binaries.
 
-If you are packaging a Flutter desktop application, use the `buildFlutterApplication` function instead.
+If you are packaging a Flutter desktop application, use [`buildFlutterApplication`](#ssec-dart-flutter) instead.
 
 `vendorHash`: is the hash of the output of the dependency fetcher derivation. To obtain it, simply set it to `lib.fakeHash` (or omit it) and run the build ([more details here](#sec-source-hashes)).
 
@@ -32,5 +32,34 @@ buildDartApplication rec {
 
   pubspecLockFile = ./pubspec.lock;
   vendorHash = "sha256-Atm7zfnDambN/BmmUf4BG0yUz/y6xWzf0reDw3Ad41s=";
+}
+```
+
+## Flutter applications {#ssec-dart-flutter}
+
+The function `buildFlutterApplication` builds Flutter applications.
+
+The deps.json file must always be provided when packaging in Nixpkgs. It will be generated and printed if the derivation is attempted to be built without one. Alternatively, `autoDepsList` may be set to `true` when outside of Nixpkgs, as it relies on import-from-derivation.
+
+A `pubspec.lock` file must be available. See the [Dart documentation](#ssec-dart-applications) for more details.
+
+```nix
+{  flutter, fetchFromGitHub }:
+
+flutter.buildFlutterApplication {
+  pname = "firmware-updater";
+  version = "unstable-2023-04-30";
+
+  src = fetchFromGitHub {
+    owner = "canonical";
+    repo = "firmware-updater";
+    rev = "6e7dbdb64e344633ea62874b54ff3990bd3b8440";
+    sha256 = "sha256-s5mwtr5MSPqLMN+k851+pFIFFPa0N1hqz97ys050tFA=";
+    fetchSubmodules = true;
+  };
+
+  pubspecLockFile = ./pubspec.lock;
+  depsListFile = ./deps.json;
+  vendorHash = "sha256-cdMO+tr6kYiN5xKXa+uTMAcFf2C75F3wVPrn21G4QPQ=";
 }
 ```
