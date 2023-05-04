@@ -7355,6 +7355,12 @@ with pkgs;
     };
   };
 
+  fcitx5-skk = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { };
+
+  fcitx5-skk-qt = fcitx5-skk.override {
+    enableQt = true;
+  };
+
   fcitx5-unikey = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
 
   fcitx5-configtool = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
@@ -9785,9 +9791,7 @@ with pkgs;
 
   lshw = callPackage ../tools/system/lshw { };
 
-  lunatic = callPackage ../development/interpreters/lunatic {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  lunatic = callPackage ../development/interpreters/lunatic { };
 
   lux = callPackage ../tools/video/lux { };
 
@@ -11564,7 +11568,7 @@ with pkgs;
 
   qovery-cli = callPackage ../tools/admin/qovery-cli { };
 
-  qownnotes = libsForQt5.callPackage ../applications/office/qownnotes {
+  qownnotes = qt6Packages.callPackage ../applications/office/qownnotes {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
@@ -13065,6 +13069,8 @@ with pkgs;
     trilium-server
     ;
 
+  trippy = callPackage ../tools/networking/trippy { };
+
   trousers = callPackage ../tools/security/trousers { };
 
   trueseeing = callPackage ../tools/security/trueseeing { };
@@ -14531,6 +14537,7 @@ with pkgs;
   clang_13 = llvmPackages_13.clang;
   clang_14 = llvmPackages_14.clang;
   clang_15 = llvmPackages_15.clang;
+  clang_16 = llvmPackages_16.clang;
 
   clang-tools = callPackage ../development/tools/clang-tools {
     llvmPackages = llvmPackages_latest;
@@ -14578,6 +14585,10 @@ with pkgs;
 
   clang-tools_15 = callPackage ../development/tools/clang-tools {
     llvmPackages = llvmPackages_15;
+  };
+
+  clang-tools_16 = callPackage ../development/tools/clang-tools {
+    llvmPackages = llvmPackages_16;
   };
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
@@ -15534,6 +15545,7 @@ with pkgs;
   lld_13 = llvmPackages_13.lld;
   lld_14 = llvmPackages_14.lld;
   lld_15 = llvmPackages_15.lld;
+  lld_16 = llvmPackages_16.lld;
 
   lldb = llvmPackages_latest.lldb;
   lldb_5 = llvmPackages_5.lldb;
@@ -15547,6 +15559,7 @@ with pkgs;
   lldb_13 = llvmPackages_13.lldb;
   lldb_14 = llvmPackages_14.lldb;
   lldb_15 = llvmPackages_15.lldb;
+  lldb_16 = llvmPackages_16.lldb;
 
   llvm = llvmPackages.llvm;
   llvm_5  = llvmPackages_5.llvm;
@@ -15560,6 +15573,7 @@ with pkgs;
   llvm_13 = llvmPackages_13.llvm;
   llvm_14 = llvmPackages_14.llvm;
   llvm_15 = llvmPackages_15.llvm;
+  llvm_16 = llvmPackages_16.llvm;
 
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
@@ -15658,6 +15672,13 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_15.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_15.libraries or llvmPackages_15.libraries;
     targetLlvm = targetPackages.llvmPackages_15.llvm or llvmPackages_15.llvm;
+  }));
+
+  llvmPackages_16 = recurseIntoAttrs (callPackage ../development/compilers/llvm/16 ({
+    inherit (stdenvAdapters) overrideCC;
+    buildLlvmTools = buildPackages.llvmPackages_16.tools;
+    targetLlvmLibraries = targetPackages.llvmPackages_16.libraries or llvmPackages_16.libraries;
+    targetLlvm = targetPackages.llvmPackages_16.llvm or llvmPackages_16.llvm;
   }));
 
   llvmPackages_latest = llvmPackages_14;
@@ -38391,6 +38412,8 @@ with pkgs;
   autotiling-rs = callPackage ../misc/autotiling-rs { };
 
   avell-unofficial-control-center = python3Packages.callPackage ../applications/misc/avell-unofficial-control-center { };
+
+  boatswain = callPackage ../applications/misc/boatswain { };
 
   beep = callPackage ../misc/beep { };
 
