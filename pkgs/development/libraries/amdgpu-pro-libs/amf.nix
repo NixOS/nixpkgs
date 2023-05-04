@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, libdrm, dpkg, vulkan-loader, patchelf }:
+{ pkgs, lib, stdenv, libdrm, dpkg, vulkan-loader, patchelf, fetchurl }:
 
 let
   ver = import ./version.nix { inherit pkgs; };
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
 
 
   src = [
-    (builtins.fetchurl {
+    (fetchurl {
       url = "https://repo.radeon.com/amdgpu/${ver.repo_folder_ver}/ubuntu/pool/proprietary/a/amf-amdgpu-pro/amf-amdgpu-pro_${ver.amf}-${ver.minor}.${ver.ubuntu_ver}_amd64.deb";
       sha256 = "sha256:038d39lji5n85lg22mbxr7fq3nldwyrslkr5z94hp94g2l8ar5x5";
       name = "amf";
     })
-    (builtins.fetchurl {
+    (fetchurl {
       url = "https://repo.radeon.com/amdgpu/${ver.repo_folder_ver}/ubuntu/pool/proprietary/liba/libamdenc-amdgpu-pro/libamdenc-amdgpu-pro_1.0-${ver.minor}.${ver.ubuntu_ver}_amd64.deb";
       sha256 = "sha256:0l0bfd2ayfhn15jk8cf8xnl2lgrcwpmc3c70qw3gf53jxrp5h0zs";
       name = "libamdenc";

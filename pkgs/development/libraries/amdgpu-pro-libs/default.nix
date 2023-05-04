@@ -1,4 +1,4 @@
-{ pkgs, lib, xorg, stdenv, openssl, libdrm, zlib, dpkg, patchelf }:
+{ pkgs, lib, xorg, stdenv, openssl, libdrm, zlib, dpkg, patchelf, fetchurl }:
 
 let
   ver = import ./version.nix { inherit pkgs; };
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
   version = ver.repo_folder_ver;
 
 
-  pkg64 = builtins.fetchurl {
+  pkg64 = fetchurl {
     url = "https://repo.radeon.com/amdgpu/${ver.repo_folder_ver}/ubuntu/pool/proprietary/v/vulkan-amdgpu-pro/vulkan-amdgpu-pro_${ver.major_short}-${ver.minor}.${ver.ubuntu_ver}_amd64.deb";
     sha256 = "sha256:02kavnxcccdrqz09v1628l005p1kzgv17wpqgb75nllyfr5103l9";
     name = "vulkan64";
   };
-  pkg32 = builtins.fetchurl {
+  pkg32 = fetchurl {
     url = "https://repo.radeon.com/amdgpu/${ver.repo_folder_ver}/ubuntu/pool/proprietary/v/vulkan-amdgpu-pro/vulkan-amdgpu-pro_${ver.major_short}-${ver.minor}.${ver.ubuntu_ver}_i386.deb";
     sha256 = "sha256:143r5vcqbh6s699w3y9wg87lnyl77h2g8kmdikcbl44y3q06xm6r";
     name = "vulkan32";
