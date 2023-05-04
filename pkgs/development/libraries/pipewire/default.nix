@@ -184,6 +184,8 @@ let
       "-Dsession-managers="
       "-Dvulkan=enabled"
       "-Dx11=${mesonEnableFeature x11Support}"
+      "-Dx11-xfixes=${mesonEnableFeature x11Support}"
+      "-Dlibcanberra=${mesonEnableFeature x11Support}"
       "-Dlibmysofa=${mesonEnableFeature mysofaSupport}"
       "-Dsdl2=disabled" # required only to build examples, causes dependency loop
       "-Drlimits-install=false" # installs to /etc, we won't use this anyway
