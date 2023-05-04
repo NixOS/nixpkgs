@@ -2636,4 +2636,13 @@ self: super: {
 
   # libfuse3 fails to mount fuse file systems within the build environment
   libfuse3 = dontCheck super.libfuse3;
+
+  # Tests fail due to the newly-build fourmolu not being in PATH
+  # https://github.com/fourmolu/fourmolu/issues/231
+  fourmolu_0_12_0_0 = dontCheck (super.fourmolu_0_12_0_0.overrideScope (lself: lsuper: {
+    Cabal-syntax = lself.Cabal-syntax_3_10_1_0;
+    ghc-lib-parser = lself.ghc-lib-parser_9_6_1_20230312;
+    parsec = lself.parsec_3_1_16_1;
+    text = lself.text_2_0_2;
+  }));
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
