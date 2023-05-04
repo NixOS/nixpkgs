@@ -38,12 +38,14 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
+  preInstall = ''
+    mkdir $out
+    mkdir -p $OCAMLFIND_DESTDIR/stublibs
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    echo $OCAMLFIND_DESTDIR
-    mkdir $out
-    mkdir -p $OCAMLFIND_DESTDIR/stublibs
     make -C hacl-star-raw install
 
     runHook postInstall
