@@ -10542,6 +10542,12 @@
     githubId = 7878181;
     name = "Mateo Diaz";
   };
+  materus = {
+    email = "materus@podkos.pl";
+    github = "materusPL";
+    githubId = 28183516;
+    name = "Mateusz Słodkowicz";
+  };
   math-42 = {
     email = "matheus.4200@gmail.com";
     github = "Math-42";
