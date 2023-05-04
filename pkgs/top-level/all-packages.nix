@@ -8027,7 +8027,7 @@ with pkgs;
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
-  google-clasp = nodePackages."@google/clasp";
+  google-clasp = callPackage ../development/tools/google-clasp { };
 
   google-compute-engine = with python38.pkgs; toPythonApplication google-compute-engine;
 
