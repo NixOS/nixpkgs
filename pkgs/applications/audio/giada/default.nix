@@ -15,18 +15,21 @@
 , libogg
 , libvorbis
 , libopus
+, libXrandr
+, fmt_8
+, nlohmann_json
 }:
 
 stdenv.mkDerivation rec {
   pname = "giada";
-  version = "unstable-2021-09-24";
+  version = "unstable-2023-05-02";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = pname;
     # Using master with https://github.com/monocasual/giada/pull/509 till a new release is done.
-    rev = "f117a8b8eef08d904ef1ab22c45f0e1fad6b8a56";
-    sha256 = "01hb981lrsyk870zs8xph5fm0z7bbffpkxgw04hq487r804mkx9j";
+    rev = "9bffd0976daa3e73c9c7199d0051cb8518dbab7a";
+    sha256 = "sha256-LatkdqVGRCslaxrwZfZDmzYlqZx/8/3DwdnmLX0cdI4=";
     fetchSubmodules = true;
   };
 
@@ -46,6 +49,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    fmt_8
+    nlohmann_json
+    libXrandr
     rtmidi
     fltk
     libsndfile
