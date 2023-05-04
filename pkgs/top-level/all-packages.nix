@@ -19386,6 +19386,13 @@ with pkgs;
   allegro4 = callPackage ../development/libraries/allegro { };
   allegro5 = callPackage ../development/libraries/allegro/5.nix { };
 
+  amdgpu-pro-libs = recurseIntoAttrs {
+    vulkan = callPackage ../development/libraries/amdgpu-pro-libs { };
+    amf = callPackage ../development/libraries/amdgpu-pro-libs/amf.nix { };
+    opengl = callPackage ../development/libraries/amdgpu-pro-libs/opengl.nix { };
+    prefixes = callPackage ../development/libraries/amdgpu-pro-libs/prefixes.nix { };
+  };
+  
   amdvlk = callPackage ../development/libraries/amdvlk { };
 
   amf-headers = callPackage ../development/libraries/amf-headers { };
