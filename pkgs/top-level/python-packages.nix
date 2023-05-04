@@ -2063,8 +2063,6 @@ self: super: with self; {
 
   cornice = callPackage ../development/python-modules/cornice { };
 
-  coronavirus = callPackage ../development/python-modules/coronavirus { };
-
   corsair-scan = callPackage ../development/python-modules/corsair-scan { };
 
   cot = callPackage ../development/python-modules/cot { };
