@@ -1,5 +1,5 @@
 { lib
-, gcc11Stdenv
+, cudaPackages
 , fetchFromGitHub
 , fetchpatch
 , addOpenGLRunpath
@@ -9,8 +9,9 @@
 , glfw3
 , freeimage
 }:
-
-gcc11Stdenv.mkDerivation rec {
+let
+  stdenv = cudaPackages.backendStdenv;
+in stdenv.mkDerivation rec {
   pname = "cuda-samples";
   version = lib.versions.majorMinor cudatoolkit.version;
 
@@ -42,7 +43,7 @@ gcc11Stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t $out/bin bin/${gcc11Stdenv.hostPlatform.parsed.cpu.name}/${gcc11Stdenv.hostPlatform.parsed.kernel.name}/release/*
+    install -Dm755 -t $out/bin bin/${stdenv.hostPlatform.parsed.cpu.name}/${stdenv.hostPlatform.parsed.kernel.name}/release/*
 
     runHook postInstall
   '';
