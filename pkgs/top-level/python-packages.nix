@@ -3691,6 +3691,8 @@ self: super: with self; {
 
   fn = callPackage ../development/python-modules/fn { };
 
+  fnv-hash-fast = callPackage ../development/python-modules/fnv-hash-fast { };
+
   fnvhash = callPackage ../development/python-modules/fnvhash { };
 
   folium = callPackage ../development/python-modules/folium { };
