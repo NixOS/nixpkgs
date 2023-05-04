@@ -8,8 +8,9 @@
 , protobuf
 , pycrypto
 , pycryptodomex
-, pythonOlder
+, pyelftools
 , python-u2flib-host
+, pythonOlder
 , websocket-client
 }:
 
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     protobuf
     pycrypto
     pycryptodomex
+    pyelftools
     python-u2flib-host
     websocket-client
   ];
