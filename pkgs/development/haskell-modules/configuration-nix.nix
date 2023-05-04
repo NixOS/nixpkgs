@@ -903,16 +903,8 @@ self: super: builtins.intersectAttrs super {
     })
     (self.generateOptparseApplicativeCompletions [ "pnbackup" ] super.pinboard-notes-backup);
 
-  streamly-archive = super.streamly-archive.override {
-    # The package requires streamly == 0.9.*.
-    # (We can remove this once the assert starts failing.)
-    streamly =
-      assert (builtins.compareVersions pkgs.haskellPackages.streamly.version "0.9.0" < 0);
-        pkgs.haskellPackages.streamly_0_9_0;
-
-    # Pass the correct libarchive into the package.
-    archive = pkgs.libarchive;
-  };
+  # Pass the correct libarchive into the package.
+  streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
 
   # Pass the correct lmdb into the package.
   streamly-lmdb = super.streamly-lmdb.override { lmdb = pkgs.lmdb; };
