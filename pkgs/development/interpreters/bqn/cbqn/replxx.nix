@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/dzaima/replxx";
     description = "A replxx fork for CBQN";
     license = licenses.free;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk ];
+    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk detegr ];
     platforms = platforms.all;
   };
 }

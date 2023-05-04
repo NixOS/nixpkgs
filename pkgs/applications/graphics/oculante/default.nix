@@ -11,6 +11,8 @@
 , libXrandr
 , libXi
 , libGL
+, libxkbcommon
+, wayland
 , stdenv
 , gtk3
 , darwin
@@ -45,18 +47,21 @@ rustPlatform.buildRustPackage rec {
     openssl
     fontconfig
   ] ++ lib.optionals stdenv.isLinux [
+    libGL
     libX11
     libXcursor
     libXi
     libXrandr
-    libGL
     gtk3
+
+    libxkbcommon
+    wayland
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.libobjc
   ];
 
   postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf $out/bin/oculante --add-rpath ${lib.makeLibraryPath [ libGL ]}
+    patchelf $out/bin/oculante --add-rpath ${lib.makeLibraryPath [ libxkbcommon libX11 ]}
   '';
 
   meta = with lib; {

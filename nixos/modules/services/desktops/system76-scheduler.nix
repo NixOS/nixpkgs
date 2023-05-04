@@ -226,7 +226,7 @@ in {
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.dbus.packages = [ cfg.package ];
 
