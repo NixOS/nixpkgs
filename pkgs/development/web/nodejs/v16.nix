@@ -15,5 +15,6 @@ in
     patches = [
       ./disable-darwin-v8-system-instrumentation.patch
       ./bypass-darwin-xcrun-node16.patch
+      ./node-npm-build-npm-package-logic-node16.patch
     ] ++ npmPatches;
   }
