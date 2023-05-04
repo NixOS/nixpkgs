@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile.am --replace '@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp' ""
+    # https://pagure.io/rpmdevtools/issue/108
+    substituteInPlace build/parsePreamble.c --replace '0, LEN_AND_STR("buildarch")},' '1, LEN_AND_STR("buildarch")},'
   '';
 
   preFixup = ''
