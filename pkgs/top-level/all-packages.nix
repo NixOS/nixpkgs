@@ -34845,6 +34845,8 @@ with pkgs;
       else null;
   };
 
+  vivictpp = callPackage ../applications/video/vivictpp { };
+
   vpcs = callPackage ../applications/virtualization/vpcs { };
 
   primusLib = callPackage ../tools/X11/primus/lib.nix {
