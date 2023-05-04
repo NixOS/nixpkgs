@@ -1,21 +1,25 @@
 { lib
-, fetchPypi
-, fetchpatch
-, buildPythonPackage
-, setuptools-scm
 , attrs
+, buildPythonPackage
+, commoncode
+, fetchpatch
+, fetchPypi
 , packaging
 , pyparsing
+, pytestCheckHook
+, pythonOlder
+, saneyaml
 , semantic-version
 , semver
-, commoncode
-, pytestCheckHook
-, saneyaml
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "univers";
   version = "30.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,19 +35,38 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ attrs packaging pyparsing semantic-version semver ];
-  nativeCheckInputs = [ commoncode pytestCheckHook saneyaml ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    attrs
+    packaging
+    pyparsing
+    semantic-version
+    semver
+  ];
+
+  nativeCheckInputs = [
+    commoncode
+    pytestCheckHook
+    saneyaml
+  ];
 
   dontConfigure = true; # ./configure tries to setup virtualenv and downloads dependencies
 
-  disabledTests = [ "test_codestyle" ];
+  disabledTests = [
+    "test_codestyle"
+  ];
 
-  pythonImportsCheck = [ "univers" ];
+  pythonImportsCheck = [
+    "univers"
+  ];
 
   meta = with lib; {
     description = "Library for parsing version ranges and expressions";
     homepage = "https://github.com/nexB/univers";
+    changelog = "https://github.com/nexB/univers/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [ asl20 bsd3 mit ];
     maintainers = with maintainers; [ armijnhemel sbruder ];
   };
