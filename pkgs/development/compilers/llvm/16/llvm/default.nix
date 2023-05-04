@@ -163,23 +163,21 @@ in
 
     # This test tries to call `sw_vers` by absolute path (`/usr/bin/sw_vers`)
     # and thus fails under the sandbox:
-    substituteInPlace unittests/Support/Host.cpp \
+    substituteInPlace unittests/TargetParser/Host.cpp \
       --replace '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers" }"
-  '' + optionalString (stdenv.isDarwin && stdenv.hostPlatform.isx86) ''
+
     # This test tries to call the intrinsics `@llvm.roundeven.f32` and
     # `@llvm.roundeven.f64` which seem to (incorrectly?) lower to `roundevenf`
-    # and `roundeven` on x86_64 macOS.
+    # and `roundeven` on macOS.
     #
     # However these functions are glibc specific so the test fails:
     #   - https://www.gnu.org/software/gnulib/manual/html_node/roundevenf.html
     #   - https://www.gnu.org/software/gnulib/manual/html_node/roundeven.html
     #
-    # TODO(@rrbutani): this seems to run fine on `aarch64-darwin`, why does it
-    # pass there?
     substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
       --replace "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
       --replace "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
-
+  '' + optionalString (stdenv.isDarwin && stdenv.hostPlatform.isx86) ''
     # This test fails on darwin x86_64 because `sw_vers` reports a different
     # macOS version than what LLVM finds by reading
     # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
@@ -208,7 +206,7 @@ in
     # not clear to me when/where/for what this even gets used in LLVM.
     #
     # TODO(@rrbutani): fix/follow-up
-    substituteInPlace unittests/Support/Host.cpp \
+    substituteInPlace unittests/TargetParser/Host.cpp \
       --replace "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
 
     # This test fails with a `dysmutil` crash; have not yet dug into what's
