@@ -239,12 +239,6 @@ in
     rm test/tools/gold/X86/split-dwarf.ll
     rm test/tools/llvm-dwarfdump/X86/prettyprint_types.s
     rm test/tools/llvm-dwarfdump/X86/simplified-template-names.s
-
-    # !!! Note: these tests are removed in LLVM 16.
-    #
-    # See here for context: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999790443
-    rm test/CodeGen/RISCV/rv32zbp.ll
-    rm test/CodeGen/RISCV/rv64zbp.ll
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
     rm test/ExecutionEngine/frem.ll
