@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2023.1.0";
+  version = "2023.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-p8JydnrDEl9W4clrOkd+np0NYGP3hVnq+lyyF/zaVk8=";
+    hash = "sha256-1hWiwXjTgflQlmy0Dk2phUa1cgYBvvH99tb0TdUmDRI=";
   };
 
   nativeBuildInputs = [

@@ -8,8 +8,7 @@
 , qtsvg
 , qtwayland
 , qtwebsockets
-, qtx11extras
-, qtxmlpatterns
+, qt5compat
 , makeWrapper
 , wrapQtAppsHook
 }:
@@ -24,7 +23,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-W1bu3isEe1j7XTj+deLNk6Ncssy2UKG+eF36fe1FFWs=";
+    hash = "sha256-W1bu3isEe1j7XTj+deLNk6Ncssy2UKG+eF36fe1FFWs=";
   };
 
   nativeBuildInputs = [
@@ -38,8 +37,7 @@ stdenv.mkDerivation {
     qtdeclarative
     qtsvg
     qtwebsockets
-    qtx11extras
-    qtxmlpatterns
+    qt5compat
   ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
   postInstall =
