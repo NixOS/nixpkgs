@@ -90,10 +90,6 @@ rec {
     config = "mipsel-unknown-linux-gnu";
   } // platforms.fuloong2f_n32;
 
-  loongarch64-linux = {
-    config = "loongarch64-unknown-linux-gnu";
-  };
-
   # can execute on 32bit chip
   mips-linux-gnu                = { config = "mips-unknown-linux-gnu";                } // platforms.gcc_mips32r2_o32;
   mipsel-linux-gnu              = { config = "mipsel-unknown-linux-gnu";              } // platforms.gcc_mips32r2_o32;
@@ -137,6 +133,10 @@ rec {
   riscv32-embedded = {
     config = "riscv32-none-elf";
     libc = "newlib";
+  };
+
+  loongarch64-linux = {
+    config = "loongarch64-unknown-linux-gnu";
   };
 
   mmix = {
