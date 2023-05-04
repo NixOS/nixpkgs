@@ -10,7 +10,7 @@ let
   in {
     nativeBuildInputs = (previousAttrs.nativeBuildInputs or []) ++ [
       composer
-      phpDrv.composerHooks.composerInstallHook
+      phpDrv.composerHooks.composerSetupHook
     ];
 
     buildInputs = (previousAttrs.buildInputs or []) ++ [
@@ -52,9 +52,8 @@ let
           then (builtins.readFile content)
           else (builtins.toJSON content));
 
-    composerVendorCache = phpDrv.mkComposerVendorCache {
-      inherit composer composerLock;
-      inherit (finalAttrs) vendorHash src patches version composerOverrides pname;
+    composerDeps = phpDrv.composerHooks.fetchComposerDeps {
+      inherit (finalAttrs) src;
     };
 
     meta = previousAttrs.meta // {
