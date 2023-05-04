@@ -18,26 +18,22 @@
 
 stdenv.mkDerivation rec {
   pname = "qucs-s";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucs_s";
     rev = version;
-    sha256 = "sha256-IdIq/ZY8y/OJ2E51DwhJvcgT+cMAMLozgSuxn8As6ZY=";
+    sha256 = "sha256-2YyVeeUnLBS1Si9gwEsQLZVG98715dz/v+WCYjB3QlI=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook cmake ];
-  buildInputs = [ flex bison qtbase qttools qtsvg qtwayland libX11 gperf adms ] ++ kernels;
+  nativeBuildInputs = [ flex bison wrapQtAppsHook cmake ];
+  buildInputs = [ qtbase qttools qtsvg qtwayland libX11 gperf adms ] ++ kernels;
 
   # Make custom kernels avaible from qucs-s
   qtWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath kernels) ];
 
   QTDIR = qtbase.dev;
-
-  # Use Qt6 rather then 5. This can be removed starting from 1.0.2,
-  # see https://github.com/ra3xdh/qucs_s/commit/888feebcebfc373398b40c9b35ebabf27a87edd7
-  cmakeFlags = [ "-DWITH_QT6=ON" ];
 
   doInstallCheck = true;
   installCheck = ''
