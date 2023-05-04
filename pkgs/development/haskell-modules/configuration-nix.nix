@@ -997,6 +997,8 @@ self: super: builtins.intersectAttrs super {
     (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
   ];
 
+  lzma = super.lzma.override { liblzma = pkgs.xz; };
+
   # Wants running postgresql database accessible over ip, so postgresqlTestHook
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
