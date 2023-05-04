@@ -8,11 +8,16 @@ rec {
   glslangRev = glslangVersion;
   glslangHash = "sha256-U45/7G02o82EP4zh7i2Go0VCnsO1B7vxDwIokjyo5Rk=";
 
+  # Context: https://github.com/NixOS/nixpkgs/pull/229749
+  spirvHeadersVersion = "unstable-2023-04-27";
+  spirvHeadersRev = "7f1d2f4158704337aff1f739c8e494afc5716e7e";
+  spirvHeadersIssue282 = false;
+
   # Same version as SDK
   spirvVersion = "1.3.243.0";
   spirvRev = "sdk-${spirvVersion}";
   spirvCrossHash = "sha256-snxbTI4q0YQq8T5NQD3kcsN59iJnhlLiu1Fvr+fCDeQ=";
-  spirvHeadersHash = "sha256-VOq3r6ZcbDGGxjqC4IoPMGC5n1APUPUAs9xcRzxdyfk=";
+  spirvHeadersHash = "sha256-DHOYIZQqP5uWDYdb+vePpMBaQDOCB5Pcg8wPBMF8itk=";
   spirvToolsHash = "sha256-l44Ru0WjROQEDNU/2YQJGti1uDZP9osRdfsXus5EGX0=";
 
   vulkanVersion = "1.3.249";
