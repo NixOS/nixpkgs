@@ -136,6 +136,7 @@ rec {
         else if final.isPower then "powerpc"
         else if final.isRiscV then "riscv"
         else if final.isS390 then "s390"
+        else if final.isLoongArch64 then "loongarch"
         else final.parsed.cpu.name;
 
       qemuArch =
@@ -185,6 +186,7 @@ rec {
               pulseSupport = false;
               smbdSupport = false;
               seccompSupport = false;
+              enableDocs = false;
               hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
             };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;

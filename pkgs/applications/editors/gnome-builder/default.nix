@@ -5,7 +5,6 @@
 , desktop-file-utils
 , editorconfig-core-c
 , fetchurl
-, fetchpatch
 , flatpak
 , gnome
 , libgit2-glib
@@ -18,6 +17,7 @@
 , json-glib
 , jsonrpc-glib
 , libadwaita
+, libdex
 , libpanel
 , libpeas
 , libportal-gtk4
@@ -33,7 +33,7 @@
 , template-glib
 , vala
 , vte-gtk4
-, webkitgtk_5_0
+, webkitgtk_6_0
 , wrapGAppsHook4
 , dbus
 , xvfb-run
@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "43.6";
+  version = "44.2";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "m08hPdloyVL75CJoUPXJVk3f1XimoPiT06K2rhmjd6k=";
+    sha256 = "z6aJx40/AiMcp0cVV99MZIKASio08nHDXRqWLX8XKbA=";
   };
 
   patches = [
@@ -92,6 +92,7 @@ stdenv.mkDerivation rec {
     json-glib
     jsonrpc-glib
     libadwaita
+    libdex
     libpanel
     libxml2
     ostree
@@ -101,7 +102,7 @@ stdenv.mkDerivation rec {
     sysprof
     template-glib
     vala
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
   nativeCheckInputs = [

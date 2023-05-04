@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
       --replace '"less"' '"${less}/bin/less"'
     substituteInPlace bin/rivet-mkhtml \
       --replace '"make-plots"' \"$out/bin/make-plots\" \
-      --replace '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\"
+      --replace '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\" \
+      --replace 'ch_cmd = [sys.executable, os.path.join(os.path.dirname(__file__),' 'ch_cmd = [('
   '';
 
   configureFlags = [

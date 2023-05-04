@@ -16,7 +16,9 @@ in
       default = false;
       type = types.bool;
       description = lib.mdDoc ''
-        Whether to enable the systemd DNS resolver daemon.
+        Whether to enable the systemd DNS resolver daemon, `systemd-resolved`.
+
+        Search for `services.resolved` to see all options.
       '';
     };
 

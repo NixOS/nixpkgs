@@ -288,7 +288,6 @@ with lib.maintainers; {
 
   golang = {
     members = [
-      c00w
       kalbasit
       mic92
       zowoq
@@ -424,6 +423,22 @@ with lib.maintainers; {
     ];
     scope = "Maintain the Linux kernel.";
     shortName = "Linux Kernel";
+  };
+
+  lisp = {
+    members = [
+      raskin
+      lukego
+      nagy
+      uthar
+      hraban
+    ];
+    githubTeams = [
+      "lisp"
+    ];
+    scope = "Maintain the Lisp ecosystem.";
+    shortName = "lisp";
+    enableFeatureFreezePing = true;
   };
 
   llvm = {

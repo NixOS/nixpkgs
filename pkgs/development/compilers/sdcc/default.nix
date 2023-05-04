@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tJuuHSO81gV6gsT/5WE/nNDLz9HpQOnYTEv+nfCowFM=";
   };
 
+  enableParallelBuilding = true;
+
   buildInputs = [ boost gputils texinfo zlib ];
 
   nativeBuildInputs = [ autoconf bison flex ];

@@ -6,26 +6,21 @@
 , installShellFiles
 , tinycc
 , libiconv
-, libobjc
-, Security
-, CoreServices
-, Metal
-, Foundation
-, QuartzCore
+, darwin
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.31.1";
+  version = "1.33.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0S5BSXWnv4DMcc8cijRQx6NyDReg5aJJT65TeNFlkkw=";
+    hash = "sha256-GQouxU48raJUXzV6IT0LSyb7z5LuICdVKD0OHqPFtGo=";
   };
-  cargoSha256 = "sha256-DZICb85B9pWT8bV06FYjS604RdomB5nqtR55R00CT8c=";
+  cargoHash = "sha256-PRlNp3dF9RLxmbmzD3fdso8PD/NEQIrtywHOsKcUHAA=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -34,8 +29,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin
-    [ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ];
+  buildInputs = lib.optionals stdenv.isDarwin (
+    [ libiconv darwin.libobjc ] ++
+    (with darwin.apple_sdk.frameworks; [ Security CoreServices Metal Foundation QuartzCore ])
+  );
 
   buildAndTestSubdir = "cli";
 

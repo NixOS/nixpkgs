@@ -66,7 +66,7 @@ if __name__ == "__main__":
     sys.path.extend(sys.argv[1:])
 
     try:
-        with open("setup.py") as f:
+        with open("setup.py", encoding="utf-8-sig") as f:
             tree = ast.parse(f.read())
     except FileNotFoundError:
         exit(0)

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildFHSUserEnv, makeDesktopItem, makeWrapper, atomEnv, libuuid, at-spi2-atk, icu, openssl, zlib }:
+{ stdenv, lib, fetchurl, buildFHSEnv, makeDesktopItem, makeWrapper, atomEnv, libuuid, at-spi2-atk, icu, openssl, zlib }:
   let
     pname = "sidequest";
     version = "0.10.24";
@@ -38,7 +38,7 @@
           "$out/lib/SideQuest/sidequest"
       '';
     };
-  in buildFHSUserEnv {
+  in buildFHSEnv {
     name = "SideQuest";
 
     passthru = {

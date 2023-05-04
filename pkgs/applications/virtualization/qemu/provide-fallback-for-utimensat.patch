@@ -1,4 +1,4 @@
-From 747a741772cde6bb340eb8bdb493390280de8d16 Mon Sep 17 00:00:00 2001
+From 2ec149ea3f0046fa83e3be74aca192649a60be47 Mon Sep 17 00:00:00 2001
 From: Keno Fischer <keno@juliacomputing.com>
 Date: Sat, 16 Jun 2018 20:56:54 -0400
 Subject: [PATCH] 9p: darwin: Provide fallback impl for utimensat
@@ -29,23 +29,23 @@ Signed-off-by: Will Cohen <wwcohen@gmail.com>
  4 files changed, 111 insertions(+), 1 deletion(-)
 
 diff --git a/hw/9pfs/9p-local.c b/hw/9pfs/9p-local.c
-index d42ce6d8b8..b2c1fa42e1 100644
+index 9d07620235..9c77a431d5 100644
 --- a/hw/9pfs/9p-local.c
 +++ b/hw/9pfs/9p-local.c
-@@ -1085,7 +1085,7 @@ static int local_utimensat(FsContext *s, V9fsPath *fs_path,
+@@ -1081,7 +1081,7 @@ static int local_utimensat(FsContext *s, V9fsPath *fs_path,
          goto out;
      }
  
--    ret = utimensat(dirfd, name, buf, AT_SYMLINK_NOFOLLOW);
+-    ret = qemu_utimensat(dirfd, name, buf, AT_SYMLINK_NOFOLLOW);
 +    ret = utimensat_nofollow(dirfd, name, buf);
      close_preserve_errno(dirfd);
  out:
      g_free(dirpath);
 diff --git a/hw/9pfs/9p-util-darwin.c b/hw/9pfs/9p-util-darwin.c
-index bec0253474..2fc0475292 100644
+index 95146e7354..74ab2a7f99 100644
 --- a/hw/9pfs/9p-util-darwin.c
 +++ b/hw/9pfs/9p-util-darwin.c
-@@ -95,3 +95,99 @@ int qemu_mknodat(int dirfd, const char *filename, mode_t mode, dev_t dev)
+@@ -145,3 +145,99 @@ int qemu_mknodat(int dirfd, const char *filename, mode_t mode, dev_t dev)
  }
  
  #endif
@@ -160,12 +160,12 @@ index db451b0784..320697f347 100644
 +    return utimensat(dirfd, filename, times, AT_SYMLINK_NOFOLLOW);
 +}
 diff --git a/hw/9pfs/9p-util.h b/hw/9pfs/9p-util.h
-index 97e681e167..fd50d6243a 100644
+index c314cf381d..12d57f3398 100644
 --- a/hw/9pfs/9p-util.h
 +++ b/hw/9pfs/9p-util.h
-@@ -36,6 +36,12 @@ static inline int qemu_lsetxattr(const char *path, const char *name,
- #define qemu_lsetxattr lsetxattr
- #endif
+@@ -101,6 +101,12 @@ static inline int errno_to_dotl(int err) {
+ #define qemu_utimensat  utimensat
+ #define qemu_unlinkat   unlinkat
  
 +/* Compatibility with old SDK Versions for Darwin */
 +#if defined(CONFIG_DARWIN) && !defined(UTIME_NOW)
@@ -176,7 +176,7 @@ index 97e681e167..fd50d6243a 100644
  static inline void close_preserve_errno(int fd)
  {
      int serrno = errno;
-@@ -98,6 +104,8 @@ ssize_t flistxattrat_nofollow(int dirfd, const char *filename,
+@@ -163,6 +169,8 @@ ssize_t flistxattrat_nofollow(int dirfd, const char *filename,
                                char *list, size_t size);
  ssize_t fremovexattrat_nofollow(int dirfd, const char *filename,
                                  const char *name);
@@ -186,5 +186,4 @@ index 97e681e167..fd50d6243a 100644
  /*
   * Darwin has d_seekoff, which appears to function similarly to d_off.
 -- 
-2.35.1
-
+2.39.2

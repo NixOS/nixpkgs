@@ -11,10 +11,11 @@ index 4358a23..6ce7776 100644
      if target in build_targets:
        return PathVariable.PathIsDirCreate(key, val, env)
      else:
-@@ -155,6 +155,7 @@ if sys.platform == 'win32':
+@@ -155,6 +155,8 @@ if sys.platform == 'win32':
  env = Environment(variables=opts,
                    tools=('default', 'textfile',),
                    CPPPATH=['.', ],
++                  AR=os.environ['AR'],
 +                  ENV=os.environ,
                    )
  

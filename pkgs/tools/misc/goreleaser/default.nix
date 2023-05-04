@@ -5,19 +5,18 @@
 , installShellFiles
 , buildPackages
 }:
-
 buildGoModule rec {
   pname = "goreleaser";
-  version = "1.16.2";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BHx44ux+g642aTaV0Wlw/uz/3Vy4MJfuNffgqGDsb6I=";
+    sha256 = "sha256-tNu2rZKGUdBlhY8GmTNM48Nk1DPNp7uChe0v112fhyY=";
   };
 
-  vendorHash = "sha256-eVuEyQCO2/gufMJp8eUpC82wdJbbJsMKR1ZGv96C9mI=";
+  vendorHash = "sha256-KNHi8lSsya/vbpsWbr7un3bKsb6GcyhkrTurRhczxns=";
 
   ldflags =
     [ "-s" "-w" "-X main.version=${version}" "-X main.builtBy=nixpkgs" ];

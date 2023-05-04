@@ -169,11 +169,11 @@ in
             else (concatStrings (map (i: "--interface=\"${i}\"")
                                      interfaces))} \
           -h "${hostKey}" \
-          ${if !syslog then "--no-syslog" else ""} \
+          ${optionalString (!syslog) "--no-syslog" } \
           ${if passwordAuthentication then "--password" else "--no-password" } \
           ${if publicKeyAuthentication then "--publickey" else "--no-publickey" } \
           ${if rootLogin then "--root-login" else "--no-root-login" } \
-          ${if loginShell != null then "--login-shell=\"${loginShell}\"" else "" } \
+          ${optionalString (loginShell != null) "--login-shell=\"${loginShell}\"" } \
           ${if srpKeyExchange then "--srp-keyexchange" else "--no-srp-keyexchange" } \
           ${if !tcpForwarding then "--no-tcpip-forward" else "--tcpip-forward"} \
           ${if x11Forwarding then "--x11-forward" else "--no-x11-forward" } \

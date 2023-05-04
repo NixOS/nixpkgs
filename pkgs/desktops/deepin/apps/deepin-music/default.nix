@@ -38,8 +38,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/music-player/CMakeLists.txt \
-      --replace "include_directories(/usr/include/vlc)" "include_directories(${libvlc}/include/vlc)" \
-      --replace "include_directories(/usr/include/vlc/plugins)" "include_directories(${libvlc}/include/vlc/plugins)" \
+      --replace "/usr/include/vlc" "${libvlc}/include/vlc" \
       --replace "/usr/share" "$out/share"
     substituteInPlace src/libmusic-plugin/CMakeLists.txt \
       --replace "/usr/lib/deepin-aiassistant" "$out/lib/deepin-aiassistant"
@@ -56,6 +55,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dtkwidget
+    qt5integration
     qt5platform-plugins
     dde-qt-dbus-factory
     udisks2-qt5
@@ -76,14 +76,11 @@ stdenv.mkDerivation rec {
     gst-plugins-good
   ]);
 
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
-
   cmakeFlags = [
     "-DVERSION=${version}"
   ];
+
+  strictDeps = true;
 
   preFixup = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")

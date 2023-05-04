@@ -16,13 +16,13 @@
 , mock
 , scipy
 , wheel
+, jax
 , opt-einsum
 , backports_weakref
 , tensorflow-estimator-bin
 , tensorboard
 , cudaSupport ? false
 , cudaPackages ? {}
-, patchelfUnstable
 , zlib
 , python
 , keras-applications
@@ -67,6 +67,7 @@ in buildPythonPackage {
     protobuf
     numpy
     scipy
+    jax
     termcolor
     grpcio
     six
@@ -84,8 +85,7 @@ in buildPythonPackage {
   ] ++ lib.optional (!isPy3k) mock
     ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
-  # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
-  nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath patchelfUnstable ];
+  nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -104,6 +104,7 @@ in buildPythonPackage {
       # - Relax flatbuffers, gast, protobuf, tensorboard, and tensorflow-estimator version requirements that don't match what we have packaged
       # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
       # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
+      # - numpy was pinned to fix some internal tests: https://github.com/tensorflow/tensorflow/issues/60216
       sed -i *.dist-info/METADATA \
         -e "/Requires-Dist: flatbuffers/d" \
         -e "/Requires-Dist: gast/d" \
@@ -112,7 +113,8 @@ in buildPythonPackage {
         -e "/Requires-Dist: protobuf/d" \
         -e "/Requires-Dist: tensorboard/d" \
         -e "/Requires-Dist: tensorflow-estimator/d" \
-        -e "/Requires-Dist: tensorflow-io-gcs-filesystem/d"
+        -e "/Requires-Dist: tensorflow-io-gcs-filesystem/d" \
+        -e "s/Requires-Dist: numpy (.*)/Requires-Dist: numpy/"
     )
     wheel pack ./unpacked/tensorflow*
     mv *.whl $orig_name # avoid changes to the _os_arch.whl suffix
@@ -201,26 +203,5 @@ in buildPythonPackage {
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    knownVulnerabilities = optionals (versionOlder packages.version "2.12.0") [
-      "CVE-2023-27579"
-      "CVE-2023-25801"
-      "CVE-2023-25676"
-      "CVE-2023-25675"
-      "CVE-2023-25674"
-      "CVE-2023-25673"
-      "CVE-2023-25671"
-      "CVE-2023-25670"
-      "CVE-2023-25669"
-      "CVE-2023-25668"
-      "CVE-2023-25667"
-      "CVE-2023-25665"
-      "CVE-2023-25666"
-      "CVE-2023-25664"
-      "CVE-2023-25663"
-      "CVE-2023-25662"
-      "CVE-2023-25660"
-      "CVE-2023-25659"
-      "CVE-2023-25658"
-    ];
   };
 }

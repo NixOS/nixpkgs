@@ -8,6 +8,8 @@
 , dtkwidget
 , qt5integration
 , qt5platform-plugins
+, qtbase
+, qtsvg
 , udisks2-qt5
 , gio-qt
 , image-editor
@@ -16,7 +18,6 @@
 , opencv
 , ffmpeg
 , ffmpegthumbnailer
-, qtbase
 }:
 
 stdenv.mkDerivation rec {
@@ -35,9 +36,7 @@ stdenv.mkDerivation rec {
     substituteInPlace libUnionImage/CMakeLists.txt \
       --replace "/usr" "$out"
     substituteInPlace src/CMakeLists.txt \
-      --replace "set(PREFIX /usr)" "set(PREFIX $out)" \
-      --replace "/usr/bin" "$out/bin" \
-      --replace "/usr/share/deepin-manual/manual-assets/application/)" "share/deepin-manual/manual-assets/application/)"
+      --replace "/usr" "$out"
   '';
 
   nativeBuildInputs = [
@@ -49,7 +48,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dtkwidget
+    qt5integration
     qt5platform-plugins
+    qtbase
+    qtsvg
     udisks2-qt5
     gio-qt
     image-editor
@@ -60,10 +62,7 @@ stdenv.mkDerivation rec {
     ffmpegthumbnailer
   ];
 
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
+  strictDeps = true;
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 

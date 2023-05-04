@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "xcaddy";
-  version = "0.3.2";
+  version = "0.3.3";
 
   subPackages = [ "cmd/xcaddy" ];
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "caddyserver";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-M0eMI/TtUNVqE4F1ifizVb0e4ACGa+yLkG3pJLaaDNs=";
+    hash = "sha256-HDyHvHa8yCz59AifHxQ0LAuC/xPXQInuUYURx7bL3oE=";
   };
 
   patches = [

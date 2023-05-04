@@ -49,6 +49,143 @@ self: super: builtins.intersectAttrs super {
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch ./patches/ghc-paths-nix.patch super.ghc-paths;
 
+  #######################################
+  ### HASKELL-LANGUAGE-SERVER SECTION ###
+  #######################################
+
+  haskell-language-server = overrideCabal (drv: {
+    # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically
+    # by default. Unless we reflect this in the generic builder, GHC is going to
+    # produce some illegal references to /build/.
+    enableSharedExecutables = true;
+    # The shell script wrapper checks that the runtime ghc and its boot packages match the ghc hls was compiled with.
+    # This prevents linking issues when running TH splices.
+    postInstall = ''
+      mv "$out/bin/haskell-language-server" "$out/bin/.haskell-language-server-${self.ghc.version}-unwrapped"
+      BOOT_PKGS=`ghc-pkg-${self.ghc.version} --global list --simple-output`
+      ${pkgs.buildPackages.gnused}/bin/sed \
+        -e "s!@@EXE_DIR@@!$out/bin!" \
+        -e "s/@@EXE_NAME@@/.haskell-language-server-${self.ghc.version}-unwrapped/" \
+        -e "s/@@GHC_VERSION@@/${self.ghc.version}/" \
+        -e "s/@@BOOT_PKGS@@/$BOOT_PKGS/" \
+        -e "s/@@ABI_HASHES@@/$(for dep in $BOOT_PKGS; do printf "%s:" "$dep" && ghc-pkg-${self.ghc.version} field $dep abi --simple-output ; done | tr '\n' ' ' | xargs)/" \
+        -e "s!Consider installing ghc.* via ghcup or build HLS from source.!Visit https://haskell4nix.readthedocs.io/nixpkgs-users-guide.html#how-to-install-haskell-language-server to learn how to correctly install a matching hls for your ghc with nix.!" \
+        bindist/wrapper.in > "$out/bin/haskell-language-server"
+      ln -s "$out/bin/haskell-language-server" "$out/bin/haskell-language-server-${self.ghc.version}"
+      chmod +x "$out/bin/haskell-language-server"
+      '';
+    testToolDepends = [ self.cabal-install pkgs.git ];
+    testTarget = "func-test"; # wrapper test accesses internet
+    preCheck = ''
+      export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
+      export HOME=$TMPDIR
+    '';
+  }) super.haskell-language-server;
+
+  # ghcide-bench tests need network
+  ghcide-bench = dontCheck super.ghcide-bench;
+
+  # 2023-04-01: TODO: Either reenable at least some tests or remove the preCheck override
+  ghcide = overrideCabal (drv: {
+    # tests depend on executable
+    preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
+    # tests disabled because they require network
+    doCheck = false;
+  }) super.ghcide;
+
+  hiedb = overrideCabal (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/hiedb:$PATH
+    '';
+  }) super.hiedb;
+
+  # Tests access homeless-shelter.
+  hie-bios = dontCheck super.hie-bios;
+
+  # PLUGINS WITH ENABLED TESTS
+  # haskell-language-server plugins all use the same test harness so we give them what they want in this loop.
+  # Every hls plugin should either be in the test disabled list below, or up here in the list fixing it’s tests.
+  inherit (pkgs.lib.mapAttrs
+      (_: overrideCabal (drv: {
+        testToolDepends = (drv.testToolDepends or [ ]) ++ [ pkgs.git ];
+        preCheck = ''
+          export HOME=$TMPDIR/home
+        '' + (drv.preCheck or "");
+      }))
+      super)
+    hls-brittany-plugin
+    hls-floskell-plugin
+    hls-fourmolu-plugin
+    hls-cabal-plugin
+  ;
+
+  # PLUGINS WITH DISABLED TESTS
+  # 2023-04-01: TODO: We should reenable all these tests to figure if they are still broken.
+  inherit (pkgs.lib.mapAttrs (_: dontCheck) super)
+    # Tests have file permissions expections that don’t work with the nix store.
+    hls-gadt-plugin
+
+    # https://github.com/haskell/haskell-language-server/pull/3431
+    hls-cabal-fmt-plugin
+    hls-code-range-plugin
+    hls-explicit-record-fields-plugin
+
+    # Flaky tests
+    hls-explicit-fixity-plugin
+    hls-hlint-plugin
+    hls-pragmas-plugin
+    hls-class-plugin
+    hls-rename-plugin
+    hls-alternate-number-format-plugin
+    hls-qualify-imported-names-plugin
+    hls-haddock-comments-plugin
+    hls-tactics-plugin
+    hls-call-hierarchy-plugin
+    hls-selection-range-plugin
+    hls-ormolu-plugin
+
+    # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
+    hls-eval-plugin
+
+    # 2021-06-20: Tests fail: https://github.com/haskell/haskell-language-server/issues/1949
+    hls-refine-imports-plugin
+
+    # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2373
+    hls-explicit-imports-plugin
+
+    # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2374
+    hls-module-name-plugin
+
+    # 2022-09-19: https://github.com/haskell/haskell-language-server/issues/3200
+    hls-refactor-plugin
+
+    # 2021-09-14: Tests are flaky.
+    hls-splice-plugin
+
+    # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2205
+    hls-stylish-haskell-plugin
+
+    # Necesssary .txt files are not included in sdist.
+    # https://github.com/haskell/haskell-language-server/pull/2887
+    hls-change-type-signature-plugin
+
+    # 2023-04-03: https://github.com/haskell/haskell-language-server/issues/3549
+    hls-retrie-plugin
+  ;
+
+  ###########################################
+  ### END HASKELL-LANGUAGE-SERVER SECTION ###
+  ###########################################
+
+  audacity = enableCabalFlag "buildExamples" (overrideCabal (drv: {
+      executableHaskellDepends = [self.optparse-applicative self.soxlib];
+    }) super.audacity);
+  # 2023-04-27: Deactivating examples for now because they cause a non-trivial build failure.
+  # med-module = enableCabalFlag "buildExamples" super.med-module;
+  spreadsheet = enableCabalFlag "buildExamples" (overrideCabal (drv: {
+      executableHaskellDepends = [self.optparse-applicative self.shell-utility];
+    }) super.spreadsheet);
+
   # fix errors caused by hardening flags
   epanet-haskell = disableHardening ["format"] super.epanet-haskell;
 
@@ -124,14 +261,24 @@ self: super: builtins.intersectAttrs super {
   heist = addTestToolDepend pkgs.pandoc super.heist;
 
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
-  gio = disableHardening ["fortify"] (addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.gio));
+  gio = lib.pipe super.gio
+    [ (disableHardening ["fortify"])
+      (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
+      (addPkgconfigDepends (with pkgs; [ glib pcre2 util-linux pcre ]
+                                       ++ (if pkgs.stdenv.isLinux then [libselinux libsepol] else [])))
+    ];
   glib = disableHardening ["fortify"] (addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.glib));
   gtk3 = disableHardening ["fortify"] (super.gtk3.override { inherit (pkgs) gtk3; });
-  gtk = let gtk1 = addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.gtk;
-            gtk2 = addPkgconfigDepend pkgs.gtk2 gtk1;
-            gtk3 = disableHardening ["fortify"] gtk1;
-            gtk4 = if pkgs.stdenv.isDarwin then appendConfigureFlag "-fhave-quartz-gtk" gtk3 else gtk4;
-        in gtk3;
+  gtk = lib.pipe super.gtk (
+    [ (disableHardening ["fortify"])
+      (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
+      (addPkgconfigDepends (with pkgs; [ gtk2 pcre2 util-linux pcre fribidi
+                                         libthai libdatrie xorg.libXdmcp libdeflate
+                                        ]
+                                       ++ (if pkgs.stdenv.isLinux then [libselinux libsepol] else [])))
+    ] ++
+    ( if pkgs.stdenv.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
+  );
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
 
@@ -353,11 +500,6 @@ self: super: builtins.intersectAttrs super {
 
   # Looks like Avahi provides the missing library
   dnssd = super.dnssd.override { dns_sd = pkgs.avahi.override { withLibdnssdCompat = true; }; };
-
-  # tests depend on executable
-  ghcide = overrideCabal (drv: {
-    preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
-  }) super.ghcide;
 
   # Tests execute goldplate
   goldplate = overrideCabal (drv: {
@@ -685,9 +827,6 @@ self: super: builtins.intersectAttrs super {
       '';
     }) (addBuildTool pkgs.buildPackages.makeWrapper super.cut-the-crap);
 
-  # Tests access homeless-shelter.
-  hie-bios = dontCheck super.hie-bios;
-
   # Compiling the readme throws errors and has no purpose in nixpkgs
   aeson-gadt-th =
     disableCabalFlag "build-readme" (doJailbreak super.aeson-gadt-th);
@@ -712,34 +851,6 @@ self: super: builtins.intersectAttrs super {
   retrie_1_2_0_0 = addTestToolDepends [pkgs.git pkgs.mercurial] super.retrie_1_2_0_0;
   retrie_1_2_1_1 = addTestToolDepends [pkgs.git pkgs.mercurial] super.retrie_1_2_1_1;
 
-  haskell-language-server = overrideCabal (drv: {
-    # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically
-    # by default. Unless we reflect this in the generic builder, GHC is going to
-    # produce some illegal references to /build/.
-    enableSharedExecutables = true;
-    # The shell script wrapper checks that the runtime ghc and its boot packages match the ghc hls was compiled with.
-    # This prevents linking issues when running TH splices.
-    postInstall = ''
-      mv "$out/bin/haskell-language-server" "$out/bin/.haskell-language-server-${self.ghc.version}-unwrapped"
-      BOOT_PKGS=`ghc-pkg-${self.ghc.version} --global list --simple-output`
-      ${pkgs.buildPackages.gnused}/bin/sed \
-        -e "s!@@EXE_DIR@@!$out/bin!" \
-        -e "s/@@EXE_NAME@@/.haskell-language-server-${self.ghc.version}-unwrapped/" \
-        -e "s/@@GHC_VERSION@@/${self.ghc.version}/" \
-        -e "s/@@BOOT_PKGS@@/$BOOT_PKGS/" \
-        -e "s/@@ABI_HASHES@@/$(for dep in $BOOT_PKGS; do printf "%s:" "$dep" && ghc-pkg-${self.ghc.version} field $dep abi --simple-output ; done | tr '\n' ' ' | xargs)/" \
-        -e "s!Consider installing ghc.* via ghcup or build HLS from source.!Visit https://haskell4nix.readthedocs.io/nixpkgs-users-guide.html#how-to-install-haskell-language-server to learn how to correctly install a matching hls for your ghc with nix.!" \
-        bindist/wrapper.in > "$out/bin/haskell-language-server"
-      ln -s "$out/bin/haskell-language-server" "$out/bin/haskell-language-server-${self.ghc.version}"
-      chmod +x "$out/bin/haskell-language-server"
-      '';
-    testToolDepends = [ self.cabal-install pkgs.git ];
-    testTarget = "func-test"; # wrapper test accesses internet
-    preCheck = ''
-      export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
-      export HOME=$TMPDIR
-    '';
-  }) super.haskell-language-server;
 
   # there are three very heavy test suites that need external repos, one requires network access
   hevm = dontCheck super.hevm;
@@ -800,12 +911,6 @@ self: super: builtins.intersectAttrs super {
       install -Dm644 data/hlint.1 -t "$out/share/man/man1"
     '' + drv.postInstall or "";
   }) super.hlint;
-
-  hiedb = overrideCabal (drv: {
-    preCheck = ''
-      export PATH=$PWD/dist/build/hiedb:$PATH
-    '';
-  }) super.hiedb;
 
   taglib = overrideCabal (drv: {
     librarySystemDepends = [
@@ -885,34 +990,38 @@ self: super: builtins.intersectAttrs super {
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
 
-  cachix = overrideCabal (drv: {
-    version = "1.3.3";
+ cachix = overrideCabal (drv: {
+    version = "1.4.2";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.3.3";
-      sha256 = "sha256-xhLCsAkz5c+XIqQ4eGY9bSp3zBgCDCaHXZ2HLk8vqmE=";
+      rev = "v1.4.2";
+      sha256 = "sha256-EjfBM5O+wXJhthRU/Nd9VFue7xo5O93nx0pMt3jx0Ow=";
     };
-    buildDepends = [ self.conduit-concurrent-map ];
     postUnpack = "sourceRoot=$sourceRoot/cachix";
     postPatch = ''
-      sed -i 's/1.3.2/1.3.3/' cachix.cabal
+      sed -i 's/1.4.1/1.4.2/' cachix.cabal
     '';
   }) (super.cachix.override {
-    nix = self.hercules-ci-cnix-store.passthru.nixPackage;
     fsnotify = dontCheck super.fsnotify_0_4_1_0;
     hnix-store-core = super.hnix-store-core_0_6_1_0;
   });
-  cachix-api = overrideCabal (drv: {
-    version = "1.3.3";
-    src = pkgs.fetchFromGitHub {
-      owner = "cachix";
-      repo = "cachix";
-      rev = "v1.3.3";
-      sha256 = "sha256-xhLCsAkz5c+XIqQ4eGY9bSp3zBgCDCaHXZ2HLk8vqmE=";
-    };
-    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
-  }) super.cachix-api;
+
+  cachix_1_3_3 = overrideCabal (drv: {
+    hydraPlatforms = pkgs.lib.platforms.all;
+  }) (super.cachix_1_3_3.override {
+    nix = self.hercules-ci-cnix-store.nixPackage;
+    fsnotify = dontCheck super.fsnotify_0_4_1_0;
+    hnix-store-core = super.hnix-store-core_0_6_1_0;
+  });
+
+  hercules-ci-api-core =
+    # 2023-05-02: Work around a corrupted file on cache.nixos.org. This is a hash for x86_64-linux. Remove when it has changed.
+    if super.hercules-ci-api-core.drvPath == "/nix/store/dgy3w43zypmdswc7a7zis0njgljqvnq0-hercules-ci-api-core-0.1.5.0.drv"
+    then super.hercules-ci-api-core.overrideAttrs (_: {
+        dummyAttr = 1;
+      })
+    else super.hercules-ci-api-core;
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
@@ -1125,47 +1234,4 @@ self: super: builtins.intersectAttrs super {
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 
-  # ghcide-bench tests need network
-  ghcide-bench = dontCheck super.ghcide-bench;
-
-# haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
-} // pkgs.lib.mapAttrs
-  (_: overrideCabal (drv: {
-    testToolDepends = (drv.testToolDepends or [ ]) ++ [ pkgs.git ];
-    preCheck = ''
-      export HOME=$TMPDIR/home
-    '' + (drv.preCheck or "");
-  }))
-{
-  inherit (super)
-    hls-brittany-plugin
-    hls-eval-plugin
-    hls-floskell-plugin
-    hls-fourmolu-plugin
-    hls-module-name-plugin
-    hls-splice-plugin
-    hls-refactor-plugin
-    hls-cabal-plugin;
-  # Tests have file permissions expections that don’t work with the nix store.
-  hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
-  hls-gadt-plugin = dontCheck super.hls-gadt-plugin;
-
-  # https://github.com/haskell/haskell-language-server/pull/3431
-  hls-cabal-fmt-plugin = dontCheck super.hls-cabal-fmt-plugin;
-  hls-code-range-plugin = dontCheck super.hls-code-range-plugin;
-  hls-explicit-record-fields-plugin = dontCheck super.hls-explicit-record-fields-plugin;
-
-  # Flaky tests
-  hls-explicit-fixity-plugin = dontCheck super.hls-explicit-fixity-plugin;
-  hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
-  hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
-  hls-class-plugin = dontCheck super.hls-class-plugin;
-  hls-rename-plugin = dontCheck super.hls-rename-plugin;
-  hls-alternate-number-format-plugin = dontCheck super.hls-alternate-number-format-plugin;
-  hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
-  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
-  hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
-  hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
-  hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
-  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
 }

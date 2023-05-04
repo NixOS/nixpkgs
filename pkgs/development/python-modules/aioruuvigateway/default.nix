@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aioruuvigateway";
-  version = "0.0.2";
+  version = "0.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "akx";
     repo = "aioruuvigateway";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oT5Tlmi9bevOkcVZqg/xvCckIpN7TjbPVQefo9z1RDM=";
+    hash = "sha256-Etv+kPFYEK79hpDeNmDfuyNj1vJ6udry1u+TRO5gLV4=";
   };
 
   nativeBuildInputs = [

@@ -23,6 +23,8 @@ let
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     atLeast31 = lib.versionAtLeast ver.majMin "3.1";
     atLeast32 = lib.versionAtLeast ver.majMin "3.2";
+    # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
+    yjitSupported = atLeast32 && (stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64));
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
@@ -46,12 +48,12 @@ let
       #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
       # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
       , removeReferencesTo, jitSupport ? yjitSupport
-      , rustPlatform, yjitSupport ? atLeast32
+      , rustPlatform, yjitSupport ? yjitSupported
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
       , makeBinaryWrapper, buildRubyGem, defaultGemConfig
-      , baseRuby ? buildPackages.ruby_3_1.override {
+      , baseRuby ? buildPackages.ruby.override {
           docSupport = false;
           rubygemsSupport = false;
         }

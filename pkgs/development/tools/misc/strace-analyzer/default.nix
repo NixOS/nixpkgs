@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "strace-analyzer";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "wookietreiber";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ICUXedWg7ZT2Uzk7ZLpFqoEXiG4AzvkwCndR2aHKjVI=";
+    sha256 = "sha256-wx0/Jb2uaS1qdRQymfE00IEOyfgLtD4lXYasaJgcoxo=";
   };
 
-  cargoSha256 = "sha256-p/HYG/KaHtvgvAd+eg1fKmDnLoWCL+XiT66jRBU2xRE=";
+  cargoHash = "sha256-3OS3LEEk58+IJDQrgwo+BJq6hblojk22QxDtZY5ofA4=";
 
   nativeCheckInputs = [ strace ];
 

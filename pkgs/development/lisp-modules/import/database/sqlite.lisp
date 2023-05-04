@@ -20,6 +20,7 @@
    :database->nix-expression)
   (:export :sqlite-database :init-db)
   (:local-nicknames
+   (:hydra :org.lispbuilds.nix/hydra)
    (:json :com.inuoe.jzon)))
 
 (in-package org.lispbuilds.nix/database/sqlite)
@@ -167,7 +168,10 @@ in lib.makeScope pkgs.newScope (self: {")
                                          (str:split-omit-nulls #\, deps)
                                          (set-difference '("asdf" "uiop") :test #'string=)
                                          (sort #'string<)))))
-                 ,@(when (or (find #\/ name)
-                            (find name +broken-packages+ :test #'string=))
-                    '(("meta" (:attrs ("broken" (:symbol "true")))))))))))))
+                 ("meta" (:attrs
+                          ,@(when (or (find #\/ name)
+                                      (find name +broken-packages+ :test #'string=))
+                              '(("broken" (:symbol "true"))))
+                          ,@(unless (find name hydra:+allowlist+ :test #'string=)
+                              '(("hydraPlatforms" (:list)))))))))))))
       (format f "~%})~%"))))

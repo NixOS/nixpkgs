@@ -1,4 +1,5 @@
 { lib
+, installShellFiles
 , python3
 , fetchFromGitHub
 , nix-update-script
@@ -11,6 +12,7 @@ let
     packageOverrides = self: super: {
       fido2 = super.fido2.overridePythonAttrs (oldAttrs: rec {
         version = "0.9.3";
+        format = "setuptools";
         src = self.fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
@@ -20,6 +22,7 @@ let
 
       okta = super.okta.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.4";
+        format = "setuptools";
         src = self.fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
@@ -38,17 +41,18 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gimme-aws-creds";
-  version = "2.5.0"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.6.0"; # N.B: if you change this, check if overrides are still up-to-date
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Nike-Inc";
     repo = "gimme-aws-creds";
     rev = "v${version}";
-    hash = "sha256-rU4guBXRRJOG3/JilvEF9DwXM5z2IUV80qj3YcV8Z/I=";
+    hash = "sha256-ojbof0Pf5oer3gFC4AlrRJICSJsQYHBQR8M+WV3VwQs=";
   };
 
   nativeBuildInputs = with python.pkgs; [
+    installShellFiles
     pythonRelaxDepsHook
   ];
 
@@ -63,11 +67,11 @@ python.pkgs.buildPythonApplication rec {
     ctap-keyring-device
     requests
     okta
+    pyjwt
   ];
 
   checkInputs = with python.pkgs; [
     pytestCheckHook
-    nose
     responses
   ];
 
@@ -82,6 +86,8 @@ python.pkgs.buildPythonApplication rec {
   postInstall = ''
     rm $out/bin/gimme-aws-creds.cmd
     chmod +x $out/bin/gimme-aws-creds
+    installShellCompletion --bash --name gimme-aws-creds $out/bin/gimme-aws-creds-autocomplete.sh
+    rm $out/bin/gimme-aws-creds-autocomplete.sh
   '';
 
   passthru = {

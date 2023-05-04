@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ bison flex ] ++
-    lib.optional stdenv.hostPlatform.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.DiskArbitration
     ];
 

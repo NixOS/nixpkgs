@@ -7,13 +7,13 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "katriawm";
   version = "22.12";
 
   src = fetchzip {
-    name = self.pname + "-" + self.version;
-    url = "https://www.uninformativ.de/git/katriawm/archives/katriawm-v${self.version}.tar.gz";
+    name = finalAttrs.pname + "-" + finalAttrs.version;
+    url = "https://www.uninformativ.de/git/katriawm/archives/katriawm-v${finalAttrs.version}.tar.gz";
     hash = "sha256-xFKr4PxqvnQEAWplhRsaL5rhmSJpnImpk1eXFX0N1tc=";
   };
 

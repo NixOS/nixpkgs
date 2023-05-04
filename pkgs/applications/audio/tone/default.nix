@@ -7,13 +7,13 @@ let
 
 in buildDotnetModule rec {
   pname = "tone";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "sandreas";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Z3cumXAIJhUB3/EbzB08MfBCrga1JHtDKr44TmRQuno=";
+    sha256 = "sha256-HhXyOPoDtraT7ef0kpE7SCQbvGFLrTddzS6Kdu0LxW4=";
   };
 
   projectFile = "tone/tone.csproj";

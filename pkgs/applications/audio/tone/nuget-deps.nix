@@ -28,7 +28,7 @@
   (fetchNuGet { pname = "Microsoft.Extensions.Options.ConfigurationExtensions"; version = "7.0.0"; sha256 = "1liyprh0zha2vgmqh92n8kkjz61zwhr7g16f0gmr297z2rg1j5pj"; })
   (fetchNuGet { pname = "Microsoft.Extensions.Primitives"; version = "2.0.0"; sha256 = "1xppr5jbny04slyjgngxjdm0maxdh47vq481ps944d7jrfs0p3mb"; })
   (fetchNuGet { pname = "Microsoft.Extensions.Primitives"; version = "7.0.0"; sha256 = "1b4km9fszid9vp2zb3gya5ni9fn8bq62bzaas2ck2r7gs0sdys80"; })
-  (fetchNuGet { pname = "Microsoft.NETCore.App.Crossgen2.linux-x64"; version = "6.0.13"; sha256 = "0sjd1npl37mky8gqi4bir2fgp0bm6y3jy641asfxa0k0cidbfzwl"; })
+  (fetchNuGet { pname = "Microsoft.NETCore.App.Crossgen2.linux-x64"; version = "6.0.15"; sha256 = "0lcz7dniv3arkdzlmjgr9168rjb0an9xf3v3m3pdwjmy8yaipfba"; })
   (fetchNuGet { pname = "Newtonsoft.Json"; version = "13.0.2"; sha256 = "1p9splg1min274dpz7xdfgzrwkyfd3xlkygwpr1xgjvvyjvs6b0i"; })
   (fetchNuGet { pname = "Sandreas.AudioMetadata"; version = "0.1.1"; sha256 = "11ibv23h7qj5qshibmlsqmjca51dqbhib9p1gz66c5kqhk7ci38j"; })
   (fetchNuGet { pname = "Sandreas.Files"; version = "1.1.2"; sha256 = "08qk229q2y1dpdxdnp8xi9mgk8fgpjxrxm4z6ak8n09npp67nhn0"; })
@@ -51,5 +51,5 @@
   (fetchNuGet { pname = "TestableIO.System.IO.Abstractions"; version = "19.0.1"; sha256 = "01v2wgb6y2z7df4b2dsy0jb4hnhpv5kgyxypzyqdk7h6plad2axd"; })
   (fetchNuGet { pname = "TestableIO.System.IO.Abstractions.Wrappers"; version = "19.0.1"; sha256 = "1ms8wqar5w3z2y2qgxii9pqnsb4f1aikji2vaw01zxvnh2wry42n"; })
   (fetchNuGet { pname = "Ude.NetStandard"; version = "1.2.0"; sha256 = "074yff6g272zpkhk0zvmbfiaaxyp3b05fl24i7ffp2jf9r8bnfpl"; })
-  (fetchNuGet { pname = "z440.atl.core"; version = "4.18.0"; sha256 = "0wwqhpl3xw9vf6c5idz1kwpd72kbg7b9fcmj6gmccxa99kcgljzk"; })
+  (fetchNuGet { pname = "z440.atl.core"; version = "4.19.0"; sha256 = "16290hcf42yhs69ymjrg2znk7s56nnp4hj8rqwi1i8rdajmfr2v1"; })
 ]

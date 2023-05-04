@@ -9,9 +9,9 @@
 , lxml
 , nose
 , packaging
-, pdm-pep517
 , pillow
 , prettytable
+, pycountry
 , python-dateutil
 , pythonOlder
 , pyyaml
@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "woob";
-  version = "3.4";
+  version = "3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -33,12 +33,11 @@ buildPythonPackage rec {
     owner = "woob";
     repo = pname;
     rev = version;
-    hash = "sha256-qVE1FQK3+jBKIHW+s1iNZwy8Srb2kQhWNTlZyzc1/jE=";
+    hash = "sha256-Yb3AgUSqr9r2TIymiEUIhKThNC7yjQEkhi8GSI9fqNA=";
   };
 
   nativeBuildInputs = [
     packaging
-    pdm-pep517
   ];
 
   propagatedBuildInputs = [
@@ -51,17 +50,11 @@ buildPythonPackage rec {
     packaging
     pillow
     prettytable
+    pycountry
     pyyaml
     requests
     termcolor
     unidecode
-  ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/woob/woob/-/commit/861b1bb92be53998d8174dcca6fa643d1c7cde12.patch";
-      sha256 = "sha256-IXcE59pMFtPLTOYa2inIvuA14USQvck6Q4hrKZTC0DE=";
-    })
   ];
 
   nativeCheckInputs = [

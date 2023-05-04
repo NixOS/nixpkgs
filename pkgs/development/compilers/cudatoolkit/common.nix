@@ -29,6 +29,7 @@ args@
 , python3 # FIXME: CUDAToolkit 10 may still need python27
 , pulseaudio
 , requireFile
+, stdenv
 , backendStdenv # E.g. gcc11Stdenv, set in extension.nix
 , unixODBC
 , wayland
@@ -37,6 +38,11 @@ args@
 , freeglut
 , libGLU
 , libsForQt5
+, libtiff
+, qt6Packages
+, rdma-core
+, ucx
+, rsync
 }:
 
 backendStdenv.mkDerivation rec {
@@ -67,13 +73,20 @@ backendStdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     makeWrapper
+    rsync
     addOpenGLRunpath
     autoPatchelfHook
     autoAddOpenGLRunpathHook
   ] ++ lib.optionals (lib.versionOlder version "11") [
     libsForQt5.wrapQtAppsHook
+  ] ++ lib.optionals (lib.versionAtLeast version "11.8") [
+    qt6Packages.wrapQtAppsHook
   ];
-  buildInputs = [
+  buildInputs = lib.optionals (lib.versionOlder version "11") [
+    libsForQt5.qt5.qtwebengine
+    freeglut
+    libGLU
+  ] ++ [
     # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
     gdk-pixbuf
 
@@ -109,10 +122,13 @@ backendStdenv.mkDerivation rec {
     unixODBC
     alsa-lib
     wayland
-  ] ++ lib.optionals (lib.versionOlder version "11") [
-    libsForQt5.qt5.qtwebengine
-    freeglut
-    libGLU
+  ] ++ lib.optionals (lib.versionAtLeast version "11.8") [
+    (lib.getLib libtiff)
+    qt6Packages.qtwayland
+    rdma-core
+    ucx
+    xorg.libxshmfence
+    xorg.libxkbfile
   ];
 
   # Prepended to runpaths by autoPatchelf.
@@ -121,8 +137,8 @@ backendStdenv.mkDerivation rec {
     (placeholder "lib")
     (placeholder "out")
     "${placeholder "out"}/nvvm"
-    # Is it not handled by autoPatchelf automatically?
-    "${lib.getLib backendStdenv.cc.cc}/lib64"
+    # NOTE: use the same libstdc++ as the rest of nixpkgs, not from backendStdenv
+    "${lib.getLib stdenv.cc.cc}/lib64"
     "${placeholder "out"}/jre/lib/amd64/jli"
     "${placeholder "out"}/lib64"
     "${placeholder "out"}/nvvm/lib64"
@@ -204,6 +220,14 @@ backendStdenv.mkDerivation rec {
 
       mv pkg/builds/nsight_systems/target-linux-x64 $out/target-linux-x64
       mv pkg/builds/nsight_systems/host-linux-x64 $out/host-linux-x64
+      rm $out/host-linux-x64/libstdc++.so*
+    ''}
+      ${lib.optionalString (lib.versionAtLeast version "11.8")
+      # error: auto-patchelf could not satisfy dependency libtiff.so.5 wanted by /nix/store/.......-cudatoolkit-12.0.1/host-linux-x64/Plugins/imageformats/libqtiff.so
+      # we only ship libtiff.so.6, so let's use qt plugins built by Nix.
+      # TODO: don't copy, come up with a symlink-based "merge"
+    ''
+      rsync ${lib.getLib qt6Packages.qtimageformats}/lib/qt-6/plugins/ $out/host-linux-x64/Plugins/ -aP
     ''}
 
     rm -f $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?

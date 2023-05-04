@@ -156,10 +156,10 @@
       elpaBuild {
         pname = "autothemer";
         ename = "autothemer";
-        version = "0.2.14";
+        version = "0.2.18";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/autothemer-0.2.14.tar";
-          sha256 = "14y8b807d75qym1qviiqy1s85495z9g7jvvfqqz42ngdnk87l3qb";
+          url = "https://elpa.nongnu.org/nongnu/autothemer-0.2.18.tar";
+          sha256 = "1gn7n8xd07sks49xirwah1y039s2hn02p0y1j4lmqh7m47l0fvl2";
         };
         packageRequires = [ dash emacs ];
         meta = {
@@ -261,10 +261,10 @@
       elpaBuild {
         pname = "buttercup";
         ename = "buttercup";
-        version = "1.30";
+        version = "1.31";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/buttercup-1.30.tar";
-          sha256 = "152w8f6yy7jd6vawq4dh3fnmlxm2x3i99w9hd6kv4bs7c2y2dkj8";
+          url = "https://elpa.nongnu.org/nongnu/buttercup-1.31.tar";
+          sha256 = "1aw9k3dfscqpq2jkk1yqh6i3682yjs85fnm7rzc5i9qawrl9db6h";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -605,10 +605,10 @@
       elpaBuild {
         pname = "eat";
         ename = "eat";
-        version = "0.6.1";
+        version = "0.8";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/eat-0.6.1.tar";
-          sha256 = "0gs7cg4liz2qy3x82z8f5hddixvsh5nqvc3xkzvqqvvrwqbhf6za";
+          url = "https://elpa.nongnu.org/nongnu/eat-0.8.tar";
+          sha256 = "1nvwd8iryjdcbm3v2xjgnf4ifcbs4d8hxn7xydxw6i7c5l8vya9f";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1874,10 +1874,10 @@
       elpaBuild {
         pname = "minibar";
         ename = "minibar";
-        version = "0.2";
+        version = "0.3";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/minibar-0.2.tar";
-          sha256 = "0idb91vp0pbichv2gfs314av6cgx5mkrn9w3yxwj81if1bvsmw0h";
+          url = "https://elpa.nongnu.org/nongnu/minibar-0.3.tar";
+          sha256 = "1mgkkjaav9hkg1c0lvn887armxv18hn99zd3dy1dx2lnjv2kfdcp";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2728,10 +2728,10 @@
       elpaBuild {
         pname = "subed";
         ename = "subed";
-        version = "1.2.1";
+        version = "1.2.2";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/subed-1.2.1.tar";
-          sha256 = "09a3ggnqsm4lxqhj0z9z3df6qzibvv9lpwqij2gpiifbb4lkvj4b";
+          url = "https://elpa.nongnu.org/nongnu/subed-1.2.2.tar";
+          sha256 = "1xlh4kqa8516rvmzy67pzs0ghk9rc919nq5b2sywd5mvzi5spxnh";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2989,10 +2989,10 @@
       elpaBuild {
         pname = "undo-fu-session";
         ename = "undo-fu-session";
-        version = "0.4";
+        version = "0.5";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/undo-fu-session-0.4.tar";
-          sha256 = "1p9qr9hzqiv1kgnglskny7m7lh2f8r4l0cf53431nf8hrp806qah";
+          url = "https://elpa.nongnu.org/nongnu/undo-fu-session-0.5.tar";
+          sha256 = "002srqa08kpgzsp171n88k1bz7qin16lpr7yafg13i29x37v6yzq";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3197,10 +3197,10 @@
       elpaBuild {
         pname = "xah-fly-keys";
         ename = "xah-fly-keys";
-        version = "23.8.20230331200914";
+        version = "23.10.20230407101020";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-23.8.20230331200914.tar";
-          sha256 = "0zh7h04zy014ss36bzz820574jj2xnx7yb3rnl02m9vynrss2i3m";
+          url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-23.10.20230407101020.tar";
+          sha256 = "1gdzl5s80hhfnskngjsw1wy18rs6k5hr5cvnj7pdli9ai10alx9y";
         };
         packageRequires = [ emacs ];
         meta = {

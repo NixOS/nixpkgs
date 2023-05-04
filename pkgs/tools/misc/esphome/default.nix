@@ -16,14 +16,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2023.3.1";
+  version = "2023.4.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-h35V6tg6TewqJiZ4T5t6RNNaT2JEzqhbnJgH6xqqqzs=";
+    hash = "sha256-UKcHtrHU7Gh48G0ImgW/+2rT+ucxFzxKCur7/OfDif0=";
   };
 
   postPatch = ''
@@ -97,6 +97,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/esphome/esphome/releases/tag/${version}";
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
     license = with licenses; [

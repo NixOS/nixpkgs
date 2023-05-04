@@ -34,3 +34,16 @@ index 396756808e..d324a6df59 100644
  
          // See if the user specified a specific device.
          globals.deviceManager?.specifiedDeviceId = topLevelResults['device-id'] as String?;
+
+diff --git a/packages/flutter_tools/lib/src/cache.dart b/packages/flutter_tools/lib/src/cache.dart
+index defc86cc20..6c0824c965 100644
+--- a/packages/flutter_tools/lib/src/cache.dart
++++ b/packages/flutter_tools/lib/src/cache.dart
+@@ -666,6 +666,7 @@ class Cache {
+ 
+   /// Update the cache to contain all `requiredArtifacts`.
+   Future<void> updateAll(Set<DevelopmentArtifact> requiredArtifacts) async {
++    return;
+     if (!_lockEnabled) {
+       return;
+     }

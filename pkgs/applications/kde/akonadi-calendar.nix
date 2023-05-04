@@ -17,4 +17,8 @@ mkDerivation {
     kio kmailtransport
   ];
   outputs = [ "out" "dev" ];
+  postInstall = ''
+    # added as an include directory by cmake files and fails to compile if it's missing
+    mkdir -p "$dev/include/KF5"
+  '';
 }

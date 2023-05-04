@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-0HOmItooNsGq6iTIb9M5IPXMwYh2nQ03qfjomkg0d00=";
 
-  auditable = true; # TODO: remove when this is the default
-
   nativeBuildInputs = [ cargo-c ];
 
   postBuild = ''
