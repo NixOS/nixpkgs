@@ -23,6 +23,11 @@ buildPythonPackage {
     "test_contrib.py"
   ];
 
+  disabledTests = [
+    # https://github.com/facebookresearch/faiss/issues/2836
+    "test_update_codebooks_with_double"
+  ];
+
   nativeCheckInputs = [
     faiss
     pytestCheckHook
