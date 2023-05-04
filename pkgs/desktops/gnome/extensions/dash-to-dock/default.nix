@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-dash-to-dock";
-  version = "79";
+  version = "80";
 
   # Temporarily switched to commit hash because stable version is buggy.
   src = fetchFromGitHub {
     owner = "micheleg";
     repo = "dash-to-dock";
     rev = "extensions.gnome.org-v${version}";
-    sha256 = "sha256-vqQ9nAa/avae2+0xJ5gApbAU07pawi+R6IEQ9O6DTjs=";
+    sha256 = "sha256-b9XdLd4tcgp+B8HDlJZXjpJI3x5KE/YwckKd9+VA2Sk=";
   };
 
   nativeBuildInputs = [

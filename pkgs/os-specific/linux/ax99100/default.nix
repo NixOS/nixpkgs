@@ -26,7 +26,9 @@ stdenv.mkDerivation
   patches = [
     ./kernel-5.18-pci_free_consistent-pci_alloc_consistent.patch
     ./kernel-6.1-set_termios-const-ktermios.patch
-  ];
+  ] ++ (lib.optional (lib.versionAtLeast kernel.version "6.2") [
+    ./kernel-6.2-fix-pointer-type.patch
+  ]);
 
   patchFlags = [ "-p0" ];
 

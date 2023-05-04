@@ -1,8 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
-, runCommand
 , rustPlatform
 , openssl
 , zlib
@@ -26,7 +24,7 @@
 
 rustPlatform.buildRustPackage (
   let
-    version =  "0.77.1";
+    version =  "0.79.0";
     pname = "nushell";
   in {
   inherit version pname;
@@ -35,10 +33,10 @@ rustPlatform.buildRustPackage (
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-MheKGfm72cxFtMIDj8VxEN4VFB1+tLoj+ujzL/7n8YI=";
+    hash = "sha256-vnOTSXTgFxNTI4msgMQ/5E27VUKPj6nBIqPWLUeXAr4=";
   };
 
-  cargoSha256 = "sha256-oUeoCAeVP2MBAhJfMptK+Z3n050cqpIIgnUroRVBYjg=";
+  cargoHash = "sha256-FqhN1t3n6j5czZ40JUFtsz4ZxTl7vpMTBhrR66M1DNw=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]

@@ -7,11 +7,12 @@
 , beautifulsoup4
 , docutils
 , packaging
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pydata-sphinx-theme";
-  version = "0.13.1";
+  version = "0.13.3";
 
   format = "wheel";
 
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     dist = "py3";
     python = "py3";
     pname = "pydata_sphinx_theme";
-    hash = "sha256-zinB3nlh1hbfol9MOpYZgY1LstSpmF7QeDZ68pT7zMI=";
+    hash = "sha256-v0HKbBxiFukp4og05AS/yQ4IC1GRW751Y7Xm/acDVPA=";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     beautifulsoup4
     docutils
     packaging
+    typing-extensions
   ];
 
   pythonImportsCheck = [

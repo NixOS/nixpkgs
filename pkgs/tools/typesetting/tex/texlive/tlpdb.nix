@@ -1,4 +1,9 @@
 { # no indentation
+"00texlive.config" = {
+  frozen = true;
+  year = 2022;
+  revision = 66590;
+};
 "12many" = {
   revision = 15878;
   stripPrefix = 0;

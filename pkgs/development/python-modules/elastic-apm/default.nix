@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiohttp
 , blinker
 , buildPythonPackage
@@ -29,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.15.0";
+  version = "6.15.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "apm-agent-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Uoybe6Mx7ZLs2GaOnl278Xj6KlTEgrOuNxMRmPpSq8k=";
+    hash = "sha256-s07LZeT2vTtBU/48heGFrW74D1iqkxRaLh+LTD35mu8=";
   };
 
   propagatedBuildInputs = [
@@ -77,6 +78,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Exclude tornado tests
     "tests/contrib/asyncio/tornado/tornado_tests.py"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Flaky tests on Darwin
+    "tests/utils/threading_tests.py"
   ];
 
   pythonImportsCheck = [
@@ -89,5 +93,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/elastic/apm-agent-python/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "elasticapm-run";
   };
 }

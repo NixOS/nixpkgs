@@ -14,56 +14,20 @@
 
 let
   versionMap = {
-    "2.0.8" = {
-      sha256 = "1xwrwvps7drrpyw3wg5h3g2qajmkwqs9gz0fdw1ns9adp7vld390";
-    };
-
-    "2.0.9" = {
-      sha256 = "17wvrcwgp45z9b6arik31fjnz7908qhr5ackxq1y0gqi1hsh1xy4";
-    };
-
-    "2.1.1" = {
-      sha256 = "15wa66sachhzgvg5n35vihmkpasg100lh561c1d1bdrql0p8kbd9";
-    };
-
-    "2.1.2" = {
-      sha256 = "sha256:02scrqyp2izsd8xjm2k5j5lhn4pdhd202jlcb54ysmcqjd80awdp";
-    };
-
+    # Only kept around for BCLM. Remove once unneeded there.
     "2.1.9" = {
       sha256 = "189gjqzdz10xh3ybiy4ch1r98bsmkcb4hpnrmggd4y2g5kqnyx4y";
     };
 
-    "2.1.10" = {
-      sha256 = "0f5ihj486m7ghh3nc0jlnqa656sbqcmhdv32syz2rjx5b47ky67b";
+    # The loosely held nixpkgs convention for SBCL is to keep the last two
+    # versions.
+    # https://github.com/NixOS/nixpkgs/pull/200994#issuecomment-1315042841
+    "2.3.2" = {
+      sha256 = "sha256-RMwWLPpjMqmojHoSHRkDiCikuk9r/7d+8cexdAfLHqo=";
     };
 
-    "2.1.11" = {
-      sha256 = "1zgypmn19c58pv7j33ga7m1l7lzghj70w3xbybpgmggxwwflihdz";
-    };
-
-    "2.2.4" = {
-      sha256 = "sha256-/N0lHLxl9/gI7QrXckaEjRvhZqppoX90mWABhLelcgI=";
-    };
-
-    "2.2.6" = {
-      sha256 = "sha256-PiMEjI+oJvuRMiC+sqw2l9vFwM3y6J/tjbOe0XEjBKA=";
-    };
-
-    "2.2.9" = {
-      sha256 = "sha256-fr69bSAj//cHewNy+hFx+IBSm97GEE8gmDKXwv63wXI=";
-    };
-
-    "2.2.10" = {
-      sha256 = "sha256-jMPDqHYSI63vFEqIcwsmdQg6Oyb6FV1wz5GruTXpCDM=";
-    };
-
-    "2.2.11" = {
-      sha256 = "sha256-NgfWgBZzGICEXO1dXVXGBUzEnxkSGhUCfmxWB66Elt8=";
-    };
-
-    "2.3.0" = {
-      sha256 = "sha256-v3Q5SXEq4Cy3ST87i1fOJBlIv2ETHjaGDdszTaFDnJc=";
+    "2.3.4" = {
+      sha256 = "sha256-8RtHZMbqvbJ+WpxGshcgTRG82lNOc7+XBz1Xgx0gnE4=";
     };
   };
 
@@ -81,44 +45,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texinfo ];
   buildInputs = lib.optionals coreCompression [ zstd ];
 
-  patches = lib.optional
-    (lib.versionAtLeast version "2.1.2" && lib.versionOlder version "2.1.8")
-    (fetchpatch {
-      # Fix segfault on ARM when reading large core files
-      url = "https://github.com/sbcl/sbcl/commit/8fa3f76fba2e8572e86ac6fc5754e6b2954fc774.patch";
-      sha256 = "1ic531pjnws1k3xd03a5ixbq8cn10dlh2nfln59k0vbm0253g3lv";
-    })
-  ++ lib.optionals (lib.versionAtLeast version "2.1.10" && lib.versionOlder version "2.2.9") [
-      # Fix included in SBCL trunk since 2.2.9:
-      #   https://bugs.launchpad.net/sbcl/+bug/1980570
-      (fetchpatch {
-        name = "darwin-fno-common.patch";
-        url = "https://bugs.launchpad.net/sbcl/+bug/1980570/+attachment/5600916/+files/0001-src-runtime-fix-fno-common-build-on-darwin.patch";
-        sha256 = "0avpwgjdaxxdpq8pfvv9darfn4ql5dgqq7zaf3nmxnvhh86ngzij";
-      })
-  ] ++ lib.optionals (lib.versionAtLeast version "2.1.10" && lib.versionOlder version "2.2.0") [
-      # Fix -fno-common on arm64
-      (fetchpatch {
-        name = "arm64-fno-common.patch";
-        url = "https://github.com/sbcl/sbcl/commit/ac3739eae36de92feffef5bb9b4b4bd93f6c4942.patch";
-        sha256 = "1kxg0ng7d465rk5v4biikrzaps41x4n1v4ygnb5qh4f5jzkbms8y";
-      })
-  ] ++ lib.optionals (version == "2.2.6") [
-    # Take contrib blocklist into account for doc generation.  This fixes sbcl
-    # build on aarch64, because the docs Makefile tries to require sb-simd,
-    # which is blocked in that platform.
-    (fetchpatch {
-      url = "https://github.com/sbcl/sbcl/commit/f88989694200a5192fb68047d43d0500b2165f7b.patch";
-      sha256 = "sha256-MXEsK46RARPmB2WBPcrmZk6ArliU8DgHw73x9+/QAmk=";
-    })
-  ] ++ lib.optionals (version == "2.2.10") [
-    # hard-coded /bin/cat to just ‘cat’, trusting the PATH
-    (fetchpatch {
-      url = "https://github.com/sbcl/sbcl/commit/8ed662fbfeb5dde35eb265f390b55b01f79f70c1.patch";
-      sha256 = "sha256-2aqb13AFdw9KMf8KQ9yj1HVxgoFWZ9xWmnoDdbRSLy4=";
-    })
-  ];
-
+  # There are no patches necessary for the currently enabled versions, but this
+  # code is left in place for the next potential patch.
   postPatch = ''
     echo '"${version}.nixos"' > version.lisp-expr
 

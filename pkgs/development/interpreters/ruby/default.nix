@@ -23,6 +23,8 @@ let
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     atLeast31 = lib.versionAtLeast ver.majMin "3.1";
     atLeast32 = lib.versionAtLeast ver.majMin "3.2";
+    # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
+    yjitSupported = atLeast32 && (stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64));
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
@@ -46,12 +48,12 @@ let
       #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
       # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
       , removeReferencesTo, jitSupport ? yjitSupport
-      , rustPlatform, yjitSupport ? atLeast32
+      , rustPlatform, yjitSupport ? yjitSupported
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
       , makeBinaryWrapper, buildRubyGem, defaultGemConfig
-      , baseRuby ? buildPackages.ruby_3_1.override {
+      , baseRuby ? buildPackages.ruby.override {
           docSupport = false;
           rubygemsSupport = false;
         }
@@ -110,14 +112,6 @@ let
             (fetchpatch {
               url = "https://github.com/ruby/ruby/commit/0acc05caf7518cd0d63ab02bfa036455add02346.patch";
               sha256 = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
-            })
-          ]
-          ++ ops (ver.majMin == "3.1") [
-            # Ruby 3.1.3 cannot find pkg-config in mkmf.rb
-            # https://bugs.ruby-lang.org/issues/19189
-            (fetchpatch {
-              url = "https://github.com/ruby/ruby/commit/613fca01486e47dee9364a2fd86b5f5e77fe23c8.patch";
-              sha256 = "sha256-0Ku7l6VEpcvxexL9QA5+mNER4v8gYZOJhAjhCL1WDpw=";
             })
           ]
           ++ ops (!atLeast30 && rubygemsSupport) [
@@ -322,23 +316,23 @@ in {
   mkRuby = generic;
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "7" "";
-    sha256 = "sha256-4QEn22kdf/NkAs/oj0GMjQJaPx7qkgRLFi3XLwuMe5A=";
+    version = rubyVersion "2" "7" "8" "";
+    sha256 = "sha256-wtq2PLyPKgVSYQitQZ76Y6Z+1AdNu8+fwrHKZky0W6A=";
   };
 
   ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "5" "";
-    sha256 = "sha256-mvxjgKAnpP4a4aPi7MtrSXucWsBjHBLKVvm3vrSEh3Y=";
+    version = rubyVersion "3" "0" "6" "";
+    sha256 = "sha256-bmy9SQAw15EMD/IO3vq0KU380QRvD49H94tZeYesaD4=";
   };
 
   ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "3" "";
-    sha256 = "sha256-XqSYo19M0Vh1IApS3eQrbrF54SZOF9eHMsOlfNHGq54=";
+    version = rubyVersion "3" "1" "4" "";
+    sha256 = "sha256-o9VYeaDfqx1xQf3xDSKgfb+OXNxEFdob3gYSfVzDx7Y=";
   };
 
   ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "1" "";
-    sha256 = "sha256-E9Z5AWYO4yF9vZ3VYFk0a9QhLOZKacMG71LfZJNfjb0=";
+    version = rubyVersion "3" "2" "2" "";
+    sha256 = "sha256-lsV1WIcaZ0jeW8nydOk/S1qtBs2PN776Do2U57ikI7w=";
     cargoSha256 = "sha256-6du7RJo0DH+eYMOoh3L31F3aqfR5+iG1iKauSV1uNcQ=";
   };
 }

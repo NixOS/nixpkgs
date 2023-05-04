@@ -1,7 +1,7 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, libxshmfence, buildPackages
 , atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap, wayland
+, systemd, fontconfig, libdbusmenu, glib, buildFHSEnv, wayland
 
 # Populate passthru.tests
 , tests
@@ -150,9 +150,9 @@ let
   # in order to create or update extensions.
   # See: #83288 #91179 #73810 #41189
   #
-  # buildFHSUserEnv allows for users to use the existing vscode
+  # buildFHSEnv allows for users to use the existing vscode
   # extension tooling without significant pain.
-  fhs = { additionalPkgs ? pkgs: [] }: buildFHSUserEnvBubblewrap {
+  fhs = { additionalPkgs ? pkgs: [] }: buildFHSEnv {
     # also determines the name of the wrapped command
     name = executableName;
 

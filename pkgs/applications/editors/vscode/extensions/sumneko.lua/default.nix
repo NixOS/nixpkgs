@@ -7,10 +7,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "lua";
     publisher = "sumneko";
-    version = "3.5.6";
-    sha256 = "sha256-Unzs9rX/0MlQprSvScdBCCFMeLCaGzWsMbcFqSKY2XY=";
+    version = "3.6.19";
+    sha256 = "sha256-7f8zovJS1lNwrUryxgadrBbNRw/OwFqry57JWKY1D8E=";
   };
 
+  # Running chmod in runtime will lock up extension
+  # indefinitely if the binary is in nix store.
   patches = [ ./remove-chmod.patch ];
 
   postInstall = ''

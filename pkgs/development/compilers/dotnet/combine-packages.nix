@@ -10,7 +10,7 @@ in
 assert lib.assertMsg ((builtins.length dotnetPackages) > 0)
     ''You must include at least one package, e.g
       `with dotnetCorePackages; combinePackages [
-          sdk_3_1 aspnetcore_5_0
+          sdk_6_0 aspnetcore_7_0
        ];`'' ;
   buildEnv {
     name = "dotnet-core-combined";

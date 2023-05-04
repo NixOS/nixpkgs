@@ -36,7 +36,7 @@
 , gdm
 , upower
 , ibus
-, libnma
+, libnma-gtk4
 , libgnomekbd
 , gnome-desktop
 , gsettings-desktop-schemas
@@ -67,13 +67,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "43.3";
+  version = "44.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Sf+NBfVfpPHCLwXQOFhSzrQpprY4DBuoRh5ipG1MBx4=";
+    sha256 = "C/vkOU0mdiUVTQjQFGe9vZnoFXUS/I30XVwC3bdVHKY=";
   };
 
   patches = [
@@ -164,7 +164,7 @@ stdenv.mkDerivation rec {
 
     # not declared at build time, but typelib is needed at runtime
     libgweather
-    libnma
+    libnma-gtk4
 
     # for gnome-extension tool
     bash-completion
@@ -177,6 +177,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dtests=false"
   ];
 
   postPatch = ''

@@ -3,7 +3,7 @@
 let
 
   # To control nodejs version we pass down
-  nodejs = pkgs.nodejs-14_x;
+  nodejs = pkgs.nodejs_14;
 
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
 
@@ -107,8 +107,6 @@ let
 
       # elm-format requires text >= 2.0
       text = self.text_2_0_2;
-      # elm-format-lib requires hspec-golden < 0.2
-      hspec-golden = self.hspec-golden_0_1_0_3;
       # unorderd-container's tests indirectly depend on text < 2.0
       unordered-containers = overrideCabal (drv: { doCheck = false; }) super.unordered-containers;
       # relude-1.1.0.0's tests depend on hedgehog < 1.2, which indirectly depends on text < 2.0
@@ -118,7 +116,7 @@ let
 
   nodePkgs = pkgs.callPackage ./packages/node-composition.nix {
     inherit pkgs;
-    nodejs = pkgs.nodejs-14_x;
+    nodejs = pkgs.nodejs_14;
     inherit (pkgs.stdenv.hostPlatform) system;
   };
 
@@ -216,6 +214,19 @@ in lib.makeScope pkgs.newScope (self: with self; {
           maintainers = [ maintainers.turbomack ];
         };
       };
+
+      elm-spa = nodePkgs."elm-spa".overrideAttrs  (
+        old: {
+          nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ makeWrapper old.nodejs.pkgs.node-gyp-build ];
+
+          meta = with lib; nodePkgs."elm-spa".meta // {
+            description = "A tool for building single page apps in Elm";
+            homepage = "https://www.elm-spa.dev/";
+            license = licenses.bsd3;
+            maintainers = [ maintainers.ilyakooo0 ];
+          };
+        }
+      );
 
       elm-optimize-level-2 = nodePkgs."elm-optimize-level-2" // {
         meta = with lib; nodePkgs."elm-optimize-level-2".meta // {

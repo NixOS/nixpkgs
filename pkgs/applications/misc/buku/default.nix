@@ -8,7 +8,6 @@ let
     flask-api
     flask-bootstrap
     flask-paginate
-    flask-reverse-proxy-fix
     flask-wtf
     arrow
     werkzeug
@@ -18,20 +17,20 @@ let
   ];
 in
 with python3.pkgs; buildPythonApplication rec {
-  version = "4.7";
+  version = "4.8";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "sha256-7piJK1hz9h6EWiU/q5MAS1PSvHFxnW7rZBKxq+wda1c=";
+    sha256 = "sha256-kPVlfTYUusf5CZnKB53WZcCHo3MEnA2bLUHTRPGPn+8=";
   };
 
   nativeCheckInputs = [
     hypothesis
     pytest
-    pytest-vcr
+    pytest-recording
     pyyaml
     mypy-extensions
     click

@@ -2,12 +2,12 @@
 
 let
   pname = "via";
-  version = "2.1.0";
+  version = "3.0.0";
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/the-via/releases/releases/download/v${version}/via-${version}-linux.AppImage";
     name = "via-${version}-linux.AppImage";
-    sha256 = "sha256-eVmaVD3W+ZEw3HkuZWKsd9XYhASP5+dxzVW64fOhqwk=";
+    sha256 = "sha256-+uTvmrqHK7L5VA/lUHCZZeRYPUrcVA+vjG7venxuHhs=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
 in

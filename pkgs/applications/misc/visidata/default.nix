@@ -130,6 +130,10 @@ buildPythonApplication rec {
     bash dev/test.sh
     runHook postCheck
   '';
+  postInstall = ''
+    python dev/zsh-completion.py
+    install -Dm644 _visidata -t $out/share/zsh/site-functions
+  '';
 
   pythonImportsCheck = ["visidata"];
 

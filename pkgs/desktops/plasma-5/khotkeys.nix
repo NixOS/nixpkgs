@@ -1,8 +1,6 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , kdoctools
-, qtbase
 , kcmutils
 , kdbusaddons
 , kdelibs4support

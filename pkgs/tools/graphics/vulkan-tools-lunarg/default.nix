@@ -24,17 +24,15 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
-  # The version must match that in vulkan-headers
-  version = "1.3.239.0";
+  version = "1.3.249";
 
-  src = (assert version == vulkan-headers.version;
-    fetchFromGitHub {
-      owner = "LunarG";
-      repo = "VulkanTools";
-      rev = "sdk-${version}";
-      hash = "sha256-zgkuTy9ccg8D/riA1CM/PnbXW1R0jWEINtcEVilETwk=";
-      fetchSubmodules = true;
-    });
+  src = fetchFromGitHub {
+   owner = "LunarG";
+   repo = "VulkanTools";
+   rev = "v${version}";
+   hash = "sha256-yQE6tjUxIZEMspxDaO9AoSjoEHQl2eDAc0E/aVQZnxQ=";
+   fetchSubmodules = true;
+ };
 
   nativeBuildInputs = [ cmake python3 jq which pkg-config ];
 

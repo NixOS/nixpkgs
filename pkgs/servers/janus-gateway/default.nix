@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "janus-gateway";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "meetecho";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-32xl/dVMuT9olC0fuN9dZFz1c6N9sLA5V9qaSjqkfo4=";
+    sha256 = "sha256-2UlIpxixTl16VG6lgcfk+9LXSWn0jV1IfIkCeV/SO5w=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config gengetopt ];
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "General purpose WebRTC server";
     homepage = "https://janus.conf.meetecho.com/";
+    changelog = "https://github.com/meetecho/janus-gateway/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];

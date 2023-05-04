@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gettext
@@ -28,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "43.4";
+  version = "44.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-zlLVW6T2fYlu8tmZczc6iYZql7t0pLQCS23iZzx/8e8=";
+    sha256 = "sha256-tmeG6mr/kRH3WDVu4qEV9jR9Q3lTt77Kq+FDORnzGf8=";
   };
 
   doCheck = true;
@@ -64,14 +63,6 @@ stdenv.mkDerivation rec {
     librest_1_0
     libsecret
     libsoup_3
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "timeTest.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-maps/-/commit/bec3d2f26de1b3a8c8b7e603f6d6a46c853426fa.diff";
-      sha256 = "sha256-7/ogIDG0piZOPaCPX4nUA3jHI7RGTd2KMZsp8z0XLcc=";
-    })
   ];
 
   postPatch = ''

@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "qtest";
   version = "2.11.2";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "vincent-hugot";

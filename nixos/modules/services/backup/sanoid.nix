@@ -114,6 +114,8 @@ in
   options.services.sanoid = {
     enable = mkEnableOption (lib.mdDoc "Sanoid ZFS snapshotting service");
 
+    package = lib.mkPackageOptionMD pkgs "sanoid" {};
+
     interval = mkOption {
       type = types.str;
       default = "hourly";
@@ -181,7 +183,7 @@ in
         ExecStartPre = (map (buildAllowCommand "allow" [ "snapshot" "mount" "destroy" ]) datasets);
         ExecStopPost = (map (buildAllowCommand "unallow" [ "snapshot" "mount" "destroy" ]) datasets);
         ExecStart = lib.escapeShellArgs ([
-          "${pkgs.sanoid}/bin/sanoid"
+          "${cfg.package}/bin/sanoid"
           "--cron"
           "--configdir"
           (pkgs.writeTextDir "sanoid.conf" configFile)

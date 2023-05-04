@@ -8,19 +8,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.8.10";
+  version = "0.8.12";
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-okxZ1kALB5l94ShStAJLfzD37MLhob8MCzhbqfVISkw=";
+    rev = "v${version}";
+    hash = "sha256-nLdLTh1qSKvOR2cE9HWQrIWQ9L+ynX4qF+lTtKn/Ubs=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = with python3Packages; [
-    paramiko
     peewee
     pyqt5
     python-dateutil
@@ -29,6 +28,9 @@ python3Packages.buildPythonApplication rec {
     secretstorage
     appdirs
     setuptools
+    platformdirs
+  ] ++ lib.optionals stdenv.isLinux [
+    qt5.qtwayland
   ];
 
   postPatch = ''

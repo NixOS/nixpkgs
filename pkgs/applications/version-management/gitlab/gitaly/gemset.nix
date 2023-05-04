@@ -189,10 +189,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "07zd8r189qcqr3xp6dinlw94sylxbyn56nnas7k0aw6xvr74q12v";
+      sha256 = "1yxz433p9gg8avl94wnb68fm89zaq02r179dkirx5db614vkjfiy";
       type = "gem";
     };
-    version = "0.31.0";
+    version = "0.31.1";
   };
   gitlab-license_finder = {
     dependencies = ["rubyzip" "thor" "tomlrb" "with_env" "xml-simple"];
@@ -220,10 +220,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1dcgkhjiaxha3yznyxxzm8a4n4jf61rk7kgbxy4sdkb865zbn2ab";
+      sha256 = "1xcg53yz44cqhcpb85w3ay80kvnniy0v441c9p08wb6zzia2mnq9";
       type = "gem";
     };
-    version = "3.21.12";
+    version = "3.22.3";
   };
   googleapis-common-protos-types = {
     dependencies = ["google-protobuf"];
@@ -470,10 +470,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0qvp6h2abmlsl4sqjsvac03cr2mxq6143gbx4kq52rpazp021qsb";
+      sha256 = "17wg99w29hpiq9p4cmm8c6kdg4lcw0ll2c36qw7y50gy1cs4h5j2";
       type = "gem";
     };
-    version = "2.2.6.2";
+    version = "2.2.6.3";
   };
   rack-test = {
     dependencies = ["rack"];
@@ -746,10 +746,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "12p856z7inf47azpvh9qswsfx8035r5hbzlg2x5n8z2sjqzjkk80";
+      sha256 = "1r3k8x3vfaa6wnz8mhpn10938bzmfj489zc18q73xpsb469v0nv9";
       type = "gem";
     };
-    version = "0.17.0";
+    version = "0.18.1";
   };
   tomlrb = {
     groups = ["default" "development" "omnibus" "test"];

@@ -22,13 +22,13 @@
 
 let
   # when bumping the version, check if imhex has gotten support for the capstone version in nixpkgs
-  version = "1.26.2";
+  version = "1.27.1";
 
   patterns_src = fetchFromGitHub {
     owner = "WerWolv";
     repo = "ImHex-Patterns";
     rev = "ImHex-v${version}";
-    hash = "sha256-2+7bJzgwHfXcINM5oxwi3vEbUtq9gGJc/uxFOwT4RnM=";
+    hash = "sha256-7Aaj+W+zXjHO8A2gmWtp5Pa/i5Uk8lXzX2WHjPIPRZI=";
   };
 
 in
@@ -41,7 +41,7 @@ gcc12Stdenv.mkDerivation rec {
     owner = "WerWolv";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-H2bnRByCUAltngmVWgPW4vW8k5AWecOAzwtBKsjbpTw=";
+    hash = "sha256-meOx8SkufXbXuBIVefr/mO9fsUi3zeQmqmf86+aDMaI=";
   };
 
   nativeBuildInputs = [ cmake llvm python3 perl pkg-config ];

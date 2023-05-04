@@ -6,16 +6,16 @@ This contains instructions on how to package javascript applications.
 
 The various tools available will be listed in the [tools-overview](#javascript-tools-overview). Some general principles for packaging will follow. Finally some tool specific instructions will be given.
 
-## Getting unstuck / finding code examples
+## Getting unstuck / finding code examples {#javascript-finding-examples}
 
 If you find you are lacking inspiration for packing javascript applications, the links below might prove useful. Searching online for prior art can be helpful if you are running into solved problems.
 
-### Github
+### Github {#javascript-finding-examples-github}
 
 - Searching Nix files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+language%3ANix&type=code>
 - Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+filename%3Aflake.nix&type=code>
 
-### Gitlab
+### Gitlab {#javascript-finding-examples-gitlab}
 
 - Searching Nix files for `mkYarnPackage`: <https://gitlab.com/search?scope=blobs&search=mkYarnPackage+extension%3Anix>
 - Searching just `flake.nix` files for `mkYarnPackage`: <https://gitlab.com/search?scope=blobs&search=mkYarnPackage+filename%3Aflake.nix>
@@ -105,7 +105,7 @@ After you have identified the correct system, you need to override your package 
     });
 ```
 
-### Adding and Updating Javascript packages in nixpkgs
+### Adding and Updating Javascript packages in nixpkgs {#javascript-adding-or-updating-packages}
 
 To add a package from NPM to nixpkgs:
 
@@ -140,7 +140,7 @@ To update NPM packages in nixpkgs, run the same `generate.sh` script:
 ./pkgs/development/node-packages/generate.sh
 ```
 
-#### Git protocol error
+#### Git protocol error {#javascript-git-error}
 
 Some packages may have Git dependencies from GitHub specified with `git://`.
 GitHub has [disabled unecrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
@@ -229,7 +229,7 @@ See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
 #### Pitfalls {#javascript-node2nix-pitfalls}
 
 - If upstream package.json does not have a "version" attribute, `node2nix` will crash. You will need to add it like shown in [the package.json section](#javascript-upstream-package-json).
-- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from NPM distributed with `nodejs-16_x`.
+- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from NPM distributed with `nodejs_16`.
 - `node2nix` does not like missing packages from NPM. If you see something like `Cannot resolve version: vue-loader-v16@undefined` then you might want to try another tool. The package might have been pulled off of NPM.
 
 ### yarn2nix {#javascript-yarn2nix}
@@ -288,7 +288,7 @@ configurePhase = ''
 This will generate a derivation including the `node_modules` directory.
 If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way.
 
-#### Overriding dependency behavior
+#### Overriding dependency behavior {#javascript-mkYarnPackage-overriding-dependencies}
 
 In the `mkYarnPackage` record the property `pkgConfig` can be used to override packages when you encounter problems building.
 

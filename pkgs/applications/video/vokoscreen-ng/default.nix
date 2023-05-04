@@ -16,18 +16,19 @@
 , gst-plugins-bad
 , gst-plugins-ugly
 , wayland
+, pipewire
 , wrapQtAppsHook
 }:
 
 mkDerivation rec {
   pname = "vokoscreen-ng";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreenNG";
     rev = version;
-    sha256 = "sha256-4VEIQj9/rSzXM5EQFt2I+cKKOM1URKlblf+6vlWEuO0=";
+    sha256 = "sha256-Du/Dq7AUH5CeEKYr0kxcqguAyRVI5Ame41nU3FGvG+U=";
   };
 
   qmakeFlags = [ "src/vokoscreenNG.pro" ];
@@ -41,6 +42,7 @@ mkDerivation rec {
     qtmultimedia
     qtx11extras
     wayland
+    pipewire
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad

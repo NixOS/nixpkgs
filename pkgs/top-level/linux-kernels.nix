@@ -189,6 +189,14 @@ in {
       ];
     };
 
+    linux_6_3 = callPackage ../os-specific/linux/kernel/linux-6.3.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.fix-em-ice-bonding
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
         kernelPatches = [
@@ -494,6 +502,8 @@ in {
 
     system76-io = callPackage ../os-specific/linux/system76-io { };
 
+    system76-scheduler = callPackage ../os-specific/linux/system76-scheduler { };
+
     tmon = callPackage ../os-specific/linux/tmon { };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
@@ -565,6 +575,7 @@ in {
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_2 = recurseIntoAttrs (packagesFor kernels.linux_6_2);
+    linux_6_3 = recurseIntoAttrs (packagesFor kernels.linux_6_3);
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
     linux_5_18 = throw "linux 5.18 was removed because it reached its end of life upstream"; # Added 2022-09-17
@@ -632,8 +643,8 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_1;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_2;
-    linux_mptcp = packages.linux_mptcp_95;
+    linux_latest = packages.linux_6_3;
+    linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_1;
     linux_hardkernel_latest = packages.hardkernel_4_14;
@@ -649,6 +660,7 @@ in {
   # Derive one of the default .config files
   linuxConfig = {
     src,
+    kernelPatches ? [],
     version ? (builtins.parseDrvName src.name).version,
     makeTarget ? "defconfig",
     name ? "kernel.config",
@@ -656,6 +668,7 @@ in {
     inherit name src;
     depsBuildBuild = [ buildPackages.stdenv.cc ]
       ++ lib.optionals (lib.versionAtLeast version "4.16") [ buildPackages.bison buildPackages.flex ];
+    patches = map (p: p.patch) kernelPatches;  # Patches may include new configs.
     postPatch = ''
       patchShebangs scripts/
     '';

@@ -8,11 +8,13 @@
 , libxcb
 , libxkbcommon
 , libxml2
+, gettext
 , meson
 , ninja
 , pango
 , pkg-config
 , scdoc
+, wayland-scanner
 , wayland
 , wayland-protocols
 , wlroots_0_16
@@ -23,22 +25,24 @@
 let
   wlroots = wlroots_0_16;
 in
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
-    rev = self.version;
-    hash = "sha256-PfvtNbSAz1vt0+ko4zRPyRRN+lhQoA2kJ2xoJy5o4So=";
+    rev = finalAttrs.version;
+    hash = "sha256-yZ1tXx7AA9pFc5C6c/J3B03/TfXw1PsAunNNiee3BGU=";
   };
 
   nativeBuildInputs = [
+    gettext
     meson
     ninja
     pkg-config
     scdoc
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -64,7 +68,7 @@ stdenv.mkDerivation (self: {
   meta = with lib; {
     homepage = "https://github.com/labwc/labwc";
     description = "A Wayland stacking compositor, similar to Openbox";
-    changelog = "https://raw.githubusercontent.com/labwc/labwc/${self.version}/NEWS.md";
+    changelog = "https://raw.githubusercontent.com/labwc/labwc/${finalAttrs.version}/NEWS.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;

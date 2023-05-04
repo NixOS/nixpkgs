@@ -1,17 +1,18 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib
+, rustPlatform
+, fetchCrate
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-all-features";
-  version = "1.7.0";
+  version = "1.9.0";
 
-  src = fetchFromGitHub {
-    owner = "frewsxcv";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-p9UQaqytqpD2u9X9zaTPIgVEloU2UbD/AxVERNs1Lt8=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-OLnz1SmMLs/yats/lZugqNUlBQHSNR1bOuEmnHGdoN8=";
   };
 
-  cargoSha256 = "sha256-krtuLFQlInqdv7j8v13/X3lL0JdaMsApb9Ga5muThgw=";
+  cargoHash = "sha256-Gg5tF8IvbtIoqR0AKRS7IbcCNOCJO8oxwX0KkUr+l/M=";
 
   meta = with lib; {
     description = "A Cargo subcommand to build and test all feature flag combinations";

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "niapy";
-  version = "2.0.4";
+  version = "2.0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "NiaOrg";
     repo = "NiaPy";
     rev = "refs/tags/${version}";
-    hash = "sha256-bZ9bONFntNx5tcm/gR/uPS5CqicJX281WsvSno8aVlY=";
+    hash = "sha256-qstTxUo4jZ8YKbEjtDtSZUvR67VNkBQJdXeERJPOMDw=";
   };
 
   propagatedBuildInputs = [

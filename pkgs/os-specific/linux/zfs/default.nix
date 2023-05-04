@@ -10,6 +10,7 @@
 , gawk, gnugrep, gnused, systemd
 , smartmontools, enableMail ? false
 , sysstat, pkg-config
+, curl
 
 # Kernel dependencies
 , kernel ? null
@@ -76,6 +77,8 @@ let
           nfs-utils.override (old: { enablePython = old.enablePython or true && enablePython; })
         }/bin/exportfs"
         substituteInPlace ./lib/libshare/smb.h        --replace "/usr/bin/net"            "${samba}/bin/net"
+        # Disable dynamic loading of libcurl
+        substituteInPlace ./config/user-libfetch.m4   --replace "curl-config --built-shared" "true"
         substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
         substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d" \
                                                       --replace "/etc/default"            "$out/etc/default"
@@ -111,6 +114,7 @@ let
         ++ optional buildUser pkg-config;
       buildInputs = optionals buildUser [ zlib libuuid attr libtirpc ]
         ++ optional buildUser openssl
+        ++ optional buildUser curl
         ++ optional (buildUser && enablePython) python3;
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
@@ -210,7 +214,7 @@ let
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = lib.licenses.cddl;
         platforms = lib.platforms.linux;
-        maintainers = with lib.maintainers; [ jcumming jonringer wizeman globin raitobezarius ];
+        maintainers = with lib.maintainers; [ jcumming jonringer globin raitobezarius ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
         # On NixOS set the option boot.zfs.enableUnstable.
@@ -223,13 +227,19 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelOlder "6.2";
-    latestCompatibleLinuxPackages = linuxPackages_6_1;
+    kernelCompatible =
+      if stdenv'.isx86_64
+      then kernel.kernelOlder "6.3"
+      else kernel.kernelOlder "6.2";
+    latestCompatibleLinuxPackages =
+      if stdenv'.isx86_64
+      then linuxPackages_6_2
+      else linuxPackages_6_1;
 
     # this package should point to the latest release.
-    version = "2.1.9";
+    version = "2.1.11";
 
-    sha256 = "RT2ijcXhdw5rbz1niDjrqg6G/uOjyrJiTlS4qijiWqc=";
+    sha256 = "tJLwyqUj1l5F0WKZDeMGrEFa8fc/axKqm31xtN51a5M=";
   };
 
   zfsUnstable = common {
@@ -250,10 +260,10 @@ in {
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.10-staging-2023-03-15";
-    rev = "a5c469c5f380b09705ad0bee15e2ca7a5f78213c";
+    version = "2.1.12-staging-2023-04-18";
+    rev = "e25f9131d679692704c11dc0c1df6d4585b70c35";
 
-    sha256 = "sha256-CdPuyZMXFzANEdnsr/rB5ckkT8X5uziniY5vmRCKl1U=";
+    sha256 = "tJLwyqUj1l5F0WKZDeMGrEFa8fc/axKqm31xtN51a5M=";
 
     isUnstable = true;
   };

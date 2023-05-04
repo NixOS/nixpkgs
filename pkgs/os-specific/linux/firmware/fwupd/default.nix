@@ -2,7 +2,6 @@
 
 { stdenv
 , lib
-, fetchurl
 , fetchFromGitHub
 , gi-docgen
 , pkg-config
@@ -28,7 +27,6 @@
 , ninja
 , gcab
 , gnutls
-, pandoc
 , protobufc
 , python3
 , wrapGAppsNoGuiHook
@@ -124,7 +122,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.8.12";
+  version = "1.8.14";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -135,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-a4F7skyukl4jW3apGi1ie/EcuGlkZoszyZdtLFuJewA=";
+    hash = "sha256-xq9J44yhnF3bTutlkOLIMFM96XHMmoCL8i37tSxgPp0=";
   };
 
   patches = [
@@ -171,7 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
     valgrind
     gcab
     gnutls
-    pandoc
     protobufc # for protoc
     python
     wrapGAppsNoGuiHook
@@ -298,16 +295,6 @@ stdenv.mkDerivation (finalAttrs: {
     echo "12345678901234567890123456789012" > machine-id
     export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id) \
     LD_PRELOAD=${libredirect}/lib/libredirect.so
-  '';
-
-  preInstall = ''
-    # We have pkexec on PATH so Meson will try to use it when installation fails
-    # due to being unable to write to e.g. /etc.
-    # Let’s pretend we already ran pkexec –
-    # the pkexec on PATH would complain it lacks setuid bit,
-    # obscuring the underlying error.
-    # https://github.com/mesonbuild/meson/blob/492cc9bf95d573e037155b588dc5110ded4d9a35/mesonbuild/minstall.py#L558
-    export PKEXEC_UID=-1
   '';
 
   postInstall = ''

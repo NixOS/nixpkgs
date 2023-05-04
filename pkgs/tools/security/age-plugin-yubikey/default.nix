@@ -3,38 +3,45 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, openssl
 , pcsclite
 , PCSC
 , Foundation
+, IOKit
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "age-plugin-yubikey";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b7/65mfUr4p8tP4uU/BFonW0DqTTMIhEgB2xIwIxQVg=";
+    hash = "sha256-V3NzZyCfslUBsARO5UC8N+cuptLxg2euM87DGqtLpPk=";
   };
 
-  cargoSha256 = "sha256-LnHpinNZZHrIEWrVW0t1ja5WN57/fmiSmZlB0ylau8Y=";
+  cargoHash = "sha256-5qmwCcrhDkJlyeTS+waMiTxro1HjMHiQE5Ds/4sVpx4=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs =
-    if stdenv.isDarwin then [
-      Foundation
-      PCSC
-    ] else [
-      pcsclite
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optional stdenv.isLinux pcsclite
+  ++ lib.optionals stdenv.isDarwin [
+    IOKit
+    Foundation
+    PCSC
+  ];
 
   meta = with lib; {
-    description = "YubiKey plugin for age clients";
+    description = "YubiKey plugin for age";
     homepage = "https://github.com/str4d/age-plugin-yubikey";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ vtuan10 ];
+    changelog = "https://github.com/str4d/age-plugin-yubikey/blob/${src.rev}/CHANGELOG.md";
+    license = with licenses; [ mit asl20 ];
+    maintainers = with maintainers; [ kranzes vtuan10 ];
   };
 }

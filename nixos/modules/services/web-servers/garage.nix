@@ -51,16 +51,16 @@ in
             default = "none";
             type = types.enum ([ "none" "1" "2" "3" 1 2 3 ]);
             apply = v: toString v;
-            description = lib.mdDoc "Garage replication mode, defaults to none, see: <https://garagehq.deuxfleurs.fr/reference_manual/configuration.html#replication_mode> for reference.";
+            description = lib.mdDoc "Garage replication mode, defaults to none, see: <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#replication-mode> for reference.";
           };
         };
       };
-      description = lib.mdDoc "Garage configuration, see <https://garagehq.deuxfleurs.fr/reference_manual/configuration.html> for reference.";
+      description = lib.mdDoc "Garage configuration, see <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/> for reference.";
     };
 
     package = mkOption {
       # TODO: when 23.05 is released and if Garage 0.9 is the default, put a stateVersion check.
-      default = if versionAtLeast stateVersion "23.05" then pkgs.garage_0_8_0
+      default = if versionAtLeast config.system.stateVersion "23.05" then pkgs.garage_0_8
                 else pkgs.garage_0_7;
       defaultText = literalExpression "pkgs.garage_0_7";
       type = types.package;

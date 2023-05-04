@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch2
 , meson
 , ninja
 , gtk3
@@ -42,21 +41,12 @@
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.31.7";
+  version = "0.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-gPCj2HVS+L3vpeNig77XZ9AFdtqMyWpEo9NKQjXEmeA=";
+    sha256 = "sha256-F3Ky+h56VHnVKAKLyaMD8oVeHZWaWzyReSLmOpipCxk=";
   };
-
-  patches = [
-    # Fix build with vala 0.56.4, can be removed on next update
-    # https://gitlab.gnome.org/GNOME/shotwell/-/merge_requests/69
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/shotwell/-/commit/cd82759231e5ece2fa0dea40397c9051d15fd5c2.patch";
-      hash = "sha256-Vy2kvUlmPdEEuPB1RTcI5pGYNveeiQ+lId0YVlWo4wU=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson

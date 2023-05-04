@@ -2,6 +2,10 @@
 
 let
   libc = pkgs.stdenv.cc.libc;
+  patchelf = pkgs.patchelf.overrideAttrs(previousAttrs: {
+    NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or []) ++ [ "-static-libgcc" "-static-libstdc++" ];
+    NIX_CFLAGS_LINK = (previousAttrs.NIX_CFLAGS_LINK or []) ++ [ "-static-libgcc" "-static-libstdc++" ];
+  });
 in with pkgs; rec {
 
 
@@ -16,7 +20,7 @@ in with pkgs; rec {
   tarMinimal = gnutar.override { acl = null; };
 
   busyboxMinimal = busybox.override {
-    useMusl = !stdenv.targetPlatform.isRiscV;
+    useMusl = lib.meta.availableOn stdenv.hostPlatform musl;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
@@ -40,7 +44,10 @@ in with pkgs; rec {
   };
 
   build =
-
+    let
+      # ${libc.src}/sysdeps/unix/sysv/linux/loongarch/lp64/libnsl.abilist does not exist!
+      withLibnsl = !stdenv.hostPlatform.isLoongArch64;
+    in
     stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools";
 
@@ -65,7 +72,9 @@ in with pkgs; rec {
         cp -d ${libc.out}/lib/libdl*.so* $out/lib
         cp -d ${libc.out}/lib/librt*.so*  $out/lib
         cp -d ${libc.out}/lib/libpthread*.so* $out/lib
+      '' + lib.optionalString withLibnsl ''
         cp -d ${libc.out}/lib/libnsl*.so* $out/lib
+      '' + ''
         cp -d ${libc.out}/lib/libutil*.so* $out/lib
         cp -d ${libc.out}/lib/libnss*.so* $out/lib
         cp -d ${libc.out}/lib/libresolv*.so* $out/lib
@@ -127,7 +136,7 @@ in with pkgs; rec {
         cp -d ${bootGCC.out}/bin/gcc $out/bin
         cp -d ${bootGCC.out}/bin/cpp $out/bin
         cp -d ${bootGCC.out}/bin/g++ $out/bin
-        cp -d ${bootGCC.lib}/lib/libgcc_s.so* $out/lib
+        cp    ${bootGCC.lib}/lib/libgcc_s.so* $out/lib
         cp -d ${bootGCC.lib}/lib/libstdc++.so* $out/lib
         cp -d ${bootGCC.out}/lib/libssp.a* $out/lib
         cp -d ${bootGCC.out}/lib/libssp_nonshared.a $out/lib
@@ -149,15 +158,10 @@ in with pkgs; rec {
         rm -rf $out/include/c++/*/ext/parallel
 
         cp -d ${gmpxx.out}/lib/libgmp*.so* $out/lib
+        cp -d ${isl.out}/lib/libisl*.so* $out/lib
         cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
         cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
         cp -d ${zlib.out}/lib/libz.so* $out/lib
-
-      '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-        # These needed for cross but not native tools because the stdenv
-        # GCC has certain things built in statically. See
-        # pkgs/stdenv/linux/default.nix for the details.
-        cp -d ${isl_0_20.out}/lib/libisl*.so* $out/lib
 
       '' + lib.optionalString (stdenv.hostPlatform.isRiscV) ''
         # libatomic is required on RiscV platform for C/C++ atomics and pthread

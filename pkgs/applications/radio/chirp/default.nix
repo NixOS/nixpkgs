@@ -1,26 +1,36 @@
 { lib
 , fetchFromGitHub
+, glib
+, gsettings-desktop-schemas
 , python3
 , unstableGitUpdater
+, wrapGAppsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chirp";
-  version = "unstable-2022-12-07";
+  version = "unstable-2023-03-15";
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "chirp";
-    rev = "dc0c98d22423b496faf0a86296a6ec0bb3b3e11a";
-    hash = "sha256-z0xD11CB7Vt8k0dPXE+E5ZD9XAFwWNxjnUs25/Gd7zI=";
+    rev = "33402b7c545c5a92b7042369867e7eb75ef32a59";
+    hash = "sha256-duSEpd2GBBskoKNFos5X9wFtsjRct1918VhZd1T2rvU=";
   };
-
+  buildInputs = [
+    glib
+    gsettings-desktop-schemas
+  ];
+  nativeBuildInputs = [
+    wrapGAppsHook
+  ];
   propagatedBuildInputs = with python3.pkgs; [
     future
     pyserial
     requests
     six
     wxPython_4_2
+    yattag
   ];
 
   # "running build_ext" fails with no output

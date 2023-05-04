@@ -132,12 +132,12 @@ in
             exit 1
           ''
         else configText;
-
-      environment.systemPackages = [ cfg.package ];
     }
 
     (mkIf cfg.enable {
       networking.resolvconf.package = pkgs.openresolv;
+
+      environment.systemPackages = [ cfg.package ];
 
       systemd.services.resolvconf = {
         description = "resolvconf update";

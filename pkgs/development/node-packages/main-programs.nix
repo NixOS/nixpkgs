@@ -20,6 +20,7 @@
   "@commitlint/cli" = "commitlint";
   "@forge/cli" = "forge";
   "@gitbeaker/cli" = "gitbeaker";
+  "@githubnext/github-copilot-cli" = "github-copilot-cli";
   "@google/clasp" = "clasp";
   "@medable/mdctl-cli" = "mdctl";
   "@mermaid-js/mermaid-cli" = "mmdc";
@@ -43,6 +44,7 @@
   clubhouse-cli = "club";
   conventional-changelog-cli = "conventional-changelog";
   cpy-cli = "cpy";
+  diff2html-cli = "diff2html";
   dockerfile-language-server-nodejs = "docker-langserver";
   fast-cli = "fast";
   fauna-shell = "fauna";

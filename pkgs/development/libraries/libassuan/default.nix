@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "http://gnupg.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.erictapen ];
+    maintainers = [ ];
   };
 }

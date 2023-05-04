@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "pyssim";
-  version = "0.4";
+  version = "0.6";
 
   propagatedBuildInputs = [ numpy scipy pillow ];
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "jterrace";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rnj3xdhma1fc0fg0jjsdy74ar0hgr3w8kygbnijqjdms7m3asqm";
+    sha256 = "sha256-VvxQTvDTDms6Ccyclbf9P0HEQksl5atPPzHuH8yXTmc=";
   };
 
   # Tests are copied from .travis.yml

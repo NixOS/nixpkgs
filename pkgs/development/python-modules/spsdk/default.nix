@@ -27,19 +27,20 @@
 , pyserial
 , ruamel-yaml
 , sly
+, typing-extensions
 , pytestCheckHook
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "NXPmicro";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-UBiylZB6/0n1FQMMg0coXkYh9S6gLz2LaoKk2HoWu7c=";
+    hash = "sha256-KJUtAWENS3+VAs3Iai1aKYzMYtfetMeI0MHeQ6NraNY=";
   };
 
   nativeBuildInputs = [
@@ -52,8 +53,10 @@ buildPythonPackage rec {
     "cmsis-pack-manager"
     "deepmerge"
     "jinja2"
+    "pycryptodome"
     "pylink-square"
     "pyocd"
+    "typing-extensions"
   ];
 
   pythonRemoveDeps = [
@@ -85,6 +88,7 @@ buildPythonPackage rec {
     pyserial
     ruamel-yaml
     sly
+    typing-extensions
   ];
 
   nativeCheckInputs = [

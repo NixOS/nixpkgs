@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       fionera
       sternenseemann
     ];
-    license = licenses.mit;
+    license = with licenses; [ mit zlib ];
     platforms = with platforms; linux;
   };
 }

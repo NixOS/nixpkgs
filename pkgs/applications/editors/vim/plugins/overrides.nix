@@ -36,6 +36,7 @@
 , openscad
 , pandoc
 , parinfer-rust
+, phpactor
 , ripgrep
 , skim
 , sqlite
@@ -90,9 +91,7 @@
 , makeWrapper
 , procps
 
-  # vim-clap dependencies
-, libgit2
-, libiconv
+  # sg-nvim dependencies
 , openssl
 , pkg-config
 
@@ -120,6 +119,10 @@
 }:
 
 self: super: {
+
+  autosave-nvim = super.autosave-nvim.overrideAttrs(old: {
+    dependencies = with super; [ plenary-nvim ];
+  });
 
   barbecue-nvim = super.barbecue-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
@@ -299,6 +302,14 @@ self: super: {
 
   completion-treesitter = super.completion-treesitter.overrideAttrs (old: {
     dependencies = with self; [ completion-nvim nvim-treesitter ];
+  });
+
+  copilot-vim = super.copilot-vim.overrideAttrs (old: {
+    postInstall = ''
+      substituteInPlace $out/autoload/copilot/agent.vim \
+        --replace "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
+                  "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
+    '';
   });
 
   cpsm = super.cpsm.overrideAttrs (old: {
@@ -694,7 +705,7 @@ self: super: {
   });
 
   noice-nvim = super.noice-nvim.overrideAttrs(old: {
-    dependencies = with self; [ nui-nvim nvim-notify ];
+    dependencies = with self; [ nui-nvim ];
   });
 
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
@@ -767,6 +778,14 @@ self: super: {
 
   inherit parinfer-rust;
 
+  phpactor = buildVimPluginFrom2Nix {
+    inherit (phpactor) pname src meta version;
+    postPatch = ''
+      substituteInPlace plugin/phpactor.vim \
+        --replace "g:phpactorpath = expand('<sfile>:p:h') . '/..'" "g:phpactorpath = '${phpactor}'"
+    '';
+  };
+
   playground = super.playground.overrideAttrs (old: {
     dependencies = with self; [
       # we need the 'query' grammer to make
@@ -806,7 +825,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-GN7KM3fkeOcqmyUwsPMw499kS/eYqh8pbyPgMv4/NN4=";
+        cargoHash = "sha256-gnQNQlW/c1vzyR+HbYn7rpxZ1C6WXFcqpylIOTUMZ6g=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -840,18 +859,18 @@ self: super: {
 
   sniprun =
     let
-      version = "1.2.13";
+      version = "1.3.1";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        hash = "sha256-VDLBktZChRgorJt/V/wuFQn/SL4yOZIElmntEQEi8Tc=";
+        hash = "sha256-grrrqvdqoYTBtlU+HLrSQJsAmMA/+OHbuoVvOwHYPnk=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoSha256 = "sha256-cJwmuwsC81fSH36TRU7xGzlR4pVdjsw73uRaH1uWY+0=";
+        cargoSha256 = "sha256-hmZXYJFIeKgYyhT6mSrmX+7M9GQQHHzliYHjsBoHgOc=";
 
         nativeBuildInputs = [ makeWrapper ];
 
@@ -1142,35 +1161,7 @@ self: super: {
     passthru.python3Dependencies = ps: with ps; [ beancount ];
   });
 
-  vim-clap = super.vim-clap.overrideAttrs (old: {
-    preFixup =
-      let
-        maple-bin = rustPlatform.buildRustPackage {
-          name = "maple";
-          inherit (old) src;
-
-          nativeBuildInputs = [
-            pkg-config
-          ];
-
-          buildInputs = [
-            openssl
-          ] ++ lib.optionals stdenv.isDarwin [
-            CoreServices
-            curl
-            libgit2
-            libiconv
-          ];
-
-          cargoHash = "sha256-BFUC6fQ5LpTKx2ztCuFVzXTWzSDl03VYsmVcxBXbiT4=";
-        };
-      in
-      ''
-        ln -s ${maple-bin}/bin/maple $target/bin/maple
-      '';
-
-    meta.platforms = lib.platforms.all;
-  });
+  vim-clap = callPackage ./vim-clap { };
 
   vim-codefmt = super.vim-codefmt.overrideAttrs (old: {
     dependencies = with self; [ vim-maktaba ];
@@ -1346,6 +1337,13 @@ self: super: {
 
   vim-wakatime = super.vim-wakatime.overrideAttrs (old: {
     buildInputs = [ python3 ];
+    patchPhase = ''
+      substituteInPlace plugin/wakatime.vim \
+        --replace 'autocmd BufEnter,VimEnter' \
+                  'autocmd VimEnter' \
+        --replace 'autocmd CursorMoved,CursorMovedI' \
+                  'autocmd CursorMoved,CursorMovedI,BufEnter'
+    '';
   });
 
   vim-xdebug = super.vim-xdebug.overrideAttrs (old: {

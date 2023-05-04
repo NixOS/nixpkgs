@@ -904,6 +904,7 @@ let
 
       REGULATOR  = yes; # Voltage and Current Regulator Support
       RC_DEVICES = option yes; # Enable IR devices
+      RC_DECODERS = option yes; # Required for IR devices to work
 
       RT2800USB_RT53XX = yes;
       RT2800USB_RT55XX = yes;
@@ -966,7 +967,7 @@ let
       FSL_MC_UAPI_SUPPORT = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "5.12" yes);
 
       ASHMEM =                 { optional = true; tristate = whenBetween "5.0" "5.18" "y";};
-      ANDROID =                { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ANDROID =                { optional = true; tristate = whenBetween "5.0" "5.19" "y";};
       ANDROID_BINDER_IPC =     { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDERFS =       { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDER_DEVICES = { optional = true; freeform = whenAtLeast "5.0" "binder,hwbinder,vndbinder";};

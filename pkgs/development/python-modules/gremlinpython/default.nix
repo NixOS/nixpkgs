@@ -31,7 +31,8 @@ buildPythonPackage rec {
 
     substituteInPlace setup.py \
       --replace 'aiohttp>=3.8.0,<=3.8.1' 'aiohttp' \
-      --replace 'importlib-metadata<5.0.0' 'importlib-metadata'
+      --replace 'importlib-metadata<5.0.0' 'importlib-metadata' \
+      --replace "os.getenv('VERSION', '?').replace('-SNAPSHOT', '.dev-%d' % timestamp)" '"${version}"'
   '';
 
   # setup-requires requirements

@@ -22,6 +22,18 @@ let
 
   configFile = settingsFormat.generate "kubo-config.json" customizedConfig;
 
+  # Create a fake repo containing only the file "api".
+  # $IPFS_PATH will point to this directory instead of the real one.
+  # For some reason the Kubo CLI tools insist on reading the
+  # config file when it exists. But the Kubo daemon sets the file
+  # permissions such that only the ipfs user is allowed to read
+  # this file. This prevents normal users from talking to the daemon.
+  # To work around this terrible design, create a fake repo with no
+  # config file, only an api file and everything should work as expected.
+  fakeKuboRepo = pkgs.writeTextDir "api" ''
+    /unix/run/ipfs.sock
+  '';
+
   kuboFlags = utils.escapeSystemdExecArgs (
     optional cfg.autoMount "--mount" ++
     optional cfg.enableGC "--enable-gc" ++
@@ -37,6 +49,22 @@ let
     else "server";
 
   splitMulitaddr = addrRaw: lib.tail (lib.splitString "/" addrRaw);
+
+  multiaddrsToListenStreams = addrIn:
+    let
+      addrs = if builtins.typeOf addrIn == "list"
+      then addrIn else [ addrIn ];
+      unfilteredResult = map multiaddrToListenStream addrs;
+    in
+      builtins.filter (addr: addr != null) unfilteredResult;
+
+  multiaddrsToListenDatagrams = addrIn:
+    let
+      addrs = if builtins.typeOf addrIn == "list"
+      then addrIn else [ addrIn ];
+      unfilteredResult = map multiaddrToListenDatagram addrs;
+    in
+      builtins.filter (addr: addr != null) unfilteredResult;
 
   multiaddrToListenStream = addrRaw:
     let
@@ -154,13 +182,18 @@ in
 
           options = {
             Addresses.API = mkOption {
-              type = types.str;
-              default = "/ip4/127.0.0.1/tcp/5001";
-              description = lib.mdDoc "Where Kubo exposes its API to";
+              type = types.oneOf [ types.str (types.listOf types.str) ];
+              default = [ ];
+              description = lib.mdDoc ''
+                Multiaddr or array of multiaddrs describing the address to serve the local HTTP API on.
+                In addition to the multiaddrs listed here, the daemon will also listen on a Unix domain socket.
+                To allow the ipfs CLI tools to communicate with the daemon over that socket,
+                add your user to the correct group, e.g. `users.users.alice.extraGroups = [ config.services.kubo.group ];`
+              '';
             };
 
             Addresses.Gateway = mkOption {
-              type = types.str;
+              type = types.oneOf [ types.str (types.listOf types.str) ];
               default = "/ip4/127.0.0.1/tcp/8080";
               description = lib.mdDoc "Where the IPFS Gateway can be reached";
             };
@@ -171,7 +204,11 @@ in
                 "/ip4/0.0.0.0/tcp/4001"
                 "/ip6/::/tcp/4001"
                 "/ip4/0.0.0.0/udp/4001/quic"
+                "/ip4/0.0.0.0/udp/4001/quic-v1"
+                "/ip4/0.0.0.0/udp/4001/quic-v1/webtransport"
                 "/ip6/::/udp/4001/quic"
+                "/ip6/::/udp/4001/quic-v1"
+                "/ip6/::/udp/4001/quic-v1/webtransport"
               ];
               description = lib.mdDoc "Where Kubo listens for incoming p2p connections";
             };
@@ -244,7 +281,7 @@ in
     ];
 
     environment.systemPackages = [ cfg.package ];
-    environment.variables.IPFS_PATH = cfg.dataDir;
+    environment.variables.IPFS_PATH = fakeKuboRepo;
 
     # https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
     boot.kernel.sysctl."net.core.rmem_max" = mkDefault 2500000;
@@ -315,6 +352,10 @@ in
           # change when the changes are applied. Whyyyyyy.....
           ipfs --offline config replace -
       '';
+      postStop = mkIf cfg.autoMount ''
+        # After an unclean shutdown the fuse mounts at cfg.ipnsMountDir and cfg.ipfsMountDir are locked
+        umount --quiet '${cfg.ipnsMountDir}' '${cfg.ipfsMountDir}' || true
+      '';
       serviceConfig = {
         ExecStart = [ "" "${cfg.package}/bin/ipfs daemon ${kuboFlags}" ];
         User = cfg.user;
@@ -330,27 +371,23 @@ in
       wantedBy = [ "sockets.target" ];
       socketConfig = {
         ListenStream =
-          let
-            fromCfg = multiaddrToListenStream cfg.settings.Addresses.Gateway;
-          in
-          [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
+          [ "" ] ++ (multiaddrsToListenStreams cfg.settings.Addresses.Gateway);
         ListenDatagram =
-          let
-            fromCfg = multiaddrToListenDatagram cfg.settings.Addresses.Gateway;
-          in
-          [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
+          [ "" ] ++ (multiaddrsToListenDatagrams cfg.settings.Addresses.Gateway);
       };
     };
 
     systemd.sockets.ipfs-api = {
       wantedBy = [ "sockets.target" ];
-      # We also include "%t/ipfs.sock" because there is no way to put the "%t"
-      # in the multiaddr.
-      socketConfig.ListenStream =
-        let
-          fromCfg = multiaddrToListenStream cfg.settings.Addresses.API;
-        in
-        [ "" "%t/ipfs.sock" ] ++ lib.optional (fromCfg != null) fromCfg;
+      socketConfig = {
+        # We also include "%t/ipfs.sock" because there is no way to put the "%t"
+        # in the multiaddr.
+        ListenStream =
+          [ "" "%t/ipfs.sock" ] ++ (multiaddrsToListenStreams cfg.settings.Addresses.API);
+        SocketMode = "0660";
+        SocketUser = cfg.user;
+        SocketGroup = cfg.group;
+      };
     };
   };
 

@@ -82,7 +82,8 @@ let
 
       ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
         ${config.boot.bootspec.writer}
-        ${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"
+        ${optionalString config.boot.bootspec.enableValidation
+          ''${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"''}
       ''}
 
       ${config.system.extraSystemBuilderCmds}
@@ -338,6 +339,12 @@ in
 
 
   config = {
+    assertions = [
+      {
+        assertion = config.system.copySystemConfiguration -> !lib.inPureEvalMode;
+        message = "system.copySystemConfiguration is not supported with flakes";
+      }
+    ];
 
     system.extraSystemBuilderCmds =
       optionalString

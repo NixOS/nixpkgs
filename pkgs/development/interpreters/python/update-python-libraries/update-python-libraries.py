@@ -65,7 +65,7 @@ def _get_values(attribute, text):
 
     :returns: List of matches.
     """
-    regex = '{}\s+=\s+"(.*)";'.format(attribute)
+    regex = '{}\s+=\s+"(.*)";'.format(re.escape(attribute))
     regex = re.compile(regex)
     values = regex.findall(text)
     return values
@@ -103,9 +103,9 @@ def _get_unique_value(attribute, text):
 def _get_line_and_value(attribute, text, value=None):
     """Match attribute in text. Return the line and the value of the attribute."""
     if value is None:
-        regex = rf'({attribute}\s+=\s+\"(.*)\";)'
+        regex = rf'({re.escape(attribute)}\s+=\s+\"(.*)\";)'
     else:
-        regex = rf'({attribute}\s+=\s+\"({value})\";)'
+        regex = rf'({re.escape(attribute)}\s+=\s+\"({re.escape(value)})\";)'
     regex = re.compile(regex)
     results = regex.findall(text)
     n = len(results)

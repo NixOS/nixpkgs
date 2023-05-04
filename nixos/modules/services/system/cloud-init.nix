@@ -10,6 +10,7 @@ let cfg = config.services.cloud-init;
       openssh
       shadow
       util-linux
+      busybox
     ] ++ optional cfg.btrfs.enable btrfs-progs
       ++ optional cfg.ext4.enable e2fsprogs
     ;
