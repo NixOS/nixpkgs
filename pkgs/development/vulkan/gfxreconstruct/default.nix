@@ -10,6 +10,7 @@
 , libxcb
 , lz4
 , vulkan-loader
+, vulkanVersions
 , xcbutilkeysyms
 , zlib
 , zstd
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gfxreconstruct";
-  version = "0.9.18";
+  version = vulkanVersions.gfxreconstructVersion or vulkanVersions.sdkVersion;
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "gfxreconstruct";
-    rev = "v${version}";
-    hash = "sha256-9MDmeHid/faHeBjBfPgpRMjMMXZeHKP0VZZJtEQgBhs=";
+    rev = vulkanVersions.gfxreconstructRev or vulkanVersions.sdkRev;
+    hash = vulkanVersions.gfxreconstructHash;
     fetchSubmodules = true;
   };
 
