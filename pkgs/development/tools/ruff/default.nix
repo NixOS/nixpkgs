@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.264";
+  version = "0.0.265";
 
   src = fetchFromGitHub {
     owner = "charliermarsh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MDNqoKsXKSM5l351bMs4Z5Voig+HwR2907xlHDFB6x4=";
+    hash = "sha256-b45kPvN2yILZBvP8eSNfWD6gpinwi9RsvmonRGYj0cI=";
   };
 
   # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
