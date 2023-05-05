@@ -159,7 +159,7 @@ in {
         '';
       };
 
-      claim_token_file = mkOption {
+      claimTokenFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         description = lib.mdDoc ''
