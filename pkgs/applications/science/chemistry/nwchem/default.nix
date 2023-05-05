@@ -2,7 +2,6 @@
 , stdenv
 , pkgs
 , fetchFromGitHub
-, fetchpatch
 , which
 , openssh
 , gcc
@@ -23,35 +22,26 @@
 assert blas.isILP64 == lapack.isILP64;
 
 let
-  versionGA = "5.7.2"; # Fixed by nwchem
+  versionGA = "5.8.2"; # Fixed by nwchem
 
   ga_src = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
     rev = "v${versionGA}";
-    sha256 = "0c1y9a5jpdw9nafzfmvjcln1xc2gklskaly0r1alm18ng9zng33i";
+    hash = "sha256-2ffQIg9topqKX7ygnWaa/UunL9d0Lj9qr9xucsjLuoY=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "nwchem";
-  version = "7.0.2";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "nwchemgit";
     repo = "nwchem";
     rev = "v${version}-release";
-    sha256 = "1ckhcjaw1hzdsmm1x2fva27c4rs3r0h82qivg72v53idz880hbp3";
+    hash = "sha256-/biwHOSMGpdnYRGrGlDounKKLVaG2XkBgCmpE0IKR/Y=";
   };
-
-  patches = [
-    # Fix Python 3.10 compatibility
-    (fetchpatch {
-      name = "python3.10";
-      url = "https://github.com/nwchemgit/nwchem/commit/638401361c6f294164a4f820ff867a62ac836fd5.patch";
-      sha256 = "sha256-yUZb3wWYZm1dX0HwvffksFwhVdb7ix1p8ooJnqiSgEg=";
-    })
-  ];
 
   nativeBuildInputs = [
     perl
@@ -114,10 +104,16 @@ stdenv.mkDerivation rec {
     export LAPACK_LIB="-L${lapack}/lib -llapack"
     export BLAS_SIZE=${if blas.isILP64 then "8" else "4"}
 
+    # Requires DFT-D3 tgz file
+    # See nwchem/src/nwpw/nwpwlib/nwpwxc/build_dftd3a.sh
+    export NO_NWPWXC_VDW3A=1
+
     # extra TCE related options
     export MRCC_METHODS="y"
     export EACCSD="y"
     export IPCCSD="y"
+
+    export CCSDTQ="y"
 
     export NWCHEM_TOP="$(pwd)"
 
