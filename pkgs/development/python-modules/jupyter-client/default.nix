@@ -11,6 +11,8 @@
 , traitlets
 , isPyPy
 , py
+, pythonOlder
+, importlib-metadata
 }:
 
 buildPythonPackage rec {
@@ -35,6 +37,8 @@ buildPythonPackage rec {
     pyzmq
     tornado
     traitlets
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ] ++ lib.optional isPyPy py;
 
   # Circular dependency with ipykernel
