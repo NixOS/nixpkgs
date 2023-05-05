@@ -13084,7 +13084,7 @@ with pkgs;
 
   trickle = callPackage ../tools/networking/trickle { };
 
-  inherit (nodePackages) triton;
+  triton = callPackage ../tools/admin/triton { };
 
   triggerhappy = callPackage ../tools/inputmethods/triggerhappy { };
 
