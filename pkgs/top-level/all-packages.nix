@@ -15561,6 +15561,8 @@ with pkgs;
   lld_15 = llvmPackages_15.lld;
   lld_16 = llvmPackages_16.lld;
 
+  bolt_14 = llvmPackages_14.bolt;
+
   lldb = llvmPackages_latest.lldb;
   lldb_5 = llvmPackages_5.lldb;
   lldb_6 = llvmPackages_6.lldb;
