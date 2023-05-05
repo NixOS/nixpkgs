@@ -32955,6 +32955,8 @@ with pkgs;
 
   opentx = libsForQt5.callPackage ../applications/misc/opentx { };
 
+  openvi = darwin.apple_sdk_11_0.callPackage ../applications/editors/openvi { };
+
   opera = callPackage ../applications/networking/browsers/opera { };
 
   orca = python3Packages.callPackage ../applications/misc/orca {
