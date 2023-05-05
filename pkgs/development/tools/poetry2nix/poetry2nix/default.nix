@@ -17,7 +17,7 @@ let
   toPluginAble = (import ./plugins.nix { inherit pkgs lib; }).toPluginAble;
 
   # List of known build systems that are passed through from nixpkgs unmodified
-  knownBuildSystems = builtins.fromJSON (builtins.readFile ./known-build-systems.json);
+  knownBuildSystems = lib.importJSON ./known-build-systems.json;
   nixpkgsBuildSystems = lib.subtractLists [ "poetry" "poetry-core" ] knownBuildSystems;
 
   mkInputAttrs =
