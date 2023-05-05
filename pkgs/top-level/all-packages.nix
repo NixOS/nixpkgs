@@ -1362,6 +1362,7 @@ with pkgs;
   akkoma = callPackage ../servers/akkoma { };
   akkoma-frontends = recurseIntoAttrs {
     akkoma-fe = callPackage ../servers/akkoma/akkoma-fe { };
+    masto-fe = callPackage ../servers/akkoma/masto-fe { };
     admin-fe = callPackage ../servers/akkoma/admin-fe { };
   };
   akkoma-emoji = recurseIntoAttrs {
