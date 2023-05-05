@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/andyholmes/valent/";
     changelog = "https://github.com/andyholmes/valent/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ gpl3Plus cc0 ];
-    maintainers = with maintainers; [ federicoschonborn ];
+    maintainers = with maintainers; [ federicoschonborn aleksana ];
     platforms = platforms.linux;
   };
 }
