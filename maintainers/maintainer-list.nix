@@ -5866,6 +5866,12 @@
       fingerprint = "7FC7 98AB 390E 1646 ED4D  8F1F 797F 6238 68CD 00C2";
     }];
   };
+  greg = {
+    email = "greg.hellings@gmail.com";
+    github = "greg-hellings";
+    githubId = 273582;
+    name = "greg";
+  };
   greizgh = {
     email = "greizgh@ephax.org";
     github = "greizgh";
@@ -8763,6 +8769,12 @@
     github = "lejonet";
     githubId = 567634;
     name = "Daniel Kuehn";
+  };
+  lelgenio = {
+    email = "lelgenio@disroot.org";
+    github = "lelgenio";
+    githubId = 31388299;
+    name = "Leonardo Eugênio";
   };
   leo60228 = {
     email = "leo@60228.dev";
@@ -12174,6 +12186,16 @@
     githubId = 581269;
     name = "Philip Potter";
   };
+  philclifford = {
+    email = "philip.clifford@gmail.com";
+    matrix = "@phil8o:matrix.org";
+    github = "philclifford";
+    githubId = 8797027;
+    keys = [{
+      fingerprint = "FC15 E59F 0CFA 9329 101B  71D9 92F7 A790 E9BA F1F7";
+    }];
+    name = "Phil Clifford";
+  };
   phile314 = {
     email = "nix@314.ch";
     github = "phile314";
@@ -13410,6 +13432,12 @@
     github = "roelvandijk";
     githubId = 710906;
     name = "Roel van Dijk";
+  };
+  rogarb = {
+    email = "rogarb@rgarbage.fr";
+    github = "rogarb";
+    githubId = 69053978;
+    name = "rogarb";
   };
   roman = {
     email = "open-source@roman-gonzalez.info";
@@ -15644,10 +15672,11 @@
     githubId = 18621411;
   };
   tilpner = {
-    email = "till@hoeppner.ws";
+    name = "Till Höppner";
+    email = "nixpkgs@tilpner.com";
+    matrix = "@tilpner:tx0.co";
     github = "tilpner";
     githubId = 4322055;
-    name = "Till Höppner";
   };
   timbertson = {
     email = "tim@gfxmonk.net";
@@ -17483,6 +17512,12 @@
     github = "ztzg";
     githubId = 393108;
     name = "Damien Diederen";
+  };
+  zumorica = {
+    name = "Vera Aguilera Puerto";
+    email = "gradientvera+nix@outlook.com";
+    github = "Zumorica";
+    githubId = 6766154;
   };
   zupo = {
     name = "Nejc Zupan";

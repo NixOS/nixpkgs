@@ -4,6 +4,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, pydantic
 , pytest-aiohttp
 , pytest-asyncio
 , pytest-cov
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aionotion";
-  version = "2022.10.0";
+  version = "2023.05.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    hash = "sha256-DJkqFj87N8OlWHNto+tInj8QvVoNA9faLBb/pBbQl0U=";
+    hash = "sha256-wnyM8ERHJydhBdX9ZAskGdvIrvZNhYh/UVJv/JdxChE=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    pydantic
   ];
 
   nativeCheckInputs = [

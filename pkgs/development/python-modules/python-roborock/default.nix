@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3t9ep6JHczvNBJdJqdwrZSS+ZEh4UYQkPCx0X4e7gNY=";
+    hash = "sha256-DH3JKBjBGZQjDCYzjLQc64qARALyfQZagOy7kkK7Sew=";
   };
 
   nativeBuildInputs = [
