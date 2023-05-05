@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ImaginerApp";
     repo = "Imaginer";
-    rev = "v0.1.3";
+    rev = "v${version}";
     hash = "sha256-x1ZnmfaMfxnITiuFDlMPfTU8KZbd1ME9jDevnlsrbJs=";
   };
 
