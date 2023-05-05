@@ -223,7 +223,21 @@ let
       lispLibs = o.lispLibs ++ [
         self.mcclim
       ];
-});
+    });
+    mgl-pax = super.mgl-pax.overrideLispAttrs (o: {
+      systems = [ "mgl-pax"
+                  "mgl-pax/navigate" "mgl-pax/document" "mgl-pax/transcribe"
+                  "mgl-pax/full"
+                  # "mgl-pax/test" "mgl-pax/test-extension"
+                ];
+      lispLibs = o.lispLibs ++ (with self; [
+        # Manually scraped from mgl-pax.asd systems.
+        alexandria _3bmd _3bmd-ext-code-blocks colorize md5 swank
+        # excludes 'try' test library that would make a circular dependency:
+        #   mgl-pax -> try -> mgl-pax
+      ]);
+
+    });
   });
 
   qlpkgs =
