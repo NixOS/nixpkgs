@@ -93,6 +93,9 @@ in stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  preCheck = ''
+    patchShebangs tests/
+  '';
 
   nativeCheckInputs = [
     iproute2

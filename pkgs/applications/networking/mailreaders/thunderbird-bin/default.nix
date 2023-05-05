@@ -204,6 +204,10 @@ stdenv.mkDerivation {
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
   };
 
+  passthru = {
+    binaryName = "thunderbird";
+  };
+
   meta = with lib; {
     changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
