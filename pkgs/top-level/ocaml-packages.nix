@@ -571,6 +571,11 @@ let
       git-binary = pkgs.git;
     };
 
+    github = callPackage ../development/ocaml-modules/github {  };
+    github-data = callPackage ../development/ocaml-modules/github/data.nix {  };
+    github-jsoo = callPackage ../development/ocaml-modules/github/jsoo.nix {  };
+    github-unix = callPackage ../development/ocaml-modules/github/unix.nix {  };
+
     gluten = callPackage ../development/ocaml-modules/gluten { };
     gluten-lwt = callPackage ../development/ocaml-modules/gluten/lwt.nix { };
     gluten-lwt-unix = callPackage ../development/ocaml-modules/gluten/lwt-unix.nix { };
