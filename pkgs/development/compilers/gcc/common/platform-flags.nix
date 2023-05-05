@@ -28,4 +28,5 @@ in lib.concatLists [
       "--with-long-double-128"
       "--with-long-double-format=${gcc.long-double-format or "ieee"}"
     ]))
+  (lib.optional targetPlatform.isMips64n32 "--disable-libsanitizer") # libsanitizer does not compile on mips64n32
 ]

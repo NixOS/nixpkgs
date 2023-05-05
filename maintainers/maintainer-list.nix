@@ -5695,6 +5695,12 @@
     githubId = 1713676;
     name = "Luis G. Torres";
   };
+  giorgiga = {
+    email = "giorgio.gallo@bitnic.it";
+    github = "giorgiga";
+    githubId = 471835;
+    name = "Giorgio Gallo";
+  };
   GKasparov = {
     email = "mizozahr@gmail.com";
     github = "GKasparov";
@@ -8665,6 +8671,12 @@
     github = "Lassulus";
     githubId = 621759;
     name = "Lassulus";
+  };
+  laurent-f1z1 = {
+    email = "laurent.nixpkgs@fainsin.bzh";
+    github = "Laurent2916";
+    githubId = 21087104;
+    name = "Laurent Fainsin";
   };
   layus = {
     email = "layus.on@gmail.com";
@@ -14461,6 +14473,15 @@
     github = "SlothOfAnarchy";
     githubId = 12828415;
     name = "Michel Weitbrecht";
+  };
+  slwst = {
+    email = "email@slw.st";
+    github = "slwst";
+    githubId = 11047377;
+    name = "slwst";
+    keys = [{
+      fingerprint = "6CEB 4A2F E6DC C345 1B2B  4733 AD52 C5FB 3EFE CC7A";
+    }];
   };
   smakarov = {
     email = "setser200018@gmail.com";

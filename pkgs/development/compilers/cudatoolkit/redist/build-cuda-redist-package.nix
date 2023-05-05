@@ -60,6 +60,7 @@ backendStdenv.mkDerivation {
   meta = {
     description = attrs.name;
     license = lib.licenses.unfree;
+    maintainers = lib.teams.cuda.members;
     platforms = lib.optionals (lib.hasAttr arch attrs) [ "x86_64-linux" ];
   };
 }

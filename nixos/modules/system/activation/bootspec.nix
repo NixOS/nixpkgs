@@ -40,7 +40,7 @@ let
           # This can only be done here because we *cannot* depend on $out
           # referring to the toplevel, except by living in the toplevel itself.
           toplevelInjector = lib.escapeShellArgs [
-            "${pkgs.jq}/bin/jq"
+            "${pkgs.buildPackages.jq}/bin/jq"
             ''
               ."org.nixos.bootspec.v1".toplevel = $toplevel |
               ."org.nixos.bootspec.v1".init = $init
@@ -60,7 +60,7 @@ let
                 children);
             in
             lib.escapeShellArgs [
-              "${pkgs.jq}/bin/jq"
+              "${pkgs.buildPackages.jq}/bin/jq"
               "--sort-keys"
               ''."org.nixos.specialisation.v1" = ($ARGS.named | map_values(. | first))''
             ] + " ${lib.concatStringsSep " " specialisationLoader}";

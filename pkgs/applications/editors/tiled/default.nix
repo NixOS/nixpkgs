@@ -10,6 +10,7 @@
 , qttools
 , qtsvg
 , zlib
+, zstd
 , libGL
 }:
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config qbs wrapQtAppsHook ];
-  buildInputs = [ qtEnv zlib libGL ];
+  buildInputs = [ qtEnv zlib zstd libGL ];
 
   outputs = [ "out" "dev" ];
 
