@@ -560,14 +560,6 @@ final: prev: {
     '';
   };
 
-  triton = prev.triton.override (oldAttrs: {
-    nativeBuildInputs = [ pkgs.installShellFiles ];
-    postInstall = ''
-      installShellCompletion --cmd triton --bash <($out/bin/triton completion)
-    '';
-    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ teutat3s ]; };
-  });
-
   ts-node = prev.ts-node.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
