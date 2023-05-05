@@ -5200,6 +5200,12 @@ with pkgs;
 
   kalker = callPackage ../tools/misc/kalker { };
 
+  kapp = callPackage ../tools/networking/kapp { };
+
+  kbld = callPackage ../development/tools/kbld {};
+
+  kdbg = libsForQt5.callPackage ../development/tools/misc/kdbg { };
+
   kisslicer = callPackage ../tools/misc/kisslicer { };
 
   klaus = with python3Packages; toPythonApplication klaus;
@@ -5227,6 +5233,8 @@ with pkgs;
   krill = callPackage ../servers/krill {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
   lapce = callPackage ../applications/editors/lapce {
     inherit (darwin) libobjc;
@@ -9208,12 +9216,6 @@ with pkgs;
   lunatask = callPackage ../applications/misc/lunatask { };
 
   lvmsync = callPackage ../tools/backup/lvmsync { };
-
-  kapp = callPackage ../tools/networking/kapp { };
-
-  kdbg = libsForQt5.callPackage ../development/tools/misc/kdbg { };
-
-  kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
   lagrange = callPackage ../applications/networking/browsers/lagrange {
     inherit (darwin.apple_sdk.frameworks) AppKit;
