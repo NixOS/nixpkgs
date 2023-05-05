@@ -28,6 +28,7 @@
 , developerBuild ? false
 , decryptSslTraffic ? false
 , testers
+, buildPackages
 }:
 
 let
@@ -85,6 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+
+  depsBuildBuild = [
+    # `qtbase` expects to find `cc` (with no prefix) in the
+    # `$PATH`, so the following is needed even if
+    # `stdenv.buildPlatform.canExecute stdenv.hostPlatform`
+    buildPackages.stdenv.cc
+  ];
 
   propagatedNativeBuildInputs = [ lndir ];
 
