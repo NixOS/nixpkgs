@@ -150,6 +150,7 @@ let
       qt3d = callPackage ../modules/qt3d.nix {};
       qtcharts = callPackage ../modules/qtcharts.nix {};
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
+      qtdatavis3d = callPackage ../modules/qtdatavis3d.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
       qtgamepad = callPackage ../modules/qtgamepad.nix {
@@ -215,7 +216,7 @@ let
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
-        qtwebview qtx11extras qtxmlpatterns qtlottie
+        qtwebview qtx11extras qtxmlpatterns qtlottie qtdatavis3d
       ] ++ lib.optional (!stdenv.isDarwin) qtwayland
         ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
