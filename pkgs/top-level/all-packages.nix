@@ -27654,6 +27654,8 @@ with pkgs;
 
   adementary-theme = callPackage ../data/themes/adementary { };
 
+  adi1090x-plymouth-themes = callPackage ../data/themes/adi1090x-plymouth-themes { };
+
   adwaita-qt = libsForQt5.callPackage ../data/themes/adwaita-qt { };
 
   adwaita-qt6 = qt6Packages.callPackage ../data/themes/adwaita-qt {

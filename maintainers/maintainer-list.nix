@@ -14462,6 +14462,15 @@
     githubId = 12828415;
     name = "Michel Weitbrecht";
   };
+  slwst = {
+    email = "email@slw.st";
+    github = "slwst";
+    githubId = 11047377;
+    name = "slwst";
+    keys = [{
+      fingerprint = "6CEB 4A2F E6DC C345 1B2B  4733 AD52 C5FB 3EFE CC7A";
+    }];
+  };
   smakarov = {
     email = "setser200018@gmail.com";
     github = "SeTSeR";
