@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "dvc-gs";
-  version = "2.21.0";
+  version = "2.22.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MGNDEhJJGSQIPDXGv/y4u1UHnh4HnNbKtQbGHys0dSA=";
+    hash = "sha256-UzYW2iU/GvLJd4q6ErcLQRoAehyFF3PrMTjb8PEtmNE=";
   };
 
   # Prevent circular dependency
