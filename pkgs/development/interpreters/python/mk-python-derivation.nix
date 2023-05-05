@@ -14,6 +14,7 @@
 , flitBuildHook
 , pipBuildHook
 , pipInstallHook
+, pypaBuildHook
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
 , pythonNamespacesHook
@@ -104,7 +105,7 @@
 let
   inherit (python) stdenv;
 
-  withDistOutput = lib.elem format ["pyproject" "setuptools" "flit" "wheel"];
+  withDistOutput = lib.elem format ["pyproject" "setuptools" "build" "flit" "wheel"];
 
   name_ = name;
 
@@ -182,6 +183,8 @@ let
       unzip
     ] ++ lib.optionals (format == "setuptools") [
       setuptoolsBuildHook
+    ] ++ lib.optionals (format == "build") [
+      pypaBuildHook
     ] ++ lib.optionals (format == "flit") [
       flitBuildHook
     ] ++ lib.optionals (format == "pyproject") [
