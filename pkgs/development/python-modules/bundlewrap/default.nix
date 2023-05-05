@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "bundlewrap";
-  version = "4.17.0";
+  version = "4.17.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "bundlewrap";
     repo = "bundlewrap";
     rev = "refs/tags/${version}";
-    hash = "sha256-hdTJcuhVMbLqtPclgj4u6XwH0A5DvnGpnkhIG6Gm8+4=";
+    hash = "sha256-i4GGHeMxjgIsHfri6tYSPzU8EMZy9i8R1uDjcn1/2IE=";
   };
 
   nativeBuildInputs = [ setuptools ];
