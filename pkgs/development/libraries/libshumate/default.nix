@@ -12,10 +12,24 @@
 , sqlite
 , libsoup_3
 , gtk4
+, at-spi2-core
+, dbus
 , xvfb-run
 , gnome
 }:
 
+let
+  at-spi2-core' = at-spi2-core.overrideAttrs (attrs: {
+    mesonFlags = attrs.mesonFlags ++ [
+      # Original package looks for it on system path for closure size reasons
+      # but that is not available inside build sandbox.
+      "-Ddbus_daemon=${dbus}/bin/dbus-daemon"
+    ];
+  });
+in
+let
+  at-spi2-core = at-spi2-core';
+in
 stdenv.mkDerivation rec {
   pname = "libshumate";
   version = "1.0.3";
@@ -49,6 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeCheckInputs = [
+    dbus
     xvfb-run
   ];
 
@@ -63,8 +78,13 @@ stdenv.mkDerivation rec {
 
     env \
       HOME="$TMPDIR" \
-      GTK_A11Y=none \
-      xvfb-run meson test --print-errorlogs
+      xvfb-run \
+      dbus-run-session \
+        --config-file=${dbus}/share/dbus-1/session.conf \
+        sh -c '
+          ${at-spi2-core}/libexec/at-spi-bus-launcher --launch-immediately &
+          meson test --print-errorlogs
+        '
 
     runHook postCheck
   '';
