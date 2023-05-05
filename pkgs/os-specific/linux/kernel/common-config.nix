@@ -278,7 +278,7 @@ let
 
     video = {
       DRM_LEGACY = no;
-      NOUVEAU_LEGACY_CTX_SUPPORT = whenAtLeast "5.2" no;
+      NOUVEAU_LEGACY_CTX_SUPPORT = whenBetween "5.2" "6.3" no;
 
       # Allow specifying custom EDID on the kernel command line
       DRM_LOAD_EDID_FIRMWARE = yes;
