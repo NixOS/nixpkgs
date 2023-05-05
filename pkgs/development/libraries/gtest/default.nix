@@ -8,15 +8,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gtest";
-  version = "1.12.1";
+  version = "1.13.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
-    rev = "release-${version}";
-    hash = "sha256-W+OxRTVtemt2esw4P7IyGWXOonUN5ZuscjvzqkYvZbM=";
+    rev = "v${version}";
+    hash = "sha256-LVLEn+e7c8013pwiLzJiiIObyrlbBHYaioO/SWbItPQ=";
   };
 
   patches = [
