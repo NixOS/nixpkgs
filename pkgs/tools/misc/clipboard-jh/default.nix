@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     libffi
     wayland-protocols
     wayland
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Slackadays/clipboard";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dit7ya ];
+    platforms = platforms.all;
     mainProgram = "cb";
   };
 }
