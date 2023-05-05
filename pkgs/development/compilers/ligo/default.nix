@@ -10,6 +10,7 @@
 , mustache-go
 , yaml2json
 , tezos-rust-libs
+, darwin
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -110,6 +111,8 @@ ocamlPackages.buildDunePackage rec {
     pure-splitmix
     zarith_stubs_js
     simple-diff
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
   ];
 
   preBuild = ''
