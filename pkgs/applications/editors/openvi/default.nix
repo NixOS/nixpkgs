@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    # command -p will yield command not found erorr
+    # command -p will yield command not found error
     "PAWK=awk"
     # silently fail the chown command
     "IUSGR=$(USER)"
@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ aleksana ];
+    mainProgram = "ovi";
   };
 }
