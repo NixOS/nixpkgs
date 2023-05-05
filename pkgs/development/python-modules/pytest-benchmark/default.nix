@@ -12,6 +12,7 @@
 , pytest
 , pytestCheckHook
 , pythonOlder
+, isPy311
 }:
 
 buildPythonPackage rec {
@@ -68,6 +69,12 @@ buildPythonPackage rec {
     "test_compare_2"
     "test_regression_checks"
     "test_rendering"
+  ]
+  # tests are broken in 3.11
+  # https://github.com/ionelmc/pytest-benchmark/issues/231
+  ++ lib.optionals isPy311 [
+    "test_abort_broken"
+    "test_clonefunc"
   ];
 
   meta = with lib; {
