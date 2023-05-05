@@ -12182,6 +12182,8 @@ with pkgs;
 
   shrikhand = callPackage ../data/fonts/shrikhand { };
 
+  shopware-cli = callPackage ../tools/misc/shopware-cli { };
+
   shunit2 = callPackage ../tools/misc/shunit2 { };
 
   sic = callPackage ../applications/networking/irc/sic { };
