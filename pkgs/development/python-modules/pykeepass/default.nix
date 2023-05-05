@@ -1,4 +1,6 @@
-{ lib, fetchFromGitHub, buildPythonPackage
+{ lib
+, stdenv
+, fetchFromGitHub, buildPythonPackage
 , lxml, pycryptodomex, construct
 , argon2-cffi, python-dateutil, future
 , python
@@ -40,5 +42,6 @@ buildPythonPackage rec {
     description = "Python library to interact with keepass databases (supports KDBX3 and KDBX4)";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dotlambda ];
+    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
 }
