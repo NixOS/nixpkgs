@@ -14,6 +14,7 @@
 , wrapGAppsHook ? null
 , enableWideVine ? false
 , widevine-cdm
+, buildPackages
 }: let
   isQt6 = mkDerivationWith == null;
 
@@ -78,14 +79,20 @@ buildPythonApplication {
     wrapQtAppsHook wrapGAppsHook asciidoc
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
   ]
-    ++ lib.optional isQt6 python3Packages.pygments;
+    ++ lib.optional isQt6 python3Packages.pygments
+    ++ lib.optional stdenv.isLinux (lib.getDev qtwayland);  # for qtwaylandscanner
 
   propagatedBuildInputs = with python3Packages; ([
     pyyaml backendPackage jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
-    readability-lxml pykeepass stem
+    readability-lxml
+  ] ++ lib.optionals (!pykeepass.meta.broken) [
+    pykeepass
+  ] ++ [
+    stem
     pynacl
+  ] ++ lib.optionals (!adblock.meta.broken) [
     # extensive ad blocking
     adblock
   ]
@@ -116,7 +123,7 @@ buildPythonApplication {
     runHook preInstall
 
     make -f misc/Makefile \
-      PYTHON=${python3}/bin/python3 \
+      PYTHON=${buildPackages.python3}/bin/python3 \
       PREFIX=. \
       DESTDIR="$out" \
       DATAROOTDIR=/share \
