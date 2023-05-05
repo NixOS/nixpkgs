@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.0.2";
 
   src = fetchFromGitHub {
-    owner = "edenhill";
+    owner = "confluentinc";
     repo = "librdkafka";
     rev = "v${version}";
     sha256 = "sha256-iEW+n1PSnDoCzQCVfl4T1nchc0kL2q/M3jKNYW2f9/8=";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "librdkafka - Apache Kafka C/C++ client library";
-    homepage = "https://github.com/edenhill/librdkafka";
+    homepage = "https://github.com/confluentinc/librdkafka";
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ commandodev ];
