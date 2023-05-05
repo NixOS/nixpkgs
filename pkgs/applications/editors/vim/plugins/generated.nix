@@ -2827,6 +2827,18 @@ final: prev:
     meta.homepage = "https://github.com/sainnhe/edge/";
   };
 
+  edgedb-vim = buildVimPluginFrom2Nix {
+    pname = "edgedb-vim";
+    version = "2022-10-26";
+    src = fetchFromGitHub {
+      owner = "edgedb";
+      repo = "edgedb-vim";
+      rev = "a888b285a30ede6f5fcb03617733b3974356c450";
+      sha256 = "012jd6652f681ja22gvnrnlvsn1fllj9vmf6idghcdzz6lyjir07";
+    };
+    meta.homepage = "https://github.com/edgedb/edgedb-vim/";
+  };
+
   editorconfig-vim = buildVimPluginFrom2Nix {
     pname = "editorconfig-vim";
     version = "2023-03-22";
@@ -14626,18 +14638,6 @@ final: prev:
       sha256 = "0gbnwf535mk29yhn39sdy9bifzk2y8x6ldkybn8l3pwjrlr42cks";
     };
     meta.homepage = "https://github.com/nanotee/zoxide.vim/";
-  };
-
-  edgedb-vim = buildVimPluginFrom2Nix {
-    pname = "edgedb-vim";
-    version = "2022-10-26";
-    src = fetchFromGitHub {
-      owner = "edgedb";
-      repo = "edgedb-vim";
-      rev = "a888b285a30ede6f5fcb03617733b3974356c450";
-      sha256 = "012jd6652f681ja22gvnrnlvsn1fllj9vmf6idghcdzz6lyjir07";
-    };
-    meta.homepage = "https://github.com/edgedb/edgedb-vim/";
   };
 
   catppuccin-nvim = buildVimPluginFrom2Nix {
