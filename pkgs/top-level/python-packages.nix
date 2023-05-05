@@ -5406,6 +5406,8 @@ self: super: with self; {
 
   lakeside = callPackage ../development/python-modules/lakeside { };
 
+  langchain = callPackage ../development/python-modules/langchain { };
+
   langcodes = callPackage ../development/python-modules/langcodes { };
 
   langdetect = callPackage ../development/python-modules/langdetect { };
@@ -6909,6 +6911,8 @@ self: super: with self; {
   };
 
   openant = callPackage ../development/python-modules/openant { };
+
+  openapi-schema-pydantic = callPackage ../development/python-modules/openapi-schema-pydantic { };
 
   openapi-schema-validator = callPackage ../development/python-modules/openapi-schema-validator { };
 

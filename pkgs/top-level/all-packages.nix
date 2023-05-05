@@ -2554,6 +2554,8 @@ with pkgs;
 
   xplr = callPackage ../applications/file-managers/xplr { };
 
+  xplorer = callPackage ../applications/file-managers/xplorer { };
+
   ytree = callPackage ../applications/file-managers/ytree { };
 
   ### APPLICATIONS/TERMINAL-EMULATORS
