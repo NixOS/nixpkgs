@@ -93,5 +93,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/ArniDagur/python-adblock/blob/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ dotlambda ];
     license = with licenses; [ asl20 /* or */ mit ];
+    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
 }
