@@ -10334,6 +10334,8 @@ self: super: with self; {
 
   reparser = callPackage ../development/python-modules/reparser { };
 
+  repath = callPackage ../development/python-modules/repath { };
+
   repeated-test = callPackage ../development/python-modules/repeated-test { };
 
   repocheck = callPackage ../development/python-modules/repocheck { };
