@@ -8770,6 +8770,12 @@
     githubId = 567634;
     name = "Daniel Kuehn";
   };
+  lelgenio = {
+    email = "lelgenio@disroot.org";
+    github = "lelgenio";
+    githubId = 31388299;
+    name = "Leonardo Eugênio";
+  };
   leo60228 = {
     email = "leo@60228.dev";
     matrix = "@leo60228:matrix.org";
@@ -13427,6 +13433,12 @@
     githubId = 710906;
     name = "Roel van Dijk";
   };
+  rogarb = {
+    email = "rogarb@rgarbage.fr";
+    github = "rogarb";
+    githubId = 69053978;
+    name = "rogarb";
+  };
   roman = {
     email = "open-source@roman-gonzalez.info";
     github = "roman";
@@ -17494,6 +17506,12 @@
     github = "ztzg";
     githubId = 393108;
     name = "Damien Diederen";
+  };
+  zumorica = {
+    name = "Vera Aguilera Puerto";
+    email = "gradientvera+nix@outlook.com";
+    github = "Zumorica";
+    githubId = 6766154;
   };
   zupo = {
     name = "Nejc Zupan";

@@ -409,6 +409,8 @@ with pkgs;
 
   chatgpt-retrieval-plugin = callPackage ../servers/chatgpt-retrieval-plugin { };
 
+  chef-cli = callPackage ../tools/misc/chef-cli { };
+
   checkov = callPackage ../development/tools/analysis/checkov {
     python3 = python311;
   };
@@ -572,6 +574,8 @@ with pkgs;
   honeycomb-refinery = callPackage ../servers/tracing/honeycomb/refinery { };
 
   html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
+
+  inspec = callPackage ../tools/misc/inspec { };
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
@@ -881,7 +885,6 @@ with pkgs;
     boost = boost177; # Configure checks for specific version.
     protobuf = protobuf3_19;
     icu =  icu69;
-    v8 = v8_8_x;
   };
 
   broadlink-cli = callPackage ../tools/misc/broadlink-cli { };
@@ -1108,6 +1111,8 @@ with pkgs;
     ../build-support/setup-hooks/prune-libtool-files.sh;
 
   closureInfo = callPackage ../build-support/closure-info.nix { };
+
+  serverspec = callPackage ../tools/misc/serverspec { };
 
   setupSystemdUnits = callPackage ../build-support/setup-systemd-units.nix { };
 
@@ -1563,6 +1568,8 @@ with pkgs;
   headsetcontrol = callPackage ../tools/audio/headsetcontrol { };
 
   headset-charge-indicator = callPackage ../tools/audio/headset-charge-indicator { };
+
+  hexdiff = callPackage ../tools/misc/hexdiff { };
 
   httm = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/httm { };
 
@@ -33358,17 +33365,6 @@ with pkgs;
 
   qimgv = libsForQt5.callPackage ../applications/graphics/qimgv { };
 
-  qlandkartegt = libsForQt5.callPackage ../applications/misc/qlandkartegt {
-    gdal = gdal.override {
-      libgeotiff = libgeotiff.override { proj = proj_7; };
-      libspatialite = libspatialite.override { proj = proj_7; };
-      proj = proj_7;
-    };
-    proj = proj_7;
-  };
-
-  garmindev = callPackage ../applications/misc/qlandkartegt/garmindev.nix { };
-
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
 
   qmplay2 = libsForQt5.callPackage ../applications/video/qmplay2 { };
@@ -34231,6 +34227,12 @@ with pkgs;
   thokr = callPackage ../applications/misc/thokr { };
 
   thonny = callPackage ../applications/editors/thonny { };
+
+  betterbird-unwrapped = callPackage ../applications/networking/mailreaders/betterbird { };
+  betterbird = wrapThunderbird betterbird-unwrapped {
+    desktopName = "Betterbird";
+    pname = "betterbird";
+  };
 
   thunderbirdPackages = recurseIntoAttrs (callPackage ../applications/networking/mailreaders/thunderbird/packages.nix {
     callPackage = newScope {
@@ -36695,6 +36697,8 @@ with pkgs;
 
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
+
+  space-station-14-launcher = callPackage ../games/space-station-14-launcher { };
 
   spring = callPackage ../games/spring { asciidoc = asciidoc-full; };
 
@@ -39794,6 +39798,8 @@ with pkgs;
   spdlog = callPackage ../development/libraries/spdlog { };
 
   dart = callPackage ../development/compilers/dart { };
+
+  dart-sass = callPackage ../development/tools/misc/dart-sass { };
 
   httrack = callPackage ../tools/backup/httrack { };
 
