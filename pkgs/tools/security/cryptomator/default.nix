@@ -12,7 +12,7 @@ let
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "sha256-4MjF2PDH0JB1biY4HO2wOC0i6EIGSlzkK6tDm8nzvIo=";
+    sha256 = "sha256-2nCaSL7OlS9f+PZPh0YiMvnjOaAqlQimkKWDSjSP+bQ=";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
