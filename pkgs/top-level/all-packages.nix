@@ -6493,6 +6493,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  codeberg-pages = callPackage ../development/tools/continuous-integration/codeberg-pages { };
+
   codebraid = callPackage ../tools/misc/codebraid { };
 
   codemov = callPackage ../tools/misc/codemov { };
@@ -13942,7 +13944,7 @@ with pkgs;
   clipnotify = callPackage ../tools/misc/clipnotify { };
 
   clipboard-jh = callPackage ../tools/misc/clipboard-jh {
-    stdenv = if stdenv.isDarwin then llvmPackages_15.stdenv else stdenv;
+    stdenv = if stdenv.isDarwin then llvmPackages_16.stdenv else stdenv;
   };
 
   clipbuzz = callPackage ../tools/misc/clipbuzz { };
@@ -27654,6 +27656,8 @@ with pkgs;
 
   adementary-theme = callPackage ../data/themes/adementary { };
 
+  adi1090x-plymouth-themes = callPackage ../data/themes/adi1090x-plymouth-themes { };
+
   adwaita-qt = libsForQt5.callPackage ../data/themes/adwaita-qt { };
 
   adwaita-qt6 = qt6Packages.callPackage ../data/themes/adwaita-qt {
@@ -32954,6 +32958,8 @@ with pkgs;
   opentabletdriver = callPackage ../tools/X11/opentabletdriver { };
 
   opentx = libsForQt5.callPackage ../applications/misc/opentx { };
+
+  openvi = darwin.apple_sdk_11_0.callPackage ../applications/editors/openvi { };
 
   opera = callPackage ../applications/networking/browsers/opera { };
 
@@ -39811,13 +39817,12 @@ with pkgs;
 
   mpvc = callPackage ../applications/misc/mpvc { };
 
+  # Overriding does not work when using callPackage on discord using import instead. (https://github.com/NixOS/nixpkgs/pull/179906)
   discord = import ../applications/networking/instant-messengers/discord {
     inherit lib stdenv;
     inherit (pkgs) callPackage fetchurl;
     branch = "stable";
   };
-
-  discordo = callPackage ../applications/networking/discordo/default.nix { };
 
   discord-ptb = import ../applications/networking/instant-messengers/discord {
     inherit lib stdenv;
@@ -39830,6 +39835,15 @@ with pkgs;
     inherit (pkgs) callPackage fetchurl;
     branch = "canary";
   };
+
+  discord-development = import ../applications/networking/instant-messengers/discord {
+    inherit lib stdenv;
+    inherit (pkgs) callPackage fetchurl;
+    branch = "development";
+  };
+
+
+  discordo = callPackage ../applications/networking/discordo/default.nix { };
 
   golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah { };
 

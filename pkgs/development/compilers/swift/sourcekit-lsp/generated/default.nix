@@ -2,15 +2,16 @@
 {
   workspaceStateFile = ./workspace-state.json;
   hashes = {
-    "indexstore-db" = "05d7l3fgcvbw8plaky3pgjm03x20a63z9r14njxg5qm2zcp5m6jx";
+    "indexstore-db" = "0lf96m82s8f6lv67wbcnm9ii01fgw4bsr4vn2xp07ydfj1iqy8il";
     "swift-argument-parser" = "1jph9w7lk9nr20fsv2c8p4hisx3dda817fh7pybd0r0j1jwa9nmw";
     "swift-collections" = "1k6sjx5rqmp3gklny77b480hyzy6gkhpi23r0s8ljfbrcwawgnan";
-    "swift-crypto" = "020b8q4ss2k7a65r5dgh59z40i6sn7ij1allxkh8c8a9d0jzn313";
-    "swift-driver" = "1lcb5wqragc74nd0fjnk47lyph9hs0i9cps1mplvp2i91yzjqk05";
-    "swift-llbuild" = "07zbp2dyfqd1bnyg7snpr9brn40jf22ivly5v10mql3hrg76a18h";
-    "swift-package-manager" = "0a3vahdkj35n0dkinwcgybgfb9dnq2lq1nknn874r38xbj3mhlff";
+    "swift-crypto" = "0kllp7j0hd8k67l9b9zr2c3ddc5bvshldchzivhcz3q31qvq9ag8";
+    "swift-driver" = "0cbvddj54k3sbw0vzlmzhccs7h43hi5kq6i3n2i0mysz3bf0c6zg";
+    "swift-llbuild" = "106vnssh6pgy5s9dnq1hi1c9v2wkfydqgncg5dy7c9n23iisjy3s";
+    "swift-package-manager" = "1d1ngh7da42dm0rwkw7jzxa63a1rpc88wimm85w2j59cm446pk9k";
+    "swift-syntax" = "05394mzznmcrw246lyzsjsn1fmilj98jgkjyyxr2ynhnbgzp2jl2";
     "swift-system" = "0402hkx2q2dv27gccnn8ma79ngvwiwzkhcv4zlcdldmy6cgi0px7";
-    "swift-tools-support-core" = "134f9x44jnzdy8cwi6hs372dwbyqvr4qmsjzjy25wzpyv6m9rhrz";
-    "Yams" = "1893y13sis2aimi1a5kgkczbf06z4yig054xb565yg2xm13srb45";
+    "swift-tools-support-core" = "1qvblyiazv58qwyxgyk2dh5ymbab3y70vm2q81qs6rmv43hs8ciz";
+    "Yams" = "0b4lprxl4f6yqq0djnp394mxgmsxm2pljr7fh4f6ihdhnpwfsfvl";
   };
 }

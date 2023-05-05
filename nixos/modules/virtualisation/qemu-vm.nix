@@ -272,7 +272,7 @@ let
   suggestedRootDevice = {
     "efi_bootloading_with_default_fs" = "${cfg.bootLoaderDevice}2";
     "legacy_bootloading_with_default_fs" = "${cfg.bootLoaderDevice}1";
-    "direct_boot_with_default_fs" = cfg.bootLoaderDevice;
+    "direct_boot_with_default_fs" = lookupDriveDeviceName "root" cfg.qemu.drives;
     # This will enforce a NixOS module type checking error
     # to ask explicitly the user to set a rootDevice.
     # As it will look like `rootDevice = lib.mkDefault null;` after
@@ -344,14 +344,14 @@ in
 
     virtualisation.bootLoaderDevice =
       mkOption {
-        type = types.path;
-        default = lookupDriveDeviceName "root" cfg.qemu.drives;
-        defaultText = literalExpression ''lookupDriveDeviceName "root" cfg.qemu.drives'';
+        type = types.nullOr types.path;
+        default = if cfg.useBootLoader then lookupDriveDeviceName "root" cfg.qemu.drives else null;
+        defaultText = literalExpression ''if cfg.useBootLoader then lookupDriveDeviceName "root" cfg.qemu.drives else null;'';
         example = "/dev/vda";
         description =
           lib.mdDoc ''
             The disk to be used for the boot filesystem.
-            By default, it is the same disk as the root filesystem.
+            By default, it is the same disk as the root filesystem if you use a bootloader, otherwise it's null.
           '';
         };
 
@@ -862,6 +862,16 @@ in
                 Invalid virtualisation.forwardPorts.<entry ${toString i}>.guest.address:
                   The address must be in the default VLAN (10.0.2.0/24).
               '';
+            }
+          { assertion = cfg.useBootLoader -> cfg.diskImage != null;
+            message =
+              ''
+                Currently, bootloaders cannot be used with a tmpfs disk image.
+                It would require some rework in the boot configuration mechanism
+                to detect the proper boot partition in UEFI scenarios for example.
+
+                If you are interested into this feature, please open an issue or open a pull request.
+              '';
           }
         ]));
 
@@ -889,7 +899,8 @@ in
     # legacy and UEFI. In order to avoid this, we have to put "nodev" to force UEFI-only installs.
     # Otherwise, we set the proper bootloader device for this.
     # FIXME: make a sense of this mess wrt to multiple ESP present in the system, probably use boot.efiSysMountpoint?
-    boot.loader.grub.device = mkVMOverride (if cfg.useEFIBoot then "nodev" else cfg.bootLoaderDevice);
+    boot.loader.grub.enable = cfg.useBootLoader;
+    boot.loader.grub.device = mkIf cfg.useBootLoader (mkVMOverride (if cfg.useEFIBoot then "nodev" else cfg.bootLoaderDevice));
     boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
     virtualisation.rootDevice = mkDefault suggestedRootDevice;
 
@@ -897,13 +908,13 @@ in
 
     boot.loader.supportsInitrdSecrets = mkIf (!cfg.useBootLoader) (mkVMOverride false);
 
-    boot.initrd.extraUtilsCommands = lib.mkIf (cfg.useDefaultFilesystems && !config.boot.initrd.systemd.enable)
+    boot.initrd.extraUtilsCommands = lib.mkIf (cfg.useDefaultFilesystems && !config.boot.initrd.systemd.enable && cfg.diskImage != null)
       ''
         # We need mke2fs in the initrd.
         copy_bin_and_libs ${pkgs.e2fsprogs}/bin/mke2fs
       '';
 
-    boot.initrd.postDeviceCommands = lib.mkIf (cfg.useDefaultFilesystems && !config.boot.initrd.systemd.enable)
+    boot.initrd.postDeviceCommands = lib.mkIf (cfg.useDefaultFilesystems && !config.boot.initrd.systemd.enable && cfg.diskImage != null)
       ''
         # If the disk image appears to be empty, run mke2fs to
         # initialise.
