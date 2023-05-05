@@ -1,40 +1,28 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
-, doxygen
-, graphviz
 }:
 
 stdenv.mkDerivation rec {
   pname = "ftxui";
-  version = "3.0.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "ArthurSonzogni";
     repo = "ftxui";
     rev = "v${version}";
-    sha256 = "sha256-2pCk4drYIprUKcjnrlX6WzPted7MUAp973EmAQX3RIE=";
+    hash = "sha256-3kAhHDUwzwdvHc8JZAcA14tGqa6w69qrN1JXhSxNBQY=";
   };
-
-  patches = [
-    # Can be removed once https://github.com/ArthurSonzogni/FTXUI/pull/403 hits a stable release
-    (fetchpatch {
-      name = "fix-postevent-segfault.patch";
-      url = "https://github.com/ArthurSonzogni/FTXUI/commit/f9256fa132e9d3c50ef1e1eafe2774160b38e063.patch";
-      sha256 = "sha256-0040/gJcCXzL92FQLhZ2dNMJhNqXXD+UHFv4Koc07K0=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
-    doxygen
-    graphviz
   ];
 
   cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
     "-DFTXUI_BUILD_EXAMPLES=OFF"
+    "-DFTXUI_BUILD_DOCS=OFF"
   ];
 
   # gtest and gbenchmark don't seem to generate any binaries
