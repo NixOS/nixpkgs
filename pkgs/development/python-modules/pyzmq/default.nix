@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , py
+, pytest-asyncio
 , pytestCheckHook
 , python
 , pythonOlder
@@ -11,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "24.0.1";
+  version = "25.0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IW9dfbtnFmdZ5ZsEebyoK4rPm+1gFbUmuOsQFD+wjnc=";
+    hash = "sha256-a4wbu3DoaNyIgBqlMsrmvU47UjN4RpK3hvF60pYuUUk=";
   };
 
   buildInputs = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
     tornado
   ];
@@ -51,6 +53,14 @@ buildPythonPackage rec {
     # Test fails
     "test_mockable"
     # Issues with the sandbox
+    "test_callable_check"
+    "test_on_recv_wake"
+    "test_deny"
+    "test_allow"
+    "test_on_recv_basic"
+    "test_on_recv_async"
+    "TestThreadAuthentication"
+    "TestAsyncioAuthentication"
     "TestFutureSocket"
     "TestIOLoop"
     "TestPubLog"
@@ -62,6 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for ØMQ";
     homepage = "https://pyzmq.readthedocs.io/";
+    changelog = "https://github.com/zeromq/pyzmq/blob/v${version}/docs/source/changelog.md";
     license = with licenses; [ bsd3 /* or */ lgpl3Only ];
     maintainers = with maintainers; [ ];
   };
