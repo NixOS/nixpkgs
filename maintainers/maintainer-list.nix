@@ -14685,12 +14685,6 @@
     githubId = 6391601;
     name = "Roger Mason";
   };
-  spwhitt = {
-    email = "sw@swhitt.me";
-    github = "spwhitt";
-    githubId = 1414088;
-    name = "Spencer Whitt";
-  };
   squalus = {
     email = "squalus@squalus.net";
     github = "squalus";

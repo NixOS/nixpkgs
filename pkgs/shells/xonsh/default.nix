@@ -85,7 +85,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://xon.sh/";
     changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ spwhitt vrthra ];
+    maintainers = with maintainers; [ vrthra ];
   };
 
   passthru = {
