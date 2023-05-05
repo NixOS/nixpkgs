@@ -12,6 +12,7 @@ let
     deviceID = device.id;
     inherit (device) name addresses introducer autoAcceptFolders;
   }) cfg.devices;
+  devicesIDs = mapAttrsToList (name: device: device.id) cfg.devices;
 
   folders = mapAttrsToList ( _: folder: {
     inherit (folder) path id label type;
@@ -26,12 +27,13 @@ let
     _: folder:
     folder.enable
   ) cfg.folders);
+  foldersIDs = mapAttrsToList (name: folder: folder.id) cfg.folders;
 
-  updateConfig = pkgs.writers.writeDash "merge-syncthing-config" ''
+  jq = "${pkgs.jq}/bin/jq";
+  updateConfig = pkgs.writers.writeBash "merge-syncthing-config" ''
     set -efu
 
     # be careful not to leak secrets in the filesystem or in process listings
-
     umask 0077
 
     # get the api key by parsing the config.xml
@@ -50,21 +52,47 @@ let
             "$@"
     }
 
-    # query the old config
-    old_cfg=$(curl ${cfg.guiAddress}/rest/config)
-
-    # generate the new config by merging with the NixOS config options
-    new_cfg=$(printf '%s\n' "$old_cfg" | ${pkgs.jq}/bin/jq -c '. * {
-        "devices": (${builtins.toJSON devices}${optionalString (cfg.devices == {} || ! cfg.overrideDevices) " + .devices"}),
-        "folders": (${builtins.toJSON folders}${optionalString (cfg.folders == {} || ! cfg.overrideFolders) " + .folders"})
-    } * ${builtins.toJSON cfg.extraOptions}')
-
-    # send the new config
-    curl -X PUT -d "$new_cfg" ${cfg.guiAddress}/rest/config
+    ${lib.concatStringsSep "\n" (map (conf_type: let
+      new_conf_IDs = (concatStringsSep " " {
+        devices = devicesIDs;
+        folders = foldersIDs;
+      }.${conf_type});
+      override = {
+        devices = cfg.overrideDevices;
+        folders = cfg.overrideFolders;
+      }.${conf_type};
+      xType = if true then "PATCH" else "PUT";
+      conf = {
+        inherit devices folders;
+      }.${conf_type};
+      GET_IdAttrName = {
+        devices = "deviceID";
+        folders = "id";
+      }.${conf_type};
+      # All URLs and curl commands are based on: https://docs.syncthing.net/rest/config.html
+      baseAddress = "${cfg.guiAddress}/rest/config/${conf_type}";
+    in ''
+    old_conf_${conf_type}_ids="$(curl -X GET ${baseAddress} | ${jq} --raw-output '.[].${GET_IdAttrName}')"
+    IFS=$'\n'; for id in ${new_conf_IDs}; do
+      new_cfg="$(echo ${escapeShellArg (builtins.toJSON conf)} | ${jq} '.[] | select(.${GET_IdAttrName} == "'$id'")')"
+      curl -d "$new_cfg" -X ${xType} ${baseAddress}/$id
+    done
+    ${optionalString override ''
+      IFS=$'\n'; for id in ''${old_conf_${conf_type}_ids}; do
+        if echo ${new_conf_IDs} | grep -q $id; then
+          continue
+        else
+          curl -X DELETE ${baseAddress}/$id
+        fi
+      done
+    ''}
+    '') ["devices" "folders"])}
+    curl -X PUT -d ${escapeShellArg (builtins.toJSON cfg.extraOptions)} \
+      ${cfg.guiAddress}/rest/config/options
 
     # restart Syncthing if required
     if curl ${cfg.guiAddress}/rest/config/restart-required |
-       ${pkgs.jq}/bin/jq -e .requiresRestart > /dev/null; then
+       ${jq} -e .requiresRestart > /dev/null; then
         curl -X POST ${cfg.guiAddress}/rest/system/restart
     fi
   '';
