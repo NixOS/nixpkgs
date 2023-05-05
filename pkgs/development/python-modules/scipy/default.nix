@@ -41,6 +41,20 @@ buildPythonPackage rec {
     ./disable-datasets-tests.patch
   ];
 
+  # The pybind11 issue seems to have already been address by 2.10.3
+  # https://github.com/pybind/pybind11/issues/4420
+  #
+  # We should update pythran
+  #
+  # Numpy is pinned at patch versions, probably as a way to choose from a set
+  # of wheels published in pypi?
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "pybind11==2.10.1" "pybind11>=2.10.3" \
+      --replace '"pythran>=0.12.0,<0.13.0",' "" \
+      --replace "numpy==" "numpy>="
+  '';
+
   nativeBuildInputs = [
     pypaBuildHook
     cython
@@ -83,10 +97,6 @@ buildPythonPackage rec {
 
   dontUsePipBuild = true;
   pypaBuildFlags = [
-    # Current release pins pybind11's patch version and ours is newer.
-    # Consider restoring build-time dependency check later
-    "--skip-dependency-check"
-
     # Skip sdist
     "--wheel"
 
