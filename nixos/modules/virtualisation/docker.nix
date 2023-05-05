@@ -158,6 +158,15 @@ in
         Docker package to be used in the module.
       '';
     };
+
+    extraPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      example = literalExpression "with pkgs; [ criu ]";
+      description = lib.mdDoc ''
+        Extra packages to add to PATH for the docker daemon process.
+      '';
+    };
   };
 
   ###### implementation
@@ -194,7 +203,8 @@ in
         };
 
         path = [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") pkgs.zfs
-          ++ optional cfg.enableNvidia pkgs.nvidia-docker;
+          ++ optional cfg.enableNvidia pkgs.nvidia-docker
+          ++ cfg.extraPackages;
       };
 
       systemd.sockets.docker = {
