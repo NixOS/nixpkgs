@@ -1,6 +1,8 @@
 { lib, mkDerivation, fetchFromGitHub
 , python3, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
+, qmake
 , which, perl
+, buildPackages
 }:
 
 mkDerivation rec {
@@ -24,12 +26,16 @@ mkDerivation rec {
     perl
     python3
     ruby
+    qtbase.dev
+    qtmultimedia.dev
+    qtxmlpatterns.dev
+    qttools.dev
   ];
 
   buildInputs = [
     qtbase
-    qtmultimedia
     qttools
+    qtmultimedia
     qtxmlpatterns
   ];
 
