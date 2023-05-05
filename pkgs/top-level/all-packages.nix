@@ -9666,6 +9666,8 @@ with pkgs;
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
 
+  libmongocrypt = callPackage ../development/libraries/libmongocrypt { };
+
   libmesode = callPackage ../development/libraries/libmesode { };
 
   libmsym = callPackage ../development/libraries/science/chemistry/libmsym { };
