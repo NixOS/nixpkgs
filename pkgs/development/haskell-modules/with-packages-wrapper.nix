@@ -158,7 +158,7 @@ symlinkJoin {
       # $dynamicLinksDir
       cp $f $f-tmp
       rm $f
-      sed "N;s,dynamic-library-dirs:\s*.*,dynamic-library-dirs: $dynamicLinksDir," $f-tmp > $f
+      sed "N;s,dynamic-library-dirs:\s*.*\n,dynamic-library-dirs: $dynamicLinksDir\n," $f-tmp > $f
       rm $f-tmp
     done
   '') + ''
