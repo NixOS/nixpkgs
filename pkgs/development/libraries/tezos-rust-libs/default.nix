@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, stdenv, llvmPackages_12, cargo }:
+{ lib, fetchFromGitLab, stdenv, llvmPackages_12, cargo, libiconv }:
 
 stdenv.mkDerivation rec {
   version = "1.5";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ llvmPackages_12.llvm cargo ];
   propagatedBuildDeps = [ llvmPackages_12.libllvm ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   buildPhase = ''
     runHook preBuild
