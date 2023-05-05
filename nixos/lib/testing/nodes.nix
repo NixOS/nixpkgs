@@ -3,27 +3,34 @@ testModuleArgs@{ config, lib, hostPkgs, nodes, ... }:
 let
   inherit (lib) mkOption mkForce optional types mapAttrs mkDefault mdDoc;
 
+  inherit (import ../.. {}) evalSystemConfiguration baseModules;
+
   system = hostPkgs.stdenv.hostPlatform.system;
 
-  baseOS =
-    import ../eval-config.nix {
-      inherit system;
-      inherit (config.node) specialArgs;
-      modules = [ config.defaults ];
-      baseModules = (import ../../modules/module-list.nix) ++
-        [
-          ./nixos-test-base.nix
-          { key = "nodes"; _module.args.nodes = config.nodesCompat; }
-          ({ config, ... }:
-            {
-              virtualisation.qemu.package = testModuleArgs.config.qemu.package;
+  testModules = [
+    ./nixos-test-base.nix
+    { key = "nodes"; _module.args.nodes = config.nodesCompat; }
+    ({ config, ... }:
+      {
+        virtualisation.qemu.package = testModuleArgs.config.qemu.package;
 
-              # Ensure we do not use aliases. Ideally this is only set
-              # when the test framework is used by Nixpkgs NixOS tests.
-              nixpkgs.config.allowAliases = false;
-            })
-          testModuleArgs.config.extraBaseModules
-        ];
+        # Ensure we do not use aliases. Ideally this is only set
+        # when the test framework is used by Nixpkgs NixOS tests.
+        nixpkgs.config.allowAliases = false;
+      })
+    testModuleArgs.config.extraBaseModules
+  ];
+
+  baseOS =
+    evalSystemConfiguration {
+      inherit (config.node) specialArgs;
+      modules = [
+        { nixpkgs = { inherit system; }; }
+        config.defaults
+        testModules
+        # TODO (during review): clarify what contract is being actually consumed here (and replace this line with an explanation)
+        { _module.args.baseModules = lib.mkForce (baseModules ++ testModules); }
+      ];
     };
 
 

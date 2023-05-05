@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, evalSystemConfiguration, ... }:
 let
   domain = "sourcehut.localdomain";
 
@@ -91,9 +91,14 @@ let
             timeout = 0;
           };
         };
-        config = (import (pkgs.path + "/nixos/lib/eval-config.nix") {
-          inherit pkgs; modules = [ qemuConfig ];
-          system = "x86_64-linux";
+        config = (evalSystemConfiguration {
+          modules = [
+            {
+              _module.args = { inherit pkgs; };
+              nixpkgs.system = "x86_64-linux";
+            }
+            qemuConfig
+          ];
         }).config;
       in
       import (pkgs.path + "/nixos/lib/make-disk-image.nix") {

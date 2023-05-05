@@ -3,7 +3,8 @@
   pkgs ? import ../.. { inherit system config; },
   debug ? false,
   enableUnfree ? false,
-  use64bitGuest ? true
+  use64bitGuest ? true,
+  evalSystemConfiguration ? (import ../lib {}).evalSystemConfiguration
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -94,9 +95,9 @@ let
   in if debug then "machine.execute(ru('${logcmd} & disown'))" else "pass";
 
   testVM = vmName: vmScript: let
-    cfg = (import ../lib/eval-config.nix {
-      system = if use64bitGuest then "x86_64-linux" else "i686-linux";
+    cfg = (evalSystemConfiguration {
       modules = [
+        { nixpkgs = if use64bitGuest then "x86_64-linux" else "i686-linux"; }
         ../modules/profiles/minimal.nix
         (testVMConfig vmName vmScript)
       ];

@@ -1,11 +1,7 @@
 # Writing NixOS Modules {#sec-writing-modules}
 
-NixOS has a modular system for declarative configuration. This system
-combines multiple *modules* to produce the full system configuration.
 One of the modules that constitute the configuration is
-`/etc/nixos/configuration.nix`. Most of the others live in the
-[`nixos/modules`](https://github.com/NixOS/nixpkgs/tree/master/nixos/modules)
-subdirectory of the Nixpkgs tree.
+`/etc/nixos/configuration.nix`.
 
 Each NixOS module is a file that handles one logical aspect of the
 configuration, such as a specific kind of hardware, a service, or

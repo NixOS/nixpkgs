@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({ pkgs, lib, evalSystemConfiguration, ... }: {
   name = "containers-imperative";
   meta = {
     maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
@@ -17,7 +17,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       # Make sure we always have all the required dependencies for creating a
       # container available within the VM, because we don't have network access.
       virtualisation.additionalPaths = let
-        emptyContainer = import ../lib/eval-config.nix {
+        emptyContainer = evalSystemConfiguration {
           modules = lib.singleton {
             nixpkgs = { inherit (config.nixpkgs) localSystem; };
 

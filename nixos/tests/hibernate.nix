@@ -3,6 +3,7 @@
 { system ? builtins.currentSystem
 , config ? {}
 , pkgs ? import ../.. { inherit system config; }
+, evalSystemConfiguration ? (import ../lib {}).evalSystemConfiguration
 , systemdStage1 ? false
 }:
 
@@ -37,9 +38,11 @@ let
       emergencyAccess = true;
     };
   };
-  installedSystem = (import ../lib/eval-config.nix {
-    inherit system;
-    modules = [ installedConfig ];
+  installedSystem = (evalSystemConfiguration {
+    modules = [
+      { nixpkgs = { inherit system; }; }
+      installedConfig
+    ];
   }).config.system.build.toplevel;
 in makeTest {
   name = "hibernate";
