@@ -16,12 +16,25 @@
 , gettext
 , gnome
 , gobject-introspection
+, at-spi2-core
 , dbus
 , xvfb-run
 , shared-mime-info
 , testers
 }:
 
+let
+  at-spi2-core' = at-spi2-core.overrideAttrs (attrs: {
+    mesonFlags = attrs.mesonFlags ++ [
+      # Original package looks for it on system path for closure size reasons
+      # but that is not available inside build sandbox.
+      "-Ddbus_daemon=${dbus}/bin/dbus-daemon"
+    ];
+  });
+in
+let
+  at-spi2-core = at-spi2-core';
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
   version = "5.8.0";
@@ -85,10 +98,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     env \
       XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
-      GTK_A11Y=none \
       xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
         --config-file=${dbus}/share/dbus-1/session.conf \
-        meson test --no-rebuild --print-errorlogs
+        sh -c '
+          ${at-spi2-core}/libexec/at-spi-bus-launcher --launch-immediately &
+          meson test --no-rebuild --print-errorlogs
+        '
 
     runHook postCheck
   '';
