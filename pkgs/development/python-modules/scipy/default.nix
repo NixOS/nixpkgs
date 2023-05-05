@@ -4,6 +4,8 @@
 , python
 , pythonOlder
 , buildPythonPackage
+, blas
+, lapack
 , cython
 , gfortran
 , meson-python
@@ -19,10 +21,15 @@
 , libxcrypt
 }:
 
+assert blas.provider == numpy.blas;
+
 buildPythonPackage rec {
   pname = "scipy";
   version = "1.10.1";
-  format = "pyproject";
+
+  # Required to pass -Dblas options
+  # https://github.com/scipy/scipy/issues/17244
+  format = "build";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,7 +46,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cython gfortran meson-python pythran pkg-config wheel ];
 
   buildInputs = [
-    numpy.blas
+    blas
+    lapack
     pybind11
     pooch
   ] ++ lib.optionals (pythonOlder "3.9") [
@@ -82,7 +90,17 @@ buildPythonPackage rec {
     blas = numpy.blas;
   };
 
-  setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
+  pypaBuildFlags = [
+    # Current release pins pybind11's patch version and ours is newer.
+    # Consider restoring build-time dependency check later
+    "--skip-dependency-check"
+
+    # Skip sdist
+    "--wheel"
+
+    "-Csetup-args=-Dblas=cblas"
+    "-Csetup-args=-Dlapack=lapacke"
+  ];
 
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
