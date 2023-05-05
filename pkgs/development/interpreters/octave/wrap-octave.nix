@@ -1,4 +1,5 @@
-{ octave
+{ lib
+, octave
 , makeSetupHook
 , makeWrapper
 }:
