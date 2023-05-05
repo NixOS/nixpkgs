@@ -28134,6 +28134,8 @@ with pkgs;
 
   koreader = callPackage ../applications/misc/koreader { };
 
+  k8sgpt = callPackage ../development/tools/k8sgpt { };
+
   kreative-square-fonts = callPackage ../data/fonts/kreative-square-fonts { };
 
   la-capitaine-icon-theme = callPackage ../data/icons/la-capitaine-icon-theme {
