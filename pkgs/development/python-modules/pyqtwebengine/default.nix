@@ -48,6 +48,9 @@ in buildPythonPackage rec {
     qtwebchannel
   ];
 
+  # TODO: figure out why the env hooks aren't adding these inclusions automatically
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev qtbase}/include/QtPrintSupport/ -I${lib.getDev qtwebchannel}/include/QtWebChannel/";
+
   propagatedBuildInputs = [ pyqt5 ];
 
   dontWrapQtApps = true;
