@@ -4,6 +4,8 @@
 , bison, flex, git, gperf, ninja, pkg-config, python, python3, which
 , nodejs, qtbase, perl
 , buildPackages
+, pkgsBuildTarget
+, pkgsBuildBuild
 
 , xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
 , fontconfig, freetype, harfbuzz, icu, dbus, libdrm
@@ -27,31 +29,94 @@
 , pipewireSupport ? stdenv.isLinux
 , pipewire_0_2
 , postPatch ? ""
+, nspr
 }:
 
 let
-  # qtwebengine expects to find an executable in $PATH which runs on
-  # the build platform yet knows about the host `.pc` files.  Most
-  # configury allows setting $PKG_CONFIG to point to an
-  # arbitrarily-named script which serves this purpose; however QT
-  # insists that it is named `pkg-config` with no target prefix.  So
-  # we re-wrap the host platform's pkg-config.
-  pkg-config-wrapped-without-prefix = stdenv.mkDerivation {
-    name = "pkg-config-wrapper-without-target-prefix";
-    dontUnpack = true;
-    dontBuild = true;
-    installPhase = ''
-      mkdir -p $out/bin
-      ln -s '${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config' $out/bin/pkg-config
-    '';
-  };
+  qtPlatformCross = plat: with plat;
+    if isLinux
+    then "linux-generic-g++"
+    else throw "Please add a qtPlatformCross entry for ${plat.config}";
+
+  allDeps = [
+    # Image formats
+    libjpeg libpng libtiff libwebp
+
+    # Video formats
+    srtp libvpx
+
+    # Audio formats
+    libopus
+
+    # Text rendering
+    harfbuzz icu
+
+    libevent
+    ffmpeg_4
+    dbus
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    zlib minizip snappy nss protobuf jsoncpp
+
+    # Audio formats
+    alsa-lib
+
+    # Text rendering
+    fontconfig freetype
+
+    libcap
+    pciutils
+
+    # X11 libs
+    xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
+    xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
+
+  ] ++ lib.optionals pipewireSupport [
+    # Pipewire
+    pipewire_0_2
+  ]
+  # FIXME These dependencies shouldn't be needed but can't find a way
+  # around it. Chromium pulls this in while bootstrapping GN.
+  ++ lib.optionals stdenv.isDarwin [
+    libobjc
+    cctools
+
+    # frameworks
+    ApplicationServices
+    AVFoundation
+    Foundation
+    ForceFeedback
+    GameController
+    AppKit
+    ImageCaptureCore
+    CoreBluetooth
+    IOBluetooth
+    CoreWLAN
+    Quartz
+    Cocoa
+    LocalAuthentication
+    MediaPlayer
+    MediaAccessibility
+    SecurityInterface
+    Vision
+    CoreML
+    OpenDirectory
+    Accelerate
+
+    openbsm
+    libunwind
+  ];
+
 in
 
 qtModule {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
-    bison flex git gperf ninja pkg-config pkg-config-wrapped-without-prefix python3 which gn nodejs perl
+    (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtbase)
+    bison flex git gperf ninja python3 which gn nodejs perl
+    pkgsBuildBuild.pkg-config
+    pkg-config
+    (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtquickcontrols)
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -121,16 +186,19 @@ qtModule {
       --replace "-Wl,-fatal_warnings" ""
   '') + postPatch;
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = "-w " + (toString (lib.optionals stdenv.cc.isGNU [
     # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
-    "-Wno-class-memaccess"
+    #"-Wno-class-memaccess"
   ] ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
     # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
     # TODO: investigate and fix properly
     "-march=westmere"
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-elaborated-enum-base"
-  ]);
+  ]));
+
+  env.NIX_CFLAGS_LINK = "-Wl,--no-warn-search-mismatch";
+  env."NIX_CFLAGS_LINK_${buildPackages.stdenv.cc.suffixSalt}" = "-Wl,--no-warn-search-mismatch";
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES
@@ -138,78 +206,39 @@ qtModule {
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    #export PKG_CONFIG_EXECUTABLE='${pkgsBuildTarget.pkg-config}/bin/${pkgsBuildTarget.pkg-config.targetPrefix}pkg-config'
+    #export PKGCONFIG='${pkgsBuildTarget.pkg-config}/bin/${pkgsBuildTarget.pkg-config.targetPrefix}pkg-config'
+    #export QMAKE_PKG_CONFIG_HOST='${pkgsBuildBuild.pkg-config}/bin/pkg-config'
+    #export PKG_CONFIG='${pkgsBuildBuild.pkg-config}/bin/pkg-config'
+
+    export QMAKE_CC=$CC
+    export QMAKE_CXX=$CXX
+    export QMAKE_LINK=$CXX
+    export QMAKE_AR=$AR
+    #export QMAKE_LFLAGS=$LDFLAGS
+    #export QMAKE_CFLAGS=$CFLAGS
+    #export QMAKE_CXXFLAGS=$CXXFLAGS
   '';
 
-  qmakeFlags = [ "--" "-system-ffmpeg" ]
+  configurePlatforms = [ ];
+
+  qmakeFlags =
+     [ "--" "-system-ffmpeg" ]
     ++ lib.optional pipewireSupport "-webengine-webrtc-pipewire"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
-  propagatedBuildInputs = [
-    # Image formats
-    libjpeg libpng libtiff libwebp
+  # to get progress output in `nix-build` and `nix build -L`
+  preBuild = ''
+    export TERM=dumb
+  '';
 
-    # Video formats
-    srtp libvpx
-
-    # Audio formats
-    libopus
-
-    # Text rendering
-    harfbuzz icu
-
-    libevent
-    ffmpeg_4
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    dbus zlib minizip snappy nss protobuf jsoncpp
-
-    # Audio formats
-    alsa-lib
-
-    # Text rendering
-    fontconfig freetype
-
-    libcap
-    pciutils
-
-    # X11 libs
-    xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
-    xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
-
-  ] ++ lib.optionals pipewireSupport [
-    # Pipewire
-    pipewire_0_2
-  ]
-
-  # FIXME These dependencies shouldn't be needed but can't find a way
-  # around it. Chromium pulls this in while bootstrapping GN.
-  ++ lib.optionals stdenv.isDarwin [
-    libobjc
-    cctools
-
-    # frameworks
-    ApplicationServices
-    AVFoundation
-    Foundation
-    ForceFeedback
-    GameController
-    AppKit
-    ImageCaptureCore
-    CoreBluetooth
-    IOBluetooth
-    CoreWLAN
-    Quartz
-    Cocoa
-    LocalAuthentication
-    MediaPlayer
-    MediaAccessibility
-    SecurityInterface
-    Vision
-    CoreML
-    OpenDirectory
-    Accelerate
-
-    openbsm
-    libunwind
+  propagatedBuildInputs = allDeps;
+  depsBuildBuild = allDeps ++ [
+    pkgsBuildBuild.stdenv
+    zlib
+    nss
+    nspr
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
