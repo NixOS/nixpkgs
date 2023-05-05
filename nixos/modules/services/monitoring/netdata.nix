@@ -271,7 +271,7 @@ in {
         PrivateMounts = true;
       } // (lib.optionalAttrs (cfg.claim_token_file != null) {
         LoadCredential = [
-          "netdata_claim_token:${cfg.claim_token_file}"
+          "netdata_claim_token:${cfg.claimTokenFile}"
         ];
 
         ExecStartPre = pkgs.writeShellScript "netdata-claim" ''
