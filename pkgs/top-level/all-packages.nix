@@ -13080,6 +13080,8 @@ with pkgs;
 
   trickle = callPackage ../tools/networking/trickle { };
 
+  node-manta = callPackage ../tools/admin/manta { };
+
   triton = callPackage ../tools/admin/triton { };
 
   triggerhappy = callPackage ../tools/inputmethods/triggerhappy { };
