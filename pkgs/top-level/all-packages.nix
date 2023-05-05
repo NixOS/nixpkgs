@@ -38709,6 +38709,8 @@ with pkgs;
 
   logtop = callPackage ../tools/misc/logtop { };
 
+  imaginer = callPackage ../applications/misc/imaginer { };
+
   igraph = callPackage ../development/libraries/igraph { };
 
   igprof = callPackage ../development/tools/misc/igprof { };
