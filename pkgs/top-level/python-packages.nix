@@ -3671,6 +3671,8 @@ self: super: with self; {
 
   fleep = callPackage ../development/python-modules/fleep { };
 
+  flet = callPackage ../development/python-modules/flet { };
+
   flet-core = callPackage ../development/python-modules/flet-core { };
 
   flexmock = callPackage ../development/python-modules/flexmock { };
