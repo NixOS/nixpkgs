@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchPypi
+, pypaBuildHook
 , python
 , pythonOlder
 , buildPythonPackage
@@ -26,10 +27,7 @@ assert blas.provider == numpy.blas;
 buildPythonPackage rec {
   pname = "scipy";
   version = "1.10.1";
-
-  # Required to pass -Dblas options
-  # https://github.com/scipy/scipy/issues/17244
-  format = "build";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,7 +41,15 @@ buildPythonPackage rec {
     ./disable-datasets-tests.patch
   ];
 
-  nativeBuildInputs = [ cython gfortran meson-python pythran pkg-config wheel ];
+  nativeBuildInputs = [
+    pypaBuildHook
+    cython
+    gfortran
+    meson-python
+    pythran
+    pkg-config
+    wheel
+  ];
 
   buildInputs = [
     blas
@@ -75,6 +81,19 @@ buildPythonPackage rec {
   #
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
+  dontUsePipBuild = true;
+  pypaBuildFlags = [
+    # Current release pins pybind11's patch version and ours is newer.
+    # Consider restoring build-time dependency check later
+    "--skip-dependency-check"
+
+    # Skip sdist
+    "--wheel"
+
+    "-Csetup-args=-Dblas=cblas"
+    "-Csetup-args=-Dlapack=lapacke"
+  ];
+
   checkPhase = ''
     runHook preCheck
     pushd "$out"
@@ -89,18 +108,6 @@ buildPythonPackage rec {
   passthru = {
     blas = numpy.blas;
   };
-
-  pypaBuildFlags = [
-    # Current release pins pybind11's patch version and ours is newer.
-    # Consider restoring build-time dependency check later
-    "--skip-dependency-check"
-
-    # Skip sdist
-    "--wheel"
-
-    "-Csetup-args=-Dblas=cblas"
-    "-Csetup-args=-Dlapack=lapacke"
-  ];
 
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
