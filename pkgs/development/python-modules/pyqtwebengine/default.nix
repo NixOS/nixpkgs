@@ -1,7 +1,8 @@
 { lib, stdenv, pythonPackages, pkg-config
-, qmake, qtbase, qtsvg, qtwebengine
+, qmake, qtbase, qtsvg, qtwebengine, qtwebchannel
 , wrapQtAppsHook
 , darwin
+, buildPackages
 }:
 
 let
@@ -29,7 +30,7 @@ in buildPythonPackage rec {
   nativeBuildInputs = [
     pkg-config
     qmake
-    sip
+    buildPackages.python3Packages.sip
     qtbase
     qtsvg
     qtwebengine
@@ -44,6 +45,7 @@ in buildPythonPackage rec {
     qtbase
     qtsvg
     qtwebengine
+    qtwebchannel
   ];
 
   propagatedBuildInputs = [ pyqt5 ];
