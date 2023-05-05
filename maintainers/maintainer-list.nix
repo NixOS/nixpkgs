@@ -14067,6 +14067,12 @@
     githubId = 33031;
     name = "Greg Pfeil";
   };
+  selmison = {
+    email = "selmison@gmail.com";
+    github = "selmison";
+    githubId = 24687232;
+    name = "Selmison Miranda";
+  };
   sengaya = {
     email = "tlo@sengaya.de";
     github = "sengaya";
