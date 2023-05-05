@@ -31666,6 +31666,8 @@ with pkgs;
   kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
   kubectl-convert = kubectl.convert;
 
+  kubectl-view-secret = callPackage ../applications/networking/cluster/kubectl-view-secret { };
+
   kubernetes-metrics-server = callPackage ../applications/networking/cluster/kubernetes-metrics-server { };
 
   kubemqctl = callPackage ../applications/networking/cluster/kubemqctl { };
