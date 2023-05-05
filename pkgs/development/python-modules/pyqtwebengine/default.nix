@@ -21,7 +21,7 @@ in buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "[tool.sip.project]" "[tool.sip.project]''\nsip-include-dirs = [\"${pyqt5}/${python.sitePackages}/PyQt5/bindings\"]"
+      --replace "[tool.sip.project]" "[tool.sip.builder]''\njobs = $NIX_BUILD_CORES''\n[tool.sip.project]''\nverbose = true''\nsip-include-dirs = [\"${pyqt5}/${python.sitePackages}/PyQt5/bindings\"]"
   '';
 
   outputs = [ "out" "dev" ];
