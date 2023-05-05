@@ -734,6 +734,7 @@ in {
   timezone = handleTest ./timezone.nix {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
+  tinyproxy = handleTest ./tinyproxy.nix {};
   tinywl = handleTest ./tinywl.nix {};
   tmate-ssh-server = handleTest ./tmate-ssh-server.nix { };
   tomcat = handleTest ./tomcat.nix {};
