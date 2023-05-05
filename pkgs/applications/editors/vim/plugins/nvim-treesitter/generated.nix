@@ -115,12 +115,12 @@
   };
   blueprint = buildGrammar {
     language = "blueprint";
-    version = "0.0.0+rev=6ef91ca";
+    version = "0.0.0+rev=7f1a5df";
     src = fetchFromGitLab {
       owner = "gabmus";
       repo = "tree-sitter-blueprint";
-      rev = "6ef91ca8270f0112b9c6d27ecb9966c741a5d103";
-      hash = "sha256-E7SWUWQFlFWXfmdqNXt2eKkvFusnBUILHerQEFj2JTg=";
+      rev = "7f1a5df44861291d6951b6b2146a9fef4c226e14";
+      hash = "sha256-ihbcrDRMA+jGs7ZmDU1j9PwTEYY6SyMhC0vgmh1Om6Y=";
     };
     meta.homepage = "https://gitlab.com/gabmus/tree-sitter-blueprint.git";
   };
@@ -137,12 +137,12 @@
   };
   c_sharp = buildGrammar {
     language = "c_sharp";
-    version = "0.0.0+rev=0dd182a";
+    version = "0.0.0+rev=2340fd6";
     src = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-c-sharp";
-      rev = "0dd182a14a519a70dc60c3727fdc2fdb65c030ae";
-      hash = "sha256-yIZUsEJvQkxD4gNp4jQRGtEeSTLeSdgFdJs03nvt9ko=";
+      rev = "2340fd6b57b06ccbf24c2c6dafb15905fdccfb1f";
+      hash = "sha256-9acxVw5EWr/NwO5ERwy3V976NMY65vDQp60jIoDfO7k=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-c-sharp";
   };
@@ -292,12 +292,12 @@
   };
   dart = buildGrammar {
     language = "dart";
-    version = "0.0.0+rev=53485a8";
+    version = "0.0.0+rev=3abbd3a";
     src = fetchFromGitHub {
       owner = "UserNobody14";
       repo = "tree-sitter-dart";
-      rev = "53485a8f301254e19c518aa20c80f1bcf7cf5c62";
-      hash = "sha256-1IcvFcxIkcrOuq6bypD08PeYw6J/pL/MbYPt+dKHQbc=";
+      rev = "3abbd3a486a1e356acfdf0367dbf3680f8a0024d";
+      hash = "sha256-+rIUp5mlO0yw/Bj+yxbgKQZlP+QdNf484CsuikZatLw=";
     };
     meta.homepage = "https://github.com/UserNobody14/tree-sitter-dart";
   };
@@ -336,12 +336,12 @@
   };
   dockerfile = buildGrammar {
     language = "dockerfile";
-    version = "0.0.0+rev=8ee3a0f";
+    version = "0.0.0+rev=fd30df6";
     src = fetchFromGitHub {
       owner = "camdencheek";
       repo = "tree-sitter-dockerfile";
-      rev = "8ee3a0f7587b2bd8c45c8cb7d28bd414604aec62";
-      hash = "sha256-I73T3NuN/K9+R3itIJrNVjlyVr/432UT3HEf6LND+0c=";
+      rev = "fd30df68c4178964ed012ef7f745055db76f8ebf";
+      hash = "sha256-k5KQ0GfTveXadgQk0xay2QY7uCvFYneQ/0AKwZqAG48=";
     };
     meta.homepage = "https://github.com/camdencheek/tree-sitter-dockerfile";
   };
@@ -722,12 +722,12 @@
   };
   haskell = buildGrammar {
     language = "haskell";
-    version = "0.0.0+rev=3241b68";
+    version = "0.0.0+rev=684638e";
     src = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-haskell";
-      rev = "3241b683cc1eaa466afb83b9a5592ab39caaa2fa";
-      hash = "sha256-kGUBAXskVPRQHMwffYLRGO6uD9PNFWZeXkXsmp0yfKA=";
+      rev = "684638edce563245e4dc6263940aeffa2a0205c2";
+      hash = "sha256-ewMSd1DpaZEkbjHzUNX3D1CbhNjP47StyyvjU+oVaMM=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-haskell";
   };
@@ -997,23 +997,23 @@
   };
   llvm = buildGrammar {
     language = "llvm";
-    version = "0.0.0+rev=e9948ed";
+    version = "0.0.0+rev=d47c95d";
     src = fetchFromGitHub {
       owner = "benwilliamgraham";
       repo = "tree-sitter-llvm";
-      rev = "e9948edc41e9e5869af99dddb2b5ff5cc5581af6";
-      hash = "sha256-M7smrjU+7L9a2kpz0wM+G+YQGTQaqsVL/Q+OCKlPpzQ=";
+      rev = "d47c95d78ef0e7495a74d214dd6fcddf6e402dfc";
+      hash = "sha256-CK7f0qSAsec2cuQElXLFRQ5uiQLGCyEpNIKTIDwbBrU=";
     };
     meta.homepage = "https://github.com/benwilliamgraham/tree-sitter-llvm";
   };
   lua = buildGrammar {
     language = "lua";
-    version = "0.0.0+rev=0fc8996";
+    version = "0.0.0+rev=4e94980";
     src = fetchFromGitHub {
       owner = "MunifTanjim";
       repo = "tree-sitter-lua";
-      rev = "0fc89962b7ff5c7d676b8592c1cbce1ceaa806fd";
-      hash = "sha256-MbNP1/NKdSkUTydmK819o8vMKUZFan1yE7d227xMsh4=";
+      rev = "4e94980e52f81f713d09be104ba32bf050000031";
+      hash = "sha256-Arv627RIv0d/plfBPq5QVks737PUy3sq2kuLwLr++uM=";
     };
     meta.homepage = "https://github.com/MunifTanjim/tree-sitter-lua";
   };

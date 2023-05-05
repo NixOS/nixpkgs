@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "web3";
-  version = "5.31.1";
+  version = "6.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "web3.py";
     rev = "v${version}";
-    hash = "sha256-YsAbPI9Y6z+snKZ9NsA0YSpB38n+ra4+Ei6COYFe8v4=";
+    hash = "sha256-p3Dpmb0BST1nbh42q/eK/DjQqoIPHvNr2KllRpTgFFw=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +71,10 @@ buildPythonPackage rec {
   #];
 
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "types-protobuf==3.19.13" "types-protobuf"
+  '';
 
   pythonImportsCheck = [
     "web3"

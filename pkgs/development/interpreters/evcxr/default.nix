@@ -20,6 +20,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin
     [ libiconv CoreServices Security ];
 
+  # test broken with rust 1.69:
+  # * https://github.com/evcxr/evcxr/issues/294
+  # * https://github.com/NixOS/nixpkgs/issues/229524
+  checkFlags = [
+    "--skip=check_for_errors"
+  ];
+
   postInstall = let
     wrap = exe: ''
       wrapProgram $out/bin/${exe} \

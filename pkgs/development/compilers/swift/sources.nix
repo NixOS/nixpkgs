@@ -5,20 +5,21 @@ let
   # These packages are all part of the Swift toolchain, and have a single
   # upstream version that should match. We also list the hashes here so a basic
   # version upgrade touches only this file.
-  version = "5.7.3";
+  version = "5.8";
   hashes = {
-    llvm-project = "sha256-IDtLPe0sXamnmovbFVKvmDMnci4u/A0urAPjWTYwJCo=";
-    sourcekit-lsp = "sha256-BT6+VCBSupKOg2mXo6HlkvNRc8pVZU772Mj3LKFamsU=";
-    swift = "sha256-essP2eIp1sLuROqk0OKGBPfJnvnyAW0moMk0cX1IVQQ=";
-    swift-cmark = "sha256-f0BoTs4HYdx/aJ9HIGCWMalhl8PvClWD6R4QK3qSgAw=";
-    swift-corelibs-foundation = "sha256-g78zKSq/b/pVFAD2k2SoMpzJQIpkxMvZOaSz5JPaQmA=";
-    swift-corelibs-libdispatch = "sha256-1qbXiC1k9+T+L6liqXKg6EZXqem6KEEx8OctuL4Kb2o=";
-    swift-corelibs-xctest = "sha256-qLUO9/3tkJWorDMEHgHd8VC3ovLLq/UWXJWMtb6CMN0=";
-    swift-docc = "sha256-WlXJMAnrlVPCM+iCIhG0Gyho76BsC2yVBEpX3m/WiIQ=";
-    swift-docc-render-artifact = "sha256-ttdurN/K7OX+I4577jG3YGeRs+GLUTc7BiiEZGmFD+s=";
-    swift-driver = "sha256-BUwsvw8pirvprUFfliLQMMHr6SHTSgeaJYc9lTEvi9E=";
-    swift-experimental-string-processing = "sha256-W0cQBkdR3A0hrV75Wwm0YULUDVg1bjT0O5w5VGBYDJs=";
-    swift-package-manager = "sha256-zlFYh1wdjUwOsnbagKnAtqXl3vKPcRtnA7YMORtUeyg=";
+    llvm-project = "sha256-0xwSAwwkzFgYO3mY1rHqV8TCeH2NpM7m3VUkCDqjcdE=";
+    sourcekit-lsp = "sha256-XDGq64LbpgBrRy3IvZNgsoLUePXECK5p10vQ8cUKeGE=";
+    swift = "sha256-EY2IImBCVLiUutvDQjNUiInwCNxZsCu1mZzYSjNd4+A=";
+    swift-cmark = "sha256-6xkO9kN6eXMAigjk+KyIgVhTyC50BxmkZmD4+9z6nz8=";
+    swift-corelibs-foundation = "sha256-yRjjxJRy1eTM9VG7/Fn60UMghPavsaoueH0V8cjaIyM=";
+    swift-corelibs-libdispatch = "sha256-XOAWuaGqWJtxhGIPXYT3PIvk5OK0rkY4g1IOybJUlm4=";
+    swift-corelibs-xctest = "sha256-uwxQhKUQ1xp5ao6kfkdlYOvMr6yAb5IaBIdOfoyf+n8=";
+    swift-docc = "sha256-k1ygYDZwF4Jo7iOkHxc/3NzfgN+8XNCks5aizxBgPjM=";
+    swift-docc-render-artifact = "sha256-vdSyICXOjlNSjZXzPRxa/5305pg6PG4xww9GYEV9m10=";
+    swift-driver = "sha256-7xsG3Bpf+wqisCMaPEuEg8CjGYO/0r8BX3pMUmRrezE=";
+    swift-experimental-string-processing = "sha256-ioXG6pQKjlAc2oF38Z7TGighyZN8w2ZAAtFUq83Ow6Q=";
+    swift-package-manager = "sha256-xd6ZpeXfMoHyVrJxz6XcDLPKBvc2nl1lgWXuLrJdq+E=";
+    swift-syntax = "sha256-gkpx/1sWWi9y917OJ1GSNFYXrJb6e2qI4JlV+38laRQ=";
   };
 
   # Create fetch derivations.
