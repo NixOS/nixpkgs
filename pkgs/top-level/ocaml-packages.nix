@@ -616,7 +616,7 @@ let
     hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
 
     hacl-star = callPackage ../development/ocaml-modules/hacl-star { };
-    hacl-star-raw = callPackage ../development/ocaml-modules/hacl-star/raw.nix { };
+    hacl-star-raw = callPackage ../development/ocaml-modules/hacl-star/raw.nix { stdenv = if pkgs.stdenv.isDarwin then pkgs.darwin.apple_sdk_11_0.stdenv else pkgs.stdenv; };
 
     happy-eyeballs = callPackage ../development/ocaml-modules/happy-eyeballs { };
 
