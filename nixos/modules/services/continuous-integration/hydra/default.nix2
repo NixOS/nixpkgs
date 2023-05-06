@@ -399,7 +399,7 @@ in
         startAt = "2,14:15";
       };
 
-    systemd.services.hydra-send-stats =
+    systemd.services.hydra-send-stats, =
       { wantedBy = [ "multi-user.target" ];
         after = [ "hydra-init.service" ];
         environment = env;
