@@ -3,13 +3,10 @@
 , fetchFromGitHub
 , git
 , nixosTests
-, nodejs_16
 , python3
 }:
 
 let
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_16; };
-
   version = "2023.3.0b";
 
   bw_web_builds = fetchFromGitHub {
@@ -18,7 +15,7 @@ let
     rev = "v${version}";
     hash = "sha256-3kCgT+NsYU7sRJvw56vcPXS7j+eHxgek195zZnamjJw=";
   };
-in buildNpmPackage' rec {
+in buildNpmPackage rec {
   pname = "vaultwarden-webvault";
   inherit version;
 
