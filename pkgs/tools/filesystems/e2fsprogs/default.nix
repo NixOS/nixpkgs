@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.46.6";
+  version = "1.47.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-vy/MfuUXj+c6MFf34qo/5S6Yt7tGFQnGewIboA+Uxvc=";
+    hash = "sha256-Zmev3lbu8MavJmhJdEAOTSKI6knpRBv15iKRldUaNXg=";
   };
 
   # fuse2fs adds 14mb of dependencies
