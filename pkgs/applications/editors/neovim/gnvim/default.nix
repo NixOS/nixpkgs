@@ -2,20 +2,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gnvim-unwrapped";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "vhakulinen";
     repo = "gnvim";
     rev = "v${version}";
-    hash = "sha256-trTfDPMDL6k1/xkTteQDAGwxtmwFkuDD14MvTaedECU=";
+    hash = "sha256-736pb+GR2vWoVXfBVeIwAwPeH18c7ZuG1Cwp3ScaRfg=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;
 
-  # glib is also a native build inputs for the `glib-compile-resources` command
-  nativeBuildInputs = [ pkg-config glib ];
+  nativeBuildInputs = [
+    pkg-config
+    # for the `glib-compile-resources` command
+    glib
+  ];
   buildInputs = [ glib gtk4 ];
+
+  patches = [./fix-cargo-lock.patch];
 
   # The default build script tries to get the version through Git, so we
   # replace it
