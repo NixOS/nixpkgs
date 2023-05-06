@@ -31,15 +31,15 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   runtimeDependencies = [ gnugrep gnused curl fzf ffmpeg aria2 ]
-		++ lib.optional (player == "mpv")
-		++ lib.optional (player == "vlc") vlc
-		++ lib.optional (player == "iina") iina
-		++ lib.optional chromecastSupport catt
-		++ lib.optional sync syncplay;
+    ++ lib.optional (player == "mpv")
+    ++ lib.optional (player == "vlc") vlc
+    ++ lib.optional (player == "iina") iina
+    ++ lib.optional chromecastSupport catt
+    ++ lib.optional sync syncplay;
 
   installPhase = ''
-		runHook preInstall
-    
+    runHook preInstall
+
     install -Dm755 ani-cli $out/bin/ani-cli
 
     wrapProgram $out/bin/ani-cli \
