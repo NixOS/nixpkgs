@@ -89,7 +89,7 @@ rec {
       };
     };
 
-  mkNotoCJK = { typeface, version, rev, sha256 }:
+  mkNotoCJK = { typeface, version, sha256 }:
     stdenvNoCC.mkDerivation {
       pname = "noto-fonts-cjk-${lib.toLower typeface}";
       inherit version;
@@ -97,7 +97,8 @@ rec {
       src = fetchFromGitHub {
         owner = "googlefonts";
         repo = "noto-cjk";
-        inherit rev sha256;
+        rev = "${typeface}${version}";
+        inherit sha256;
         sparseCheckout = [ "${typeface}/Variable/OTC" ];
       };
 
@@ -154,14 +155,12 @@ rec {
   noto-fonts-cjk-sans = mkNotoCJK {
     typeface = "Sans";
     version = "2.004";
-    rev = "Sans2.004";
     sha256 = "sha256-IgalJkiOAVjNxKaPAQWfb5hKeqclliR4qVXCq63FGWY=";
   };
 
   noto-fonts-cjk-serif = mkNotoCJK {
     typeface = "Serif";
     version = "2.001";
-    rev = "Serif2.001";
     sha256 = "sha256-y1103SS0qkZMhEL5+7kQZ+OBs5tRaqkqOcs4796Fzhg=";
   };
 
