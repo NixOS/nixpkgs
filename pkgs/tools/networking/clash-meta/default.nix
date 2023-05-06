@@ -4,7 +4,7 @@
 }:
 buildGoModule rec {
   pname = "clash-meta";
-  version = "1.14.3";
+  version = "1.14.4";
 
   src = fetchFromGitHub {
     owner = "MetaCubeX";
@@ -14,10 +14,10 @@ buildGoModule rec {
     postFetch = ''
       rm -f $out/.github/workflows/{Delete,delete}.yml
     '';
-    hash = "sha256-HITuxnzzyHBJ3PlXHYR0M1r3x70AtwzAp1hQ6pX16Bo=";
+    hash = "sha256-HEJQaNFKcmR7KtXsYs2h1KpRZJfQljYjMUBMdqg7gRU=";
   };
 
-  vendorHash = "sha256-D6b0U04wwDUzeIu3//E10YehohTzvyHWtK5Yzf3xrAI=";
+  vendorHash = "sha256-jvl4dAP0EOl9p/3LPNLUqzg8H/mP7AKaI+lJ6ROo/1k=";
 
   # Do not build testing suit
   excludedPackages = [ "./test" ];

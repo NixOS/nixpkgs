@@ -130,6 +130,11 @@ starting them in parallel:
 start_all()
 ```
 
+If the hostname of a node contains characters that can't be used in a
+Python variable name, those characters will be replaced with
+underscores in the variable name, so `nodes.machine-a` will be exposed
+to Python as `machine_a`.
+
 ## Machine objects {#ssec-machine-objects}
 
 The following methods are available on machine objects:

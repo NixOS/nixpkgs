@@ -1,11 +1,12 @@
 { lib
+, stdenv
 , fetchFromGitHub
-, mkDerivation
 , cmake
 , qtbase
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libre-graph-api-cpp-qt-client";
   version = "0.13.2";
 
@@ -18,7 +19,7 @@ mkDerivation rec {
 
   sourceRoot = "source/client";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [ qtbase ];
 
   cmakeFlags = [  ];

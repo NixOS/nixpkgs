@@ -1,12 +1,17 @@
-{ lib, fetchurl, tcl }:
+{ lib
+, fetchFromGitHub
+, tcl
+}:
 
 tcl.mkTclDerivation rec {
   pname = "tclx";
-  version = "8.4.1";
+  version = "8.6.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/tclx/tclx${version}.tar.bz2";
-    sha256 = "1v2qwzzidz0is58fd1p7wfdbscxm3ip2wlbqkj5jdhf6drh1zd59";
+  src = fetchFromGitHub {
+    owner = "flightaware";
+    repo = "tclx";
+    rev = "v${version}";
+    hash = "sha256-HdbuU0IR8q/0g2fIs1xtug4oox/D24C8E2VbEJC5B1A=";
   };
 
   # required in order for tclx to properly detect tclx.tcl at runtime
@@ -17,9 +22,9 @@ tcl.mkTclDerivation rec {
   '';
 
   meta = {
-    homepage = "https://tclx.sourceforge.net/";
+    homepage = "https://github.com/flightaware/tclx";
     description = "Tcl extensions";
     license = lib.licenses.tcltk;
-    maintainers = with lib.maintainers; [ kovirobi ];
+    maintainers = with lib.maintainers; [ kovirobi fgaz ];
   };
 }

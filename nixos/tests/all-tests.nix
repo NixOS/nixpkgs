@@ -66,6 +66,15 @@ let
     ;
 
 in {
+
+  # Testing the test driver
+  nixos-test-driver = {
+    extra-python-packages = handleTest ./nixos-test-driver/extra-python-packages.nix {};
+    node-name = runTest ./nixos-test-driver/node-name.nix;
+  };
+
+  # NixOS vm tests and non-vm unit tests
+
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
   acme = runTest ./acme.nix;
@@ -197,6 +206,7 @@ in {
   dovecot = handleTest ./dovecot.nix {};
   drbd = handleTest ./drbd.nix {};
   earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
+  early-mount-options = handleTest ./early-mount-options.nix {};
   ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
   ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
   ecryptfs = handleTest ./ecryptfs.nix {};
@@ -220,7 +230,6 @@ in {
   etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
   etebase-server = handleTest ./etebase-server.nix {};
   etesync-dav = handleTest ./etesync-dav.nix {};
-  extra-python-packages = handleTest ./extra-python-packages.nix {};
   evcc = handleTest ./evcc.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
   fcitx5 = handleTest ./fcitx5 {};

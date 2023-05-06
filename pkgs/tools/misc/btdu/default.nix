@@ -9,31 +9,31 @@
 }:
 
 let
-    _d_ae_ver              = "0.0.3228";
-    _d_btrfs_ver           = "0.0.13";
-    _d_ncurses_ver         = "0.0.149";
+    _d_ae_ver              = "0.0.3236";
+    _d_btrfs_ver           = "0.0.18";
+    _d_ncurses_ver         = "1.0.0";
     _d_emsi_containers_ver = "0.9.0";
 in
 stdenv.mkDerivation rec {
     pname = "btdu";
-    version = "0.5.0";
+    version = "0.5.1";
 
     srcs = [
       (fetchurl {
         url = "https://github.com/CyberShadow/${pname}/archive/v${version}.tar.gz";
-        sha256 = "90ba4d8997575993e9d39a503779fb32b37bb62b8d9386776e95743bfc859606";
+        sha256 = "566269f365811f6db53280fc5476a7fcf34791396ee4e090c150af4280b35ba5";
       })
       (fetchurl {
         url = "https://github.com/CyberShadow/ae/archive/v${_d_ae_ver}.tar.gz";
-        sha256 = "6b3da61d9f7f1a7343dbe5691a16482cabcd78532b7c09ed9d63eb1934f1b9d8";
+        sha256 = "5ea3f0d9d2d13012ce6a1ee1b52d9fdff9dfb1d5cc7ee5d1b04cab1947ed4d36";
       })
       (fetchurl {
         url = "https://github.com/CyberShadow/d-btrfs/archive/v${_d_btrfs_ver}.tar.gz";
-        sha256 = "05a59cd64000ce2af9bd0578ef5118ab4d10de0ec50410ba0d4e463f01cfaa4e";
+        sha256 = "32af4891d93c7898b0596eefb8297b88d3ed5c14c84a5951943b7b54c7599dbd";
       })
       (fetchurl {
         url = "https://github.com/D-Programming-Deimos/ncurses/archive/v${_d_ncurses_ver}.tar.gz";
-        sha256 = "2c8497f5dd93f9d3a05ca7ed57c4fcaee1e988fd25a24de106917ddf72f34646";
+        sha256 = "b5db677b75ebef7a1365ca4ef768f7344a2bc8d07ec223a2ada162f185d0d9c6";
       })
       (fetchurl {
         url = "https://github.com/dlang-community/containers/archive/v${_d_emsi_containers_ver}.tar.gz";

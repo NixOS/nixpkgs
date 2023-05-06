@@ -1,14 +1,14 @@
 --- a/Sources/SwiftDriver/Jobs/GenericUnixToolchain+LinkerSupport.swift
 +++ b/Sources/SwiftDriver/Jobs/GenericUnixToolchain+LinkerSupport.swift
-@@ -9,6 +9,7 @@
- // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+@@ -10,6 +10,7 @@
  //
  //===----------------------------------------------------------------------===//
+ 
 +import Foundation
- import TSCBasic
  import SwiftOptions
  
-@@ -116,7 +117,20 @@ extension GenericUnixToolchain {
+ import func TSCBasic.lookupExecutablePath
+@@ -120,7 +121,20 @@ extension GenericUnixToolchain {
        // just using `clang` and avoid a dependency on the C++ runtime.
        let clangTool: Tool =
          parsedOptions.hasArgument(.enableExperimentalCxxInterop) ? .clangxx : .clang
@@ -30,7 +30,7 @@
        if let toolsDirPath = parsedOptions.getLastArgument(.toolsDirectory) {
          // FIXME: What if this isn't an absolute path?
          let toolsDir = try AbsolutePath(validating: toolsDirPath.asSingle)
-@@ -132,6 +146,7 @@ extension GenericUnixToolchain {
+@@ -136,6 +150,7 @@ extension GenericUnixToolchain {
          commandLine.appendFlag("-B")
          commandLine.appendPath(toolsDir)
        }
