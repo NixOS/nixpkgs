@@ -38,30 +38,27 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     meta = with pkgs.lib.maintainers; { maintainers = [ StillerHarpo ]; };
 
     nodes = {
-      builderHttp = { ... }: {
+      builder = { ... }: {
         services.flakeAutoUpgrade = {
-          enable = true;
-          remote = "http://gitweb";
-          credentials = {
-            user = aliceUsername;
-            passwordFile = pkgs.writeText "password" alicePassword;
+          http = {
+            remote = "http://gitweb";
+            credentials = {
+              user = aliceUsername;
+              passwordFile = pkgs.writeText "password" alicePassword;
+            };
+            updateBranch = "update";
+            buildAttributes = [ "attr1" "attr2" ];
+            failLogInCommitMsg = true;
           };
-          updateBranch = "update";
-          buildAttributes = [ "attr1" "attr2" ];
-          failLogInCommitMsg = true;
-        };
-        nixpkgs.overlays = [ nixOverlay ];
-      };
-      builderSsh = { ... }: {
-        services.flakeAutoUpgrade = {
-          enable = true;
-          remote = "root@gitweb:${repohome}";
           ssh = {
-            hostKey = "gitweb " + snakeOilPublicKey;
-            key = snakeOilPrivateKey;
+            remote = "root@gitweb:${repohome}";
+            ssh = {
+              hostKey = "gitweb " + snakeOilPublicKey;
+              key = snakeOilPrivateKey;
+            };
+            updateBranch = "update";
+            buildAttributes = [ "attr1" "attr2" ];
           };
-          updateBranch = "update";
-          buildAttributes = [ "attr1" "attr2" ];
         };
         nixpkgs.overlays = [ nixOverlay ];
       };
@@ -134,29 +131,28 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git push --set-upstream origin main")
         gitweb.wait_for_open_port(22)
         gitweb.wait_for_open_port(80)
-        builderSsh.wait_for_unit("multi-user.target")
-        builderSsh.fail("stat /var/lib/flake-auto-upgrade/fakeFlake")
-        builderSsh.systemctl("start flake-auto-upgrade")
+        builder.wait_for_unit("multi-user.target")
+        builder.fail("stat /var/lib/flake-auto-upgrade-ssh/fakeFlake")
+        builder.systemctl("start flake-auto-upgrade-ssh")
         # flake is added
-        builderSsh.wait_until_succeeds("stat /var/lib/flake-auto-upgrade/repo/fakeFlake")
+        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-ssh/repo/fakeFlake")
         # attr1 is build
-        builderSsh.wait_until_succeeds("stat /var/lib/flake-auto-upgrade/repo/result1")
+        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-ssh/repo/result1")
         # change own for lighttpd
         gitweb.succeed("chown lighttpd:lighttpd -R ${repohome}")
-        builderHttp.wait_for_unit("multi-user.target")
-        builderHttp.systemctl("start flake-auto-upgrade")
+        builder.systemctl("start flake-auto-upgrade-http")
         # flake is changed again
-        builderHttp.wait_until_succeeds("stat /var/lib/flake-auto-upgrade/repo/fakeFlake")
-        assert "2 /var/lib/flake-auto-upgrade/repo/fakeFlake" in builderHttp.wait_until_succeeds("wc -l /var/lib/flake-auto-upgrade/repo/fakeFlake")
+        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/fakeFlake")
+        assert "2 /var/lib/flake-auto-upgrade-http/repo/fakeFlake" in builder.wait_until_succeeds("wc -l /var/lib/flake-auto-upgrade-http/repo/fakeFlake")
         # attr1 is build
-        builderHttp.wait_until_succeeds("stat /var/lib/flake-auto-upgrade/repo/result1")
-        builderHttp.succeed("touch /var/lib/flake-auto-upgrade/repo/failFile")
-        builderHttp.sleep(1)
-        builderHttp.systemctl("start flake-auto-upgrade")
+        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result1")
+        builder.succeed("touch /var/lib/flake-auto-upgrade-http/repo/failFile")
+        builder.sleep(1)
+        builder.systemctl("start flake-auto-upgrade-http")
         # attr2 is build
-        builderHttp.wait_until_succeeds("stat /var/lib/flake-auto-upgrade/repo/result2")
+        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result2")
         # flake is changed again
-        assert "3 /var/lib/flake-auto-upgrade/repo/fakeFlake" in builderHttp.succeed("wc -l /var/lib/flake-auto-upgrade/repo/fakeFlake")
+        assert "3 /var/lib/flake-auto-upgrade-http/repo/fakeFlake" in builder.succeed("wc -l /var/lib/flake-auto-upgrade-http/repo/fakeFlake")
         # Build failure is recorded in the commit message
         gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git fetch")
         gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git checkout update")
