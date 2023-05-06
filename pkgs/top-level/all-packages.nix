@@ -10623,6 +10623,8 @@ with pkgs;
 
   offlineimap = callPackage ../tools/networking/offlineimap { };
 
+  offzip = callPackage ../tools/compression/offzip { };
+
   ofono-phonesim = libsForQt5.callPackage ../development/tools/ofono-phonesim { };
 
   ogdf = callPackage ../development/libraries/ogdf { };
@@ -38434,6 +38436,8 @@ with pkgs;
   beep = callPackage ../misc/beep { };
 
   bees = callPackage ../tools/filesystems/bees { };
+
+  blahaj = callPackage ../tools/misc/blahaj { };
 
   bootil = callPackage ../development/libraries/bootil { };
 
