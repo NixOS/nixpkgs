@@ -16,12 +16,14 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.28.0";
+  version = "2.28.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RndjvbbmFNHqi0Vl5CxT+y6y/UMHpGAelxAqlYwJgSo=";
+    hash = "sha256-XbUIe+XIFOz34sfTChoVyX7Kl9jCbzHdxU12fUpDvOg=";
   };
 
   patches = [
@@ -63,7 +65,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
-    homepage = "http://imageio.github.io/";
+    homepage = "https://imageio.readthedocs.io";
+    changelog = "https://github.com/imageio/imageio/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ Luflosi ];
   };
