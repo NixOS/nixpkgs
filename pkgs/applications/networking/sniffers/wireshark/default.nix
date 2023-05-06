@@ -138,9 +138,7 @@ stdenv.mkDerivation {
   '' else
     lib.optionalString withQt ''
       pwd
-      install -Dm644 -t $out/share/applications ../resources/freedesktop/org.wireshark.Wireshark.desktop
 
-      install -Dm644 ../resources/icons/wsicon.svg $out/share/icons/wireshark.svg
       mkdir -pv $dev/include/{epan/{wmem,ftypes,dfilter},wsutil/wmem,wiretap}
 
       cp config.h $dev/include/wireshark/
