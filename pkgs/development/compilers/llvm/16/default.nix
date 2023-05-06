@@ -93,9 +93,7 @@ in let
       lib.platforms.arm ++
       lib.platforms.m68k ++
       lib.platforms.mips ++
-      lib.platforms.power ++
       lib.platforms.riscv ++
-      lib.platforms.s390x ++
       lib.platforms.wasi ++
       lib.platforms.x86;
   };
