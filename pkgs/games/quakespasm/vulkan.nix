@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ ylh daemonspudguy ];
+    maintainers = with maintainers; [ ylh ];
   };
 }
