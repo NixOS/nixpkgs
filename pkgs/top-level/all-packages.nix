@@ -3507,6 +3507,8 @@ with pkgs;
 
   itd = callPackage ../applications/misc/itd { };
 
+  kavita = callPackage ../servers/web-apps/kavita { };
+
   kord = callPackage ../applications/misc/kord { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
@@ -5448,6 +5450,8 @@ with pkgs;
   nautilus-open-any-terminal = callPackage ../tools/misc/nautilus-open-any-terminal { };
 
   n2n = callPackage ../tools/networking/n2n { };
+
+  nest-cli = callPackage ../development/tools/nest-cli { };
 
   nextdns = callPackage ../applications/networking/nextdns { };
 
@@ -24181,8 +24185,6 @@ with pkgs;
 
   v8 = darwin.apple_sdk_11_0.callPackage ../development/libraries/v8 { };
 
-  v8_8_x = callPackage ../development/libraries/v8/8_x.nix { };
-
   vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
 
   vaapi-intel-hybrid = callPackage ../development/libraries/vaapi-intel-hybrid { };
@@ -38104,7 +38106,7 @@ with pkgs;
 
   qucs = callPackage ../applications/science/electronics/qucs { };
 
-  qucs-s = callPackage ../applications/science/electronics/qucs-s { };
+  qucs-s = qt6Packages.callPackage ../applications/science/electronics/qucs-s { };
 
   xcircuit = callPackage ../applications/science/electronics/xcircuit { };
 
@@ -38728,6 +38730,8 @@ with pkgs;
   lima-bin = callPackage ../applications/virtualization/lima/bin.nix { };
 
   logtop = callPackage ../tools/misc/logtop { };
+
+  imaginer = callPackage ../applications/misc/imaginer { };
 
   igraph = callPackage ../development/libraries/igraph { };
 

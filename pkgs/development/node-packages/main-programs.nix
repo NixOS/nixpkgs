@@ -24,7 +24,6 @@
   "@medable/mdctl-cli" = "mdctl";
   "@mermaid-js/mermaid-cli" = "mmdc";
   "@nerdwallet/shepherd" = "shepherd";
-  "@nestjs/cli" = "nest";
   "@prisma/language-server" = "prisma-language-server";
   "@tailwindcss/language-server" = "tailwindcss-language-server";
   "@uppy/companion" = "companion";

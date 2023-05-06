@@ -8874,8 +8874,8 @@ let
   args = {
     name = "ariang";
     packageName = "ariang";
-    version = "1.3.3";
-    src = ../../../../../../../../nix/store/3pp4ryp6vbl4bgx2g5qzqjwfzs689v1k-source;
+    version = "1.3.4";
+    src = ../../../../../../../../nix/store/rhbjvs607bgp8gcyp2czg18r5ygwjpl6-source;
     dependencies = [
       (sources."@gulp-sourcemaps/identity-map-2.0.1" // {
         dependencies = [
