@@ -31010,6 +31010,8 @@ with pkgs;
 
   hushboard = python3.pkgs.callPackage ../applications/audio/hushboard { };
 
+  husky = callPackage ../development/tools/misc/husky { };
+
   hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
   hydrogen_0 = callPackage ../applications/audio/hydrogen/0.nix { }; # Old stable, has GMKit.
 
