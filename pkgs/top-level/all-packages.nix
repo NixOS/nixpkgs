@@ -4614,9 +4614,7 @@ with pkgs;
 
   dtrx = callPackage ../tools/compression/dtrx { };
 
-  dua = callPackage ../tools/misc/dua {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
+  dua = callPackage ../tools/misc/dua { };
 
   duf = callPackage ../tools/misc/duf { };
 
@@ -9666,6 +9664,8 @@ with pkgs;
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
 
+  libmongocrypt = callPackage ../development/libraries/libmongocrypt { };
+
   libmesode = callPackage ../development/libraries/libmesode { };
 
   libmsym = callPackage ../development/libraries/science/chemistry/libmsym { };
@@ -12181,6 +12181,8 @@ with pkgs;
   showmethekey = callPackage ../applications/video/showmethekey { };
 
   shrikhand = callPackage ../data/fonts/shrikhand { };
+
+  shopware-cli = callPackage ../tools/misc/shopware-cli { };
 
   shunit2 = callPackage ../tools/misc/shunit2 { };
 
@@ -18819,6 +18821,8 @@ with pkgs;
   process-viewer = callPackage ../applications/misc/process-viewer { };
 
   procodile = callPackage ../tools/system/procodile { };
+
+  proxmove = callPackage ../tools/admin/proxmove { };
 
   pry = callPackage ../development/tools/pry { };
 

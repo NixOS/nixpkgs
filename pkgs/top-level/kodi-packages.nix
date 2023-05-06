@@ -120,6 +120,8 @@ let self = rec {
 
   idna = callPackage ../applications/video/kodi/addons/idna { };
 
+  infotagger = callPackage ../applications/video/kodi/addons/infotagger { };
+
   inputstream-adaptive = callPackage ../applications/video/kodi/addons/inputstream-adaptive { };
 
   inputstream-ffmpegdirect = callPackage ../applications/video/kodi/addons/inputstream-ffmpegdirect { };
