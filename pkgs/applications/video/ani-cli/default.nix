@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation rec {
     install -Dm755 ani-cli $out/bin/ani-cli
     
     wrapProgram $out/bin/ani-cli \
-      --prefix PATH : ${lib.makeBinPath buildInputs}
+      --prefix PATH : ${lib.makeBinPath runtimeDependencies}
       
     runHook postInstall
   '';
