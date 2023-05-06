@@ -154,8 +154,8 @@ rec {
   noto-fonts-cjk-sans = mkNotoCJK {
     typeface = "Sans";
     version = "2.004";
-    rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
-    sha256 = "sha256-PWpcTBnBRK87ZuRI/PsGp2UMQgCCyfkLHwvB1mOl5K0=";
+    rev = "Sans2.004";
+    sha256 = "sha256-IgalJkiOAVjNxKaPAQWfb5hKeqclliR4qVXCq63FGWY=";
   };
 
   noto-fonts-cjk-serif = mkNotoCJK {
