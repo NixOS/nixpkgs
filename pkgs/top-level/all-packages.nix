@@ -1637,6 +1637,8 @@ with pkgs;
 
   quich = callPackage ../tools/misc/quich { } ;
 
+  rabtap = callPackage ../tools/networking/rabtap { } ;
+
   redfang = callPackage ../tools/networking/redfang { };
 
   s0ix-selftest-tool = callPackage ../tools/system/s0ix-selftest-tool { };
