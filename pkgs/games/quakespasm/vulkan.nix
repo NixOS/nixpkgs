@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vkquake";
-  version = "1.22.3";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "Novum";
@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ ylh ];
+    maintainers = with maintainers; [ ylh daemonspudguy ];
   };
 }
