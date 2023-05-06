@@ -54,11 +54,11 @@ let
 
     atdgen-runtime = callPackage ../development/ocaml-modules/atdgen/runtime.nix { };
 
-    awa = callPackage ../development/ocaml-modules/awa { };
+    awa = callPackage ../development/ocaml-modules/awa { mtime = mtime_1; };
 
-    awa-lwt = callPackage ../development/ocaml-modules/awa/lwt.nix { };
+    awa-lwt = callPackage ../development/ocaml-modules/awa/lwt.nix { mtime = mtime_1; };
 
-    awa-mirage = callPackage ../development/ocaml-modules/awa/mirage.nix { };
+    awa-mirage = callPackage ../development/ocaml-modules/awa/mirage.nix { mtime = mtime_1; };
 
     ### B ###
 
@@ -321,11 +321,11 @@ let
 
     dns-certify =  callPackage ../development/ocaml-modules/dns/certify.nix { };
 
-    dns-cli =  callPackage ../development/ocaml-modules/dns/cli.nix { };
+    dns-cli =  callPackage ../development/ocaml-modules/dns/cli.nix { mtime = mtime_1; };
 
-    dns-client =  callPackage ../development/ocaml-modules/dns/client.nix { };
+    dns-client =  callPackage ../development/ocaml-modules/dns/client.nix { mtime = mtime_1; };
 
-    dns-client-lwt = callPackage ../development/ocaml-modules/dns/client-lwt.nix { };
+    dns-client-lwt = callPackage ../development/ocaml-modules/dns/client-lwt.nix { mtime = mtime_1; };
 
     dns-client-mirage = callPackage ../development/ocaml-modules/dns/client-mirage.nix { };
 
@@ -571,6 +571,7 @@ let
 
     git-unix = callPackage ../development/ocaml-modules/git/unix.nix {
       git-binary = pkgs.git;
+      mtime = mtime_1;
     };
 
     github = callPackage ../development/ocaml-modules/github {  };
@@ -622,7 +623,7 @@ let
 
     happy-eyeballs = callPackage ../development/ocaml-modules/happy-eyeballs { };
 
-    happy-eyeballs-lwt = callPackage ../development/ocaml-modules/happy-eyeballs/lwt.nix { };
+    happy-eyeballs-lwt = callPackage ../development/ocaml-modules/happy-eyeballs/lwt.nix { mtime = mtime_1; };
 
     happy-eyeballs-mirage = callPackage ../development/ocaml-modules/happy-eyeballs/mirage.nix { };
 
@@ -652,7 +653,7 @@ let
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
-    index = callPackage ../development/ocaml-modules/index { };
+    index = callPackage ../development/ocaml-modules/index { mtime = mtime_1; };
 
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
@@ -672,15 +673,15 @@ let
 
     iri = callPackage ../development/ocaml-modules/iri { };
 
-    irmin = callPackage ../development/ocaml-modules/irmin { };
+    irmin = callPackage ../development/ocaml-modules/irmin { mtime = mtime_1; };
 
     irmin-chunk = callPackage ../development/ocaml-modules/irmin/chunk.nix { };
 
-    irmin-containers = callPackage ../development/ocaml-modules/irmin/containers.nix { };
+    irmin-containers = callPackage ../development/ocaml-modules/irmin/containers.nix { mtime = mtime_1; };
 
     irmin-fs = callPackage ../development/ocaml-modules/irmin/fs.nix { };
 
-    irmin-git = callPackage ../development/ocaml-modules/irmin/git.nix { };
+    irmin-git = callPackage ../development/ocaml-modules/irmin/git.nix { mtime = mtime_1; };
 
     irmin-graphql = callPackage ../development/ocaml-modules/irmin/graphql.nix { };
 
@@ -692,9 +693,9 @@ let
 
     irmin-mirage-graphql = callPackage ../development/ocaml-modules/irmin/mirage-graphql.nix { };
 
-    irmin-pack = callPackage ../development/ocaml-modules/irmin/pack.nix { };
+    irmin-pack = callPackage ../development/ocaml-modules/irmin/pack.nix { mtime = mtime_1; };
 
-    irmin-test = callPackage ../development/ocaml-modules/irmin/test.nix { };
+    irmin-test = callPackage ../development/ocaml-modules/irmin/test.nix { mtime = mtime_1; };
 
     irmin-tezos = callPackage ../development/ocaml-modules/irmin/tezos.nix { };
 
@@ -961,6 +962,7 @@ let
 
     metrics-unix = callPackage ../development/ocaml-modules/metrics/unix.nix {
       inherit (pkgs) gnuplot;
+      mtime = mtime_1;
     };
 
     mew = callPackage ../development/ocaml-modules/mew { };
@@ -1007,11 +1009,11 @@ let
 
     mirage-crypto-pk = callPackage ../development/ocaml-modules/mirage-crypto/pk.nix { };
 
-    mirage-crypto-rng = callPackage ../development/ocaml-modules/mirage-crypto/rng.nix { };
+    mirage-crypto-rng = callPackage ../development/ocaml-modules/mirage-crypto/rng.nix { mtime = mtime_1; };
 
     mirage-crypto-rng-async = callPackage ../development/ocaml-modules/mirage-crypto/rng-async.nix { };
 
-    mirage-crypto-rng-lwt = callPackage ../development/ocaml-modules/mirage-crypto/rng-lwt.nix { };
+    mirage-crypto-rng-lwt = callPackage ../development/ocaml-modules/mirage-crypto/rng-lwt.nix { mtime = mtime_1; };
 
     mirage-crypto-rng-mirage = callPackage ../development/ocaml-modules/mirage-crypto/rng-mirage.nix { };
 
@@ -1073,6 +1075,7 @@ let
 
     mrmime = callPackage ../development/ocaml-modules/mrmime { };
 
+    mtime_1 =  callPackage ../development/ocaml-modules/mtime/1_x.nix { };
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
@@ -1249,7 +1252,7 @@ let
       inherit (pkgs) unzip;
     };
 
-    opium = callPackage ../development/ocaml-modules/opium { };
+    opium = callPackage ../development/ocaml-modules/opium { mtime = mtime_1; };
 
     opti = callPackage ../development/ocaml-modules/opti { };
 
@@ -1400,7 +1403,7 @@ let
 
     prometheus = callPackage ../development/ocaml-modules/prometheus { };
 
-    progress = callPackage ../development/ocaml-modules/progress { };
+    progress = callPackage ../development/ocaml-modules/progress { mtime = mtime_1; };
 
     promise_jsoo = callPackage ../development/ocaml-modules/promise_jsoo { };
 
