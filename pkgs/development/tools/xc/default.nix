@@ -13,10 +13,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-hCdIO377LiXFKz0GfCmAADTPfoatk8YWzki7lVP3yLw=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+  ];
+
   meta = with lib; {
     homepage = "https://xcfile.dev/";
     description = "Markdown defined task runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ joerdav ];
+    maintainers = with maintainers; [ figsoda joerdav ];
   };
 }
