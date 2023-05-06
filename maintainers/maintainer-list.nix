@@ -17105,6 +17105,12 @@
     github = "yanganto";
     githubId = 10803111;
   };
+  yaoshiu = {
+    email = "yongyuanxihuanchenxi@gmail.com";
+    github = "yaoshiu";
+    githubId = 56054933;
+    name = "Phie Ash";
+  };
   yarny = {
     github = "Yarny0";
     githubId = 41838844;
