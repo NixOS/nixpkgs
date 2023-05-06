@@ -34,9 +34,9 @@ let
 in
 
 mapAliases {
-  "@antora/cli" = pkgs.antora;
+  "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
-  "@nestjs/cli" = pkgs.nest-cli;
+  "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   manta = pkgs.node-manta; # Added 2023-05-06
   trito = pkgs.triton; # Added 2023-05-06
 }
