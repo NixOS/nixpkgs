@@ -663,6 +663,8 @@ let
 
     integers_stubs_js = callPackage ../development/ocaml-modules/integers_stubs_js { };
 
+    iomux = callPackage ../development/ocaml-modules/iomux { };
+
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
     ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
