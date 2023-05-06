@@ -39720,6 +39720,8 @@ with pkgs;
 
   xlayoutdisplay = callPackage ../tools/X11/xlayoutdisplay { };
 
+  xlibinput-calibrator = callPackage ../tools/inputmethods/xlibinput_calibrator { };
+
   xlog = callPackage ../applications/radio/xlog { };
 
   xmagnify = callPackage ../tools/X11/xmagnify { };
