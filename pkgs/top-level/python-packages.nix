@@ -814,6 +814,8 @@ self: super: with self; {
 
   authres = callPackage ../development/python-modules/authres { };
 
+  auto-gpt-plugin-template = callPackage ../development/python-modules/auto-gpt-plugin-template { };
+
   autobahn = callPackage ../development/python-modules/autobahn { };
 
   autocommand = callPackage ../development/python-modules/autocommand { };
