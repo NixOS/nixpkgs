@@ -289,9 +289,9 @@ in rec {
         // optionalAttrs (config.requisite != [])
           { Requisite = toString config.requisite; }
         // optionalAttrs (config ? restartTriggers && config.restartTriggers != [])
-          { X-Restart-Triggers = toString config.restartTriggers; }
+          { X-Restart-Triggers = builtins.hashString "sha512" (toString config.restartTriggers); }
         // optionalAttrs (config ? reloadTriggers && config.reloadTriggers != [])
-          { X-Reload-Triggers = toString config.reloadTriggers; }
+          { X-Reload-Triggers = builtins.hashString "sha512" (toString config.reloadTriggers); }
         // optionalAttrs (config.description != "") {
           Description = config.description; }
         // optionalAttrs (config.documentation != []) {
