@@ -16,7 +16,12 @@ rustPlatform.buildRustPackage {
     rev = "8b708d549c213c34e4ca62d31cf0dd25bfa7b548";
     sha256 = "sha256-s8nDuG32lI4pBLsOzgfyUGpc7/r0j4EhzH54ErBK7A0=";
   };
-  cargoSha256 = "sha256-29D7kPG7vop9lIxWQnaHkCTRY8YsCjERRCOvbU7oemQ=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "inkwell-0.1.0" = "sha256-vWrpF66r5HalGQz2jSmQljfz0EgS7shLw7A8q75j3tE=";
+    };
+  };
 
   /*
      https://crates.io/crates/llvm-sys#llvm-compatibility

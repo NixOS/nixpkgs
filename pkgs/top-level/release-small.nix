@@ -150,5 +150,5 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   xfsprogs = linux;
   xkeyboard_config = linux;
   zip = all;
-
+  tests-stdenv-gcc-stageCompare = all;
 } ))

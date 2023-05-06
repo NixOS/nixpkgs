@@ -176,7 +176,7 @@ rec {
       # Only show the error for the first missing argument
       error = errorForArg (lib.head missingArgs);
 
-    in if missingArgs == [] then makeOverridable f allArgs else throw error;
+    in if missingArgs == [] then makeOverridable f allArgs else abort error;
 
 
   /* Like callPackage, but for a function that returns an attribute

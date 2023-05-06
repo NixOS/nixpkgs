@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "googleapis";
     repo = "python-crc32c";
     rev = "v${version}";
-    sha256 = "sha256-Tx7UBIwKzSBbpuqdqGiXTbmBE+1MDRknVe3Zee0UHKQ=";
+    hash = "sha256-Tx7UBIwKzSBbpuqdqGiXTbmBE+1MDRknVe3Zee0UHKQ=";
   };
 
   buildInputs = [ crc32c ];

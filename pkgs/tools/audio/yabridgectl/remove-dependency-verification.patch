@@ -1,5 +1,5 @@
 diff --git a/tools/yabridgectl/src/actions.rs b/tools/yabridgectl/src/actions.rs
-index 03617c4d..19ade93e 100644
+index 25857753..59590e38 100644
 --- a/tools/yabridgectl/src/actions.rs
 +++ b/tools/yabridgectl/src/actions.rs
 @@ -835,14 +835,6 @@ pub fn do_sync(config: &mut Config, options: &SyncOptions) -> Result<()> {

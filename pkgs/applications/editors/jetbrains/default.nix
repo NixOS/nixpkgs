@@ -8,6 +8,7 @@
 , patchelf
 , openssl
 , expat
+, libxcrypt-legacy
 , vmopts ? null
 }:
 
@@ -50,6 +51,7 @@ let
         libdbusmenu
         openssl.out
         expat
+        libxcrypt-legacy
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''

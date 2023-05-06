@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
-  version = "3.4.3";
+  version = "3.5.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-V5CggWp9G0/XoQhArrY3LCvfkF2SymORDWdJGjsr7yI=";
+    hash = "sha256-IZY5vGQoJHcnMBcPjsrYYyuBI4WWyLCRZ/PC3TeVX9k=";
   };
 
   nativeBuildInputs = [

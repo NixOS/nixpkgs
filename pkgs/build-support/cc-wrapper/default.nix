@@ -9,15 +9,48 @@
 , lib
 , stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
-, gccForLibs ? null
 , zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
 , nixSupport ? {}
-, isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
+, isGNU ? false, isClang ? cc.isClang or false, isCcache ? cc.isCcache or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
+
+# Whether or not to add `-B` and `-L` to `nix-support/cc-{c,ld}flags`
+, useCcForLibs ?
+
+  # Always add these flags for Clang, because in order to compile (most
+  # software) it needs libraries that are shipped and compiled with gcc.
+  if isClang then true
+
+  # Never add these flags for a build!=host cross-compiler or a host!=target
+  # ("cross-built-native") compiler; currently nixpkgs has a special build
+  # path for these (`crossStageStatic`).  Hopefully at some point that build
+  # path will be merged with this one and this conditional will be removed.
+  else if (with stdenvNoCC; buildPlatform != hostPlatform || hostPlatform != targetPlatform) then false
+
+  # Never add these flags when wrapping the bootstrapFiles' compiler; it has a
+  # /usr/-like layout with everything smashed into a single outpath, so it has
+  # no trouble finding its own libraries.
+  else if (cc.passthru.isFromBootstrapFiles or false) then false
+
+  # Add these flags when wrapping `xgcc` (the first compiler that nixpkgs builds)
+  else if (cc.passthru.isXgcc or false) then true
+
+  # Add these flags when wrapping `stdenv.cc`
+  else if (cc.stdenv.cc.cc.passthru.isXgcc or false) then true
+
+  # Do not add these flags in any other situation.  This is `false` mainly to
+  # prevent these flags from being added when wrapping *old* versions of gcc
+  # (e.g. `gcc6Stdenv`), since they will cause the old gcc to get `-B` and
+  # `-L` flags pointing at the new gcc's libstdc++ headers.  Example failure:
+  # https://hydra.nixos.org/build/213125495
+  else false
+
+# the derivation at which the `-B` and `-L` flags added by `useCcForLibs` will point
+, gccForLibs ? if useCcForLibs then cc else null
 }:
 
 with lib;
@@ -61,7 +94,7 @@ let
   expand-response-params =
     lib.optionalString ((buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null") (import ../expand-response-params { inherit (buildPackages) stdenv; });
 
-  useGccForLibs = isClang
+  useGccForLibs = useCcForLibs
     && libcxx == null
     && !stdenv.targetPlatform.isDarwin
     && !(stdenv.targetPlatform.useLLVM or false)
@@ -126,7 +159,7 @@ assert nativePrefix == bintools.nativePrefix;
 stdenv.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${ccName}-wrapper");
-  version = if cc == null then null else ccVersion;
+  version = if cc == null then "" else ccVersion;
 
   preferLocalBuild = true;
 
@@ -173,7 +206,7 @@ stdenv.mkDerivation {
         local dst="$1"
         local wrapper="$2"
         export prog="$3"
-        export use_response_file_by_default=${if isClang then "1" else "0"}
+        export use_response_file_by_default=${if isClang && !isCcache then "1" else "0"}
         substituteAll "$wrapper" "$out/bin/$dst"
         chmod +x "$out/bin/$dst"
       }
@@ -224,7 +257,9 @@ stdenv.mkDerivation {
         ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
       fi
 
-      if [ -e $ccPath/cpp ]; then
+      if [ -e $ccPath/${targetPrefix}cpp ]; then
+        wrap ${targetPrefix}cpp $wrapper $ccPath/${targetPrefix}cpp
+      elif [ -e $ccPath/cpp ]; then
         wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
       fi
     ''
@@ -299,9 +334,11 @@ stdenv.mkDerivation {
     ##
     ## GCC libs for non-GCC support
     ##
-    + optionalString useGccForLibs ''
+    + optionalString (useGccForLibs && isClang) ''
 
       echo "-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-cflags
+    ''
+    + optionalString useGccForLibs ''
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
       echo "-L${gccForLibs.lib}/${targetPlatform.config}/lib" >> $out/nix-support/cc-ldflags
     ''
@@ -317,7 +354,7 @@ stdenv.mkDerivation {
                       && targetPlatform.isLinux
                       && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
                       && !(stdenv.targetPlatform.useLLVM or false)
-                      && gccForLibs != null) ''
+                      && gccForLibs != null) (''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
 
       # Pull in 'cc.out' target to get 'libstdc++fs.a'. It should be in
@@ -325,6 +362,11 @@ stdenv.mkDerivation {
       # TODO(trofi): remove once gcc is fixed to move libraries to .lib output.
       echo "-L${gccForLibs}/${optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}"}/lib" >> $out/nix-support/cc-ldflags
     ''
+    # this ensures that when clang passes -lgcc_s to lld (as it does
+    # when building e.g. firefox), lld is able to find libgcc_s.so
+    + lib.optionalString (gccForLibs?libgcc) ''
+      echo "-L${gccForLibs.libgcc}/lib" >> $out/nix-support/cc-ldflags
+    '')
 
     ##
     ## General libc support
@@ -367,7 +409,11 @@ stdenv.mkDerivation {
       touch "$out/nix-support/libcxx-cxxflags"
       touch "$out/nix-support/libcxx-ldflags"
     ''
-    + optionalString (libcxx == null && (useGccForLibs && gccForLibs.langCC or false)) ''
+    # Adding -isystem flags should be done only for clang; gcc
+    # already knows how to find its own libstdc++, and adding
+    # additional -isystem flags will confuse gfortran (see
+    # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
+    + optionalString (libcxx == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
       for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
@@ -550,8 +596,11 @@ stdenv.mkDerivation {
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     shell = getBin shell + shell.shellPath or "";
     gnugrep_bin = if nativeTools then "" else gnugrep;
+    # stdenv.cc.cc should not be null and we have nothing better for now.
+    # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
+    cc = if nativeTools then "" else cc;
     wrapperName = "CC_WRAPPER";
-    inherit suffixSalt coreutils_bin bintools cc;
+    inherit suffixSalt coreutils_bin bintools;
     inherit libc_bin libc_dev libc_lib;
     inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
   };

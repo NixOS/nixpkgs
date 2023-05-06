@@ -11,7 +11,7 @@
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
 , officialRelease ? false
   # The platforms for which we build Nixpkgs.
-, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
+, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]
 , limitedSupportedSystems ? [ "i686-linux" ]
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
@@ -82,7 +82,7 @@ let
               jobs.tests.cc-wrapper-libcxx.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
-              jobs.tests.patch-shebangs.x86_64-darwin
+              jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
               */
             ];
         } else null;
@@ -127,11 +127,10 @@ let
               jobs.tests.cc-multilib-gcc.x86_64-linux
               jobs.tests.cc-multilib-clang.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-linux
-              jobs.tests.patch-shebangs.x86_64-linux
+              jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
               */
             ]
-            # FIXME: reintroduce aarch64-darwin after this builds again
-            ++ lib.collect lib.isDerivation (removeAttrs jobs.stdenvBootstrapTools [ "aarch64-darwin" ])
+            ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
             ++ lib.optionals supportDarwin.x86_64 [
               jobs.stdenv.x86_64-darwin
               jobs.cargo.x86_64-darwin
@@ -158,50 +157,39 @@ let
               jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
-              jobs.tests.patch-shebangs.x86_64-darwin
+              jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
               */
             ];
         };
 
       stdenvBootstrapTools = with lib;
-        genAttrs systemsWithAnySupport
-          (system: {
-            inherit
-              (import ../stdenv/linux/make-bootstrap-tools.nix {
+        genAttrs systemsWithAnySupport (system:
+          if hasSuffix "-linux" system then
+            let
+              bootstrap = import ../stdenv/linux/make-bootstrap-tools.nix {
                 pkgs = import ../.. {
                   localSystem = { inherit system; };
                 };
-              })
-              dist test;
-          })
-        # darwin is special in this
-        // optionalAttrs supportDarwin.x86_64 {
-          x86_64-darwin =
+              };
+            in {
+              inherit (bootstrap) dist test;
+            }
+          else if hasSuffix "-darwin" system then
             let
               bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix {
-                localSystem = { system = "x86_64-darwin"; };
+                localSystem = { inherit system; };
               };
             in {
               # Lightweight distribution and test
               inherit (bootstrap) dist test;
               # Test a full stdenv bootstrap from the bootstrap tools definition
-              inherit (bootstrap.test-pkgs) stdenv;
-            };
-        } // optionalAttrs supportDarwin.aarch64 {
-          # Cross compiled bootstrap tools
-          aarch64-darwin =
-            let
-              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix {
-                localSystem = { system = "x86_64-darwin"; };
-                crossSystem = { system = "aarch64-darwin"; };
-              };
-            in {
-              # Distribution only for now
-              inherit (bootstrap) dist;
-            };
-          };
-
-       };
+              # TODO: Re-enable once the new bootstrap-tools are in place.
+              #inherit (bootstrap.test-pkgs) stdenv;
+            }
+          else
+            abort "No bootstrap implementation for system: ${system}"
+        );
+    };
 
   # Do not allow attribute collision between jobs inserted in
   # 'nonPackageAttrs' and jobs pulled in from 'pkgs'.
@@ -229,7 +217,6 @@ let
       perlPackages = { };
 
       darwin = packagePlatforms pkgs.darwin // {
-        cf-private = {};
         xcode = {};
       };
     } ));

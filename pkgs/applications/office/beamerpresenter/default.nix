@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     qtbase
     qtmultimedia
     qttools
+  ] ++ lib.optionals stdenv.isLinux [
     qtwayland
   ] ++ lib.optionals useMupdf [
     freetype

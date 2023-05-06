@@ -8,19 +8,21 @@
 , runCommand
 , writeText
 , plantuml-markdown
+, pythonOlder
 }:
-let
+
+buildPythonPackage rec {
   pname = "plantuml-markdown";
-  version = "3.8.0";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "3.9.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mikitex70";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-6zGE3j+AfS5r3dj+4mfT4juxKUODEOgGlnn3wtvPcEk=";
+    hash = "sha256-5+l3JkK/8S1KFXqa0++l3mIQ2KCpHe9+DiVqasBAZA0=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +35,9 @@ buildPythonPackage {
   # The package uses a custom script that downloads a certain version of plantuml for testing.
   doCheck = false;
 
-  pythonImportsCheck = [ "plantuml_markdown" ];
+  pythonImportsCheck = [
+    "plantuml_markdown"
+  ];
 
   passthru.tests.example-doc =
     let
@@ -59,6 +63,7 @@ buildPythonPackage {
       diagram which will be converted into an image and inserted in the document.
     '';
     homepage = "https://github.com/mikitex70/plantuml-markdown";
+    changelog = "https://github.com/mikitex70/plantuml-markdown/releases/tag/${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ nikstur ];
   };

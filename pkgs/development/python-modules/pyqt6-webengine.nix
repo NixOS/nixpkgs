@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "PyQt6_WebEngine";
-  version = "6.4.0";
+  version = "6.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-THHBMIYKvNEeBMr7IuM5g/qaOu6DI8UZCbFaFwGCjiE=";
+    hash = "sha256-i6nbVsTBgaKi+rFnPKNeW2PcaRE/CFAn3cQ8cQttbuk=";
   };
 
   # fix include path and increase verbosity

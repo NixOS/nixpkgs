@@ -1,9 +1,10 @@
-{ lib, stdenv, writeScript, buildFHSUserEnv, steam, glxinfo-i686, runtimeShell
+{ lib, stdenv, writeShellScript, buildFHSEnv, steam, glxinfo-i686
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
 , extraArgs ? "" # arguments to always pass to steam
+, extraEnv ? { } # Environment variables to pass to Steam
 , withGameSpecificLibraries ? true # exclude game specific libraries
 }:
 
@@ -27,6 +28,9 @@ let
     # Steam VR
     procps
     usbutils
+
+    # It tries to execute xdg-user-dir and spams the log with command not founds
+    xdg-user-dirs
 
     # electron based launchers need newer versions of these libraries than what runtime provides
     mesa
@@ -52,7 +56,9 @@ let
     fi
   '';
 
-in buildFHSUserEnv rec {
+  envScript = lib.toShellVars extraEnv;
+
+in buildFHSEnv rec {
   name = "steam";
 
   targetPkgs = pkgs: with pkgs; [
@@ -128,6 +134,9 @@ in buildFHSUserEnv rec {
     tbb
     zlib
 
+    # SteamVR
+    udev
+
     # Other things from runtime
     glib
     gtk2
@@ -174,7 +183,6 @@ in buildFHSUserEnv rec {
     xorg.xkeyboardconfig
     xorg.libpciaccess
     xorg.libXScrnSaver # Dead Cells
-    udev # Shadow of the Tomb Raider
     icu # dotnet runtime, e.g. Stardew Valley
 
     # screeps dependencies
@@ -228,8 +236,7 @@ in buildFHSUserEnv rec {
     export SDL_JOYSTICK_DISABLE_UDEV=1
   '' + extraProfile;
 
-  runScript = writeScript "steam-wrapper.sh" ''
-    #!${runtimeShell}
+  runScript = writeShellScript "steam-wrapper.sh" ''
     if [ -f /host/etc/NIXOS ]; then   # Check only useful on NixOS
       ${glxinfo-i686}/bin/glxinfo >/dev/null 2>&1
       # If there was an error running glxinfo, we know something is wrong with the configuration
@@ -249,6 +256,9 @@ in buildFHSUserEnv rec {
 
     ${exportLDPath}
     ${fixBootstrap}
+
+    set -o allexport # Export the following env vars
+    ${envScript}
     exec steam ${extraArgs} "$@"
   '';
 
@@ -265,15 +275,14 @@ in buildFHSUserEnv rec {
   # breaks the ability for application to reference shared memory.
   unsharePid = false;
 
-  passthru.run = buildFHSUserEnv {
+  passthru.run = buildFHSEnv {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;
     inherit multiPkgs profile extraInstallCommands;
     inherit unshareIpc unsharePid;
 
-    runScript = writeScript "steam-run" ''
-      #!${runtimeShell}
+    runScript = writeShellScript "steam-run" ''
       run="$1"
       if [ "$run" = "" ]; then
         echo "Usage: steam-run command-to-run args..." >&2
@@ -283,6 +292,9 @@ in buildFHSUserEnv rec {
 
       ${exportLDPath}
       ${fixBootstrap}
+
+      set -o allexport # Export the following env vars
+      ${envScript}
       exec -- "$run" "$@"
     '';
 

@@ -2,6 +2,7 @@
 , fetchurl
 , buildDunePackage
 , ocaml
+, findlib
 , cppo
 , ppxlib
 , ppx_derivers
@@ -32,7 +33,7 @@ buildDunePackage rec {
   pname = "ppx_deriving";
   inherit (params) version;
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/ocaml-ppx/ppx_deriving/releases/download/v${version}/ppx_deriving-v${version}.tbz";
@@ -42,7 +43,7 @@ buildDunePackage rec {
   strictDeps = true;
 
   nativeBuildInputs = [ cppo ];
-  buildInputs = [ ppxlib ];
+  buildInputs = [ findlib ppxlib ];
   propagatedBuildInputs = [
     (if params.useOMP2
     then ocaml-migrate-parsetree-2

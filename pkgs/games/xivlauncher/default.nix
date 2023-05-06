@@ -1,5 +1,5 @@
-{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret, glib, gnutls, aria2, steam-run
-, copyDesktopItems, makeDesktopItem
+{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret, glib, gnutls, aria2, steam-run, gst_all_1
+, copyDesktopItems, makeDesktopItem, makeWrapper
 , useSteamRun ? true }:
 
 let
@@ -17,7 +17,9 @@ in
       fetchSubmodules = true;
     };
 
-    nativeBuildInputs = [ copyDesktopItems ];
+    nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+
+    buildInputs = with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ];
 
     projectFile = "src/XIVLauncher.Core/XIVLauncher.Core.csproj";
     nugetDeps = ./deps.nix; # File generated with `nix-build -A xivlauncher.passthru.fetch-deps`
@@ -40,6 +42,11 @@ in
     postFixup = lib.optionalString useSteamRun ''
       substituteInPlace $out/bin/XIVLauncher.Core \
         --replace 'exec' 'exec ${steam-run}/bin/steam-run'
+    '' + ''
+      wrapProgram $out/bin/XIVLauncher.Core --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
+      # the reference to aria2 gets mangled as UTF-16LE and isn't detectable by nix: https://github.com/NixOS/nixpkgs/issues/220065
+      mkdir -p $out/nix-support
+      echo ${aria2} >> $out/nix-support/depends
     '';
 
     executables = [ "XIVLauncher.Core" ];

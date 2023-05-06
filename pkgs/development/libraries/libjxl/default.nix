@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.7.0";
+  version = "0.8.1";
 
   outputs = [ "out" "dev" ];
 
@@ -29,17 +29,17 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    sha256 = "sha256-9DBLQ/gMyy2ZUm7PCWYJ7XOzkgQM0cAewJZzMNo8UPs=";
+    hash = "sha256-WWuvUTMrlR6ePbEs01ulLnuMiUqGrh4qELWFh0QMaGU=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
 
   patches = [
-    # present in master
+    # Add missing <atomic> content to fix gcc compilation for RISCV architecture
+    # https://github.com/libjxl/libjxl/pull/2211
     (fetchpatch {
-      name = "fix-test-failure-on-ia64-ppc64-riscv64";
-      url = "https://github.com/libjxl/libjxl/commit/bb8eac5d6acec223e44cf8cc72ae02f0816de311.patch";
-      hash = "sha256-DuUCStWEquhWo7bOss0RgZ7ouYE4FpWrIMFywYR424s=";
+      url = "https://github.com/libjxl/libjxl/commit/22d12d74e7bc56b09cfb1973aa89ec8d714fa3fc.patch";
+      hash = "sha256-X4fbYTMS+kHfZRbeGzSdBW5jQKw8UN44FEyFRUtw0qo=";
     })
   ];
 
@@ -98,6 +98,9 @@ stdenv.mkDerivation rec {
 
     # Use our version of highway, though it is still statically linked in
     "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
+
+    # Use our version of gtest
+    "-DJPEGXL_FORCE_SYSTEM_GTEST=ON"
 
     # TODO: Update this package to enable this (overridably via an option):
     # Viewer tools for evaluation.

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "qtawesome";
-  version = "1.2.2";
+  version = "1.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "spyder-ide";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-zXwIwYG76aCKPTE8mGiAOK8kQUCzJbqnjJszmIqByaA=";
+    hash = "sha256-cndmxdo00TLq1Cy66IFwcT5CKBavaFAfknkpLZCYvUQ=";
   };
 
   propagatedBuildInputs = [

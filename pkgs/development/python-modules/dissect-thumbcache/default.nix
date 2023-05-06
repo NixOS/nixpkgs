@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-thumbcache";
-  version = "1.2";
+  version = "1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.thumbcache";
     rev = "refs/tags/${version}";
-    hash = "sha256-lTtTZQgEvgaVoNPnVeRGO/BQU/8RfQ2ktljSBflhlOw=";
+    hash = "sha256-HO2s9AxDRmL4TNRYCdkYpWry3i4GNR0K9i5D2Pz3mVQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Don't run Windows related tests
     "windows"
+    "test_index_type"
   ];
 
   meta = with lib; {

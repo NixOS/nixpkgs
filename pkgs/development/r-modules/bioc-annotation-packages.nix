@@ -76,10 +76,11 @@ in with self; {
   BSgenome_Hsapiens_UCSC_hg18_masked = derive2 { name="BSgenome.Hsapiens.UCSC.hg18.masked"; version="1.3.99"; sha256="031sr3y95c32igk3lrrsafdm9i1zprjran8gak06arqc0hvzbfk0"; depends=[BSgenome BSgenome_Hsapiens_UCSC_hg18]; };
   BSgenome_Hsapiens_UCSC_hg19 = derive2 { name="BSgenome.Hsapiens.UCSC.hg19"; version="1.4.3"; sha256="06lx7q7i52lg3vkjkqy492z9ianzgi4nhs9m1jrxjjb4hgbnbyjv"; depends=[BSgenome]; };
   BSgenome_Hsapiens_UCSC_hg19_masked = derive2 { name="BSgenome.Hsapiens.UCSC.hg19.masked"; version="1.3.993"; sha256="19533ihgad67bzhavycv6z708012ylz9cw1qdfmk2b7ikf3kiaz9"; depends=[BSgenome BSgenome_Hsapiens_UCSC_hg19]; };
-  BSgenome_Hsapiens_UCSC_hg38 = derive2 { name="BSgenome.Hsapiens.UCSC.hg38"; version="1.4.4"; sha256="03xmh6q99nqjxz29m6j0ymxlk22jq0nlvpf4a2yhg3hgnxqkakh2"; depends=[BSgenome]; };
+  BSgenome_Hsapiens_UCSC_hg38 = derive2 { name="BSgenome.Hsapiens.UCSC.hg38"; version="1.4.5"; sha256="0lp94r9dsx8sl1ifysavgjf4aamhjc4n71zif5jyfnwmzpj7g4ml"; depends=[BSgenome GenomeInfoDb]; };
   BSgenome_Hsapiens_UCSC_hg38_dbSNP151_major = derive2 { name="BSgenome.Hsapiens.UCSC.hg38.dbSNP151.major"; version="0.0.9999"; sha256="0290fk7jvlcb1mh6nlyqagqskfh0dvaysj1d6s15bgygnlm3r726"; depends=[BSgenome]; };
   BSgenome_Hsapiens_UCSC_hg38_dbSNP151_minor = derive2 { name="BSgenome.Hsapiens.UCSC.hg38.dbSNP151.minor"; version="0.0.9999"; sha256="1xw8vckhsak35r942yyvlrpbhb2w4vzah8wfgmn3vyj1zklk3913"; depends=[BSgenome]; };
-  BSgenome_Hsapiens_UCSC_hg38_masked = derive2 { name="BSgenome.Hsapiens.UCSC.hg38.masked"; version="1.4.4"; sha256="0ac5c265pgq1yzyp655ix0awdszzxf3mhrp0qsfsb73msqb2s99n"; depends=[BSgenome BSgenome_Hsapiens_UCSC_hg38]; };
+  BSgenome_Hsapiens_UCSC_hg38_masked = derive2 { name="BSgenome.Hsapiens.UCSC.hg38.masked"; version="1.4.5"; sha256="0j71hdxqvvc0s8mc6jp6zk502mrf095qazj95yzzb4rm6sjvd20m"; depends=[BSgenome BSgenome_Hsapiens_UCSC_hg38 GenomeInfoDb]; };
+  BSgenome_Hsapiens_UCSC_hs1 = derive2 { name="BSgenome.Hsapiens.UCSC.hs1"; version="1.4.4"; sha256="1y5rxlms9fj20fz32l56i5j1c4fzly5zzvlxz01fs46qimnfb3ms"; depends=[BSgenome]; };
   BSgenome_Mdomestica_UCSC_monDom5 = derive2 { name="BSgenome.Mdomestica.UCSC.monDom5"; version="1.4.2"; sha256="16kzb66kjpmf9j92pwh98ah5rhrnfyzdpr0rk659zham6dzga9ck"; depends=[BSgenome]; };
   BSgenome_Mfascicularis_NCBI_5_0 = derive2 { name="BSgenome.Mfascicularis.NCBI.5.0"; version="1.4.2"; sha256="1lrdj7aibx4i60hpbaqgk3qir9zjs67mxdgp5jmgmw7gf2nwyn3x"; depends=[BSgenome]; };
   BSgenome_Mfascicularis_NCBI_6_0 = derive2 { name="BSgenome.Mfascicularis.NCBI.6.0"; version="1.5.0"; sha256="0zl73jkg56jrvqyqvp67jx63dl8li6pypkgn1dqj959qzdzc57j0"; depends=[BSgenome]; };
@@ -125,7 +126,7 @@ in with self; {
   BSgenome_Vvinifera_URGI_IGGP12Xv0 = derive2 { name="BSgenome.Vvinifera.URGI.IGGP12Xv0"; version="0.1"; sha256="1m8mqkiqs7291hccb8pfyf2yxpky45qr6j3d9wkvp9x3ra3h0yxf"; depends=[BSgenome]; };
   BSgenome_Vvinifera_URGI_IGGP12Xv2 = derive2 { name="BSgenome.Vvinifera.URGI.IGGP12Xv2"; version="0.1"; sha256="1saavsi75gw33jphhm3qb5psyfrv850ss4cmqr4i7aw1kc0fvs1j"; depends=[BSgenome]; };
   BSgenome_Vvinifera_URGI_IGGP8X = derive2 { name="BSgenome.Vvinifera.URGI.IGGP8X"; version="0.1"; sha256="0v0hi2pbbi5ynd92bvbv4bzr7bgv48kvyz62hdv7k9gh7s5pg0id"; depends=[BSgenome]; };
-  CTCF = derive2 { name="CTCF"; version="0.99.10"; sha256="0s6rscf6c4sjf6azf3blzb3lfgk7sk3clrlvmhq2gv82g9ic6d40"; depends=[]; };
+  CTCF = derive2 { name="CTCF"; version="0.99.11"; sha256="06gy1f71p01h6yfj5xmvlgz6n7sg7rpkc3723y51h30ir6xrzbrg"; depends=[]; };
   ChemmineDrugs = derive2 { name="ChemmineDrugs"; version="1.0.2"; sha256="0l47ac6lkycmghra2cbcdcxcv47ari8xg6lxpzilvkf4n6ld6064"; depends=[BiocGenerics ChemmineR RSQLite]; };
   DO_db = derive2 { name="DO.db"; version="2.9"; sha256="10bqqa124l61ivzy4mdd3z3ar9a6537qbxw23pc4y9w8a6dwnavn"; depends=[AnnotationDbi]; };
   ENCODExplorerData = derive2 { name="ENCODExplorerData"; version="0.99.5"; sha256="00gfm5l8pxrfs4cw4jlw6n0cz5s31isg69k833n89800v26w3kvh"; depends=[data_table jsonlite RCurl]; };
@@ -219,8 +220,8 @@ in with self; {
   SNPlocs_Hsapiens_dbSNP144_GRCh38 = derive2 { name="SNPlocs.Hsapiens.dbSNP144.GRCh38"; version="0.99.20"; sha256="0yxmsnxncr7w30r0d7bg5i96pclm2vf40p9jdqa02rc67a6sximn"; depends=[BiocGenerics BSgenome GenomeInfoDb GenomicRanges IRanges S4Vectors]; };
   SNPlocs_Hsapiens_dbSNP149_GRCh38 = derive2 { name="SNPlocs.Hsapiens.dbSNP149.GRCh38"; version="0.99.20"; sha256="17bv25p1261hn9d7mxfp6pvivj15pxyvr92gms8a8msfqg9y0xkb"; depends=[BiocGenerics BSgenome GenomeInfoDb GenomicRanges IRanges S4Vectors]; };
   SNPlocs_Hsapiens_dbSNP150_GRCh38 = derive2 { name="SNPlocs.Hsapiens.dbSNP150.GRCh38"; version="0.99.20"; sha256="0jkwwgxxpm9ry8kizq8hs70sky41pks1ag40y5aqq91yjbpqlckj"; depends=[BiocGenerics BSgenome GenomeInfoDb GenomicRanges IRanges S4Vectors]; };
-  SNPlocs_Hsapiens_dbSNP155_GRCh37 = derive2 { name="SNPlocs.Hsapiens.dbSNP155.GRCh37"; version="0.99.22"; sha256="0icb85y6jc6a2rphf8dsxhfcsh7j6kmm6iii7f0dl33dsgsmb1wl"; depends=[BiocGenerics BSgenome GenomeInfoDb GenomicRanges IRanges S4Vectors]; };
-  SNPlocs_Hsapiens_dbSNP155_GRCh38 = derive2 { name="SNPlocs.Hsapiens.dbSNP155.GRCh38"; version="0.99.22"; sha256="1zdx6bjl494wlzqhhz6q6cnygbrvqimcrmmxab5dfwckkyfxlyd8"; depends=[BiocGenerics BSgenome GenomeInfoDb GenomicRanges IRanges S4Vectors]; };
+  SNPlocs_Hsapiens_dbSNP155_GRCh37 = derive2 { name="SNPlocs.Hsapiens.dbSNP155.GRCh37"; version="0.99.23"; sha256="1hl63ph2j8s2igwgp0xs35a366wa7f1x6bmid09k6wqx8fcdilgy"; depends=[BiocGenerics BSgenome GenomeInfoDb GenomicRanges IRanges S4Vectors]; };
+  SNPlocs_Hsapiens_dbSNP155_GRCh38 = derive2 { name="SNPlocs.Hsapiens.dbSNP155.GRCh38"; version="0.99.23"; sha256="0j4skfz6g7ir1igqbql0hk04871vpfqg7dpmvv9z6k2mx9lnrh7w"; depends=[BiocGenerics BSgenome GenomeInfoDb GenomicRanges IRanges S4Vectors]; };
   TxDb_Athaliana_BioMart_plantsmart22 = derive2 { name="TxDb.Athaliana.BioMart.plantsmart22"; version="3.0.1"; sha256="0j2zr4cddad7z1lxx9m9kfgyy7jajjnblpk9j8igd39ia3ixrpzc"; depends=[AnnotationDbi GenomicFeatures]; };
   TxDb_Athaliana_BioMart_plantsmart25 = derive2 { name="TxDb.Athaliana.BioMart.plantsmart25"; version="3.1.3"; sha256="0a6v0l6p13zmiysi3k8dxzdlxng552qqj9rnlbdavdiidla0pvm3"; depends=[AnnotationDbi GenomicFeatures]; };
   TxDb_Athaliana_BioMart_plantsmart28 = derive2 { name="TxDb.Athaliana.BioMart.plantsmart28"; version="3.2.2"; sha256="1yjyvrbx55y024lqg3b2rlf8pngqw5xi3p83j5ipan05wf0aq6ir"; depends=[AnnotationDbi GenomicFeatures]; };

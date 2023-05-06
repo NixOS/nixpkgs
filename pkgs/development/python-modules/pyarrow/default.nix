@@ -17,6 +17,7 @@
 , pytest-lazy-fixture
 , pkg-config
 , scipy
+, fetchpatch
 , setuptools-scm
 }:
 
@@ -96,6 +97,9 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
+    # A couple of tests are missing fixture imports, luckily pytest offers a
+    # clean solution.
+    "--fixtures pyarrow/tests/conftest.py"
     # Deselect a single test because pyarrow prints a 2-line error message where
     # only a single line is expected. The additional line of output comes from
     # the glog library which is an optional dependency of arrow-cpp that is

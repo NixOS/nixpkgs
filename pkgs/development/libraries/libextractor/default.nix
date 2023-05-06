@@ -13,7 +13,7 @@
 # '';
 # See also <https://nixos.org/nixpkgs/manual/#sec-language-gnome>.
 , gtkSupport ? true, glib, gtk3
-, videoSupport ? true, ffmpeg, libmpeg2
+, videoSupport ? true, ffmpeg_4, libmpeg2
 }:
 
 stdenv.mkDerivation rec {
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
    ] ++ lib.optionals gstreamerSupport
           ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
      ++ lib.optionals gtkSupport [ glib gtk3 ]
-     ++ lib.optionals videoSupport [ ffmpeg libmpeg2 ];
+     ++ lib.optionals videoSupport [ ffmpeg_4 libmpeg2 ];
 
   configureFlags = [
     "--disable-ltdl-install"

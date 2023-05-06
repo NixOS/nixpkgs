@@ -47,7 +47,12 @@ let
     then [ "${name} ${value}" ]
     else concatLists (mapAttrsToList (genSection name) value);
 
-  addDefaults = settings: { backend = "btrfs-progs-sudo"; } // settings;
+  sudo_doas =
+    if config.security.sudo.enable then "sudo"
+    else if config.security.doas.enable then "doas"
+    else throw "The btrbk nixos module needs either sudo or doas enabled in the configuration";
+
+  addDefaults = settings: { backend = "btrfs-progs-${sudo_doas}"; } // settings;
 
   mkConfigFile = name: settings: pkgs.writeTextFile {
     name = "btrbk-${name}.conf";
@@ -152,20 +157,41 @@ in
   };
   config = mkIf (sshEnabled || serviceEnabled) {
     environment.systemPackages = [ pkgs.btrbk ] ++ cfg.extraPackages;
-    security.sudo.extraRules = [
-      {
-        users = [ "btrbk" ];
-        commands = [
-          { command = "${pkgs.btrfs-progs}/bin/btrfs"; options = [ "NOPASSWD" ]; }
-          { command = "${pkgs.coreutils}/bin/mkdir"; options = [ "NOPASSWD" ]; }
-          { command = "${pkgs.coreutils}/bin/readlink"; options = [ "NOPASSWD" ]; }
-          # for ssh, they are not the same than the one hard coded in ${pkgs.btrbk}
-          { command = "/run/current-system/bin/btrfs"; options = [ "NOPASSWD" ]; }
-          { command = "/run/current-system/sw/bin/mkdir"; options = [ "NOPASSWD" ]; }
-          { command = "/run/current-system/sw/bin/readlink"; options = [ "NOPASSWD" ]; }
+    security.sudo = mkIf (sudo_doas == "sudo") {
+      extraRules = [
+        {
+            users = [ "btrbk" ];
+            commands = [
+            { command = "${pkgs.btrfs-progs}/bin/btrfs"; options = [ "NOPASSWD" ]; }
+            { command = "${pkgs.coreutils}/bin/mkdir"; options = [ "NOPASSWD" ]; }
+            { command = "${pkgs.coreutils}/bin/readlink"; options = [ "NOPASSWD" ]; }
+            # for ssh, they are not the same than the one hard coded in ${pkgs.btrbk}
+            { command = "/run/current-system/bin/btrfs"; options = [ "NOPASSWD" ]; }
+            { command = "/run/current-system/sw/bin/mkdir"; options = [ "NOPASSWD" ]; }
+            { command = "/run/current-system/sw/bin/readlink"; options = [ "NOPASSWD" ]; }
+            ];
+        }
+      ];
+    };
+    security.doas = mkIf (sudo_doas == "doas") {
+      extraRules = let
+        doasCmdNoPass = cmd: { users = [ "btrbk" ]; cmd = cmd; noPass = true; };
+      in
+        [
+            (doasCmdNoPass "${pkgs.btrfs-progs}/bin/btrfs")
+            (doasCmdNoPass "${pkgs.coreutils}/bin/mkdir")
+            (doasCmdNoPass "${pkgs.coreutils}/bin/readlink")
+            # for ssh, they are not the same than the one hard coded in ${pkgs.btrbk}
+            (doasCmdNoPass "/run/current-system/bin/btrfs")
+            (doasCmdNoPass "/run/current-system/sw/bin/mkdir")
+            (doasCmdNoPass "/run/current-system/sw/bin/readlink")
+
+            # doas matches command, not binary
+            (doasCmdNoPass "btrfs")
+            (doasCmdNoPass "mkdir")
+            (doasCmdNoPass "readlink")
         ];
-      }
-    ];
+    };
     users.users.btrbk = {
       isSystemUser = true;
       # ssh needs a home directory
@@ -183,8 +209,9 @@ in
               "best-effort" = 2;
               "realtime" = 1;
             }.${cfg.ioSchedulingClass};
+            sudo_doas_flag = "--${sudo_doas}";
           in
-          ''command="${pkgs.util-linux}/bin/ionice -t -c ${toString ioniceClass} ${optionalString (cfg.niceness >= 1) "${pkgs.coreutils}/bin/nice -n ${toString cfg.niceness}"} ${pkgs.btrbk}/share/btrbk/scripts/ssh_filter_btrbk.sh --sudo ${options}" ${v.key}''
+          ''command="${pkgs.util-linux}/bin/ionice -t -c ${toString ioniceClass} ${optionalString (cfg.niceness >= 1) "${pkgs.coreutils}/bin/nice -n ${toString cfg.niceness}"} ${pkgs.btrbk}/share/btrbk/scripts/ssh_filter_btrbk.sh ${sudo_doas_flag} ${options}" ${v.key}''
         )
         cfg.sshAccess;
     };

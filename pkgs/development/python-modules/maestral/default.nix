@@ -14,7 +14,7 @@
 , keyrings-alt
 , packaging
 , pathspec
-, Pyro5
+, pyro5
 , requests
 , rich
 , setuptools
@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.7.1";
+  version = "1.7.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = "maestral";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WYLYDDXxO5ot30oSBkxgJszn8nyAQh5XtCyywBz56J4=";
+    hash = "sha256-XyyEAeEQEc7MhGyXBBLZDqzBL7K+0dMMCKhr0iENvog=";
   };
 
   propagatedBuildInputs = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     keyrings-alt
     packaging
     pathspec
-    Pyro5
+    pyro5
     requests
     rich
     setuptools

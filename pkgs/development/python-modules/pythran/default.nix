@@ -25,7 +25,7 @@ in buildPythonPackage rec {
     owner = "serge-sans-paille";
     repo = "pythran";
     rev = version;
-    sha256 = "sha256-F9gUZOTSuiqvfGoN4yQqwUg9mnCeBntw5eHO7ZnjpzI=";
+    hash = "sha256-F9gUZOTSuiqvfGoN4yQqwUg9mnCeBntw5eHO7ZnjpzI=";
   };
 
   patches = [

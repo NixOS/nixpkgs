@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, buildPackages, makeRustPlatform }:
+{ lib, stdenvNoCC, buildPackages }:
 
 let
   rpath = lib.makeLibraryPath [
@@ -66,7 +66,15 @@ redoxRustPlatform.buildRustPackage rec {
   # TODO: should be hostPlatform
   TARGET = buildPackages.rust.toRustTargetSpec stdenvNoCC.targetPlatform;
 
-  cargoSha256 = "1fzz7ba3ga57x1cbdrcfrdwwjr70nh4skrpxp4j2gak2c3scj6rz";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "redox_syscall-0.2.0" = "sha256-nwbJBrhuc01fPbBgd5ShboNu0Nauqp2UjkA+sm9oCeE=";
+    };
+  };
+
+  # error: Usage of `RUSTC_WORKSPACE_WRAPPER` requires `-Z unstable-options`
+  auditable = false;
 
   meta = with lib; {
     homepage = "https://gitlab.redox-os.org/redox-os/relibc";

@@ -1,34 +1,44 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiosqlite
 , aiofiles
-, pytz
-, python-dateutil
-, sortedcontainers
+, aiosqlite
+, buildPythonPackage
 , cryptography
-, typing-extensions
-, importlib-metadata
-, pytestCheckHook
+, fetchFromGitHub
 , pytest-asyncio
 , pytest-mock
-, asynctest
+, pytestCheckHook
+, python-dateutil
 , pythonOlder
+, pytz
+, sortedcontainers
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "asyncua";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
-    rev = "v${version}";
-    hash = "sha256-6A4z+tiQ2oUlB9t44wlW64j5sjWFMAgqT3Xt0FdJCBs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DnBxR4nD3dBBhiElDuRgljHaoBPiakdjY/VFn3VsKEQ=";
+    fetchSubmodules = true;
   };
+
+  postPatch = ''
+    # https://github.com/FreeOpcUa/opcua-asyncio/issues/1263
+    substituteInPlace setup.py \
+      --replace ", 'asynctest'" ""
+
+    # Workaround hardcoded paths in test
+    # "test_cli_tools_which_require_sigint"
+    substituteInPlace tests/test_tools.py \
+      --replace "tools/" "$out/bin/"
+  '';
 
   propagatedBuildInputs = [
     aiosqlite
@@ -38,28 +48,22 @@ buildPythonPackage rec {
     sortedcontainers
     cryptography
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
-
-  pythonImportsCheck = [
-    "asyncua"
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-mock
-    asynctest
   ];
 
-  disabledTests = [
-    "test_cli_tools_which_require_sigint" # Hard coded path only works from root of src
+  pythonImportsCheck = [
+    "asyncua"
   ];
 
   meta = with lib; {
     description = "OPC UA / IEC 62541 Client and Server for Python";
     homepage = "https://github.com/FreeOpcUa/opcua-asyncio";
+    changelog = "https://github.com/FreeOpcUa/opcua-asyncio/releases/tag/v${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ harvidsen ];
   };

@@ -4,7 +4,7 @@
 , sphinx
 , pytest-cov
 , pytest
-, Mako
+, mako
 , numpy
 , funcsigs
 , withCuda ? false, pycuda
@@ -17,12 +17,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fpa1Pfo5EAafg7Pgha17G6k5G13fdErjclv0On/uYyI=";
+    hash = "sha256-fpa1Pfo5EAafg7Pgha17G6k5G13fdErjclv0On/uYyI=";
   };
 
   nativeCheckInputs = [ sphinx pytest-cov pytest ];
 
-  propagatedBuildInputs = [ Mako numpy funcsigs ]
+  propagatedBuildInputs = [ mako numpy funcsigs ]
     ++ lib.optional withCuda pycuda
     ++ lib.optional withOpenCL pyopencl;
 

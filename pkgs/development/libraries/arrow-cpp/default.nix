@@ -55,16 +55,16 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "ecab1162cbec872e17d949ecc86181670aee045c";
-    hash = "sha256-w6rEuxfLTEO8DyXV44G6JOMeTfYtskFCOj9rHXNmj2Y=";
+    rev = "47f7b56b25683202c1fd957668e13f2abafc0f12";
+    hash = "sha256-ZDznR+yi0hm5O1s9as8zq5nh1QxJ8kXCRwbNQlzXpnI=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "5b82793ef7196f7b3583e85669ced211cd8b5ff2";
-    hash = "sha256-gcOvk7qFHZgJWE9CpucC8zwayYw47VbC3lmSRu4JQFg=";
+    rev = "b2e7cc755159196e3a068c8594f7acbaecfdaaac";
+    hash = "sha256-IFvGTOkaRSNgZOj8DziRj88yH5JRF+wgSDZ5N0GNvjk=";
   };
 
   aws-sdk-cpp-arrow = aws-sdk-cpp.override {
@@ -81,12 +81,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "11.0.0";
+  version = "12.0.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-Ldjw6ghIpYeFYo7jpXZ1VI1QnhchOi9dcrDZALQ/VDA=";
+    hash = "sha256-3dg0eIJ3XlOvfQlloZArfY/NCgMP0U94PU+F6CE1LVI=";
   };
+
   sourceRoot = "apache-arrow-${version}/cpp";
 
   # versions are all taken from
@@ -268,7 +269,6 @@ stdenv.mkDerivation rec {
     description = "A cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
     license = licenses.asl20;
-    broken = stdenv.isLinux && stdenv.isAarch64; # waiting on gtest changes in staging
     platforms = platforms.unix;
     maintainers = with maintainers; [ tobim veprbl cpcloud ];
   };

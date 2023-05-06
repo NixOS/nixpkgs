@@ -25,7 +25,7 @@ in
 
     compressionLevel = mkOption {
       type = types.nullOr types.int;
-      description = lib.mdDoc "The compression level for XZ compression (between 0 and 9)";
+      description = lib.mdDoc "The compression level for ZSTD compression (between 0 and 16)";
       default = null;
     };
 
@@ -62,7 +62,13 @@ in
       after = [ "network-online.target" ];
       path = [ config.nix.package ];
       wantedBy = [ "multi-user.target" ];
+      unitConfig = {
+        # allow to restart indefinitely
+        StartLimitIntervalSec = 0;
+      };
       serviceConfig = {
+        # don't put too much stress on the machine when restarting
+        RestartSec = 1;
         # we don't want to kill children processes as those are deployments
         KillMode = "process";
         Restart = "on-failure";

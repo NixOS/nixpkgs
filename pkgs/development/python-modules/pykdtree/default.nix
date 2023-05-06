@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pykdtree";
-  version = "1.3.6";
+  version = "1.3.7.post0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eAtpPQVVuFfXqrMeNdQpO/Tr253sekW6S7I7RAD2Jtw=";
+    hash = "sha256-7KHWHTPbYh74An62ka6I25xl0ZarpLLMkMGQy5C7UI4=";
   };
 
   buildInputs = [ openmp ];

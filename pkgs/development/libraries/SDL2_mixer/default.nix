@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     "--disable-music-mp3-mpg123-shared"
     "--disable-music-opus-shared"
     "--disable-music-midi-fluidsynth-shared"
+
+    # override default path to allow MIDI files to be played
+    "--with-timidity-cfg=${timidity}/share/timidity/timidity.cfg"
   ] ++ lib.optionals stdenv.isDarwin [
     "--disable-sdltest"
     "--disable-smpegtest"

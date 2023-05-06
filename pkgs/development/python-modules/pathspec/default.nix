@@ -2,27 +2,36 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, setuptools
+, flit-core
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pathspec";
-  version = "0.10.3";
+  version = "0.11.0";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ViAN5Ad9nQeRRlqpCVoB1CGGHkBbUJaVUFHe79aX1vY=";
+    hash = "sha256-ZNM41OCRTpHBeSMh5pB7Wlk/GrGFHef8JpVXohsw67w=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
+  ];
+
+  pythonImportsCheck = [
+    "pathspec"
+  ];
+
+  checkInputs = [
+    unittestCheckHook
   ];
 
   meta = {
     description = "Utility library for gitignore-style pattern matching of file paths";
     homepage = "https://github.com/cpburnz/python-path-specification";
+    changelog = "https://github.com/cpburnz/python-pathspec/blob/v${version}/CHANGES.rst";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ copumpkin ];
   };

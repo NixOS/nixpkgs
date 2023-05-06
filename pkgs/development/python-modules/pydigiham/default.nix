@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "jketterl";
     repo = "pydigiham";
     rev = version;
-    sha256 = "sha256-kiEvQl3SuDnHI4Fh97AarsszHGFt7tbWBvBRW84Qv18=";
+    hash = "sha256-kiEvQl3SuDnHI4Fh97AarsszHGFt7tbWBvBRW84Qv18=";
   };
 
   propagatedBuildInputs = [ digiham ];

@@ -5,14 +5,14 @@ Subject: [PATCH] Fix hwdb paths
 
 Patch by vcunat.
 ---
- src/libsystemd/sd-hwdb/hwdb-internal.h | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ src/libsystemd/sd-hwdb/hwdb-internal.h | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/src/libsystemd/sd-hwdb/hwdb-internal.h b/src/libsystemd/sd-hwdb/hwdb-internal.h
-index 62d27f7b89..87318e041b 100644
+index 5302679a62..39e59a527f 100644
 --- a/src/libsystemd/sd-hwdb/hwdb-internal.h
 +++ b/src/libsystemd/sd-hwdb/hwdb-internal.h
-@@ -83,8 +83,5 @@ struct trie_value_entry2_f {
+@@ -83,8 +83,4 @@ struct trie_value_entry2_f {
  } _packed_;
  
  #define hwdb_bin_paths                          \
@@ -22,4 +22,3 @@ index 62d27f7b89..87318e041b 100644
 -        _CONF_PATHS_SPLIT_USR_NULSTR("systemd/hwdb/hwdb.bin") \
 -        UDEVLIBEXECDIR "/hwdb.bin\0"
 +        "/etc/udev/hwdb.bin\0"
-+

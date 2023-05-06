@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libheif";
-  version = "1.14.2";
+  version = "1.15.2";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "strukturag";
     repo = "libheif";
     rev = "v${version}";
-    sha256 = "sha256-JwPeSNUc++z6RfMe0qAuXdekzLWR/MCmsT+Ykvp9a/s=";
+    sha256 = "sha256-VbMBZ17leGezng2FYKgiSq04Se0PT0a3WqjM6xZ3zS4=";
   };
 
   nativeBuildInputs = [

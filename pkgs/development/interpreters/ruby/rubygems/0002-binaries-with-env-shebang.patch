@@ -18,11 +18,11 @@ index 34620860..00ab31d9 100644
    extend Gem::Deprecate
  
    DEFAULT_OPTIONS = { # :nodoc:
--    :env_shebang         => false,
-+    :env_shebang         => true,
-     :document            => %w[ri],
-     :domain              => :both, # HACK dup
-     :force               => false,
+-    :env_shebang => false,
++    :env_shebang => true,
+     :document => %w[ri],
+     :domain => :both, # HACK dup
+     :force => false,
 -- 
 2.21.0
 

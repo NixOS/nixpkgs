@@ -11,8 +11,8 @@ let
     repo = "ASF-ui";
     # updated by the update script
     # this is always the commit that should be used with asf-ui from the latest asf version
-    rev = "22692a1f115e8ca86f83fa17be55d9b20985570f";
-    sha256 = "0k0msk1r7ih092cwjngy1824bxkbjwz0d5p3k2r2l67r2p9b3lab";
+    rev = "bc84d62e4f60f24cca6e9f8e820c30c750bcb0de";
+    sha256 = "10z3jv551f41f2k9p6y0yhrqk6jr8pmpkrd479s1zfj40ywh48bc";
   };
 
 in

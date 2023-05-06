@@ -73,9 +73,9 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
-    version = "8.1";
+    version = "8.5";
     url = "https://dl.winehq.org/wine/source/8.x/wine-${version}.tar.xz";
-    hash = "sha256-QSDuaz8pTZeq8scwNM8cLL8ToZXJTFx0pkaoH5JBJZg=";
+    hash = "sha256-wJdmQBswu0JeEy4RSyba+kJ2SX5AzL4V+3fnUfsJvhc=";
     inherit (stable) gecko32 gecko64 patches;
 
     mono = fetchurl rec {
@@ -105,7 +105,7 @@ in rec {
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    hash = "sha256-5AzXXaRGyvfYxd3yXtAlZREv1wp6UqWdDRdnwmKVaUg=";
+    hash = "sha256-vHV7x2U9B4P0E4tcQuMXHSS4NqN7rlnhC6v/t+0Qlh0=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
@@ -113,7 +113,7 @@ in rec {
     disabledPatchsets = [ ];
   };
 
-  wayland = fetchFromGitLab rec {
+  wayland = fetchFromGitLab {
     # https://gitlab.collabora.com/alf/wine/-/tree/wayland
     version = "8.0";
     hash = "sha256-whRnm21UyKZ4AQufNmctzivISVobnCeidmpYz65vlyk=";

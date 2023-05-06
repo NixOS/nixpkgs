@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchFromGitLab
 , fetchFromGitHub
 , fetchurl
 , substituteAll
@@ -11,29 +12,39 @@
 , xdg-utils
 , dbus
 , hwdata
-, libX11
 , mangohud32
-, vulkan-headers
+, addOpenGLRunpath
 , appstream
 , glslang
-, makeWrapper
-, Mako
+, mako
 , meson
 , ninja
 , pkg-config
 , unzip
-, vulkan-loader
 , libXNVCtrl
 , wayland
+, libX11
+, nlohmann_json
+, spdlog
 , glew
 , glfw
-, nlohmann_json
 , xorg
-, addOpenGLRunpath
 , gamescopeSupport ? true # build mangoapp and mangohudctl
+, nix-update-script
 }:
 
 let
+  # Derived from subprojects/cmocka.wrap
+  cmocka = rec {
+    version = "1.81";
+    src = fetchFromGitLab {
+      owner = "cmocka";
+      repo = "cmocka";
+      rev = "59dc0013f9f29fcf212fe4911c78e734263ce24c";
+      hash = "sha256-IbAZOC0Q60PrKlKVWsgg/PFDV0PLb/yy+Iz/4Iziny0=";
+    };
+  };
+
   # Derived from subprojects/imgui.wrap
   imgui = rec {
     version = "1.81";
@@ -41,44 +52,39 @@ let
       owner = "ocornut";
       repo = "imgui";
       rev = "refs/tags/v${version}";
-      sha256 = "sha256-rRkayXk3xz758v6vlMSaUu5fui6NR8Md3njhDB0gJ18=";
+      hash = "sha256-rRkayXk3xz758v6vlMSaUu5fui6NR8Md3njhDB0gJ18=";
     };
     patch = fetchurl {
       url = "https://wrapdb.mesonbuild.com/v2/imgui_${version}-1/get_patch";
-      sha256 = "sha256-bQC0QmkLalxdj4mDEdqvvOFtNwz2T1MpTDuMXGYeQ18=";
+      hash = "sha256-bQC0QmkLalxdj4mDEdqvvOFtNwz2T1MpTDuMXGYeQ18=";
     };
   };
 
-  # Derived from subprojects/spdlog.wrap
-  #
-  # NOTE: We only statically link spdlog due to a bug in pressure-vessel:
-  # https://github.com/ValveSoftware/steam-runtime/issues/511
-  #
-  # Once this fix is released upstream, we should switch back to using
-  # the system provided spdlog
-  spdlog = rec {
-    version = "1.8.5";
+  # Derived from subprojects/vulkan-headers.wrap
+  vulkan-headers = rec {
+    version = "1.2.158";
     src = fetchFromGitHub {
-      owner = "gabime";
-      repo = "spdlog";
-      rev = "refs/tags/v${version}";
-      sha256 = "sha256-D29jvDZQhPscaOHlrzGN1s7/mXlcsovjbqYpXd7OM50=";
+      owner = "KhronosGroup";
+      repo = "Vulkan-Headers";
+      rev = "v${version}";
+      hash = "sha256-5uyk2nMwV1MjXoa3hK/WUeGLwpINJJEvY16kc5DEaks=";
     };
     patch = fetchurl {
-      url = "https://wrapdb.mesonbuild.com/v2/spdlog_${version}-1/get_patch";
-      sha256 = "sha256-PDjyddV5KxKGORECWUMp6YsXc3kks0T5gxKrCZKbdL4=";
+      url = "https://wrapdb.mesonbuild.com/v2/vulkan-headers_${version}-2/get_patch";
+      hash = "sha256-hgNYz15z9FjNHoj4w4EW0SOrQh1c4uQSnsOOrt2CDhc=";
     };
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.6.8";
+  version = "0.6.9-1";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-jfmgN90kViHa7vMOjo2x4bNY2QbLk93uYEvaA4DxYvg=";
+    hash = "sha256-AX4m1XZ+yXp74E3slFGyI3CGu2eYU+eXNN2EY+ivdfk=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -86,11 +92,19 @@ in stdenv.mkDerivation rec {
   # Unpack subproject sources
   postUnpack = ''(
     cd "$sourceRoot/subprojects"
+    ${lib.optionalString finalAttrs.doCheck ''
+      cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
+    ''}
     cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
-    cp -R --no-preserve=mode,ownership ${spdlog.src} spdlog-${spdlog.version}
+    cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
   )'';
 
   patches = [
+    # Add @libraryPath@ template variable to fix loading the preload
+    # library and @dataPath@ to support overlaying Vulkan apps without
+    # requiring MangoHud to be installed
+    ./preload-nix-workaround.patch
+
     # Hard code dependencies. Can't use makeWrapper since the Vulkan
     # layer can be used without the mangohud executable by setting MANGOHUD=1.
     (substituteAll {
@@ -106,83 +120,93 @@ in stdenv.mkDerivation rec {
       ];
 
       libdbus = dbus.lib;
-      inherit hwdata libX11;
-    })
-  ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
-    # Support 32bit OpenGL applications by appending the mangohud32
-    # lib path to LD_LIBRARY_PATH.
-    #
-    # This workaround is necessary since on Nix's build of ld.so, $LIB
-    # always expands to lib even when running an 32bit application.
-    #
-    # See https://github.com/NixOS/nixpkgs/issues/101597.
-    (substituteAll {
-      src = ./opengl32-nix-workaround.patch;
-      inherit mangohud32;
+      inherit hwdata;
     })
   ];
 
-  postPatch = ''(
-    cd subprojects
-    unzip ${imgui.patch}
-    unzip ${spdlog.patch}
-  )'';
+  postPatch = ''
+    substituteInPlace bin/mangohud.in \
+      --subst-var-by libraryPath ${lib.makeSearchPath "lib/mangohud" ([
+        (placeholder "out")
+      ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+        mangohud32
+      ])} \
+      --subst-var-by dataDir ${placeholder "out"}/share
+
+    (
+      cd subprojects
+      unzip ${imgui.patch}
+      unzip ${vulkan-headers.patch}
+    )
+  '';
 
   mesonFlags = [
-    "-Duse_system_vulkan=enabled"
-    "-Dvulkan_datadir=${vulkan-headers}/share"
     "-Dwith_wayland=enabled"
+    "-Duse_system_spdlog=enabled"
+    "-Dtests=${if finalAttrs.doCheck then "enabled" else "disabled"}"
   ] ++ lib.optionals gamescopeSupport [
-    "-Dmangoapp_layer=true"
     "-Dmangoapp=true"
+    "-Dmangoapp_layer=true"
     "-Dmangohudctl=true"
   ];
 
   nativeBuildInputs = [
-    appstream
+    addOpenGLRunpath
     glslang
-    makeWrapper
-    Mako
+    mako
     meson
     ninja
     pkg-config
     unzip
-    vulkan-loader
+
+    # Only the headers are used from these packages
+    # The corresponding libraries are loaded at runtime from the app's runpath
+    libXNVCtrl
+    wayland
+    libX11
   ];
 
   buildInputs = [
     dbus
-    libX11
-    libXNVCtrl
-    wayland
+    nlohmann_json
+    spdlog
   ] ++ lib.optionals gamescopeSupport [
     glew
     glfw
-    nlohmann_json
-    vulkan-headers
     xorg.libXrandr
   ];
 
-  # Support 32bit Vulkan applications by linking in 32bit Vulkan layer
-  # This is needed for the same reason the 32bit OpenGL workaround is needed.
+  doCheck = true;
+
+  nativeCheckInputs = [
+    appstream
+  ];
+
+  # Support 32bit Vulkan applications by linking in 32bit Vulkan layers
+  # This is needed for the same reason the 32bit preload workaround is needed.
   postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-    ln -s ${mangohud32}/share/vulkan/implicit_layer.d/MangoHud.json \
-      "$out/share/vulkan/implicit_layer.d/MangoHud.x86.json"
+    ln -s ${mangohud32}/share/vulkan/implicit_layer.d/MangoHud.x86.json \
+      "$out/share/vulkan/implicit_layer.d"
+
+    ${lib.optionalString gamescopeSupport ''
+      ln -s ${mangohud32}/share/vulkan/implicit_layer.d/libMangoApp.x86.json \
+        "$out/share/vulkan/implicit_layer.d"
+    ''}
   '';
 
-  # Support Nvidia cards by adding OpenGL path and support overlaying
-  # Vulkan applications without requiring MangoHud to be installed
   postFixup = ''
-    wrapProgram "$out/bin/mangohud" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
-      --prefix XDG_DATA_DIRS : "$out/share"
-  '' + lib.optionalString (gamescopeSupport) ''
-    if [[ -e "$out/bin/mangoapp" ]]; then
-      wrapProgram "$out/bin/mangoapp" \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
-        --prefix XDG_DATA_DIRS : "$out/share"
-    fi
+    # Add OpenGL driver path to RUNPATH to support NVIDIA cards
+    addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
+    ${lib.optionalString gamescopeSupport ''
+      addOpenGLRunpath "$out/bin/mangoapp"
+    ''}
+    ${lib.optionalString finalAttrs.doCheck ''
+      # libcmocka.so is only used for tests
+      rm "$out/lib/libcmocka.so"
+    ''}
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more";
@@ -191,4 +215,4 @@ in stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau zeratax ];
   };
-}
+})

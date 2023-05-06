@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "eth-keys";
     rev = "v${version}";
-    sha256 = "sha256-jG/jJPM4t3z6UQIdc8L6y0DxZiGx5pVuGL8XwbIt60o=";
+    hash = "sha256-jG/jJPM4t3z6UQIdc8L6y0DxZiGx5pVuGL8XwbIt60o=";
   };
 
   propagatedBuildInputs = [

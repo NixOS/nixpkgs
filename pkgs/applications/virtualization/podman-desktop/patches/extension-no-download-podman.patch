@@ -1,0 +1,13 @@
+diff --git a/extensions/podman/package.json b/extensions/podman/package.json
+index 5f86bbe9..92c0ef3b 100644
+--- a/extensions/podman/package.json
++++ b/extensions/podman/package.json
+@@ -86,7 +86,7 @@
+     }
+   },
+   "scripts": {
+-    "build": "rollup --bundleConfigAsCjs --config rollup.config.js --compact --environment BUILD:production && npx ts-node ./scripts/download.ts  && node ./scripts/build.js",
++    "build": "rollup --bundleConfigAsCjs --config rollup.config.js --compact --environment BUILD:production && node ./scripts/build.js",
+     "watch": "rollup --bundleConfigAsCjs --config rollup.config.js -w",
+     "test": "vitest run --passWithNoTests"
+   },

@@ -1,4 +1,5 @@
 { buildPythonApplication
+, charset-normalizer
 , colorama
 , commitizen
 , decli
@@ -41,10 +42,12 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'charset-normalizer = "^2.1.0"' 'charset-normalizer = "*"'
+      --replace 'charset-normalizer = "^2.1.0"' 'charset-normalizer = "*"' \
+      --replace 'argcomplete = ">=1.12.1,<2.1"' 'argcomplete = ">=1.12.1"'
   '';
 
   propagatedBuildInputs = [
+    charset-normalizer
     termcolor
     questionary
     colorama

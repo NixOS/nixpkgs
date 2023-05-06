@@ -4,6 +4,11 @@
 with import ../default.nix;
 
 let
+  testingThrow = expr: {
+    expr = (builtins.tryEval (builtins.seq expr "didn't throw"));
+    expected = { success = false; value = false; };
+  };
+  testingDeepThrow = expr: testingThrow (builtins.deepSeq expr expr);
 
   testSanitizeDerivationName = { name, expected }:
   let
@@ -533,6 +538,37 @@ runTests {
     };
   };
 
+  # code from example
+  testFoldlAttrs = {
+    expr = {
+      example = foldlAttrs
+        (acc: name: value: {
+          sum = acc.sum + value;
+          names = acc.names ++ [ name ];
+        })
+        { sum = 0; names = [ ]; }
+        {
+          foo = 1;
+          bar = 10;
+        };
+      # should just return the initial value
+      emptySet = foldlAttrs (throw "function not needed") 123 { };
+      # should just evaluate to the last value
+      accNotNeeded = foldlAttrs (_acc: _name: v: v) (throw "accumulator not needed") { z = 3; a = 2; };
+      # the accumulator doesnt have to be an attrset it can be as trivial as being just a number or string
+      trivialAcc = foldlAttrs (acc: _name: v: acc * 10 + v) 1 { z = 1; a = 2; };
+    };
+    expected = {
+      example = {
+        sum = 11;
+        names = [ "bar" "foo" ];
+      };
+      emptySet = 123;
+      accNotNeeded = 3;
+      trivialAcc = 121;
+    };
+  };
+
   # code from the example
   testRecursiveUpdateUntil = {
     expr = recursiveUpdateUntil (path: l: r: path == ["foo"]) {
@@ -883,6 +919,131 @@ runTests {
     expected  = "«foo»";
   };
 
+  testToPlist =
+    let
+      deriv = derivation { name = "test"; builder = "/bin/sh"; system = "aarch64-linux"; };
+    in {
+    expr = mapAttrs (const (generators.toPlist { })) {
+      value = {
+        nested.values = rec {
+          int = 42;
+          float = 0.1337;
+          bool = true;
+          emptystring = "";
+          string = "fn\${o}\"r\\d";
+          newlinestring = "\n";
+          path = /. + "/foo";
+          null_ = null;
+          list = [ 3 4 "test" ];
+          emptylist = [];
+          attrs = { foo = null; "foo b/ar" = "baz"; };
+          emptyattrs = {};
+        };
+      };
+    };
+    expected = { value = builtins.readFile ./test-to-plist-expected.plist; };
+  };
+
+  testToLuaEmptyAttrSet = {
+    expr = generators.toLua {} {};
+    expected = ''{}'';
+  };
+
+  testToLuaEmptyList = {
+    expr = generators.toLua {} [];
+    expected = ''{}'';
+  };
+
+  testToLuaListOfVariousTypes = {
+    expr = generators.toLua {} [ null 43 3.14159 true ];
+    expected = ''
+      {
+        nil,
+        43,
+        3.14159,
+        true
+      }'';
+  };
+
+  testToLuaString = {
+    expr = generators.toLua {} ''double-quote (") and single quotes (')'';
+    expected = ''"double-quote (\") and single quotes (')"'';
+  };
+
+  testToLuaAttrsetWithLuaInline = {
+    expr = generators.toLua {} { x = generators.mkLuaInline ''"abc" .. "def"''; };
+    expected = ''
+      {
+        ["x"] = ("abc" .. "def")
+      }'';
+  };
+
+  testToLuaAttrsetWithSpaceInKey = {
+    expr = generators.toLua {} { "some space and double-quote (\")" = 42; };
+    expected = ''
+      {
+        ["some space and double-quote (\")"] = 42
+      }'';
+  };
+
+  testToLuaWithoutMultiline = {
+    expr = generators.toLua { multiline = false; } [ 41 43 ];
+    expected = ''{ 41, 43 }'';
+  };
+
+  testToLuaEmptyBindings = {
+    expr = generators.toLua { asBindings = true; } {};
+    expected = "";
+  };
+
+  testToLuaBindings = {
+    expr = generators.toLua { asBindings = true; } { x1 = 41; _y = { a = 43; }; };
+    expected = ''
+      _y = {
+        ["a"] = 43
+      }
+      x1 = 41
+    '';
+  };
+
+  testToLuaPartialTableBindings = {
+    expr = generators.toLua { asBindings = true; } { "x.y" = 42; };
+    expected = ''
+      x.y = 42
+    '';
+  };
+
+  testToLuaIndentedBindings = {
+    expr = generators.toLua { asBindings = true; indent = "  "; } { x = { y = 42; }; };
+    expected = "  x = {\n    [\"y\"] = 42\n  }\n";
+  };
+
+  testToLuaBindingsWithSpace = testingThrow (
+    generators.toLua { asBindings = true; } { "with space" = 42; }
+  );
+
+  testToLuaBindingsWithLeadingDigit = testingThrow (
+    generators.toLua { asBindings = true; } { "11eleven" = 42; }
+  );
+
+  testToLuaBasicExample = {
+    expr = generators.toLua {} {
+      cmd = [ "typescript-language-server" "--stdio" ];
+      settings.workspace.library = generators.mkLuaInline ''vim.api.nvim_get_runtime_file("", true)'';
+    };
+    expected = ''
+      {
+        ["cmd"] = {
+          "typescript-language-server",
+          "--stdio"
+        },
+        ["settings"] = {
+          ["workspace"] = {
+            ["library"] = (vim.api.nvim_get_runtime_file("", true))
+          }
+        }
+      }'';
+  };
 
 # CLI
 

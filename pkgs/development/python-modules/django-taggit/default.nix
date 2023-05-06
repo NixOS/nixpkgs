@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
 , django
 , djangorestframework
 , python
@@ -18,6 +19,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-yPLk6uOHk5CJs9ddHYZJ4AiICXDAaM6dDoL4f9XilQg=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Django 4.2 support; https://github.com/jazzband/django-taggit/pull/850
+      url = "https://github.com/jazzband/django-taggit/commit/5f19cfbaa14e8d6d4d1679529eb168a87ca97908.patch";
+      hash = "sha256-KcsiACLy3+1JoFquu//Kz+iAySZQAVIuBEKzNZaaR9s=";
+    })
+  ];
 
   propagatedBuildInputs = [
     django

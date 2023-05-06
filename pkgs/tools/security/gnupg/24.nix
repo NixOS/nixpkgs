@@ -1,10 +1,10 @@
-{ fetchurl, fetchpatch, lib, stdenv, pkg-config, libgcrypt, libassuan, libksba
-, libgpg-error, libiconv, npth, gettext, texinfo, buildPackages
-, nixosTests
-, guiSupport ? stdenv.isDarwin, enableMinimal ? false
-, adns, bzip2, gnutls, libusb1, openldap
-, pinentry, readline, sqlite, zlib
+{ lib, stdenv, fetchurl, buildPackages
+, pkg-config, texinfo
+, gettext, libassuan, libgcrypt, libgpg-error, libiconv, libksba, npth
+, adns, bzip2, gnutls, libusb1, openldap, readline, sqlite, zlib
+, enableMinimal ? false
 , withPcsc ? !enableMinimal, pcsclite
+, guiSupport ? stdenv.isDarwin, pinentry
 , withTpm2Tss ? !stdenv.isDarwin && !enableMinimal, tpm2-tss
 }:
 
@@ -16,44 +16,44 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-HXkVjdAdmSQx3S4/rLif2slxJ/iXhOosthDGAPsMFIM=";
+    hash = "sha256-HXkVjdAdmSQx3S4/rLif2slxJ/iXhOosthDGAPsMFIM=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [
-    libgcrypt libassuan libksba libiconv npth gettext
-  ] ++ lib.optionals (!enableMinimal) ([
-    readline libusb1 gnutls adns openldap zlib bzip2 sqlite
-  ] ++ lib.optional withTpm2Tss tpm2-tss);
+    gettext libassuan libgcrypt libgpg-error libiconv libksba npth
+  ] ++ lib.optionals (!enableMinimal) [
+    adns bzip2 gnutls libusb1 openldap readline sqlite zlib
+  ] ++ lib.optionals withTpm2Tss [ tpm2-tss ];
 
   patches = [
     ./fix-libusb-include-path.patch
     ./tests-add-test-cases-for-import-without-uid.patch
-    # TODO: Refresh patch? Doesn't apply on 2.4.0
-    #./allow-import-of-previously-known-keys-even-without-UI.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
-
+    ./24-allow-import-of-previously-known-keys-even-without-UI.patch
     # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
     ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
-
   ];
+
   postPatch = ''
     sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
-  '' + lib.optionalString (stdenv.isLinux && withPcsc) ''
-    sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
-  '';
+    '' + lib.optionalString (stdenv.isLinux && withPcsc) ''
+      sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+    '';
 
-  pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
     "--with-npth-prefix=${npth}"
-  ] ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
+  ]
+  ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentry.binaryPath or "bin/pinentry"}"
   ++ lib.optional withTpm2Tss "--with-tss=intel"
   ++ lib.optional stdenv.isDarwin "--disable-ccid-driver";
+
   postInstall = if enableMinimal
   then ''
     rm -r $out/{libexec,sbin,share}
@@ -76,11 +76,16 @@ stdenv.mkDerivation rec {
       if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
       ln -s $f $out/bin/$(basename $f)
     done
+
+    for f in $out/libexec/; do
+      if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
+      ln -s $f $out/bin/$(basename $f)
+    done
   '';
 
   enableParallelBuilding = true;
 
-  passthru.tests.connman = nixosTests.gnupg;
+  passthru.tests.connman = lib.nixosTests.gnupg;
 
   meta = with lib; {
     homepage = "https://gnupg.org";

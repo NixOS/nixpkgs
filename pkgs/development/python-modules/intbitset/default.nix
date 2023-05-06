@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/inveniosoftware/intbitset";
     changelog = "https://github.com/inveniosoftware-contrib/intbitset/blob/v${version}/CHANGELOG.rst";
     license = licenses.lgpl3Plus;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

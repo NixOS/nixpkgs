@@ -10,6 +10,8 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, stdenv
 , typing-extensions
 , wrapt
 , uptime
@@ -17,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "can";
-  version = "4.1.0";
+  version = "4.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +28,7 @@ buildPythonPackage rec {
     owner = "hardbyte";
     repo = "python-can";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jNy47SapujTF3ReJtIbwUY53IftIH4cXZjkzHrnZMFQ=";
+    hash = "sha256-KY+WViWcKbrO6SO6cIo5dWylyBDEdmAR6wYwJogeCjs=";
   };
 
   postPatch = ''
@@ -37,6 +39,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     msgpack
     packaging
+    setuptools
     typing-extensions
     wrapt
   ];
@@ -73,10 +76,16 @@ buildPythonPackage rec {
     # pytest.approx is not supported in a boolean context (since pytest7)
     "test_pack_unpack"
     "test_receive"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # timing sensitive
+    "test_general"
+    "test_gap"
   ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
+    # skips timing senstive tests
+    export CI=1
   '';
 
   pythonImportsCheck = [

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2022.12.0";
+  version = "2023.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CD0I5VKnZHx+zhNt+jpLahN5JWvrVbvti43fBfHhTsc=";
+    hash = "sha256-qnYFAKLY+L6O/Y87J6lLKvOwqMLANzR9WV6vb/Cdinc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION="${version}";

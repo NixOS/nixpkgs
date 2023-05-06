@@ -136,10 +136,12 @@ rec {
         else if final.isPower then "powerpc"
         else if final.isRiscV then "riscv"
         else if final.isS390 then "s390"
+        else if final.isLoongArch64 then "loongarch"
         else final.parsed.cpu.name;
 
       qemuArch =
         if final.isAarch32 then "arm"
+        else if final.isS390 && !final.isS390x then null
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
         else final.uname.processor;
@@ -184,6 +186,7 @@ rec {
               pulseSupport = false;
               smbdSupport = false;
               seccompSupport = false;
+              enableDocs = false;
               hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
             };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
@@ -193,7 +196,7 @@ rec {
           then "${pkgs.runtimeShell} -c '\"$@\"' --"
           else if final.isWindows
           then "${wine}/bin/wine${lib.optionalString (final.parsed.cpu.bits == 64) "64"}"
-          else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux
+          else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
           then "${qemu-user}/bin/qemu-${final.qemuArch}"
           else if final.isWasi
           then "${pkgs.wasmtime}/bin/wasmtime"

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "ypcrts";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-T0CdWWr8p3JVhp3nol5hyxsrD3951JE2EDpFt+m+3bE=";
+    hash = "sha256-T0CdWWr8p3JVhp3nol5hyxsrD3951JE2EDpFt+m+3bE=";
   };
 
   nativeCheckInputs = [

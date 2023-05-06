@@ -20,7 +20,7 @@
 , cddbSupport ? true, libcddb ? null
 , cdioSupport ? true, libcdio ? null, libcdio-paranoia ? null
 , cueSupport ? true, libcue ? null
-, discidSupport ? (!stdenv.isDarwin), libdiscid ? null
+, discidSupport ? false, libdiscid ? null
 , ffmpegSupport ? true, ffmpeg ? null
 , flacSupport ? true, flac ? null
 , madSupport ? true, libmad ? null

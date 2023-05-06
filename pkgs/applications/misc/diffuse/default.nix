@@ -14,13 +14,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "diffuse";
-  version = "0.7.7";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "MightyCreak";
     repo = "diffuse";
     rev = "v${version}";
-    sha256 = "7tidv01znXYYSOKe3cH2+gSBF00aneL9nealcE5avcE=";
+    sha256 = "aGg5uh9KitVP2bBUizgGIZWvzTxfJGid0WUGVNyHdlk=";
   };
 
   format = "other";

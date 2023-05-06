@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fizz";
-  version = "2023.03.06.00";
+  version = "2023.03.20.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "fizz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zb3O5YHQc+1cPcL0K3FwhMfr+/KFQU7SDVT1bEITF6E=";
+    hash = "sha256-oBdTj7IPlmtF5rEgDVN/wwa0ZxkN6h2QMN3PQB0nCgQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C++14 implementation of the TLS-1.3 standard";
     homepage = "https://github.com/facebookincubator/fizz";
+    changelog = "https://github.com/facebookincubator/fizz/releases/tag/v${version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pierreis kylesferrazza ];

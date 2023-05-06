@@ -184,6 +184,22 @@ in
           .tar.gz files.
         '';
       };
+      environmentFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          Environment file (see {manpage}`systemd.exec(5)`
+          "EnvironmentFile=" section for the syntax) which sets config options
+          for mattermost (see [the mattermost documentation](https://docs.mattermost.com/configure/configuration-settings.html#environment-variables)).
+
+          Settings defined in the environment file will overwrite settings
+          set via nix or via the {option}`services.mattermost.extraConfig`
+          option.
+
+          Useful for setting config options without their value ending up in the
+          (world-readable) nix store, e.g. for a database password.
+        '';
+      };
 
       localDatabaseCreate = mkOption {
         type = types.bool;
@@ -321,6 +337,7 @@ in
           Restart = "always";
           RestartSec = "10";
           LimitNOFILE = "49152";
+          EnvironmentFile = cfg.environmentFile;
         };
         unitConfig.JoinsNamespaceOf = mkIf cfg.localDatabaseCreate "postgresql.service";
       };

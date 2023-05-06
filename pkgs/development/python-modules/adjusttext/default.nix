@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "Phlya";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-N+eCDwK5E9zGKG7uruuhnpTlJeiXG2a15PKW0gJFAqw=";
+    hash = "sha256-N+eCDwK5E9zGKG7uruuhnpTlJeiXG2a15PKW0gJFAqw=";
   };
 
   nativeBuildInputs = [

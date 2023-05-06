@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gitmux";
-  version = "0.9.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "arl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QbQykbZo8fMyCMd0MF7CGrPFECN0ehcTGGLeQXbnlxw=";
+    sha256 = "sha256-0WfxtOidHiRxSXGzG8So965f/sBS0DY7fEDsocvfPiY=";
   };
 
   vendorHash = "sha256-talZSkf8lQXwXKdkQliHFv2K+42BFtcg13oB5Szkff0=";

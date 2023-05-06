@@ -44,7 +44,6 @@
 , p7zip
 , xgamma
 , libstrangle
-, wine
 , fluidsynth
 , xorgserver
 , xorg
@@ -64,7 +63,6 @@ let
     p7zip
     xgamma
     libstrangle
-    wine
     fluidsynth
     xorgserver
     xorg.setxkbmap
@@ -84,13 +82,12 @@ buildPythonApplication rec {
     sha256 = "sha256-rsiXm7L/M85ot6NrTyy//lMRFlLPJYve9y6Erg9Ugxg=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
   buildInputs = [
     atk
     gdk-pixbuf
     glib-networking
     gnome-desktop
-    gobject-introspection
     gtk3
     libnotify
     pango
@@ -139,9 +136,6 @@ buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath requiredTools}"
     "\${gappsWrapperArgs[@]}"
   ];
-  # needed for glib-schemas to work correctly (will crash on dialogues otherwise)
-  # see https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   meta = with lib; {
     homepage = "https://lutris.net";

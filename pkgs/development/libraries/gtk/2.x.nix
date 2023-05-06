@@ -46,10 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/2.0-immodules.cache.patch
     ./patches/gtk2-theme-paths.patch
   ] ++ lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      url = "https://bug557780.bugzilla-attachments.gnome.org/attachment.cgi?id=306776";
-      sha256 = "0sp8f1r5c4j2nlnbqgv7s7nxa4cfwigvm033hvhb1ld652pjag4r";
-    })
+    ./patches/2.0-gnome_bugzilla_557780_306776_freeciv_darwin.patch
     ./patches/2.0-darwin-x11.patch
   ];
 
@@ -68,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   '' else null;
 
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-gdktarget=${gdktarget}"
     "--with-xinput=yes"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -77,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_path_GTK_UPDATE_ICON_CACHE=${buildPackages.gtk2}/bin/gtk-update-icon-cache"
     "ac_cv_path_GDK_PIXBUF_CSOURCE=${buildPackages.gdk-pixbuf.dev}/bin/gdk-pixbuf-csource"
+  ];
+
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
   ];
 
   doCheck = false; # needs X11

@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/spdx/tools-python";
     changelog = "https://github.com/spdx/tools-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

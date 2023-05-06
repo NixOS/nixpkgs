@@ -1,5 +1,5 @@
 { stdenv, lib, buildPythonApplication, fetchPypi, lxml, matplotlib, numpy
-, opencv4, pymavlink, pyserial, setuptools, wxPython_4_0, billiard
+, opencv4, pymavlink, pyserial, setuptools, wxPython_4_2, billiard
 , gnureadline }:
 
 buildPythonApplication rec {
@@ -24,7 +24,7 @@ buildPythonApplication rec {
     pymavlink
     pyserial
     setuptools
-    wxPython_4_0
+    wxPython_4_2
   ] ++ lib.optionals stdenv.isDarwin [ billiard gnureadline ];
 
   # No tests

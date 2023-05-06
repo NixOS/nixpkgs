@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "p4c";
-  version = "1.2.3.6";
+  version = "1.2.3.8";
 
   src = fetchFromGitHub {
     owner = "p4lang";
     repo = "p4c";
     rev = "v${version}";
-    sha256 = "sha256-3i2L1wORVN+X5sr4Hs+zGD/GgM1sAXt34R4kGMkd4qk=";
+    sha256 = "sha256-EvMoooB6kAV0fJ3XBFJKpams87ImybTXw0C5P9YAa9Q=";
     fetchSubmodules = true;
   };
 

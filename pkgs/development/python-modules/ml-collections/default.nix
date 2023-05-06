@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "ml_collections";
-    sha256 = "sha256-P+/McuxDOqHl0yMHo+R0u7Z/QFvoFOpSohZr/J2+aMw=";
+    hash = "sha256-P+/McuxDOqHl0yMHo+R0u7Z/QFvoFOpSohZr/J2+aMw=";
   };
 
   # The pypi source archive does not include requirements.txt or

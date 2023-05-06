@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation {
   pname = "sgp4";
-  version = "unstable-2021-01-11";
+  version = "unstable-2022-11-13";
 
   src = fetchFromGitHub {
     owner = "dnwrnr";
     repo = "sgp4";
-    rev = "ca9d4d97af4ee62461de6f13e0c85d1dc6000040";
-    sha256 = "sha256-56It/71R10U+Hnhw2tC16e5fZdyfQ8DLx6LVq65Rjvc=";
+    rev = "6a448b4850e5fbf8c1ca03bb5f6013a9fdc1fd91";
+    hash = "sha256-gfJQOLhys5wKzZCxFVqbo+5l7jPeGPzrvYsdZKPSCJc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -18,6 +18,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/dnwrnr/sgp4";
     license = licenses.asl20;
     maintainers = with maintainers; [ alexwinter ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

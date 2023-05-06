@@ -30,7 +30,7 @@ in buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-10MH23XpAv/uDW/2tRFGS2lKU8hnaNBwbIBIgVc7Jpk=";
+    hash = "sha256-10MH23XpAv/uDW/2tRFGS2lKU8hnaNBwbIBIgVc7Jpk=";
   };
 
   nativeBuildInputs = [

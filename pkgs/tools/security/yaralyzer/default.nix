@@ -16,6 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "python-dotenv"
     "rich"
   ];
 

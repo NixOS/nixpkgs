@@ -2,12 +2,12 @@
 
 let
   pname = "irccloud";
-  version = "0.13.0";
+  version = "0.16.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/irccloud/irccloud-desktop/releases/download/v${version}/IRCCloud-${version}-linux-x86_64.AppImage";
-    sha256 = "0ff69m5jav2c90918avsr5wvik2gds3klij3dzhkb352fgrd1s0l";
+    sha256 = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
   };
 
   appimageContents = appimageTools.extractType2 {

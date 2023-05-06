@@ -12,7 +12,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-wuTPcBUuPK1D4VO8BXexx9AdiPM+X0TkJ3G7b7ofER8=";
   };
 
-  cargoSha256 = "sha256-5jcb/MajXV9bp0T9Og8d5TEzTwQyiyPTPHeWh8Ewr8Q=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "evdev-0.10.1" = "sha256-iIzKhlA+7qg+nNwP82OIpoXVUEYU31iSEt1KJA3EewQ=";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://codeberg.org/valpackett/evscript";

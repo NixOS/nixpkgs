@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mysql-connector-java";
-  version = "8.0.31";
+  version = "8.0.33";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-${version}.zip";
-    sha256 = "sha256-Wo86n/4mono7YAagI/5Efm/X+2jjpOPaFSCMNAB6btI=";
+    sha256 = "sha256-k3jft7sM2xrc88mdhltxtm+SZcRAn6B4EvglMyJyX4Y=";
   };
 
   installPhase = ''

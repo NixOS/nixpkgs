@@ -5,11 +5,11 @@
 
 buildOctavePackage rec {
   pname = "ga";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0s5azn4n174avlmh5gw21zfqfkyxkzn4v09q4l9swv7ldmg3mirv";
+    sha256 = "sha256-cbP7ucua7DdxLL422INxjZxz/x1pHoIq+jkjrtfaabE=";
   };
 
   meta = with lib; {

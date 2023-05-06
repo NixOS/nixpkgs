@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "ecs-logging-python";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-2BfZ96D24sfjFD6l+gjp6xXbSJ0kjQD/FhHLI3bpVGM=";
+    hash = "sha256-2BfZ96D24sfjFD6l+gjp6xXbSJ0kjQD/FhHLI3bpVGM=";
   };
 
   nativeBuildInputs = [

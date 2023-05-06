@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "5.2.1";
+  version = "5.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "tkem";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1B/vAfGroGABijMWuiKmIkMyjNSp2B3VkH7s1NMlbw0=";
+    hash = "sha256-7MbP3jz17lGwjAeWo8QmS5v1vGqIQmYLbKVcK/q89Z4=";
   };
 
   nativeCheckInputs = [

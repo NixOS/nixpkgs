@@ -5,22 +5,24 @@
 # propagates
 , pycryptodome
 , requests
+, rtp
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "pytapo";
-  version = "2.9.2";
+  version = "3.1.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LW14uDQBqIVsigOzO0bNTpjY7Fk0IWAeDMPEuWM/nOo=";
+    hash = "sha256-e5XeXPwf2QSZ/xgaPBPoRBaTvC8oNYI9/b190wSI4oQ=";
   };
 
   propagatedBuildInputs = [
     pycryptodome
     requests
+    rtp
     urllib3
   ];
 

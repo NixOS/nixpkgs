@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "scooby";
-  version = "0.7.1";
+  version = "0.7.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,10 +22,8 @@ buildPythonPackage rec {
     owner = "banesullivan";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-wKbCIA6Xp+VYhcQ5ZpHo5usB+ksnMAJyv5naBvl4Cxo=";
+    hash = "sha256-eY8Ysc20Q1OHKb/LU+4gqnSgNfHCytjOnnvB24EfQto=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
@@ -39,6 +37,8 @@ buildPythonPackage rec {
     pyvips
     scipy
   ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   preCheck = ''
     export PATH="$PATH:$out/bin";

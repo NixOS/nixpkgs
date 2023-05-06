@@ -1,7 +1,6 @@
 { type
 , version
 , srcs
-, icu # passing icu as an argument, because dotnet 3.1 has troubles with icu71
 , packages ? null
 }:
 
@@ -15,7 +14,7 @@ assert if type == "sdk" then packages != null else true;
 , autoPatchelfHook
 , makeWrapper
 , libunwind
-, openssl_1_1
+, icu
 , libuuid
 , zlib
 , libkrb5
@@ -42,10 +41,10 @@ let
     sdk = ".NET SDK ${version}";
   };
 
-  packageDeps = mkNugetDeps {
+  packageDeps = if type == "sdk" then mkNugetDeps {
     name = "${pname}-${version}-deps";
     nugetDeps = packages;
-  };
+  } else null;
 
 in
 stdenv.mkDerivation (finalAttrs: rec {
@@ -61,9 +60,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     zlib
     icu
     libkrb5
-    # this must be before curl for autoPatchElf to find it
-    # curl brings in its own openssl
-    openssl_1_1
     curl
   ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
 

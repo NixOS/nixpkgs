@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "GehirnInc";
     repo = "python-jwt";
     rev = "v${version}";
-    sha256 = "sha256-N1J8yBVX/O+92cRp+q2gA2cFsd+C7JjUR9jo0VGoINg=";
+    hash = "sha256-N1J8yBVX/O+92cRp+q2gA2cFsd+C7JjUR9jo0VGoINg=";
   };
 
   postPatch = ''

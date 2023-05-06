@@ -39,7 +39,19 @@ stdenv.mkDerivation rec {
       url = "https://github.com/google/or-tools/commit/a26602f24781e7bfcc39612568aa9f4010bb9736.patch";
       hash = "sha256-gM0rW0xRXMYaCwltPK0ih5mdo3HtX6mKltJDHe4gbLc=";
     })
+    # Backport fix in cmake test configuration where pip installs newer version from PyPi over local build,
+    #  breaking checkPhase: https://github.com/google/or-tools/issues/3260
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/commit/edd1544375bd55f79168db315151a48faa548fa0.patch";
+      hash = "sha256-S//1YM3IoRCp3Ghg8zMF0XXgIpVmaw4gH8cVb9eUbqM=";
+    })
   ];
+
+  # or-tools normally attempts to build Protobuf for the build platform when
+  # cross-compiling. Instead, just tell it where to find protoc.
+  postPatch = ''
+    echo "set(PROTOC_PRG $(type -p protoc))" > cmake/host.cmake
+  '';
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
@@ -48,23 +60,25 @@ stdenv.mkDerivation rec {
     "-DFETCH_PYTHON_DEPS=OFF"
     "-DUSE_GLPK=ON"
     "-DUSE_SCIP=OFF"
-  ];
+    "-DPython3_EXECUTABLE=${python.pythonForBuild.interpreter}"
+  ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
   nativeBuildInputs = [
     cmake
     ensureNewerSourcesForZipFilesHook
     pkg-config
-    python
-    python.pkgs.pip
+    python.pythonForBuild
     swig4
     unzip
-  ];
+  ] ++ (with python.pythonForBuild.pkgs; [
+    pip
+    mypy-protobuf
+  ]);
   buildInputs = [
     bzip2
     cbc
     eigen
     glpk
     python.pkgs.absl-py
-    python.pkgs.mypy-protobuf
     python.pkgs.pybind11
     python.pkgs.setuptools
     python.pkgs.wheel
@@ -95,7 +109,7 @@ stdenv.mkDerivation rec {
     pip install --prefix="$python" python/
   '';
 
-  outputs = [ "out" "python" ];
+  outputs = [ "out" "dev" "python" ];
 
   meta = with lib; {
     homepage = "https://github.com/google/or-tools";
@@ -104,6 +118,6 @@ stdenv.mkDerivation rec {
       Google's software suite for combinatorial optimization.
     '';
     maintainers = with maintainers; [ andersk ];
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "mkb79";
     repo = "Audible";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-SIEDBuMCC/Hap2mGVbKEFic96ClN369SEsV06Sg+poY=";
+    hash = "sha256-SIEDBuMCC/Hap2mGVbKEFic96ClN369SEsV06Sg+poY=";
   };
 
   propagatedBuildInputs = [ beautifulsoup4 httpx pbkdf2 pillow pyaes rsa ];

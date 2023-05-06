@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "charis-sil";
-  version = "6.101";
+  version = "6.200";
 
   src = fetchzip {
     url = "https://software.sil.org/downloads/r/charis/CharisSIL-${version}.zip";
-    hash = "sha256-Rf5eKQVZw7zgTv6KkJUdNdd4sSJPdvjy/GDLusvlgzE=";
+    hash = "sha256-q451lec/l13Uanmr8K/C55Cr3avRvqQUkPK/ZZ1kgHo=";
   };
 
   installPhase = ''

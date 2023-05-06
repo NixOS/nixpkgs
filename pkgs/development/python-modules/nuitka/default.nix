@@ -10,8 +10,9 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.4.8";
-  pname = "Nuitka";
+  pname = "nuitka";
+  version = "1.1.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Nuitka";

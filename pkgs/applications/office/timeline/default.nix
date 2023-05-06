@@ -4,21 +4,23 @@
 , gettext
 , makeDesktopItem
 , copyDesktopItems
+, wrapGAppsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "timeline";
   version = "2.6.0";
+  format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/thetimelineproj/${pname}-${version}.zip";
     sha256 = "sha256-qwH2mt3Va62QJKJGOpt5WV3QksqQaRGEif4CcPC5F2E=";
   };
 
-  nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems ];
+  nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems wrapGAppsHook ];
 
   pythonPath = with python3.pkgs; [
-    wxPython_4_0
+    wxPython_4_2
     humblewx
     icalendar
     markdown
@@ -73,6 +75,12 @@ python3.pkgs.buildPythonApplication rec {
     runHook preCheck
     ${python3.interpreter} tools/execute-specs.py
     runHook postCheck
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "dmulholl";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EPz9zHnxR75WoRaiHKJNiCRWFwU1TBpC4uHz62jUOqM=";
+    hash = "sha256-EPz9zHnxR75WoRaiHKJNiCRWFwU1TBpC4uHz62jUOqM=";
   };
 
   checkPhase = ''

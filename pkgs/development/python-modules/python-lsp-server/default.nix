@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.7.1";
+  version = "1.7.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Rx8mHBmJw4gh0FtQBVMmOlQklODplrhnWwzsEhQm4NE=";
+    hash = "sha256-jsWk2HDDRjOAPGX1K9NqhWkA5xD2fM830z7g7Kee0yQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -161,5 +161,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-lsp/python-lsp-server/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pylsp";
   };
 }

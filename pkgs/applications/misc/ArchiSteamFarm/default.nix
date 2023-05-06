@@ -13,13 +13,13 @@
 buildDotnetModule rec {
   pname = "archisteamfarm";
   # nixpkgs-update: no auto update
-  version = "5.4.2.13";
+  version = "5.4.4.5";
 
   src = fetchFromGitHub {
     owner = "justarchinet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4DaqIsHfijA0hkhlsC6qQ1n+HC0zwdMtXiswOPOVpM4=";
+    sha256 = "sha256-xSHoBKhqEmWf9BXWhlsMqKGhgeeQi0zSG1nxNzivr7g=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
@@ -32,6 +32,9 @@ buildDotnetModule rec {
   dotnetFlags = [
     "-p:PublishSingleFile=true"
     "-p:PublishTrimmed=true"
+  ];
+  dotnetInstallFlags = [
+    "--framework=net7.0"
   ];
   selfContainedBuild = true;
 
@@ -53,12 +56,15 @@ buildDotnetModule rec {
 
   postInstall = ''
     buildPlugin() {
+      echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
         --output $out/lib/${pname}/plugins/$1 --configuration Release \
-        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore
+        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore \
+        --framework=net7.0
      }
 
      buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
+     buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
      buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
   '';
 

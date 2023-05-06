@@ -4,7 +4,7 @@
 }:
 let
   # Poetry2nix version
-  version = "1.39.1";
+  version = "1.41.0";
 
   inherit (poetryLib) isCompatible readTOML normalizePackageName normalizePackageSet;
 
@@ -27,6 +27,7 @@ let
     , includeBuildSystem ? true
     , groups ? [ ]
     , checkGroups ? [ "dev" ]
+    , extras ? [ "*" ]  # * means all extras, otherwise include the dependencies for a given extra
     }:
     let
       getInputs = attr: attrs.${attr} or [ ];
@@ -58,12 +59,26 @@ let
 
       mkInput = attr: extraInputs: getInputs attr ++ extraInputs;
 
+      rawDeps = pyProject.tool.poetry."dependencies" or { };
+
+      rawRequiredDeps = lib.filterAttrs (_: v: !(v.optional or false)) rawDeps;
+
+      desiredExtrasDeps = lib.unique
+        (lib.concatMap (extra: pyProject.tool.poetry.extras.${extra}) extras);
+
+      allRawDeps =
+        if extras == [ "*" ] then
+          rawDeps
+        else
+          rawRequiredDeps // lib.getAttrs desiredExtrasDeps rawDeps;
+      checkInputs' = getDeps (pyProject.tool.poetry."dev-dependencies" or { })  # <poetry-1.2.0
+        # >=poetry-1.2.0 dependency groups
+        ++ lib.flatten (map (g: getDeps (pyProject.tool.poetry.group.${g}.dependencies or { })) checkGroups);
     in
     {
       buildInputs = mkInput "buildInputs" (if includeBuildSystem then buildSystemPkgs else [ ]);
       propagatedBuildInputs = mkInput "propagatedBuildInputs" (
-        (getDeps pyProject.tool.poetry."dependencies" or { })
-        ++ (
+        getDeps allRawDeps ++ (
           # >=poetry-1.2.0 dependency groups
           if pyProject.tool.poetry.group or { } != { }
           then lib.flatten (map (g: getDeps pyProject.tool.poetry.group.${g}.dependencies) groups)
@@ -71,11 +86,8 @@ let
         )
       );
       nativeBuildInputs = mkInput "nativeBuildInputs" [ ];
-      nativeCheckInputs = mkInput "nativeCheckInputs" (
-        getDeps (pyProject.tool.poetry."dev-dependencies" or { })  # <poetry-1.2.0
-        # >=poetry-1.2.0 dependency groups
-        ++ lib.flatten (map (g: getDeps (pyProject.tool.poetry.group.${g}.dependencies or { })) checkGroups)
-      );
+      checkInputs = mkInput "checkInputs" checkInputs';
+      nativeCheckInputs = mkInput "nativeCheckInputs" checkInputs';
     };
 
 
@@ -124,6 +136,7 @@ lib.makeScope pkgs.newScope (self: {
     { projectDir ? null
     , pyproject ? projectDir + "/pyproject.toml"
     , poetrylock ? projectDir + "/poetry.lock"
+    , poetrylockPos ? { file = toString poetrylock; line = 0; column = 0; }
     , overrides ? self.defaultPoetryOverrides
     , python ? pkgs.python3
     , pwd ? projectDir
@@ -133,6 +146,7 @@ lib.makeScope pkgs.newScope (self: {
     , pyProject ? readTOML pyproject
     , groups ? [ ]
     , checkGroups ? [ "dev" ]
+    , extras ? [ "*" ]
     }:
     let
       /* The default list of poetry2nix override overlays */
@@ -142,7 +156,7 @@ lib.makeScope pkgs.newScope (self: {
       };
       getFunctorFn = fn: if builtins.typeOf fn == "set" then fn.__functor else fn;
 
-      poetryPkg = pkgs.callPackage ./pkgs/poetry { inherit python; };
+      poetryPkg = pkgs.callPackage ./pkgs/poetry { inherit python; poetry2nix = self; };
 
       scripts = pyProject.tool.poetry.scripts or { };
       hasScripts = scripts != { };
@@ -193,6 +207,7 @@ lib.makeScope pkgs.newScope (self: {
                   value = self.mkPoetryDep (
                     pkgMeta // {
                       inherit pwd preferWheels;
+                      pos = poetrylockPos;
                       source = pkgMeta.source or null;
                       # Default to files from lock file version 2.0 and fall back to 1.1
                       files = pkgMeta.files or lockFiles.${normalizedName};
@@ -221,6 +236,11 @@ lib.makeScope pkgs.newScope (self: {
         (
           [
             # Remove Python packages aliases with non-normalized names to avoid issues with infinite recursion (issue #750).
+            (self: super: {
+              # Upstream nixpkgs uses non canonical names
+              async-generator = super.async-generator or super.async_generator or null;
+            })
+
             (self: super: lib.attrsets.mapAttrs
               (
                 name: value:
@@ -248,7 +268,7 @@ lib.makeScope pkgs.newScope (self: {
                 }
             )
 
-            # Fix infinite recursion in a lot of packages because of nativeCheckInputs
+            # Fix infinite recursion in a lot of packages because of checkInputs
             (self: super: lib.mapAttrs
               (name: value: (
                 if lib.isDerivation value && lib.hasAttr "overridePythonAttrs" value
@@ -268,7 +288,7 @@ lib.makeScope pkgs.newScope (self: {
       packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) overlays;
       py = python.override { inherit packageOverrides; self = py; };
 
-      inputAttrs = mkInputAttrs { inherit py pyProject groups checkGroups; attrs = { }; includeBuildSystem = false; };
+      inputAttrs = mkInputAttrs { inherit py pyProject groups checkGroups extras; attrs = { }; includeBuildSystem = false; };
 
       requiredPythonModules = python.pkgs.requiredPythonModules;
       /* Include all the nested dependencies which are required for each package.
@@ -304,6 +324,7 @@ lib.makeScope pkgs.newScope (self: {
     , editablePackageSources ? { }
     , extraPackages ? ps: [ ]
     , groups ? [ "dev" ]
+    , extras ? [ "*" ]
     }:
     let
       inherit (lib) hasAttr;
@@ -336,7 +357,7 @@ lib.makeScope pkgs.newScope (self: {
         excludedEditablePackageNames;
 
       poetryPython = self.mkPoetryPackages {
-        inherit pyproject poetrylock overrides python pwd preferWheels pyProject groups;
+        inherit pyproject poetrylock overrides python pwd preferWheels pyProject groups extras;
         editablePackageSources = editablePackageSources';
       };
 
@@ -371,11 +392,12 @@ lib.makeScope pkgs.newScope (self: {
     , preferWheels ? false
     , groups ? [ ]
     , checkGroups ? [ "dev" ]
+    , extras ? [ "*" ]
     , ...
     }@attrs:
     let
       poetryPython = self.mkPoetryPackages {
-        inherit pyproject poetrylock overrides python pwd preferWheels groups checkGroups;
+        inherit pyproject poetrylock overrides python pwd preferWheels groups checkGroups extras;
       };
       py = poetryPython.python;
 
@@ -392,7 +414,7 @@ lib.makeScope pkgs.newScope (self: {
       ];
       passedAttrs = builtins.removeAttrs attrs specialAttrs;
 
-      inputAttrs = mkInputAttrs { inherit py pyProject attrs groups checkGroups; };
+      inputAttrs = mkInputAttrs { inherit py pyProject attrs groups checkGroups extras; };
 
       app = py.pkgs.buildPythonPackage (
         passedAttrs // inputAttrs // {
@@ -481,9 +503,9 @@ lib.makeScope pkgs.newScope (self: {
   /*
     The default list of poetry2nix override overlays
 
-    Can be overridden by calling defaultPoetryOverrides.overrideOverlay which takes an overlay function
+    Can be overriden by calling defaultPoetryOverrides.overrideOverlay which takes an overlay function
   */
-  defaultPoetryOverrides = self.mkDefaultPoetryOverrides (import ./overrides { inherit pkgs lib poetryLib; });
+  defaultPoetryOverrides = self.mkDefaultPoetryOverrides (import ./overrides { inherit pkgs lib; });
 
   /*
     Convenience functions for specifying overlays with or without the poerty2nix default overrides
@@ -501,8 +523,8 @@ lib.makeScope pkgs.newScope (self: {
       combining it with poetry2nix default overrides
     */
     withDefaults = overlay: [
-      self.defaultPoetryOverrides
       overlay
+      self.defaultPoetryOverrides
     ];
   };
 })

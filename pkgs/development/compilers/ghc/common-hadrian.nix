@@ -62,7 +62,7 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic
+  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs
 
 , # Whether to build terminfo.
   enableTerminfo ? !(stdenv.targetPlatform.isWindows
@@ -91,7 +91,7 @@
       transformers =
         lib.optionals useLLVM [ "llvm" ]
         ++ lib.optionals (!enableShared) [
-          "fully_static"
+          "no_dynamic_libs"
           "no_dynamic_ghc"
         ]
         ++ lib.optionals (!enableProfiledLibs) [ "no_profiled_libs" ]
@@ -182,7 +182,6 @@ let
     # be needed for TemplateHaskell. This solution was described in
     # https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
     lib.optionals enableRelocatedStaticLibs [
-      "*.*.rts.*.opts += -fPIC -fexternal-dynamic-refs"
       "*.*.ghc.*.opts += -fPIC -fexternal-dynamic-refs"
     ]
     ++ lib.optionals targetPlatform.useAndroidPrebuilt [
@@ -396,16 +395,14 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = [
     perl ghc hadrian bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
-  ] ++ lib.optionals (rev != null) [
-    # We need to execute the boot script
-    autoconf automake m4 python3
+    # autoconf and friends are necessary for hadrian to create the bindist
+    autoconf automake m4
+    # Python is used in a few scripts invoked by hadrian to generate e.g. rts headers.
+    python3
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
-  ] ++ lib.optionals targetPlatform.isGhcjs [
-    # emscripten itself is added via depBuildTarget / targetCC
-    python3
   ];
 
   # For building runtime libs
@@ -426,10 +423,10 @@ stdenv.mkDerivation ({
     runHook preBuild
 
     # hadrianFlagsArray is created in preConfigure
-    echo "hadrianFlags: $hadrianFlags ''${hadrianFlagsArray}"
+    echo "hadrianFlags: $hadrianFlags ''${hadrianFlagsArray[@]}"
 
     # We need to go via the bindist for installing
-    hadrian $hadrianFlags "''${hadrianFlagsArray}" binary-dist-dir
+    hadrian $hadrianFlags "''${hadrianFlagsArray[@]}" binary-dist-dir
 
     runHook postBuild
   '';

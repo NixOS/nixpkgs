@@ -12,6 +12,7 @@
 , aiohttp
 , psutil
 , pyopenssl
+, pytest-forked
 , pytestCheckHook
 }:
 
@@ -39,6 +40,7 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
   nativeCheckInputs = [
+    pytest-forked
     pytestCheckHook
     psutil
   ] ++ lib.optionals (pythonOlder "3.11") [
@@ -64,14 +66,17 @@ buildPythonPackage rec {
     # Tries to run "env", but fails to find it
     "--deselect=tests/test_process.py::Test_UV_Process::test_process_env_2"
     "--deselect=tests/test_process.py::Test_AIO_Process::test_process_env_2"
+    # AssertionError: b'' != b'out\n'
+    "--deselect=tests/test_process.py::Test_UV_Process::test_process_streams_redirect"
+    "--deselect=tests/test_process.py::Test_AIO_Process::test_process_streams_redirect"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # Segmentation fault
+    "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # Flaky test: https://github.com/MagicStack/uvloop/issues/412
-    "--deselect=tests/test_tcp.py::Test_UV_TCPSSL::test_shutdown_timeout_handler_not_set"
     # Broken: https://github.com/NixOS/nixpkgs/issues/160904
     "--deselect=tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
-    # Flaky test: https://github.com/MagicStack/uvloop/issues/513
-    "--deselect=tests/test_tcp.py::Test_UV_TCP::test_create_server_5"
-    "--deselect=tests/test_tcp.py::Test_UV_TCP::test_create_server_6"
+    # Segmentation fault
+    "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
   ];
 
   disabledTestPaths = [

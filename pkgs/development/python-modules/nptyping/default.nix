@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "nptyping";
-  version = "2.4.1";
+  version = "2.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "ramonhagenaars";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jV2MVMP/tlYN3djoViemGaJyzREoOJJamwG97WFhIvc=";
+    hash = "sha256-hz4YrcvARCAA7TXapmneIwle/F4pzcIYLPSmiFHC0VQ=";
   };
 
   propagatedBuildInputs = [

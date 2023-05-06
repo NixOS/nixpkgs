@@ -4,7 +4,7 @@
 , fetchPypi
 , fetchpatch
 , pythonOlder
-, Mako
+, mako
 , markdown
 , setuptools-git
 , setuptools-scm
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    Mako
+    mako
     markdown
   ];
 

@@ -1,27 +1,27 @@
 { lib, stdenv, fetchFromGitHub
 , cmake
-, libev, nghttp3, quictls
 , cunit, ncurses
+, libev, nghttp3, quictls
 , withJemalloc ? false, jemalloc
 , curlHTTP3
 }:
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "0.13.1";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bkTbnf7vyTxA623JVGUgrwAuXK7d8kzijOK1F4Sh4yY=";
+    hash = "sha256-VsacRYvjTWVx2ga952s1vs02GElXIW6umgcYr3UCcgE=";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
   nativeCheckInputs = [ cunit ncurses ];
+  buildInputs = [ libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
 
   cmakeFlags = [
     "-DENABLE_STATIC_LIB=OFF"

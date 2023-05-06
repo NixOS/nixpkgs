@@ -130,6 +130,11 @@ cmakeConfigurePhase() {
         echo "cmake: enabled parallel building"
     fi
 
+    if ! [[ -v enableParallelInstalling ]]; then
+        enableParallelInstalling=1
+        echo "cmake: enabled parallel installing"
+    fi
+
     runHook postConfigure
 }
 

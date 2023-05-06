@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "badrobot";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LGoNM8wu1qaq4cVEzR723/cueZlndE1Z2PCYEOU+nPQ=";
+    sha256 = "sha256-mLBJLeB85QeC4PYH4FyOI8lHz1OxIJlJbqgDfXTNnhM=";
   };
-  vendorSha256 = "sha256-FS4kFVi+3NOJOfWfy5m/hDrQvCzpmsNSB/PliF6cVps=";
+  vendorHash = "sha256-SB7gGgm7BwMSo4ocKX4UGB+OdjVY92S5YZfOmTl4VEk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

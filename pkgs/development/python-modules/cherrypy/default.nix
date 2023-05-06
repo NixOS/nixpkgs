@@ -8,6 +8,7 @@
 , objgraph
 , path
 , portend
+, pyopenssl
 , pytest-forked
 , pytest-services
 , pytestCheckHook
@@ -99,6 +100,7 @@ buildPythonPackage rec {
     json = [ simplejson ];
     memcached_session = [ python-memcached ];
     routes_dispatcher = [ routes ];
+    ssl = [ pyopenssl ];
     # not packaged yet
     xcgi = [ /* flup */ ];
   };

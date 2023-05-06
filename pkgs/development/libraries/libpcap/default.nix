@@ -4,6 +4,7 @@
 , flex
 , bison
 , bluez
+, libnl
 , libxcrypt
 , pkg-config
 , withBluez ? false
@@ -12,17 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libpcap";
-  version = "1.10.1";
+  version = "1.10.4";
 
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-7ShfSsyvBTRPkJdXV7Pb/ncrpB0cQBwmSLf6RbcRvdQ=";
+    hash = "sha256-7RmgOD+tcuOtQ1/SOdfNgNZJFrhyaVUBWdIORxYOvl8=";
   };
 
-  buildInputs = lib.optionals withRemote [ libxcrypt ];
+  buildInputs = lib.optionals stdenv.isLinux [ libnl ]
+    ++ lib.optionals withRemote [ libxcrypt ];
 
   nativeBuildInputs = [ flex bison ]
-    ++ lib.optionals withBluez [ bluez.dev pkg-config ];
+    ++ lib.optionals stdenv.isLinux [ pkg-config ]
+    ++ lib.optionals withBluez [ bluez.dev ];
 
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.

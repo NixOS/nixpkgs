@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "appflowy";
-  version = "0.1.0";
+  version = "0.1.3";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy_x86_64-unknown-linux-gnu_ubuntu-20.04.tar.gz";
-    sha256 = "sha256-WuEwhJ1YhbldFfisfUsp3GCV2vQy9oTam6BkL/7QEgI=";
+    sha256 = "sha256-dZqnwROrw3ioCzUNvpklGOCr5cyjXU1Iqkp6xBdr3rA=";
     stripRoot = false;
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mv AppFlowy/* ./
+    cd AppFlowy_x86_64-unknown-linux-gnu_ubuntu-20.04/AppFlowy/
 
     mkdir -p $out/opt/
     mkdir -p $out/bin/
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     # Add missing libraries to appflowy using the ones it comes with
-    makeWrapper $out/opt/app_flowy $out/bin/appflowy \
+    makeWrapper $out/opt/AppFlowy $out/bin/appflowy \
       --set LD_LIBRARY_PATH "$out/opt/lib/" \
       --prefix PATH : "${lib.makeBinPath [ xdg-user-dirs ]}"
   '';

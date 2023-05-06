@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl, writeTextDir
-, fetchpatch
 , withCMake ? true, cmake
 
 # sensitive downstream packages
@@ -14,22 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "c-ares";
-  version = "1.18.1";
+  version = "1.19.0";
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://c-ares.haxx.se/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Gn1SqKhKn7/7G+kTPA9uFyF9kepab6Yfa0cpzaeOu88=";
+    sha256 = "sha256-v866N+I/1TEpOCkALKwEAe9JptxVkj9/kiNlhbetHdM=";
   };
-
-  # c-ares is used for fetchpatch, so avoid using it for c-aresMinimal
-  patches = lib.optionals withCMake [
-    # fix .pc paths created by cmake build
-    (fetchpatch {
-      url = "https://github.com/jonringer/c-ares/commit/9806a8a2f999a8a3efa3c893f2854dce6919d5bb.patch";
-      sha256 = "sha256-nh/ZKdan2/FTrouApRQA7O8KGZrLEUuWhxGOktiiGwU=";
-    })
-  ];
 
   nativeBuildInputs = lib.optionals withCMake [ cmake ];
 
@@ -47,6 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A C library for asynchronous DNS requests";
     homepage = "https://c-ares.haxx.se";
+    changelog = "https://c-ares.org/changelog.html#${lib.replaceStrings [ "." ] [ "_" ] version}";
     license = licenses.mit;
     platforms = platforms.all;
   };

@@ -1,36 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , gettext
+, magic
 , pexpect
+, pyyaml
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "sosreport";
-  version = "4.3";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "sosreport";
     repo = "sos";
     rev = version;
-    sha256 = "sha256-fLEYRRQap7xqSyUU9MAV8cxxYKydHjn8J147VTXSf78=";
+    sha256 = "sha256-xbL/4CmDnygiL/u3Jsa6fAkO4YfklDzuFMsxSGy1Ra4=";
   };
-
-  patches = [
-    (fetchpatch {
-      # fix sos --help
-      url = "https://github.com/sosreport/sos/commit/ac4eb48fa35c13b99ada41540831412480babf8d.patch";
-      sha256 = "sha256-6ZRoDDZN2KkHTXOKuHTAquB/HTIUppodmx83WxxYFP0=";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
   ];
 
   propagatedBuildInputs = [
+    magic
     pexpect
+    pyyaml
+    setuptools
   ];
 
   # requires avocado-framework 94.0, latest version as of writing is 96.0

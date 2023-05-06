@@ -37,12 +37,16 @@ in buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "setuptools<60" "setuptools"
+      --replace 'max_numpy_run_version = "1.24"' 'max_numpy_run_version = "1.25"'
+    substituteInPlace numba/__init__.py \
+      --replace "elif numpy_version > (1, 23):" "elif numpy_version > (1, 24):"
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
-  nativeBuildInputs = lib.optionals cudaSupport [
+  nativeBuildInputs = [
+    numpy
+  ] ++ lib.optionals cudaSupport [
     addOpenGLRunpath
   ];
 
@@ -65,6 +69,8 @@ in buildPythonPackage rec {
       url = "https://github.com/numba/numba/commit/993e8c424055a7677b2755b184fc9e07549713b9.patch";
       hash = "sha256-IhIqRLmP8gazx+KWIyCxZrNLMT4jZT8CWD3KcH4KjOo=";
     })
+    # Backport numpy 1.24 support from https://github.com/numba/numba/pull/8691
+    ./numpy-1.24.patch
   ] ++ lib.optionals cudaSupport [
     (substituteAll {
       src = ./cuda_path.patch;

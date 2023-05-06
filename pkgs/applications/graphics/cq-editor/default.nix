@@ -22,7 +22,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     cadquery
-    Logbook
+    logbook
     pyqt5
     pyparsing
     pyqtgraph

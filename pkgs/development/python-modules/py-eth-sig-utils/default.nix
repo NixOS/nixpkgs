@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "rmeissner";
     repo = "py-eth-sig-utils";
     rev = "v${version}";
-    sha256 = "sha256-PNvEHH5w2ptntRGzqWrqlbIzJJsT60OXg/Dh5f6Wq9k=";
+    hash = "sha256-PNvEHH5w2ptntRGzqWrqlbIzJJsT60OXg/Dh5f6Wq9k=";
   };
 
   propagatedBuildInputs = [

@@ -36,9 +36,9 @@ buildPythonPackage rec {
       --replace 'attrs<=' 'attrs>=' \
       --replace 'colorama==' 'colorama>=' \
       --replace 'gql[requests]==3.0.0a6' 'gql' \
-      --replace 'PyYAML==' 'PyYAML>=' \
+      --replace 'PyYAML==5.*' 'PyYAML' \
       --replace 'marshmallow<' 'marshmallow>=' \
-      --replace 'websocket-client==' 'websocket-client>='
+      --replace 'websocket-client==0.57.*' 'websocket-client'
   '';
 
   propagatedBuildInputs = [

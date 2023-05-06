@@ -41,7 +41,7 @@ let
 
       substituteInPlace $out/bin/${pname} \
         --replace "/usr/lib/beyondcompare" "$out/lib/beyondcompare" \
-        --replace "ldd" "${glibc.out}/bin/ldd" \
+        --replace "ldd" "${glibc.bin}/bin/ldd" \
         --replace "/bin/bash" "${runtimeShell}"
 
       # Create symlink bzip2 library

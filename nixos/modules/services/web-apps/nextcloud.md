@@ -5,17 +5,23 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
-The current default by NixOS is `nextcloud25` which is also the latest
+The current default by NixOS is `nextcloud26` which is also the latest
 major version available.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
 
 Nextcloud is a PHP-based application which requires an HTTP server
 ([`services.nextcloud`](#opt-services.nextcloud.enable)
-optionally supports
-[`services.nginx`](#opt-services.nginx.enable))
-and a database (it's recommended to use
-[`services.postgresql`](#opt-services.postgresql.enable)).
+and optionally supports
+[`services.nginx`](#opt-services.nginx.enable)).
+
+For the database, you can set
+[`services.nextcloud.config.dbtype`](#opt-services.nextcloud.config.dbtype) to
+either `sqlite` (the default), `mysql`, or `pgsql`. For the last two, by
+default, a local database will be created and nextcloud will connect to it via
+socket; this can be disabled by setting
+[`services.nextcloud.database.createLocally`](#opt-services.nextcloud.database.createLocally)
+to `false`.
 
 A very basic configuration may look like this:
 ```
@@ -26,28 +32,8 @@ A very basic configuration may look like this:
     hostName = "nextcloud.tld";
     config = {
       dbtype = "pgsql";
-      dbuser = "nextcloud";
-      dbhost = "/run/postgresql"; # nextcloud will add /.s.PGSQL.5432 by itself
-      dbname = "nextcloud";
       adminpassFile = "/path/to/admin-pass-file";
-      adminuser = "root";
     };
-  };
-
-  services.postgresql = {
-    enable = true;
-    ensureDatabases = [ "nextcloud" ];
-    ensureUsers = [
-     { name = "nextcloud";
-       ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
-     }
-    ];
-  };
-
-  # ensure that postgres is running *before* running the setup
-  systemd.services."nextcloud-setup" = {
-    requires = ["postgresql.service"];
-    after = ["postgresql.service"];
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
@@ -132,7 +118,9 @@ Auto updates for Nextcloud apps can be enabled using
     Nextcloud supports [server-side encryption (SSE)](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html).
     This is not an end-to-end encryption, but can be used to encrypt files that will be persisted
     to external storage such as S3. Please note that this won't work anymore when using OpenSSL 3
-    for PHP's openssl extension because this is implemented using the legacy cipher RC4.
+    for PHP's openssl extension and **Nextcloud 25 or older** because this is implemented using the
+    legacy cipher RC4. For Nextcloud26 this isn't relevant anymore, because Nextcloud has an RC4 implementation
+    written in native PHP and thus doesn't need `ext-openssl` for that anymore.
     If [](#opt-system.stateVersion) is *above* `22.05`,
     this is disabled by default. To turn it on again and for further information please refer to
     [](#opt-services.nextcloud.enableBrokenCiphersForSSE).

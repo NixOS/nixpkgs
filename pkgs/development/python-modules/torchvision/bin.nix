@@ -1,12 +1,12 @@
 { lib
 , stdenv
+, addOpenGLRunpath
+, autoPatchelfHook
 , buildPythonPackage
+, cudaPackages
 , fetchurl
-, isPy37
-, isPy38
-, isPy39
-, isPy310
-, patchelf
+, pythonAtLeast
+, pythonOlder
 , pillow
 , python
 , torch-bin
@@ -16,7 +16,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.14.1";
+  version = "0.15.1";
 in buildPythonPackage {
   inherit version;
 
@@ -26,10 +26,17 @@ in buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  disabled = !(isPy37 || isPy38 || isPy39 || isPy310);
+  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.12");
+
+  buildInputs = with cudaPackages; [
+    # $out/${sitePackages}/torchvision/_C.so wants libcudart.so.11.0 but torchvision.libs only ships
+    # libcudart.$hash.so.11.0
+    cuda_cudart
+  ];
 
   nativeBuildInputs = [
-    patchelf
+    autoPatchelfHook
+    addOpenGLRunpath
   ];
 
   propagatedBuildInputs = [
@@ -42,14 +49,8 @@ in buildPythonPackage {
 
   pythonImportsCheck = [ "torchvision" ];
 
-  postFixup = let
-    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
-  in ''
-    # Note: after patchelf'ing, libcudart can still not be found. However, this should
-    #       not be an issue, because PyTorch is loaded before torchvision and brings
-    #       in the necessary symbols.
-    patchelf --set-rpath "${rpath}:${torch-bin}/${python.sitePackages}/torch/lib:" \
-      "$out/${python.sitePackages}/torchvision/_C.so"
+  preInstall = ''
+    addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
   '';
 
   meta = with lib; {

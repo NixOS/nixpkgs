@@ -8,11 +8,12 @@
 , libdrm
 , numactl
 , valgrind
+, gcc
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-thunk";
-  version = "5.4.3";
+  version = "5.4.4";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     numactl
     valgrind
+    gcc.cc.libgcc or null # TODO: unhack this?
   ];
 
   cmakeFlags = [

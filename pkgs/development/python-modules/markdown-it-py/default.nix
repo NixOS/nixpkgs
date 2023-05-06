@@ -1,25 +1,30 @@
 { lib
 , attrs
 , buildPythonPackage
+, commonmark
 , fetchFromGitHub
 , flit-core
 , linkify-it-py
+, markdown
 , mdurl
-, psutil
-, py
-, pytest-benchmark
+, mistletoe
+, mistune
+, myst-parser
+, panflute
+, pyyaml
+, sphinx
+, sphinx-book-theme
+, sphinx-copybutton
+, sphinx-design
+, stdenv
 , pytest-regressions
 , pytestCheckHook
 , pythonOlder
-, typing-extensions
-# allow disabling tests for the nixos manual build.
-# the test suite closure is just too large.
-, disableTests ? false
 }:
 
 buildPythonPackage rec {
   pname = "markdown-it-py";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +33,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-6UATJho3SuIbLktZtFcDrCTWIAh52E+n5adcgl49un0=";
+    hash = "sha256-qdRU1BxczFDGoIEtl0ZMkKNn4p5tec8YuPt5ZwX5fYM=";
   };
 
   nativeBuildInputs = [
@@ -36,29 +41,29 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    attrs
-    linkify-it-py
     mdurl
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
   nativeCheckInputs = [
-    psutil
-    py
-  ] ++ lib.optionals (! disableTests) [
-    pytest-benchmark
     pytest-regressions
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.linkify;
 
-  pytestFlagsArray = [
-    "--benchmark-skip"
-  ];
+  # disable and remove benchmark tests
+  preCheck = ''
+    rm -r benchmarking
+  '';
+  doCheck = !stdenv.isi686;
 
   pythonImportsCheck = [
     "markdown_it"
   ];
+
+  passthru.optional-dependencies = {
+    compare = [ commonmark markdown mistletoe mistune panflute ];
+    linkify = [ linkify-it-py ];
+    rtd = [ attrs myst-parser pyyaml sphinx sphinx-copybutton sphinx-design sphinx-book-theme ];
+  };
 
   meta = with lib; {
     description = "Markdown parser in Python";

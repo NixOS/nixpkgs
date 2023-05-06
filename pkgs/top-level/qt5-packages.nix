@@ -80,8 +80,6 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   drumstick = callPackage ../development/libraries/drumstick { };
 
-  fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
-
   fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
 
   qgpgme = callPackage ../development/libraries/gpgme { };
@@ -133,7 +131,7 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
   libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix {
-    inherit (pkgs.darwin.apple_sdk.frameworks) AGL Cocoa Foundation;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate AGL Cocoa Foundation;
   };
 
   libqglviewer = callPackage ../development/libraries/libqglviewer {
@@ -193,8 +191,6 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
 
   qoauth = callPackage ../development/libraries/qoauth { };
-
-  qscintilla = callPackage ../development/libraries/qscintilla { };
 
   qt5ct = callPackage ../tools/misc/qt5ct { };
 

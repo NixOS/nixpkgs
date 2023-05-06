@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-dingz";
     rev = version;
-    sha256 = "sha256-bCytQwLWw8D1UkKb/3LQ301eDCkVR4alD6NHjTs6I+4=";
+    hash = "sha256-bCytQwLWw8D1UkKb/3LQ301eDCkVR4alD6NHjTs6I+4=";
   };
 
   propagatedBuildInputs = [

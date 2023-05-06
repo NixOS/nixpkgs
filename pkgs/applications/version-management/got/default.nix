@@ -1,27 +1,36 @@
 { lib, stdenv, fetchurl
 , pkg-config, openssl, libbsd, libevent, libuuid, libossp_uuid, libmd, zlib, ncurses, bison
+, autoPatchelfHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "got";
-  version = "0.83";
+  version = "0.88";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
-    sha256 = "sha256-kNhU6OR9IUNPL72D90nhq2X5vmVW7YUmpnq/EOUvG/8=";
+    hash = "sha256-F8EHMKAQq/fV/i6+Vf42hmVjhbptuuiO8zfE9kfzzqA=";
   };
 
-  nativeBuildInputs = [ pkg-config bison ];
+  nativeBuildInputs = [ pkg-config bison ]
+    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   buildInputs = [ openssl libbsd libevent libuuid libmd zlib ncurses ]
   ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
 
-  preConfigure = lib.optionals stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     # The configure script assumes dependencies on Darwin are install via
     # Homebrew or MacPorts and hardcodes assumptions about the paths of
     # dependencies which fails the nixpkgs configurePhase.
     substituteInPlace configure --replace 'xdarwin' 'xhomebrew'
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    # error: conflicting types for 'strmode'
+    "-DHAVE_STRMODE=1"
+    # Undefined symbols for architecture arm64: "_bsd_getopt"
+    "-include getopt.h"
+  ]);
 
   doInstallCheck = true;
 

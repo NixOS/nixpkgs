@@ -13,13 +13,14 @@ postFixupHooks+=(_multioutPropagateDev)
 # specific to this function's use case, which is setting up the output variables.
 _assignFirst() {
     local varName="$1"
+    local _var
     local REMOVE=REMOVE # slightly hacky - we allow REMOVE (i.e. not a variable name)
     shift
-    for var in "$@"; do
-        if [ -n "${!var-}" ]; then eval "${varName}"="${var}"; return; fi
+    for _var in "$@"; do
+        if [ -n "${!_var-}" ]; then eval "${varName}"="${_var}"; return; fi
     done
     echo
-    echo "error: _assignFirst: could not find a non-empty variable to assign to ${varName}."
+    echo "error: _assignFirst: could not find a non-empty variable whose name to assign to ${varName}."
     echo "       The following variables were all unset or empty:"
     echo "           $*"
     if [ -z "${out:-}" ]; then
@@ -138,9 +139,9 @@ moveToOutput() {
 
             # remove empty directories, printing iff at least one gets removed
             local srcParent="$(readlink -m "$srcPath/..")"
-            if rmdir "$srcParent"; then
+            if [ -n "$(find "$srcParent" -maxdepth 0 -type d -empty 2>/dev/null)" ]; then
                 echo "Removing empty $srcParent/ and (possibly) its parents"
-                rmdir -p --ignore-fail-on-non-empty "$(readlink -m "$srcParent/..")" \
+                rmdir -p --ignore-fail-on-non-empty "$srcParent" \
                     2> /dev/null || true # doesn't ignore failure for some reason
             fi
         done

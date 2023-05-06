@@ -201,7 +201,7 @@ def parse_line(line):
     if re.match('\s*(#.*)?$', line):
         return 'nothing'
 
-    match = re.match('\s*export\s+([^:\s]+)\s*:=\s*(.*)$', line)
+    match = re.match('([^:\s]+)\s*:=\s*(.*)$', line)
 
     if match:
         return {

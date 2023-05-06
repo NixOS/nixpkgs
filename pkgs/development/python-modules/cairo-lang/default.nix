@@ -31,27 +31,15 @@
 
 buildPythonPackage rec {
   pname = "cairo-lang";
-  version = "0.10.0";
+  version = "0.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchzip {
     url = "https://github.com/starkware-libs/cairo-lang/releases/download/v${version}/cairo-lang-${version}.zip";
-    sha256 = "sha256-+PE7RSKEGADbue63FoT6UBOwURJs7lBNkL7aNlpSxP8=";
+    hash = "sha256-MNbzDqqNhij9JizozLp9hhQjbRGzWxECOErS3TOPlAA=";
   };
-
-  # TODO: remove a substantial part when https://github.com/starkware-libs/cairo-lang/pull/88/files is merged.
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "lark-parser" "lark"
-
-    substituteInPlace starkware/cairo/lang/compiler/parser_transformer.py \
-      --replace 'value, meta' 'meta, value' \
-      --replace 'value: Tuple[CommaSeparatedWithNotes], meta' 'meta, value: Tuple[CommaSeparatedWithNotes]'
-    substituteInPlace starkware/cairo/lang/compiler/parser.py \
-      --replace 'standard' 'basic'
-  '';
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
@@ -98,6 +86,10 @@ buildPythonPackage rec {
     "pytest"
     "pytest-asyncio"
   ];
+
+  postFixup = ''
+    chmod +x $out/bin/*
+  '';
 
   # There seems to be no test included in the ZIP release…
   # Cloning from GitHub is harder because they use a custom CMake setup

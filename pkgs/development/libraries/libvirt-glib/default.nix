@@ -10,7 +10,8 @@
 , libcap_ng
 , libvirt
 , libxml2
-, withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
 , withDocs ? stdenv.hostPlatform == stdenv.buildPlatform
 , gtk-doc

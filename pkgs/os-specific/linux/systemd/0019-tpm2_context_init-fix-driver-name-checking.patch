@@ -1,4 +1,4 @@
-From 236e9281cb158be3191c500524fbc5f397a25e03 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Sun, 15 Jan 2023 20:15:55 +0800
 Subject: [PATCH] tpm2_context_init: fix driver name checking
@@ -27,10 +27,10 @@ filename_is_valid with path_is_valid.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/shared/tpm2-util.c b/src/shared/tpm2-util.c
-index ba8dfb041d..7de5d5fc77 100644
+index 4345b95106..424a334df1 100644
 --- a/src/shared/tpm2-util.c
 +++ b/src/shared/tpm2-util.c
-@@ -192,7 +192,7 @@ int tpm2_context_init(const char *device, struct tpm2_context *ret) {
+@@ -176,7 +176,7 @@ int tpm2_context_new(const char *device, Tpm2Context **ret_context) {
                  fn = strjoina("libtss2-tcti-", driver, ".so.0");
  
                  /* Better safe than sorry, let's refuse strings that cannot possibly be valid driver early, before going to disk. */
@@ -38,7 +38,4 @@ index ba8dfb041d..7de5d5fc77 100644
 +                if (!path_is_valid(fn))
                          return log_error_errno(SYNTHETIC_ERRNO(EINVAL), "TPM2 driver name '%s' not valid, refusing.", driver);
  
-                 dl = dlopen(fn, RTLD_NOW);
--- 
-2.39.0
-
+                 context->tcti_dl = dlopen(fn, RTLD_NOW);

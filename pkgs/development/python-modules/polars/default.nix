@@ -12,7 +12,7 @@ let
   version = "0.15.13";
   rootSource = fetchzip {
     url = "https://github.com/pola-rs/${pname}/archive/refs/tags/py-${version}.tar.gz";
-    sha256 = "sha256-bk2opNLN3L+fkzXVfUU5O37UmA27ijmnAElCHjsuI+o=";
+    hash = "sha256-bk2opNLN3L+fkzXVfUU5O37UmA27ijmnAElCHjsuI+o=";
   };
 in
 buildPythonPackage {
@@ -35,7 +35,7 @@ buildPythonPackage {
         cd py-polars
     '';
     name = "${pname}-${version}";
-    sha256 = "sha256-u7ascftUPz8K+gWwjjxdXXFJf++M+8P9QE/KVJkO5DM=";
+    hash = "sha256-u7ascftUPz8K+gWwjjxdXXFJf++M+8P9QE/KVJkO5DM=";
   };
   cargoRoot = "py-polars";
 

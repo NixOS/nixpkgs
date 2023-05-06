@@ -45,6 +45,7 @@
   else if withAthena then "athena"
   else "lucid")
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, withTreeSitter ? lib.versionAtLeast version "29", tree-sitter ? null
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -58,11 +59,20 @@ assert withGTK2 -> !withGTK3 && gtk2-x11 != null && !withPgtk;
 assert withGTK3 -> !withGTK2 && ((gtk3-x11 != null) || withPgtk);
 assert withPgtk -> withGTK3 && !withX && gtk3 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
+assert withTreeSitter -> tree-sitter != null;
 
 
+let
+  libGccJitLibraryPaths = [
+    "${lib.getLib libgccjit}/lib/gcc"
+    "${lib.getLib stdenv.cc.libc}/lib"
+  ] ++ lib.optionals (stdenv.cc?cc.libgcc) [
+    "${lib.getLib stdenv.cc.cc.libgcc}/lib"
+  ];
+in
 (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
   NATIVE_FULL_AOT = "1";
-  LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
+  LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
 } // {
   pname = pname + lib.optionalString ( !withX && !withNS && !withMacport && !withGTK2 && !withGTK3 ) "-nox";
   inherit version;
@@ -73,17 +83,15 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
             then ./native-comp-driver-options-28.patch
             else ./native-comp-driver-options.patch;
       backendPath = (lib.concatStringsSep " "
-        (builtins.map (x: ''"-B${x}"'') [
+        (builtins.map (x: ''"-B${x}"'') ([
           # Paths necessary so the JIT compiler finds its libraries:
           "${lib.getLib libgccjit}/lib"
-          "${lib.getLib libgccjit}/lib/gcc"
-          "${lib.getLib stdenv.cc.libc}/lib"
-
+        ] ++ libGccJitLibraryPaths ++ [
           # Executable paths necessary for compilation (ld, as):
           "${lib.getBin stdenv.cc.cc}/bin"
           "${lib.getBin stdenv.cc.bintools}/bin"
           "${lib.getBin stdenv.cc.bintools.bintools}/bin"
-        ]));
+        ])));
     })
   ];
 
@@ -136,7 +144,7 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
   nativeBuildInputs = [ pkg-config makeWrapper ]
     ++ lib.optionals (srcRepo || withMacport) [ texinfo ]
     ++ lib.optionals srcRepo [ autoreconfHook ]
-    ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
+    ++ lib.optional (withPgtk || withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls gettext jansson harfbuzz.dev ]
@@ -164,7 +172,8 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
       ImageCaptureCore GSS ImageIO
     ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ]
-    ++ lib.optionals nativeComp [ libgccjit ];
+    ++ lib.optionals nativeComp [ libgccjit ]
+    ++ lib.optionals withTreeSitter [ tree-sitter ];
 
   hardeningDisable = [ "format" ];
 
@@ -193,6 +202,7 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
     ++ lib.optional withImageMagick "--with-imagemagick"
     ++ lib.optional withXinput2 "--with-xinput2"
     ++ lib.optional (!withToolkitScrollBars) "--without-toolkit-scroll-bars"
+    ++ lib.optional withTreeSitter "--with-tree-sitter"
   ;
 
   installTargets = [ "tags" "install" ];
@@ -241,6 +251,7 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
 
   passthru = {
     inherit nativeComp;
+    treeSitter = withTreeSitter;
     pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
     tests = { inherit (nixosTests) emacs-daemon; };
   };
@@ -251,6 +262,7 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 jwiegley adisbladis matthewbauer atemu ];
     platforms   = if withMacport then platforms.darwin else platforms.all;
+    broken      = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
 
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more.  At its

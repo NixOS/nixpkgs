@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "fcurella";
     repo = "python-datauri";
     rev = "v${version}";
-    sha256 = "sha256-Eevd/xxKgxvvsAfI/L/KShH+PfxffBGyVwKewLgyEu0=";
+    hash = "sha256-Eevd/xxKgxvvsAfI/L/KShH+PfxffBGyVwKewLgyEu0=";
   };
 
   pythonImportsCheck = [

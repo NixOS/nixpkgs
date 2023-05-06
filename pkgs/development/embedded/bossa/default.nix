@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, wxGTK, libX11, readline }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, wxGTK32
+, libX11
+, readline
+, darwin
+}:
 
 let
   # BOSSA needs a "bin2c" program to embed images.
@@ -24,11 +31,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8M3MU/+Y1L6SaQ1yoC9Z27A/gGruZdopLnL1z7h7YJw=";
   };
 
-  nativeBuildInputs = [ bin2c ];
-  buildInputs = [ wxGTK libX11 readline ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "-arch x86_64" ""
+  '';
 
-  # Explicitly specify targets so they don't get stripped.
-  makeFlags = [ "bin/bossac" "bin/bossash" "bin/bossa" ];
+  nativeBuildInputs = [ bin2c ];
+  buildInputs = [
+    wxGTK32
+    libX11
+    readline
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
+  ];
+
+  makeFlags = [
+    "WXVERSION=3.2"
+    # Explicitly specify targets so they don't get stripped.
+    "bin/bossac"
+    "bin/bossash"
+    "bin/bossa"
+  ];
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   installPhase = ''
@@ -47,6 +70,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.shumatech.com/web/products/bossa";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -7,26 +7,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kanata";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mQSbsJ+3mKoDMg0ewwR7UvXUq+5WA9aTPKWCaTz8nDE=";
+    sha256 = "sha256-gHkcOn37MNpcP6ra1Eur9O4/trPGmAOAGVU1NwiuQGY=";
   };
 
-  cargoHash = "sha256-Pu96OGfnXNaIse/IcwFJWxGMlKOVhZ6DtvgXJkHh+Ao=";
-
-  cargoPatches = [
-    (fetchpatch {
-      name = "serialize-cfg-parsing-tests-for-1.2.0.patch";
-      url = "https://github.com/jtroo/kanata/commit/9ef1e80fbcb40402262e08bd9196d000f73f686d.patch";
-      hash = "sha256-/FhyaYx4usDjGoVfRktf9dtwjY4oXdMQKqxLz00/NPY=";
-    })
-  ];
+  cargoHash = "sha256-C2d7QdgWd9RTQtXLD4mO0txpzo/SbemJx9YYu62QbqA=";
 
   buildFeatures = lib.optional withCmd "cmd";
+
+  postInstall = ''
+    install -Dm 444 assets/kanata-icon.svg $out/share/icons/hicolor/scalable/apps/kanata.svg
+  '';
 
   meta = with lib; {
     description = "A tool to improve keyboard comfort and usability with advanced customization";

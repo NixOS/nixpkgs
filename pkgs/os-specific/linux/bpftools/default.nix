@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, linuxHeaders
 , libopcodes, libopcodes_2_38
 , libbfd, libbfd_2_38
 , elfutils, readline
@@ -8,15 +8,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftools";
-  version = "5.19.12";
 
-  src = fetchurl {
-    url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
-    sha256 = "sha256-xDalSMcxLOb8WjRyy+rYle749ShB++fHH9jki9/isLo=";
-  };
+  inherit (linuxHeaders) version src;
+
+  separateDebugInfo = true;
 
   patches = [
-    ./strip-binary-name.patch
     # fix unknown type name '__vector128' on ppc64le
     ./include-asm-types-for-ppc64le.patch
   ];

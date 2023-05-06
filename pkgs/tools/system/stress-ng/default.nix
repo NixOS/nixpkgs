@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.15.03";
+  version = "0.15.06";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-ryZoW2N93f1jDNF+qZ8y9brPGrTLiOFi2ciIEh1Lt1c=";
+    hash = "sha256-64PEeVpbFs0BjH4DvATlwErxqeJl/vn5otfiylT1RNk=";
   };
 
   postPatch = ''

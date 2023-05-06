@@ -4,13 +4,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "deepin-desktop-base";
-  version = "2022.03.07";
+  version = "2022.11.15-deepin";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-joAduRI9jUtPA4lNsEhgOZlci8j/cvD8rJThqvj6a8A=";
+    sha256 = "sha256-GTgIHWz+x1Pl3F4zKA9V8o2oq6c53OK94q95WoMG+Qo=";
   };
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" ];
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Base assets and definitions for Deepin Desktop Environment";
     homepage = "https://github.com/linuxdeepin/deepin-desktop-base";
-    license = licenses.gpl3Plus;
+    license = with licenses; [ gpl3Plus cc-by-40 ];
     platforms = platforms.linux;
     maintainers = teams.deepin.members;
   };

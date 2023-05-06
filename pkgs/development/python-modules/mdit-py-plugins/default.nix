@@ -6,14 +6,11 @@
 , markdown-it-py
 , pytest-regressions
 , pytestCheckHook
-# allow disabling tests for the nixos manual build.
-# the test suite closure is just too large.
-, disableTests ? false
 }:
 
 buildPythonPackage rec {
   pname = "mdit-py-plugins";
-  version = "0.3.3";
+  version = "0.3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +19,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9eaVM5KxrMY5q0c2KWmctCHyPGmEGGNa9B3LoRL/mcI=";
+    hash = "sha256-U6Qh/1GklW9ZXBXmjPLuxga0JS/Cyga1iorcMEA+WP8=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +30,7 @@ buildPythonPackage rec {
     markdown-it-py
   ];
 
-  nativeCheckInputs = lib.optionals (!disableTests) [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-regressions
   ];
@@ -45,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of core plugins for markdown-it-py";
     homepage = "https://github.com/executablebooks/mdit-py-plugins";
+    changelog = "https://github.com/executablebooks/mdit-py-plugins/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ AluisioASG ];
   };

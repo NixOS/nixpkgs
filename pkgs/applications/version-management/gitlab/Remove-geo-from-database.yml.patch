@@ -8,13 +8,13 @@ Subject: [PATCH] Remove geo from database.yml
  1 file changed, 28 deletions(-)
 
 diff --git a/config/database.yml.postgresql b/config/database.yml.postgresql
-index 5329a8e9fd7..a4daab1fd0c 100644
+index c1b1247b5b08..a81437d1e1b5 100644
 --- a/config/database.yml.postgresql
 +++ b/config/database.yml.postgresql
-@@ -18,13 +18,6 @@ production:
-     #     port: 8600
-     #     record: secondary.postgresql.service.consul
-     #     interval: 300
+@@ -26,13 +26,6 @@ production:
+   #   username: git
+   #   password: "secure password"
+   #   host: localhost
 -  geo:
 -    adapter: postgresql
 -    encoding: unicode
@@ -25,10 +25,10 @@ index 5329a8e9fd7..a4daab1fd0c 100644
  
  #
  # Development specific
-@@ -39,13 +32,6 @@ development:
-     host: localhost
-     variables:
-       statement_timeout: 15s
+@@ -57,13 +50,6 @@ development:
+   #   host: localhost
+   #   variables:
+   #     statement_timeout: 15s
 -  geo:
 -    adapter: postgresql
 -    encoding: unicode
@@ -39,10 +39,10 @@ index 5329a8e9fd7..a4daab1fd0c 100644
  
  #
  # Staging specific
-@@ -58,13 +44,6 @@ staging:
-     username: git
-     password: "secure password"
-     host: localhost
+@@ -84,13 +70,6 @@ staging:
+   #   username: git
+   #   password: "secure password"
+   #   host: localhost
 -  geo:
 -    adapter: postgresql
 -    encoding: unicode
@@ -53,10 +53,10 @@ index 5329a8e9fd7..a4daab1fd0c 100644
  
  # Warning: The database defined as "test" will be erased and
  # re-generated from your development database when you run "rake".
-@@ -80,10 +59,3 @@ test: &test
-     prepared_statements: false
-     variables:
-       statement_timeout: 15s
+@@ -117,10 +96,3 @@ test: &test
+   #   prepared_statements: false
+   #   variables:
+   #     statement_timeout: 15s
 -  geo:
 -    adapter: postgresql
 -    encoding: unicode

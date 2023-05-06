@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-diet";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "the-lean-crate";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-olF+F2y7F3ZpyluyslRDlfRKkWmE+zJ01bXyzy9x5EQ=";
+    sha256 = "sha256-JzhSTbEf2Yl5cEIb+88y+s8lUN6c1Mir4NYvzAWMZwY=";
   };
 
-  cargoSha256 = "sha256-ayi7Px1A8XzswlGnm31YWF7+8+lBChBaVJFwozSAimw=";
+  cargoSha256 = "sha256-zW6ec8DHzP6AuNI6fcOQLH03ca+/yjdh56nltSM9pAA=";
 
   meta = with lib; {
     description = "Help computing optimal include directives for your Cargo.toml manifest";

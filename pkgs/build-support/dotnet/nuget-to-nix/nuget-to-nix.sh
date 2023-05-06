@@ -7,14 +7,15 @@ export PATH="@binPath@"
 export LC_ALL=C
 
 if [ $# -eq 0 ]; then
-  >&2 echo "Usage: $0 <packages directory> [path to excluded package source] > deps.nix"
+  >&2 echo "Usage: $0 <packages directory> [path to a file with a list of excluded packages] > deps.nix"
   exit 1
 fi
 
 pkgs=$1
 tmp=$(realpath "$(mktemp -td nuget-to-nix.XXXXXX)")
 trap 'rm -r "$tmp"' EXIT
-excluded_source=$(realpath "${2:-$tmp/empty}")
+
+excluded_list=$(realpath "${2:-/dev/null}")
 
 export DOTNET_NOLOGO=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
@@ -37,7 +38,7 @@ for package in *; do
   for version in *; do
     id=$(xq -r .package.metadata.id "$version/$package".nuspec)
 
-    if [[ -e "$excluded_source/$id.$version".nupkg ]]; then
+    if grep -qxF "$id.$version.nupkg" "$excluded_list"; then
       continue
     fi
 

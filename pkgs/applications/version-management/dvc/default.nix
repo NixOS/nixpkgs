@@ -10,56 +10,56 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "2.17.0";
-  format = "setuptools";
+  version = "2.56.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
-    rev = version;
-    hash = "sha256-2h+fy4KMxFrVtKJBtA1RmJDZv0OVm1BxO1akZzAw95Y=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-IpdlNwOuUNWgfphRH2UTQ/IvBHo39PafCqyioju8miI=";
   };
 
+  pythonRelaxDeps = [
+    "dvc-data"
+    "platformdirs"
+  ];
+
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "grandalf==0.6" "grandalf" \
-      --replace "scmrepo==0.0.25" "scmrepo" \
-      --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
 
   nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
     setuptools-scm
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    aiohttp-retry
     appdirs
     colorama
     configobj
-    dictdiffer
-    diskcache
     distro
     dpath
-    dvclive
     dvc-data
+    dvc-http
     dvc-render
+    dvc-studio-client
     dvc-task
     flatten-dict
     flufl_lock
     funcy
     grandalf
-    nanotime
+    hydra-core
+    iterative-telemetry
     networkx
     packaging
     pathspec
-    ply
+    platformdirs
     psutil
     pydot
     pygtrie
     pyparsing
-    python-benedict
     requests
     rich
     ruamel-yaml
@@ -73,17 +73,13 @@ python3.pkgs.buildPythonApplication rec {
     voluptuous
     zc_lockfile
   ] ++ lib.optionals enableGoogle [
-    gcsfs
-    google-cloud-storage
+    dvc-gs
   ] ++ lib.optionals enableAWS [
-    aiobotocore
-    boto3
-    s3fs
+    dvc-s3
   ] ++ lib.optionals enableAzure [
-    azure-identity
-    knack
+    dvc-azure
   ] ++ lib.optionals enableSSH [
-    bcrypt
+    dvc-ssh
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.9") [
@@ -96,6 +92,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
+    changelog = "https://github.com/iterative/dvc/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai fab ];
   };

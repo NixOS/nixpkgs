@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "asweigart";
     repo = "pyautogui";
     rev = "5e4acb870f2e7ce0ea1927cc5188bc2f5ab7bbbc";
-    sha256 = "sha256-R9tcTqxUaqw63FLOGFRaO/Oz6kD7V6MPHdQ8A29NdXw=";
+    hash = "sha256-R9tcTqxUaqw63FLOGFRaO/Oz6kD7V6MPHdQ8A29NdXw=";
   };
 
   nativeCheckInputs = [ xvfb-run scrot ];

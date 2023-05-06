@@ -12,6 +12,8 @@ buildDunePackage rec {
   pname = "ssl";
   version = "0.5.13";
 
+  duneVersion = "3";
+
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ssl";

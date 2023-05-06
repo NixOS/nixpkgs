@@ -1,4 +1,4 @@
-{ buildDunePackage, dns, dns-client, dns-mirage, dns-resolver, dns-tsig
+{ buildDunePackage, dns, dns-client-mirage, dns-mirage, dns-resolver, dns-tsig
 , dns-server, duration, randomconv, lwt, mirage-time, mirage-clock
 , mirage-random, tcpip, metrics
 }:
@@ -11,7 +11,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     dns
-    dns-client
+    dns-client-mirage
     dns-mirage
     dns-resolver
     dns-tsig

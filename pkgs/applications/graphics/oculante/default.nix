@@ -11,28 +11,34 @@
 , libXrandr
 , libXi
 , libGL
+, libxkbcommon
+, wayland
 , stdenv
 , gtk3
 , darwin
+, perl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
-  version = "0.6.41";
+  version = "0.6.63";
 
   src = fetchFromGitHub {
     owner = "woelper";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2pXfdR5KUD6IUasxyUptxLSLDcvJtwJwOmhHD3I7op8=";
+    sha256 = "sha256-ynxGpx8LLcd4/n9hz/bbhpZUxqX1sPS7LFYPZ22hTxo=";
   };
 
-  cargoHash = "sha256-F/NKTsDRfoueVrwlq/RkBR6wNn79NiuT2InAR+XPbqw=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     nasm
+    perl
   ];
 
   checkFlagsArray = [ "--skip=tests::net" ]; # requires network access
@@ -41,18 +47,21 @@ rustPlatform.buildRustPackage rec {
     openssl
     fontconfig
   ] ++ lib.optionals stdenv.isLinux [
+    libGL
     libX11
     libXcursor
     libXi
     libXrandr
-    libGL
     gtk3
+
+    libxkbcommon
+    wayland
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.libobjc
   ];
 
   postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf $out/bin/oculante --add-rpath ${lib.makeLibraryPath [ libGL ]}
+    patchelf $out/bin/oculante --add-rpath ${lib.makeLibraryPath [ libxkbcommon libX11 ]}
   '';
 
   meta = with lib; {
@@ -61,6 +70,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/woelper/oculante";
     changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya figsoda ];
   };
 }

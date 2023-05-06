@@ -4,11 +4,12 @@
 , fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu, sourceHighlight
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, dejagnu, sourceHighlight
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
-, enableDebuginfod ? false, elfutils
+, enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils, elfutils
 , guile ? null
+, hostCpuOnly ? false
 , safePaths ? [
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
    "$debugdir" "$datadir/auto-load"
@@ -27,12 +28,12 @@ in
 assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
-  pname = targetPrefix + basename;
-  version = "12.1";
+  pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
+  version = "13.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-DheTv48rVNU/Rt6oTM/URvSPgbKXsoxPf8AXuBjWn+0=";
+    hash = "sha256-EVrVwY1ppr4qsViC02XdoqIhHBT0gLNQLG66V24ulaA=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -47,23 +48,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./debug-info-from-env.patch
-    # backport readline=8.2 support
-    (fetchpatch {
-      name = "readline-8.2.patch";
-      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff_plain;h=1add37b567a7dee39d99f37b37802034c3fce9c4";
-      hash = "sha256-KmQXylPAWNGXF8wtXCCArhUzHi+GUY8ii2Xpx8R08jE=";
-    })
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
-  # Does not nave to be conditional. We apply it conditionally
-  # to speed up inclusion to nearby nixos release.
-  ] ++ lib.optionals stdenv.is32bit [
-    ./32-bit-BFD_VMA-format.patch
   ];
 
   nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile sourceHighlight ]
+  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib zstd guile sourceHighlight ]
     ++ lib.optional pythonSupport python3
     ++ lib.optional doCheck dejagnu
     ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; });
@@ -81,8 +72,15 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ "build" "host" "target" ];
 
-  # GDB have to be built out of tree.
   preConfigure = ''
+    # remove precompiled docs, required for man gdbinit to mention /etc/gdb/gdbinit
+    rm gdb/doc/*.info*
+    rm gdb/doc/*.5
+    rm gdb/doc/*.1
+    # fix doc build https://sourceware.org/bugzilla/show_bug.cgi?id=27808
+    rm gdb/doc/GDBvn.texi
+
+    # GDB have to be built out of tree.
     mkdir _build
     cd _build
   '';
@@ -97,11 +95,15 @@ stdenv.mkDerivation rec {
     "--program-prefix=${targetPrefix}"
 
     "--disable-werror"
-    "--enable-targets=all" "--enable-64-bit-bfd"
+  ] ++ lib.optional (!hostCpuOnly) "--enable-targets=all" ++ [
+    "--enable-64-bit-bfd"
     "--disable-install-libbfd"
     "--disable-shared" "--enable-static"
     "--with-system-zlib"
     "--with-system-readline"
+
+    "--with-system-gdbinit=/etc/gdb/gdbinit"
+    "--with-system-gdbinit-dir=/etc/gdb/gdbinit.d"
 
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"

@@ -89,7 +89,7 @@ let
   renderSection = sectionName: attrs:
     lib.pipe attrs [
       (lib.mapAttrsToList renderLine)
-      (builtins.filter (v: !isNull v))
+      (builtins.filter (v: v != null))
       (builtins.concatStringsSep "\n")
       (section: ''
         [${sectionName}]

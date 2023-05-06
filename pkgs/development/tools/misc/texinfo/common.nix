@@ -1,6 +1,7 @@
 { version, sha256, patches ? [] }:
 
 { lib, stdenv, buildPackages, fetchurl, perl, xz, libintl, bash
+, gnulib
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -27,6 +28,16 @@ stdenv.mkDerivation {
   };
 
   patches = patches ++ optional crossBuildTools ./cross-tools-flags.patch;
+
+  postPatch = ''
+    patchShebangs tp/maintain
+  ''
+  # This patch is needed for IEEE-standard long doubles on
+  # powerpc64; it does not apply cleanly to texinfo 5.x or
+  # earlier.  It is merged upstream in texinfo 6.8.
+  + lib.optionalString (version == "6.7") ''
+    patch -p1 -d gnulib < ${gnulib.passthru.longdouble-redirect-patch}
+  '';
 
   # ncurses is required to build `makedoc'
   # this feature is introduced by the ./cross-tools-flags.patch
@@ -58,7 +69,7 @@ stdenv.mkDerivation {
     && !stdenv.isDarwin
     && !stdenv.isSunOS; # flaky
 
-  checkFlags = lib.optionals (!stdenv.hostPlatform.isMusl) [
+  checkFlags = lib.optionals (!stdenv.hostPlatform.isMusl && lib.versionOlder version "7") [
     # Test is known to fail on various locales on texinfo-6.8:
     #   https://lists.gnu.org/r/bug-texinfo/2021-07/msg00012.html
     "XFAIL_TESTS=test_scripts/layout_formatting_fr_icons.sh"
@@ -72,11 +83,14 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://www.gnu.org/software/texinfo/";
     description = "The GNU documentation system";
+    homepage = "https://www.gnu.org/software/texinfo/";
+    changelog = "https://git.savannah.gnu.org/cgit/texinfo.git/plain/NEWS";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ vrthra oxij ];
+    # see comment above in patches section
+    broken = stdenv.hostPlatform.isPower64 && lib.strings.versionOlder version "6.0";
 
     longDescription = ''
       Texinfo is the official documentation format of the GNU project.

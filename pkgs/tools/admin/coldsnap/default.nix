@@ -9,15 +9,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "coldsnap";
-  version = "0.4.3";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kL9u+IBlC9Pxm5yaJagY9dy0Pm0xlKfVxFVBmwDMSak=";
+    hash = "sha256-WqNGajtezhBDYmgUayKjdNAZSyKirIYeYOnozMCIya4=";
   };
-  cargoHash = "sha256-eYBmke0FQ9CK3cCaM7ecmp1vkNlZO3SHRnxFzmelYhU=";
+  cargoHash = "sha256-av9hsvY8xsB+HlIRLYNFDJc9eyBfOyBZ347vWoVsDmM=";
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
   nativeBuildInputs = [ pkg-config ];

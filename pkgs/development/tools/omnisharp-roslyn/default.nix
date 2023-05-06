@@ -1,9 +1,7 @@
 { buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
-, icu
 , lib
-, patchelf
 , stdenv
 , runCommand
 , expect
@@ -13,21 +11,19 @@ let
 in
 let finalPackage = buildDotnetModule rec {
   pname = "omnisharp-roslyn";
-  version = "1.39.4";
+  version = "1.39.6";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "rX0FeURw6WMbcJOomqHFcZ9tpKO1td60/HbbVClV324=";
+    sha256 = "6KCHZ5I5OkDaensqHO//owI/nrQkOoF60f/n3YV7jaE=";
   };
 
   projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
   nugetDeps = ./deps.nix;
 
-  nativeBuildInputs = [
-    patchelf
-  ];
+  useAppHost = false;
 
   dotnetInstallFlags = [ "--framework net6.0" ];
   dotnetBuildFlags = [ "--framework net6.0" "--no-self-contained" ];
@@ -53,25 +49,27 @@ let finalPackage = buildDotnetModule rec {
   '';
 
   dontDotnetFixup = true; # we'll fix it ourselves
-  postFixup = lib.optionalString stdenv.isLinux ''
-    # Emulate what .NET 7 does to its binaries while a fix doesn't land in buildDotnetModule
-    patchelf --set-interpreter $(patchelf --print-interpreter ${sdk_6_0}/dotnet) \
-      --set-rpath $(patchelf --print-rpath ${sdk_6_0}/dotnet) \
-      $out/lib/omnisharp-roslyn/OmniSharp
+  preFixup = ''
+    # We create a wrapper that will run the OmniSharp dll using the `dotnet`
+    # executable from PATH. Doing it this way allows it to run using newer SDK
+    # versions than it was build with, which allows it to properly find those SDK
+    # versions - OmniSharp only finds SDKs with the same version or newer as
+    # itself. We still provide a fallback, in case no `dotnet` is provided in
+    # PATH
+    mkdir -p "$out/bin"
 
-  '' + ''
-    # Now create a wrapper without DOTNET_ROOT
-    # we explicitly don't set DOTNET_ROOT as it should get the one from PATH
-    # as you can use any .NET SDK higher than 6 to run OmniSharp and you most
-    # likely will NOT want the .NET 6 runtime running it (as it'll use that to
-    # detect the SDKs for its own use, so it's better to let it find it in PATH).
-    makeWrapper $out/lib/omnisharp-roslyn/OmniSharp $out/bin/OmniSharp \
-      --prefix LD_LIBRARY_PATH : ${sdk_6_0.icu}/lib \
-      --set-default DOTNET_ROOT ${sdk_6_0}
+    cat << EOF > "$out/bin/OmniSharp"
+    #!${stdenv.shell}
+    export PATH="\''${PATH}:${sdk_6_0}/bin"
+    dotnet "$out/lib/omnisharp-roslyn/OmniSharp.dll" "\$@"
+    EOF
+
+    chmod +x "$out/bin/OmniSharp"
   '';
 
-  passthru.tests = {
-    no-sdk = runCommand "no-sdk" { nativeBuildInputs = [ finalPackage expect ]; meta.timeout = 60; } ''
+  passthru.tests = let
+    with-sdk = sdk: runCommand "with-${if sdk ? version then sdk.version else "no"}-sdk"
+      { nativeBuildInputs = [ finalPackage sdk expect ]; meta.timeout = 60; } ''
       HOME=$TMPDIR
       expect <<"EOF"
         spawn OmniSharp
@@ -79,24 +77,7 @@ let finalPackage = buildDotnetModule rec {
           send_error "timeout!\n"
           exit 1
         }
-        expect "\"ERROR\",\"Name\":\"OmniSharp.MSBuild.Discovery.Providers.SdkInstanceProvider\""
-        expect eof
-        catch wait result
-        if { [lindex $result 3] == 0 } {
-          exit 1
-        }
-      EOF
-      touch $out
-    '';
-
-    with-sdk = runCommand "with-sdk" { nativeBuildInputs = [ finalPackage sdk_6_0 expect ]; meta.timeout = 60; } ''
-      HOME=$TMPDIR
-      expect <<"EOF"
-        spawn OmniSharp
-        expect_before timeout {
-          send_error "timeout!\n"
-          exit 1
-        }
+        expect ".NET Core SDK ${if sdk ? version then sdk.version else sdk_6_0.version}"
         expect "{\"Event\":\"started\","
         send \x03
         expect eof
@@ -105,6 +86,11 @@ let finalPackage = buildDotnetModule rec {
       EOF
       touch $out
     '';
+  in {
+    # Make sure we can run OmniSharp with any supported SDK version, as well as without
+    with-net6-sdk = with-sdk sdk_6_0;
+    with-net7-sdk = with-sdk dotnetCorePackages.sdk_7_0;
+    no-sdk = with-sdk null;
   };
 
   meta = with lib; {

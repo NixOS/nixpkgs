@@ -17,6 +17,11 @@ buildPythonPackage rec {
     hash = "sha256-f6kxYX/dg16OWYpw29dH4Z26ncLZCYyHKGc4fzoCld0=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'version="master",' 'version="${version}",'
+  '';
+
   propagatedBuildInputs = [
     aiohttp
     async-timeout

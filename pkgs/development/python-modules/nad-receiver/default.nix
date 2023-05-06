@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "joopert";
     repo = "nad_receiver";
     rev = version;
-    sha256 = "sha256-jRMk/yMA48ei+g/33+mMYwfwixaKTMYcU/z/VOoJbvY=";
+    hash = "sha256-jRMk/yMA48ei+g/33+mMYwfwixaKTMYcU/z/VOoJbvY=";
   };
 
   propagatedBuildInputs = [

@@ -19,7 +19,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-kdDdKI4nJqomA2h370JT180qQ+EkcLaF4NAG+PjydGE=";
   };
 
-  cargoHash = "sha256-NI4V3j92OqBk99lDe6hJgaHmGRdEle7prayo2uGF7CE=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "clokwerk-0.4.0-rc1" = "sha256-GQDWEN2arDDRu2ft8QYdXsNhBEIhBNZTnLoLy27cbAI=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -48,4 +53,3 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.isx86_64 && stdenv.isDarwin;
   };
 }
-

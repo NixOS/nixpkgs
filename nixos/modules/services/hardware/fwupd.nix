@@ -18,6 +18,12 @@ let
         fwupd = cfg.daemonSettings;
       };
     };
+
+    "fwupd/uefi_capsule.conf" = {
+      source = format.generate "uefi_capsule.conf" {
+        uefi_capsule = cfg.uefiCapsuleSettings;
+      };
+    };
   };
 
   originalEtc =
@@ -136,6 +142,16 @@ in {
         default = {};
         description = lib.mdDoc ''
           Configurations for the fwupd daemon.
+        '';
+      };
+
+      uefiCapsuleSettings = mkOption {
+        type = types.submodule {
+          freeformType = format.type.nestedTypes.elemType;
+        };
+        default = {};
+        description = lib.mdDoc ''
+          UEFI capsule configurations for the fwupd daemon.
         '';
       };
     };

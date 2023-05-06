@@ -9,6 +9,7 @@
 , pycryptodomex
 , websockets
 , mutagen
+, secretstorage
 , atomicparsleySupport ? true
 , ffmpegSupport ? true
 , rtmpSupport ? true
@@ -28,7 +29,14 @@ buildPythonPackage rec {
     sha256 = "sha256-Jl1dqXp2wV19mkCIpnt4rNXc9vjP2CV8UvWB/5lv9RU=";
   };
 
-  propagatedBuildInputs = [ brotli certifi mutagen pycryptodomex websockets ];
+  propagatedBuildInputs = [
+    brotli
+    certifi
+    mutagen
+    pycryptodomex
+    secretstorage  # "optional", as in not in requirements.txt, needed for `--cookies-from-browser`
+    websockets
+  ];
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support

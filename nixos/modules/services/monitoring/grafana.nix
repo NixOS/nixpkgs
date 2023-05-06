@@ -92,17 +92,6 @@ let
   grafanaTypes.datasourceConfig = types.submodule {
     freeformType = provisioningSettingsFormat.type;
 
-    imports = [
-      (mkRemovedOptionModule [ "password" ] ''
-        `services.grafana.provision.datasources.settings.datasources.<name>.password` has been removed
-        in Grafana 9. Use `secureJsonData` instead.
-      '')
-      (mkRemovedOptionModule [ "basicAuthPassword" ] ''
-        `services.grafana.provision.datasources.settings.datasources.<name>.basicAuthPassword` has been removed
-        in Grafana 9. Use `secureJsonData` instead.
-      '')
-    ];
-
     options = {
       name = mkOption {
         type = types.str;
@@ -603,7 +592,6 @@ in {
                   description = lib.mdDoc "List of datasources to insert/update.";
                   default = [];
                   type = types.listOf grafanaTypes.datasourceConfig;
-                  apply = map (flip builtins.removeAttrs [ "password" "basicAuthPassword" ]);
                 };
 
                 deleteDatasources = mkOption {
@@ -1300,7 +1288,7 @@ in {
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
-        ] ++ lib.optional (cfg.settings.server.protocol == "socket") [ "@chown" ];
+        ] ++ lib.optionals (cfg.settings.server.protocol == "socket") [ "@chown" ];
         UMask = "0027";
       };
       preStart = ''

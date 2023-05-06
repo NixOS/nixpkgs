@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "rst2pdf";
-  version = "0.99";
+  version = "0.100";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fa23fa93bddd1f52d058ceaeab6582c145546d80f2f8a95974f3703bd6c8152";
+    sha256 = "sha256-Zkw8FubT3qJ06ECkNurE26bLUKtq8xYvydVxa+PLe0I=";
   };
 
   outputs = [ "out" "man" ];

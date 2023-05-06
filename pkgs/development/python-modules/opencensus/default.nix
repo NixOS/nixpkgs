@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "opencensus";
-  version = "0.11.0";
+  version = "0.11.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AmIWq6uJ2U2FBJLz3GWVAFXsT4QRX6bHvq/7pEo0bkI=";
+    hash = "sha256-YVQEKiNrns3VWiPfuydDuz3qzQaH4+A5HsLgx0lQ1m8=";
   };
 
   propagatedBuildInputs = [

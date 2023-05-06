@@ -1,19 +1,20 @@
-{ stdenv
-, lib
+{ lib
 , isPyPy
 , pythonOlder
 , fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 
 # build
 , cython
+, setuptools
 
 # propagates
 , greenlet
-, importlib-metadata
 , typing-extensions
 
 # optionals
+, aiomysql
 , aiosqlite
 , asyncmy
 , asyncpg
@@ -22,7 +23,7 @@
 , mypy
 , mysql-connector
 , mysqlclient
-# TODO: oracledb
+, oracledb
 , pg8000
 , psycopg
 , psycopg2
@@ -34,36 +35,41 @@
 
 # tests
 , mock
+, pytest-xdist
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "1.4.46";
+  version = "2.0.9";
+  format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+  src = fetchFromGitHub {
+    owner = "sqlalchemy";
+    repo = "sqlalchemy";
+    rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-0WlRZ7Kv6owtZB+PDFKk+8dxEL4p3QQrRPq8eQd2PqM=";
   };
 
-  nativeBuildInputs = lib.optionals (!isPyPy) [
+  nativeBuildInputs =[
+    setuptools
+  ] ++ lib.optionals (!isPyPy) [
     cython
   ];
 
   propagatedBuildInputs = [
     greenlet
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
-  passthru.optional-dependencies = rec {
+  passthru.optional-dependencies = lib.fix (self: {
     asyncio = [
       greenlet
     ];
     mypy = [
-      #mypy
+      mypy
     ];
     mssql = [
       pyodbc
@@ -87,7 +93,7 @@ buildPythonPackage rec {
       cx_oracle
     ];
     oracle_oracledb = [
-      # TODO: oracledb
+      oracledb
     ];
     postgresql = [
       psycopg2
@@ -97,7 +103,7 @@ buildPythonPackage rec {
     ];
     postgresql_asyncpg = [
       asyncpg
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     postgresql_psycopg2binary = [
       psycopg2
     ];
@@ -112,28 +118,30 @@ buildPythonPackage rec {
     ];
     aiomysql = [
       aiomysql
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     asyncmy = [
       asyncmy
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     aiosqlite = [
       aiosqlite
       typing-extensions
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     sqlcipher = [
       # TODO: sqlcipher3
     ];
-  };
+  });
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     mock
   ];
 
-  # disable mem-usage tests on mac, has trouble serializing pickle files
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "MemUsageWBackendTest"
-    "MemUsageTest"
+  disabledTestPaths = [
+    # typing correctness, not interesting
+    "test/ext/mypy"
+    # slow and high memory usage, not interesting
+    "test/aaa_profiling"
   ];
 
   meta = with lib; {

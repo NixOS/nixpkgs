@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-ntfs";
-  version = "3.3";
+  version = "3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.ntfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-xhtAN0QaLLbQk/aAd9PlEkyW39w33iPaQtGzbouI6hc=";
+    hash = "sha256-n6FPdsObzHLhhkfyxTiCDR4PpIQqRJU+QpAYtxk1Snc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

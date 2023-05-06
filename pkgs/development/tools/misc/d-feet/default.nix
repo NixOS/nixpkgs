@@ -63,10 +63,6 @@ python3.pkgs.buildPythonApplication rec {
     "-Dtests=false" # needs dbus
   ];
 
-  # Temporary fix
-  # See https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py

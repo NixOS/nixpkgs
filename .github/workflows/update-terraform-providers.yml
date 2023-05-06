@@ -12,7 +12,7 @@ jobs:
   tf-providers:
     permissions:
       contents: write # for peter-evans/create-pull-request to create branch
-      pull-requests: write # for peter-evans/create-pull-request to create a PR, for peter-evans/create-or-update-comment to create or update comment
+      pull-requests: write # for peter-evans/create-pull-request to create a PR
     if: github.repository_owner == 'NixOS' && github.ref == 'refs/heads/master' # ensure workflow_dispatch only runs on master
     runs-on: ubuntu-latest
     steps:
@@ -36,21 +36,33 @@ jobs:
             --argstr keep-going true \
             --argstr max-workers 2 \
             --argstr path terraform-providers
+      - name: get failed updates
+        run: |
+          echo 'FAILED<<EOF' >> $GITHUB_ENV
+          git ls-files --others >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      # cleanup logs of failed updates so they aren't included in the PR
       - name: clean repo
         run: |
           git clean -f
       - name: create PR
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v5
         with:
           body: |
             Automatic update by [update-terraform-providers](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/update-terraform-providers.yml) action.
 
             https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}
 
+            These providers failed to update:
+            ```
+            ${{ env.FAILED }}
+            ```
+
             Check that all providers build with:
             ```
             @ofborg build terraform.full
             ```
+            If there is more than ten commits in the PR `ofborg` won't build it automatically and you will need to use the above command.
           branch: terraform-providers-update
           delete-branch: false
           title: ${{ steps.setup.outputs.title }}

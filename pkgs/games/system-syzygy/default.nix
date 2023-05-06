@@ -23,7 +23,15 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ SDL2 ];
 
-  cargoSha256 = "1jp9wnavq92w52ksj2q9fi3y58wq7ybfkx2kfbx2i2xv8d7y88ax";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ahi-0.1.0" = "sha256-EliAObznLP1wkk8r3c3hhB300HYnEd9N6CJW+xG6bxE=";
+      "itersynth-0.1.0" = "sha256-dXQ+uBFchcnOjKF/CcS+AwhzFzejk2JCvvKMfS64RRQ=";
+      "sdl2-0.31.0" = "sha256-wTam0hwiajdw/ub2yM6q7+50Y3AueStcK5HLa65Y2XQ=";
+      "winres-0.1.6" = "sha256-7jYrgc3BV2UmzfACc/xyYsTkaXBPfn+bLmwdrcBe1O0=";
+    };
+  };
 
   postInstall = ''
     mkdir -p $out/share/syzygy/

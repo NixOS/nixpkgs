@@ -4,7 +4,6 @@
 , buildPythonPackage
 , eventlet
 , fetchFromGitHub
-, fetchpatch
 , iana-etc
 , libredirect
 , mock
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.3.4";
+  version = "4.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,17 +25,8 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fymO9WqkYaRsHKCJHQJpySHqZor2t8BfVrfYUfYoJno=";
+    hash = "sha256-sE6AlT01Rou427i9w+xwUTMflKxUr0Heqt2l+Y2AMmU=";
   };
-
-  patches = [
-    # Address Python 3.11 mocking issue, https://github.com/miguelgrinberg/python-engineio/issues/279
-    (fetchpatch {
-      name = "mocking-issue-py311.patch";
-      url = "https://github.com/miguelgrinberg/python-engineio/commit/ac3911356fbe933afa7c11d56141f0e228c01528.patch";
-      hash = "sha256-LNMhjX8kqOI3y8XugCHxCPEC6lF83NROfIczXWiLuqY=";
-    })
-  ];
 
   nativeCheckInputs = [
     aiohttp

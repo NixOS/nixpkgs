@@ -82,27 +82,36 @@
 , bpftools
 , libbpf
 
+, withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
+, withAudit ? true
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
 , withDocumentation ? true
-, withEfi ? stdenv.hostPlatform.isEfi && !stdenv.hostPlatform.isMusl
+, withEfi ? stdenv.hostPlatform.isEfi
 , withFido2 ? true
 , withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
+, withKmod ? true
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
-    && stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6" # assumes hard floats
+    && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+    # buildPackages.targetPackages.llvmPackages is the same as llvmPackages,
+    # but we do it this way to avoid taking llvmPackages as an input, and
+    # risking making it too easy to ignore the above comment about llvmPackages.
+    && lib.meta.availableOn stdenv.hostPlatform buildPackages.targetPackages.llvmPackages.compiler-rt
+, withLibidn2 ? true
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
 , withNetworkd ? true
 , withNss ? !stdenv.hostPlatform.isMusl
 , withOomd ? true
+, withPam ? true
 , withPCRE2 ? true
 , withPolkit ? true
 , withPortabled ? !stdenv.hostPlatform.isMusl
@@ -112,6 +121,7 @@
 , withTimedated ? true
 , withTimesyncd ? true
 , withTpm2Tss ? true
+, withUkify ? false  # adds python to closure which is too much by default
 , withUserDb ? true
 , withUtmp ? !stdenv.hostPlatform.isMusl
   # tests assume too much system access for them to be feasible for us right now
@@ -129,17 +139,19 @@
 assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
+assert withHomed -> withPam;
+assert withUkify -> withEfi;
 
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "252.5";
+  version = "253.3";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1667246393";
+  releaseTimestamp = "1676488940";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -150,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-cNZRTuYFMR1z6KpELeQoJahMhRl4fKuRuc3xXH3KzlM=";
+    hash = "sha256-iy1kyqiVeXIhFJAQ+nYorrXm/xb2gfakyrEfMyNR5l8=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -162,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0003-Fix-NixOS-containers.patch
-    ./0004-Look-for-fsck-in-the-right-place.patch
+    ./0004-fsck-look-for-fsck-binary-not-just-in-sbin.patch
     ./0005-Add-some-NixOS-specific-unit-directories.patch
     ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
     ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
@@ -181,32 +193,33 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-cccd4bcaf381c2729adc000381bd89906003e72a.tar.gz";
-        sha256 = "2CFZEzWqUy6OOF3c+LN4Zmy3RqMzfdRHp+B5zlWJsoE=";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-f34f6ab04b443608497b73668365819343d0c2fe.tar.gz";
+        sha256 = "DFcLPvjQIxGEDADpP232ZRd7cOEKt6B48Ah29nIGTt4=";
       };
       musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
     [
-      (musl-patches + "/0003-missing_type.h-add-comparison_fn_t.patch")
-      (musl-patches + "/0004-add-fallback-parse_printf_format-implementation.patch")
-      (musl-patches + "/0005-src-basic-missing.h-check-for-missing-strndupa.patch")
-      (musl-patches + "/0007-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
-      (musl-patches + "/0008-add-missing-FTW_-macros-for-musl.patch")
-      (musl-patches + "/0010-Use-uintmax_t-for-handling-rlim_t.patch")
-      (musl-patches + "/0011-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
-      (musl-patches + "/0012-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
-      (musl-patches + "/0013-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
-      (musl-patches + "/0014-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
-      (musl-patches + "/0015-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
-      (musl-patches + "/0018-avoid-redefinition-of-prctl_mm_map-structure.patch")
-      (musl-patches + "/0022-do-not-disable-buffer-in-writing-files.patch")
-      (musl-patches + "/0025-Handle-__cpu_mask-usage.patch")
-      (musl-patches + "/0026-Handle-missing-gshadow.patch")
-      (musl-patches + "/0028-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
-      (musl-patches + "/0001-pass-correct-parameters-to-getdents64.patch")
-      (musl-patches + "/0002-Add-sys-stat.h-for-S_IFDIR.patch")
       (musl-patches + "/0001-Adjust-for-musl-headers.patch")
-      (musl-patches + "/0001-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
+      (musl-patches + "/0005-pass-correct-parameters-to-getdents64.patch")
+      (musl-patches + "/0006-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
+      (musl-patches + "/0007-Add-sys-stat.h-for-S_IFDIR.patch")
+      (musl-patches + "/0009-missing_type.h-add-comparison_fn_t.patch")
+      (musl-patches + "/0010-add-fallback-parse_printf_format-implementation.patch")
+      (musl-patches + "/0011-src-basic-missing.h-check-for-missing-strndupa.patch")
+      (musl-patches + "/0012-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
+      (musl-patches + "/0013-add-missing-FTW_-macros-for-musl.patch")
+      (musl-patches + "/0014-Use-uintmax_t-for-handling-rlim_t.patch")
+      (musl-patches + "/0015-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
+      (musl-patches + "/0016-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
+      (musl-patches + "/0017-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
+      (musl-patches + "/0018-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
+      (musl-patches + "/0019-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
+      (musl-patches + "/0020-avoid-redefinition-of-prctl_mm_map-structure.patch")
+      (musl-patches + "/0021-do-not-disable-buffer-in-writing-files.patch")
+      (musl-patches + "/0022-Handle-__cpu_mask-usage.patch")
+      (musl-patches + "/0023-Handle-missing-gshadow.patch")
+      (musl-patches + "/0024-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
+      (musl-patches + "/0026-src-boot-efi-efi-string.c-define-wchar_t-from-__WCHA.patch")
     ]
   );
 
@@ -278,7 +291,7 @@ stdenv.mkDerivation (finalAttrs: {
           # Systemd does this decision during configure time and uses ifdef's to
           # enable specific branches. We can safely ignore (nuke) the libidn "v1"
           # libraries.
-          { name = "libidn2.so.0"; pkg = libidn2; }
+          { name = "libidn2.so.0"; pkg = opt withLibidn2 libidn2; }
           { name = "libidn.so.12"; pkg = null; }
           { name = "libidn.so.11"; pkg = null; }
 
@@ -295,6 +308,9 @@ stdenv.mkDerivation (finalAttrs: {
           # inspect-elf support
           { name = "libelf.so.1"; pkg = opt withCoredump elfutils; }
           { name = "libdw.so.1"; pkg = opt withCoredump elfutils; }
+
+          # Support for PKCS#11 in systemd-cryptsetup, systemd-cryptenroll and systemd-homed
+          { name = "libp11-kit.so.0"; pkg = opt (withHomed || withCryptsetup) p11-kit; }
         ];
 
       patchDlOpen = dl:
@@ -304,8 +320,8 @@ stdenv.mkDerivation (finalAttrs: {
         if dl.pkg == null then ''
           # remove the dependency on the library by replacing it with an invalid path
           for file in $(grep -lr '"${dl.name}"' src); do
-            echo "patching dlopen(\"${dl.name}\", …) in $file to an invalid store path ("/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}")…"
-            substituteInPlace "$file" --replace '"${dl.name}"' '"/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}"'
+            echo "patching dlopen(\"${dl.name}\", …) in $file to an invalid store path ("${builtins.storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}")…"
+            substituteInPlace "$file" --replace '"${dl.name}"' '"${builtins.storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}"'
           done
         '' else ''
           # ensure that the library we provide actually exists
@@ -341,7 +357,7 @@ stdenv.mkDerivation (finalAttrs: {
   # when cross-compiling.
   + ''
     shopt -s extglob
-    patchShebangs tools test src/!(rpm|kernel-install) src/kernel-install/test-kernel-install.sh
+    patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
   '';
 
   outputs = [ "out" "man" "dev" ];
@@ -376,36 +392,37 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      acl
-      audit
-      kmod
       libxcrypt
       libcap
-      libidn2
       libuuid
       linuxHeaders
-      pam
       bashInteractive # for patch shebangs
     ]
 
     ++ lib.optionals wantGcrypt [ libgcrypt libgpg-error ]
     ++ lib.optional withTests glib
+    ++ lib.optional withAcl acl
     ++ lib.optional withApparmor libapparmor
+    ++ lib.optional withAudit audit
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
     ++ lib.optional withCoredump elfutils
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
     ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexec-tools
+    ++ lib.optional withKmod kmod
+    ++ lib.optional withLibidn2 libidn2
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
+    ++ lib.optional withPam pam
     ++ lib.optional withPCRE2 pcre2
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
-    ++ lib.optionals withHomed [ p11-kit ]
+    ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
     ++ lib.optional withTpm2Tss tpm2-tss
+    ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
   ;
 
   #dontAddPrefix = true;
@@ -424,6 +441,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
+    "-Dpam=${lib.boolToString withPam}"
     "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
     "-Drootprefix=${placeholder "out"}"
     "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
@@ -435,7 +453,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dglib=${lib.boolToString withTests}"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
+    "-Dacl=${lib.boolToString withAcl}"
     "-Danalyze=${lib.boolToString withAnalyze}"
+    "-Daudit=${lib.boolToString withAudit}"
     "-Dgcrypt=${lib.boolToString wantGcrypt}"
     "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=${lib.boolToString withCompression}"
@@ -461,7 +481,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsplit-usr=false"
     "-Dlibcurl=${lib.boolToString wantCurl}"
     "-Dlibidn=false"
-    "-Dlibidn2=true"
+    "-Dlibidn2=${lib.boolToString withLibidn2}"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
@@ -488,7 +508,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
-    "-Dkmod-path=${kmod}/bin/kmod"
     "-Dsulogin-path=${util-linux}/bin/sulogin"
     "-Dmount-path=${util-linux}/bin/mount"
     "-Dumount-path=${util-linux}/bin/umount"
@@ -502,6 +521,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     "-Defi=${lib.boolToString withEfi}"
     "-Dgnu-efi=${lib.boolToString withEfi}"
+
+    "-Dukify=${lib.boolToString withUkify}"
   ] ++ lib.optionals withEfi [
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
@@ -522,6 +543,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     "-Dgshadow=false"
     "-Didn=false"
+  ] ++ lib.optionals withKmod [
+    "-Dkmod=true"
+    "-Dkmod-path=${kmod}/bin/kmod"
   ];
   preConfigure =
     let
@@ -556,7 +580,6 @@ stdenv.mkDerivation (finalAttrs: {
           replacement = "${coreutils}/bin/cat";
           where = [ "test/create-busybox-container" "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
         }
-        { search = "/sbin/modprobe"; replacement = "${lib.getBin kmod}/sbin/modprobe"; where = [ "units/modprobe@.service" ]; }
         {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
@@ -590,6 +613,8 @@ stdenv.mkDerivation (finalAttrs: {
             "src/import/pull-tar.c"
           ];
         }
+      ] ++ lib.optionals withKmod [
+        { search = "/sbin/modprobe"; replacement = "${lib.getBin kmod}/sbin/modprobe"; where = [ "units/modprobe@.service" ]; }
       ];
 
       # { replacement, search, where } -> List[str]
@@ -661,7 +686,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     mkdir -p $out/example/systemd
-    mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
+    mv $out/lib/{binfmt.d,sysctl.d,tmpfiles.d} $out/example
     mv $out/lib/systemd/{system,user} $out/example/systemd
 
     rm -rf $out/etc/systemd/system
@@ -677,6 +702,8 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
+  '' + lib.optionalString withKmod ''
+    mv $out/lib/modules-load.d $out/example
   '';
 
   # Avoid *.EFI binary stripping. At least on aarch64-linux strip
@@ -711,11 +738,11 @@ stdenv.mkDerivation (finalAttrs: {
     # runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
+    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests) switchTest;
-      cross = pkgsCross.aarch64-multiplatform.systemd;
+      cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
     };
   };
 

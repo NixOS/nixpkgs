@@ -15,17 +15,19 @@
 , zlib
 , icu
 , freetype
+, pugixml
+, nix-update-script
 }:
 
 mkDerivation rec {
   pname = "organicmaps";
-  version = "2023.01.25-3";
+  version = "2023.04.02-7";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    sha256 = "sha256-4nlD/GFOoBOCXVWtC7i6SUquEbob5++GyagZOTznygU=";
+    sha256 = "sha256-xXBzHo7IOo2f1raGnpFcsvs++crHMI5SACIc345cX7g=";
     fetchSubmodules = true;
   };
 
@@ -55,12 +57,20 @@ mkDerivation rec {
     zlib
     icu
     freetype
+    pugixml
   ];
 
   # Yes, this is PRE configure. The configure phase uses cmake
   preConfigure = ''
     bash ./configure.sh
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+      extraArgs = [ "-vr" "(.*)-android" ];
+    };
+  };
 
   meta = with lib; {
     # darwin: "invalid application of 'sizeof' to a function type"

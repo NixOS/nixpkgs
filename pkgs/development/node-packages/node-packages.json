@@ -14,6 +14,7 @@
 , "@microsoft/rush"
 , "@nerdwallet/shepherd"
 , "@nestjs/cli"
+, "@shopify/cli"
 , "@squoosh/cli"
 , "@tailwindcss/aspect-ratio"
 , "@tailwindcss/forms"
@@ -21,6 +22,7 @@
 , "@tailwindcss/line-clamp"
 , "@tailwindcss/typography"
 , "@uppy/companion"
+, "@volar/vue-language-server"
 , "@vue/cli"
 , {"@webassemblyjs/cli": "1.11.1"}
 , {"@webassemblyjs/repl": "1.11.1"}
@@ -120,6 +122,7 @@
 , "degit"
 , "dhcp"
 , "diagnostic-languageserver"
+, "diff2html-cli"
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
 , "@electron-forge/cli"
@@ -280,7 +283,7 @@
 , "reveal-md"
 , "rimraf"
 , "rollup"
-, { "rust-analyzer-build-deps": "../../applications/editors/vscode/extensions/rust-analyzer/build-deps" }
+, { "rust-analyzer-build-deps": "../../applications/editors/vscode/extensions/rust-lang.rust-analyzer/build-deps" }
 , "rtlcss"
 , "s3http"
 , "sass"

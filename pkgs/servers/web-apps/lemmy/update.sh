@@ -14,7 +14,7 @@ const latest_rev = $(curl -q https://api.github.com/repos/${owner}/${server_repo
   jq -r '.tag_name')
 const latest_version = $(echo $latest_rev)
 const current_version = $(jq -r '.version' $directory/pin.json)
-if ($latest_version === $current_version) {
+if (latest_version === $current_version) {
   echo "lemmy is already up-to-date"
   return 0
 } else {

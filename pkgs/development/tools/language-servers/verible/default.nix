@@ -17,8 +17,8 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2023-02-02";
-  GIT_VERSION = "v0.0-2821-gb2180bfa";
+  GIT_DATE = "2023-04-14";
+  GIT_VERSION = "v0.0-3179-g525ffaf7";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (lib.take 3 (lib.drop 1 (builtins.splitVersion GIT_VERSION)));
@@ -27,7 +27,7 @@ buildBazelPackage rec {
     owner = "chipsalliance";
     repo = "verible";
     rev = "${GIT_VERSION}";
-    sha256 = "sha256-etcimvInhebH2zRPyZnWUq6m3VnCq44w32GJrIacULo=";
+    sha256 = "sha256-IXS8yeyryBNpPkCpMcOUsdIlKo447d0a8aZKroFJOzM=";
   };
 
   patches = [
@@ -49,8 +49,8 @@ buildBazelPackage rec {
     # of the output derivation ? Is there a more robust way to do this ?
     # (Hashes extracted from the ofborg build logs)
     sha256 = {
-      aarch64-linux = "sha256-dYJoae3+u+gpULHS8nteFzzL974cVJ+cJzeG/Dz2HaQ=";
-      x86_64-linux = "sha256-Jd99+nhqgZ2Gwd78eyXfnSSfbl8C3hoWkiUnzJG1jqM=";
+      aarch64-linux = "sha256-BrJyFeq3BB4sHIXMMxRIaYV+VJAfTs2bvK7pnw6faBY=";
+      x86_64-linux = "sha256-G6tqHWeQBi2Ph3IDFNu2sp+UU2BO93+lcyJ+kvpuRJo=";
     }.${system} or (throw "No hash for system: ${system}");
   };
 
@@ -74,7 +74,7 @@ buildBazelPackage rec {
 
   bazel = bazel_4;
   removeRulesCC = false;
-  bazelTarget = ":install-binaries";
+  bazelTargets = [ ":install-binaries" ];
   bazelTestTargets = [ "//..." ];
   bazelBuildFlags = [
     "-c opt"

@@ -14,7 +14,6 @@
 
 , pname ? "kicad"
 , stable ? true
-, withOCC ? true
 , withNgspice ? !stdenv.isDarwin
 , libngspice
 , withScripting ? true
@@ -117,7 +116,7 @@ stdenv.mkDerivation rec {
     inherit stable baseName;
     inherit kicadSrc kicadVersion;
     inherit wxGTK python wxPython;
-    inherit withOCC withNgspice withScripting withI18n;
+    inherit withNgspice withScripting withI18n;
     inherit debug sanitizeAddress sanitizeThreads;
   };
 
@@ -131,7 +130,7 @@ stdenv.mkDerivation rec {
   dontFixup = true;
 
   pythonPath = optionals (withScripting)
-    [ wxPython python.pkgs.six ];
+    [ wxPython python.pkgs.six python.pkgs.requests ];
 
   nativeBuildInputs = [ makeWrapper ]
     ++ optionals (withScripting)

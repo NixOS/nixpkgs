@@ -65,8 +65,6 @@ gnustep.stdenv.mkDerivation rec {
     for bin in $out/bin/*; do
       wrapProgram $bin --prefix LD_LIBRARY_PATH : $out/lib/sogo --prefix GNUSTEP_CONFIG_FILE : $out/share/GNUstep/GNUstep.conf
     done
-
-    rmdir $out/nix
   '';
 
   passthru.tests.sogo = nixosTests.sogo;

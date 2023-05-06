@@ -4,11 +4,14 @@
 , rev ? null
 , md5 ? null
 , sha256 ? null
+, hash ? null
 , fetchSubrepos ? false
 , preferLocalBuild ? true }:
 
 if md5 != null then
-  throw "fetchhg does not support md5 anymore, please use sha256"
+  throw "fetchhg does not support md5 anymore, please use sha256 or hash"
+else if hash != null && sha256 != null then
+  throw "Only one of sha256 or hash can be set"
 else
 # TODO: statically check if mercurial as the https support if the url starts woth https.
 stdenvNoCC.mkDerivation {
@@ -20,9 +23,14 @@ stdenvNoCC.mkDerivation {
 
   subrepoClause = lib.optionalString fetchSubrepos "S";
 
-  outputHashAlgo = "sha256";
+  outputHashAlgo = if hash != null then null else "sha256";
   outputHashMode = "recursive";
-  outputHash = sha256;
+  outputHash = if hash != null then
+    hash
+  else if sha256 != null then
+    sha256
+  else
+    lib.fakeSha256;
 
   inherit url rev;
   inherit preferLocalBuild;

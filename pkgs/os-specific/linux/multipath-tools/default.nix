@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
       kpartx/Makefile libmpathpersist/Makefile
     sed -i -e "s,GZIP,GZ," \
       $(find * -name Makefile\*)
+
+    sed '1i#include <assert.h>' -i tests/{util,vpd}.c
   '';
 
   nativeBuildInputs = [ pkg-config perl ];

@@ -99,7 +99,6 @@ let
     # "clang-builtin-headers"
     "stdlib"
     "sdk-overlay"
-    "parser-lib"
     "static-mirror-lib"
     "editor-integration"
     # "tools"
@@ -257,6 +256,7 @@ in stdenv.mkDerivation {
     ${copySource "llvm-project"}
     ${copySource "swift"}
     ${copySource "swift-experimental-string-processing"}
+    ${copySource "swift-syntax"}
     ${lib.optionalString
       (!stdenv.isDarwin)
       (copySource "swift-corelibs-libdispatch")}
@@ -276,9 +276,13 @@ in stdenv.mkDerivation {
       -e 's|/bin/cp|${coreutils}/bin/cp|g' \
       -e 's|/usr/bin/file|${file}/bin/file|g'
 
+    patch -p1 -d swift -i ${./patches/swift-cmake-3.25-compat.patch}
     patch -p1 -d swift -i ${./patches/swift-wrap.patch}
     patch -p1 -d swift -i ${./patches/swift-nix-resource-root.patch}
+    patch -p1 -d swift -i ${./patches/swift-linux-fix-libc-paths.patch}
     patch -p1 -d swift -i ${./patches/swift-linux-fix-linking.patch}
+    patch -p1 -d swift -i ${./patches/swift-darwin-libcxx-flags.patch}
+    patch -p1 -d swift -i ${./patches/swift-darwin-link-cxxabi.patch}
     patch -p1 -d swift -i ${substituteAll {
       src = ./patches/swift-darwin-plistbuddy-workaround.patch;
       inherit swiftArch;
@@ -287,8 +291,6 @@ in stdenv.mkDerivation {
       src = ./patches/swift-prevent-sdk-dirs-warning.patch;
       inherit (builtins) storeDir;
     }}
-    substituteInPlace swift/cmake/modules/SwiftConfigureSDK.cmake \
-      --replace '/usr/include' "${stdenv.cc.libc_dev}/include"
 
     # This patch needs to know the lib output location, so must be substituted
     # in the same derivation as the compiler.
@@ -321,8 +323,8 @@ in stdenv.mkDerivation {
     ''}
 
     # Remove tests for cross compilation, which we don't currently support.
-    rm swift/test/Interop/Cxx/class/constructors-copy-irgen.swift
-    rm swift/test/Interop/Cxx/class/constructors-irgen.swift
+    rm swift/test/Interop/Cxx/class/constructors-copy-irgen-*.swift
+    rm swift/test/Interop/Cxx/class/constructors-irgen-*.swift
 
     # TODO: consider fixing and re-adding. This test fails due to a non-standard "install_prefix".
     rm swift/validation-test/Python/build_swift.swift
@@ -342,7 +344,7 @@ in stdenv.mkDerivation {
     rm swift/test/Serialization/restrict-swiftmodule-to-revision.swift
 
     # This test was flaky in ofborg, see #186476
-    rm swift/test/AutoDiff/compiler_crashers_fixed/sr14290-missing-debug-scopes-in-pullback-trampoline.swift
+    rm swift/test/AutoDiff/compiler_crashers_fixed/issue-56649-missing-debug-scopes-in-pullback-trampoline.swift
 
     patchShebangs .
 
@@ -446,7 +448,8 @@ in stdenv.mkDerivation {
       -DSWIFT_PATH_TO_CMARK_SOURCE=$SWIFT_SOURCE_ROOT/swift-cmark
       -DSWIFT_PATH_TO_CMARK_BUILD=$SWIFT_BUILD_ROOT/swift-cmark
       -DSWIFT_PATH_TO_LIBDISPATCH_SOURCE=$SWIFT_SOURCE_ROOT/swift-corelibs-libdispatch
-      -DEXPERIMENTAL_STRING_PROCESSING_SOURCE_DIR=$SWIFT_SOURCE_ROOT/swift-experimental-string-processing
+      -DSWIFT_PATH_TO_SWIFT_SYNTAX_SOURCE=$SWIFT_SOURCE_ROOT/swift-syntax
+      -DSWIFT_PATH_TO_STRING_PROCESSING_SOURCE=$SWIFT_SOURCE_ROOT/swift-experimental-string-processing
       -DSWIFT_INSTALL_COMPONENTS=${lib.concatStringsSep ";" swiftInstallComponents}
       -DSWIFT_STDLIB_ENABLE_OBJC_INTEROP=${if stdenv.isDarwin then "ON" else "OFF"}
     "
@@ -501,6 +504,7 @@ in stdenv.mkDerivation {
     cmakeFlags="
       -GNinja
       -DCMAKE_Swift_COMPILER=$SWIFT_BUILD_ROOT/swift/bin/swiftc
+      -DSWIFT_PATH_TO_SWIFT_SYNTAX_SOURCE=$SWIFT_SOURCE_ROOT/swift-syntax
 
       -DTOOLCHAIN_DIR=/var/empty
       -DSWIFT_NATIVE_LLVM_TOOLS_PATH=${stdenv.cc}/bin
@@ -579,7 +583,7 @@ in stdenv.mkDerivation {
     # Undo the clang and swift wrapping we did for the build.
     # (This happened via patches to cmake files.)
     cd $SWIFT_BUILD_ROOT
-    mv llvm/bin/clang-14{-unwrapped,}
+    mv llvm/bin/clang-15{-unwrapped,}
     mv swift/bin/swift-frontend{-unwrapped,}
 
     mkdir $out $lib
@@ -619,7 +623,12 @@ in stdenv.mkDerivation {
     # Swift has a separate resource root from Clang, but locates the Clang
     # resource root via subdir or symlink. Provide a default here, but we also
     # patch Swift to prefer NIX_CC if set.
-    ln -s ${clang}/resource-root $lib/lib/swift/clang
+    #
+    # NOTE: We don't symlink directly here, because that'd add a run-time dep
+    # on the full Clang compiler to every Swift executable. The copy here is
+    # just copying the 3 symlinks inside to smaller closures.
+    mkdir $lib/lib/swift/clang
+    cp -P ${clang}/resource-root/* $lib/lib/swift/clang/
 
     ${lib.optionalString stdenv.isDarwin ''
     # Install required library for ObjC interop.

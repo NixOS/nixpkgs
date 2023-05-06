@@ -10,10 +10,11 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/avsm/ocaml-yaml/releases/download/v${version}/yaml-${version}.tbz";
-    sha256 = "sha256-0KngriGEpp5tcgK/43B9EEOdMacSQYYCNLGfAgRS7Mc=";
+    hash = "sha256-0KngriGEpp5tcgK/43B9EEOdMacSQYYCNLGfAgRS7Mc=";
   };
 
   minimalOCamlVersion = "4.13";
+  duneVersion = "3";
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ bos ctypes ];

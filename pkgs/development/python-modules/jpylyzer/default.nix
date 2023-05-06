@@ -19,7 +19,7 @@ let
     owner = "openpreserve";
     repo = "jpylyzer-test-files";
     rev = "146cb0029b5ea9d8ef22dc6683cec8afae1cc63a";
-    sha256 = "sha256-uKUau7mYXqGs4dSnXGPnPsH9k81ZCK0aPj5F9HWBMZ8=";
+    hash = "sha256-uKUau7mYXqGs4dSnXGPnPsH9k81ZCK0aPj5F9HWBMZ8=";
   };
 
 in buildPythonPackage rec {
@@ -30,7 +30,7 @@ in buildPythonPackage rec {
     owner = "openpreserve";
     repo = pname;
     rev = version;
-    sha256 = "sha256-LBVOwjWC/HEvGgoi8WxEdl33M4JrfdHEj1Dk7f1NAiA=";
+    hash = "sha256-LBVOwjWC/HEvGgoi8WxEdl33M4JrfdHEj1Dk7f1NAiA=";
   };
 
   propagatedBuildInputs = [ six ];

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "soupsieve";
-  version = "2.3.2.post1";
+  version = "2.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/FOJOz2iwz3ilWZ6DhnweMFL+GVErzBzVN5fzxKj8w0=";
+    hash = "sha256-4o26nKbHwAFz405LpXRI8GiLtoG3xei/SXHar8CT1po=";
   };
 
   nativeBuildInputs = [

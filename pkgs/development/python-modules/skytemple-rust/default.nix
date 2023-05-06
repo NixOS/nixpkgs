@@ -5,27 +5,30 @@
 , libiconv
 , Foundation
 , rustPlatform
-, setuptools-rust }:
+, setuptools-rust
+, range-typed-integers
+}:
 
 buildPythonPackage rec {
   pname = "skytemple-rust";
-  version = "1.3.7";
+  version = "1.4.0.post0";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rC7KA79va8gZpMKJQ7s3xYdbopNqmWdRYDCbaWaxsR0=";
+    hash = "sha256-aw57B15sDbMcdNPD8MW+O7AdqSSqjlOcuXNSm10GdPM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-lXPCxRbaqUC5EfyeBPtJDuGADYOA+DWMaOZRwXppP8E=";
+    hash = "sha256-SvHrMr5k4afVdU5nvg+bcoHVmzHYyoOYqv7nOSVxRCE=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
   nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
+  propagatedBuildInputs = [ range-typed-integers ];
 
   GETTEXT_SYSTEM = true;
 

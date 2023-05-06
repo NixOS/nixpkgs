@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "python_opendata_transport";
     inherit version;
-    sha256 = "sha256-CpzMMp2C3UOiUna9EcUucD/PKv7AZlkaU8QJfWntoi8=";
+    hash = "sha256-CpzMMp2C3UOiUna9EcUucD/PKv7AZlkaU8QJfWntoi8=";
   };
 
   propagatedBuildInputs = [

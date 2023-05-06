@@ -1,0 +1,28 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index c0dfa2a..2decf88 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1158,9 +1158,9 @@ checksum = "da5bf7748fd4cd0b2490df8debcc911809dbcbee4ece9531b96c29a9c729de5a"
+ 
+ [[package]]
+ name = "gtk4"
+-version = "0.4.8"
++version = "0.4.9"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c64f0c2a3d80e899dc3febddad5bac193ffcf74a0fd7e31037f30dd34d6f7396"
++checksum = "4e8ae5aef2793bc3551b5e5e3fa062a5de54bb1eccf10dfa4effe9e4384fbbbc"
+ dependencies = [
+  "bitflags",
+  "cairo-rs",
+@@ -1181,9 +1181,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "gtk4-macros"
+-version = "0.4.8"
++version = "0.4.9"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "fafbcc920af4eb677d7d164853e7040b9de5a22379c596f570190c675d45f7a7"
++checksum = "d9a4a8077b3a392dd7d637924529e1213d2e0c8e4d531177bc3355e86c257a54"
+ dependencies = [
+  "anyhow",
+  "proc-macro-crate 1.2.1",

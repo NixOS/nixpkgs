@@ -171,7 +171,7 @@ let
   doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.useLLVM or false);
+  separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
   outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
 
   # Turn a derivation into its outPath without a string context attached.
@@ -186,27 +186,35 @@ let
                                   ++ buildInputs ++ propagatedBuildInputs
                                   ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
   dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
-  supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
+
+  hardeningDisable' = if lib.any (x: x == "fortify") hardeningDisable
+    # disabling fortify implies fortify3 should also be disabled
+    then lib.unique (hardeningDisable ++ [ "fortify3" ])
+    else hardeningDisable;
+  supportedHardeningFlags = [ "fortify" "fortify3" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
   # Musl-based platforms will keep "pie", other platforms will not.
   # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
   # in the nixpkgs manual to inform users about the defaults.
-  defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
-                            # Except when:
-                            #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-                            #    - static armv7l, where compilation fails.
-                            !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
-                          then supportedHardeningFlags
-                          else lib.remove "pie" supportedHardeningFlags;
+  defaultHardeningFlags = let
+    # not ready for this by default
+    supportedHardeningFlags' = lib.remove "fortify3" supportedHardeningFlags;
+  in if stdenv.hostPlatform.isMusl &&
+      # Except when:
+      #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
+      #    - static armv7l, where compilation fails.
+      !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
+    then supportedHardeningFlags'
+    else lib.remove "pie" supportedHardeningFlags';
   enabledHardeningOptions =
-    if builtins.elem "all" hardeningDisable
+    if builtins.elem "all" hardeningDisable'
     then []
-    else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
+    else lib.subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
   # hardeningDisable additionally supports "all".
   erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
 
   checkDependencyList = checkDependencyList' [];
   checkDependencyList' = positions: name: deps: lib.flip lib.imap1 deps (index: dep:
-    if lib.isDerivation dep || isNull dep || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
+    if lib.isDerivation dep || dep == null || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
     else if lib.isList dep then checkDependencyList' ([index] ++ positions) name dep
     else throw "Dependency is not of a valid type: ${lib.concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
@@ -286,6 +294,7 @@ else let
       (["meta" "passthru" "pos"
        "checkInputs" "installCheckInputs"
        "nativeCheckInputs" "nativeInstallCheckInputs"
+       "__contentAddressed"
        "__darwinAllowLocalNetworking"
        "__impureHostDeps" "__propagatedImpureHostDeps"
        "sandboxProfile" "propagatedSandboxProfile"]
@@ -301,6 +310,7 @@ else let
           hostSuffix = lib.optionalString
             (stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix)
             "-${stdenv.hostPlatform.config}";
+
           # Disambiguate statically built packages. This was originally
           # introduce as a means to prevent nix-env to get confused between
           # nix and nixStatic. This should be also achieved by moving the
@@ -311,7 +321,10 @@ else let
         lib.strings.sanitizeDerivationName (
           if attrs ? name
           then attrs.name + hostSuffix
-          else "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
+          else
+            # we cannot coerce null to a string below
+            assert lib.assertMsg (attrs ? version && attrs.version != null) "The ‘version’ attribute cannot be null.";
+            "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
         );
     }) // lib.optionalAttrs __structuredAttrs { env = checkedEnv; } // {
       builder = attrs.realBuilder or stdenv.shell;
@@ -433,6 +446,7 @@ else let
     } // lib.optionalAttrs (enableParallelBuilding) {
       inherit enableParallelBuilding;
       enableParallelChecking = attrs.enableParallelChecking or true;
+      enableParallelInstalling = attrs.enableParallelInstalling or true;
     } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
     } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
@@ -488,46 +502,8 @@ else let
         lib.mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
 
-  validity = checkMeta { inherit meta attrs; };
-
-  # The meta attribute is passed in the resulting attribute set,
-  # but it's not part of the actual derivation, i.e., it's not
-  # passed to the builder and is not a dependency.  But since we
-  # include it in the result, it *is* available to nix-env for queries.
-  meta = {
-      # `name` above includes cross-compilation cruft,
-      # is under assert, and is sanitized.
-      # Let's have a clean always accessible version here.
-      name = attrs.name or "${attrs.pname}-${attrs.version}";
-
-      # If the packager hasn't specified `outputsToInstall`, choose a default,
-      # which is the name of `p.bin or p.out or p` along with `p.man` when
-      # present.
-      #
-      # If the packager has specified it, it will be overridden below in
-      # `// meta`.
-      #
-      #   Note: This default probably shouldn't be globally configurable.
-      #   Services and users should specify outputs explicitly,
-      #   unless they are comfortable with this default.
-      outputsToInstall =
-        let
-          hasOutput = out: builtins.elem out outputs;
-        in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs) )]
-          ++ lib.optional (hasOutput "man") "man";
-    }
-    // attrs.meta or {}
-    # Fill `meta.position` to identify the source location of the package.
-    // lib.optionalAttrs (pos != null) {
-      position = pos.file + ":" + toString pos.line;
-    } // {
-      # Expose the result of the checks for everyone to see.
-      inherit (validity) unfree broken unsupported insecure;
-      available = validity.valid != "no"
-               && (if config.checkMetaRecursively or false
-                   then lib.all (d: d.meta.available or true) references
-                   else true);
-    };
+  meta = checkMeta.commonMeta { inherit validity attrs pos references; };
+  validity = checkMeta.assertValidity { inherit meta attrs; };
 
   checkedEnv =
     let
@@ -578,7 +554,8 @@ lib.extendDerivation
        disallowedRequisites = [ ];
      });
 
-     inherit meta passthru overrideAttrs;
+     inherit passthru overrideAttrs;
+     inherit meta;
    } //
    # Pass through extra attributes that are not inputs, but
    # should be made available to Nix expressions using the

@@ -8,13 +8,13 @@ let
     x86_64-darwin = "x64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash = {
-    x64-linux_hash = "sha256-iuI24gT7/RFZ9xc4csd+zWEzPSPsxqYY5F+78IWRjxQ=";
-    arm64-linux_hash = "sha256-yHAoZxLeKF6mlR/Av0EH0Lh2XquM9Vx6huNDTEs4wyU=";
-    x64-osx_hash = "sha256-ES6njZTSfd/36+RvibE1hlQlCT+hEEcOem8epBSsnXc=";
+    x64-linux_hash = "sha256-JGv4SXONVncRdWqtqvKnBWJXnp16AWLyFvULTWPmAgc=";
+    arm64-linux_hash = "sha256-irZLQfeGAkM6mb6EXC2tuslyw7QYBZg/aRb0Lx7CJFA=";
+    x64-osx_hash = "sha256-UcPZXf0BzoqlTmOSn1gDEvSZHijyB2nAb6HBj9R1D9Q=";
   }."${arch}-${os}_hash";
 in stdenv.mkDerivation rec {
   pname = "lidarr";
-  version = "1.0.2.2592";
+  version = "1.1.4.3027";
 
   src = fetchurl {
     url = "https://github.com/lidarr/Lidarr/releases/download/v${version}/Lidarr.master.${version}.${os}-core-${arch}.tar.gz";

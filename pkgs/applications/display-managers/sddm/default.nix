@@ -32,6 +32,12 @@ in mkDerivation {
       url = "https://github.com/sddm/sddm/commit/e93bf95c54ad8c2a1604f8d7be05339164b19308.patch";
       sha256 = "sha256:1rh6sdvzivjcl5b05fczarvxhgpjhi7019hvf2gadnwgwdg104r4";
     })
+    # Fix fails to start while starting X server
+    # See: https://github.com/sddm/sddm/pull/1324
+    (fetchpatch {
+      url = "https://github.com/sddm/sddm/commit/adfaa222fdfa6115ea2b320b0bbc2126db9270a5.patch";
+      sha256 = "sha256-q/YLlAjxluzHMKUUQglLo3RyyhERQGPHXGr56+4R9VU=";
+    })
   ];
 
   postPatch =

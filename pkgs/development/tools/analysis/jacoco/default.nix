@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "jacoco";
-  version = "0.8.8";
+  version = "0.8.10";
 
   src = fetchzip {
     url = "https://search.maven.org/remotecontent?filepath=org/jacoco/jacoco/${version}/jacoco-${version}.zip";
     stripRoot = false;
-    sha256 = "sha256-NfXkMAFG1yMj1o06Hlhg9+B4RzL0I36fAGjZx3IC+NQ=";
+    sha256 = "sha256-V8I3DXoeUPNxAe7z/ISGa5UQAyLJN7RKXlD0FOw92Oo=";
   };
 
   outputs = [ "out" "doc" ];
@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A free code coverage library for Java";
-    homepage = "https://jacoco.org/jacoco";
+    homepage = "https://www.jacoco.org/jacoco";
+    changelog = "https://www.jacoco.org/jacoco/trunk/doc/changes.html";
     license = licenses.epl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ figsoda ];

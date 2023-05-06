@@ -45,11 +45,20 @@ buildPythonPackage rec {
 
   sourceRoot = "source/${pname}";
 
+  patches = [
+    # https://github.com/quantumlib/Cirq/pull/5991
+    (fetchpatch {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/python-cirq/cirq-pr5991-np1.24.patch?rev=8";
+      stripLen = 1;
+      hash = "sha256-d2FpaxM1PsPWT9ZM9v2gVrnLCy9zmvkkyAVgo85eL3U=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "matplotlib~=3.0" "matplotlib" \
       --replace "networkx~=2.4" "networkx" \
-      --replace "numpy~=1.16" "numpy"
+      --replace "numpy>=1.16,<1.24" "numpy"
   '';
 
   propagatedBuildInputs = [
@@ -91,6 +100,8 @@ buildPythonPackage rec {
     "test_metadata_search_path"
     # Fails due pandas MultiIndex. Maybe issue with pandas version in nix?
     "test_benchmark_2q_xeb_fidelities"
+    # https://github.com/quantumlib/Cirq/pull/5991
+    "test_json_and_repr_data"
   ];
 
   meta = with lib; {

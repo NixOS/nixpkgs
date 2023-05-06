@@ -29,6 +29,9 @@ stdenv.mkDerivation {
     # https://github.com/SerenityOS/serenity/issues/17062
     substituteInPlace main.cpp \
       --replace "./SQLServer/SQLServer" "$out/bin/SQLServer"
+    # https://github.com/SerenityOS/serenity/issues/10055
+    substituteInPlace ../Meta/Lagom/CMakeLists.txt \
+      --replace "@rpath" "$out/lib"
   '';
 
   nativeBuildInputs = [
@@ -49,16 +52,7 @@ stdenv.mkDerivation {
     "-DENABLE_UNICODE_DATABASE_DOWNLOAD=false"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-Wno-error"
-  ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0") [
-    # error: use of undeclared identifier 'aligned_alloc'
-    "-include mm_malloc.h"
-    "-Daligned_alloc=_mm_malloc"
-  ]);
-
-  # https://github.com/NixOS/nixpkgs/issues/201254
-  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   # https://github.com/SerenityOS/serenity/issues/10055
   postInstall = lib.optionalString stdenv.isDarwin ''

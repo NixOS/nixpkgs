@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "eth-account";
     rev = "v${version}";
-    sha256 = "sha256-cjQvTKC4lDbKnAvbmnTGHQiJZsZFhXc/+UH5rUdlGxs=";
+    hash = "sha256-cjQvTKC4lDbKnAvbmnTGHQiJZsZFhXc/+UH5rUdlGxs=";
   };
 
   postPatch = ''

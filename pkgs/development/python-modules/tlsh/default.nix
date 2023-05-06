@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "trendmicro";
     repo = "tlsh";
     rev = version;
-    sha256 = "sha256-9Vkj7a5xU/coFyM/8i8JB0DdnbgDAEMOjmmMF8ckKuE=";
+    hash = "sha256-9Vkj7a5xU/coFyM/8i8JB0DdnbgDAEMOjmmMF8ckKuE=";
   };
 
   nativeBuildInputs = [ cmake ];

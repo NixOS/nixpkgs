@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "heywbj";
     repo = "django-rest-framework-recursive";
     rev = version;
-    sha256 = "sha256-Q/6yxpz3c402sMZudAeFIht9+5GmTRlzM51AMAx5muY=";
+    hash = "sha256-Q/6yxpz3c402sMZudAeFIht9+5GmTRlzM51AMAx5muY=";
   };
 
   propagatedBuildInputs = [

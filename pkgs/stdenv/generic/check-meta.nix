@@ -368,7 +368,18 @@ let
     else if !allowBroken && attrs.meta.broken or false then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      { valid = "no"; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
+      let toPretty = lib.generators.toPretty {
+            allowPrettyValues = true;
+            indent = "  ";
+          };
+      in { valid = "no"; reason = "unsupported";
+           errormsg = ''
+             is not available on the requested hostPlatform:
+               hostPlatform.config = "${hostPlatform.config}"
+               package.meta.platforms = ${toPretty (attrs.meta.platforms or [])}
+               package.meta.badPlatforms = ${toPretty (attrs.meta.badPlatforms or [])}
+            '';
+         }
     else if !(hasAllowedInsecure attrs) then
       { valid = "no"; reason = "insecure"; errormsg = "is marked as insecure"; }
 
@@ -378,6 +389,55 @@ let
       { valid = "warn"; reason = "maintainerless"; errormsg = "has no maintainers"; }
     # -----
     else { valid = "yes"; });
+
+
+  # The meta attribute is passed in the resulting attribute set,
+  # but it's not part of the actual derivation, i.e., it's not
+  # passed to the builder and is not a dependency.  But since we
+  # include it in the result, it *is* available to nix-env for queries.
+  # Example:
+  #   meta = checkMeta.commonMeta { inherit validity attrs pos references; };
+  #   validity = checkMeta.assertValidity { inherit meta attrs; };
+  commonMeta = { validity, attrs, pos ? null, references ? [ ] }:
+    let
+      outputs = attrs.outputs or [ "out" ];
+    in
+    {
+      # `name` derivation attribute includes cross-compilation cruft,
+      # is under assert, and is sanitized.
+      # Let's have a clean always accessible version here.
+      name = attrs.name or "${attrs.pname}-${attrs.version}";
+
+      # If the packager hasn't specified `outputsToInstall`, choose a default,
+      # which is the name of `p.bin or p.out or p` along with `p.man` when
+      # present.
+      #
+      # If the packager has specified it, it will be overridden below in
+      # `// meta`.
+      #
+      #   Note: This default probably shouldn't be globally configurable.
+      #   Services and users should specify outputs explicitly,
+      #   unless they are comfortable with this default.
+      outputsToInstall =
+        let
+          hasOutput = out: builtins.elem out outputs;
+        in
+        [ (lib.findFirst hasOutput null ([ "bin" "out" ] ++ outputs)) ]
+        ++ lib.optional (hasOutput "man") "man";
+    }
+    // attrs.meta or { }
+    # Fill `meta.position` to identify the source location of the package.
+    // lib.optionalAttrs (pos != null) {
+      position = pos.file + ":" + toString pos.line;
+    } // {
+      # Expose the result of the checks for everyone to see.
+      inherit (validity) unfree broken unsupported insecure;
+
+      available = validity.valid != "no"
+      && (if config.checkMetaRecursively or false
+      then lib.all (d: d.meta.available or true) references
+      else true);
+    };
 
   assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
@@ -390,6 +450,7 @@ let
           warn = handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; };
           yes = true;
         }.${validity.valid};
+
   };
 
-in assertValidity
+in { inherit assertValidity commonMeta; }

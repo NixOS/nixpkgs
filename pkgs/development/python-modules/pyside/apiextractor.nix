@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "PySide";
     repo = "Apiextractor";
     rev = version;
-    sha256 = "sha256-YH8aYyzv59xiIglZbdNgOPnmEQwNE2GmotAFFfFdMlg=";
+    hash = "sha256-YH8aYyzv59xiIglZbdNgOPnmEQwNE2GmotAFFfFdMlg=";
   };
 
   outputs = [ "out" "dev" ];

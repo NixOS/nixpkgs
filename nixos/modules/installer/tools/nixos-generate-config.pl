@@ -85,12 +85,7 @@ sub debug {
 
 
 # nixpkgs.system
-my ($status, @systemLines) = runCommand("@nixInstantiate@ --impure --eval --expr builtins.currentSystem");
-if ($status != 0 || join("", @systemLines) =~ /error/) {
-    die "Failed to retrieve current system type from nix.\n";
-}
-chomp(my $system = @systemLines[0]);
-push @attrs, "nixpkgs.hostPlatform = lib.mkDefault $system;";
+push @attrs, "nixpkgs.hostPlatform = lib.mkDefault \"@system@\";";
 
 
 my $cpuinfo = read_file "/proc/cpuinfo";
@@ -126,9 +121,6 @@ if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
 # Virtualization support?
 push @kernelModules, "kvm-intel" if hasCPUFeature "vmx";
 push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
-
-push @attrs, "hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "AuthenticAMD";
-push @attrs, "hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "GenuineIntel";
 
 
 # Look at the PCI devices and add necessary modules.  Note that most
@@ -203,7 +195,7 @@ sub pciCheck {
     }
 
     # In case this is a virtio scsi device, we need to explicitly make this available.
-    if ($vendor eq "0x1af4" && $device eq "0x1004") {
+    if ($vendor eq "0x1af4" && ($device eq "0x1004" || $device eq "0x1048") ) {
         push @initrdAvailableKernelModules, "virtio_scsi";
     }
 
@@ -324,11 +316,15 @@ if ($virt eq "systemd-nspawn") {
 }
 
 
-# Provide firmware for devices that are not detected by this script,
-# unless we're in a VM/container.
-push @imports, "(modulesPath + \"/installer/scan/not-detected.nix\")"
-    if $virt eq "none";
+# Check if we're on bare metal, not in a VM/container.
+if ($virt eq "none") {
+    # Provide firmware for devices that are not detected by this script.
+    push @imports, "(modulesPath + \"/installer/scan/not-detected.nix\")";
 
+    # Update the microcode.
+    push @attrs, "hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "AuthenticAMD";
+    push @attrs, "hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "GenuineIntel";
+}
 
 # For a device name like /dev/sda1, find a more stable path like
 # /dev/disk/by-uuid/X or /dev/disk/by-label/Y.
@@ -472,7 +468,7 @@ EOF
     }
 
     # Don't emit tmpfs entry for /tmp, because it most likely comes from the
-    # boot.tmpOnTmpfs option in configuration.nix (managed declaratively).
+    # boot.tmp.useTmpfs option in configuration.nix (managed declaratively).
     next if ($mountPoint eq "/tmp" && $fsType eq "tmpfs");
 
     # Emit the filesystem.
@@ -514,21 +510,6 @@ EOF
                 }
             }
         }
-    }
-}
-
-# For lack of a better way to determine it, guess whether we should use a
-# bigger font for the console from the display mode on the first
-# framebuffer. A way based on the physical size/actual DPI reported by
-# the monitor would be nice, but I don't know how to do this without X :)
-my $fb_modes_file = "/sys/class/graphics/fb0/modes";
-if (-f $fb_modes_file && -r $fb_modes_file) {
-    my $modes = read_file($fb_modes_file);
-    $modes =~ m/([0-9]+)x([0-9]+)/;
-    my $console_width = $1, my $console_height = $2;
-    if ($console_width > 1920) {
-        push @attrs, "# high-resolution display";
-        push @attrs, 'hardware.video.hidpi.enable = lib.mkDefault true;';
     }
 }
 

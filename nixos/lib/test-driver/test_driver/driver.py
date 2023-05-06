@@ -2,6 +2,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Union, Optional, Callable, ContextManager
 import os
+import re
 import tempfile
 
 from test_driver.logger import rootlog
@@ -26,6 +27,10 @@ def get_tmp_dir() -> Path:
             f"The directory defined by TMPDIR, TEMP, TMP, or CWD: {tmp_dir} is not writeable"
         )
     return tmp_dir
+
+
+def pythonize_name(name: str) -> str:
+    return re.sub(r"^[^A-z_]|[^A-z0-9_]", "_", name)
 
 
 class Driver:
@@ -113,7 +118,7 @@ class Driver:
             polling_condition=self.polling_condition,
             Machine=Machine,  # for typing
         )
-        machine_symbols = {m.name: m for m in self.machines}
+        machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
         # "machine", even if it's not called that.
         if len(self.machines) == 1:
@@ -179,7 +184,6 @@ class Driver:
             start_command=cmd,
             name=name,
             keep_vm_state=args.get("keep_vm_state", False),
-            allow_reboot=args.get("allow_reboot", False),
         )
 
     def serial_stdout_on(self) -> None:

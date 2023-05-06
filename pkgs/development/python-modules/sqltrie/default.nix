@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sqltrie";
-  version = "0.0.28";
+  version = "0.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-i1IFkibQ7VHrkD8KzeInBE4ZbjxAw8nQIeE6O4iYmbw=";
+    hash = "sha256-e/3Tq2H9I0zvqq0+q1c3nbz2UiMNX7JpVpVC9suvYRM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

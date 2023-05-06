@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.11.1";
+  version = "3.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TwVY6/4TSY8cPj3y/A7+cxpyVJ9+lPg+vAKNhfBNfqI=";
+    hash = "sha256-KBqnGp56U2lGLo/2MWu5kfHr7pfIJJDT857+xnrK+iU=";
   };
 
   propagatedBuildInputs = [

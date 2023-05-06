@@ -9,28 +9,26 @@
 , mtdev
 , cairo
 , xorg
-, waylandSupport ? false
+, waylandSupport ? true
+, wayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "qt5platform-plugins";
-  version = "5.6.3";
+  version = "5.6.9";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AySltMI9x5mfquy532h1QfGpfwSfI9+h6BtIHPyNWGk=";
+    sha256 = "sha256-EG5M4rcMK62DX4ywm2IH0lGHC510BnMqcefMlF9pyr8=";
   };
 
-  ## https://github.com/linuxdeepin/qt5platform-plugins/pull/119
-  postPatch = ''
-    rm -r xcb/libqt5xcbqpa-dev/
-    mkdir -p xcb/libqt5xcbqpa-dev/${qtbase.version}
-    cp -r ${qtbase.src}/src/plugins/platforms/xcb/*.h xcb/libqt5xcbqpa-dev/${qtbase.version}/
-  '';
-
-  nativeBuildInputs = [ qmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     mtdev
@@ -38,12 +36,19 @@ stdenv.mkDerivation rec {
     qtbase
     qtx11extras
     xorg.libSM
+  ]
+  ++ lib.optionals waylandSupport [
+    wayland
   ];
 
   qmakeFlags = [
     "INSTALL_PATH=${placeholder "out"}/${qtbase.qtPluginPrefix}/platforms"
+    "QT_XCB_PRIVATE_INCLUDE=${qtbase.src}/src/plugins/platforms/xcb"
   ]
-  ++ lib.optional (!waylandSupport) [ "CONFIG+=DISABLE_WAYLAND" ];
+  ++ lib.optionals (!waylandSupport) [ "CONFIG+=DISABLE_WAYLAND" ];
+
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString waylandSupport "-I${wayland.dev}/include";
 
   meta = with lib; {
     description = "Qt platform plugins for DDE";

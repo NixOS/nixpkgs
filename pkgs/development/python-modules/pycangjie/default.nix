@@ -20,7 +20,7 @@ buildPythonPackage {
     owner = "Cangjians";
     repo = "pycangjie";
     rev = "361bb413203fd43bab624d98edf6f7d20ce6bfd3";
-    sha256 = "sha256-sS0Demzm89WtEIN4Efz0OTsUQ/c3gIX+/koekQGOca4=";
+    hash = "sha256-sS0Demzm89WtEIN4Efz0OTsUQ/c3gIX+/koekQGOca4=";
   };
 
   nativeBuildInputs = [ pkg-config libtool autoconf automake cython ];

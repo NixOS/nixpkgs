@@ -1,19 +1,20 @@
 <book xmlns="http://docbook.org/ns/docbook"
-      xmlns:xi="http://www.w3.org/2001/XInclude">
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xml:id="nixpkgs-manual">
  <info>
   <title>Nixpkgs Manual</title>
   <subtitle>Version <xi:include href=".version" parse="text" />
   </subtitle>
  </info>
  <xi:include href="preface.chapter.xml" />
- <part>
+ <part xml:id="part-using">
   <title>Using Nixpkgs</title>
   <xi:include href="using/configuration.chapter.xml" />
   <xi:include href="using/overlays.chapter.xml" />
   <xi:include href="using/overrides.chapter.xml" />
   <xi:include href="functions.xml" />
  </part>
- <part>
+ <part xml:id="part-stdenv">
   <title>Standard environment</title>
   <xi:include href="stdenv/stdenv.chapter.xml" />
   <xi:include href="stdenv/meta.chapter.xml" />
@@ -21,7 +22,7 @@
   <xi:include href="stdenv/cross-compilation.chapter.xml" />
   <xi:include href="stdenv/platform-notes.chapter.xml" />
  </part>
- <part>
+ <part xml:id="part-builders">
   <title>Builders</title>
   <xi:include href="builders/fetchers.chapter.xml" />
   <xi:include href="builders/trivial-builders.chapter.xml" />
@@ -32,7 +33,7 @@
   <xi:include href="languages-frameworks/index.xml" />
   <xi:include href="builders/packages/index.xml" />
  </part>
- <part>
+ <part xml:id="part-contributing">
   <title>Contributing to Nixpkgs</title>
   <xi:include href="contributing/quick-start.chapter.xml" />
   <xi:include href="contributing/coding-conventions.chapter.xml" />

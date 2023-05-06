@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "ICRAR";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0FgNOVpgJTxRALuufZ7Dt1TwuX+zqw35yCq8kmq4RTc=";
+    hash = "sha256-0FgNOVpgJTxRALuufZ7Dt1TwuX+zqw35yCq8kmq4RTc=";
   };
 
   meta = {

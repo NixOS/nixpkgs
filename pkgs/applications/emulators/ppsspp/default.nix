@@ -4,7 +4,7 @@
 , SDL2
 , cmake
 , copyDesktopItems
-, ffmpeg
+, ffmpeg_4
 , glew
 , libffi
 , libsForQt5
@@ -29,23 +29,23 @@ let
 in
 # Only SDL frontend needs to specify whether to use Wayland
 assert forceWayland -> !enableQt;
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ppsspp"
           + lib.optionalString enableQt "-qt"
           + lib.optionalString (!enableQt) "-sdl"
           + lib.optionalString forceWayland "-wayland";
-  version = "1.14.4";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-7xzhN8JIQD4LZg8sQ8rLNYZrW0nCNBfZFgzoKdoWbKc=";
+    sha256 = "sha256-D42u3MP+JKO/1IrOWVliVg4flUJi/pADScbNktRP+bY=";
   };
 
   postPatch = ''
-    substituteInPlace git-version.cmake --replace unknown ${self.src.rev}
+    substituteInPlace git-version.cmake --replace unknown ${finalAttrs.src.rev}
     substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
   '';
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation (self: {
 
   buildInputs = [
     SDL2
-    ffmpeg
+    ffmpeg_4
     (glew.override { enableEGL = forceWayland; })
     libzip
     snappy

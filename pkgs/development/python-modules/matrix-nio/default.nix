@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, Logbook
+, logbook
 , aiofiles
 , aiohttp
 , aiohttp-socks
@@ -43,8 +43,8 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"' \
       --replace 'h11 = "^0.12.0"' 'h11 = "*"' \
-      --replace 'jsonschema = "^3.2.0"' 'jsonschema = "*"' \
-      --replace 'cachetools = { version = "^4.2.1", optional = true }' 'cachetools = { version = "*", optional = true }'
+      --replace 'cachetools = { version = "^4.2.1", optional = true }' 'cachetools = { version = "*", optional = true }' \
+      --replace 'aiohttp-socks = "^0.7.0"' 'aiohttp-socks = "*"'
   '';
 
   nativeBuildInputs = [
@@ -53,22 +53,27 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    Logbook
     aiofiles
     aiohttp
     aiohttp-socks
-    atomicwrites
     attrs
-    cachetools
     future
     h11
     h2
     jsonschema
-    peewee
+    logbook
     pycryptodome
-    python-olm
     unpaddedbase64
   ];
+
+  passthru.optional-dependencies = {
+    e2e = [
+      atomicwrites
+      cachetools
+      python-olm
+      peewee
+    ];
+  };
 
   nativeCheckInputs = [
     aioresponses
@@ -78,7 +83,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-benchmark
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.e2e;
 
   pytestFlagsArray = [
     "--benchmark-disable"
@@ -93,6 +98,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/poljar/matrix-nio";
+    changelog = "https://github.com/poljar/matrix-nio/blob/${version}/CHANGELOG.md";
     description = "A Python Matrix client library, designed according to sans I/O principles";
     license = licenses.isc;
     maintainers = with maintainers; [ tilpner emily symphorien ];

@@ -1,6 +1,5 @@
 { lib
 , aiohttp
-, asynctest
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "subarulink";
-  version = "0.7.1";
+  version = "0.7.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     owner = "G-Two";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-igfC/Hi/cbNnHmrzgWQnhJ9cdWHPI0fIqPIYeIZuxgU=";
+    hash = "sha256-D2nwzj7uYL/v5Ew2+LfJBLH904Htam4Fa3Gs6t8Hbyo=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +29,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     cryptography
     pytest-asyncio
     pytestCheckHook

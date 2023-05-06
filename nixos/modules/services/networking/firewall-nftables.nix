@@ -94,7 +94,13 @@ in
           ${optionalString (ifaceSet != "") ''iifname { ${ifaceSet} } accept comment "trusted interfaces"''}
 
           # Some ICMPv6 types like NDP is untracked
-          ct state vmap { invalid : drop, established : accept, related : accept, * : jump input-allow } comment "*: new and untracked"
+          ct state vmap {
+            invalid : drop,
+            established : accept,
+            related : accept,
+            new : jump input-allow,
+            untracked: jump input-allow,
+          }
 
           ${optionalString cfg.logRefusedConnections ''
             tcp flags syn / fin,syn,rst,ack log level info prefix "refused connection: "
@@ -143,7 +149,13 @@ in
           chain forward {
             type filter hook forward priority filter; policy drop;
 
-            ct state vmap { invalid : drop, established : accept, related : accept, * : jump forward-allow } comment "*: new and untracked"
+            ct state vmap {
+              invalid : drop,
+              established : accept,
+              related : accept,
+              new : jump forward-allow,
+              untracked : jump forward-allow,
+            }
 
           }
 

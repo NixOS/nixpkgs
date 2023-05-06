@@ -4,20 +4,24 @@
 }:
 let
   cdefs_h = fetchurl {
-    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-cdefs.h";
+    name = "sys-cdefs.h";
+    url = "https://git.alpinelinux.org/aports/plain/main/libc-dev/sys-cdefs.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
     sha256 = "16l3dqnfq0f20rzbkhc38v74nqcsh9n3f343bpczqq8b1rz6vfrh";
   };
   queue_h = fetchurl {
-    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-queue.h";
+    name = "sys-queue.h";
+    url = "http://git.alpinelinux.org/aports/plain/main/libc-dev/sys-queue.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
     sha256 = "12qm82id7zys92a1qh2l1qf2wqgq6jr4qlbjmqyfffz3s3nhfd61";
   };
   tree_h = fetchurl {
-    url = "http://git.alpinelinux.org/cgit/aports/plain/main/libc-dev/sys-tree.h";
+    name = "sys-tree.h";
+    url = "http://git.alpinelinux.org/aports/plain/main/libc-dev/sys-tree.h?id=7ca0ed62d4c0d713d9c7dd5b9a077fba78bce578";
     sha256 = "14igk6k00bnpfw660qhswagyhvr0gfqg4q55dxvaaq7ikfkrir71";
   };
 
   stack_chk_fail_local_c = fetchurl {
-    url = "https://git.alpinelinux.org/aports/plain/main/musl/__stack_chk_fail_local.c?h=3.10-stable";
+    name = "__stack_chk_fail_local.c";
+    url = "https://git.alpinelinux.org/aports/plain/main/musl/__stack_chk_fail_local.c?id=9afbe3cbbf4c30ff23c733218c3c03d7e8c6461d";
     sha256 = "1nhkzzy9pklgjcq2yg89d3l18jif331srd3z3vhy5qwxl1spv6i9";
   };
 
@@ -145,7 +149,13 @@ stdenv.mkDerivation rec {
     homepage    = "https://musl.libc.org/";
     changelog   = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
     license     = licenses.mit;
-    platforms   = platforms.linux;
+    platforms   = [
+      "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
+      "armv7l-linux" "i686-linux" "x86_64-linux" "m68k-linux"
+      "microblaze-linux" "microblazeel-linux" "mipsel-linux"
+      "mips64el-linux" "powerpc64-linux" "powerpc64le-linux"
+      "riscv64-linux" "s390x-linux"
+    ];
     maintainers = with maintainers; [ thoughtpolice dtzWill ];
   };
 }

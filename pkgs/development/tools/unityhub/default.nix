@@ -1,45 +1,131 @@
-{ lib, fetchurl, appimageTools  }:
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSEnv
+, extraPkgs ? pkgs: [ ]
+, extraLibs ? pkgs: [ ]
+}:
 
-appimageTools.wrapType2 rec {
+stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "2.3.2";
+  version = "3.4.2";
 
   src = fetchurl {
-    # mirror of https://public-cdn.cloud.unity3d.com/hub/prod/UnityHub.AppImage
-    url = "https://archive.org/download/unity-hub-${version}/UnityHub.AppImage";
-    sha256 = "07nfyfp9apshqarc6pgshsczila6x4943hiyyizc55kp85aw0imn";
+    url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
+    sha256 = "sha256-I1qtrD94IpMut0a6JUHErHaksoZ+z8/dDG8U68Y5zJE=";
   };
 
-  extraPkgs = (pkgs: with pkgs; with xorg; [ gtk2 gdk-pixbuf glib libGL libGLU nss nspr
-    alsa-lib cups libcap fontconfig freetype pango
-    cairo dbus dbus-glib libdbusmenu libdbusmenu-gtk2 expat zlib libpng12 udev tbb
-    libpqxx gtk3 libsecret lsb-release openssl nodejs ncurses5
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
-    libX11 libXcursor libXdamage libXfixes libXrender libXi
-    libXcomposite libXext libXrandr libXtst libSM libICE libxcb
+  fhsEnv = buildFHSEnv {
+    name = "${pname}-fhs-env";
+    runScript = "";
 
-    libselinux pciutils libpulseaudio libxml2 icu clang cacert
-  ]);
+    # Seems to be needed for GTK filepickers to work in FHSUserEnv
+    profile = "XDG_DATA_DIRS=\"\$XDG_DATA_DIRS:/usr/share/\"";
 
-  extraInstallCommands =
-    let appimageContents = appimageTools.extractType2 { inherit pname version src; }; in
-    ''
-      install -Dm444 ${appimageContents}/unityhub.desktop -t $out/share/applications
-      substituteInPlace $out/share/applications/unityhub.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
-      install -m 444 -D ${appimageContents}/unityhub.png \
-        $out/share/icons/hicolor/64x64/apps/unityhub.png
-    '';
+    targetPkgs = pkgs: with pkgs; [
+      xorg.libXrandr
+
+      # GTK filepicker
+      gsettings-desktop-schemas
+      hicolor-icon-theme
+
+      # Bug Reporter dependencies
+      fontconfig
+      freetype
+      lsb-release
+    ] ++ extraPkgs pkgs;
+
+    multiPkgs = pkgs: with pkgs; [
+      # Unity Hub ldd dependencies
+      cups
+      gtk3
+      expat
+      libxkbcommon
+      lttng-ust_2_12
+      krb5
+      alsa-lib
+      nss_latest
+      libdrm
+      mesa
+      nspr
+      atk
+      dbus
+      at-spi2-core
+      pango
+      xorg.libXcomposite
+      xorg.libXext
+      xorg.libXdamage
+      xorg.libXfixes
+      xorg.libxcb
+      xorg.libxshmfence
+      xorg.libXScrnSaver
+      xorg.libXtst
+
+      # Unity Hub additional dependencies
+      libva
+      openssl_1_1
+      cairo
+      xdg-utils
+      libnotify
+      libuuid
+      libsecret
+      udev
+      libappindicator
+      wayland
+      cpio
+      icu
+      libpulseaudio
+
+      # Editor dependencies
+      libglvnd # provides ligbl
+      xorg.libX11
+      xorg.libXcursor
+      glib
+      gdk-pixbuf
+      libxml2
+      zlib
+      clang
+      git # for git-based packages in unity package manager
+    ] ++ extraLibs pkgs;
+  };
+
+  unpackCmd = "dpkg -x $curSrc src";
+
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out
+    mv opt/ usr/share/ $out
+
+    # `/opt/unityhub/unityhub` is a shell wrapper that runs `/opt/unityhub/unityhub-bin`
+    # Which we don't need and overwrite with our own custom wrapper
+    makeWrapper ${fhsEnv}/bin/${pname}-fhs-env $out/opt/unityhub/unityhub \
+      --add-flags $out/opt/unityhub/unityhub-bin \
+      --argv0 unityhub
+
+    # Link binary
+    mkdir -p $out/bin
+    ln -s $out/opt/unityhub/unityhub $out/bin/unityhub
+
+    # Replace absolute path in desktop file to correctly point to nix store
+    substituteInPlace $out/share/applications/unityhub.desktop \
+      --replace /opt/unityhub/unityhub $out/opt/unityhub/unityhub
+
+    runHook postInstall
+  '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
+    description = "Official Unity3D app to download and manage Unity Projects and installations";
     homepage = "https://unity3d.com/";
-    description = "Game development tool";
-    longDescription = ''
-      Popular development platform for creating 2D and 3D multiplatform games
-      and interactive experiences.
-    '';
     license = licenses.unfree;
+    maintainers = with maintainers; [ tesq0 huantian ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ tesq0 ];
   };
 }

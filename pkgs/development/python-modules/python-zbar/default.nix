@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "mchehab";
     repo = "zbar";
     rev = version;
-    sha256 = "sha256-FvV7TMc4JbOiRjWLka0IhtpGGqGm5fis7h870OmJw2U=";
+    hash = "sha256-FvV7TMc4JbOiRjWLka0IhtpGGqGm5fis7h870OmJw2U=";
   };
 
   patches = [

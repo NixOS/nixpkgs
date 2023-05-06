@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -31,6 +32,7 @@
 , gobject-introspection
 , itstool
 , libsecret
+, libportal-gtk3
 , gsettings-desktop-schemas
 , python3
 }:
@@ -39,11 +41,11 @@
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.31.5";
+  version = "0.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-OwSPxs6ZsjLR4OqbjbB0CDyGyI07bWMTaiz4IXqkXBk=";
+    sha256 = "sha256-F3Ky+h56VHnVKAKLyaMD8oVeHZWaWzyReSLmOpipCxk=";
   };
 
   nativeBuildInputs = [
@@ -86,6 +88,7 @@ stdenv.mkDerivation rec {
     gcr
     gnome.adwaita-icon-theme
     libsecret
+    libportal-gtk3
   ];
 
   postPatch = ''

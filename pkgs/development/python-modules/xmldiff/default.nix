@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "xmldiff";
-  version = "2.5";
+  version = "2.6.1";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bF8wvGXOboHZpwo8sCafe6YYUv1sqnoPv8Dt8zs8txc=";
+    hash = "sha256-gbgX7y/Q3pswM2tH/R1GSMmbMGhQJKB7w08sFGQE4Vk=";
   };
 
   propagatedBuildInputs = [

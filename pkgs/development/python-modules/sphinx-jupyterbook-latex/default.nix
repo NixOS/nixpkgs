@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "sphinx_jupyterbook_latex";
-    sha256 = "sha256-2h060Cj1XdvxC5Ewu58k/GDK+2ccvTnf2VU3qvyQly4=";
+    hash = "sha256-2h060Cj1XdvxC5Ewu58k/GDK+2ccvTnf2VU3qvyQly4=";
   };
 
   postPatch = ''

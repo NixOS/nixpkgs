@@ -25,7 +25,9 @@
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? bintools != null && bintools ? man
 , extraPackages ? [], extraBuildCommands ? ""
-, isGNU ? bintools.isGNU or false, isLLVM ? bintools.isLLVM or false
+, isGNU ? bintools.isGNU or false
+, isLLVM ? bintools.isLLVM or false
+, isCCTools ? bintools.isCCTools or false
 , buildPackages ? {}
 , targetPackages ? {}
 , useMacosReexportHack ? false
@@ -86,6 +88,7 @@ let
     else if targetPlatform.isMips                     then "${sharedLibraryLoader}/lib/ld.so.1"
     # `ld-linux-riscv{32,64}-<abi>.so.1`
     else if targetPlatform.isRiscV                    then "${sharedLibraryLoader}/lib/ld-linux-riscv*.so.1"
+    else if targetPlatform.isLoongArch64              then "${sharedLibraryLoader}/lib/ld-linux-loongarch*.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
     else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
@@ -100,7 +103,7 @@ in
 stdenv.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${bintoolsName}-wrapper");
-  version = if bintools == null then null else bintoolsVersion;
+  version = if bintools == null then "" else bintoolsVersion;
 
   preferLocalBuild = true;
 
@@ -139,6 +142,7 @@ stdenv.mkDerivation {
         local dst="$1"
         local wrapper="$2"
         export prog="$3"
+        export use_response_file_by_default=${if isCCTools then "1" else "0"}
         substituteAll "$wrapper" "$out/bin/$dst"
         chmod +x "$out/bin/$dst"
       }
@@ -163,7 +167,7 @@ stdenv.mkDerivation {
 
     # If we are asked to wrap `gas` and this bintools has it,
     # then symlink it (`as` will be symlinked next).
-    # This is mainly for the wrapped gnatboot on x86-64 Darwin,
+    # This is mainly for the wrapped gnat-bootstrap on x86-64 Darwin,
     # as it must have both the GNU assembler from cctools (installed as `gas`)
     # and the Clang integrated assembler (installed as `as`).
     # See pkgs/os-specific/darwin/binutils/default.nix for details.
@@ -183,7 +187,9 @@ stdenv.mkDerivation {
       done
 
     '' + (if !useMacosReexportHack then ''
-      wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
+      if [ -e ''${ld:-$ldPath/${targetPrefix}ld} ]; then
+        wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
+      fi
     '' else ''
       ldInner="${targetPrefix}ld-reexport-delegate"
       wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${targetPrefix}ld}
@@ -191,10 +197,9 @@ stdenv.mkDerivation {
       unset ldInner
     '') + ''
 
-      for variant in ld.gold ld.bfd ld.lld; do
-        local underlying=$ldPath/${targetPrefix}$variant
-        [[ -e "$underlying" ]] || continue
-        wrap ${targetPrefix}$variant ${./ld-wrapper.sh} $underlying
+      for variant in $ldPath/${targetPrefix}ld.*; do
+        basename=$(basename "$variant")
+        wrap $basename ${./ld-wrapper.sh} $variant
       done
     '';
 

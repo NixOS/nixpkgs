@@ -7,12 +7,24 @@
 
 stdenv.mkDerivation rec {
   pname = "diffutils";
-  version = "3.8";
+  version = "3.9";
 
   src = fetchurl {
     url = "mirror://gnu/diffutils/diffutils-${version}.tar.xz";
-    sha256 = "sha256-pr3X0bMSZtEcT03mwbdI1GB6sCMa9RiPwlM9CuJDj+w=";
+    hash = "sha256-2A076QogGGjeg9eNrTQTrYgWDMU7zDbrnq98INvwI/E=";
   };
+
+  patches = [
+    # Backport of a fix for 'diff -D' output.
+    # TODO: remove when updating to 3.10.
+    ./fix-diff-D.patch
+  ];
+
+  postPatch = ''
+    # avoid the need for help2man
+    # TODO: can be removed when fix-diff-D.patch is removed.
+    touch man/diff.1
+  '';
 
   outputs = [ "out" "info" ];
 

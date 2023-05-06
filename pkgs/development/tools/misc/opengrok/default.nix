@@ -1,26 +1,26 @@
-{ lib, stdenv, fetchurl, jre, ctags, makeWrapper, coreutils, git, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "opengrok";
-  version = "1.0";
+  version = "1.12.3";
 
   # binary distribution
   src = fetchurl {
     url = "https://github.com/oracle/opengrok/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0h4rwfh8m41b7ij931gcbmkihri25m48373qf6ig0714s66xwc4i";
+    hash = "sha256-GHSsfsEhBYeUbSKZfve3O2Z+bL3e7dqpl4sQKrQgWDE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -a * $out/
-    substituteInPlace $out/bin/OpenGrok --replace "/bin/uname" "${coreutils}/bin/uname"
-    substituteInPlace $out/bin/Messages --replace "#!/bin/ksh" "#!${runtimeShell}"
-    wrapProgram $out/bin/OpenGrok \
-      --prefix PATH : "${lib.makeBinPath [ ctags git ]}" \
-      --set JAVA_HOME "${jre}" \
-      --set OPENGROK_TOMCAT_BASE "/var/tomcat"
+    makeWrapper ${jre}/bin/java $out/bin/opengrok \
+      --add-flags "-jar $out/lib/opengrok.jar"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

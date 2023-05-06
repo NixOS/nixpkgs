@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitLab
-, python3Packages
+, fetchFromGitHub
+, python3
 , gobject-introspection
 , gtk3
 , pango
@@ -15,7 +16,22 @@
 , networkmanager
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      semver = super.semver.overridePythonAttrs (oldAttrs: rec {
+        version = "2.13.0";
+        src = fetchFromGitHub {
+          owner = "python-semver";
+          repo = "python-semver";
+          rev = "refs/tags/${version}";
+          hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "sublime-music";
   version = "0.11.16";
   format = "pyproject";
@@ -29,10 +45,11 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    python3Packages.poetry-core
-    python3Packages.pythonRelaxDepsHook
     wrapGAppsHook
-  ];
+  ] ++ (with python.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
+  ]);
 
   # Can be removed in later versions (probably > 0.11.16)
   pythonRelaxDeps = [
@@ -57,7 +74,7 @@ python3Packages.buildPythonApplication rec {
   ++ lib.optional networkSupport networkmanager
   ;
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     bleach
     dataclasses-json
     deepdiff
@@ -70,16 +87,12 @@ python3Packages.buildPythonApplication rec {
     requests
     semver
   ]
-  ++ lib.optional chromecastSupport PyChromecast
+  ++ lib.optional chromecastSupport pychromecast
   ++ lib.optional keyringSupport keyring
   ++ lib.optional serverSupport bottle
   ;
 
-  # hook for gobject-introspection doesn't like strictDeps
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python.pkgs; [
     pytest
   ];
 

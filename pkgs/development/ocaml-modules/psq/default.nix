@@ -1,15 +1,15 @@
 { lib, buildDunePackage, ocaml, fetchurl, seq, qcheck-alcotest }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.03";
   pname = "psq";
-  version = "0.2.0";
+  version = "0.2.1";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/pqwy/psq/releases/download/v${version}/psq-v${version}.tbz";
-    sha256 = "1j4lqkq17rskhgcrpgr4n1m1a2b1x35mlxj6f9g05rhpmgvgvknk";
+    url = "https://github.com/pqwy/psq/releases/download/v${version}/psq-${version}.tbz";
+    hash = "sha256-QgBfUz6r50sXme4yuJBWVM1moivtSvK9Jmso2EYs00Q=";
   };
 
   propagatedBuildInputs = [ seq ];

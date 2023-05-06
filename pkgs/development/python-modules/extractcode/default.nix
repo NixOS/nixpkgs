@@ -23,6 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-gIGTkum8+BKfdNiQT+ipjA3+0ngjVoQnNygsAoMRPYg=";
   };
 
+  postPatch = ''
+    # PEP440 support was removed in newer setuptools, https://github.com/nexB/extractcode/pull/46
+    substituteInPlace setup.cfg \
+      --replace ">=3.6.*" ">=3.6"
+  '';
+
   dontConfigure = true;
 
   nativeBuildInputs = [
@@ -69,7 +75,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Universal archive extractor using z7zip, libarchve, other libraries and the Python standard library";
     homepage = "https://github.com/nexB/extractcode";
+    changelog = "https://github.com/nexB/extractcode/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

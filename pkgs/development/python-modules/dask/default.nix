@@ -10,6 +10,7 @@
 , fetchFromGitHub
 , fetchpatch
 , fsspec
+, importlib-metadata
 , jinja2
 , numpy
 , packaging
@@ -22,13 +23,15 @@
 , pythonOlder
 , pyyaml
 , scipy
+, setuptools
 , toolz
+, versioneer
 , zarr
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.1.0";
+  version = "2023.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -36,9 +39,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
-    rev = version;
-    hash = "sha256-avyrKBAPyYZBNgItnkNCferqb6+4yeGpBAZhSkL/fFA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-PkEFXF6OFZU+EMFBUopv84WniQghr5Q6757Qx6D5MyE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    versioneer
+  ];
 
   propagatedBuildInputs = [
     click
@@ -47,6 +55,7 @@ buildPythonPackage rec {
     packaging
     partd
     pyyaml
+    importlib-metadata
     toolz
   ];
 
@@ -91,8 +100,9 @@ buildPythonPackage rec {
       --replace "version=versioneer.get_version()," "version='${version}'," \
       --replace "cmdclass=versioneer.get_cmdclass()," ""
 
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace " --durations=10" "" \
+      --replace " --cov-config=pyproject.toml" "" \
       --replace " -v" ""
   '';
 
@@ -101,8 +111,6 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
-    # DeprecationWarning: The 'sym_pos' keyword is deprecated and should be replaced by using 'assume_a = "pos"'. 'sym_pos' will be removed in SciPy 1.11.0.
-    "-W" "ignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -115,6 +123,9 @@ buildPythonPackage rec {
     "test_chunksize_files"
     # TypeError: 'ArrowStringArray' with dtype string does not support reduction 'min'
     "test_set_index_string"
+    # numpy 1.24
+    # RuntimeWarning: invalid value encountered in cast
+    "test_setitem_extended_API_2d_mask"
   ];
 
   __darwinAllowLocalNetworking = true;

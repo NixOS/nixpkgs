@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-about";
-  version = "0.5.4";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-about";
     rev = version;
-    sha256 = "sha256-zr9Y07VoW8XQELzw7C1QT8Ared8ntH9yjncZqZJ1uj4=";
+    sha256 = "sha256-nlumcRcL5HwRJTNqLJ9+UkSg88HuE96Rg8Tgc+ZcK2M=";
   };
 
-  cargoSha256 = "sha256-L01NvZbJggOMcoBLXZw8peiCQxA1DPqnrZVx2pMb40o=";
+  cargoSha256 = "sha256-Fa1DGXzHDR3EAZyFg0g2aKFynQlC/LL+Tg5LKpOUzmM=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -26,7 +26,9 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  ZSTD_SYS_USE_PKG_CONFIG = true;
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";

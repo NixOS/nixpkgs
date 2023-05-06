@@ -37,16 +37,8 @@ stdenv.mkDerivation rec {
     # submitted by Fedora on the GNOME Bugzilla
     # (https://bugzilla.gnome.org/787443). Upstream thinks the patch
     # could be merged, but dev can not make a new release.
-
-    (fetchpatch {
-      url = "https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=359589";
-      sha256 = "0f0d9iddg8zwy853phh7swikg4yzhxxv71fcag36f8gis0j5p998";
-    })
-
-    (fetchpatch {
-      url = "https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=361056";
-      sha256 = "09fyrdci4727fg6qm5aaapsbv71sf4wgfaqz8jqlyy61dibgg490";
-    })
+    ./patches/gnome_bugzilla_787443_359589_deepin.patch
+    ./patches/gnome_bugzilla_787443_361056_deepin.patch
   ];
 
   outputs = [ "out" "dev" ];

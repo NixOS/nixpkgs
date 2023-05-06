@@ -22,13 +22,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-frog";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "TenderOwl";
     repo = "Frog";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-AJ6pFtTM4ViZ9dB41wzHoPSHDdmu+SOzD5fkoAiRLzQ=";
+    sha256 = "sha256-ErDHrdD9UZxOIGwgN5eakY6vhNvE6D9SoRYXZhzmYX4=";
   };
 
   format = "other";

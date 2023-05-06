@@ -1,27 +1,53 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, buildFHSUserEnv, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, buildFHSEnv, installShellFiles, go-task }:
 
 let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "0.29.0";
+    version = "0.32.2";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = pname;
       rev = version;
-      sha256 = "sha256-jew4KLpOOXE9N/h4qFqof8y26DQrvm78E/ARbbwocD4=";
+      hash = "sha256-Em8L2ZYS1rgW46/MP5hs/EBWGcb5GP3EDEzWi072F/I=";
     };
 
     nativeBuildInputs = [
       installShellFiles
     ];
 
+    nativeCheckInputs = [
+      go-task
+    ];
+
     subPackages = [ "." ];
 
-    vendorSha256 = "sha256-BunonnjzGnpcmGJXxEQXvjJLGvdSXUOK9zAhXoAemHY=";
+    vendorSha256 = "sha256-+5Cj6wdX25fK+Y9czTwRRqCdY+0iarvii9nD3QMDh+c=";
 
-    doCheck = false;
+    postPatch = let
+      skipTests = [
+        # tries to "go install"
+        "TestDummyMonitor"
+        # try to Get "https://downloads.arduino.cc/libraries/library_index.tar.bz2"
+        "TestDownloadAndChecksums"
+        "TestParseArgs"
+        "TestParseReferenceCores"
+        "TestPlatformSearch"
+        "TestPlatformSearchSorting"
+      ];
+    in ''
+      substituteInPlace Taskfile.yml \
+        --replace "go test" "go test -p $NIX_BUILD_CORES -skip '(${lib.concatStringsSep "|" skipTests})'"
+    '';
+
+    doCheck = stdenv.isLinux;
+
+    checkPhase = ''
+      runHook preCheck
+      task go:test
+      runHook postCheck
+    '';
 
     ldflags = [
       "-s" "-w" "-X github.com/arduino/arduino-cli/version.versionString=${version}" "-X github.com/arduino/arduino-cli/version.commit=unknown"
@@ -48,10 +74,10 @@ let
 
 in
 if stdenv.isLinux then
-# buildFHSUserEnv is needed because the arduino-cli downloads compiler
+# buildFHSEnv is needed because the arduino-cli downloads compiler
 # toolchains from the internet that have their interpreters pointed at
 # /lib64/ld-linux-x86-64.so.2
-  buildFHSUserEnv
+  buildFHSEnv
   {
     inherit (pkg) name meta;
 

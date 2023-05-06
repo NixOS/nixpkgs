@@ -1,15 +1,18 @@
 { lib
+, stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, mupdf
 , swig
+, xcbuild
+, mupdf
 , freetype
 , harfbuzz
 , openjpeg
 , jbig2dec
 , libjpeg_turbo
 , gumbo
-, pythonOlder
+, memstreamHook
 }:
 
 buildPythonPackage rec {
@@ -31,6 +34,8 @@ buildPythonPackage rec {
   '';
   nativeBuildInputs = [
     swig
+  ] ++ lib.optionals stdenv.isDarwin [
+    xcbuild
   ];
 
   buildInputs = [
@@ -41,6 +46,8 @@ buildPythonPackage rec {
     jbig2dec
     libjpeg_turbo
     gumbo
+  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
+    memstreamHook
   ];
 
   doCheck = false;
@@ -55,6 +62,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ teto ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

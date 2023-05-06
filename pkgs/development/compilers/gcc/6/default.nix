@@ -17,7 +17,7 @@
 , gmp, mpfr, libmpc, gettext, which, patchelf, binutils
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
-, gnatboot ? null
+, gnat-bootstrap ? null
 , zip ? null, unzip ? null, pkg-config ? null
 , gtk2 ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
@@ -45,7 +45,7 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 
-assert langAda -> gnatboot != null;
+assert langAda -> gnat-bootstrap != null;
 
 # threadsCross is just for MinGW
 assert threadsCross != {} -> stdenv.targetPlatform.isWindows;
@@ -62,7 +62,8 @@ let majorVersion = "6";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-    patches = optionals (!stdenv.targetPlatform.isRedox) [
+    patches = [ ../9/fix-struct-redefinition-on-glibc-2.36.patch ]
+    ++ optionals (!stdenv.targetPlatform.isRedox) [
       ../use-source-date-epoch.patch ./0001-Fix-build-for-glibc-2.31.patch
 
       # Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
@@ -77,6 +78,7 @@ let majorVersion = "6";
       ++ optional langAda ./gnat-glibc234.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
+      ++ optional langGo ./gogcc-workaround-glibc-2.36.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
       ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch
@@ -149,7 +151,7 @@ let majorVersion = "6";
         flex
         gettext
         gmp
-        gnatboot
+        gnat-bootstrap
         gnused
         gtk2
         isl
@@ -338,6 +340,7 @@ stdenv.mkDerivation ({
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langAda langGo version;
     isGNU = true;
+    hardeningUnsupportedFlags = [ "fortify3" ];
   };
 
   enableParallelBuilding = true;

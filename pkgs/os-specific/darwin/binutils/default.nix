@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     makeWrapper "${clang-unwrapped}/bin/clang" "$out/bin/${targetPrefix}as" \
       --add-flags "-x assembler -integrated-as -c"
   ''
-  # x86-64 Darwin gnatboot emits assembly
+  # x86-64 Darwin gnat-bootstrap emits assembly
   # with MOVQ as the mnemonic for quadword interunit moves
   # such as `movq %rbp, %xmm0`.
   # The clang integrated assembler recognises this as valid,
@@ -89,6 +89,7 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit targetPrefix;
+    isCCTools = true;
   };
 
   meta = {

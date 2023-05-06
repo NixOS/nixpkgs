@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     gobject-introspection
     vala
+    gnutls
     gtk-doc
     python3
   ];

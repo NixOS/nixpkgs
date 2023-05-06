@@ -7,6 +7,9 @@
 , packaging
 , appdirs
 , requests
+, tqdm
+, paramiko
+, xxhash
 }:
 
 buildPythonPackage rec {
@@ -17,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-V9IOxLEN1pTSsFu2S8axCcboWmwUBXlM6H7Ys0GrP0Q=";
+    hash = "sha256-V9IOxLEN1pTSsFu2S8axCcboWmwUBXlM6H7Ys0GrP0Q=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -43,6 +46,14 @@ buildPythonPackage rec {
     "processor"
     "integration"
   ];
+
+  passthru = {
+    optional-dependencies = {
+      progress = [ tqdm ];
+      sftp = [ paramiko ];
+      xxhash = [ xxhash ];
+    };
+  };
 
   meta = with lib; {
     description = "A friend to fetch your data files.";

@@ -16,6 +16,7 @@ buildDunePackage rec {
   '';
 
   minimalOCamlVersion = "4.06";
+  duneVersion = "3";
 
   propagatedBuildInputs = [ io-page mirage-block ];
 

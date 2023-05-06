@@ -12,4 +12,4 @@ luarocksMoveDataHook () {
 }
 
 echo "Using luarocksMoveDataHook"
-preDistPhases+=" luarocksMoveDataHook"
+preFixupHooks+=(luarocksMoveDataHook)

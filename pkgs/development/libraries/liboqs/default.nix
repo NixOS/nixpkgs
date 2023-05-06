@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://openquantumsafe.org";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ candyc1oud ];
+    maintainers = [];
   };
 }

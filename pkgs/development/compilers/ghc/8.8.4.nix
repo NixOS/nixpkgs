@@ -175,6 +175,10 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "doc" ];
 
   patches = [
+    # Fix docs build with sphinx >= 6.0
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
+    ./ghc-8.8.4-sphinx-6.0.patch
+
     # See upstream patch at
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/4885. Since we build
     # from source distributions, the auto-generated configure script needs to be

@@ -85,18 +85,18 @@ def copy_from_profile(profile: Optional[str], generation: int, specialisation: O
     return efi_file_path
 
 
-def describe_generation(generation_dir: str) -> str:
+def describe_generation(profile: Optional[str], generation: int, specialisation: Optional[str]) -> str:
     try:
-        with open("%s/nixos-version" % generation_dir) as f:
+        with open(profile_path(profile, generation, specialisation, "nixos-version")) as f:
             nixos_version = f.read()
     except IOError:
         nixos_version = "Unknown"
 
-    kernel_dir = os.path.dirname(os.path.realpath("%s/kernel" % generation_dir))
+    kernel_dir = os.path.dirname(profile_path(profile, generation, specialisation, "kernel"))
     module_dir = glob.glob("%s/lib/modules/*" % kernel_dir)[0]
     kernel_version = os.path.basename(module_dir)
 
-    build_time = int(os.path.getctime(generation_dir))
+    build_time = int(os.path.getctime(system_dir(profile, generation, specialisation)))
     build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F')
 
     description = "@distroName@ {}, Linux Kernel {}, Built on {}".format(
@@ -131,11 +131,10 @@ def write_entry(profile: Optional[str], generation: int, specialisation: Optiona
                   "or renamed a file in `boot.initrd.secrets`", file=sys.stderr)
     entry_file = "@efiSysMountPoint@/loader/entries/%s" % (
         generation_conf_filename(profile, generation, specialisation))
-    generation_dir = os.readlink(system_dir(profile, generation, specialisation))
     tmp_path = "%s.tmp" % (entry_file)
-    kernel_params = "init=%s/init " % generation_dir
+    kernel_params = "init=%s " % profile_path(profile, generation, specialisation, "init")
 
-    with open("%s/kernel-params" % (generation_dir)) as params_file:
+    with open(profile_path(profile, generation, specialisation, "kernel-params")) as params_file:
         kernel_params = kernel_params + params_file.read()
     with open(tmp_path, 'w') as f:
         f.write(BOOT_ENTRY.format(title=title,
@@ -143,7 +142,7 @@ def write_entry(profile: Optional[str], generation: int, specialisation: Optiona
                     kernel=kernel,
                     initrd=initrd,
                     kernel_params=kernel_params,
-                    description=describe_generation(generation_dir)))
+                    description=describe_generation(profile, generation, specialisation)))
         if machine_id is not None:
             f.write("machine-id %s\n" % machine_id)
     os.rename(tmp_path, entry_file)
@@ -296,15 +295,19 @@ def main() -> None:
     remove_old_entries(gens)
     for gen in gens:
         try:
-            is_default = os.readlink(system_dir(*gen)) == args.default_config
+            is_default = os.path.dirname(profile_path(*gen, "init")) == args.default_config
             write_entry(*gen, machine_id, current=is_default)
             for specialisation in get_specialisations(*gen):
                 write_entry(*specialisation, machine_id, current=is_default)
             if is_default:
                 write_loader_conf(*gen)
         except OSError as e:
-            profile = f"profile '{gen.profile}'" if gen.profile else "default profile"
-            print("ignoring {} in the list of boot entries because of the following error:\n{}".format(profile, e), file=sys.stderr)
+            # See https://github.com/NixOS/nixpkgs/issues/114552
+            if e.errno == errno.EINVAL:
+                profile = f"profile '{gen.profile}'" if gen.profile else "default profile"
+                print("ignoring {} in the list of boot entries because of the following error:\n{}".format(profile, e), file=sys.stderr)
+            else:
+                raise e
 
     for root, _, files in os.walk('@efiSysMountPoint@/efi/nixos/.extra-files', topdown=False):
         relative_root = root.removeprefix("@efiSysMountPoint@/efi/nixos/.extra-files").removeprefix("/")

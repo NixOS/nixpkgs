@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "joeyespo";
     repo = "grip";
     rev = "v${version}";
-    sha256 = "sha256-CHL2dy0H/i0pLo653F7aUHFvZHTeZA6jC/rwn1KrEW4=";
+    hash = "sha256-CHL2dy0H/i0pLo653F7aUHFvZHTeZA6jC/rwn1KrEW4=";
   };
 
   nativeCheckInputs = [ pytest responses ];

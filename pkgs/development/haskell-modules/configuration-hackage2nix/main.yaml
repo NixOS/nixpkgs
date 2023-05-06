@@ -44,13 +44,25 @@ default-package-overrides:
   - shake-cabal < 0.2.2.3
   # needed as long as we have pandoc < 3.0, i.e. stackage lts 20
   - pandoc-crossref < 0.3.15.0
+  # Needs to match hspec which is tracked in stackage
+  - hspec-api < 2.10
+  # 2023-04-13: latest version requires ghc-events >= 0.19 but it's not on LTS yet
+  - eventlog2html < 0.10
+
+  # 2023-04-22: For dhall < 1.42 compatibility
+  - dhall-nixpkgs == 1.0.9
+  - dhall-nix == 1.1.25
 
 extra-packages:
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - Cabal == 2.4.*                      # required for cabal-install etc.
-  - Cabal == 3.2.*                      # required for cabal-install etc.
+  - Cabal == 3.2.*                      # required for cabal2spec
   - Cabal == 3.4.*                      # required for cabal-install etc.
-  - Cabal == 3.6.*                      # required for cabal-install-parsers etc.
+  - Cabal == 3.6.*
+  - Cabal-syntax == 3.8.*               # required for cabal-install{,-parsers}
+  - Cabal == 3.8.*                      # required for cabal-install{,-parsers}
+  - cachix < 1.4                        # 2023-04-02: cachix 1.4{,.1} have known on multi-user Nix systems
+  - directory == 1.3.7.*                # required to build cabal-install 3.10.* with GHC 9.2
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
   - aeson < 2                           # required by pantry-0.5.2
   - apply-refact == 0.9.*               # 2022-12-12: needed for GHC < 9.2
@@ -62,7 +74,6 @@ extra-packages:
   - brick == 0.70.*                     # 2022-08-13: needed by matterhorn-50200.17.0
   - brick-skylighting < 1.0             # 2022-08-13: needed by matterhorn-50200.17.0 to match brick
   - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
-  - cabal-install-parsers < 0.5         # 2022-08-31: required by haskell-ci 0.14.3
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - dependent-map == 0.2.4.0            # required by Hasura 1.3.1, 2020-08-20
   - dependent-sum == 0.4                # required by Hasura 1.3.1, 2020-08-20
@@ -74,17 +85,22 @@ extra-packages:
   - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
   - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
+  - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
   - ghc-lib == 8.10.7.*                 # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.2
+  - ghc-lib == 9.4.*                    # 2023-03-17: preserve for GHC 9.4
   - ghc-lib-parser == 8.10.7.*          # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 9.2
+  - ghc-lib-parser == 9.4.*             # 2023-03-17: preserve for GHC 9.4
   - ghc-lib-parser-ex == 8.10.*         # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 9.2
-  - ghc-lib-parser-ex >= 9.2.0.3 && < 9.2.1 # 2022-07-13: needed by hlint 3.4.1
+  - ghc-lib-parser-ex == 9.4.*          # 2023-03-17: preserve for GHC 9.4
+  - gi-soup == 2.4.28                   # 2023-04-05: the last version to support libsoup-2.4 (and thus be compatible with our other gi- packages)
   - haddock == 2.23.*                   # required on GHC < 8.10.x
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy == 1.19.12                    # for ghcjs
+  - hermes-json == 0.2.*                # 2023-03-22: for nix-output-monitor-2.0.0.5
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
@@ -105,6 +121,7 @@ extra-packages:
   - optparse-applicative < 0.16         # needed for niv-0.2.19
   - ormolu == 0.1.4.1                   # 2022-09-21: needed for hls on ghc 8.8
   - ormolu == 0.2.*                     # 2022-02-21: For ghc 8.8 and 8.10
+  - ormolu == 0.5.*                     # 2022-04-12: For ghc 9.4
   - pantry == 0.5.2.1                   # needed for stack-2.7.3
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - relude == 0.7.0.0                   # 2022-02-25: Needed for ema 0.6
@@ -120,6 +137,8 @@ extra-packages:
   - ShellCheck == 0.8.0                 # 2022-12-28: required by haskell-ci 0.14.3
   - retrie < 1.2.0.0                    # 2022-12-30: required for hls on ghc < 9.2
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
+  - primitive == 0.7.4.0                # 2023-03-04: primitive 0.8 is not compatible with too many packages on ghc 9.4 as of now
+  - fourmolu == 0.10.1.0                # 2023-04-18: for hls-fourmolu-plugin 1.1.1.0
 
 package-maintainers:
   abbradar:
@@ -183,9 +202,6 @@ package-maintainers:
     - vulkan-utils
   erictapen:
     - hakyll
-    - hakyll-contrib-hyphenation
-    - webify
-    - squeal-postgresql
   Gabriel439:
     - annah
     - bench
@@ -259,7 +275,10 @@ package-maintainers:
     - clay
     - ema
     - emanote
+    - eventlog2html
     - generic-optics
+    - ghc-debug-brick
+    - ghc-debug-stub
     - ghcid
     - graphql-client
     - haskell-language-server
@@ -418,6 +437,120 @@ package-maintainers:
     - rhine-gloss
     - simple-affine-space
     - time-domain
+  thielema:
+    - accelerate-arithmetic
+    - accelerate-fftw
+    - accelerate-fourier
+    - accelerate-utility
+    - align-audio
+    - alsa-core
+    - alsa-pcm
+    - alsa-seq
+    - apportionment
+    - audacity
+    - battleship-combinatorics
+    - bibtex
+    - board-games
+    - buffer-pipe
+    - cabal-flatpak
+    - calendar-recycling
+    - checksum
+    - check-pvp
+    - combinatorial
+    - comfort-graph
+    - comfort-array
+    - comfort-array-shape
+    - comfort-fftw
+    - comfort-glpk
+    - concurrent-split
+    - cutter
+    - data-accessor
+    - data-accessor-mtl
+    - data-accessor-template
+    - data-accessor-transformers
+    - data-ref
+    - doctest-exitcode-stdio
+    - doctest-extract
+    - doctest-lib
+    - dsp
+    - enumset
+    - equal-files
+    - event-list
+    - explicit-exception
+    - fixed-length
+    - fftw-ffi
+    - gnuplot
+    - group-by-date
+    - guarded-allocation
+    - iff
+    - interpolation
+    - jack
+    - latex
+    - lazyio
+    - markov-chain
+    - midi
+    - midi-alsa
+    - midi-music-box
+    - mbox-utility
+    - med-module
+    - monoid-transformer
+    - non-empty
+    - non-negative
+    - numeric-prelude
+    - numeric-quest
+    - pathtype
+    - pooled-io
+    - probability
+    - quickcheck-transformer
+    - reactive-midyim
+    - reactive-balsa
+    - reactive-jack
+    - sample-frame
+    - sample-frame-np
+    - set-cover
+    - shell-utility
+    - sound-collage
+    - sox
+    - soxlib
+    - split-record
+    - spreadsheet
+    - stm-split
+    - storable-record
+    - storable-tuple
+    - storablevector
+    - synthesizer-core
+    - synthesizer-dimensional
+    - synthesizer-alsa
+    - synthesizer-midi
+    - tagchup
+    - tfp
+    - unicode
+    - unique-logic
+    - unique-logic-tf
+    - unsafe
+    - utility-ht
+    - wuerfelschlange
+    - xml-basic
+    - youtube
+    - prelude-compat
+    - fft
+    - carray
+    - lapack-ffi-tools
+    - netlib-ffi
+    - blas-ffi
+    - lapack-ffi
+    - netlib-carray
+    - blas-carray
+    - lapack-carray
+    - netlib-comfort-array
+    - blas-comfort-array
+    - lapack-comfort-array
+    - lapack
+    - lapack-hmatrix
+    - hmm-lapack
+    - magico
+    - resistor-cube
+    - linear-circuit
   utdemir:
     - nix-tree
   zowoq:
@@ -508,6 +641,7 @@ unsupported-platforms:
   spade:                                        [ platforms.darwin ] # depends on sdl2-mixer, which doesn't work on darwin
   synthesizer-alsa:                             [ platforms.darwin ]
   taffybar:                                     [ platforms.darwin ]
+  twirl:                                        [ platforms.darwin ] # depends on sdl2-mixer
   emanote:                                      [ x86_64-darwin ] # Depends on stork which is broken on macOS sdk < 10.14
   termonad:                                     [ platforms.darwin ]
   tokyotyrant-haskell:                          [ platforms.darwin ]
@@ -518,6 +652,7 @@ unsupported-platforms:
   VulkanMemoryAllocator:                        [ i686-linux, armv7l-linux, platforms.darwin ]
   vulkan-utils:                                 [ platforms.darwin ]
   webkit2gtk3-javascriptcore:                   [ platforms.darwin ]
+  wiringPi:                                     [ aarch64-darwin ]
   xattr:                                        [ platforms.darwin ]
   xgboost-haskell:                              [ aarch64-linux, armv7l-linux ]
   xmobar:                                       [ platforms.darwin ]
@@ -552,6 +687,7 @@ supported-platforms:
   hsignal:                                      [ platforms.x86 ] # -msse2
   HFuse:                                        [ platforms.linux ]
   HQu:                                          [ platforms.x86 ] # vendored C++ library needs i686/x86_64
+  hs-swisstable-hashtables-class:               [ platforms.x86_64 ] # depends on swisstable, which Needs AVX2
   hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
   inline-asm:                                   [ platforms.x86 ] # x86 assembler
   keid-core:                                    [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
@@ -562,13 +698,15 @@ supported-platforms:
   keid-sound-openal:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   keid-ui-dearimgui:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   kqueue:                                       [ platforms.netbsd, platforms.freebsd, platforms.openbsd, platforms.darwin ]
+  libfuse3:                                     [ platforms.linux ]
   linux-evdev:                                  [ platforms.linux ]
   linux-file-extents:                           [ platforms.linux ]
   linux-inotify:                                [ platforms.linux ]
   linux-mount:                                  [ platforms.linux ]
   linux-namespaces:                             [ platforms.linux ]
   lxc:                                          [ platforms.linux ]
-  midi-alsa:                                    [ platforms.linux ]
+  midi-alsa:                                    [ platforms.linux ] # alsa-core only supported on linux
+  midisurface:                                  [ platforms.linux ] # alsa-core only supported on linux
   OrderedBits:                                  [ platforms.x86 ] # lacks implementations for non-x86: https://github.com/choener/OrderedBits/blob/401cbbe933b1635aa33e8e9b29a4a570b0a8f044/lib/Data/Bits/Ordered.hs#L316
   password:                                     [ platforms.x86 ] # uses scrypt, which requries x86
   password-instances:                           [ platforms.x86 ] # uses scrypt, which requries x86
@@ -577,6 +715,7 @@ supported-platforms:
   scat:                                         [ platforms.x86 ] # uses scrypt, which requries x86
   scrypt:                                       [ platforms.x86 ] # https://github.com/informatikr/scrypt/issues/8
   seqalign:                                     [ platforms.x86 ] # x86 intrinsics
+  streamed:                                     [ platforms.linux] # alsa-core only supported on linux
   swisstable:                                   [ platforms.x86_64 ] # Needs AVX2
   tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
   udev:                                         [ platforms.linux ]

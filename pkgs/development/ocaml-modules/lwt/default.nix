@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, libev, buildDunePackage
-, cppo, dune-configurator, ocplib-endian
+, ocaml, cppo, dune-configurator, ocplib-endian
 }:
 
 buildDunePackage rec {
@@ -14,6 +14,11 @@ buildDunePackage rec {
     rev = version;
     sha256 = "sha256-XstKs0tMwliCyXnP0Vzi5WC27HKJGnATUYtbbQmH1TE=";
   };
+
+  postPatch = lib.optionalString (lib.versionAtLeast ocaml.version "5.0") ''
+    substituteInPlace src/unix/dune \
+      --replace "libraries bigarray lwt" "libraries lwt"
+  '';
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ dune-configurator ];

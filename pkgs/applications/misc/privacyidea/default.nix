@@ -11,7 +11,8 @@ let
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
-        src = oldAttrs.src.override {
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
@@ -26,7 +27,7 @@ let
         src = self.fetchPypi {
           pname = "Flask-Migrate";
           inherit version;
-          sha256 = "ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38";
+          hash = "sha256-ri8FZxWIdi3YOiHYsYxR/jVehng+JFlJlf+Nc4Df/jg=";
         };
       });
       flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (old: rec {
@@ -43,7 +44,7 @@ let
         version = "1.0.1";
         src = old.src.override {
           inherit version;
-          sha256 = "6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c";
+          hash = "sha256-bICx5a02ZSkOo5MguR4b4eDV9gZSuWSjBwIW3oPS5Hw=";
         };
         nativeCheckInputs = old.nativeCheckInputs ++ (with self; [
           requests
@@ -55,18 +56,18 @@ let
         version = "2.11.3";
         src = old.src.override {
           inherit version;
-          sha256 = "sha256-ptWEM94K6AA0fKsfowQ867q+i6qdKeZo8cdoy4ejM8Y=";
+          hash = "sha256-ptWEM94K6AA0fKsfowQ867q+i6qdKeZo8cdoy4ejM8Y=";
         };
         patches = [
           # python 3.10 compat fixes. In later upstream releases, but these
           # are not compatible with flask 1 which we need here :(
           (fetchpatch {
             url = "https://github.com/thmo/jinja/commit/1efb4cc918b4f3d097c376596da101de9f76585a.patch";
-            sha256 = "sha256-GFaSvYxgzOEFmnnDIfcf0ImScNTh1lR4lxt2Uz1DYdU=";
+            hash = "sha256-GFaSvYxgzOEFmnnDIfcf0ImScNTh1lR4lxt2Uz1DYdU=";
           })
           (fetchpatch {
             url = "https://github.com/mkrizek/jinja/commit/bd8bad37d1c0e2d8995a44fd88e234f5340afec5.patch";
-            sha256 = "sha256-Uow+gaO+/dH6zavC0X/SsuMAfhTLRWpamVlL87DXDRA=";
+            hash = "sha256-Uow+gaO+/dH6zavC0X/SsuMAfhTLRWpamVlL87DXDRA=";
             excludes = [ "CHANGES.rst" ];
           })
         ];
@@ -76,21 +77,21 @@ let
         version = "2.0.1";
         src = old.src.override {
           inherit version;
-          sha256 = "sha256-WUxngH+xYjizDES99082wCzfItHIzake+KDtjav1Ygo=";
+          hash = "sha256-WUxngH+xYjizDES99082wCzfItHIzake+KDtjav1Ygo=";
         };
       });
       itsdangerous = super.itsdangerous.overridePythonAttrs (old: rec {
         version = "1.1.0";
         src = old.src.override {
           inherit version;
-          sha256 = "321b033d07f2a4136d3ec762eac9f16a10ccd60f53c0c91af90217ace7ba1f19";
+          hash = "sha256-MhsDPQfypBNtPsdi6snxahDM1g9TwMka+QIXrOe6Hxk=";
         };
       });
       flask = super.flask.overridePythonAttrs (old: rec {
         version = "1.1.4";
         src = old.src.override {
           inherit version;
-          sha256 = "0fbeb6180d383a9186d0d6ed954e0042ad9f18e0e8de088b2b419d526927d196";
+          hash = "sha256-D762GA04OpGG0NbtlU4AQq2fGODo3giLK0GdUmkn0ZY=";
         };
       });
       sqlsoup = super.sqlsoup.overrideAttrs ({ meta ? {}, ... }: {
@@ -100,13 +101,13 @@ let
         version = "7.1.2";
         src = old.src.override {
           inherit version;
-          sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
+          hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
         };
       });
       # Now requires `lingua` as check input that requires a newer `click`,
       # however `click-7` is needed by the older flask we need here. Since it's just
       # for the test-suite apparently, let's skip it for now.
-      Mako = super.Mako.overridePythonAttrs (lib.const {
+      mako = super.mako.overridePythonAttrs (lib.const {
         nativeCheckInputs = [];
         doCheck = false;
       });
@@ -165,7 +166,7 @@ python3'.pkgs.buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SYXw8PBCb514v3rcy15W/vZS5JyMsu81D2sJmviLRtw=";
+    hash = "sha256-SYXw8PBCb514v3rcy15W/vZS5JyMsu81D2sJmviLRtw=";
     fetchSubmodules = true;
   };
 

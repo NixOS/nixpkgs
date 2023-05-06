@@ -1,26 +1,50 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
 , atom
-, ply
-, kiwisolver
-, qtpy
-, sip_4
-, cppy
+, buildPythonPackage
 , bytecode
+, cppy
+, fetchFromGitHub
+, kiwisolver
+, pegen
+, ply
+, qtpy
+, setuptools
+, setuptools-scm
+, pythonOlder
+, sip_4
 }:
 
 buildPythonPackage rec {
   pname = "enaml";
-  version = "0.15.2";
+  version = "0.16.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-FNp/8Fs+06m4kiczkN5lx5Qly0ALLtSmxD4LkkJiqho=";
+    hash = "sha256-0W5FWGS4vu5+O6/C4El60QDsRNj+P4xGQ62NdkfJd5I=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    atom
+    bytecode
+    cppy
+    kiwisolver
+    pegen
+    ply
+    qtpy
+    sip_4
+  ];
 
   # qt bindings cannot be found during tests
   doCheck = false;
@@ -40,21 +64,10 @@ buildPythonPackage rec {
     "enaml.workbench"
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [
-    atom
-    ply
-    kiwisolver
-    qtpy
-    sip_4
-    cppy
-    bytecode
-  ];
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   meta = with lib; {
-    homepage = "https://github.com/nucleic/enaml";
     description = "Declarative User Interfaces for Python";
+    homepage = "https://github.com/nucleic/enaml";
+    changelog = "https://github.com/nucleic/enaml/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ raboof ];
   };

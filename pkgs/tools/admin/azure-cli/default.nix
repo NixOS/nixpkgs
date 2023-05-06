@@ -27,7 +27,9 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     substituteInPlace setup.py \
       --replace "chardet~=3.0.4" "chardet" \
       --replace "javaproperties~=0.5.1" "javaproperties" \
-      --replace "scp~=0.13.2" "scp"
+      --replace "scp~=0.13.2" "scp" \
+      --replace "packaging>=20.9,<22.0" "packaging" \
+      --replace "fabric~=2.4" "fabric"
 
     # remove namespace hacks
     # remove urllib3 because it was added as 'urllib3[secure]', which doesn't get handled well
@@ -131,13 +133,13 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     colorama
     cryptography
     distro
-    Fabric
+    fabric
     jsmin
     knack
     mock
     paramiko
     pydocumentdb
-    PyGithub
+    pygithub
     pygments
     pynacl
     pyopenssl

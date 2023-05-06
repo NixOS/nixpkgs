@@ -1,9 +1,13 @@
-{ lib, newScope }:
+{ lib, newScope, config }:
 
 lib.makeScope newScope (self: with self; {
+  async-prompt = callPackage ./async-prompt.nix { };
+
   autopair = callPackage ./autopair.nix { };
 
-  autopair-fish = callPackage ./autopair-fish.nix { };
+  bobthefish = callPackage ./bobthefish.nix { };
+
+  bobthefisher = callPackage ./bobthefisher.nix { };
 
   buildFishPlugin = callPackage ./build-fish-plugin.nix { };
 
@@ -24,9 +28,15 @@ lib.makeScope newScope (self: with self; {
 
   forgit = callPackage ./forgit.nix { };
 
+  fzf = callPackage ./fzf.nix { };
+
   fzf-fish = callPackage ./fzf-fish.nix { };
 
+  github-copilot-cli-fish = callPackage ./github-copilot-cli-fish.nix { };
+
   grc = callPackage ./grc.nix { };
+
+  humantime-fish = callPackage ./humantime-fish.nix { };
 
   hydro = callPackage ./hydro.nix { };
 
@@ -38,7 +48,15 @@ lib.makeScope newScope (self: with self; {
 
   pure = callPackage ./pure.nix { };
 
+  sdkman-for-fish = callPackage ./sdkman-for-fish.nix { };
+
   sponge = callPackage ./sponge.nix { };
 
   tide = callPackage ./tide.nix { };
+
+  wakatime-fish = callPackage ./wakatime-fish.nix { };
+
+  z = callPackage ./z.nix { };
+} // lib.optionalAttrs config.allowAliases {
+  autopair-fish = self.autopair; # Added 2023-03-10
 })

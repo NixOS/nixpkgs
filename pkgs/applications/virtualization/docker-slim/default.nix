@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "docker-slim";
-  version = "1.40.0";
+  version = "1.40.1";
 
   src = fetchFromGitHub {
     owner = "slimtoolkit";
     repo = "slim";
     rev = version;
-    sha256 = "sha256-KbwkZIGkAdzPPo5CrWKnKzFsD8OUONk6JWo1wzwti3s=";
+    hash = "sha256-ec5Qedt6NrcWZilcN9dhosAN59orgS2xxjXWO9XDxVE=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/slim" "cmd/slim-sensor" ];
 

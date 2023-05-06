@@ -10,13 +10,13 @@
 
 mkDerivation rec {
   pname = "libcprime";
-  version = "4.3.0";
+  version = "4.4.1";
 
   src = fetchFromGitLab {
     owner = "cubocore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+z5dXKaV2anN6OLMycEz87kDqQScgHHEKwGhDAdHSd4=";
+    sha256 = "sha256-6kkKmF9mARhSm93ZrWJiwRNmpkiCxyhSD3W7X3gYuu4=";
   };
 
   patches = [

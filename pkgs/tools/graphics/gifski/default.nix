@@ -1,27 +1,43 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, pkg-config
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "gifski";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
     rev = version;
-    sha256 = "sha256-JJSAU9z3JOlvfW6AW/P/KrjhOcD0ax8TmqgqM48rlAo=";
+    sha256 = "sha256-sPsq/hntNqOdPJcoob1jrDUrLLiBEnfRoDANyFUjOuM=";
   };
 
-  cargoHash = "sha256-UV2iQFbeGvJs8kEowYRNv8DxEGwaIWL1/3A2oUCcauw=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ffmpeg-sys-next-6.0.1" = "sha256-/KxW57lt9/qKqNUUZqJucsP0cKvZ1m/FdGCsZxBlxYc=";
+    };
+  };
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
   # error: the crate `gifski` is compiled with the panic strategy `abort` which is incompatible with this crate's strategy of `unwind`
   doCheck = !stdenv.isDarwin;
 
+  # error: linker `/usr/bin/x86_64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml;
+  '';
+
   meta = with lib; {
     description = "GIF encoder based on libimagequant (pngquant)";
     homepage = "https://gif.ski/";
-    license = licenses.agpl3;
-    maintainers = [ maintainers.marsam ];
+    changelog = "https://github.com/ImageOptim/gifski/releases/tag/${src.rev}";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ figsoda marsam ];
   };
 }

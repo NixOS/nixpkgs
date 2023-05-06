@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.5.5";
+  version = "0.5.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = pname;
-    rev = version;
-    hash = "sha256-t7u0p6V2woqIFsqywv7k5s5pbbnmcn45YnlFWH1PEi4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BIGHaZhrEc7wcIesBIXdVRzozllCNOz67V+LmQfZ8oY=";
   };
 
   nativeBuildInputs = [

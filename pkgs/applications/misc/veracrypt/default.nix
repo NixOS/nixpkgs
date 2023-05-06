@@ -12,6 +12,7 @@
 , exfat
 , ntfs3g
 , btrfs-progs
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "src";
 
-  nativeBuildInputs = [ makeself pkg-config yasm ];
+  nativeBuildInputs = [ makeself pkg-config yasm wrapGAppsHook ];
   buildInputs = [ fuse lvm2 wxGTK ];
 
   enableParallelBuilding = true;

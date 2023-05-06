@@ -1,35 +1,25 @@
-{ stdenv, lib, rust, rustPlatform, fetchgit, fetchpatch
-, clang, pkg-config, protobuf, python3, wayland-scanner
+{ lib, rustPlatform, fetchgit, pkg-config, protobuf, python3, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "107.1";
+  version = "112.0";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "5a49a836e63aa6e9ae38b80daa09a013a57bfb7f";
-    sha256 = "F+5i3R7Tbd9xF63Olnyavzg/hD+8HId1duWm8bvAmLA=";
+    rev = "014b853ebdba00c7bad751a37fa4271ff2a50d77";
+    sha256 = "qVfkNN6dHfMeDYMDvccU9PAz78Dh2ylL6UpoApoYKJw=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
-  patches = [
-    # Backport seccomp sandbox update for recent Glibc.
-    # fetchpatch is not currently gerrit/gitiles-compatible, so we
-    # have to use the mirror.
-    # https://github.com/NixOS/nixpkgs/pull/133604
-    (fetchpatch {
-      url = "https://github.com/google/crosvm/commit/aae01416807e7c15270b3d44162610bcd73952ff.patch";
-      sha256 = "nQuOMOwBu8QvfwDSuTz64SQhr2dF9qXt2NarbIU55tU=";
-    })
+  cargoSha256 = "ath0x9dfQCWWU9+zKyYLC6Q/QXupifHhdQxrS+N2UWw=";
+
+  nativeBuildInputs = [
+    pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
   ];
-
-  cargoSha256 = "1jg9x5adz1lbqdwnzld4xg4igzmh90nd9xm287cgkvh5fbmsjfjv";
-
-  nativeBuildInputs = [ clang pkg-config protobuf python3 wayland-scanner ];
 
   buildInputs = [
     libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
@@ -37,11 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   preConfigure = ''
     patchShebangs third_party/minijail/tools/*.py
-    substituteInPlace build.rs --replace '"clang"' '"${stdenv.cc.targetPrefix}clang"'
   '';
-
-  "CARGO_TARGET_${lib.toUpper (builtins.replaceStrings ["-"] ["_"] (rust.toRustTarget stdenv.hostPlatform))}_LINKER" =
-    "${stdenv.cc.targetPrefix}cc";
 
   # crosvm mistakenly expects the stable protocols to be in the root
   # of the pkgdatadir path, rather than under the "stable"

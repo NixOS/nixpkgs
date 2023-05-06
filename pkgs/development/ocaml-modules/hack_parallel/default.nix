@@ -1,10 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, core, core_unix, pkg-config
+{ lib, fetchFromGitHub, buildDunePackage, core, core_unix ? null, pkg-config
 , sqlite }:
 buildDunePackage rec {
   pname = "hack_parallel";
   version = "1.0.1";
-  useDune2 = true;
-  minimumOcamlVersion = "4.04.1";
+  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "rvantonder";

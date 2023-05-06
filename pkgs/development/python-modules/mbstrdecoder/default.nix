@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "mbstrdecoder";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-U8F+mWKDulIRvvhswmdGnxKjM2qONQybViQ5TLZbLDY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vLlCS5gnc7NgDN4cEZSxxInzbEq4HXAXmvlVfwn3cSM=";
   };
 
   propagatedBuildInputs = [ chardet ];

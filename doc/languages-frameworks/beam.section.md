@@ -14,7 +14,7 @@ nixpkgs follows the [official elixir deprecation schedule](https://hexdocs.pm/el
 
 All BEAM-related expressions are available via the top-level `beam` attribute, which includes:
 
-- `interpreters`: a set of compilers running on the BEAM, including multiple Erlang/OTP versions (`beam.interpreters.erlangR22`, etc), Elixir (`beam.interpreters.elixir`) and LFE (Lisp Flavoured Erlang) (`beam.interpreters.lfe`).
+- `interpreters`: a set of compilers running on the BEAM, including multiple Erlang/OTP versions (`beam.interpreters.erlang_22`, etc), Elixir (`beam.interpreters.elixir`) and LFE (Lisp Flavoured Erlang) (`beam.interpreters.lfe`).
 
 - `packages`: a set of package builders (Mix and rebar3), each compiled with a specific Erlang/OTP version, e.g. `beam.packages.erlang22`.
 
@@ -22,7 +22,7 @@ The default Erlang compiler, defined by `beam.interpreters.erlang`, is aliased a
 
 To create a package builder built with a custom Erlang version, use the lambda, `beam.packagesWith`, which accepts an Erlang/OTP derivation and produces a package builder similar to `beam.packages.erlang`.
 
-Many Erlang/OTP distributions available in `beam.interpreters` have versions with ODBC and/or Java enabled or without wx (no observer support). For example, there's `beam.interpreters.erlangR22_odbc_javac`, which corresponds to `beam.interpreters.erlangR22` and `beam.interpreters.erlangR22_nox`, which corresponds to `beam.interpreters.erlangR22`.
+Many Erlang/OTP distributions available in `beam.interpreters` have versions with ODBC and/or Java enabled or without wx (no observer support). For example, there's `beam.interpreters.erlang_22_odbc_javac`, which corresponds to `beam.interpreters.erlang_22` and `beam.interpreters.erlang_22_nox`, which corresponds to `beam.interpreters.erlang_22`.
 
 ## Build Tools {#build-tools}
 
@@ -128,7 +128,7 @@ You will need to run the build process once to fix the hash to correspond to you
 
 ###### FOD {#fixed-output-derivation}
 
-A fixed output derivation will download mix dependencies from the internet. To ensure reproducibility, a hash will be supplied. Note that mix is relatively reproducible. An FOD generating a different hash on each run hasn't been observed (as opposed to npm where the chances are relatively high). See [elixir_ls](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/beam-modules/elixir-ls/default.nix) for a usage example of FOD.
+A fixed output derivation will download mix dependencies from the internet. To ensure reproducibility, a hash will be supplied. Note that mix is relatively reproducible. An FOD generating a different hash on each run hasn't been observed (as opposed to npm where the chances are relatively high). See [elixir-ls](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/beam-modules/elixir-ls/default.nix) for a usage example of FOD.
 
 Practical steps
 
@@ -154,7 +154,7 @@ Here is how your `default.nix` file would look for a phoenix project.
 with import <nixpkgs> { };
 
 let
-  # beam.interpreters.erlangR23 is available if you need a particular version
+  # beam.interpreters.erlang_23 is available if you need a particular version
   packages = beam.packagesWith beam.interpreters.erlang;
 
   pname = "your_project";
@@ -274,18 +274,18 @@ Usually, we need to create a `shell.nix` file and do our development inside of t
 
 with pkgs;
 let
-  elixir = beam.packages.erlangR24.elixir_1_12;
+  elixir = beam.packages.erlang_24.elixir_1_12;
 in
 mkShell {
   buildInputs = [ elixir ];
 }
 ```
 
-### Using an overlay
+### Using an overlay {#beam-using-overlays}
 
 If you need to use an overlay to change some attributes of a derivation, e.g. if you need a bugfix from a version that is not yet available in nixpkgs, you can override attributes such as `version` (and the corresponding `hash`) and then use this overlay in your development environment:
 
-#### `shell.nix`
+#### `shell.nix` {#beam-using-overlays-shell.nix}
 
 ```nix
 let

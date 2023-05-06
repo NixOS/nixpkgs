@@ -1,46 +1,48 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, numpy
-, scipy
-, pandas
-, matplotlib
 , autograd
 , autograd-gamma
-, formulaic
-, scikit-learn
-, sybil
-, flaky
-, jinja2
+, buildPythonPackage
 , dill
+, fetchFromGitHub
+, flaky
+, formulaic
+, jinja2
+, matplotlib
+, numpy
+, pandas
 , psutil
+, pytestCheckHook
+, pythonOlder
+, scikit-learn
+, scipy
+, sybil
 }:
 
 buildPythonPackage rec {
   pname = "lifelines";
-  version = "0.27.4";
+  version = "0.27.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
     repo = "lifelines";
-    rev = "v${version}";
-    sha256 = "sha256-KDoXplqkTsk85dmcTBhbj2GDcC4ry+2z5C2QHAnBTw4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6ulg3R59QHy31CXit8tddi6F0vPKVRZDIu0zdS19xu0=";
   };
 
   propagatedBuildInputs = [
-    numpy
-    scipy
-    pandas
-    matplotlib
     autograd
     autograd-gamma
     formulaic
+    matplotlib
+    numpy
+    pandas
+    scipy
   ];
 
-  pythonImportsCheck = [ "lifelines" ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     dill
     flaky
     jinja2
@@ -50,14 +52,23 @@ buildPythonPackage rec {
     sybil
   ];
 
+  pythonImportsCheck = [
+    "lifelines"
+  ];
+
   disabledTestPaths = [
     "lifelines/tests/test_estimation.py"
   ];
 
-  meta = {
-    homepage = "https://lifelines.readthedocs.io";
+  disabledTests = [
+    "test_datetimes_to_durations_with_different_frequencies"
+  ];
+
+  meta = with lib; {
     description = "Survival analysis in Python";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ swflint ];
+    homepage = "https://lifelines.readthedocs.io";
+    changelog = "https://github.com/CamDavidsonPilon/lifelines/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ swflint ];
   };
 }

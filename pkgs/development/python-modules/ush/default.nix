@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "tarruda";
     repo = "python-ush";
     rev = version;
-    sha256 = "sha256-eL3vG3yS02enbLYorKvvYKbju9HInffUhrZgkodwhvo=";
+    hash = "sha256-eL3vG3yS02enbLYorKvvYKbju9HInffUhrZgkodwhvo=";
   };
 
   nativeCheckInputs = [

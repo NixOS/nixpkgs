@@ -5,9 +5,10 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
   nodes.machine =
     { config, pkgs, lib, ... }:
     let
-      disk = config.virtualisation.bootDevice;
+      disk = config.virtualisation.rootDevice;
     in
     {
+      virtualisation.rootDevice = "/dev/vda";
       virtualisation.useDefaultFilesystems = false;
 
       boot.initrd.availableKernelModules = [ "btrfs" ];

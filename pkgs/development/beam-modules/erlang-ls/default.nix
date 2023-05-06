@@ -30,10 +30,9 @@ rebar3Relx {
   releaseType = "escript";
   beamDeps = builtins.attrValues deps;
 
-  # Skip "els_hover_SUITE" test for Erlang/OTP 25+ while upstream hasn't fixed it
-  # https://github.com/erlang-ls/erlang_ls/pull/1402
-  postPatch = lib.optionalString (lib.versionOlder "25" erlang.version) ''
-    rm apps/els_lsp/test/els_hover_SUITE.erl
+  # https://github.com/erlang-ls/erlang_ls/issues/1429
+  postPatch =  ''
+    rm apps/els_lsp/test/els_diagnostics_SUITE.erl
   '';
 
   buildPlugins = [ rebar3-proper ];
@@ -57,6 +56,7 @@ rebar3Relx {
     description = "The Erlang Language Server";
     platforms = platforms.unix;
     license = licenses.asl20;
+    mainProgram = "erlang_ls";
   };
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell

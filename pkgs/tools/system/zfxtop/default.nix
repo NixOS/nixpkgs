@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "zfxtop";
-  version = "0.2.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "ssleert";
     repo = "zfxtop";
     rev = version;
-    hash = "sha256-9o32sryffcCt/sBnaT5QzD5oLRfJHgq1yKP8d0pk2JQ=";
+    hash = "sha256-7qeTC9CIx4K2fLRM/pYrSU1NHv9TFMsl7TT0W5Uph60=";
   };
 
-  vendorHash = "sha256-H1X7j77Wp8ipgNTMZbFwoSA7NrILahFK8YwoP1W3h2c=";
+  vendorHash = "sha256-VKBRgDu9xVbZrC5fadkdFjd1OETNwaxgraRnA34ETzE=";
 
   meta = with lib; {
     description = "fetch top for gen Z with X written by bubbletea enjoyer";

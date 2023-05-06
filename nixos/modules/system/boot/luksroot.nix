@@ -158,6 +158,20 @@ let
       wait_target "header" ${dev.header} || die "${dev.header} is unavailable"
     ''}
 
+    try_empty_passphrase() {
+        ${if dev.tryEmptyPassphrase then ''
+             echo "Trying empty passphrase!"
+             echo "" | ${csopen}
+             cs_status=$?
+             if [ $cs_status -eq 0 ]; then
+                 return 0
+             else
+                 return 1
+             fi
+        '' else "return 1"}
+    }
+
+
     do_open_passphrase() {
         local passphrase
 
@@ -212,13 +226,27 @@ let
             ${csopen} --key-file=${dev.keyFile} \
               ${optionalString (dev.keyFileSize != null) "--keyfile-size=${toString dev.keyFileSize}"} \
               ${optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"}
+            cs_status=$?
+            if [ $cs_status -ne 0 ]; then
+              echo "Key File ${dev.keyFile} failed!"
+              if ! try_empty_passphrase; then
+                ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
+                echo " - failing back to interactive password prompt"
+                do_open_passphrase
+              fi
+            fi
         else
-            ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
-            echo " - failing back to interactive password prompt"
-            do_open_passphrase
+            # If the key file never shows up we should also try the empty passphrase
+            if ! try_empty_passphrase; then
+               ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
+               echo " - failing back to interactive password prompt"
+               do_open_passphrase
+            fi
         fi
         '' else ''
-        do_open_passphrase
+           if ! try_empty_passphrase; then
+              do_open_passphrase
+           fi
         ''}
     }
 
@@ -476,6 +504,7 @@ let
   preLVM = filterAttrs (n: v: v.preLVM) luks.devices;
   postLVM = filterAttrs (n: v: !v.preLVM) luks.devices;
 
+
   stage1Crypttab = pkgs.writeText "initrd-crypttab" (lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: let
     opts = v.crypttabExtraOpts
       ++ optional v.allowDiscards "discard"
@@ -483,6 +512,8 @@ let
       ++ optional (v.header != null) "header=${v.header}"
       ++ optional (v.keyFileOffset != null) "keyfile-offset=${toString v.keyFileOffset}"
       ++ optional (v.keyFileSize != null) "keyfile-size=${toString v.keyFileSize}"
+      ++ optional (v.keyFileTimeout != null) "keyfile-timeout=${builtins.toString v.keyFileTimeout}s"
+      ++ optional (v.tryEmptyPassphrase) "try-empty-password=true"
     ;
   in "${n} ${v.device} ${if v.keyFile == null then "-" else v.keyFile} ${lib.concatStringsSep "," opts}") luks.devices));
 
@@ -591,6 +622,25 @@ in
               The name of the file (can be a raw device or a partition) that
               should be used as the decryption key for the encrypted device. If
               not specified, you will be prompted for a passphrase instead.
+            '';
+          };
+
+          tryEmptyPassphrase = mkOption {
+            default = false;
+            type = types.bool;
+            description = lib.mdDoc ''
+              If keyFile fails then try an empty passphrase first before
+              prompting for password.
+            '';
+          };
+
+          keyFileTimeout = mkOption {
+            default = null;
+            example = 5;
+            type = types.nullOr types.int;
+            description = lib.mdDoc ''
+              The amount of time in seconds for a keyFile to appear before
+              timing out and trying passwords.
             '';
           };
 
@@ -889,6 +939,10 @@ in
           message = "boot.initrd.luks.devices.<name>.bypassWorkqueues is not supported for kernels older than 5.9";
         }
 
+        { assertion = !config.boot.initrd.systemd.enable -> all (x: x.keyFileTimeout == null) (attrValues luks.devices);
+          message = "boot.initrd.luks.devices.<name>.keyFileTimeout is only supported for systemd initrd";
+        }
+
         { assertion = config.boot.initrd.systemd.enable -> all (dev: !dev.fallbackToPassword) (attrValues luks.devices);
           message = "boot.initrd.luks.devices.<name>.fallbackToPassword is implied by systemd stage 1.";
         }
@@ -970,13 +1024,12 @@ in
         copy_bin_and_libs ${pkgs.gnupg}/libexec/scdaemon
 
         ${concatMapStringsSep "\n" (x:
-          if x.gpgCard != null then
+          optionalString (x.gpgCard != null)
             ''
               mkdir -p $out/secrets/gpg-keys/${x.device}
               cp -a ${x.gpgCard.encryptedPass} $out/secrets/gpg-keys/${x.device}/cryptkey.gpg
               cp -a ${x.gpgCard.publicKey} $out/secrets/gpg-keys/${x.device}/pubkey.asc
             ''
-          else ""
           ) (attrValues luks.devices)
         }
       ''}

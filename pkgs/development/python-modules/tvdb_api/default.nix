@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "dbr";
     repo = "tvdb_api";
     rev = "ce0382181a9e08a5113bfee0fed2c78f8b1e613f";
-    sha256 = "sha256-poUuwySr6+8U9PIHhqFaR7nXzh8kSaW7mZkuKTUJKj8=";
+    hash = "sha256-poUuwySr6+8U9PIHhqFaR7nXzh8kSaW7mZkuKTUJKj8=";
   };
 
   propagatedBuildInputs = [ requests-cache ];

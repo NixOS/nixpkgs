@@ -26,11 +26,13 @@
 , ujson
 , orjson
 , hypothesis
+, libxcrypt
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.4";
+  version = "1.10.7";
+  format = "setuptools";
 
   outputs = [
     "out"
@@ -44,12 +46,16 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-BFyv1uVq2pLcJeS5955G/pDA3ce9YTqZ6F7kAkwnuvY=";
+    hash = "sha256-7X7rlHJ5Q01CuB9FZzoUfyfwx6AMXtE1BV5t+LnZKIM=";
   };
 
   postPatch = ''
     sed -i '/flake8/ d' Makefile
   '';
+
+  buildInputs = lib.optionals (pythonOlder "3.9") [
+    libxcrypt
+  ];
 
   nativeBuildInputs = [
     cython
@@ -70,16 +76,23 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     devtools
-    email-validator
     pyupgrade
-    python-dotenv
     typing-extensions
   ];
+
+  passthru.optional-dependencies = {
+    dotenv = [
+      python-dotenv
+    ];
+    email = [
+      email-validator
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [
     # https://github.com/pydantic/pydantic/issues/4817

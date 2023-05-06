@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "niaaml";
-  version = "1.1.11";
+  version = "1.1.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "lukapecnik";
     repo = "NiaAML";
     rev = version;
-    sha256 = "sha256-B87pI1EpZj1xECrgTmzN5S35Cy1nPowBRyu1IDb5zCE=";
+    hash = "sha256-GAUXEkUOD04DQtRG/RAeeeLmenBd25h18Lmrxbm4X3A=";
   };
 
   nativeBuildInputs = [
@@ -37,9 +37,10 @@ buildPythonPackage rec {
     scikit-learn
   ];
 
-  # create scikit-learn dep version consistent
+  # create scikit-learn and niapy deps version consistent
   preBuild = ''
     toml-adapt -path pyproject.toml -a change -dep scikit-learn -ver X
+    toml-adapt -path pyproject.toml -a change -dep niapy -ver X
   '';
 
   nativeCheckInputs = [

@@ -34,7 +34,7 @@ buildGoModule rec {
     homepage = "https://git.helsinki.tools/helsinki-systems/wp4nix";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
 

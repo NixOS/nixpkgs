@@ -12,18 +12,21 @@
 , libiconv
 , Security
 , staticBuild ? stdenv.hostPlatform.isStatic
+# for passthru.tests
+, libgit2-glib
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgit2";
-  version = "1.5.1";
-  # also check the following packages for updates: python3.pkgs.pygit2 and libgit2-glib
+  version = "1.6.4";
+  # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
-    sha256 = "sha256-KzBMwpqn6wUFhgB3KDclBS0BvZSVcasM5AG/y+L91xM=";
+    hash = "sha256-lW3mokVKsbknVj2xsxEbeZH4IdKZ0aIgGutzenS0Eh0=";
   };
 
   cmakeFlags = [
@@ -40,6 +43,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;
 
   doCheck = false; # hangs. or very expensive?
+
+  passthru.tests = {
+    inherit libgit2-glib;
+    inherit (python3Packages) pygit2;
+  };
 
   meta = with lib; {
     description = "Linkable library implementation of Git that you can use in your application";

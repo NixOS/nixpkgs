@@ -7,7 +7,10 @@
 , wayland
 , wayland-scanner
 , obs-studio
+, libffi
 , libX11
+, libXau
+, libXdmcp
 , libxcb
 , vulkan-headers
 , vulkan-loader
@@ -17,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-vkcapture";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "nowrep";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xtIcIT9lWw73Et9WgyEUznwy1X947Rv5nTiM+t0qYaM=";
+    hash = "sha256-UQQ8oBEnOxmSN4ZyW4LdPZYvd5eB9EmdR0UvE1wgMZw=";
   };
 
   cmakeFlags = lib.optionals stdenv.isi686 [
@@ -35,7 +38,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules ninja wayland-scanner ];
   buildInputs = [
     libGL
+    libffi
     libX11
+    libXau
+    libXdmcp
     libxcb
     vulkan-headers
     vulkan-loader

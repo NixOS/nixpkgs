@@ -107,6 +107,36 @@ let
       expected = true;
     };
 
+    # Test examples from the lib.path.subpath.join documentation
+    testSubpathJoinExample1 = {
+      expr = subpath.join [ "foo" "bar/baz" ];
+      expected = "./foo/bar/baz";
+    };
+    testSubpathJoinExample2 = {
+      expr = subpath.join [ "./foo" "." "bar//./baz/" ];
+      expected = "./foo/bar/baz";
+    };
+    testSubpathJoinExample3 = {
+      expr = subpath.join [ ];
+      expected = "./.";
+    };
+    testSubpathJoinExample4 = {
+      expr = (builtins.tryEval (subpath.join [ /foo ])).success;
+      expected = false;
+    };
+    testSubpathJoinExample5 = {
+      expr = (builtins.tryEval (subpath.join [ "" ])).success;
+      expected = false;
+    };
+    testSubpathJoinExample6 = {
+      expr = (builtins.tryEval (subpath.join [ "/foo" ])).success;
+      expected = false;
+    };
+    testSubpathJoinExample7 = {
+      expr = (builtins.tryEval (subpath.join [ "../foo" ])).success;
+      expected = false;
+    };
+
     # Test examples from the lib.path.subpath.normalise documentation
     testSubpathNormaliseExample1 = {
       expr = subpath.normalise "foo//bar";

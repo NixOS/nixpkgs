@@ -1,11 +1,11 @@
-{ lib, fetchpatch, fetchzip, yarn2nix-moretea, nodejs-16_x, jq, dos2unix }:
+{ lib, fetchpatch, fetchzip, yarn2nix-moretea, nodejs_16, jq, dos2unix }:
 
 yarn2nix-moretea.mkYarnPackage {
-  version = "1.1.2";
+  version = "1.1.5";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/meshcentral/-/meshcentral-1.1.2.tgz";
-    sha256 = "0fhmvh10wlf17fwxdclra06z1bq5bg6n53smzwni1v1h4967hhk3";
+    url = "https://registry.npmjs.org/meshcentral/-/meshcentral-1.1.5.tgz";
+    sha256 = "1djdqfcmfk35q7hfbdn4rnh4di2lk1gk7icfasjmihrgpnsxrrir";
   };
 
   patches = [ ./fix-js-include-paths.patch ];
@@ -24,7 +24,7 @@ yarn2nix-moretea.mkYarnPackage {
   preFixup = ''
     mkdir -p $out/bin
     chmod a+x $out/libexec/meshcentral/deps/meshcentral/meshcentral.js
-    sed -i '1i#!${nodejs-16_x}/bin/node' $out/libexec/meshcentral/deps/meshcentral/meshcentral.js
+    sed -i '1i#!${nodejs_16}/bin/node' $out/libexec/meshcentral/deps/meshcentral/meshcentral.js
     ln -s $out/libexec/meshcentral/deps/meshcentral/meshcentral.js $out/bin/meshcentral
   '';
 

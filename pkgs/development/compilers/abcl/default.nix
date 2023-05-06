@@ -1,42 +1,73 @@
-{lib, stdenv, fetchurl, ant, jre, jdk}:
+{ stdenv
+, lib
+, fetchurl
+, ant
+, jre
+, jdk
+, makeWrapper
+}:
+
 stdenv.mkDerivation rec {
   pname = "abcl";
-  version = "1.9.0";
-  # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
+  version = "1.9.1";
+
   src = fetchurl {
     url = "https://common-lisp.net/project/armedbear/releases/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "sha256-oStchPKINL2Yjjra4K0q1MxsRR2eRPPAhT0AcVjBmGk=";
+    sha256 = "sha256-pbxnfJRB9KgzwgpUG93Rb/+SZIRmkd6aHa9mmfj/EeI=";
   };
+
   configurePhase = ''
+    runHook preConfigure
+
     mkdir nix-tools
     export PATH="$PWD/nix-tools:$PATH"
     echo "echo nix-builder.localdomain" > nix-tools/hostname
     chmod a+x nix-tools/*
 
     hostname
+
+    runHook postConfigure
   '';
+
+  buildInputs = [ jre ];
+
+  # note for the future:
+  # if you use makeBinaryWrapper, you will trade bash for glibc, the closure will be slightly larger
+  nativeBuildInputs = [ makeWrapper ant jdk ];
+
   buildPhase = ''
+    runHook preBuild
+
     ant
+
+    runHook postBuild
   '';
-  # Fix for https://github.com/armedbear/abcl/issues/484
-  javaOpts =
-    lib.optionalString
-      (lib.versionAtLeast jre.version "17")
-      "--add-opens=java.base/java.util.jar=ALL-UNNAMED";
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,share/doc/abcl,lib/abcl}
     cp -r README COPYING CHANGES examples/  "$out/share/doc/abcl/"
     cp -r dist/*.jar contrib/ "$out/lib/abcl/"
 
-    echo "#! ${stdenv.shell}" >> "$out/bin/abcl"
-    echo "${jre}/bin/java $javaOpts -cp \"$out/lib/abcl/abcl.jar:$out/lib/abcl/abcl-contrib.jar:\$CLASSPATH\" org.armedbear.lisp.Main \"\$@\"" >> "$out/bin/abcl"
-    chmod a+x "$out"/bin/*
+    makeWrapper ${jre}/bin/java $out/bin/abcl \
+      --prefix CLASSPATH : $out/lib/abcl/abcl.jar \
+      --prefix CLASSPATH : $out/lib/abcl/abcl-contrib.jar \
+      ${lib.optionalString (lib.versionAtLeast jre.version "17")
+        # Fix for https://github.com/armedbear/abcl/issues/484
+        "--add-flags --add-opens=java.base/java.util.jar=ALL-UNNAMED \\"
+      }
+      --add-flags org.armedbear.lisp.Main
+
+    runHook postInstall
   '';
-  buildInputs = [jre ant jdk jre];
+
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "A JVM-based Common Lisp implementation";
     license = lib.licenses.gpl3 ;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = lib.teams.lisp.members;
     platforms = lib.platforms.linux;
     homepage = "https://common-lisp.net/project/armedbear/";
   };

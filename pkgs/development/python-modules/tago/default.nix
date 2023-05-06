@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "tago-io";
     repo = "tago-sdk-python";
     rev = version;
-    sha256 = "sha256-eu6n83qmo1PQKnR/ellto04xi/3egl+LSKMOG277X1k=";
+    hash = "sha256-eu6n83qmo1PQKnR/ellto04xi/3egl+LSKMOG277X1k=";
   };
 
   propagatedBuildInputs = [

@@ -15,6 +15,8 @@
 , gnomeSupport ? true
 , sqlite
 , glib-networking
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +39,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     glib
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
     vala
   ];
@@ -58,6 +61,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
     "-Dgssapi=disabled"
+    "-Dvapi=${if withIntrospection then "enabled" else "disabled"}"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
     "-Dgnome=${lib.boolToString gnomeSupport}"
     "-Dntlm=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [

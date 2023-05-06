@@ -10,12 +10,14 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.28.0";
-  disabled = pythonOlder "3.5";
+  version = "1.31.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nj2N3RbQWDIUxf3/6AbJNECGch8QdDX2i62ZDlqIgms=";
+    hash = "sha256-LYPx0S9zPhYqh+BrF2FJ17ucW65Knl/OHHcdf3A/emU=";
   };
 
   propagatedBuildInputs = [
@@ -42,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A linter for YAML files";
     homepage = "https://github.com/adrienverge/yamllint";
+    changelog = "https://github.com/adrienverge/yamllint/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jonringer mikefaille ];
   };

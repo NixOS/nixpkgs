@@ -3,7 +3,7 @@
 , symlinkJoin
 , fetchurl
 , fetchzip
-, sconsPackages
+, scons
 , zlib
 , libiconv
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     chmod -R u+w $out/share/nsis
   '';
 
-  nativeBuildInputs = [ sconsPackages.scons_latest ];
+  nativeBuildInputs = [ scons ];
   buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   CPPPATH = symlinkJoin {

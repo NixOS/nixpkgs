@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitLab, stdenv, darwin, nixosTests, rocksdb_6_23 }:
+{ lib, rustPlatform, fetchFromGitLab, pkg-config, sqlite, stdenv, darwin, nixosTests, rocksdb_6_23 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
@@ -11,22 +11,29 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-GSCpmn6XRbmnfH31R9c6QW3/pez9KHPjI99dR+ln0P4=";
   };
 
-  # https://github.com/rust-lang/cargo/issues/11192
-  # https://github.com/ruma/ruma/issues/1441
-  postPatch = ''
-    pushd $cargoDepsCopy
-    patch -p0 < ${./cargo-11192-workaround.patch}
-    for p in ruma*; do echo '{"files":{},"package":null}' > $p/.cargo-checksum.json; done
-    popd
-  '';
+  # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
+  # inheritance within Git dependencies, but importCargoLock does.
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "heed-0.10.6" = "sha256-rm02pJ6wGYN4SsAbp85jBVHDQ5ITjZZd+79EC2ubRsY=";
+      "reqwest-0.11.9" = "sha256-wH/q7REnkz30ENBIK5Rlxnc1F6vOyuEANMHFmiVPaGw=";
+      "ruma-0.7.4" = "sha256-ztobLdOXSGyK1YcPMMIycO3ZmnjxG5mLkHltf0Fbs8s=";
+    };
+  };
 
-  cargoSha256 = "sha256-WFoupcuaG7f7KYBn/uzbOzlHHLurOyvm5e1lEcinxC8=";
+  # Conduit enables rusqlite's bundled feature by default, but we'd rather use our copy of SQLite.
+  preBuild = ''
+    substituteInPlace Cargo.toml --replace "features = [\"bundled\"]" "features = []"
+    cargo update --offline -p rusqlite
+  '';
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+    pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

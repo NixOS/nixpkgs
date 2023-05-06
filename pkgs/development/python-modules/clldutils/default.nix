@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "clld";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dva0lbbTxvETDPkACxpI3PPzWh5gz87Fv6W3lTjNv3Q=";
+    hash = "sha256-dva0lbbTxvETDPkACxpI3PPzWh5gz87Fv6W3lTjNv3Q=";
   };
 
   patchPhase = ''

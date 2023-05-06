@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.19.4";
+  version = "0.19.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "python";
-    rev = "v${version}";
-    hash = "sha256-zPcqM+Ge7K4pJD4K0MkkGdSiYvXxe0K1qbfHzVYmGx0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XG2uAG5sKGGtnCTQJ2gsAm7jxtvMg+1MXPJLkb+2cPQ=";
   };
 
   propagatedBuildInputs = [
@@ -62,6 +62,11 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.encryption;
 
   SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
+  disabledTestPaths = [
+    # sqlalchemy 2 unsupported
+    "mautrix/client/state_store/tests/store_test.py"
+  ];
 
   pythonImportsCheck = [
     "mautrix"

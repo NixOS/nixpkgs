@@ -15,28 +15,25 @@
 , gst-plugins-good
 , gst-plugins-bad
 , gst-plugins-ugly
+, wayland
+, pipewire
+, wrapQtAppsHook
 }:
-mkDerivation rec {
 
+mkDerivation rec {
   pname = "vokoscreen-ng";
-  version = "3.0.8";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreenNG";
     rev = version;
-    sha256 = "1302663hyp2xxhaavhfky24a2p9gz23i3rykmrc6c1n23h24snri";
+    sha256 = "sha256-Du/Dq7AUH5CeEKYr0kxcqguAyRVI5Ame41nU3FGvG+U=";
   };
-
-  patches = [
-    # Adaptation of previously used https://github.com/City-busz/vokoscreenNG/commit/0a3784095ecca582f7eb09551ceb34c309d83637 patch
-    # used for 3.0.5 but incompatible at least since 3.0.8. The issue is addressed here https://github.com/vkohaupt/vokoscreenNG/issues/139
-    ./linux-support-installation-target.patch
-  ];
 
   qmakeFlags = [ "src/vokoscreenNG.pro" ];
 
-  nativeBuildInputs = [ qttools pkg-config qmake ];
+  nativeBuildInputs = [ qttools pkg-config qmake wrapQtAppsHook ];
   buildInputs = [
     gstreamer
     libX11
@@ -44,7 +41,8 @@ mkDerivation rec {
     qtbase
     qtmultimedia
     qtx11extras
-
+    wayland
+    pipewire
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
@@ -57,7 +55,12 @@ mkDerivation rec {
   '';
 
   postInstall = ''
+    mkdir -p $out/bin $out/share/applications $out/share/icons
+    cp ./vokoscreenNG $out/bin/
+    cp ./src/applications/vokoscreenNG.desktop $out/share/applications/
+    cp ./src/applications/vokoscreenNG.png $out/share/icons/
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+    wrapQtApp $out/bin/vokoscreenNG
   '';
 
   meta = with lib; {

@@ -2,29 +2,32 @@
 , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
-, buildEnv, bundler, bundix
-, makeWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
+, buildEnv, bundler, bundix, rustPlatform
+, makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
 , openssl, openssl_1_1
+, linuxPackages, libsystemtap
 } @ args:
 
 let
   op = lib.optional;
   ops = lib.optionals;
   opString = lib.optionalString;
-  patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
 
-  generic = { version, sha256 }: let
+  generic = { version, sha256, cargoSha256 ? null }: let
     ver = version;
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
+    atLeast31 = lib.versionAtLeast ver.majMin "3.1";
+    atLeast32 = lib.versionAtLeast ver.majMin "3.2";
+    # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
+    yjitSupported = atLeast32 && (stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64));
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
-      , useRailsExpress ? true
       , rubygemsSupport ? true
       , zlib, zlibSupport ? true
       , openssl, openssl_1_1, opensslSupport ? true
@@ -34,6 +37,7 @@ let
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
       , jemalloc, jemallocSupport ? false
+      , linuxPackages, systemtap ? linuxPackages.systemtap, libsystemtap, dtraceSupport ? false
       # By default, ruby has 3 observed references to stdenv.cc:
       #
       # - If you run:
@@ -43,17 +47,17 @@ let
       #   Or (usually):
       #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
       # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
-      , removeReferencesTo, jitSupport ? false
+      , removeReferencesTo, jitSupport ? yjitSupport
+      , rustPlatform, yjitSupport ? yjitSupported
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
-      , makeWrapper, buildRubyGem, defaultGemConfig
-      , baseRuby ? buildPackages.ruby_3_1.override {
-          useRailsExpress = false;
+      , makeBinaryWrapper, buildRubyGem, defaultGemConfig
+      , baseRuby ? buildPackages.ruby.override {
           docSupport = false;
           rubygemsSupport = false;
         }
-      , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform || useRailsExpress
+      , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform
       }:
       stdenv.mkDerivation rec {
         pname = "ruby";
@@ -69,8 +73,12 @@ let
 
         outputs = [ "out" ] ++ lib.optional docSupport "devdoc";
 
+        strictDeps = true;
+
         nativeBuildInputs = [ autoreconfHook bison ]
           ++ (op docSupport groff)
+          ++ (ops (dtraceSupport && stdenv.isLinux) [ systemtap libsystemtap ])
+          ++ ops yjitSupport [ rustPlatform.cargoSetupHook rustPlatform.rust.cargo rustPlatform.rust.rustc ]
           ++ op useBaseRuby baseRuby;
         buildInputs = [ autoconf ]
           ++ (op fiddleSupport libffi)
@@ -89,14 +97,16 @@ let
         propagatedBuildInputs = op jemallocSupport jemalloc;
 
         enableParallelBuilding = true;
+        # /build/ruby-2.7.7/lib/fileutils.rb:882:in `chmod':
+        #   No such file or directory @ apply2files - ...-ruby-2.7.7-devdoc/share/ri/2.7.0/system/ARGF/inspect-i.ri (Errno::ENOENT)
+        # make: *** [uncommon.mk:373: do-install-all] Error 1
+        enableParallelInstalling = false;
 
-        patches =
-          (import ./patchsets.nix {
-            inherit patchSet useRailsExpress ops fetchpatch;
-            patchLevel = ver.patchLevel;
-          }).${ver.majMinTiny}
-          ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
-          ++ op (atLeast30 && useBaseRuby) ./do-not-update-gems-baseruby.patch
+        patches = op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
+          ++ op (atLeast30 && useBaseRuby) (
+            if atLeast32 then ./do-not-update-gems-baseruby-3.2.patch
+            else ./do-not-update-gems-baseruby.patch
+          )
           ++ ops (ver.majMin == "3.0") [
             # Ruby 3.0 adds `-fdeclspec` to $CC instead of $CFLAGS. Fixed in later versions.
             (fetchpatch {
@@ -118,7 +128,22 @@ let
               url = "https://github.com/ruby/ruby/commit/261d8dd20afd26feb05f00a560abd99227269c1c.patch";
               sha256 = "0wrii25cxcz2v8bgkrf7ibcanjlxwclzhayin578bf0qydxdm9qy";
             })
+          ]
+          ++ ops atLeast31 [
+            # When using a baseruby, ruby always sets "libdir" to the build
+            # directory, which nix rejects due to a reference in to /build/ in
+            # the final product. Removing this reference doesn't seem to break
+            # anything and fixes cross compliation.
+            ./dont-refer-to-build-dir.patch
           ];
+
+        cargoRoot = opString yjitSupport "yjit";
+
+        cargoDeps = if yjitSupport then rustPlatform.fetchCargoTarball {
+          inherit src;
+          sourceRoot = "${pname}-${version}/${cargoRoot}";
+          sha256 = cargoSha256;
+        } else null;
 
         postUnpack = opString rubygemsSupport ''
           rm -rf $sourceRoot/{lib,test}/rubygems*
@@ -141,7 +166,9 @@ let
           (lib.enableFeature true "pthread")
           (lib.withFeatureAs true "soname" "ruby-${version}")
           (lib.withFeatureAs useBaseRuby "baseruby" "${baseRuby}/bin/ruby")
+          (lib.enableFeature dtraceSupport "dtrace")
           (lib.enableFeature jitSupport "jit-support")
+          (lib.enableFeature yjitSupport "yjit")
           (lib.enableFeature docSupport "install-doc")
           (lib.withFeature jemallocSupport "jemalloc")
           (lib.withFeatureAs docSupport "ridir" "${placeholder "devdoc"}/share/ri")
@@ -204,7 +231,7 @@ let
           for makefile in $extMakefiles; do
             make -C "$(dirname "$makefile")" distclean
           done
-          find "$out/${passthru.gemPath}" -name gem_make.out -delete
+          find "$out/${passthru.gemPath}" \( -name gem_make.out -o -name mkmf.log \) -delete
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
@@ -271,8 +298,9 @@ let
             ruby = self;
           };
 
+          inherit rubygems;
           inherit (import ../../ruby-modules/with-packages {
-            inherit lib stdenv makeWrapper buildRubyGem buildEnv;
+            inherit lib stdenv makeBinaryWrapper buildRubyGem buildEnv;
             gemConfig = defaultGemConfig;
             ruby = self;
           }) withPackages buildGems gems;
@@ -288,17 +316,23 @@ in {
   mkRuby = generic;
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "7" "";
-    sha256 = "sha256-4QEn22kdf/NkAs/oj0GMjQJaPx7qkgRLFi3XLwuMe5A=";
+    version = rubyVersion "2" "7" "8" "";
+    sha256 = "sha256-wtq2PLyPKgVSYQitQZ76Y6Z+1AdNu8+fwrHKZky0W6A=";
   };
 
   ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "5" "";
-    sha256 = "sha256-mvxjgKAnpP4a4aPi7MtrSXucWsBjHBLKVvm3vrSEh3Y=";
+    version = rubyVersion "3" "0" "6" "";
+    sha256 = "sha256-bmy9SQAw15EMD/IO3vq0KU380QRvD49H94tZeYesaD4=";
   };
 
   ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "2" "";
-    sha256 = "0gm84ipk6mrfw94852w5h7xxk2lqrxjbnlwb88svf0lz70933131";
+    version = rubyVersion "3" "1" "4" "";
+    sha256 = "sha256-o9VYeaDfqx1xQf3xDSKgfb+OXNxEFdob3gYSfVzDx7Y=";
+  };
+
+  ruby_3_2 = generic {
+    version = rubyVersion "3" "2" "2" "";
+    sha256 = "sha256-lsV1WIcaZ0jeW8nydOk/S1qtBs2PN776Do2U57ikI7w=";
+    cargoSha256 = "sha256-6du7RJo0DH+eYMOoh3L31F3aqfR5+iG1iKauSV1uNcQ=";
   };
 }

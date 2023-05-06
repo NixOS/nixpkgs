@@ -1,4 +1,4 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, libretro, genesis-plus-gx }:
+{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, genesis-plus-gx }:
 
 buildKodiBinaryAddon rec {
   pname = "kodi-libretro-genplus";
@@ -8,7 +8,7 @@ buildKodiBinaryAddon rec {
   src = fetchFromGitHub {
     owner = "kodi-game";
     repo = "game.libretro.genplus";
-    rev = "${version}-${rel}";
+    rev = "${version}-Matrix";
     sha256 = "sha256-F3bt129lBZKlDtp7X0S0q10T9k9C2zNeHG+yIP3818Q=";
   };
 

@@ -1,5 +1,5 @@
 { lib, stdenv, rustPlatform, fetchFromGitea, openssl, pkg-config, protobuf
-, testers, Security, garage, nixosTests }:
+, cacert, testers, Security, garage, nixosTests }:
 let
   generic = { version, sha256, cargoSha256, eol ? false, broken ? false }: rustPlatform.buildRustPackage {
     pname = "garage";
@@ -21,14 +21,18 @@ let
       openssl
     ] ++ lib.optional stdenv.isDarwin Security;
 
+    checkInputs = [
+      cacert
+    ];
+
     OPENSSL_NO_VENDOR = true;
 
-    # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v0.7.2/default.nix#L84-L98
+    # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v0.8.2/nix/compile.nix#L192-L198
     # on version changes for checking if changes are required here
     buildFeatures = [
       "kubernetes-discovery"
     ] ++
-    (lib.optional (lib.versionAtLeast version "0.8") [
+    (lib.optionals (lib.versionAtLeast version "0.8") [
       "bundled-libs"
       "sled"
       "metrics"
@@ -36,20 +40,19 @@ let
       "telemetry-otlp"
       "lmdb"
       "sqlite"
+      "consul-discovery"
     ]);
 
     # To make integration tests pass, we include the optional k2v feature here,
-    # but not in buildFeatures. See:
-    # https://garagehq.deuxfleurs.fr/documentation/reference-manual/k2v/
+    # but in buildFeatures only for version 0.8+, where it's enabled by default.
+    # See: https://garagehq.deuxfleurs.fr/documentation/reference-manual/k2v/
     checkFeatures = [
       "k2v"
       "kubernetes-discovery"
     ] ++
-    (lib.optional (lib.versionAtLeast version "0.8") [
+    (lib.optionals (lib.versionAtLeast version "0.8") [
       "bundled-libs"
       "sled"
-      "metrics"
-      "telemetry-otlp"
       "lmdb"
       "sqlite"
     ]);
@@ -80,15 +83,13 @@ in
 
     garage_0_7 = garage_0_7_3;
 
-    garage_0_8_0 = generic {
-      version = "0.8.0";
-      sha256 = "sha256-c2RhHfg0+YV2E9Ckl1YSc+0nfzbHPIt0JgtT0DND9lA=";
-      cargoSha256 = "sha256-vITXckNOiJbMuQW6/8p7dsZThkjxg/zUy3AZBbn33no=";
-      # On x86_64-darwin, tests are failing.
-      broken = stdenv.isDarwin && stdenv.isx86_64;
+    garage_0_8_2 = generic {
+      version = "0.8.2";
+      sha256 = "sha256-IlDWbNWI1yXvPPF3HIqQvo79M2FQCtoX1wRLJrDbd9k=";
+      cargoSha256 = "sha256-6l4tDBMcOvckTkEO05rman4hHlmVbBt1nCeX5/dETKk=";
     };
 
-    garage_0_8 = garage_0_8_0;
+    garage_0_8 = garage_0_8_2;
 
     garage = garage_0_8;
   }

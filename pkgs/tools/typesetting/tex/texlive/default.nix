@@ -5,7 +5,7 @@
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscript_headless, harfbuzz
 , makeWrapper, python3, ruby, perl, gnused, gnugrep, coreutils
-, libfaketime
+, libfaketime, makeFontsConf
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
@@ -24,17 +24,19 @@ let
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv lib makeWrapper writeText
-      stdenv python3 ruby perl gnused gnugrep coreutils libfaketime;
+      stdenv python3 ruby perl gnused gnugrep coreutils libfaketime makeFontsConf;
     ghostscript = ghostscript_headless;
   };
 
+  tlpdb = import ./tlpdb.nix;
+
+  tlpdbVersion = tlpdb."00texlive.config";
+
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
-    orig = import ./pkgs.nix;
-    removeSelfDep = lib.mapAttrs
-      (n: p: if p ? deps then p // { deps = lib.filter (dn: n != dn) p.deps; }
-                         else p);
-    clean = removeSelfDep (orig // {
+    orig = removeAttrs tlpdb [ "00texlive.config" ];
+
+    overridden = orig // {
       # overrides of texlive.tlpdb
 
       texlive-msg-translations = orig.texlive-msg-translations // {
@@ -57,16 +59,13 @@ let
         deps = orig.collection-plaingeneric.deps ++ [ "xdvi" ];
       };
 
-      # override cyclic dependency until #167226 is fixed
-      xecjk = orig.xecjk // {
-        deps = lib.remove "ctex" orig.xecjk.deps;
-      };
-
       texdoc = orig.texdoc // {
+        version = orig.texdoc.version + "-tlpdb-" + (toString tlpdbVersion.revision);
+
         # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
         postUnpack = ''
           if [[ -f "$out"/scripts/texdoc/texdoc.tlu ]]; then
-            unxz --stdout "${tlpdb}" > texlive.tlpdb
+            unxz --stdout "${tlpdbxz}" > texlive.tlpdb
 
             # create dummy doc file to ensure that texdoc does not return an error
             mkdir -p support/texdoc
@@ -80,19 +79,16 @@ let
           fi
         '';
       };
-    }); # overrides
+    }; # overrides
 
-    linkDeps = lib.mapAttrs (_: attrs: attrs // lib.optionalAttrs (attrs ? deps) {
-      deps = builtins.map (n: tl.${n}) attrs.deps;
-    }); # transform [ "dep1" "dep2" ... ] into [ tl."dep1" ... ]
-
-    in lib.mapAttrs flatDeps (linkDeps clean);
+    in lib.mapAttrs mkTLPkg overridden;
     # TODO: texlive.infra for web2c config?
 
 
-  flatDeps = pname: attrs:
+  # create a TeX package: an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
+  mkTLPkg = pname: attrs:
     let
-      version = attrs.version or (builtins.toString attrs.revision);
+      version = attrs.version or (toString attrs.revision);
       mkPkgV = tlType: let
         pkg = attrs // {
           sha512 = attrs.sha512.${tlType};
@@ -110,31 +106,56 @@ let
             tlType = "run";
             hasFormats = attrs.hasFormats or false;
             hasHyphens = attrs.hasHyphens or false;
+            tlDeps = map (n: tl.${n}) (attrs.deps or []);
           }
         )]
         ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
         ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
         ++ lib.optional (bin ? ${pname})
-            ( bin.${pname} // { inherit pname; tlType = "bin"; } )
-        ++ combinePkgs (attrs.deps or []);
+            ( bin.${pname} // { tlType = "bin"; } );
     };
 
-  # for daily snapshots
-  snapshot = {
-    year = "2022";
-    month = "12";
-    day = "27";
+  version = {
+    # day of the snapshot being taken
+    year = "2023";
+    month = "03";
+    day = "19";
+    # TeX Live version
+    texliveYear = 2022;
+    # final (historic) release or snapshot
+    final = true;
   };
 
-  tlpdb = fetchurl {
-    # use the same mirror(s) as urlPrefixes below
-    urls = [
-      #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
-      #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
-      "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
-    ];
-    hash = "sha256-i8DE3/rZmtp+gODJWeHV1VcCK5cgHUgmywf3Q/agTOA=";
+  # The tarballs on CTAN mirrors for the current release are constantly
+  # receiving updates, so we can't use those directly. Stable snapshots
+  # need to be used instead. Ideally, for the release branches of NixOS we
+  # should be switching to the tlnet-final versions
+  # (https://tug.org/historic/).
+  urlPrefixes = with version; lib.optionals final  [
+    # tlnet-final snapshot; used when texlive.tlpdb is frozen
+    # the TeX Live yearly freeze typically happens in mid-March
+    "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString texliveYear}/tlnet-final"
+    "ftp://tug.org/texlive/historic/${toString texliveYear}/tlnet-final"
+  ] ++ [
+    # daily snapshots hosted by one of the texlive release managers;
+    # used for non-final snapshots and as fallback for final snapshots that have not reached yet the historic mirrors
+    # please note that this server is not meant for large scale deployment and should be avoided on release branches
+    # https://tug.org/pipermail/tex-live/2019-November/044456.html
+    "https://texlive.info/tlnet-archive/${year}/${month}/${day}/tlnet"
+  ];
+
+  tlpdbxz = fetchurl {
+    urls = map (up: "${up}/tlpkg/texlive.tlpdb.xz") urlPrefixes;
+    hash = "sha256-vm7DmkH/h183pN+qt1p1wZ6peT2TcMk/ae0nCXsCoMw=";
   };
+
+  tlpdbNix = runCommand "tlpdb.nix" {
+    inherit tlpdbxz;
+    tl2nix = ./tl2nix.sed;
+  }
+  ''
+    xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq > "$out"
+  '';
 
   # create a derivation that contains an unpacked upstream TL package
   mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
@@ -145,21 +166,7 @@ let
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
-        map (up: "${up}/${urlName}.r${toString revision}.tar.xz") urlPrefixes);
-
-      # The tarballs on CTAN mirrors for the current release are constantly
-      # receiving updates, so we can't use those directly. Stable snapshots
-      # need to be used instead. Ideally, for the release branches of NixOS we
-      # should be switching to the tlnet-final versions
-      # (https://tug.org/historic/).
-      urlPrefixes = args.urlPrefixes or [
-        # tlnet-final snapshot
-        #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
-        #"ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
-
-        # Daily snapshots hosted by one of the texlive release managers
-        "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
-      ];
+        map (up: "${up}/archive/${urlName}.r${toString revision}.tar.xz") (args.urlPrefixes or urlPrefixes));
 
     in runCommand "texlive-${tlName}"
       ( {
@@ -168,6 +175,9 @@ let
           # metadata for texlive.combine
           passthru = {
             inherit pname tlType version;
+          } // lib.optionalAttrs (tlType == "run" && args ? deps) {
+            tlDeps = map (n: tl.${n}) args.deps;
+          } // lib.optionalAttrs (tlType == "run") {
             hasFormats = args.hasFormats or false;
             hasHyphens = args.hasHyphens or false;
           };
@@ -186,12 +196,36 @@ let
       );
 
   # combine a set of TL packages into a single TL meta-package
-  combinePkgs = pkgList: lib.concatLists # uniqueness is handled in `combine`
-    (builtins.map (a: a.pkgs) pkgList);
+  combinePkgs = pkgList: lib.catAttrs "pkg" (
+    let
+      # a TeX package is an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
+      # the derivations make up the TeX package and optionally (for backward compatibility) its dependencies
+      tlPkgToSets = { pkgs, ... }: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
+          # outputName required to distinguish among bin.core-big outputs
+          key = "${pkg.pname or pkg.name}.${tlType}-${version}-${outputName}";
+          inherit pkg;
+        }) pkgs;
+      pkgListToSets = lib.concatMap tlPkgToSets; in
+    builtins.genericClosure {
+      startSet = pkgListToSets pkgList;
+      operator = { pkg, ... }: pkgListToSets (pkg.tlDeps or []);
+    });
+
+  assertions =
+    lib.assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
+    lib.assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
 
 in
   tl // {
-    inherit bin combine;
+
+    tlpdb = {
+      # nested in an attribute set to prevent them from appearing in search
+      nix = tlpdbNix;
+      xz = tlpdbxz;
+    };
+
+    bin = assert assertions; bin;
+    combine = assert assertions; combine;
 
     # Pre-defined combined packages for TeX Live schemes,
     # to make nix-env usage more comfortable and build selected on Hydra.
@@ -206,8 +240,7 @@ in
           (combine {
             ${pname} = attrs;
             extraName = "combined" + lib.removePrefix "scheme" pname;
-            #extraVersion = "-final";
-            extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
+            extraVersion = with version; if final then "-final" else ".${year}${month}${day}";
           })
         )
         { inherit (tl)

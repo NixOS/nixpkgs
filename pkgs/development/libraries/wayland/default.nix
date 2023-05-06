@@ -8,8 +8,10 @@
 , wayland-scanner
 , expat
 , libxml2
-, withLibraries ? stdenv.isLinux
+, withLibraries ? stdenv.isLinux || stdenv.isDarwin
+, withTests ? stdenv.isLinux
 , libffi
+, epoll-shim
 , withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
 , graphviz-nox
 , doxygen
@@ -24,17 +26,24 @@
 # Documentation is only built when building libraries.
 assert withDocumentation -> withLibraries;
 
+# Tests are only built when building libraries.
+assert withTests -> withLibraries;
+
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
 stdenv.mkDerivation rec {
   pname = "wayland";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
-    sha256 = "1b0ixya9bfw5c9jx8mzlr7yqnlyvd3jv5z8wln9scdv8q5zlvikd";
+    hash = "sha256-FUCvHqaYpHHC2OnSiDMsfg/TYMjx0Sk267fny8JCWEI=";
   };
+
+  patches = [
+    ./darwin.patch
+  ];
 
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py
@@ -50,7 +59,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddocumentation=${lib.boolToString withDocumentation}"
     "-Dlibraries=${lib.boolToString withLibraries}"
-    "-Dtests=${lib.boolToString withLibraries}"
+    "-Dtests=${lib.boolToString withTests}"
   ];
 
   depsBuildBuild = [
@@ -78,6 +87,8 @@ stdenv.mkDerivation rec {
     libxml2
   ] ++ lib.optionals withLibraries [
     libffi
+  ] ++ lib.optionals (withLibraries && !stdenv.hostPlatform.isLinux) [
+    epoll-shim
   ] ++ lib.optionals withDocumentation [
     docbook_xsl
     docbook_xml_dtd_45
@@ -110,7 +121,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wayland.freedesktop.org/";
     license = licenses.mit; # Expat version
-    platforms = if withLibraries then platforms.linux else platforms.unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
   };
 

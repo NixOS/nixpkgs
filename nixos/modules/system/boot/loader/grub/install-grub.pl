@@ -34,23 +34,29 @@ sub getList {
 }
 
 sub readFile {
-    my ($fn) = @_; local $/ = undef;
-    open FILE, "<$fn" or return undef; my $s = <FILE>; close FILE;
-    local $/ = "\n"; chomp $s; return $s;
+    my ($fn) = @_;
+    # enable slurp mode: read entire file in one go
+    local $/ = undef;
+    open my $fh, "<$fn" or return undef;
+    my $s = <$fh>;
+    close $fh;
+    # disable slurp mode
+    local $/ = "\n";
+    chomp $s;
+    return $s;
 }
 
 sub writeFile {
     my ($fn, $s) = @_;
-    open FILE, ">$fn" or die "cannot create $fn: $!\n";
-    print FILE $s or die;
-    close FILE or die;
+    open my $fh, ">$fn" or die "cannot create $fn: $!\n";
+    print $fh $s or die "cannot write to $fn: $!\n";
+    close $fh or die "cannot close $fn: $!\n";
 }
 
 sub runCommand {
-    my ($cmd) = @_;
-    open FILE, "$cmd 2>/dev/null |" or die "Failed to execute: $cmd\n";
-    my @ret = <FILE>;
-    close FILE;
+    open(my $fh, "-|", @_) or die "Failed to execute: $@_\n";
+    my @ret = $fh->getlines();
+    close $fh;
     return ($?, @ret);
 }
 
@@ -200,7 +206,7 @@ sub GrubFs {
                 $search = $types{$fsIdentifier} . ' ';
 
                 # Based on the type pull in the identifier from the system
-                my ($status, @devInfo) = runCommand("@utillinux@/bin/blkid -o export @{[$fs->device]}");
+                my ($status, @devInfo) = runCommand("@utillinux@/bin/blkid", "-o", "export", @{[$fs->device]});
                 if ($status != 0) {
                     die "Failed to get blkid info (returned $status) for @{[$fs->mount]} on @{[$fs->device]}";
                 }
@@ -213,7 +219,7 @@ sub GrubFs {
 
             # BTRFS is a special case in that we need to fix the referrenced path based on subvolumes
             if ($fs->type eq 'btrfs') {
-                my ($status, @id_info) = runCommand("@btrfsprogs@/bin/btrfs subvol show @{[$fs->mount]}");
+                my ($status, @id_info) = runCommand("@btrfsprogs@/bin/btrfs", "subvol", "show", @{[$fs->mount]});
                 if ($status != 0) {
                     die "Failed to retrieve subvolume info for @{[$fs->mount]}\n";
                 }
@@ -221,7 +227,7 @@ sub GrubFs {
                 if ($#ids > 0) {
                     die "Btrfs subvol name for @{[$fs->device]} listed multiple times in mount\n"
                 } elsif ($#ids == 0) {
-                    my ($status, @path_info) = runCommand("@btrfsprogs@/bin/btrfs subvol list @{[$fs->mount]}");
+                    my ($status, @path_info) = runCommand("@btrfsprogs@/bin/btrfs", "subvol", "list", @{[$fs->mount]});
                     if ($status != 0) {
                         die "Failed to find @{[$fs->mount]} subvolume id from btrfs\n";
                     }
@@ -450,8 +456,9 @@ sub addEntry {
 
     # Include second initrd with secrets
     if (-e -x "$path/append-initrd-secrets") {
-        my $initrdName = basename($initrd);
-        my $initrdSecretsPath = "$bootPath/kernels/$initrdName-secrets";
+        # Name the initrd secrets after the system from which they're derived.
+        my $systemName = basename(Cwd::abs_path("$path"));
+        my $initrdSecretsPath = "$bootPath/kernels/$systemName-secrets";
 
         mkpath(dirname($initrdSecretsPath), 0, 0755);
         my $oldUmask = umask;
@@ -470,7 +477,7 @@ sub addEntry {
         if (-e $initrdSecretsPathTemp && ! -z _) {
             rename $initrdSecretsPathTemp, $initrdSecretsPath or die "failed to move initrd secrets into place: $!\n";
             $copied{$initrdSecretsPath} = 1;
-            $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$initrdName-secrets";
+            $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$systemName-secrets";
         } else {
             unlink $initrdSecretsPathTemp;
             rmdir dirname($initrdSecretsPathTemp);

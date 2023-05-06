@@ -4,6 +4,7 @@
 , diff-match-patch
 , django
 , fetchFromGitHub
+, psycopg2
 , python
 , pythonOlder
 , pytz
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "django-import-export";
-  version = "2.8.0";
+  version = "3.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "django-import-export";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-km6TQq4OZZtx9/lgBzS3tEifAYjkkUX//9FRATDLX/0=";
+    hash = "sha256-ws9gUPCr5nM8HGbCt9+6IFjLgAKiCMQRkY/yfIb2mng=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     chardet
+    psycopg2
     pytz
   ];
 

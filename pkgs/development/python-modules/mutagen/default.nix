@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
 
 # docs
 , python
@@ -30,6 +31,15 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     sphinx
     sphinx-rtd-theme
+  ];
+
+  patches = [
+    (fetchpatch {
+      # docs: Make extlinks compatible with sphinx 6.0
+      # https://github.com/quodlibet/mutagen/pull/590
+      url = "https://github.com/quodlibet/mutagen/commit/37b4e6bddc03e1f715425c418ea84bac15116907.patch";
+      hash = "sha256-CnGfHY4RhRhOLvlRTH/NZwzCnAL3VhU6xosuh6fkqGQ=";
+    })
   ];
 
   postInstall = ''

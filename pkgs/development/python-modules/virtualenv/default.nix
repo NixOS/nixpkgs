@@ -1,38 +1,39 @@
 { lib
-, stdenv
 , buildPythonPackage
 , pythonOlder
 , isPy27
+, isPyPy
 , cython
 , distlib
 , fetchPypi
 , filelock
 , flaky
+, hatch-vcs
+, hatchling
 , importlib-metadata
 , importlib-resources
-, pathlib2
 , platformdirs
 , pytest-freezegun
 , pytest-mock
 , pytest-timeout
 , pytestCheckHook
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.17.1";
-  format = "setuptools";
+  version = "20.19.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+LknaE78bxzCBsnbKXpXCrmtDlHBb6nkVIfTbRkFwFg=";
+    hash = "sha256-N6ZAuoLtQLImWZxSLUEeS+XtszmgwN4DDA3HtkbWFZA=";
   };
 
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
@@ -74,6 +75,13 @@ buildPythonPackage rec {
     "test_seed_link_via_app_data"
     # Permission Error
     "test_bad_exe_py_info_no_raise"
+  ] ++ lib.optionals (isPyPy) [
+    # encoding problems
+    "test_bash"
+    # permission error
+    "test_can_build_c_extensions"
+    # fails to detect pypy version
+    "test_discover_ok"
   ];
 
   pythonImportsCheck = [

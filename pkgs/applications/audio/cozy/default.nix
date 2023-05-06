@@ -24,11 +24,6 @@ python3Packages.buildPythonApplication rec {
   pname = "cozy";
   version = "1.2.1";
 
-  # Temporary fix
-  # See https://github.com/NixOS/nixpkgs/issues/57029
-  # and https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   src = fetchFromGitHub {
     owner = "geigi";
     repo = pname;

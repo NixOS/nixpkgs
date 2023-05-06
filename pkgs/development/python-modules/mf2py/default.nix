@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "microformats";
     repo = "mf2py";
     rev = version;
-    sha256 = "sha256-9pAD/eCmc/l7LGmKixDhZy3hhj1jCmcyo9wbqgtz/wI=";
+    hash = "sha256-9pAD/eCmc/l7LGmKixDhZy3hhj1jCmcyo9wbqgtz/wI=";
   };
 
   propagatedBuildInputs = [

@@ -1,5 +1,6 @@
 # Inherit arguments from the derivation
-makeWrapperArgs=( ${makeWrapperArgs-} )
+declare -a derivationMakeWrapperArgs="( ${makeWrapperArgs-} )"
+makeWrapperArgs=( "${derivationMakeWrapperArgs[@]}" )
 
 # First argument is the executable you want to wrap,
 # the second is the destination for the wrapper.

@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Python bindings for LZFSE";
     homepage = "https://github.com/ydkhatri/pyliblzfse";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

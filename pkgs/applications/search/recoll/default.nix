@@ -79,9 +79,9 @@ mkDerivation rec {
     python3Packages.mutagen
     xapian
     zlib
-  ] ++ lib.optional withGui [
+  ] ++ lib.optionals withGui [
     qtbase
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
   ];
 

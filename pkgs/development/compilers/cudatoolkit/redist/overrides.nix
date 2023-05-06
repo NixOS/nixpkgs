@@ -41,6 +41,10 @@ in
       # uses the last --compiler-bindir it gets on the command line.
       # FIXME: this results in "incompatible redefinition" warnings.
       # https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#compiler-bindir-directory-ccbin
+      # NOTE: We unconditionally set -Xfatbin=-compress-all, which reduces the size of the
+      #   compiled binaries. If binaries grow over 2GB, they will fail to link. This is a problem
+      #   for us, as the default set of CUDA capabilities we build can regularly cause this to
+      #   occur (for example, with Magma).
       postInstall = (oldAttrs.postInstall or "") + ''
         mkdir -p $out/nix-support
         cat <<EOF >> $out/nix-support/setup-hook
@@ -49,7 +53,7 @@ in
         if [ -z "\''${CUDAHOSTCXX-}" ]; then
           export CUDAHOSTCXX=${cc}/bin;
         fi
-        export NVCC_PREPEND_FLAGS+=' --compiler-bindir=${cc}/bin'
+        export NVCC_PREPEND_FLAGS+=' --compiler-bindir=${cc}/bin -Xfatbin=-compress-all'
         EOF
       '';
     });

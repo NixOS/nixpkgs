@@ -1,23 +1,19 @@
 { lib
-, python3Packages
+, nix-update-script
+, python3
 }:
 
-with python3Packages; buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "synadm";
-  version = "0.38";
+  version = "0.41.2";
   format = "setuptools";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-l1KRUnjzj1/MEb1nxV6hMaxi15q7baG+iiK2yatZYRc=";
+    hash = "sha256-wSpgc1umBMLCc2ThfYSuNNnzqWXyEQM0XhTuOAQaiXg=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "Click>=7.0,<8.0" "Click"
-  '';
-
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     click
     click-option-group
     dnspython
@@ -33,6 +29,8 @@ with python3Packages; buildPythonApplication rec {
     runHook postCheck
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Command line admin tool for Synapse";
     longDescription = ''
@@ -40,6 +38,7 @@ with python3Packages; buildPythonApplication rec {
       conveniently issue commands available via its admin API's
       (matrix-org/synapse@master/docs/admin_api)
     '';
+    changelog = "https://github.com/JOJ0/synadm/releases/tag/v${version}";
     homepage = "https://github.com/JOJ0/synadm";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hexa ];

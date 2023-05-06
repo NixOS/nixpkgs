@@ -36,7 +36,7 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.23.0";
+  version = "0.25.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-EMPqBKrtlwI9SJlqZjyAN5CtV4/BNwc5LapfeCEIYxc=";
+    sha256 = "sha256-ysAZdmkFEuqJDTPe246F2I4Qp+fjtomia42PS8BuMM8=";
   };
 
   nativeBuildInputs = [
@@ -96,11 +96,6 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/36468
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ];
-
-  postPatch = ''
-    chmod +x build-aux/post_install.py
-    patchShebangs build-aux/post_install.py
-  '';
 
   checkPhase = ''
     runHook preCheck

@@ -1,0 +1,92 @@
+--- a/cmake/utilities.cmake	1970-01-01 01:00:01.000000000 +0100
++++ b/cmake/utilities.cmake	2023-03-09 19:28:16.556251981 +0100
+@@ -241,9 +241,9 @@
+     install(
+         TARGETS ${ARGN}
+         COMPONENT runtime
+-        RUNTIME DESTINATION bin
+-        LIBRARY DESTINATION lib
+-        ARCHIVE DESTINATION lib
++        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     )
+ endfunction()
+ 
+@@ -270,9 +270,9 @@
+         install(
+             TARGETS ${ARGN}
+             COMPONENT ${component}
+-            RUNTIME DESTINATION bin
+-            LIBRARY DESTINATION lib
+-            ARCHIVE DESTINATION lib
++            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+         )
+     endforeach()
+ endfunction()
+--- a/src/lib/geogram/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/src/lib/geogram/CMakeLists.txt	2023-03-09 20:29:12.346780432 +0100
+@@ -76,7 +76,7 @@
+ # Install include files for the standard devkit
+ install(
+     DIRECTORY api
+-    DESTINATION include/${VORPALINE_INCLUDE_SUBPATH}/geogram
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${VORPALINE_INCLUDE_SUBPATH}/geogram
+     COMPONENT devkit
+     FILES_MATCHING PATTERN *.h
+ )
+@@ -84,7 +84,7 @@
+ # Install include files for the full devkit
+ install(
+     DIRECTORY .
+-    DESTINATION include/${VORPALINE_INCLUDE_SUBPATH}/geogram
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${VORPALINE_INCLUDE_SUBPATH}/geogram
+     COMPONENT devkit-full
+     FILES_MATCHING PATTERN *.h
+     # Exclude all files related to licensing
+@@ -93,7 +93,7 @@
+ 
+ install(
+         FILES "${PROJECT_BINARY_DIR}/geogram${VORPALINE_VERSION_MAJOR}.pc"
+-        DESTINATION lib${LIB_SUFFIX}/pkgconfig
++        DESTINATION ${GEOGRAM_INSTALL_PKGCONFIG_DIR}
+ )
+ 
+ 
+--- a/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/CMakeLists.txt	2023-03-09 20:40:20.075218356 +0100
+@@ -158,7 +158,7 @@
+ 
+ # FindGeogram.cmake
+ 
+-install(FILES cmake/FindGeogram.cmake DESTINATION lib/cmake/modules COMPONENT devkit)
++install(FILES cmake/FindGeogram.cmake DESTINATION ${GEOGRAM_INSTALL_CMAKE_DIR} COMPONENT devkit)
+ 
+ # Configure CPack
+ 
+--- a/doc/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/doc/CMakeLists.txt	2023-03-09 21:12:04.386327003 +0100
+@@ -25,14 +25,14 @@
+ 
+   # Install documentation
+   if(GEOGRAM_WITH_VORPALINE)
+-      install(FILES README.txt DESTINATION doc COMPONENT runtime)
+-      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LICENSE.txt DESTINATION doc COMPONENT runtime OPTIONAL)
++      install(FILES README.txt DESTINATION ${CMAKE_INSTALL_DOCDIR} COMPONENT runtime)
++      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LICENSE.txt DESTINATION ${CMAKE_INSTALL_DOCDIR} COMPONENT runtime OPTIONAL)
+   endif()
+ 
+-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/VERSION.txt DESTINATION doc/geogram COMPONENT runtime OPTIONAL)
+-  
+-  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/devkit/html DESTINATION doc/devkit COMPONENT doc-devkit OPTIONAL)
+-  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/devkit-full/html DESTINATION doc/devkit COMPONENT doc-devkit-full OPTIONAL)
+-  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/devkit-internal/html DESTINATION doc/devkit COMPONENT doc-devkit-internal OPTIONAL)
++  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/VERSION.txt DESTINATION ${CMAKE_INSTALL_DOCDIR}/geogram COMPONENT runtime OPTIONAL)
++
++  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/devkit/html DESTINATION ${CMAKE_INSTALL_DOCDIR}/devkit COMPONENT doc-devkit OPTIONAL)
++  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/devkit-full/html DESTINATION ${CMAKE_INSTALL_DOCDIR}/devkit COMPONENT doc-devkit-full OPTIONAL)
++  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/devkit-internal/html DESTINATION ${CMAKE_INSTALL_DOCDIR}/devkit COMPONENT doc-devkit-internal OPTIONAL)
+ 
+ endif()

@@ -1,32 +1,27 @@
 { lib
-, mkDerivation
-, variant ? "standalone"
+, stdenv
 , fetchzip
-, fetchpatch
+, cimg
 , cmake
-, pkg-config
+, curl
+, fftw
+, gimp
+, gimpPlugins
+, gmic
+, graphicsmagick
+, libjpeg
+, libpng
+, libtiff
 , ninja
+, nix-update-script
 , opencv3
 , openexr
-, graphicsmagick
-, fftw
-, zlib
-, libjpeg
-, libtiff
-, libpng
-, curl
-, gimp ? null
-, gmic
+, pkg-config
 , qtbase
 , qttools
-, writeShellScript
-, common-updater-scripts
-, gnugrep
-, gnused
-, coreutils
-, jq
-, nix-update-script
-, gimpPlugins
+, wrapQtAppsHook
+, zlib
+, variant ? "standalone"
 }:
 
 let
@@ -46,33 +41,28 @@ let
 
 in
 
-assert lib.assertMsg (builtins.hasAttr variant variants) "gmic-qt variant “${variant}” is not supported. Please use one of ${lib.concatStringsSep ", " (builtins.attrNames variants)}.";
+assert lib.assertMsg
+  (builtins.hasAttr variant variants)
+  "gmic-qt variant \"${variant}\" is not supported. Please use one of ${lib.concatStringsSep ", " (builtins.attrNames variants)}.";
 
-assert lib.assertMsg (builtins.all (d: d != null) variants.${variant}.extraDeps or []) "gmic-qt variant “${variant}” is missing one of its dependencies.";
+assert lib.assertMsg
+  (builtins.all (d: d != null) variants.${variant}.extraDeps or [])
+  "gmic-qt variant \"${variant}\" is missing one of its dependencies.";
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.2.1";
+  version = "3.2.4";
 
   src = fetchzip {
-    url = "https://gmic.eu/files/source/gmic_${version}.tar.gz";
-    hash = "sha256-2lMnn19FcFKnfIjSxOObqxIjqLMUoWgi0ADZBCBePY4=";
+    url = "https://gmic.eu/files/source/gmic_${finalAttrs.version}.tar.gz";
+    hash = "sha256-FJ2zlsah/3Jf5ie4UhQsPvMoxDMc6iHl3AkhKsZSuqE=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "gmic-qt-3.2.1-fix-system-gmic.patch";
-      url = "https://github.com/c-koi/gmic-qt/commit/e8d7a3523753ff592da63b1d54edf0921c54fe53.patch";
-      hash = "sha256-kBFZo2qvod4pH3oK8gvnmw39x6eMH9zjr4mMcY74mFo=";
-    })
-  ];
-
-  sourceRoot = "source/gmic-qt";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     ninja
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -90,17 +80,21 @@ mkDerivation rec {
     curl
   ] ++ variants.${variant}.extraDeps or [];
 
-  cmakeFlags = [
-    "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else variant}"
-    "-DENABLE_SYSTEM_GMIC=ON"
-    "-DENABLE_DYNAMIC_LINKING=ON"
-  ];
+  preConfigure = ''
+    cd gmic-qt
+  '';
 
   postPatch = ''
     patchShebangs \
       translations/filters/csv2ts.sh \
       translations/lrelease.sh
   '';
+
+  cmakeFlags = [
+    "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else variant}"
+    "-DENABLE_SYSTEM_GMIC=ON"
+    "-DENABLE_DYNAMIC_LINKING=ON"
+  ];
 
   postFixup = lib.optionalString (variant == "gimp") ''
     echo "wrapping $out/${gimp.targetPluginDir}/gmic_gimp_qt/gmic_gimp_qt"
@@ -110,15 +104,19 @@ mkDerivation rec {
   passthru = {
     tests = {
       gimp-plugin = gimpPlugins.gmic;
+      # Needs to update them all in lockstep.
+      inherit cimg gmic;
     };
 
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
-    description = variants.${variant}.description;
+  meta = {
     homepage = "http://gmic.eu/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    inherit (variants.${variant}) description;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.lilyinstarlight ];
+    platforms = lib.platforms.unix;
+    mainProgram = "gmic_qt";
   };
-}
+})

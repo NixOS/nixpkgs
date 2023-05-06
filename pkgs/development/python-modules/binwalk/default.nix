@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "ReFirmLabs";
     repo = "binwalk";
     rev = "v${version}";
-    sha256 = "sha256-hlPbzqGRSXcIqlI+SNKq37CnnHd1IoMBNSjhyeAM1TE=";
+    hash = "sha256-hlPbzqGRSXcIqlI+SNKq37CnnHd1IoMBNSjhyeAM1TE=";
   };
 
   patches = [

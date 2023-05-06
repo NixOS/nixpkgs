@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "378";
+  version = "379";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    hash = "sha256-ZJ37/V7dDtnkfPjk2VO0sNPDC8KAFm38T/0Ulz/sPpI=";
+    hash = "sha256-p93ydO6EuX+xKDZ1AJ1Tyi0CoP/VzlpRGNr8NiPrsxA=";
   };
 
   strictDeps = true;
@@ -54,8 +54,13 @@ stdenv.mkDerivation rec {
     "--with-app-defaults=$(out)/lib/X11/app-defaults"
   ] ++ lib.optional enableDecLocator "--enable-dec-locator";
 
-  # Work around broken "plink.sh".
-  NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
+  env = {
+    # Work around broken "plink.sh".
+    NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
+  } // lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    # Various symbols missing without this define: TAB3, NLDLY, CRDLY, BSDLY, FFDLY, CBAUD
+    NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+  };
 
   # Hack to get xterm built with the feature of releasing a possible setgid of 'utmp',
   # decided by the sysadmin to allow the xterm reporting to /var/run/utmp

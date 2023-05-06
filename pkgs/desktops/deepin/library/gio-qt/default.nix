@@ -13,25 +13,25 @@
 
 stdenv.mkDerivation rec {
   pname = "gio-qt";
-  version = "0.0.11";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dlY1CTlXywgGZUonBBe3cDwx8h2xXrPY6Ft/D59nlug=";
+    sha256 = "sha256-/wLaVR31T+EcT6D5Cw0QIjZasioPWC74KNmt1tckwXk=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     wrapQtAppsHook
-  ] ++ lib.optional buildDocs [ doxygen qttools.dev ];
+  ] ++ lib.optionals buildDocs [ doxygen qttools.dev ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DPROJECT_VERSION=${version}"
-  ] ++ lib.optional (!buildDocs) [ "-DBUILD_DOCS=OFF" ];
+  ] ++ lib.optionals (!buildDocs) [ "-DBUILD_DOCS=OFF" ];
 
   propagatedBuildInputs = [ glibmm ];
 

@@ -26,12 +26,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "4.12";
+  version = "5.1";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-zIwFGla4u0M1ZtbiiQ31nz2JWjlcjPUkbBtygQLOEK4=";
+    hash = "sha256-imWB3ffHQJ22NlEGATUa9yTto2OrWbHV2o2YEDPyb3I=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     webkitgtk
   ]
   ++ (with perlPackages; [
-    DateManip
+    JSONParse
     FinanceQuote
     perl
   ]);
@@ -72,96 +72,24 @@ stdenv.mkDerivation rec {
     ./0002-disable-gnc-fq-update.patch
     # this patch prevents the building of gnucash-valgrind
     ./0003-remove-valgrind.patch
-    # this patch makes gnucash exec the Finance::Quote helpers directly
-    ./0004-exec-fq-helpers.patch
+    # this patch makes gnucash exec the Finance::Quote wrapper directly
+    ./0004-exec-fq-wrapper.patch
+    # this patch removes the online_wiggle GncQuotes test
+    ./0005-remove-gncquotes-online-wiggle.patch
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress
   # guile warning
-  GUILE_AUTO_COMPILE="0";
+  env.GUILE_AUTO_COMPILE = "0";
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
     # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
     "-Wno-error=use-after-free"
   ]);
 
-  # `make check` target does not define its prerequisites but expects them to
-  # have already been built.  The list of targets below was built through trial
-  # and error based on failing tests.
   doCheck = true;
-  preCheck = ''
-    make \
-      test-account-object \
-      test-address \
-      test-agedver \
-      test-app-utils \
-      test-aqb \
-      test-autoclear \
-      test-backend-dbi \
-      test-business \
-      test-column-types \
-      test-commodities \
-      test-customer \
-      test-dom-converters1 \
-      test-dynload \
-      test-employee \
-      test-engine \
-      test-exp-parser \
-      test-gnc-glib-utils \
-      test-gnc-guid \
-      test-gnc-int128 \
-      test-gnc-numeric \
-      test-gnc-path-util \
-      test-gnc-rational \
-      test-group-vs-book \
-      test-guid \
-      test-import-account-matcher \
-      test-import-backend \
-      test-import-map \
-      test-import-parse \
-      test-import-pending-matches \
-      test-incompatdep \
-      test-job \
-      test-kvp-frames \
-      test-kvp-value \
-      test-link-module-tax-us \
-      test-link-ofx \
-      test-load-backend \
-      test-load-c \
-      test-load-engine \
-      test-load-example-account \
-      test-load-xml2 \
-      test-lots \
-      test-modsysver \
-      test-numeric \
-      test-object \
-      test-print-parse-amount \
-      test-qof \
-      test-qofquerycore \
-      test-qofsession \
-      test-query \
-      test-querynew \
-      test-recurrence \
-      test-resolve-file-path \
-      test-scm-query \
-      test-scm-query-string \
-      test-split-register-copy-ops \
-      test-split-vs-account \
-      test-sqlbe \
-      test-string-converters \
-      test-sx \
-      test-tokenizer \
-      test-transaction-reversal \
-      test-transaction-voiding \
-      test-userdata-dir \
-      test-userdata-dir-invalid-home \
-      test-vendor \
-      test-xml-account \
-      test-xml-commodity \
-      test-xml-pricedb \
-      test-xml-transaction \
-      test-xml2-is-file
-  '';
+  enableParallelChecking = true;
+  checkTarget = "check";
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -181,10 +109,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/gnucash "''${gappsWrapperArgs[@]}"
 
-    for file in $out/bin/gnc-fq-check $out/bin/gnc-fq-dump $out/bin/gnc-fq-helper; do
-      wrapProgram $file \
-      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ DateManip FinanceQuote ]}"
-    done
+    wrapProgram $out/bin/finance-quote-wrapper \
+      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ JSONParse FinanceQuote ]}"
   '';
 
   meta = with lib; {

@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "petertodd";
     repo = "python-bitcoinlib";
     rev = "refs/tags/python-bitcoinlib-v${version}";
-    sha256 = "sha256-jguybrH86z6NWLaucQEYjvH2Gkoh3Aqh/PLZ6l8Qel4=";
+    hash = "sha256-jguybrH86z6NWLaucQEYjvH2Gkoh3Aqh/PLZ6l8Qel4=";
   };
 
   postPatch = ''

@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , fetchurl
 , cmake
-, ffmpeg
+, ffmpeg_4
 , libdrm
 , libglvnd
 , libffi
@@ -18,6 +18,7 @@
 , vulkan-loader
 , wayland
 , wayland-protocols
+, wayland-scanner
 , zlib
 }:
 let
@@ -76,13 +77,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.5.0";
+  version = "1.3.5.2";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-RPuhcLJ5Ad41SFPjJBdghcNBPIGzZBeVWTjySWOp0KA=";
+    hash = "sha256-79N0DX+yQhTuAhspBmeqM/iFQpJ1LabKyFfzHoLLbeg=";
   };
 
   outputs = [ "out" "lib" ];
@@ -103,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_4
     libdrm
     libffi
     libglvnd
@@ -126,13 +127,16 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
+    wayland-scanner
   ];
 
-  # Fix cts cmake not coping with absolute install dirs
   cmakeFlags = [
+    # Fix cts cmake not coping with absolute install dirs
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+
+    "-DWAYLAND_SCANNER=wayland-scanner"
   ];
 
   postInstall = ''
@@ -151,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Khronos Vulkan Conformance Tests";
     homepage = "https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/vulkancts/README.md";
+    changelog = "https://github.com/KhronosGroup/VK-GL-CTS/releases/tag/${finalAttrs.pname}-${finalAttrs.version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ Flakebi ];
   };

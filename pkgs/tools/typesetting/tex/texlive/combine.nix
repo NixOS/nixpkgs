@@ -17,11 +17,11 @@ let
   pkgList = rec {
     all = lib.filter pkgFilter (combinePkgs (lib.attrValues pkgSet));
     splitBin = builtins.partition (p: p.tlType == "bin") all;
-    bin = mkUniqueOutPaths splitBin.right
+    bin = splitBin.right
       ++ lib.optional
           (lib.any (p: p.tlType == "run" && p.pname == "pdfcrop") splitBin.wrong)
           (lib.getBin ghostscript);
-    nonbin = mkUniqueOutPaths splitBin.wrong;
+    nonbin = splitBin.wrong;
 
     # extra interpreters needed for shebangs, based on 2015 schemes "medium" and "tetex"
     # (omitted tk needed in pname == "epspdf", bin/epspdftk)
@@ -33,85 +33,111 @@ let
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
-  sortedUniqueStrings = list: lib.sort (a: b: a < b) (lib.unique list);
-
-  mkUniqueOutPaths = pkgs: lib.unique
-    (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
-
-in (buildEnv {
   name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
 
-  extraPrefix = "/share/texmf";
+  texmfroot = (buildEnv {
+    name = "${name}-texmfroot";
+
+    # the 'non-relocated' packages must live in $TEXMFROOT/texmf-dist (e.g. fmtutil, updmap look for perl modules there)
+    extraPrefix = "/texmf-dist";
+
+    # remove fake derivations (without 'outPath') to avoid undesired build dependencies
+    paths = lib.catAttrs "outPath" pkgList.nonbin;
+
+    nativeBuildInputs = [ perl bin.core.out ];
+
+    postBuild = # generate ls-R database
+    ''
+      perl -I "${bin.core.out}/share/texmf-dist/scripts/texlive" \
+        -- "$out/texmf-dist/scripts/texlive/mktexlsr.pl" --sort "$out"/texmf-dist
+    '';
+  }).overrideAttrs (_: { allowSubstitutes = true; });
+
+  # expose info and man pages in usual /share/{info,man} location
+  doc = buildEnv {
+    name = "${name}-doc";
+
+    paths = [ (texmfroot.outPath + "/texmf-dist/doc") ];
+    extraPrefix = "/share";
+
+    pathsToLink = [
+      "/info"
+      "/man"
+    ];
+  };
+
+in (buildEnv {
+
+  inherit name;
 
   ignoreCollisions = false;
-  paths = pkgList.nonbin;
+
+  # remove fake derivations (without 'outPath') to avoid undesired build dependencies
+  paths = lib.catAttrs "outPath" pkgList.bin ++ [ doc ];
   pathsToLink = [
     "/"
-    "/tex/generic/config" # make it a real directory for scheme-infraonly
+    "/bin" # ensure these are writeable directories
   ];
 
   nativeBuildInputs = [ makeWrapper libfaketime perl bin.texlinks ];
   buildInputs = pkgList.extraInputs;
 
-  # This is set primarily to help find-tarballs.nix to do its job
-  passthru.packages = pkgList.all;
+  passthru = {
+    # This is set primarily to help find-tarballs.nix to do its job
+    packages = pkgList.all;
+    # useful for inclusion in the `fonts.fonts` nixos option or for use in devshells
+    fonts = "${texmfroot}/texmf-dist/fonts";
+  };
 
   postBuild = ''
-    mkdir -p "$out"/bin
-  '' +
-    lib.concatMapStrings
-      (path: ''
-        for f in '${path}'/bin/*; do
-          if [[ -L "$f" ]]; then
-            cp -d "$f" "$out"/bin/
-          else
-            ln -s "$f" "$out"/bin/
-          fi
-        done
-      '')
-      pkgList.bin
-    +
-  ''
-    export PATH="$out/bin:$out/share/texmf/scripts/texlive:$PATH"
-    export TEXMFCNF="$out/share/texmf/web2c"
+    TEXMFROOT="${texmfroot}"
+    TEXMFDIST="${texmfroot}/texmf-dist"
+    export PATH="$out/bin:$PATH"
+    export PERL5LIB="${bin.core.out}/share/texmf-dist/scripts/texlive" # modules otherwise found in tlpkg/ of texlive.infra
     TEXMFSYSCONFIG="$out/share/texmf-config"
     TEXMFSYSVAR="$out/share/texmf-var"
-    export PERL5LIB="$out/share/texmf/scripts/texlive:${bin.core.out}/share/texmf-dist/scripts/texlive"
+    export TEXMFCNF="$TEXMFSYSVAR/web2c"
   '' +
-    # patch texmf-dist  -> $out/share/texmf
+    # patch texmf-dist  -> $TEXMFDIST
     # patch texmf-local -> $out/share/texmf-local
+    # patch texmf.cnf   -> $TEXMFSYSVAR/web2c/texmf.cnf
     # TODO: perhaps do lua actions?
     # tried inspiration from install-tl, sub do_texmf_cnf
   ''
-    if [ -e "$TEXMFCNF/texmfcnf.lua" ]; then
+    mkdir -p "$TEXMFCNF"
+    if [ -e "$TEXMFDIST/web2c/texmfcnf.lua" ]; then
       sed \
-        -e 's,texmf-dist,texmf,g' \
+        -e "s,\(TEXMFOS[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFROOT\",g" \
+        -e "s,\(TEXMFDIST[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFDIST\",g" \
+        -e "s,\(TEXMFSYSVAR[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFSYSVAR\",g" \
+        -e "s,\(TEXMFSYSCONFIG[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFSYSCONFIG\",g" \
         -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf-local\",g" \
         -e "s,\$SELFAUTOLOC,$out,g" \
         -e "s,selfautodir:/,$out/share/,g" \
         -e "s,selfautodir:,$out/share/,g" \
         -e "s,selfautoparent:/,$out/share/,g" \
         -e "s,selfautoparent:,$out/share/,g" \
-        -i "$TEXMFCNF/texmfcnf.lua"
+        "$TEXMFDIST/web2c/texmfcnf.lua" > "$TEXMFCNF/texmfcnf.lua"
     fi
 
     sed \
-      -e 's,texmf-dist,texmf,g' \
+      -e "s,\(TEXMFROOT[ ]*=[ ]*\)[^\,]*,\1$TEXMFROOT,g" \
+      -e "s,\(TEXMFDIST[ ]*=[ ]*\)[^\,]*,\1$TEXMFDIST,g" \
+      -e "s,\(TEXMFSYSVAR[ ]*=[ ]*\)[^\,]*,\1$TEXMFSYSVAR,g" \
+      -e "s,\(TEXMFSYSCONFIG[ ]*=[ ]*\)[^\,]*,\1$TEXMFSYSCONFIG,g" \
       -e "s,\$SELFAUTOLOC,$out,g" \
       -e "s,\$SELFAUTODIR,$out/share,g" \
       -e "s,\$SELFAUTOPARENT,$out/share,g" \
       -e "s,\$SELFAUTOGRANDPARENT,$out/share,g" \
       -e "/^mpost,/d" `# CVE-2016-10243` \
-      -i "$TEXMFCNF/texmf.cnf"
-
-    mkdir "$out/share/texmf-local"
+      "$TEXMFDIST/web2c/texmf.cnf" > "$TEXMFCNF/texmf.cnf"
   '' +
     # now filter hyphenation patterns and formats
   (let
     hyphens = lib.filter (p: p.hasHyphens or false && p.tlType == "run") pkgList.splitBin.wrong;
-    hyphenPNames = sortedUniqueStrings (map (p: p.pname) hyphens);
+    hyphenPNames = map (p: p.pname) hyphens;
     formats = lib.filter (p: p.hasFormats or false && p.tlType == "run") pkgList.splitBin.wrong;
-    formatPNames = sortedUniqueStrings (map (p: p.pname) formats);
+    formatPNames = map (p: p.pname) formats;
     # sed expression that prints the lines in /start/,/end/ except for /end/
     section = start: end: "/${start}/,/${end}/{ /${start}/p; /${end}/!p; };\n";
     script =
@@ -132,18 +158,31 @@ in (buildEnv {
         + lib.concatMapStrings (pname: section "^-- from ${pname}:$" "^}$|^-- from") hyphenPNames
         + "$p;\n"
       );
+    # formats not being installed must be disabled by prepending #! (see man fmtutil)
+    # sed expression that enables the formats in /start/,/end/
+    enableFormats = pname: "/^# from ${pname}:$/,/^# from/{ s/^#! //; };\n";
     fmtutilSed =
       writeText "fmtutil.sed" (
-        "1{ s/^(# Generated by .*)$/\\1, modified by texlive.combine/; p; }\n"
-        + "2,/^# from/{ /^# from/!p; };\n"
-        + lib.concatMapStrings (pname: section "^# from ${pname}:$" "^# from") formatPNames
+        # document how file was generated
+        "1{ s/^(# Generated by .*)$/\\1, modified by texlive.combine/; }\n"
+        # disable all formats, even those already disabled
+        + "s/^([^#]|#! )/#! \\1/;\n"
+        # enable the formats from the packages being installed
+        + lib.concatMapStrings enableFormats formatPNames
+        # clean up formats that have been disabled twice
+        + "s/^#! #! /#! /;\n"
       );
   in ''
-    for fname in "$out"/share/texmf/tex/generic/config/language.{dat,def}; do
-      [[ -e "$fname" ]] && sed -E -n -f '${script}' -i "$fname"
+    mkdir -p "$TEXMFSYSVAR/tex/generic/config"
+    for fname in tex/generic/config/language.{dat,def}; do
+      [[ -e "$TEXMFDIST/$fname" ]] && sed -E -n -f '${script}' "$TEXMFDIST/$fname" > "$TEXMFSYSVAR/$fname"
     done
-    [[ -e "$out"/share/texmf/tex/generic/config/language.dat.lua ]] && sed -E -n -f '${scriptLua}' -i "$out"/share/texmf/tex/generic/config/language.dat.lua
-    [[ -e "$TEXMFCNF"/fmtutil.cnf ]] && sed -E -n -f '${fmtutilSed}' -i "$TEXMFCNF"/fmtutil.cnf
+    [[ -e "$TEXMFDIST"/tex/generic/config/language.dat.lua ]] && sed -E -n -f '${scriptLua}' \
+      "$TEXMFDIST"/tex/generic/config/language.dat.lua > "$TEXMFSYSVAR"/tex/generic/config/language.dat.lua
+    [[ -e "$TEXMFDIST"/web2c/fmtutil.cnf ]] && sed -E -f '${fmtutilSed}' "$TEXMFDIST"/web2c/fmtutil.cnf > "$TEXMFCNF"/fmtutil.cnf
+
+    # make new files visible to kpathsea
+    perl "$TEXMFDIST"/scripts/texlive/mktexlsr.pl --sort "$TEXMFSYSVAR"
   '') +
 
   # function to wrap created executables with required env vars
@@ -161,7 +200,11 @@ in (buildEnv {
       makeWrapper "$target" "$link" \
         --prefix PATH : "${gnused}/bin:${gnugrep}/bin:${coreutils}/bin:$out/bin:${perl}/bin" \
         --prefix PERL5LIB : "$PERL5LIB" \
-        --set-default TEXMFCNF "$TEXMFCNF"
+        --set-default TEXMFCNF "$TEXMFCNF" \
+        --set-default FONTCONFIG_FILE "${
+          # neccessary for XeTeX to find the fonts distributed with texlive
+          makeFontsConf { fontDirectories = [ "${texmfroot}/texmf-dist/fonts" ]; }
+        }"
 
       # avoid using non-nix shebang in $target by calling interpreter
       if [[ "$(head -c 2 "$target")" = "#!" ]]; then
@@ -191,30 +234,22 @@ in (buildEnv {
   '' +
   # texlive post-install actions
   ''
-    ln -sf "$out"/share/texmf/scripts/texlive/updmap.pl "$out"/bin/updmap
+    ln -sf "$TEXMFDIST"/scripts/texlive/updmap.pl "$out"/bin/updmap
   '' +
     # now hack to preserve "$0" for mktexfmt
   ''
-    cp "$out"/share/texmf/scripts/texlive/fmtutil.pl "$out/bin/fmtutil"
+    cp "$TEXMFDIST"/scripts/texlive/fmtutil.pl "$out/bin/fmtutil"
     patchShebangs "$out/bin/fmtutil"
-    sed "1s|$| -I $out/share/texmf/scripts/texlive|" -i "$out/bin/fmtutil"
     ln -sf fmtutil "$out/bin/mktexfmt"
 
-    perl "$out"/share/texmf/scripts/texlive/mktexlsr.pl --sort "$out"/share/texmf
     texlinks "$out/bin" && wrapBin
-    FORCE_SOURCE_DATE=1 fmtutil --sys --all | grep '^fmtutil' # too verbose
-    #texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
 
-    # tex intentionally ignores SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
-    # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/0139-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
-    if [[ -f "$TEXMFSYSVAR"/web2c/tex/tex.fmt ]]
-    then
-      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) tex -output-directory "$TEXMFSYSVAR"/web2c/tex -ini -jobname=tex -progname=tex tex.ini
-    fi
-    if [[ -f "$TEXMFSYSVAR"/web2c/luahbtex/lualatex.fmt ]]
-    then
-      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luahbtex --output-directory="$TEXMFSYSVAR"/web2c/luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini
-    fi
+    # many formats still ignore SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
+    # libfaketime fixes non-determinism related to timestamps ignoring FORCE_SOURCE_DATE
+    # we cannot fix further randomness caused by luatex; for further details, see
+    # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/2006-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
+    FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' fmtutil --sys --all | grep '^fmtutil' # too verbose
+    #texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
 
     # Disable unavailable map files
     echo y | updmap --sys --syncwithtrees --force
@@ -224,16 +259,16 @@ in (buildEnv {
     # sort entries to improve reproducibility
     [[ -f "$TEXMFSYSCONFIG"/web2c/updmap.cfg ]] && sort -o "$TEXMFSYSCONFIG"/web2c/updmap.cfg "$TEXMFSYSCONFIG"/web2c/updmap.cfg
 
-    perl "$out"/share/texmf/scripts/texlive/mktexlsr.pl --sort "$out"/share/texmf-* # to make sure
+    perl "$TEXMFDIST"/scripts/texlive/mktexlsr.pl --sort "$TEXMFSYSCONFIG" "$TEXMFSYSVAR" # to make sure
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive
   ''
     source '${bin.core.out}/share/texmf-dist/scripts/texlive/scripts.lst'
     for s in $texmf_scripts; do
-      [[ -x "$out/share/texmf/scripts/$s" ]] || continue
+      [[ -x "$TEXMFDIST/scripts/$s" ]] || continue
       tName="$(basename $s | sed 's/\.[a-z]\+$//')" # remove extension
       [[ ! -e "$out/bin/$tName" ]] || continue
-      ln -sv "$(realpath $out/share/texmf/scripts/$s)" "$out/bin/$tName" # wrapped below
+      ln -sv "$(realpath "$TEXMFDIST/scripts/$s")" "$out/bin/$tName" # wrapped below
     done
   '' +
     # A hacky way to provide repstopdf
@@ -241,8 +276,9 @@ in (buildEnv {
     #  * ./bin/repstopdf needs to be a symlink to be processed by wrapBin
   ''
     if [[ -e "$out"/bin/epstopdf ]]; then
-      cp "$out"/bin/epstopdf "$out"/share/texmf/scripts/repstopdf
-      ln -s "$out"/share/texmf/scripts/repstopdf "$out"/bin/repstopdf
+      mkdir -p "$TEXMFSYSVAR/scripts"
+      cp "$out"/bin/epstopdf "$TEXMFSYSVAR"/scripts/repstopdf
+      ln -s "$TEXMFSYSVAR"/scripts/repstopdf "$out"/bin/repstopdf
     fi
   '' +
     # finish up the wrappers
@@ -262,30 +298,24 @@ in (buildEnv {
   # TODO: a context trigger https://www.preining.info/blog/2015/06/debian-tex-live-2015-the-new-layout/
     # http://wiki.contextgarden.net/ConTeXt_Standalone#Unix-like_platforms_.28Linux.2FMacOS_X.2FFreeBSD.2FSolaris.29
 
-    # I would just create links from "$out"/share/{man,info},
-    #   but buildenv has problems with merging symlinks with directories;
-    #   note: it's possible we might need deepen the work-around to man/*.
-  ''
-    for d in {man,info}; do
-      [[ -e "$out/share/texmf/doc/$d" ]] || continue;
-      mkdir -p "$out/share/$d"
-      ln -s -t "$out/share/$d" "$out/share/texmf/doc/$d"/*
-    done
-  '' +
   # MkIV uses its own lookup mechanism and we need to initialize
   # caches for it.
+  # We use faketime to fix the embedded timestamps and patch the uuids
+  # with some random but constant values.
   ''
     if [[ -e "$out/bin/mtxrun" ]]; then
-      mtxrun --generate
+      substitute "$TEXMFDIST"/scripts/context/lua/mtxrun.lua mtxrun.lua \
+        --replace 'cache_uuid=osuuid()' 'cache_uuid="e2402e51-133d-4c73-a278-006ea4ed734f"' \
+        --replace 'uuid=osuuid(),' 'uuid="242be807-d17e-4792-8e39-aa93326fc871",'
+      FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' luatex --luaonly mtxrun.lua --generate
     fi
   ''
     + bin.cleanBrokenLinks +
   # Get rid of all log files. They are not needed, but take up space
-  # and render the build unreproducible by their embedded timestamps.
+  # and render the build unreproducible by their embedded timestamps
+  # and other non-deterministic diagnostics.
   ''
-    find $TEXMFSYSVAR/web2c -name '*.log' -delete
+    find "$TEXMFSYSVAR"/web2c -name '*.log' -delete
   ''
   ;
 }).overrideAttrs (_: { allowSubstitutes = true; })
-# TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file
-#       similarly, deal with xe(la)tex font visibility?

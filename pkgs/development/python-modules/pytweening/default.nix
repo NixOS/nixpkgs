@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hTMoLPcLMd6KBJnhz0IJMLABPHhxGIcrLsiZOCeS4uY=";
+    hash = "sha256-hTMoLPcLMd6KBJnhz0IJMLABPHhxGIcrLsiZOCeS4uY=";
   };
 
   pythonImportsCheck = [ "pytweening" ];

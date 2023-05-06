@@ -1,8 +1,0 @@
---- a/corekeyboard/CMakeLists.txt	2022-01-29 14:03:28.149607341 +0700
-+++ b/CMakeLists.txt	2022-01-29 14:04:00.178733700 +0700
-@@ -55,5 +55,4 @@
- 
- install( TARGETS corekeyboard DESTINATION bin )
- install( FILES org.cubocore.CoreKeyboard.desktop DESTINATION share/applications )
--install( FILES org.cubocore.CoreKeyboard-Tray.desktop DESTINATION /etc/xdg/autostart )
- install( FILES org.cubocore.CoreKeyboard.svg DESTINATION share/icons/hicolor/scalable/apps/ )

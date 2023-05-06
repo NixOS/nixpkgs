@@ -1,18 +1,18 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, musl-fts
 , musl-obstack, m4, zlib, zstd, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs
 , argp-standalone
-, enableDebuginfod ? false, sqlite, curl, libmicrohttpd, libarchive
+, enableDebuginfod ? true, sqlite, curl, libmicrohttpd, libarchive
 , gitUpdater
 }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   pname = "elfutils";
-  version = "0.188";
+  version = "0.189";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-+4sOjQgCAFuaMJxgwdjeMt0pUbVvDDo8tW0hzgFZXf8=";
+    sha256 = "sha256-Ob2PGjOOK3zUq8P/EaDt3G5pD2lXildHjYF5tBSHCMg=";
   };
 
   patches = [
@@ -36,18 +36,6 @@ stdenv.mkDerivation rec {
       name = "musl-strndupa.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
       sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
-    })
-    (fetchpatch {
-      name = "use-curlopt_protocols_str-for-new-libcurl.patch";
-      url = "https://sourceware.org/git/?p=elfutils.git;a=patch;h=6560fb26a62ef135a804357ef4f15a47de3e49b3;hp=a5b07cdf9c491fb7a4a16598c482c68b718f59b9";
-      excludes = [ "debuginfod/ChangeLog" ]; # Doesn't apply
-      sha256 = "sha256-yjeliqojRGvfwbXynmxFGyKqAY7AEr0mbSGQEliYhZ4=";
-    })
-    (fetchpatch {
-      name = "fix-usage-of-deprecated-curlinfo.patch";
-      url = "https://sourceware.org/git/?p=elfutils.git;a=patch;h=d2bf497b12fbd49b4996ccf0744303ffd67735b1;hp=6ecd16410ce1fe5cb0ac5b7c3342c5cc330e3a04";
-      excludes = [ "debuginfod/ChangeLog" ]; # Doesn't apply
-      sha256 = "sha256-zMx/TazM7vXJre2XagIWvwRS8cd8pbzMTmAbpbqZmx0=";
     })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
 

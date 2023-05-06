@@ -2,6 +2,7 @@
 , buildLlvmTools
 , monorepoSrc, runCommand
 , cmake
+, ninja
 , libxml2
 , libllvm
 , version
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     ./gnu-install-dirs.patch
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ libllvm libxml2 ];
 
   cmakeFlags = [
@@ -35,6 +36,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
   ];
+
+  # Musl's default stack size is too small for lld to be able to link Firefox.
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-Wl,-z,stack-size=2097152";
 
   outputs = [ "out" "lib" "dev" ];
 

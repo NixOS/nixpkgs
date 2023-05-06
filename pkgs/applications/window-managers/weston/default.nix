@@ -6,15 +6,17 @@
 , pipewire ? null, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null
 , libva ? null, libwebp ? null, xwayland ? null
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
+, buildDemo ? true
+, buildRemoting ? true, gst_all_1
 }:
 
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "11.0.0";
+  version = "11.0.1";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
-    sha256 = "078y14ff9wmmbzq314f7bq1bxx0rc12xy4j362n60iamr56qs4x6";
+    url = "https://gitlab.freedesktop.org/wayland/weston/uploads/f5648c818fba5432edc3ea63c4db4813/weston-${version}.tar.xz";
+    sha256 = "sha256-pBP2jCUpV/wxkcNlCCPsNWrowSTMwMtEDaXNxOLLnlc=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -23,20 +25,21 @@ stdenv.mkDerivation rec {
     cairo colord dbus freerdp lcms2 libGL libXcursor libdrm libevdev libinput
     libjpeg seatd libunwind libva libwebp libxcb libxkbcommon mesa mtdev pam
     pango pipewire udev vaapi wayland wayland-protocols
+  ] ++ lib.optionals buildRemoting [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
   ];
 
   mesonFlags= [
     "-Dbackend-drm-screencast-vaapi=${lib.boolToString (vaapi != null)}"
     "-Dbackend-rdp=${lib.boolToString (freerdp != null)}"
     "-Dxwayland=${lib.boolToString (xwayland != null)}" # Default is true!
-    "-Dremoting=false" # TODO
+    (lib.mesonBool "remoting" buildRemoting)
     "-Dpipewire=${lib.boolToString (pipewire != null)}"
     "-Dimage-webp=${lib.boolToString (libwebp != null)}"
-    "-Ddemo-clients=false"
+    (lib.mesonBool "demo-clients" buildDemo)
     "-Dsimple-clients="
     "-Dtest-junit-xml=false"
-    # TODO:
-    #"--enable-clients"
   ] ++ lib.optionals (xwayland != null) [
     "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
   ];

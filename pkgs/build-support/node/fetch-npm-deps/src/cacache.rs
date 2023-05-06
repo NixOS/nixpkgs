@@ -1,5 +1,5 @@
 use digest::{Digest, Update};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sha1::Sha1;
 use sha2::{Sha256, Sha512};
 use std::{
@@ -9,24 +9,24 @@ use std::{
 };
 use url::Url;
 
-#[derive(Serialize)]
-struct Key {
-    key: String,
-    integrity: String,
-    time: u8,
-    size: usize,
-    metadata: Metadata,
+#[derive(Serialize, Deserialize)]
+pub(super) struct Key {
+    pub(super) key: String,
+    pub(super) integrity: String,
+    pub(super) time: u8,
+    pub(super) size: usize,
+    pub(super) metadata: Metadata,
 }
 
-#[derive(Serialize)]
-struct Metadata {
-    url: Url,
-    options: Options,
+#[derive(Serialize, Deserialize)]
+pub(super) struct Metadata {
+    pub(super) url: Url,
+    pub(super) options: Options,
 }
 
-#[derive(Serialize)]
-struct Options {
-    compress: bool,
+#[derive(Serialize, Deserialize)]
+pub(super) struct Options {
+    pub(super) compress: bool,
 }
 
 pub struct Cache(PathBuf);
@@ -72,7 +72,7 @@ impl Cache {
                 &mut p,
                 &hash
                     .into_iter()
-                    .map(|x| format!("{:02x}", x))
+                    .map(|n| format!("{n:02x}"))
                     .collect::<String>(),
             );
 

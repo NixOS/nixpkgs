@@ -14,7 +14,14 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0rwi0lkmhlq4i8fba3s9nd9ajhz2dqxzkgfp5i8y0rvbfmhmfd6b";
   };
 
-  cargoSha256 = "1c058sjgd79ps8ahvxp25qyc3a6b2csb41vamrphv9ygai60mng6";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ipc-channel-0.9.0" = "sha256-ZinW3vTsb6dWDRN1/P4TlOlbjiQSHkE6n6f1yEiKsbA=";
+      "nats-0.3.2" = "sha256-ebZSSczF76FMsYRC9hc4n9yTQVyAD4JgaqpFvGG+01U=";
+      "zmq-0.8.3" = "sha256-ZydP7ThHvLMWc8snm52Wlhji35Gn5Y2TzzN75UH5xLE=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsodium libarchive openssl zeromq ];

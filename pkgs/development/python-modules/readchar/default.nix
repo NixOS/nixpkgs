@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "readchar";
-  version = "4.0.3";
+  version = "4.0.5";
   format = "setuptools";
 
   # Don't use wheels on PyPI
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "magmax";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-QMaTZRS9iOSuax706Es9WhkwU3vdcNb14dbiSt48aN0=";
+    hash = "sha256-Ru18lh+9tXtvttypnob0HNPKBiGF7E9HDL21l1AAGa8=";
   };
 
   postPatch = ''

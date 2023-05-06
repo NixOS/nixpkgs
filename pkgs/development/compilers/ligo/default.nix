@@ -6,21 +6,30 @@
 , ocamlPackages
 , cacert
 , ocaml-crunch
+, jq
+, mustache-go
+, yaml2json
+, tezos-rust-libs
+, darwin
 }:
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.60.0";
+  version = "0.64.2";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-gyMSpy+F3pF2Kv1ygUs20mrspJ6GtJ6ySyZD7zfZj2w=";
+    sha256 = "sha256-/XUJFDH1pv65VeZt57P+AiCegTwCn7OWdaa0D8sw7CI=";
     fetchSubmodules = true;
   };
 
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
+  CHANGELOG_PATH = "./changelog.txt";
+
+  # This is a hack to work around the hack used in the dune files
+  OPAM_SWITCH_PREFIX = "${tezos-rust-libs}";
 
   duneVersion = "3";
 
@@ -33,6 +42,10 @@ ocamlPackages.buildDunePackage rec {
     ocamlPackages.crunch
     ocamlPackages.menhir
     ocamlPackages.ocaml-recovery-parser
+    # deps for changelog
+    jq
+    mustache-go
+    yaml2json
   ];
 
   buildInputs = with ocamlPackages; [
@@ -60,13 +73,19 @@ ocamlPackages.buildDunePackage rec {
     lambda-term
     tar-unix
     parse-argv
-
+    hacl-star
+    prometheus
+    # lsp
+    linol
+    linol-lwt
+    ocaml-lsp
     # Test helpers deps
     qcheck
     qcheck-alcotest
     alcotest-lwt
-
     # vendored tezos' deps
+    aches
+    aches-lwt
     tezos-plonk
     tezos-bls12-381-polynomial
     ctypes
@@ -78,13 +97,10 @@ ocamlPackages.buildDunePackage rec {
     lwt-canceler
     ipaddr
     bls12-381
-    bls12-381-legacy
     bls12-381-signature
     ptime
     mtime
     lwt_log
-    ringo
-    ringo-lwt
     secp256k1-internal
     resto
     resto-directory
@@ -95,7 +111,16 @@ ocamlPackages.buildDunePackage rec {
     pure-splitmix
     zarith_stubs_js
     simple-diff
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
   ];
+
+  preBuild = ''
+    # The scripts use `nix-shell` in the shebang which seems to fail
+    sed -i -e '1,5d' ./scripts/changelog-generation.sh
+    sed -i -e '1,5d' ./scripts/changelog-json.sh
+    ./scripts/changelog-generation.sh
+  '';
 
   nativeCheckInputs = [
     cacert

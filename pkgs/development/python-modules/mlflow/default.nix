@@ -13,6 +13,8 @@
 , gorilla
 , gunicorn
 , importlib-metadata
+, markdown
+, matplotlib
 , numpy
 , packaging
 , pandas
@@ -20,27 +22,38 @@
 , protobuf
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
+, pyarrow
+, pytz
 , pyyaml
 , querystring_parser
 , requests
+, scikit-learn
 , scipy
+, shap
 , simplejson
-, six
 , sqlalchemy
 , sqlparse
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "1.30.0";
+  version = "2.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ln1R9uLcbMIxbnLc9BNSF8WByPTx+d3hBmqrqeCyLHo=";
+    hash = "sha256-Y0OTl7JxjOV0cojvVHX0azcWs3ClF74+PGe3maJHoYY=";
   };
+
+  # Remove currently broken dependency `shap`, a model explainability package.
+  # This seems quite unprincipled especially with tests not being enabled,
+  # but not mlflow has a 'skinny' install option which does not require `shap`.
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRemoveDeps = [ "shap" ];
+  pythonRelaxDeps = [ "pytz" "pyarrow" ];
 
   propagatedBuildInputs = [
     alembic
@@ -54,18 +67,23 @@ buildPythonPackage rec {
     gorilla
     gunicorn
     importlib-metadata
+    markdown
+    matplotlib
     numpy
     packaging
     pandas
     prometheus-flask-exporter
     protobuf
     python-dateutil
+    pyarrow
+    pytz
     pyyaml
     querystring_parser
     requests
+    scikit-learn
     scipy
+    #shap
     simplejson
-    six
     sqlalchemy
     sqlparse
   ];
@@ -74,8 +92,9 @@ buildPythonPackage rec {
     "mlflow"
   ];
 
+  # no tests in PyPI dist
   # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
-  # also, tests use conda so can't run on NixOS without buildFHSUserEnv
+  # also, tests use conda so can't run on NixOS without buildFHSEnv
   doCheck = false;
 
   meta = with lib; {

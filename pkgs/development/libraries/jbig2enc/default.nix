@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-IAL4egXgaGmCilzcryjuvOoHhahyrfGWY68GBfXXgAM=";
   };
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [
     leptonica
     zlib

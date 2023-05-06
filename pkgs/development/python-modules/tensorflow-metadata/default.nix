@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-metadata";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "metadata";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-pgeQ9qMcz/DsdvF3THMZ4uPToLxtIM0No/kgRlBzU8A=";
+    hash = "sha256-XzOV0gTZo9Flr3HVI5mzK+qgol4rsteerfrgLpw4Ouo=";
   };
 
   patches = [

@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "fplll";
     repo = "fpylll";
     rev = version;
-    sha256 = "sha256-T6l6hKzRDevlLyLu5H+bnEdl0OhsPer1coCDiftbPAk=";
+    hash = "sha256-T6l6hKzRDevlLyLu5H+bnEdl0OhsPer1coCDiftbPAk=";
   };
 
   buildInputs = [

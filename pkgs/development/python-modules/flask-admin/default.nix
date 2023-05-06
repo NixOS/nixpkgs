@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "flask-admin";
-  version = "1.6.0";
+  version = "1.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-Admin";
     inherit version;
-    hash = "sha256-Qk/8ebew3/8FFVVobqEuhuSN/6ysFL6qMZ+0UCrECYg=";
+    hash = "sha256-JMrir4MramEaAdfcNfQtJmwdbHWkJrhp2MskG3gjM2k=";
   };
 
   propagatedBuildInputs = [

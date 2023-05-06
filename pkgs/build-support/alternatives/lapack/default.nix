@@ -35,6 +35,9 @@ stdenv.mkDerivation {
     implementation = lapackImplementation;
   };
 
+  # TODO: drop this forced rebuild, as it was needed just once.
+  rebuild_salt = if stdenv.isDarwin && stdenv.isx86_64 then "J4AQ" else null;
+
   dontBuild = true;
   dontConfigure = true;
   unpackPhase = "src=$PWD";

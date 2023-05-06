@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "markdown-include";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "setuptools";
 
   # only wheel on pypi
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "cmacmackin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-wTGgxvM3/h+6plUcheeMSkpk1we7pwuWHurkDkmbnPY=";
+    hash = "sha256-1MEk0U00a5cpVhqnDZkwBIk4NYgsRXTVsI/ANNQ/OH0=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

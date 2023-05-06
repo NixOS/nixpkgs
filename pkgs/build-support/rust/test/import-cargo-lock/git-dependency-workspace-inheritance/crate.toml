@@ -1,0 +1,6 @@
+[package]
+version = { workspace = true }
+
+[dependencies]
+foo = { workspace = true, features = ["cat"] }
+bar = "1.0.0"

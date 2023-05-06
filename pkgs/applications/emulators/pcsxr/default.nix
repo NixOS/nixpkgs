@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook, intltool, pkg-config, gtk3, SDL2, xorg
-, wrapGAppsHook, libcdio, nasm, ffmpeg, file
+, wrapGAppsHook, libcdio, nasm, ffmpeg_4, file
 , fetchpatch }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook intltool pkg-config wrapGAppsHook ];
   buildInputs = [
-    gtk3 SDL2 xorg.libXv xorg.libXtst libcdio nasm ffmpeg file
+    gtk3 SDL2 xorg.libXv xorg.libXtst libcdio nasm ffmpeg_4 file
     xorg.libXxf86vm
   ];
 

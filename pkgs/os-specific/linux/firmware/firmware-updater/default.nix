@@ -1,23 +1,21 @@
 { lib
-, flutter2
+, flutter
 , fetchFromGitHub
-, stdenv
 }:
 
-flutter2.mkFlutterApp {
+flutter.buildFlutterApplication {
   pname = "firmware-updater";
-  version = "unstable";
+  version = "unstable-2023-04-30";
 
-  vendorHash =
-    if stdenv.system == "aarch64-linux"
-    then "sha256-+ACmcIKXtGtaYBuwc7jY9hEdIS9qxQCbuxRKJQohX5A="
-    else "sha256-nPblucEpNCBJYpIqx1My6SWq8CjXYuHDG/uphdcrWjQ=";
+  pubspecLockFile = ./pubspec.lock;
+  depsListFile = ./deps.json;
+  vendorHash = "sha256-cdMO+tr6kYiN5xKXa+uTMAcFf2C75F3wVPrn21G4QPQ=";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "firmware-updater";
-    rev = "a51817a2551e29895352618a91df9cf93d944af1";
-    sha256 = "6uhks6a9JcyIC5o0VssqfBlE4pqKiQ7d3KOb6feNTvU=";
+    rev = "6e7dbdb64e344633ea62874b54ff3990bd3b8440";
+    sha256 = "sha256-s5mwtr5MSPqLMN+k851+pFIFFPa0N1hqz97ys050tFA=";
     fetchSubmodules = true;
   };
 

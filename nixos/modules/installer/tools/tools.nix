@@ -25,6 +25,7 @@ let
     path = makeBinPath [
       pkgs.jq
       nixos-enter
+      pkgs.util-linuxMinimal
     ];
   };
 
@@ -34,7 +35,7 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
-    nixInstantiate = "${pkgs.nix}/bin/nix-instantiate";
+    system = pkgs.stdenv.hostPlatform.system;
     detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
     btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
@@ -65,6 +66,9 @@ let
     name = "nixos-enter";
     src = ./nixos-enter.sh;
     inherit (pkgs) runtimeShell;
+    path = makeBinPath [
+      pkgs.util-linuxMinimal
+    ];
   };
 
 in
@@ -159,10 +163,7 @@ in
       $desktopConfiguration
         # Configure keymap in X11
         # services.xserver.layout = "us";
-        # services.xserver.xkbOptions = {
-        #   "eurosign:e";
-        #   "caps:escape" # map caps to escape.
-        # };
+        # services.xserver.xkbOptions = "eurosign:e,caps:escape";
 
         # Enable CUPS to print documents.
         # services.printing.enable = true;

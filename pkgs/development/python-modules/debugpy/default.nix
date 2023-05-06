@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
+, pythonAtLeast
 , fetchFromGitHub
 , substituteAll
 , gdb
@@ -18,16 +19,18 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.6.6";
+  version = "1.6.7";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  # Currently doesn't support 3.11:
+  # https://github.com/microsoft/debugpy/issues/1107
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GanRWzGyg0Efa+kuU7Q0IOmO0ohXZIjuz8RZYERTpzo=";
+    hash = "sha256-porQTFvcLaIkvhWPM4vWR0ohlcFRkRwSLpQJNg25Tj4=";
   };
 
   patches = [
@@ -87,7 +90,13 @@ buildPythonPackage rec {
     requests
   ];
 
-  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  preCheck = ''
+    # Scale default timeouts by a factor of 4 to avoid flaky builds
+    # https://github.com/microsoft/debugpy/pull/1286 if merged would
+    # allow us to disable the timeouts altogether
+    export DEBUGPY_PROCESS_SPAWN_TIMEOUT=60
+    export DEBUGPY_PROCESS_EXIT_TIMEOUT=20
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
   '';
@@ -103,6 +112,11 @@ buildPythonPackage rec {
 
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    # https://github.com/microsoft/debugpy/issues/1241
+    "test_flask_breakpoint_multiproc"
+  ];
 
   pythonImportsCheck = [
     "debugpy"

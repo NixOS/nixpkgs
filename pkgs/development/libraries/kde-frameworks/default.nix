@@ -27,9 +27,6 @@ existing packages here and modify it as necessary.
 { libsForQt5, lib, fetchurl }:
 
 let
-
-  minQtVersion = "5.15";
-  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
   maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
   license = with lib.licenses; [
     lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12Plus
@@ -86,7 +83,6 @@ let
                 license = meta.license or license;
                 maintainers = (meta.maintainers or []) ++ maintainers;
                 platforms = meta.platforms or lib.platforms.linux;
-                broken = meta.broken or broken;
               };
 
           in mkDerivation (args // {
@@ -107,7 +103,6 @@ let
       kcalendarcore = callPackage ./kcalendarcore.nix {};
       kcodecs = callPackage ./kcodecs.nix {};
       kconfig = callPackage ./kconfig.nix {};
-      kcontacts = callPackage ./kcontacts.nix {};
       kcoreaddons = callPackage ./kcoreaddons.nix {};
       kdbusaddons = callPackage ./kdbusaddons.nix {};
       kdnssd = callPackage ./kdnssd.nix {};
@@ -128,16 +123,16 @@ let
       oxygen-icons5 = callPackage ./oxygen-icons5.nix {};
       prison = callPackage ./prison.nix {};
       qqc2-desktop-style = callPackage ./qqc2-desktop-style.nix {};
-      solid = callPackage ./solid.nix {};
+      solid = callPackage ./solid {};
       sonnet = callPackage ./sonnet.nix {};
       syntax-highlighting = callPackage ./syntax-highlighting.nix {};
       threadweaver = callPackage ./threadweaver.nix {};
 
     # TIER 2
       kactivities = callPackage ./kactivities.nix {};
-      kactivities-stats = callPackage ./kactivities-stats.nix {};
       kauth = callPackage ./kauth {};
       kcompletion = callPackage ./kcompletion.nix {};
+      kcontacts = callPackage ./kcontacts.nix {};
       kcrash = callPackage ./kcrash.nix {};
       kdoctools = callPackage ./kdoctools {};
       kfilemetadata = callPackage ./kfilemetadata {};
@@ -145,19 +140,20 @@ let
       kjobwidgets = callPackage ./kjobwidgets.nix {};
       knotifications = callPackage ./knotifications.nix {};
       kpackage = callPackage ./kpackage {};
+      kpeople = callPackage ./kpeople.nix {};
       kpty = callPackage ./kpty.nix {};
       kunitconversion = callPackage ./kunitconversion.nix {};
       syndication = callPackage ./syndication.nix {};
 
     # TIER 3
       baloo = callPackage ./baloo.nix {};
+      kactivities-stats = callPackage ./kactivities-stats.nix {};
       kbookmarks = callPackage ./kbookmarks.nix {};
       kcmutils = callPackage ./kcmutils.nix {};
       kconfigwidgets = callPackage ./kconfigwidgets.nix {};
       kdav = callPackage ./kdav.nix {};
       kdeclarative = callPackage ./kdeclarative.nix {};
       kded = callPackage ./kded.nix {};
-      kdesignerplugin = callPackage ./kdesignerplugin.nix {};
       kdesu = callPackage ./kdesu {};
       kemoticons = callPackage ./kemoticons.nix {};
       kglobalaccel = callPackage ./kglobalaccel.nix {};
@@ -167,14 +163,12 @@ let
       knewstuff = callPackage ./knewstuff {};
       knotifyconfig = callPackage ./knotifyconfig.nix {};
       kparts = callPackage ./kparts.nix {};
-      kpeople = callPackage ./kpeople.nix {};
       krunner = callPackage ./krunner.nix {};
       kservice = callPackage ./kservice {};
       ktexteditor = callPackage ./ktexteditor.nix {};
       ktextwidgets = callPackage ./ktextwidgets.nix {};
       kwallet = callPackage ./kwallet.nix {};
       kxmlgui = callPackage ./kxmlgui.nix {};
-      kxmlrpcclient = callPackage ./kxmlrpcclient.nix {};
       plasma-framework = callPackage ./plasma-framework.nix {};
       kpurpose = callPackage ./purpose.nix {};
 
@@ -183,11 +177,13 @@ let
 
     # PORTING AIDS
       kdelibs4support = callPackage ./kdelibs4support {};
+      kdesignerplugin = callPackage ./kdesignerplugin.nix {};
       khtml = callPackage ./khtml.nix {};
       kjs = callPackage ./kjs.nix {};
       kjsembed = callPackage ./kjsembed.nix {};
       kmediaplayer = callPackage ./kmediaplayer.nix {};
       kross = callPackage ./kross.nix {};
+      kxmlrpcclient = callPackage ./kxmlrpcclient.nix {};
 
     };
 

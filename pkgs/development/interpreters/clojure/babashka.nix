@@ -1,26 +1,43 @@
-{ lib, buildGraalvmNativeImage, fetchurl, writeScript }:
+{ lib
+, buildGraalvmNativeImage
+, graalvmCEPackages
+, removeReferencesTo
+, fetchurl
+, writeScript }:
 
 buildGraalvmNativeImage rec {
   pname = "babashka";
-  version = "1.1.173";
+  version = "1.3.179";
 
   src = fetchurl {
     url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-p/KGDCocTksvUwj6x5l1xUEM1OZ4pNHtXL4mTgg7JUI=";
+    sha256 = "sha256-tF+SqKY7tcJvmOATVwKIZemR2A3eqrbhvSBvr7tcq5U=";
   };
 
+  graalvmDrv = graalvmCEPackages.graalvm19-ce;
+
   executable = "bb";
+
+  nativeBuildInputs = [ removeReferencesTo ];
 
   extraNativeImageBuildArgs = [
     "-H:+ReportExceptionStackTraces"
     "--no-fallback"
     "--native-image-info"
+    "--enable-preview"
   ];
 
   installCheckPhase = ''
     $out/bin/bb --version | grep '${version}'
     $out/bin/bb '(+ 1 2)' | grep '3'
     $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | grep '[1 2]'
+  '';
+
+  # As of v1.2.174, this will remove references to ${graalvmDrv}/conf/chronology,
+  # not sure the implications of this but this file is not available in
+  # graalvm19-ce anyway.
+  postInstall = ''
+    remove-references-to -t ${graalvmDrv} $out/bin/${executable}
   '';
 
   passthru.updateScript = writeScript "update-babashka" ''

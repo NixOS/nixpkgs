@@ -46,6 +46,7 @@
   # Darwin-only dependencies
 , CoreBluetooth
 , ForceFeedback
+, IOBluetooth
 , IOKit
 , moltenvk
 , OpenGL
@@ -106,6 +107,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     CoreBluetooth
     ForceFeedback
+    IOBluetooth
     IOKit
     moltenvk
     OpenGL
@@ -134,9 +136,6 @@ stdenv.mkDerivation rec {
     # The .desktop file should already set this, but Dolphin may be launched in other ways
     "--set QT_QPA_PLATFORM xcb"
   ];
-
-  # https://github.com/NixOS/nixpkgs/issues/201254
-  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
 
   # Use nix-provided libraries instead of submodules
   postPatch = lib.optionalString stdenv.isDarwin ''

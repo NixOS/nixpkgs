@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "ipfs-shipyard";
     repo = "py-ipfs-http-client";
     rev = version;
-    sha256 = "sha256-OmC67pN2BbuGwM43xNDKlsLhwVeUbpvfOazyIDvoMEA=";
+    hash = "sha256-OmC67pN2BbuGwM43xNDKlsLhwVeUbpvfOazyIDvoMEA=";
   };
 
   propagatedBuildInputs = [
