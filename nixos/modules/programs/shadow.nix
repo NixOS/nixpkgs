@@ -1,67 +1,131 @@
 # Configuration for the pwdutils suite of tools: passwd, useradd, etc.
-
 { config, lib, utils, pkgs, ... }:
-
 with lib;
-
 let
+  cfg = config.security.loginDefs;
+in
+{
+  options = with types; {
+    security.loginDefs = {
+      package = mkPackageOptionMD pkgs "shadow" { };
 
-  /*
-  There are three different sources for user/group id ranges, each of which gets
-  used by different programs:
-  - The login.defs file, used by the useradd, groupadd and newusers commands
-  - The update-users-groups.pl file, used by NixOS in the activation phase to
-    decide on which ids to use for declaratively defined users without a static
-    id
-  - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
-    by systemd for features like ConditionUser=@system and systemd-sysusers
-  */
-  loginDefs =
-    ''
-      DEFAULT_HOME yes
+      chfnRestrict = mkOption {
+        description = mdDoc ''
+          Use chfn SUID to allow non-root users to change their account GECOS information.
+        '';
+        type = nullOr str;
+        default = null;
+      };
 
-      SYS_UID_MIN  400
-      SYS_UID_MAX  999
-      UID_MIN      1000
-      UID_MAX      29999
+      settings = mkOption {
+        description = mdDoc ''
+          Config options for the /etc/login.defs file, that defines
+          the site-specific configuration for the shadow password suite.
+          See login.defs(5) man page for available options.
+        '';
+        type = submodule {
+          freeformType = (pkgs.formats.keyValue { }).type;
+          /* There are three different sources for user/group id ranges, each of which gets
+             used by different programs:
+             - The login.defs file, used by the useradd, groupadd and newusers commands
+             - The update-users-groups.pl file, used by NixOS in the activation phase to
+               decide on which ids to use for declaratively defined users without a static
+               id
+             - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
+               by systemd for features like ConditionUser=@system and systemd-sysusers
+              */
+          options = {
+            DEFAULT_HOME = mkOption {
+              description = mdDoc "Indicate if login is allowed if we can't cd to the home directory.";
+              default = "yes";
+              type = enum [ "yes" "no" ];
+            };
 
-      SYS_GID_MIN  400
-      SYS_GID_MAX  999
-      GID_MIN      1000
-      GID_MAX      29999
+            ENCRYPT_METHOD = mkOption {
+              description = mdDoc "This defines the system default encryption algorithm for encrypting passwords.";
+              # The default crypt() method, keep in sync with the PAM default
+              default = "YESCRYPT";
+              type = enum [ "YESCRYPT" "SHA512" "SHA256" "MD5" "DES"];
+            };
 
-      TTYGROUP     tty
-      TTYPERM      0620
+            SYS_UID_MIN = mkOption {
+              description = mdDoc "Range of user IDs used for the creation of system users by useradd or newusers.";
+              default = 400;
+              type = int;
+            };
 
-      # Ensure privacy for newly created home directories.
-      UMASK        077
+            SYS_UID_MAX = mkOption {
+              description = mdDoc "Range of user IDs used for the creation of system users by useradd or newusers.";
+              default = 999;
+              type = int;
+            };
 
-      # Uncomment this and install chfn SUID to allow non-root
-      # users to change their account GECOS information.
-      # This should be made configurable.
-      #CHFN_RESTRICT frwh
+            UID_MIN = mkOption {
+              description = mdDoc "Range of user IDs used for the creation of regular users by useradd or newusers.";
+              default = 1000;
+              type = int;
+            };
 
-      # The default crypt() method, keep in sync with the PAM default
-      ENCRYPT_METHOD YESCRYPT
-    '';
+            UID_MAX = mkOption {
+              description = mdDoc "Range of user IDs used for the creation of regular users by useradd or newusers.";
+              default = 29999;
+              type = int;
+            };
 
-  mkSetuidRoot = source:
-    { setuid = true;
-      owner = "root";
-      group = "root";
-      inherit source;
+            SYS_GID_MIN = mkOption {
+              description = mdDoc "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
+              default = 400;
+              type = int;
+            };
+
+            SYS_GID_MAX = mkOption {
+              description = mdDoc "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
+              default = 999;
+              type = int;
+            };
+
+            GID_MIN = mkOption {
+              description = mdDoc "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
+              default = 1000;
+              type = int;
+            };
+
+            GID_MAX = mkOption {
+              description = mdDoc "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
+              default = 29999;
+              type = int;
+            };
+
+            TTYGROUP = mkOption {
+              description = mdDoc ''
+                The terminal permissions: the login tty will be owned by the TTYGROUP group,
+                and the permissions will be set to TTYPERM'';
+              default = "tty";
+              type = str;
+            };
+
+            TTYPERM = mkOption {
+              description = mdDoc ''
+                The terminal permissions: the login tty will be owned by the TTYGROUP group,
+                and the permissions will be set to TTYPERM'';
+              default = "0620";
+              type = str;
+            };
+
+            # Ensure privacy for newly created home directories.
+            UMASK = mkOption {
+              description = mdDoc "The file mode creation mask is initialized to this value.";
+              default = "077";
+              type = str;
+            };
+          };
+        };
+        default = { };
+      };
     };
 
-in
-
-{
-
-  ###### interface
-
-  options = {
-
-    users.defaultUserShell = lib.mkOption {
-      description = lib.mdDoc ''
+    users.defaultUserShell = mkOption {
+      description = mdDoc ''
         This option defines the default shell assigned to user
         accounts. This can be either a full system path or a shell package.
 
@@ -69,63 +133,107 @@ in
         used outside the store (in particular in /etc/passwd).
       '';
       example = literalExpression "pkgs.zsh";
-      type = types.either types.path types.shellPackage;
+      type = either path shellPackage;
     };
-
   };
-
 
   ###### implementation
 
   config = {
+    assertions = [
+      {
+        assertion = cfg.settings.SYS_UID_MIN <= cfg.settings.SYS_UID_MAX;
+        message = "SYS_UID_MIN must be less than or equal to SYS_UID_MAX";
+      }
+      {
+        assertion = cfg.settings.UID_MIN <= cfg.settings.UID_MAX;
+        message = "UID_MIN must be less than or equal to UID_MAX";
+      }
+      {
+        assertion = cfg.settings.SYS_GID_MIN <= cfg.settings.SYS_GID_MAX;
+        message = "SYS_GID_MIN must be less than or equal to SYS_GID_MAX";
+      }
+      {
+        assertion = cfg.settings.GID_MIN <= cfg.settings.GID_MAX;
+        message = "GID_MIN must be less than or equal to GID_MAX";
+      }
+    ];
 
-    environment.systemPackages =
-      lib.optional config.users.mutableUsers pkgs.shadow ++
-      lib.optional (types.shellPackage.check config.users.defaultUserShell)
-        config.users.defaultUserShell;
+    security.loginDefs.settings.CHFN_RESTRICT =
+      mkIf (cfg.chfnRestrict != null) cfg.chfnRestrict;
+
+    environment.systemPackages = optional config.users.mutableUsers cfg.package
+      ++ optional (types.shellPackage.check config.users.defaultUserShell) config.users.defaultUserShell
+      ++ optional (cfg.chfnRestrict != null) pkgs.util-linux;
 
     environment.etc =
-      { # /etc/login.defs: global configuration for pwdutils.  You
-        # cannot login without it!
-        "login.defs".source = pkgs.writeText "login.defs" loginDefs;
+      # Create custom toKeyValue generator
+      # see https://man7.org/linux/man-pages/man5/login.defs.5.html for config specification
+      let
+        toKeyValue = generators.toKeyValue {
+          mkKeyValue = generators.mkKeyValueDefault { } " ";
+        };
+      in
+      {
+        # /etc/login.defs: global configuration for pwdutils.
+        # You cannot login without it!
+        "login.defs".source = pkgs.writeText "login.defs" (toKeyValue cfg.settings);
 
         # /etc/default/useradd: configuration for useradd.
-        "default/useradd".source = pkgs.writeText "useradd"
-          ''
-            GROUP=100
-            HOME=/home
-            SHELL=${utils.toShellPath config.users.defaultUserShell}
-          '';
+        "default/useradd".source = pkgs.writeText "useradd" ''
+          GROUP=100
+          HOME=/home
+          SHELL=${utils.toShellPath config.users.defaultUserShell}
+        '';
       };
 
-    security.pam.services =
-      { chsh = { rootOK = true; };
-        chfn = { rootOK = true; };
-        su = { rootOK = true; forwardXAuth = true; logFailures = true; };
-        passwd = {};
-        # Note: useradd, groupadd etc. aren't setuid root, so it
-        # doesn't really matter what the PAM config says as long as it
-        # lets root in.
-        useradd = { rootOK = true; };
-        usermod = { rootOK = true; };
-        userdel = { rootOK = true; };
-        groupadd = { rootOK = true; };
-        groupmod = { rootOK = true; };
-        groupmems = { rootOK = true; };
-        groupdel = { rootOK = true; };
-        login = { startSession = true; allowNullPassword = true; showMotd = true; updateWtmp = true; };
-        chpasswd = { rootOK = true; };
+    security.pam.services = {
+      chsh = { rootOK = true; };
+      chfn = { rootOK = true; };
+      su = {
+        rootOK = true;
+        forwardXAuth = true;
+        logFailures = true;
       };
-
-    security.wrappers = {
-      su        = mkSetuidRoot "${pkgs.shadow.su}/bin/su";
-      sg        = mkSetuidRoot "${pkgs.shadow.out}/bin/sg";
-      newgrp    = mkSetuidRoot "${pkgs.shadow.out}/bin/newgrp";
-      newuidmap = mkSetuidRoot "${pkgs.shadow.out}/bin/newuidmap";
-      newgidmap = mkSetuidRoot "${pkgs.shadow.out}/bin/newgidmap";
-    } // lib.optionalAttrs config.users.mutableUsers {
-      chsh   = mkSetuidRoot "${pkgs.shadow.out}/bin/chsh";
-      passwd = mkSetuidRoot "${pkgs.shadow.out}/bin/passwd";
+      passwd = { };
+      # Note: useradd, groupadd etc. aren't setuid root, so it
+      # doesn't really matter what the PAM config says as long as it
+      # lets root in.
+      useradd.rootOK = true;
+      usermod.rootOK = true;
+      userdel.rootOK = true;
+      groupadd.rootOK = true;
+      groupmod.rootOK = true;
+      groupmems.rootOK = true;
+      groupdel.rootOK = true;
+      login = {
+        startSession = true;
+        allowNullPassword = true;
+        showMotd = true;
+        updateWtmp = true;
+      };
+      chpasswd = { rootOK = true; };
     };
+
+    security.wrappers =
+      let
+        mkSetuidRoot = source: {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          inherit source;
+        };
+      in
+      {
+        su = mkSetuidRoot "${cfg.package.su}/bin/su";
+        sg = mkSetuidRoot "${cfg.package.out}/bin/sg";
+        newgrp = mkSetuidRoot "${cfg.package.out}/bin/newgrp";
+        newuidmap = mkSetuidRoot "${cfg.package.out}/bin/newuidmap";
+        newgidmap = mkSetuidRoot "${cfg.package.out}/bin/newgidmap";
+      }
+      // optionalAttrs config.users.mutableUsers {
+        chsh = mkSetuidRoot "${cfg.package.out}/bin/chsh";
+        passwd = mkSetuidRoot "${cfg.package.out}/bin/passwd";
+      };
   };
 }
