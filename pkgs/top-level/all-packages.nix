@@ -36471,6 +36471,8 @@ with pkgs;
 
   opensoldat = callPackage ../games/opensoldat { };
 
+  opensurge = callPackage ../games/opensurge { };
+
   portmod = callPackage ../games/portmod { };
 
   tetrio-desktop = callPackage ../games/tetrio-desktop { };
