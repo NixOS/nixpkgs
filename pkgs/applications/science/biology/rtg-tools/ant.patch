@@ -1,0 +1,21 @@
+--- ./build.xml.orig	2022-10-10 23:41:37.288306508 +0200
++++ ./build.xml	2022-10-10 23:43:22.316061657 +0200
+@@ -344,17 +344,10 @@
+     </javadoc>
+   </target>
+ 
+-  <scriptdef language="javascript" name="lowercase">
+-    <attribute name="value" />
+-    <attribute name="name" />
+-    project.setProperty(attributes.get("name"), attributes.get("value").toLowerCase());
+-  </scriptdef>
+-
+   <target name="zip-init" depends="rtg-vcs-info"> <!-- set up properties -->
+     <tstamp> <format property="build.tstamp" pattern="yyyyMMddHHmm" /></tstamp>
+     <propertyregex property="almostproductfilename" input="${product}" regexp="\s+" global="true" replace="-" />
+-    <property name="almostproductfilename" value="${product}" />
+-    <lowercase name="productfilename" value="${almostproductfilename}" />
++    <property name="productfilename" value="${product}" />
+     <condition property="zipversion"
+                value="${productfilename}-${product.version}"
+                else="${productfilename}-${product.version}-${rtg.vcs.commit.revision}">
