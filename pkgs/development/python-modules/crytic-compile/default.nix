@@ -36,7 +36,7 @@ buildPythonPackage rec {
   # PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
   env.HOME = "/tmp";
   pythonImportsCheck = [
-   "crytic_compile"
+    "crytic_compile"
   ];
 
   meta = with lib; {
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/crytic/crytic-compile";
     changelog = "https://github.com/crytic/crytic-compile/releases/tag/${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 arturcygan hellwolf ];
+    maintainers = with maintainers; [ arturcygan hellwolf ];
   };
 }
