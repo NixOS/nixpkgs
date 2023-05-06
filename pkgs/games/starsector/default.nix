@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "starsector";
-  version = "0.95.1a-RC6";
+  version = "0.96a-RC7";
 
   src = fetchzip {
     url = "https://s3.amazonaws.com/fractalsoftworks/starsector/starsector_linux-${version}.zip";
-    sha256 = "sha256-+0zGJHM+SMonx3sytCQNQA/QBgzdPMEfQvOjrCDSOs8=";
+    sha256 = "sha256-QMmjUNG1cOQfNi4Ouzbtv+NnsFTXizy1pj+AFjW0CiM=";
   };
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "https://fractalsoftworks.com";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ bbigras lizelive ];
   };
 
   passthru.updateScript = writeScript "starsector-update-script" ''
