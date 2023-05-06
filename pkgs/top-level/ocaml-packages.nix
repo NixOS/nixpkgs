@@ -419,6 +419,11 @@ let
 
     eigen = callPackage ../development/ocaml-modules/eigen { };
 
+    eio = callPackage ../development/ocaml-modules/eio { };
+    eio_linux = callPackage ../development/ocaml-modules/eio/linux.nix { };
+    eio_main = callPackage ../development/ocaml-modules/eio/main.nix { };
+    eio_posix = callPackage ../development/ocaml-modules/eio/posix.nix { };
+
     either = callPackage ../development/ocaml-modules/either { };
 
     elina = callPackage ../development/ocaml-modules/elina { };
