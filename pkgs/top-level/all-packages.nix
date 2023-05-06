@@ -20733,6 +20733,8 @@ with pkgs;
 
   gnome-menus = callPackage ../development/libraries/gnome-menus { };
 
+  gnote = callPackage ../applications/office/gnote { };
+
   elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
 
   gtk2 = callPackage ../development/libraries/gtk/2.x.nix {
