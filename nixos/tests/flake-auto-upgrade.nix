@@ -151,6 +151,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         # attr1 is build
         builderHttp.wait_until_succeeds("stat /var/lib/flake-auto-upgrade/repo/result1")
         builderHttp.succeed("touch /var/lib/flake-auto-upgrade/repo/failFile")
+        builderHttp.sleep(1)
         builderHttp.systemctl("start flake-auto-upgrade")
         # attr2 is build
         builderHttp.wait_until_succeeds("stat /var/lib/flake-auto-upgrade/repo/result2")
