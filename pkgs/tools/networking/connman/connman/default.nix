@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
       url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=a48864a2e5d2a725dfc6eef567108bc13b43857f";
       sha256 = "sha256-jB1qL13mceQ1riv3K+oFWw4VC7ohv/CcH9sjxZPXcG4=";
     })
+    (fetchpatch {
+      name = "CVE-2023-28488.patch";
+      url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=99e2c16ea1cced34a5dc450d76287a1c3e762138";
+      sha256 = "sha256-377CmsECji2w/c4bZXR+TxzTB7Lce0yo7KdK1oWfCVY=";
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Fix Musl build by avoiding a Glibc-only API.
     (fetchpatch {
