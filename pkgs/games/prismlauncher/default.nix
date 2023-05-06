@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     tomlplusplus
   ] ++ lib.optional gamemodeSupport gamemode;
 
+  hardeningEnable = [ "pie" ];
+
   cmakeFlags = lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
     ++ lib.optionals (lib.versionAtLeast qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=6" ];
 
