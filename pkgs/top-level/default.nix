@@ -52,7 +52,7 @@
 } @ args:
 
 # Check that either system or localSystem was passed
-assert localSystem.system != null;
+assert ((localSystem.system or null) != null || !localSystem ? device);
 
 let
   # Rename the function arguments
