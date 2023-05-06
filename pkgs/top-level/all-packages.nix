@@ -23990,6 +23990,8 @@ with pkgs;
     python = python3;
   };
 
+  surgescript = callPackage ../development/libraries/surgescript { };
+
   sutils = callPackage ../tools/misc/sutils { };
 
   svrcore = callPackage ../development/libraries/svrcore { };
