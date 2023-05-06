@@ -46,7 +46,8 @@
   installPhase = ''
     mkdir -p $out
     cp ./.config $out/config
-    cp -r out/* $out
+    cp out/klipper.bin $out/ || true
+    cp out/klipper.elf $out/ || true
   '';
 
   dontFixup = true;
