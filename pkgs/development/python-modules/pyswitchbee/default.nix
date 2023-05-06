@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbee";
-  version = "1.7.21";
+  version = "1.7.26";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jafar-atili";
     repo = "pySwitchbee";
     rev = "refs/tags/${version}";
-    hash = "sha256-3Ujs9GgdJm69vb8F00ZWaRgWXxkaPguX5DJ71bqOFec=";
+    hash = "sha256-g8g0QSih2AM/xPHdjuYGj6eB+kKqldjNHZ2Co60mUnk=";
   };
 
   nativeBuildInputs = [
