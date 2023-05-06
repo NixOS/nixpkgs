@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   # (see https://github.com/steveicarus/iverilog/issues/917)
   # so disable the full suite for now.
   doCheck = true;
-  doInstallCheck = false;
+  doInstallCheck = !stdenv.isAarch64;
 
   nativeInstallCheckInputs = [
     perl
