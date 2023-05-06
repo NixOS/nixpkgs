@@ -20,6 +20,8 @@ self: super: with self; {
 
   absl-py = callPackage ../development/python-modules/absl-py { };
 
+  abstract-singleton = callPackage ../development/python-modules/abstract-singleton { };
+
   accessible-pygments = callPackage ../development/python-modules/accessible-pygments { };
 
   accelerate = callPackage ../development/python-modules/accelerate { };
