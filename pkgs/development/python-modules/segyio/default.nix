@@ -7,7 +7,6 @@
 , scikit-build
 , pytest
 , numpy
-, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
