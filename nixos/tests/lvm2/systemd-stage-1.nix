@@ -64,6 +64,8 @@ in import ../make-test-python.nix ({ pkgs, ... }: {
     virtualisation = {
       emptyDiskImages = [ 8192 8192 ];
       useBootLoader = true;
+      useNixStoreImage = false;
+      mountHostNixStore = true;
       useEFIBoot = true;
     };
     boot.loader.systemd-boot.enable = true;
