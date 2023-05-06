@@ -10,15 +10,14 @@
 , protobuf
 , cmake
 , gcc
-, dill
-, multiprocess
+, confluent-kafka
 , pytestCheckHook
 , pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "bytewax";
-  version = "0.15.1";
+  version = "0.16.0";
   format = "pyproject";
 
   disabled = pythonAtLeast "3.11";
@@ -27,7 +26,7 @@ buildPythonPackage rec {
     owner = "bytewax";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-4HZUu3WSrhxusvuVz8+8mndTu/9DML1tCH52eaWy+oE=";
+    hash = "sha256-XdFkFhN8Z15Zw5HZ2wmnNFoTzyRtIbB7TAtOpKwuKyY=";
   };
 
   # Remove docs tests, myst-docutils in nixpkgs is not compatible with package requirements.
@@ -36,7 +35,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-IfVX3k9AsqP84aagCLSwxmutUoEkP8haD+t+VY4V02U=";
+    hash = "sha256-XGE1qPHi13/+8jjNCIgfzPudw561T0vUfJv5xnKySAg=";
   };
 
   nativeBuildInputs = [
@@ -54,12 +53,14 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  propagatedBuildInputs = [
-    dill
-    multiprocess
-  ];
+  preCheck = ''
+    export PY_IGNORE_IMPORTMISMATCH=1
+  '';
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+    confluent-kafka
+  ];
 
   meta = with lib; {
     description = "Python Stream Processing";
