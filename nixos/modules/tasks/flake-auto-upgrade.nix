@@ -207,10 +207,15 @@ in {
           cd repo || exit
           ${pkgs.git}/bin/git fetch
         fi
-        ${pkgs.git}/bin/git checkout ${cfg.updateBranch} || ${pkgs.git}/bin/git checkout -b ${cfg.updateBranch}
-        ${pkgs.git}/bin/git pull || true
-        ${pkgs.git}/bin/git merge origin/${cfg.mainBranch} || true
         rm -f ./*.log
+        if ${pkgs.git}/bin/git checkout ${cfg.updateBranch};
+        then
+          # We don't pull because a force push could have happend in the meantime
+          ${pkgs.git}/bin/git reset --hard origin/${cfg.updateBranch}
+        else
+          ${pkgs.git}/bin/git checkout -b ${cfg.updateBranch}
+        fi
+        ${pkgs.git}/bin/git merge origin/${cfg.mainBranch} || true
         ${lib.optionalString cfg.updateFlake ''
           ${nixCommand} flake update --commit-lock-file
         ''}
