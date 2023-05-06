@@ -3132,6 +3132,8 @@ with pkgs;
 
   bunyan-rs = callPackage ../development/tools/bunyan-rs { };
 
+  butt = callPackage ../applications/audio/butt { };
+
   calcure = callPackage ../applications/misc/calcure { };
 
   callaudiod = callPackage ../applications/audio/callaudiod { };
@@ -17999,7 +18001,6 @@ with pkgs;
 
   libgcc = callPackage ../development/libraries/gcc/libgcc {
     stdenvNoLibs = gccStdenvNoLibs; # cannot be built with clang it seems
-    gcc = gcc11; # fails to build with gcc12
   };
 
   # This is for e.g. LLVM libraries on linux.

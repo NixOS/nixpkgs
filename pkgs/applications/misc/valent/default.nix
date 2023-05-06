@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "valent";
-  version = "unstable-2023-03-31";
+  version = "unstable-2023-05-01";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "bb9fc25a58eeb81abea2bb651accc9538a3a82fd";
+    rev = "74f5d9349a60f0d9fcf88cda01713980a221d639";
     fetchSubmodules = true;
-    sha256 = "sha256-3pEPE96gFjDGesFs/EZswuv6D3JQEpnAnlCw0IWYkR0=";
+    sha256 = "sha256-wqdujEKizrDFXtsjSTWpFgDL7MH3tsLTc7yd3LFgIQU=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/andyholmes/valent/";
     changelog = "https://github.com/andyholmes/valent/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ gpl3Plus cc0 ];
-    maintainers = with maintainers; [ federicoschonborn ];
+    maintainers = with maintainers; [ federicoschonborn aleksana ];
     platforms = platforms.linux;
   };
 }
