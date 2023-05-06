@@ -35,4 +35,5 @@ in
 
 mapAliases ({
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
+  "@nestjs/cli" = pkgs.nest-cli;
 })

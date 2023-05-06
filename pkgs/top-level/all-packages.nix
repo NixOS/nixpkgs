@@ -5449,6 +5449,8 @@ with pkgs;
 
   n2n = callPackage ../tools/networking/n2n { };
 
+  nest-cli = callPackage ../development/tools/nest-cli { };
+
   nextdns = callPackage ../applications/networking/nextdns { };
 
   nexttrace = callPackage ../tools/networking/nexttrace { };
