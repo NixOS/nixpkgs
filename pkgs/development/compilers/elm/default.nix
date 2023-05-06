@@ -3,7 +3,7 @@
 let
 
   # To control nodejs version we pass down
-  nodejs = pkgs.nodejs_14;
+  nodejs = pkgs.nodejs_16;
 
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
 
