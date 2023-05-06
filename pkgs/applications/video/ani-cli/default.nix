@@ -14,8 +14,8 @@
 , ffmpeg
 , aria2
 , player ? "mpv"
-, chromecast ? "false"
-, sync ? "false"
+, chromecastSupport ? false
+, sync ? false
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -30,17 +30,22 @@ stdenvNoCC.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gnugrep gnused curl fzf ffmpeg aria2 ]
-                ++ lib.optional (player == "mpv") mpv
-                ++ lib.optional (player == "vlc") vlc
-                ++ lib.optional (player == "iina") iina
-                ++ lib.optional (chromecast != "false") catt
-                ++ lib.optional (sync != "false") syncplay;
+  runtimeDependencies = [ gnugrep gnused curl fzf ffmpeg aria2 ]
+                          ++ lib.optional (player == "mpv") mpv
+                          ++ lib.optional (player == "vlc") vlc
+                          ++ lib.optional (player == "iina") iina
+                          ++ lib.optional chromecastSupport catt
+                          ++ lib.optional sync syncplay;
 
   installPhase = ''
+    runHook preInstall
+    
     install -Dm755 ani-cli $out/bin/ani-cli
+    
     wrapProgram $out/bin/ani-cli \
       --prefix PATH : ${lib.makeBinPath buildInputs}
+      
+    runHook postInstall
   '';
 
   meta = with lib; {
