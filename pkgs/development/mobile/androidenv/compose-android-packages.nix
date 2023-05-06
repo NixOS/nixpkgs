@@ -2,12 +2,12 @@
 , licenseAccepted ? false
 }:
 
-{ cmdLineToolsVersion ? "8.0"
+{ cmdLineToolsVersion ? "9.0"
 , toolsVersion ? "26.1.1"
-, platformToolsVersion ? "33.0.3"
-, buildToolsVersions ? [ "33.0.1" ]
+, platformToolsVersion ? "34.0.1"
+, buildToolsVersions ? [ "33.0.2" ]
 , includeEmulator ? false
-, emulatorVersion ? "31.3.14"
+, emulatorVersion ? "33.1.6"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
