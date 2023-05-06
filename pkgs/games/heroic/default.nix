@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchYarnDeps
+, fetchpatch
 , gitUpdater
 , yarn
 , fixup_yarn_lock
@@ -29,6 +30,15 @@ in stdenv.mkDerivation rec {
     yarnLock = "${src}/yarn.lock";
     sha256 = "sha256-R0lZrVfUH8NucuwarcE47jQ8ex5FY2hK6jJJ2TIRSWY=";
   };
+
+  patches = [
+    # Fix for capturing keyboard shortcuts when not in focus.
+    # TODO: Remove when updating past 2.7.1.
+    (fetchpatch {
+      url = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/commit/c82e6ca8dd7070071793fe5a3c4c04b4ae02c3c7.patch";
+      hash = "sha256-Pum67YPejfq8ERv6XWVLQzs+/SyNojmTGTQpE0UR4kg=";
+    })
+  ];
 
   nativeBuildInputs = [
     yarn
