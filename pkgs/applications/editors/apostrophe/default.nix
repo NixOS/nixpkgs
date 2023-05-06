@@ -2,7 +2,7 @@
 , wrapGAppsHook, pkg-config, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
 , gtk3, webkitgtk, glib-networking, gnome, gspell, texlive
-, shared-mime-info, libhandy, fira, sassc
+, shared-mime-info, libhandy, fira, fira-mono, sassc
 }:
 
 let
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
       --replace 'url("/app/share/fonts/FiraSans-Regular.ttf") format("ttf")'             \
                 'url("${fira}/share/fonts/opentype/FiraSans-Regular.otf") format("otf")' \
       --replace 'url("/app/share/fonts/FiraMono-Regular.ttf") format("ttf")'             \
-                'url("${fira}/share/fonts/opentype/FiraMono-Regular.otf") format("otf")'
+                'url("${fira-mono}/share/fonts/opentype/FiraMono-Regular.otf") format("otf")'
 
     patchShebangs --build build-aux/meson_post_install.py
   '';

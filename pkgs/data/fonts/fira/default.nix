@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/share/fonts/opentype
-    cp otf/*.otf $out/share/fonts/opentype
+    cp otf/FiraSans*.otf $out/share/fonts/opentype
 
     runHook postInstall
   '';
