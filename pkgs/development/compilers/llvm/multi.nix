@@ -46,7 +46,7 @@ let
       libc = gcc_multi_sysroot;
     };
 
-    gccForLibs = gcc_multi_sysroot;
+    gccForLibs = gcc_multi_sysroot // { inherit (glibc_multi) libgcc; };
   };
 
 in clangMulti
