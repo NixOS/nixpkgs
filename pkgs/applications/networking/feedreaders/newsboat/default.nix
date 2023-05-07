@@ -1,5 +1,5 @@
 { lib, stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkg-config, libxml2, json_c, ncurses
-, asciidoctor, libiconv, Security, Foundation, makeWrapper }:
+, asciidoctor, libiconv, Security, Foundation, makeWrapper, nix-update-script }:
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
@@ -54,6 +54,10 @@ rustPlatform.buildRustPackage rec {
       wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
     done
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage    = "https://newsboat.org/";

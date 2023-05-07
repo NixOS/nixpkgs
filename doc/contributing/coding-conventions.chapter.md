@@ -454,7 +454,7 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
     owner = "NixOS";
     repo = "nix";
     rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "ha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=;
+    hash = "ha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
   }
   ```
 

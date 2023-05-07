@@ -268,14 +268,6 @@ let
     '';
   }) { inherit pkgs system; };
 in {
-  ELK-6 = mkElkTest "elk-6-oss" {
-    name = "elk-6-oss";
-    elasticsearch = pkgs.elasticsearch6-oss;
-    logstash      = pkgs.logstash6-oss;
-    kibana        = pkgs.kibana6-oss;
-    journalbeat   = pkgs.journalbeat6;
-    metricbeat    = pkgs.metricbeat6;
-  };
   # We currently only package upstream binaries.
   # Feel free to package an SSPL licensed source-based package!
   # ELK-7 = mkElkTest "elk-7-oss" {
@@ -287,13 +279,6 @@ in {
   #   metricbeat    = pkgs.metricbeat7;
   # };
   unfree = lib.dontRecurseIntoAttrs {
-    ELK-6 = mkElkTest "elk-6" {
-      elasticsearch = pkgs.elasticsearch6;
-      logstash      = pkgs.logstash6;
-      kibana        = pkgs.kibana6;
-      journalbeat   = pkgs.journalbeat6;
-      metricbeat    = pkgs.metricbeat6;
-    };
     ELK-7 = mkElkTest "elk-7" {
       elasticsearch = pkgs.elasticsearch7;
       logstash      = pkgs.logstash7;

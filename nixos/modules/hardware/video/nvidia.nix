@@ -26,6 +26,8 @@ let
   nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
   nvidiaSettings = cfg.nvidiaSettings;
   busIDType = types.strMatching "([[:print:]]+[\:\@][0-9]{1,3}\:[0-9]{1,2}\:[0-9])?";
+
+  ibtSupport = cfg.open || (nvidia_x11.ibtSupport or false);
 in
 
 {
@@ -462,7 +464,7 @@ in
     boot.kernelParams = optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
       ++ optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
       ++ optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
-      ++ optional (!cfg.open && config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && lib.versionOlder nvidia_x11.version "530") "ibt=off";
+      ++ optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
 
     services.udev.extraRules =
       ''

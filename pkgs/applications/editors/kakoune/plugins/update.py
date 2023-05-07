@@ -81,10 +81,7 @@ in lib.fix' (lib.extends overrides packages)
 
 def main():
     editor = KakouneEditor("kakoune", ROOT, GET_PLUGINS)
-    parser = editor.create_parser()
-    args = parser.parse_args()
-
-    pluginupdate.update_plugins(editor, args)
+    editor.run()
 
 
 if __name__ == "__main__":

@@ -7,15 +7,15 @@ second (ToolChains.cpp) happens when Swift is used to link the final product.
 
 --- a/lib/ClangImporter/ClangImporter.cpp
 +++ b/lib/ClangImporter/ClangImporter.cpp
-@@ -68,6 +68,7 @@
+@@ -73,6 +73,7 @@
  #include "llvm/Support/FileSystem.h"
  #include "llvm/Support/Memory.h"
  #include "llvm/Support/Path.h"
 +#include "llvm/Support/Process.h"
+ #include "llvm/Support/VirtualFileSystem.h"
  #include "llvm/Support/YAMLParser.h"
- #include "llvm/Support/YAMLTraits.h"
  #include <algorithm>
-@@ -809,6 +810,17 @@ importer::addCommonInvocationArguments(
+@@ -786,6 +787,17 @@ importer::addCommonInvocationArguments(
  
    const std::string &overrideResourceDir = importerOpts.OverrideResourceDir;
    if (overrideResourceDir.empty()) {
@@ -33,7 +33,7 @@ second (ToolChains.cpp) happens when Swift is used to link the final product.
      llvm::SmallString<128> resourceDir(searchPathOpts.RuntimeResourcePath);
  
      // Adjust the path to refer to our copy of the Clang resource directory
-@@ -824,6 +836,7 @@ importer::addCommonInvocationArguments(
+@@ -801,6 +813,7 @@ importer::addCommonInvocationArguments(
      // Set the Clang resource directory to the path we computed.
      invocationArgStrs.push_back("-resource-dir");
      invocationArgStrs.push_back(std::string(resourceDir.str()));
@@ -43,7 +43,7 @@ second (ToolChains.cpp) happens when Swift is used to link the final product.
      invocationArgStrs.push_back(overrideResourceDir);
 --- a/lib/Driver/ToolChains.cpp
 +++ b/lib/Driver/ToolChains.cpp
-@@ -1372,10 +1372,20 @@ void ToolChain::getClangLibraryPath(const ArgList &Args,
+@@ -1393,10 +1393,20 @@ void ToolChain::getClangLibraryPath(const ArgList &Args,
                                      SmallString<128> &LibPath) const {
    const llvm::Triple &T = getTriple();
  

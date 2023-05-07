@@ -696,6 +696,7 @@ rec {
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
       , description ? null
+      , class ? null
       }@attrs:
       let
         inherit (lib.modules) evalModules;
@@ -707,7 +708,7 @@ rec {
         ) defs;
 
         base = evalModules {
-          inherit specialArgs;
+          inherit class specialArgs;
           modules = [{
             # This is a work-around for the fact that some sub-modules,
             # such as the one included in an attribute set, expects an "args"
@@ -762,9 +763,14 @@ rec {
         functor = defaultFunctor name // {
           type = types.submoduleWith;
           payload = {
-            inherit modules specialArgs shorthandOnlyDefinesConfig description;
+            inherit modules class specialArgs shorthandOnlyDefinesConfig description;
           };
           binOp = lhs: rhs: {
+            class =
+              if lhs.class == null then rhs.class
+              else if rhs.class == null then lhs.class
+              else if lhs.class == rhs.class then lhs.class
+              else throw "A submoduleWith option is declared multiple times with conflicting class values \"${toString lhs.class}\" and \"${toString rhs.class}\".";
             modules = lhs.modules ++ rhs.modules;
             specialArgs =
               let intersecting = builtins.intersectAttrs lhs.specialArgs rhs.specialArgs;

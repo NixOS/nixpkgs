@@ -1,14 +1,14 @@
 { stdenv, cmake, libpcap, fetchFromGitHub, lib }:
 stdenv.mkDerivation rec {
   pname = "updreplay";
-  version = "1.0.0";
+  version = "1.1.0";
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libpcap ];
   src = fetchFromGitHub {
     owner = "rigtorp";
     repo = "udpreplay";
     rev = "v${version}";
-    hash = "sha256-8cp1RyVBnq3vx2LPkAx7ktmdLo0bSq9UWlbb/DrJxpc=";
+    hash = "sha256-kF9a3pjQbFKf25NKyK7uSq0AAO6JK7QeChLhm9Z3wEA=";
   };
 
   meta = with lib; {

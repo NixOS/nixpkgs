@@ -13,21 +13,21 @@
 assert sevVariant -> stdenv.isx86_64;
 stdenv.mkDerivation rec {
   pname = "libkrunfw";
-  version = "3.10.0";
+  version = "3.11.0";
 
   src = if stdenv.isLinux then fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-yL5D8oOGucLWi4kFPxan5Gq+jIkVSDOW/v1+zKg3G+o=";
+    hash = "sha256-p5z3Dc7o/Ja3K0VlOWIPc0qOIU5p+JSxWe7QiVQNkjs=";
   } else fetchurl {
     url = "https://github.com/containers/libkrunfw/releases/download/v${version}/v${version}-with_macos_prebuilts.tar.gz";
-    hash = "sha256-Q7n+Og+eAnHSQm7kLUN0uV+CKcdtLBYAgt7Q0+CxEfA=";
+    hash = "sha256-XcdsK8L5NwMgelSMhE2YKYxaAin/3p/+GrljGGZpK5Y=";
   };
 
   kernelSrc = fetchurl {
-    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.2.1.tar.xz";
-    hash = "sha256-L8wH4ckOpM4Uj1D5vusNygtuSzeado3oq8ekom8lJTQ=";
+    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.2.9.tar.xz";
+    hash = "sha256-kDRJwWTAPw50KqzJIOGFY1heB6KMbLeeD9bDZpX9Q/U=";
   };
 
   preBuild = ''

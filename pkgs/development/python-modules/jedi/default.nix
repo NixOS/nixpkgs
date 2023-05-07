@@ -5,7 +5,7 @@
 , pythonOlder
 , fetchFromGitHub
 , attrs
-, django
+, django_3
 , pytestCheckHook
 , parso
 }:
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     attrs
-    django
+    django_3
     pytestCheckHook
   ];
 

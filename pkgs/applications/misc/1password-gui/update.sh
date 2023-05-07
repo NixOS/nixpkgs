@@ -27,6 +27,18 @@ print_hash() {
     echo "$CHANNEL ${ARCH}-${OS}: $CURRENT_HASH"
 }
 
+if [[ -z "$STABLE_VER" && -n "$1" ]]; then
+    STABLE_VER="$1"
+fi
+
+if [[ -z "$BETA_VER" && -n "$2" ]]; then
+    BETA_VER="$2"
+fi
+
+if [[ "${BETA_VER: -4}" != "BETA" ]]; then
+    BETA_VER="$BETA_VER.BETA"
+fi
+
 if [[ -z "$STABLE_VER" ]]; then
     echo "No 'STABLE_VER' environment variable provided, skipping"
 else

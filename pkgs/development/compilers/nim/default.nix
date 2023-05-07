@@ -165,7 +165,8 @@ in {
     };
 
     depsBuildBuild = [ nim-unwrapped ];
-    buildInputs = [ openssl ];
+    buildInputs = [ openssl ]
+      ++ lib.optional stdenv.isDarwin Security;
 
     nimFlags = [ "--cpu:${nimHost.cpu}" "--os:${nimHost.os}" "-d:release" ];
 
@@ -201,6 +202,10 @@ in {
       strictDeps = true;
 
       nativeBuildInputs = [ makeWrapper ];
+
+      # Needed for any nim package that uses the standard library's
+      # 'std/sysrand' module.
+      depsTargetTargetPropagated = lib.optional stdenv.isDarwin Security;
 
       patches = [
         ./nim.cfg.patch

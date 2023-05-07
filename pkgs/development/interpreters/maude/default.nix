@@ -3,14 +3,7 @@
 }:
 
 let
-
-  version = "3.1";
-
-  fullMaude = fetchurl {
-    url = "http://maude.cs.illinois.edu/w/images/0/0a/Full-Maude-${version}.zip";
-    sha256 = "8b13af02c6243116c2ef9592622ecaa06d05dbe1dd6b1e595551ff33855948f2";
-  };
-
+  version = "3.3.1";
 in
 
 stdenv.mkDerivation {
@@ -18,8 +11,8 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "http://maude.cs.illinois.edu/w/images/d/d3/Maude-${version}.tar.gz";
-    sha256 = "b112d7843f65217e3b5a9d40461698ef8dab7cbbe830af21216dfb924dc88a2f";
+    url = "https://github.com/SRI-CSL/Maude/archive/refs/tags/Maude${version}.tar.gz";
+    sha256 = "ueM8qi3fLogWT8bA+ZyBnd9Zr9oOKuoiu2YpG6o5J1E=";
   };
 
   nativeBuildInputs = [ flex bison unzip makeWrapper ];
@@ -34,7 +27,10 @@ stdenv.mkDerivation {
   # https://gitweb.gentoo.org/repo/gentoo.git/commit/dev-lang/maude/maude-3.1-r1.ebuild?id=f021cc6cfa1e35eb9c59955830f1fd89bfcb26b4
   configureFlags = [ "--without-libsigsegv" ];
 
+  # Certain tests (in particular, Misc/fileTest) expect us to build in a subdirectory
+  # We'll use the directory Opt/ as suggested in INSTALL
   preConfigure = ''
+    mkdir Opt; cd Opt
     configureFlagsArray=(
       --datadir="$out/share/maude"
       TECLA_LIBS="-ltecla -lncursesw"
@@ -42,19 +38,15 @@ stdenv.mkDerivation {
       CFLAGS="-O3" CXXFLAGS="-O3"
     )
   '';
+  configureScript = "../configure";
 
   doCheck = true;
 
   postInstall = ''
     for n in "$out/bin/"*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
-    unzip ${fullMaude}
-    install -D -m 444 full-maude31.maude $out/share/maude/full-maude.maude
   '';
 
-  # bison -dv surface.yy -o surface.c
-  # mv surface.c surface.cc
-  # mv: cannot stat 'surface.c': No such file or directory
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   meta = {
     broken = stdenv.isDarwin;

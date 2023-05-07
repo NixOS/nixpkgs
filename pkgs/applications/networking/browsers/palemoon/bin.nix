@@ -13,11 +13,13 @@
 , libpulseaudio
 , makeDesktopItem
 , wrapGAppsHook
+, testers
+, palemoon-bin
 }:
 
 stdenv.mkDerivation rec {
   pname = "palemoon-bin";
-  version = "32.0.1";
+  version = "32.1.1";
 
   src = fetchzip {
     urls = [
@@ -25,9 +27,9 @@ stdenv.mkDerivation rec {
       "https://rm-us.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
     ];
     hash = if withGTK3 then
-      "sha256-CSAsZTMIeInuvN7mddiMDtzzNKuYST2zp1XczKAP1mQ="
+      "sha256-Kre+F1AE4bC5hAODYjo+S6TUCpKk8KMnYumQWHz+epY="
     else
-      "sha256-bvdy4tqnuoUxVVz/8zp7VwfS3wH51eKCzXDqgDWMb3A=";
+      "sha256-LIsep7KsNhsw3zlmgltu6/4qZEWjGQbUmLqHCabSTfg=";
   };
 
   preferLocalBuild = true;
@@ -151,6 +153,10 @@ stdenv.mkDerivation rec {
     )
     wrapGApp $out/lib/palemoon/palemoon
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = palemoon-bin;
+  };
 
   meta = with lib; {
     homepage = "https://www.palemoon.org/";

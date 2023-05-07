@@ -74,10 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
     links = { unwrappedCC, extraConfig }: stdenv.mkDerivation {
-      name = "ccache-links";
+      pname = "ccache-links";
+      inherit (finalAttrs) version;
       passthru = {
         isClang = unwrappedCC.isClang or false;
         isGNU = unwrappedCC.isGNU or false;
+        isCcache = true;
       };
       inherit (unwrappedCC) lib;
       nativeBuildInputs = [ makeWrapper ];

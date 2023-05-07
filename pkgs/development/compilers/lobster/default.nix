@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, unstableGitUpdater
 , cmake
 , callPackage
 
@@ -9,7 +8,7 @@
 , xorg
 
 # Darwin deps
-, cf-private
+, CoreFoundation
 , Cocoa
 , AudioToolbox
 , OpenGL
@@ -19,19 +18,19 @@
 
 stdenv.mkDerivation rec {
   pname = "lobster";
-  version = "2021.3";
+  version = "2023.5";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
     rev = "v${version}";
-    sha256 = "sha256-ENs2Jy2l6fogZdCSaIyfV9wQm57qaZfx5HVHOnQBrRk=";
+    sha256 = "sha256-3jF5Ab8P8w1WxgsE8d0ByldzL/YVt/fvLVGKOEzBzPI=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = if stdenv.isDarwin
     then [
-      cf-private
+      CoreFoundation
       Cocoa
       AudioToolbox
       OpenGL

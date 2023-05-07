@@ -61,17 +61,19 @@
 
 stdenv.mkDerivation rec {
   pname = "audacity";
-  version = "3.2.5";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Audacity-${version}";
-    hash = "sha256-tMz55fZh+TfvLEyApDqC0QMd2hEQLJsNQ6y2Xy0xgaQ=";
+    hash = "sha256-4L5ggu1izm9kichZBsJHAFq74q59xWGVYC11gy3K9go=";
   };
 
   postPatch = ''
     mkdir src/private
+    substituteInPlace scripts/build/macOS/fix_bundle.py \
+      --replace "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
@@ -148,16 +150,20 @@ stdenv.mkDerivation rec {
     "-Daudacity_conan_enabled=Off"
     "-Daudacity_use_ffmpeg=loaded"
     "-Daudacity_has_vst3=Off"
+    "-Daudacity_has_crashreports=Off"
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+
+    # Fix duplicate store paths
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   # [ 57%] Generating LightThemeAsCeeCode.h...
   # ../../utils/image-compiler: error while loading shared libraries:
   # lib-theme.so: cannot open shared object file: No such file or directory
   preBuild = ''
-    export LD_LIBRARY_PATH=$PWD/utils
+    export LD_LIBRARY_PATH=$PWD/Release/lib/audacity
   '';
 
   doCheck = false; # Test fails

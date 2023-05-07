@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "trino-cli";
-  version = "403";
+  version = "413";
 
   jarfilename = "${pname}-${version}-executable.jar";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://maven/io/trino/${pname}/${version}/${jarfilename}";
-    sha256 = "sha256-Yo7WQoY99gbXflcms0v3r9w+GXSNOP+CdKDnUZXEs8Q=";
+    sha256 = "sha256-gsa5RbW9gz7TRhiU4bKLtxTZaggP9Ee6KpxhZBhpqgA=";
   };
 
   dontUnpack = true;
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "The Trino CLI provides a terminal-based, interactive shell for running queries";
     homepage = "https://github.com/trinodb/trino";
     license = licenses.asl20;
-    maintainers = [ maintainers.regadas ];
+    maintainers = with maintainers; [ regadas cpcloud ];
   };
 }

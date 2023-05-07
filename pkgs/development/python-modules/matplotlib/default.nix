@@ -135,7 +135,6 @@ buildPythonPackage rec {
     libX11
     tcl
     tk
-    tkinter
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ];
@@ -167,6 +166,8 @@ buildPythonPackage rec {
     tornado
   ] ++ lib.optionals enableNbagg [
     ipykernel
+  ] ++ lib.optionals enableTk [
+    tkinter
   ];
 
   passthru.config = {

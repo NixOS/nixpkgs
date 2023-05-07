@@ -17,19 +17,19 @@
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "52.2.0";
+  version = "52.6.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iW432YtZtRGUWia33Lsnu+aQuedhBJdh8dZ30FPg6Vk=";
+    hash = "sha256-TTV6oydUP2znEOm7KZElugNDfROnlPmyC19Ig1H8/wM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-/7qKIQglNKGveKFtPeqd35Mq2hH/20BGTgDBgip4PnI=";
+    hash = "sha256-Np2TfgKP3yfJqA4WZyyedGp9XtKJjDikUov5pvB/opk=";
   };
 
   nativeBuildInputs = [

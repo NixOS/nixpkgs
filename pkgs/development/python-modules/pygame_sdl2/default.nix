@@ -17,6 +17,11 @@ buildPythonPackage rec {
     rm -rf gen gen3
   '';
 
+  # Remove build tag which produces invaild version
+  postPatch = ''
+    sed -i '2d' setup.cfg
+  '';
+
   nativeBuildInputs = [
     SDL2.dev cython
   ];

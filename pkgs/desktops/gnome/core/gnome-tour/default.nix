@@ -11,7 +11,7 @@
 , gdk-pixbuf
 , desktop-file-utils
 , appstream-glib
-, wrapGAppsHook
+, wrapGAppsHook4
 , python3
 , gnome
 , libadwaita
@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-tour";
-  version = "43.0";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-E1HkGWJ/vXx3GTKm7xrYDAvy5oKMSUigYgaJhN2zzIg=";
+    hash = "sha256-Bt52d90cWQ0OozoDLJzPTDfGK8ViFbgjyHnkLuYwwrY=";
   };
 
   cargoVendorDir = "vendor";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     python3
     rustPlatform.cargoSetupHook
     rustc
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [

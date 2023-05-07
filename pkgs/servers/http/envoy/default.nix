@@ -81,7 +81,7 @@ buildBazelPackage rec {
   fetchAttrs = {
     sha256 = {
       x86_64-linux = "sha256-H2s8sTbmKF+yRfSzLsZAT2ckFuunFwh/FMSKj+GYyPM=";
-      aarch64-linux = "sha256-R9jzy/dpdCcGgT9yq59Wo/IN/bVo6fxnVPGhLMZ9fbM=";
+      aarch64-linux = "sha256-1/z7sZYMiuB4Re2itDZydsFVEel2NOYmi6vRmBGVO/4=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -140,7 +140,7 @@ buildBazelPackage rec {
   removeRulesCC = false;
   removeLocalConfigCc = true;
   removeLocal = false;
-  bazelTarget = "//source/exe:envoy-static";
+  bazelTargets = [ "//source/exe:envoy-static" ];
   bazelBuildFlags = [
     "-c opt"
     "--spawn_strategy=standalone"
@@ -176,5 +176,13 @@ buildBazelPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    knownVulnerabilities = [
+      "CVE-2023-27487"
+      "CVE-2023-27488"
+      "CVE-2023-27491"
+      "CVE-2023-27492"
+      "CVE-2023-27493"
+      "CVE-2023-27496"
+    ];
   };
 }

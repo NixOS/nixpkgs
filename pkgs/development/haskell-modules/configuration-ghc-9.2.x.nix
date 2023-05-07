@@ -69,9 +69,6 @@ self: super: {
   # Tests depend on `parseTime` which is no longer available
   hourglass = dontCheck super.hourglass;
 
-  # For -fghc-lib see cabal.project in haskell-language-server.
-  stylish-haskell = enableCabalFlag "ghc-lib" super.stylish-haskell;
-
   # Needs to match ghc version
   ghc-tags = doDistribute self.ghc-tags_1_5;
 

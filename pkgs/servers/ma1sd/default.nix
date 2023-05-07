@@ -4,7 +4,7 @@
 , fetchpatch
 , jre
 , git
-, gradle
+, gradle_7
 , perl
 , makeWrapper
 }:
@@ -19,6 +19,8 @@ let
     rev = version;
     hash = "sha256-K3kaujAhWsRQuTMW3SZOnE7Rmu8+tDXaxpLrb45OI4A=";
   };
+
+  gradle = gradle_7;
 
   patches = [
     # https://github.com/ma1uta/ma1sd/pull/122

@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "cbqn-bytecode";
-  version = "unstable-2023-01-27";
+  version = "unstable-2023-04-19";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "cbqnBytecode";
-    rev = "b2f47806ea770451d06d04e20177baeaec92e6dd";
-    hash = "sha256-dukpEB5qg6jF4AIHKK+atTvCKZTVtJ1M/nw7+SNp250=";
+    rev = "78ed4102f914eb5fa490d76d4dcd4f8be6e53417";
+    hash = "sha256-IOhxcfGmpARiTdFMSpc+Rh8VXtasZdfP6vKJzULNxAg=";
   };
 
   dontConfigure = true;
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/dzaima/cbqnBytecode";
     description = "CBQN precompiled bytecode";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk ];
+    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk detegr ];
     platforms = platforms.all;
   };
 }

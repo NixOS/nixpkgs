@@ -1,4 +1,4 @@
-{ lib, stdenv, writeShellScript, buildFHSUserEnv, steam, glxinfo-i686
+{ lib, stdenv, writeShellScript, buildFHSEnv, steam, glxinfo-i686
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
@@ -29,6 +29,9 @@ let
     procps
     usbutils
 
+    # It tries to execute xdg-user-dir and spams the log with command not founds
+    xdg-user-dirs
+
     # electron based launchers need newer versions of these libraries than what runtime provides
     mesa
     sqlite
@@ -55,7 +58,7 @@ let
 
   envScript = lib.toShellVars extraEnv;
 
-in buildFHSUserEnv rec {
+in buildFHSEnv rec {
   name = "steam";
 
   targetPkgs = pkgs: with pkgs; [
@@ -131,6 +134,9 @@ in buildFHSUserEnv rec {
     tbb
     zlib
 
+    # SteamVR
+    udev
+
     # Other things from runtime
     glib
     gtk2
@@ -177,7 +183,6 @@ in buildFHSUserEnv rec {
     xorg.xkeyboardconfig
     xorg.libpciaccess
     xorg.libXScrnSaver # Dead Cells
-    udev # Shadow of the Tomb Raider
     icu # dotnet runtime, e.g. Stardew Valley
 
     # screeps dependencies
@@ -270,7 +275,7 @@ in buildFHSUserEnv rec {
   # breaks the ability for application to reference shared memory.
   unsharePid = false;
 
-  passthru.run = buildFHSUserEnv {
+  passthru.run = buildFHSEnv {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;

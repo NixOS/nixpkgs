@@ -18,11 +18,11 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      checksum = "sha256-26mkizwkF0qPX2+0rkjep28ZuNlLGPljCvVO73t34Lk=";
+      checksum = "sha256-ozyQya2WxnDK6of1VfxlDlXo6IDGxAXkCjFt3DqRM4k=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      checksum = "sha256-gcf/MJ5aNUPoH6qz0n9vjviTec1rcxB0UzF+++6bUTs=";
+      checksum = "sha256-UxceWQ/eIGPFXNFIPSzBe431qqp54GwDbs9p7cqLosA=";
     };
   };
   inherit (stdenv.hostPlatform) system;
@@ -30,7 +30,7 @@ let
   inherit (binary) platform checksum;
 in stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "10.10.0";
+  version = "12.9.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";

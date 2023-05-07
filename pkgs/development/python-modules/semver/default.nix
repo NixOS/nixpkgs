@@ -3,21 +3,28 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "semver";
-  version = "2.13.0";
-  format = "setuptools";
+  version = "3.0.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-semver";
     repo = "python-semver";
-    rev = version;
-    hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ErLmKZswoNgsY82epNUmJDVs065JvSwz3zY+y8jQ0e8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -40,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python package to work with Semantic Versioning (http://semver.org/)";
     homepage = "https://python-semver.readthedocs.io/";
+    changelog = "https://github.com/python-semver/python-semver/releases/tag/3.0.0";
     license = licenses.bsd3;
     maintainers = with maintainers; [ np ];
   };

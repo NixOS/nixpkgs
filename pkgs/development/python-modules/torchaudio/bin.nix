@@ -1,46 +1,60 @@
 { lib
 , stdenv
+, addOpenGLRunpath
+, autoPatchelfHook
 , buildPythonPackage
+, cudaPackages
 , fetchurl
-, isPy37
-, isPy38
-, isPy39
-, isPy310
+, ffmpeg_4
+, pythonAtLeast
+, pythonOlder
 , python
 , torch-bin
-, pythonOlder
-, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "0.13.1";
+  version = "2.0.1";
   format = "wheel";
 
   src =
     let pyVerNoDot = lib.replaceStrings [ "." ] [ "" ] python.pythonVersion;
         unsupported = throw "Unsupported system";
         srcs = (import ./binary-hashes.nix version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
-    in fetchurl srcs;
+    in
+    fetchurl srcs;
 
-  disabled = !(isPy38 || isPy39 || isPy310);
+  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.12");
+
+  buildInputs = with cudaPackages; [
+    # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libcudart.so.11.0 but torch/lib only ships
+    # libcudart.$hash.so.11.0
+    cuda_cudart
+
+    # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libnvToolsExt.so.2 but torch/lib only ships
+    # libnvToolsExt-$hash.so.1
+    cuda_nvtx
+
+    ffmpeg_4.lib
+  ];
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    addOpenGLRunpath
+  ];
 
   propagatedBuildInputs = [
     torch-bin
   ];
 
+  preInstall = ''
+    addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
+  '';
+
   # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.
   dontStrip = true;
 
   pythonImportsCheck = [ "torchaudio" ];
-
-  postFixup = ''
-    # Note: after patchelf'ing, libcudart can still not be found. However, this should
-    #       not be an issue, because PyTorch is loaded before torchvision and brings
-    #       in the necessary symbols.
-    patchelf --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:${torch-bin}/${python.sitePackages}/torch/lib:" \
-      "$out/${python.sitePackages}/torchaudio/_torchaudio.so"
-  '';
 
   meta = with lib; {
     description = "PyTorch audio library";
@@ -51,7 +65,7 @@ buildPythonPackage rec {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = licenses.bsd3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
     maintainers = with maintainers; [ junjihashimoto ];
   };
 }

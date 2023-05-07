@@ -1,21 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "consul-template";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "consul-template";
     rev = "v${version}";
-    sha256 = "sha256-Q2mNMgGnwyYXVsmP6cVVlGEs2fHUZKwrWepmmQXmNLo=";
+    hash = "sha256-6B6qijC10WOyGQ9159DK0+WSE19fXbwQc023pkg1iqQ=";
   };
 
-  vendorHash = "sha256-75IFVVd4L70kEV5L7Ub9RpR9LMhkz3fB4b5eAYwkPPk=";
+  vendorHash = "sha256-wNZliD6mcJT+/U/1jiwdYubYe0Oa+YR6vSLo5vs0bDk=";
 
   # consul-template tests depend on vault and consul services running to
   # execute tests so we skip them here
   doCheck = false;
+
+  passthru.tests = {
+    inherit (nixosTests) consul-template;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/hashicorp/consul-template/";

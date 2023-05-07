@@ -7,6 +7,8 @@ buildDunePackage rec {
   pname = "iter";
   version = "1.6";
 
+  duneVersion = "3";
+
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = pname;

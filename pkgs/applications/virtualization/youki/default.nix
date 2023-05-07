@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://containers.github.io/youki/";
     changelog = "https://github.com/containers/youki/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ candyc1oud ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

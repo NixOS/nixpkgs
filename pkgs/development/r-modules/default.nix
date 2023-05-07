@@ -68,9 +68,10 @@ let
     hydraPlatforms = [];
   };
   deriveCran = mkDerive {
-    mkHomepage = {name, snapshot, ...}: "https://cran.r-project.org/${snapshot}/web/packages/${name}/";
-    mkUrls = {name, version, snapshot}: [
-      "https://packagemanager.rstudio.com/cran/${snapshot}/src/contrib/${name}_${version}.tar.gz"
+    mkHomepage = {name, ...}: "https://cran.r-project.org/web/packages/${name}/";
+    mkUrls = {name, version}: [
+      "mirror://cran/${name}_${version}.tar.gz"
+      "mirror://cran/Archive/${name}/${name}_${version}.tar.gz"
     ];
   };
 
@@ -1334,6 +1335,10 @@ let
 
     rhdf5= old.rhdf5.overrideAttrs (attrs: {
       patches = [ ./patches/rhdf5.patch ];
+    });
+
+    textshaping = old.textshaping.overrideAttrs (attrs: {
+      env.NIX_LDFLAGS = "-lfribidi -lharfbuzz";
     });
   };
 in

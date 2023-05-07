@@ -2,9 +2,7 @@
 , darwin
 }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "chit";
   version = "0.1.15";
 

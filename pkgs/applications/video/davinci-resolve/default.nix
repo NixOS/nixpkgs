@@ -8,7 +8,8 @@
 , addOpenGLRunpath
 , libGLU
 , xorg
-, buildFHSUserEnv
+, buildFHSEnv
+, buildFHSEnvChroot
 , bash
 , writeText
 , ocl-icd
@@ -26,7 +27,11 @@ let
       pname = "davinci-resolve";
       version = "17.4.3";
 
-      nativeBuildInputs = [ unzip appimage-run addOpenGLRunpath ];
+      nativeBuildInputs = [
+        unzip
+        (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; } )
+        addOpenGLRunpath
+      ];
 
       # Pretty sure, there are missing dependencies ...
       buildInputs = [ libGLU xorg.libXxf86vm ];
@@ -133,7 +138,7 @@ let
     }
   );
 in
-buildFHSUserEnv {
+buildFHSEnv {
   name = "davinci-resolve";
   targetPkgs = pkgs: with pkgs; [
     librsvg

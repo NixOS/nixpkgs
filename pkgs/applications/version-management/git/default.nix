@@ -19,6 +19,7 @@
 , pkg-config, glib, libsecret
 , gzip # needed at runtime by gitweb.cgi
 , withSsh ? false
+, sysctl
 , doInstallCheck ? !stdenv.isDarwin  # extremely slow on darwin
 , tests
 }:
@@ -28,7 +29,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.39.2";
+  version = "2.40.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "R1918Tc7LNTkOHBhhRdZZtXBH2jE2x5IwmJXxD3c8tY=";
+    hash = "sha256-SJO4uY7vyf3EsOfKJJ40AAT6p4BKQz0XQp4xHh/vIdI=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -185,12 +186,14 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Fix references to the perl, sed, awk and various coreutil binaries used by
       # shell scripts that git calls (e.g. filter-branch)
+      # and completion scripts
       SCRIPT="$(cat <<'EOS'
         BEGIN{
           @a=(
             '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
             '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
-            '${coreutils}/bin/wc', '${coreutils}/bin/tr'
+            '${coreutils}/bin/wc', '${coreutils}/bin/tr',
+            '${coreutils}/bin/ls'
             ${lib.optionalString perlSupport ", '${perlPackages.perl}/bin/perl'"}
           );
         }
@@ -201,7 +204,8 @@ stdenv.mkDerivation (finalAttrs: {
       EOS
       )"
       perl -0777 -i -pe "$SCRIPT" \
-        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,submodule,subtree,web--browse}
+        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,submodule,subtree,web--browse} \
+        $out/share/bash-completion/completions/{git,gitk}
 
 
       # Also put git-http-backend into $PATH, so that we can use smart
@@ -213,8 +217,6 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc.perl" $out/bin/git-credential-netrc \
                   --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-cvsimport \
-                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
-      wrapProgram $out/libexec/git-core/git-add--interactive \
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-archimport \
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
@@ -292,6 +294,8 @@ stdenv.mkDerivation (finalAttrs: {
     "DEFAULT_TEST_TARGET=prove"
     "PERL_PATH=${buildPackages.perl}/bin/perl"
   ];
+
+  nativeInstallCheckInputs = lib.optional stdenv.isDarwin sysctl;
 
   preInstallCheck = ''
     installCheckFlagsArray+=(

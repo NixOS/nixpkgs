@@ -6,7 +6,6 @@
 , pkg-config
 , networkmanager
 , gnome
-, libnotify
 , libsecret
 , polkit
 , modemmanager
@@ -25,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "network-manager-applet";
-  version = "1.30.0";
+  version = "1.32.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-lRa4Tp2fEA24mgxny/5XztsFYjENRcqvtjMuJ7vrXNM=";
+    sha256 = "sha256-orWv+hUFrUOQKVn9vgnlvOxXsR7TM/pgRY/7nGLvujg=";
   };
 
   mesonFlags = [

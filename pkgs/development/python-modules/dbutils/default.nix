@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "dbutils";
-  version = "3.0.2";
+  version = "3.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "DBUtils";
-    hash = "sha256-+t65eeFAbcEj4tuZVfMU4NU2DzBOC9bPBHqqX8P99bM=";
+    hash = "sha256-jkhWWxKtK0sfIU3gKU3utLKFePWyq7QNaMKSS2TX4Ac=";
   };
 
   nativeCheckInputs = [

@@ -9,7 +9,7 @@ buildEnv {
 
   postBuild = ''
     rm "$out/bin/qmake"
-    cp "${qtbase.dev}/bin/qmake" "$out/bin"
+    cp "${qtbase}/bin/qmake" "$out/bin"
     cat >"$out/bin/qt.conf" <<EOF
     [Paths]
     Prefix = $out
