@@ -2949,6 +2949,8 @@ self: super: with self; {
 
   drf-spectacular-sidecar = callPackage ../development/python-modules/drf-spectacular-sidecar { };
 
+  drf-ujson2 = callPackage ../development/python-modules/drf-ujson2 { };
+
   drf-writable-nested = callPackage ../development/python-modules/drf-writable-nested { };
 
   drf-yasg = callPackage ../development/python-modules/drf-yasg { };
