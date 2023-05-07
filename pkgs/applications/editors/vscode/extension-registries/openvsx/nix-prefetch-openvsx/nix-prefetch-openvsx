@@ -1,0 +1,243 @@
+#!/usr/bin/env bash
+
+# Adapt from get_vsixpkg() of the original update_install_exts.sh
+
+set -eu -o pipefail
+
+declare -a QUEUED_ARGS=()
+declare -a NONFLAG_ARGS=()
+
+source nix-prefetch-vsix-lib.sh
+
+DOMAIN="https://open-vsx.org"
+
+function prepare_domain {
+    if [[ -z "${DOMAIN-}" ]]; then
+        fail "DOMAIN: Variable unset or empty."
+    fi
+}
+
+function prepare_meta_json_path_expected {
+    prepare_exttmp
+    prepare_vsix_fullname
+    META_JSON_PATH_EXPECTED="$EXTTMP/${VSIX_FULLNAME}_meta.json"
+}
+
+function prepare_meta_json_path {
+    if [[ -z "${META_JSON_PATH-}" ]]; then
+        prepare_domain
+        prepare_vsix_publisher
+        prepare_vsix_name
+        prepare_vsix_version_specified
+        prepare_meta_json_path_expected
+        local META_JSON_URL
+        META_JSON_URL="$DOMAIN/api/$VSIX_PUBLISHER/$VSIX_NAME/$VSIX_VERSION_SPECIFIED"
+        download_file "$META_JSON_PATH_EXPECTED" "$META_JSON_URL"
+        META_JSON_PATH="$META_JSON_PATH_EXPECTED"
+    fi
+}
+
+function prepare_vsix_version_fetched {
+    if [[ -z "${VSIX_VERSION_FETCHED-}" ]]; then
+        refget_from_varname_json META_JSON_PATH VSIX_VERSION_FETCHED version
+        if [[ "${VSIX_VERSION_FETCHED:-null}" == "null" ]]; then
+            fail "VSIX_VERSION_FETCHED: invalid value ($VSIX_VERSION_FETCHED)"
+        fi
+    fi
+}
+
+function prepare_vsix_url {
+    prepare_domain
+    prepare_vsix_publisher
+    prepare_vsix_name
+    prepare_vsix_version
+    prepare_vsix_fullname
+    VSIX_URL="$DOMAIN/api/$VSIX_PUBLISHER/$VSIX_NAME/$VSIX_VERSION/file/$VSIX_FULLNAME-$VSIX_VERSION.vsix";
+}
+
+function download_package_json {
+    prepare_domain
+    prepare_vsix_publisher
+    prepare_vsix_name
+    prepare_vsix_version
+    local PACKAGE_JSON_URL
+    PACKAGE_JSON_URL="$DOMAIN/api/$VSIX_PUBLISHER/$VSIX_NAME/$VSIX_VERSION/file/package.json"
+    prepare_package_json_path_expected
+    download_file "$PACKAGE_JSON_PATH_EXPECTED" "$PACKAGE_JSON_URL"
+    PACKAGE_JSON_PATH="$PACKAGE_JSON_PATH_EXPECTED"
+}
+
+function prepare_package_json_path {
+    if [[ -z "${PACKAGE_JSON_PATH-}" ]]; then
+        if (( NO_HASH )); then
+            download_package_json
+        else
+            unpack_package_json
+        fi
+    fi
+}
+
+NO_PRINT_DOMAIN=0
+save_function prepare_dict_key_output prepare_dict_key_output_orig
+function prepare_dict_key_output {
+    prepare_dict_key_output_orig
+    if ! (( NO_PRINT_DOMAIN )); then
+        prepare_domain
+        DICT_KEY_OUTPUT[domain]=DOMAIN
+    fi
+}
+
+QUEUED_ARGS=( "$@" )
+
+VSIX_PUBLISHER=""
+VSIX_NAME=""
+VSIX_VERSION=""
+VSIX_VERSION_SPECIFIED=""
+VSIX_VERSION_FETCHED=""
+NO_ADD=0
+NO_HASH=0
+NO_META=0
+
+if [[ "${#QUEUED_ARGS[@]}" -eq 0 ]]; then
+    fail "Expect PUBLISHER and NAME"
+fi
+
+while [[ "${#QUEUED_ARGS[@]}" -gt 0 ]]; do
+    case "${QUEUED_ARGS[0]}" in
+        -h|--help)
+            echo \
+"Usage: nix-prefetch-openvsx [OPTIONS] PUBLISHER NAME VERSION=latest
+
+Fetch the vscode extension from Open VSX Registry
+and print the registryRef (previously \"mktplcRef\") attributes in JSON format
+
+Options:
+  -A, --no-add              Don't add the downloaded VSIX file to the Nix store.
+                            Useful when getting the hash of a large number of files.
+  --base16                  Print the hash in base-16 format.
+  --base32                  Print the hash in base-32 format.
+  --base64                  Print the hash in base-64 format.
+  -h, --help                Print this help and exit.
+  -H, --no-hash             Do not print the nix-hash value of this extension.
+                            If set, nix-prefetch-openvsx will not download
+                            the VSIX file, and will therefore not output the VSIX hash.
+                            If --no-meta isn't set, meta attributes will be fetched
+                            by downloading the \`package.json\` file alone.
+                            This implies \`-A\`.
+  -M, --no-meta             Do not print the meta attributes.
+                            This also prevents the VSIX file to be unpacked.
+  --sri                     Print the hash in SRI format.
+                            This is the default behavior
+  -t, --tmpdir TMPDIR       Specify the directory
+                            to create temporary directories in.
+                            Default to \`\"\${TMPDIR:-/tmp}\"\` by \`mktemp\`
+                            from the environment.
+  --type HASH_ALGO          Specify the hash algorithm.
+                            Default to sha256
+  -u, --domain DOMAIN       Specify the domain of the Open VSX Registry instance.
+                            Default to
+                            $DOMAIN
+  -U, --no-print-domain     Don't print the domain of the Open VSX Registry instance.
+
+If non-flag arguments (PUBLISHER, NAME, VERSION, etc.) happen to start with '-',
+they should be escaped with a '\\' prefix or be added after '--'."
+
+            exit 0
+            ;;
+        -A|--no-add)
+            NO_ADD=1
+            shift_args
+            ;;
+        --base16)
+            HASH_FORMAT="base16"
+            shift_args
+            ;;
+        --base32)
+            HASH_FORMAT="base32"
+            shift_args
+            ;;
+        --base64)
+            HASH_FORMAT="base64"
+            shift_args
+            ;;
+        -H|--no-hash)
+            NO_HASH=1
+            shift_args
+            ;;
+        -M|--no-meta)
+            NO_META=1
+            shift_args
+            ;;
+        --sri)
+            HASH_FORMAT="sri"
+            shift_args
+            ;;
+        -t|--tmpdir)
+            if [[ "${#QUEUED_ARGS[@]}" -lt 2 ]]; then
+                fail "Expect ${QUEUED_ARGS[0]} TMPDIR"
+            fi
+            export TMPDIR="${QUEUED_ARGS[1]}"
+            shift_args 2
+            ;;
+        --type)
+            HASH_ALGO="${QUEUED_ARGS[1]}"
+            shift_args 2
+            ;;
+        -u|--domain)
+            if [[ "$#" -lt 2 ]]; then
+                fail "Expect ${QUEUED_ARGS[0]} DOMAIN"
+            fi
+            DOMAIN="${QUEUED_ARGS[1]}"
+            shift_args 2
+            ;;
+        -U|--no-print-domain)
+            NO_PRINT_DOMAIN=1
+            shift_args
+            ;;
+        -)
+            fail "Unexpected argument ${QUEUED_ARGS[0]}"
+            ;;
+        --)
+            shift_args 1
+            NONFLAG_ARGS+=( "${QUEUED_ARGS[@]}" )
+            QUEUED_ARGS=()
+            ;;
+        --?*)
+            fail "Unexpected argument ${QUEUED_ARGS[0]}"
+            ;;
+        -?*)
+            manage_shorthands
+            ;;
+        \\-*)
+            # If an argument begins with '\-'
+            # Get the second and the following characters
+            # and put into NONFLAG_ARGS
+            NONFLAG_ARGS+=("${QUEUED_ARGS[0]:1}")
+            shift_args 1
+            ;;
+        *)
+            NONFLAG_ARGS+=("${QUEUED_ARGS[0]}")
+            shift_args 1
+            ;;
+    esac
+done
+
+if [[ "${#NONFLAG_ARGS[@]}" -lt 2 ]]; then
+    fail "Expect PUBLISHER and NAME"
+fi
+VSIX_PUBLISHER="${NONFLAG_ARGS[0]}"
+VSIX_NAME="${NONFLAG_ARGS[1]}"
+if [[ "${#NONFLAG_ARGS[@]}" -lt 3 || -z "${NONFLAG_ARGS[2]}" ]]; then
+    VSIX_VERSION_SPECIFIED="latest"
+else
+    VSIX_VERSION_SPECIFIED="${NONFLAG_ARGS[2]}"
+fi
+
+create_exttmp
+trap cleanup EXIT
+
+if ! (( NO_HASH )) && ! (( NO_ADD )); then
+    add_vsix_to_store
+fi
+
+print_output

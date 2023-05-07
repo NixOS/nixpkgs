@@ -34763,6 +34763,9 @@ with pkgs;
 
   vscode-extensions = recurseIntoAttrs (callPackage ../applications/editors/vscode/extensions { });
 
+  vscode-registries = recurseIntoAttrs (callPackage ../applications/editors/vscode/extension-registries { });
+  vscode-registry-commons = callPackage ../applications/editors/vscode/extension-registries/commons { };
+
   vscodium = callPackage ../applications/editors/vscode/vscodium.nix { };
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
@@ -39010,6 +39013,12 @@ with pkgs;
 
   nix-prefetch-github = with python3Packages;
     toPythonApplication nix-prefetch-github;
+
+  nix-prefetch-openvsx = callPackage ../applications/editors/vscode/extension-registries/openvsx/nix-prefetch-openvsx { };
+
+  nix-prefetch-vscode-marketplace = callPackage ../applications/editors/vscode/extension-registries/vscode-marketplace/nix-prefetch-vscode-marketplace { };
+
+  nix-prefetch-vsix-lib = callPackage ../applications/editors/vscode/extension-registries/commons/nix-prefetch-vsix-lib { };
 
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr
