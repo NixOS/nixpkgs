@@ -14,7 +14,7 @@ let
       "qt"
     else if xserverCfg.desktopManager.xfce.enable then
       "gtk2"
-    else if xserverCfg.enable || config.programs.sway.enable then
+    else if xserverCfg.enable || config.programs.sway.enable || config.programs.hyprland.enable then
       "gnome3"
     else
       "curses";
