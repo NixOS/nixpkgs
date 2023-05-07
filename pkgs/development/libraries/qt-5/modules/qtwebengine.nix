@@ -26,7 +26,7 @@
 , lib, stdenv, fetchpatch
 , version ? null
 , qtCompatVersion
-, pipewireSupport ? stdenv.isLinux
+, pipewireSupport ? stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform
 , pipewire_0_2
 , postPatch ? ""
 , nspr
