@@ -12,6 +12,7 @@
 , libaio
 , zstd
 , lz4
+, coreutils
 , python3Packages
 , util-linux
 , udev
@@ -21,17 +22,27 @@
 , getopt
 , fuse3
 , fuseSupport ? false
+, rustPlatform
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bcachefs-tools";
-  version = "unstable-2023-01-31";
+  version = "unstable-2023-05-02";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    rev = "3c39b422acd3346321185be0ce263809e2a9a23f";
-    hash = "sha256-2ci/m4JfodLiPoWfP+QCEqlk0k48zq3mKb8Pdrtln0o=";
+    rev = "6b1f79d5df9f2735192ed1a40c711cf131d4f43e";
+    hash = "sha256-MZr+RQ45KMWARzdbYmurXc1k7DC44hAKO0WaT5Fr5pQ=";
+  };
+
+  cargoRoot = "rust-src";
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = "${src}/${cargoRoot}/Cargo.lock";
+    outputHashes = {
+     "bindgen-0.64.0" = "sha256-GNG8as33HLRYJGYe0nw6qBzq86aHiGonyynEM7gaEE4=";
+    };
   };
 
   postPatch = ''
@@ -44,7 +55,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkg-config docutils python3Packages.python makeWrapper
-  ];
+  ] ++ (with rustPlatform; [
+    cargoSetupHook
+    bindgenHook
+    rust.cargo
+    rust.rustc
+  ]);
 
   buildInputs = [
     libuuid libscrypt libsodium keyutils liburcu zlib libaio
@@ -59,11 +75,10 @@ stdenv.mkDerivation {
     rm tests/test_fuse.py
   '';
 
-  # this symlink is needed for mount -t bcachefs to work
+  # this wrap is needed for mount -t bcachefs to work
   postFixup = ''
-    ln -s $out/bin/mount.bcachefs.sh $out/bin/mount.bcachefs
-    wrapProgram $out/bin/mount.bcachefs.sh \
-      --prefix PATH : ${lib.makeBinPath [ getopt util-linux ]}
+    wrapProgram $out/bin/mount.bcachefs \
+      --prefix PATH : ${lib.makeBinPath [ coreutils getopt util-linux ]}
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
