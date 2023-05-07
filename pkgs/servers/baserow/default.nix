@@ -149,6 +149,12 @@ with python.pkgs; buildPythonApplication rec {
 
   DJANGO_SETTINGS_MODULE = "baserow.config.settings.test";
 
+  passthru = {
+    # PYTHONPATH of all dependencies used by the package
+    inherit python;
+    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+
+  };
   meta = with lib; {
     description = "No-code database and Airtable alternative";
     homepage = "https://baserow.io";
