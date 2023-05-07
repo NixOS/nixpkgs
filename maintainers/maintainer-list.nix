@@ -6274,6 +6274,14 @@
     github = "higebu";
     githubId = 733288;
   };
+
+  hikari = {
+    email = "HikariNee@protonmail.com";
+    github = "HikariNee";
+    githubId = 72349937;
+    name = "Hikari";
+  };
+
   hiljusti = {
     name = "J.R. Hill";
     email = "hiljusti@so.dang.cool";
@@ -6286,6 +6294,7 @@
     githubId = 19825977;
     name = "Hiren Shah";
   };
+
   hiro98 = {
     email = "hiro@protagon.space";
     github = "vale981";
