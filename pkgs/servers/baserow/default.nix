@@ -3,6 +3,7 @@
 , makeWrapper
 , python3
 , antlr4_9
+, nixosTests
 }:
 
 let
@@ -150,6 +151,19 @@ with python.pkgs; buildPythonApplication rec {
 
   DJANGO_SETTINGS_MODULE = "baserow.config.settings.test";
 
+<<<<<<< HEAD
+=======
+  passthru = {
+    # PYTHONPATH of all dependencies used by the package
+    inherit python;
+    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+
+    tests = {
+      inherit (nixosTests) baserow;
+    };
+  };
+
+>>>>>>> a7086efd42bc (nixos/tests/web-apps/baserow: init)
   meta = with lib; {
     description = "No-code database and Airtable alternative";
     homepage = "https://baserow.io";
