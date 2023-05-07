@@ -72,7 +72,7 @@ in {
         example = {
           authorization = {
             trusted_clients = [ "10.0.0.0/24" ];
-            cors_domains = [ "https://app.fluidd.xyz" ];
+            cors_domains = [ "https://app.fluidd.xyz" "https://my.mainsail.xyz" ];
           };
         };
         description = lib.mdDoc ''
