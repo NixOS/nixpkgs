@@ -316,7 +316,7 @@ let
       sed -i xpi/build_xpi -Ee "/-aL/a '--chmod=Du=rwx',"
     '';
 
-    buildInputs = [ python3 rsync perl ];
+    nativeBuildInputs = [ python3 rsync perl ];
 
     buildPhase = ''
       python3 xpi/build_xpi -s ${zotero-client}/build -c source -m ${rev}
