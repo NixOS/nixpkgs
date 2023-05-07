@@ -1535,6 +1535,44 @@ showPhaseFooter() {
 }
 
 
+runPhase() {
+    local curPhase="${1%Phase}Phase"
+    if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then return; fi
+    if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then return; fi
+    if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then return; fi
+    if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then return; fi
+    if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then return; fi
+    if [[ "$curPhase" = installPhase && -n "${dontInstall:-}" ]]; then return; fi
+    if [[ "$curPhase" = fixupPhase && -n "${dontFixup:-}" ]]; then return; fi
+    if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then return; fi
+    if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then return; fi
+
+    if [[ -n $NIX_LOG_FD ]]; then
+        echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&"$NIX_LOG_FD"
+    fi
+
+    showPhaseHeader "$curPhase"
+    dumpVars
+
+    local startTime=$(date +"%s")
+
+    # Evaluate the variable named $curPhase if it exists, otherwise the
+    # function named $curPhase.
+    eval "${!curPhase:-$curPhase}"
+
+    local endTime=$(date +"%s")
+
+    showPhaseFooter "$curPhase" "$startTime" "$endTime"
+
+    if [ "$curPhase" = unpackPhase ]; then
+        # make sure we can cd into the directory
+        [ -z "${sourceRoot}" ] || chmod +x "${sourceRoot}"
+
+        cd "${sourceRoot:-.}"
+    fi
+}
+
+
 genericBuild() {
     # variable used by our gzip wrapper to add -n.
     # gzip is in common-path.nix and is added to nix-shell but we only want to change its behaviour in nix builds. do not move to a setupHook in gzip.
@@ -1561,39 +1599,7 @@ genericBuild() {
     # phase name is space-free, which it must be because it's the name
     # of either a shell variable or a shell function.
     for curPhase in ${phases[*]}; do
-        if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then continue; fi
-        if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then continue; fi
-        if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then continue; fi
-        if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then continue; fi
-        if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then continue; fi
-        if [[ "$curPhase" = installPhase && -n "${dontInstall:-}" ]]; then continue; fi
-        if [[ "$curPhase" = fixupPhase && -n "${dontFixup:-}" ]]; then continue; fi
-        if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then continue; fi
-        if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then continue; fi
-
-        if [[ -n $NIX_LOG_FD ]]; then
-            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&"$NIX_LOG_FD"
-        fi
-
-        showPhaseHeader "$curPhase"
-        dumpVars
-
-        local startTime=$(date +"%s")
-
-        # Evaluate the variable named $curPhase if it exists, otherwise the
-        # function named $curPhase.
-        eval "${!curPhase:-$curPhase}"
-
-        local endTime=$(date +"%s")
-
-        showPhaseFooter "$curPhase" "$startTime" "$endTime"
-
-        if [ "$curPhase" = unpackPhase ]; then
-            # make sure we can cd into the directory
-            [ -z "${sourceRoot}" ] || chmod +x "${sourceRoot}"
-
-            cd "${sourceRoot:-.}"
-        fi
+        runPhase "$curPhase"
     done
 }
 
