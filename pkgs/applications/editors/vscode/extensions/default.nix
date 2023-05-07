@@ -602,8 +602,8 @@ let
           mktplcRef = {
             name = "catppuccin-vsc-icons";
             publisher = "catppuccin";
-            version = "0.8.0";
-            sha256 = "sha256-yAiFlQZxVsYq7/TnLkvaknLA/szq8z1+zH8pCg9cs2w=";
+            version = "0.9.0";
+            sha256 = "sha256-CTR4lNm8MRjFCaBM8Euk2LAhszwV8n9rsNHGWL+cp84=";
           };
           meta = {
             description = "Soothing pastel icon theme for VSCode";
