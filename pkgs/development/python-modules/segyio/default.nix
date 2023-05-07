@@ -7,20 +7,11 @@
 , scikit-build
 , pytest
 , numpy
-, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "segyio";
-  version = "1.9.9";
-
-  patches = [
-    # PR https://github.com/equinor/segyio/pull/531
-    (fetchpatch {
-        url = "https://github.com/equinor/segyio/commit/628bc5e02d0f98b89fe70b072df9b8e677622e9e.patch";
-        hash = "sha256-j+vqHZNfPIh+yWBgqbGD3W04FBvFiDJKnmcC/oTk3a8=";
-    })
-  ];
+  version = "1.9.11";
 
   postPatch = ''
     # Removing unecessary build dependency
@@ -35,8 +26,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "equinor";
     repo = pname;
-    rev = version;
-    hash = "sha256-L3u5BHS5tARS2aIiQbumADkuzw1Aw4Yuav8H8tRNYNg=";
+    rev = "v${version}";
+    hash = "sha256-4izeMRgg5nJ9pRfSEMDlKSYYNWkhbKEzIz7czea6Vrc=";
   };
 
   nativeBuildInputs = [ cmake ninja python scikit-build ];

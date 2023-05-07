@@ -775,12 +775,12 @@ final: prev:
 
   auto-session = buildVimPluginFrom2Nix {
     pname = "auto-session";
-    version = "2023-04-29";
+    version = "2023-05-05";
     src = fetchFromGitHub {
       owner = "rmagatti";
       repo = "auto-session";
-      rev = "9752e6b11327329ed3ba5ec2bec36abe4535a8e0";
-      sha256 = "0hqh8mzs9vxfasxb1sr4vx2igcjl9f9vmf5spd7vriaxi331sf1p";
+      rev = "21033c6815f249a7839c3a85fc8a6b44d74925c9";
+      sha256 = "1xw2azfkwn2q0nz3g67wy6wkaqlmhxy26x7bnjl7n21lh2gxv7fm";
     };
     meta.homepage = "https://github.com/rmagatti/auto-session/";
   };
@@ -2827,6 +2827,18 @@ final: prev:
     meta.homepage = "https://github.com/sainnhe/edge/";
   };
 
+  edgedb-vim = buildVimPluginFrom2Nix {
+    pname = "edgedb-vim";
+    version = "2022-10-26";
+    src = fetchFromGitHub {
+      owner = "edgedb";
+      repo = "edgedb-vim";
+      rev = "a888b285a30ede6f5fcb03617733b3974356c450";
+      sha256 = "012jd6652f681ja22gvnrnlvsn1fllj9vmf6idghcdzz6lyjir07";
+    };
+    meta.homepage = "https://github.com/edgedb/edgedb-vim/";
+  };
+
   editorconfig-vim = buildVimPluginFrom2Nix {
     pname = "editorconfig-vim";
     version = "2023-03-22";
@@ -3288,12 +3300,12 @@ final: prev:
 
   fzf-lua = buildVimPluginFrom2Nix {
     pname = "fzf-lua";
-    version = "2023-04-27";
+    version = "2023-05-05";
     src = fetchFromGitHub {
       owner = "ibhagwan";
       repo = "fzf-lua";
-      rev = "79c7c3480cc363b3d4ecdfcb8b56623d9decd570";
-      sha256 = "0vay2k6hv30fhchjd59m4xqdyl9642xs5gjlc1rrb9v3s2xs9g53";
+      rev = "2dbedc91386a78ce08967135969d39392f7f36d7";
+      sha256 = "11850qbyr83bh5im75lf74ssizw956gf3n34s3wcqdhxx6nv5xbp";
     };
     meta.homepage = "https://github.com/ibhagwan/fzf-lua/";
   };
@@ -6419,12 +6431,12 @@ final: prev:
 
   nvim-highlite = buildVimPluginFrom2Nix {
     pname = "nvim-highlite";
-    version = "2023-05-04";
+    version = "2023-05-05";
     src = fetchFromGitHub {
       owner = "Iron-E";
       repo = "nvim-highlite";
-      rev = "624fddaf856add7a4a9a40b33fad3bb3818f4fc8";
-      sha256 = "1r65wcpbdqi05mpa9382bawv32l2r0s8avr9in5q07sl66wd59v8";
+      rev = "d5654c3a8951f6c503cb8083a0e9dbfc35a5f59c";
+      sha256 = "1c00jijxqa83xbg3spn8830h8gmn1mqh6m4jifhahglanh3y5228";
     };
     meta.homepage = "https://github.com/Iron-E/nvim-highlite/";
   };
@@ -14305,12 +14317,12 @@ final: prev:
 
   vista-vim = buildVimPluginFrom2Nix {
     pname = "vista.vim";
-    version = "2023-04-17";
+    version = "2023-05-05";
     src = fetchFromGitHub {
       owner = "liuchengxu";
       repo = "vista.vim";
-      rev = "cbe87c86505d80fe5ad7fd508f2d92185f2e2aa1";
-      sha256 = "0vx99bhrgwr72az85imp7qwni54q9kk1v9vhdbglfc4h1rd3fzm5";
+      rev = "522a5e0ef955c037d530d5c89944043c92e4e8da";
+      sha256 = "0g9vjji4760824q7w0ik89b1wrq0k0rv54c3wmpxk9hxfd34wlb1";
     };
     meta.homepage = "https://github.com/liuchengxu/vista.vim/";
   };

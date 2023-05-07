@@ -12,7 +12,7 @@ let
   #     * update lsquic and boringssl if necessarry, lsquic.cr depends on
   #       the same version of lsquic and lsquic requires the boringssl
   #       commit mentioned in its README
-  versions = builtins.fromJSON (builtins.readFile ./versions.json);
+  versions = lib.importJSON ./versions.json;
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";

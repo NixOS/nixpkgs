@@ -78,8 +78,7 @@ stdenvNoLibs.mkDerivation rec {
         tm.h \
         options.h \
         insn-constants.h \
-        insn-modes.h \
-        gcov-iov.h
+        insn-modes.h
     )
     mkdir -p "$buildRoot/gcc/include"
   ''
@@ -141,6 +140,9 @@ stdenvNoLibs.mkDerivation rec {
     # Do not have dynamic linker without libc
     "--enable-static"
     "--disable-shared"
+
+    # Avoid dependency on gcc.
+    "--disable-gcov"
   ];
 
   makeFlags = [ "MULTIBUILDTOP:=../" ];

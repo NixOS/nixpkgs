@@ -3132,6 +3132,8 @@ with pkgs;
 
   bunyan-rs = callPackage ../development/tools/bunyan-rs { };
 
+  butt = callPackage ../applications/audio/butt { };
+
   calcure = callPackage ../applications/misc/calcure { };
 
   callaudiod = callPackage ../applications/audio/callaudiod { };
@@ -3504,6 +3506,8 @@ with pkgs;
   itchiodl = callPackage ../games/itchiodl { };
 
   itd = callPackage ../applications/misc/itd { };
+
+  kavita = callPackage ../servers/web-apps/kavita { };
 
   kord = callPackage ../applications/misc/kord { };
 
@@ -5446,6 +5450,8 @@ with pkgs;
   nautilus-open-any-terminal = callPackage ../tools/misc/nautilus-open-any-terminal { };
 
   n2n = callPackage ../tools/networking/n2n { };
+
+  nest-cli = callPackage ../development/tools/nest-cli { };
 
   nextdns = callPackage ../applications/networking/nextdns { };
 
@@ -10623,6 +10629,8 @@ with pkgs;
 
   offlineimap = callPackage ../tools/networking/offlineimap { };
 
+  offzip = callPackage ../tools/compression/offzip { };
+
   ofono-phonesim = libsForQt5.callPackage ../development/tools/ofono-phonesim { };
 
   ogdf = callPackage ../development/libraries/ogdf { };
@@ -13074,7 +13082,9 @@ with pkgs;
 
   trickle = callPackage ../tools/networking/trickle { };
 
-  inherit (nodePackages) triton;
+  node-manta = callPackage ../tools/admin/manta { };
+
+  triton = callPackage ../tools/admin/triton { };
 
   triggerhappy = callPackage ../tools/inputmethods/triggerhappy { };
 
@@ -13348,9 +13358,7 @@ with pkgs;
 
   verilator = callPackage ../applications/science/electronics/verilator { };
 
-  verilog = callPackage ../applications/science/electronics/verilog {
-    autoconf = buildPackages.autoconf269;
-  };
+  verilog = callPackage ../applications/science/electronics/verilog { };
 
   versus = callPackage ../applications/networking/versus { };
 
@@ -17997,7 +18005,6 @@ with pkgs;
 
   libgcc = callPackage ../development/libraries/gcc/libgcc {
     stdenvNoLibs = gccStdenvNoLibs; # cannot be built with clang it seems
-    gcc = gcc11; # fails to build with gcc12
   };
 
   # This is for e.g. LLVM libraries on linux.
@@ -24174,8 +24181,6 @@ with pkgs;
   ucommon = callPackage ../development/libraries/ucommon { };
 
   v8 = darwin.apple_sdk_11_0.callPackage ../development/libraries/v8 { };
-
-  v8_8_x = callPackage ../development/libraries/v8/8_x.nix { };
 
   vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
 
@@ -38098,7 +38103,7 @@ with pkgs;
 
   qucs = callPackage ../applications/science/electronics/qucs { };
 
-  qucs-s = callPackage ../applications/science/electronics/qucs-s { };
+  qucs-s = qt6Packages.callPackage ../applications/science/electronics/qucs-s { };
 
   xcircuit = callPackage ../applications/science/electronics/xcircuit { };
 
@@ -38435,6 +38440,8 @@ with pkgs;
 
   bees = callPackage ../tools/filesystems/bees { };
 
+  blahaj = callPackage ../tools/misc/blahaj { };
+
   bootil = callPackage ../development/libraries/bootil { };
 
   brgenml1lpr = pkgsi686Linux.callPackage ../misc/cups/drivers/brgenml1lpr { };
@@ -38720,6 +38727,8 @@ with pkgs;
   lima-bin = callPackage ../applications/virtualization/lima/bin.nix { };
 
   logtop = callPackage ../tools/misc/logtop { };
+
+  imaginer = callPackage ../applications/misc/imaginer { };
 
   igraph = callPackage ../development/libraries/igraph { };
 
@@ -39708,6 +39717,8 @@ with pkgs;
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator { };
 
   xlayoutdisplay = callPackage ../tools/X11/xlayoutdisplay { };
+
+  xlibinput-calibrator = callPackage ../tools/inputmethods/xlibinput_calibrator { };
 
   xlog = callPackage ../applications/radio/xlog { };
 
