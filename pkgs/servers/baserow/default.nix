@@ -63,6 +63,7 @@ with python.pkgs; buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
+    baserow_premium
     autobahn
     advocate
     antlr4-python3-runtime
