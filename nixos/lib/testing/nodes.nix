@@ -1,7 +1,17 @@
 testModuleArgs@{ config, lib, hostPkgs, nodes, ... }:
 
 let
-  inherit (lib) mkOption mkForce optional types mapAttrs mkDefault mkIf mdDoc;
+  inherit (lib)
+    literalExpression
+    literalMD
+    mapAttrs
+    mdDoc
+    mkDefault
+    mkIf
+    mkOption mkForce
+    optional
+    types
+    ;
 
   baseOS =
     import ../eval-config.nix {
@@ -85,6 +95,17 @@ in
       '';
     };
 
+    node.pkgsReadOnly = mkOption {
+      description = mdDoc ''
+        Whether to make the `nixpkgs.*` options read-only. This is only relevant when [`node.pkgs`](#test-opt-node.pkgs) is set.
+
+        Set this to `false` when any of the [`nodes`](#test-opt-nodes) needs to configure any of the `nixpkgs.*` options. This will slow down evaluation of your test a bit.
+      '';
+      type = types.bool;
+      default = config.node.pkgs != null;
+      defaultText = literalExpression ''node.pkgs != null'';
+    };
+
     node.specialArgs = mkOption {
       type = types.lazyAttrsOf types.raw;
       default = { };
@@ -118,7 +139,7 @@ in
 
     passthru.nodes = config.nodesCompat;
 
-    defaults = mkIf (config.node.pkgs != null) {
+    defaults = mkIf config.node.pkgsReadOnly {
       nixpkgs.pkgs = config.node.pkgs;
       imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
       disabledModules = [{ key = "nodes.nix-pkgs"; }];
