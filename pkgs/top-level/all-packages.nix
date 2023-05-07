@@ -495,6 +495,8 @@ with pkgs;
 
   dae = callPackage ../tools/networking/dae { };
 
+  darling = callPackage ../applications/emulators/darling { };
+
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
