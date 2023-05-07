@@ -340,11 +340,9 @@ let
     startupWMClass = pname;
     mimeTypes = [ "x-scheme-handler/zotero" "text/plain" ];
     terminal = false;
-    actions = {
-      profile-manager-window = {
-        name = "Profile Manager";
-        exec = "${pname} -P";
-      };
+    actions.profile-manager-window = {
+      name = "Profile Manager";
+      exec = "${pname} -P";
     };
   };
 in
