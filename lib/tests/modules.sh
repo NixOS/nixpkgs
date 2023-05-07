@@ -247,6 +247,14 @@ checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-if-foo-e
 checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-if-enable.nix
 checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-enable-if.nix
 
+# Check importApply
+checkConfigOutput '"abc"' config.value ./importApply.nix
+# importApply does not set a key.
+# Disabling the function file is not sufficient, because importApply can't reasonably assume that the key is unique.
+# e.g. user may call it multiple times with different arguments and expect each of the module to apply.
+# While this is excusable for the disabledModules aspect, it is not for the deduplication of modules.
+checkConfigOutput '"abc"' config.value ./importApply-disabling.nix
+
 # Check disabledModules with config definitions and option declarations.
 set -- config.enable ./define-enable.nix ./declare-enable.nix
 checkConfigOutput '^true$' "$@"

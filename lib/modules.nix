@@ -1366,6 +1366,48 @@ let
       ]);
     };
 
+  /*
+    Imports a nix file much like the module system would, but also pass extra
+    arguments.
+
+    This solves the problem of being unable to pass a value from the lexical
+    scope to a single module. This occurs when you return a module from a rich
+    scope, such as that of a flake.
+
+    While you could do `import <file> { ... }` yourself, the result
+    is not as good, because `import` is unaware and does not return the location.
+    `importApply` does keep this location, so that it can be used in error
+    messages.
+
+    The nix file must contain a function that returns a module. A module may
+    itself be a function. See the example below.
+
+    This function does not add support for deduplication and `disabledModules`,
+    although that could be achieved by wrapping the returned module. The reason
+    for this is that second argument of `importApply` may not be the same for
+    different invocations of `importApply`. Hence, the file name may not be a
+    key.
+
+    Example
+
+        # lib.nix
+        imports = [
+          (lib.modules.importApply ./module.nix { bar = bar; })
+        ];
+
+        # module.nix
+        { bar }:
+        { lib, config, ... }:
+        {
+          options = ...;
+          config = ... bar ...;
+        }
+
+  */
+  importApply =
+    modulePath: staticArgs:
+      lib.setDefaultModuleLocation modulePath (import modulePath staticArgs);
+
   /* Use this function to import a JSON file as NixOS configuration.
 
      modules.importJSON :: path -> attrs
@@ -1415,6 +1457,7 @@ private //
     filterOverrides'
     fixMergeModules
     fixupOptionType  # should be private?
+    importApply
     importJSON
     importTOML
     mergeDefinitions
