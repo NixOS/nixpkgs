@@ -10588,6 +10588,8 @@ self: super: with self; {
 
   ruffus = callPackage ../development/python-modules/ruffus { };
 
+  rules = callPackage ../development/python-modules/rules { };
+
   ruuvitag-ble = callPackage ../development/python-modules/ruuvitag-ble { };
 
   ruyaml = callPackage ../development/python-modules/ruyaml { };
