@@ -38,7 +38,7 @@ let
 
   # A description of all available google-cloud-sdk components.
   # It's a JSON file with a list of components, along with some metadata
-  snapshot = builtins.fromJSON (builtins.readFile snapshotPath);
+  snapshot = lib.importJSON snapshotPath;
 
   # Generate a snapshot file for a single component.  It has the same format as
   # `snapshot`, but only contains a single component.  These files are

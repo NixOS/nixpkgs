@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, unzip }:
 let
-  sources = builtins.fromJSON (builtins.readFile ./sources.json);
+  sources = lib.importJSON ./sources.json;
   platform =
     if (builtins.hasAttr stdenv.hostPlatform.system sources.platforms) then
       builtins.getAttr (stdenv.hostPlatform.system) sources.platforms
