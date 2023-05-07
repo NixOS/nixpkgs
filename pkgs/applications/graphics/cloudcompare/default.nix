@@ -13,6 +13,7 @@
 , mpfr
 , pdal
 , pcl
+, xorg
 , qtbase
 , qtsvg
 , qttools
@@ -49,6 +50,7 @@ mkDerivation rec {
     mpfr
     pdal
     pcl
+    xorg.libXt
     qtbase
     qtsvg
     qttools
