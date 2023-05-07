@@ -10,6 +10,7 @@ let
     mkIf
     mkOption mkForce
     optional
+    optionalAttrs
     types
     ;
 
@@ -26,7 +27,7 @@ let
             {
               virtualisation.qemu.package = testModuleArgs.config.qemu.package;
             })
-          ({
+          (optionalAttrs (!config.node.pkgsReadOnly) {
             key = "nodes.nix-pkgs";
             config = {
               # Ensure we do not use aliases. Ideally this is only set
@@ -142,7 +143,6 @@ in
     defaults = mkIf config.node.pkgsReadOnly {
       nixpkgs.pkgs = config.node.pkgs;
       imports = [ ../../modules/misc/nixpkgs/read-only.nix ];
-      disabledModules = [{ key = "nodes.nix-pkgs"; }];
     };
 
   };
