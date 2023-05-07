@@ -145,6 +145,8 @@ with python.pkgs; buildPythonApplication rec {
     "tests/baserow/ws"
   ];
 
+  pythonImportsCheck = [ "baserow" ];
+
   DJANGO_SETTINGS_MODULE = "baserow.config.settings.test";
 
   meta = with lib; {
