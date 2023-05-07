@@ -79,11 +79,7 @@ let
     # warnIf pkgs.config.allowAliases "nixosTests: pkgs includes aliases."
     {
       _class = "nixosTest";
-      defaults = {
-        nixpkgs.pkgs = pkgs;
-        imports = [ ../modules/misc/nixpkgs/read-only.nix ];
-        disabledModules = [{ key = "nodes.nix-pkgs"; }];
-      };
+      node.pkgs = pkgs;
     };
 
 in {
