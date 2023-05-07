@@ -5,7 +5,7 @@
 , patchelf
 , makeWrapper
 , openssl
-, libxcrypt
+, libxcrypt-legacy
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
 
-  libPath = lib.makeLibraryPath [ openssl libxcrypt ];
+  libPath = lib.makeLibraryPath [ openssl libxcrypt-legacy ];
 
   buildCommand = ''
     mkdir -p $out/bin/
