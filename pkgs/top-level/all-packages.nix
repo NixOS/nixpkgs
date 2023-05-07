@@ -13592,6 +13592,7 @@ with pkgs;
   clang_13 = llvmPackages_13.clang;
   clang_14 = llvmPackages_14.clang;
   clang_15 = llvmPackages_15.clang;
+  clang_16 = llvmPackages_16.clang;
 
   clang-tools = callPackage ../development/tools/clang-tools {
     llvmPackages = llvmPackages_latest;
@@ -13639,6 +13640,10 @@ with pkgs;
 
   clang-tools_15 = callPackage ../development/tools/clang-tools {
     llvmPackages = llvmPackages_15;
+  };
+
+  clang-tools_16 = callPackage ../development/tools/clang-tools {
+    llvmPackages = llvmPackages_16;
   };
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
@@ -14636,6 +14641,7 @@ with pkgs;
   lld_13 = llvmPackages_13.lld;
   lld_14 = llvmPackages_14.lld;
   lld_15 = llvmPackages_15.lld;
+  lld_16 = llvmPackages_16.lld;
 
   lldb = llvmPackages_latest.lldb;
   lldb_5 = llvmPackages_5.lldb;
@@ -14649,6 +14655,7 @@ with pkgs;
   lldb_13 = llvmPackages_13.lldb;
   lldb_14 = llvmPackages_14.lldb;
   lldb_15 = llvmPackages_15.lldb;
+  lldb_16 = llvmPackages_16.lldb;
 
   llvm = llvmPackages.llvm;
   llvm_5  = llvmPackages_5.llvm;
@@ -14662,6 +14669,7 @@ with pkgs;
   llvm_13 = llvmPackages_13.llvm;
   llvm_14 = llvmPackages_14.llvm;
   llvm_15 = llvmPackages_15.llvm;
+  llvm_16 = llvmPackages_16.llvm;
 
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
@@ -14759,6 +14767,13 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_15.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_15.libraries or llvmPackages_15.libraries;
     targetLlvm = targetPackages.llvmPackages_15.llvm or llvmPackages_15.llvm;
+  }));
+
+  llvmPackages_16 = recurseIntoAttrs (callPackage ../development/compilers/llvm/16 ({
+    inherit (stdenvAdapters) overrideCC;
+    buildLlvmTools = buildPackages.llvmPackages_16.tools;
+    targetLlvmLibraries = targetPackages.llvmPackages_16.libraries or llvmPackages_16.libraries;
+    targetLlvm = targetPackages.llvmPackages_16.llvm or llvmPackages_16.llvm;
   }));
 
   llvmPackages_latest = llvmPackages_14;
@@ -20121,6 +20136,12 @@ with pkgs;
   libcue = callPackage ../development/libraries/libcue { };
 
   libcutl = callPackage ../development/libraries/libcutl { };
+
+  libcxxrt = callPackage ../development/libraries/libcxxrt {
+    stdenv = if stdenv.hostPlatform.useLLVM or false
+             then overrideCC stdenv buildPackages.llvmPackages.tools.clangNoLibcxx
+             else stdenv;
+  };
 
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
