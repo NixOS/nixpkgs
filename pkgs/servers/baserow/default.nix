@@ -52,6 +52,10 @@ with python.pkgs; buildPythonApplication rec {
     sed 's/[~<>=].*//' -i requirements/base.in requirements/base.txt
     sed 's/zope-interface/zope.interface/' -i requirements/base.in requirements/base.txt
     sed 's/\[standard\]//' -i requirements/base.in requirements/base.txt
+    # This variable do not support `redis+socket://`, let's separate all of them.
+    sed 's/CELERY_REDBEAT_REDIS_URL = REDIS_URL/CELERY_REDBEAT_REDIS_URL = os.getenv("REDIS_BEAT_URL", REDIS_URL)/' -i src/baserow/config/settings/base.py
+    sed 's/\"LOCATION\": REDIS_URL/\"LOCATION\": os.getenv("DJANGO_REDIS_URL", REDIS_URL)/' -i src/baserow/config/settings/base.py
+    sed 's/\"hosts\": \[REDIS_URL\]/\"hosts\": \[os.getenv("DJANGO_CHANNEL_REDIS_URL", REDIS_URL)\]/' -i src/baserow/config/settings/base.py
   '';
 
   nativeBuildInputs = [
