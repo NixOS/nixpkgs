@@ -93,7 +93,7 @@ let
             name = lib.strings.getName drv;
           in
           {
-            name =
+            name = "lib/" +
               (lib.strings.replaceStrings [ "-" ] [ "_" ]
                 (lib.strings.removePrefix "tree-sitter-"
                   (lib.strings.removeSuffix "-grammar" name)))
