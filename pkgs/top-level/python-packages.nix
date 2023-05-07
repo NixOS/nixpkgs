@@ -7234,6 +7234,8 @@ self: super: with self; {
 
   paver = callPackage ../development/python-modules/paver { };
 
+  paypal-checkout-serversdk = callPackage ../development/python-modules/paypal-checkout-serversdk { };
+
   paypalhttp = callPackage ../development/python-modules/paypalhttp { };
 
   paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
