@@ -2703,6 +2703,8 @@ self: super: with self; {
 
   django-mptt = callPackage ../development/python-modules/django-mptt { };
 
+  django-mysql = callPackage ../development/python-modules/django-mysql { };
+
   django_nose = callPackage ../development/python-modules/django_nose { };
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
