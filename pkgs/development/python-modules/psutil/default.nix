@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.9.4";
+  version = "5.9.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PX+XOetDXUsTOJRKviP0lYS95TlfJ0h9LuJa2ah3SmI=";
+    hash = "sha256-VBBjjk3znFTZV/xRzgMEis2ObWCrwPUQevUeX7Vm6zw=";
   };
 
   buildInputs =
@@ -66,6 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Process and system utilization information interface";
     homepage = "https://github.com/giampaolo/psutil";
+    changelog = "https://github.com/giampaolo/psutil/blob/release-${version}/HISTORY.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jonringer ];
   };

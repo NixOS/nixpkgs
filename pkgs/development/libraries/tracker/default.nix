@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.5.0";
+  version = "3.5.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "EylCddu7rZY0s6g5DAjm8Svr/oT2zK+3Kyewwjuo2i8=";
+    sha256 = "+XLVCse6/czxE7HrmdyuNUBGhameVb/vFvOsg7Tel00=";
   };
 
   strictDeps = true;
@@ -102,8 +102,8 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck =
-    # https://gitlab.gnome.org/GNOME/tracker/-/issues/397
-    !stdenv.isAarch64
+    # https://gitlab.gnome.org/GNOME/tracker/-/issues/402
+    !stdenv.isDarwin
     # https://gitlab.gnome.org/GNOME/tracker/-/issues/398
     && !stdenv.is32bit;
 

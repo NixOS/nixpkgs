@@ -100,6 +100,8 @@
 , MediaToolbox
 , enableGplPlugins ? true
 , bluezSupport ? stdenv.isLinux
+# Causes every application using GstDeviceMonitor to send mDNS queries every 2 seconds
+, microdnsSupport ? false
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
@@ -151,7 +153,6 @@ stdenv.mkDerivation rec {
     #webrtc-audio-processing_1 # required by isac
     libbs2b
     libmodplug
-    libmicrodns
     openjpeg
     libopenmpt
     libopus
@@ -203,6 +204,8 @@ stdenv.mkDerivation rec {
     x265
   ] ++ lib.optionals bluezSupport [
     bluez
+  ] ++ lib.optionals microdnsSupport [
+    libmicrodns
   ] ++ lib.optionals stdenv.isLinux [
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
@@ -286,6 +289,7 @@ stdenv.mkDerivation rec {
     "-Dgs=disabled" # depends on `google-cloud-cpp`
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
+    "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
     (lib.mesonEnable "doc" enableDocumentation)
   ]
