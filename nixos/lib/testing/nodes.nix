@@ -3,11 +3,9 @@ testModuleArgs@{ config, lib, hostPkgs, nodes, ... }:
 let
   inherit (lib) mkOption mkForce optional types mapAttrs mkDefault mdDoc;
 
-  system = hostPkgs.stdenv.hostPlatform.system;
-
   baseOS =
     import ../eval-config.nix {
-      inherit system;
+      system = null; # use modularly defined system
       inherit (config.node) specialArgs;
       modules = [ config.defaults ];
       baseModules = (import ../../modules/module-list.nix) ++
@@ -17,11 +15,16 @@ let
           ({ config, ... }:
             {
               virtualisation.qemu.package = testModuleArgs.config.qemu.package;
-
+            })
+          ({
+            config = {
               # Ensure we do not use aliases. Ideally this is only set
               # when the test framework is used by Nixpkgs NixOS tests.
               nixpkgs.config.allowAliases = false;
-            })
+              # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
+              nixpkgs.system = hostPkgs.stdenv.hostPlatform.system;
+            };
+          })
           testModuleArgs.config.extraBaseModules
         ];
     };
