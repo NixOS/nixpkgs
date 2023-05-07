@@ -17,7 +17,6 @@ buildPythonPackage rec {
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
-  # PyPi lacks tests.
   src = fetchFromGitHub {
     owner = "eigenein";
     repo = "protobuf";
@@ -44,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of Protocol Buffers with dataclass-based schemas";
     homepage = "https://github.com/eigenein/protobuf";
+    changelog = "https://github.com/eigenein/protobuf/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ chuangzhu ];
   };
