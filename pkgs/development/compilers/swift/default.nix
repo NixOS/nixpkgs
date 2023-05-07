@@ -97,6 +97,8 @@ let
       inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
     };
 
+    swift-format = callPackage ./swift-format { };
+
   };
 
 in self
