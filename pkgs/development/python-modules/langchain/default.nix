@@ -61,7 +61,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.158";
+  version = "0.0.159";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -70,7 +70,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-R8l7Y33CiTL4px5A7rB6PHMnSjvINZBrgANwUMFkls8=";
+    hash = "sha256-Q7sIwYD/5ELFLo3J9FNYIDpR999lGhgmp1H5LsvjHdM=";
   };
 
   postPatch = ''
