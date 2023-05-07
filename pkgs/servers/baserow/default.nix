@@ -3,6 +3,7 @@
 , makeWrapper
 , python3
 , antlr4_9
+, nixosTests
 }:
 
 let
@@ -154,7 +155,11 @@ with python.pkgs; buildPythonApplication rec {
     inherit python;
     pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
 
+    tests = {
+      inherit (nixosTests) baserow;
+    };
   };
+
   meta = with lib; {
     description = "No-code database and Airtable alternative";
     homepage = "https://baserow.io";
