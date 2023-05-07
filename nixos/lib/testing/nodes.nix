@@ -17,6 +17,7 @@ let
               virtualisation.qemu.package = testModuleArgs.config.qemu.package;
             })
           ({
+            key = "nodes.nix-pkgs";
             config = {
               # Ensure we do not use aliases. Ideally this is only set
               # when the test framework is used by Nixpkgs NixOS tests.
