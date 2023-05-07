@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "whatthepatch";
-  version = "1.0.4";
+  version = "1.0.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "cscorley";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-pejph0WyhryS2injlFElFozIDl6zJeiENh6fqh6982s=";
+    hash = "sha256-1+OIs77Vyx56pgf7VSmi4UsPgkv8qZXFm8L2jK2CTMk=";
   };
 
   nativeBuildInputs = [
