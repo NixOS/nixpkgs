@@ -6,6 +6,7 @@
 , pkg-config
 , rustPlatform
 , nix-update-script
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [ "--version-regex" "harmonia-v(.*)" ];
     };
+    tests = { inherit (nixosTests) harmonia; };
   };
 
   meta = with lib; {
