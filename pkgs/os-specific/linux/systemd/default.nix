@@ -452,7 +452,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddebug-shell=${bashInteractive}/bin/bash"
     "-Dglib=${lib.boolToString withTests}"
     # while we do not run tests we should also not build them. Removes about 600 targets
-    "-Dtests=false"
+    "-Dtests=${lib.boolToString withTests}"
     "-Dacl=${lib.boolToString withAcl}"
     "-Danalyze=${lib.boolToString withAnalyze}"
     "-Daudit=${lib.boolToString withAudit}"
@@ -677,7 +677,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-D__UAPI_DEF_ETHHDR=0"
   ]);
 
-  doCheck = false; # fails a bunch of tests
+  doCheck = withTests; # fails a bunch of tests
 
   # trigger the test -n "$DESTDIR" || mutate in upstreams build system
   preInstall = ''

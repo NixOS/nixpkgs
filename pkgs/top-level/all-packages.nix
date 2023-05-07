@@ -27446,6 +27446,21 @@ with pkgs;
     withLibidn2 = true;
   };
 
+  systemdTests = vmTools.runInLinuxVM ((systemd.override {
+    withTests = true;
+  }).overrideAttrs (old: {
+    postPatch = ''
+      ${old.postPatch or ""}
+      mkdir -p /usr/bin
+      ln -s ${coreutils}/bin/env /usr/bin/env
+    '';
+    # systemd-detect-virt should be on PATH
+    preCheck = ''
+      PATH=${lib.getBin systemd}/bin:$PATH
+    '';
+    memSize = 1024;
+  }));
+
 
   udev =
     if (with stdenv.hostPlatform; isLinux && isStatic) then libudev-zero
