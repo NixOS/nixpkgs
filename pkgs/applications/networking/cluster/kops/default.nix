@@ -14,7 +14,7 @@ let
           inherit sha256;
         };
 
-        vendorSha256 = null;
+        vendorHash = null;
 
         nativeBuildInputs = [ installShellFiles ];
 
@@ -62,8 +62,8 @@ rec {
   };
 
   kops_1_26 = mkKops rec {
-    version = "1.26.2";
-    sha256 = "sha256-PY/dcKyciPg3OyUPeBwYed6ADprpI2/+8d8SuGTXWqc=";
+    version = "1.26.3";
+    sha256 = "sha256-8IQbVFqH5r8H7z7U441Aox4yp3KF/sqs3+JpMru8qwQ=";
     rev = "v${version}";
   };
 }

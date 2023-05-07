@@ -9,6 +9,7 @@
 , hyprland-share-picker
 , inih
 , libdrm
+, libuuid
 , mesa
 , pipewire
 , systemd
@@ -36,6 +37,7 @@ stdenv.mkDerivation {
     hyprland-protocols
     inih
     libdrm
+    libuuid
     mesa
     pipewire
     systemd
