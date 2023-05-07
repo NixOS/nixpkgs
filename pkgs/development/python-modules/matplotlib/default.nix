@@ -116,6 +116,7 @@ buildPythonPackage rec {
     pkg-config
     pybind11
     setuptools-scm
+    numpy
   ];
 
   buildInputs = [
