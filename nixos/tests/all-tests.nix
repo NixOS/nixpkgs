@@ -46,7 +46,7 @@ let
   inherit
     (rec {
       doRunTest = arg: ((import ../lib/testing-python.nix { inherit system pkgs; }).evalTest {
-        imports = [ arg ];
+        imports = [ arg readOnlyPkgs ];
       }).config.result;
       findTests = tree:
         if tree?recurseForDerivations && tree.recurseForDerivations
@@ -94,7 +94,7 @@ in {
 
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
-  acme = runTest { imports = [ ./acme.nix readOnlyPkgs ]; };
+  acme = runTest ./acme.nix;
   adguardhome = runTest ./adguardhome.nix;
   aesmd = runTestOn ["x86_64-linux"] ./aesmd.nix;
   agate = runTest ./web-servers/agate.nix;
