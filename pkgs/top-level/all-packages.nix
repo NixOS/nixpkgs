@@ -8019,7 +8019,7 @@ with pkgs;
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
-  google-clasp = nodePackages."@google/clasp";
+  google-clasp = callPackage ../development/tools/google-clasp { };
 
   google-compute-engine = with python38.pkgs; toPythonApplication google-compute-engine;
 
@@ -14620,6 +14620,11 @@ with pkgs;
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
     llvmPackages = llvmPackages_latest;
     inherit (llvmPackages_latest) clang;
+  };
+
+  clazy = callPackage ../development/tools/analysis/clazy {
+    llvmPackages = llvmPackages_latest;
+    stdenv = llvmPackages_latest.stdenv;
   };
 
   #Use this instead of stdenv to build with clang
@@ -38604,6 +38609,8 @@ with pkgs;
   faust2alsa = callPackage ../applications/audio/faust/faust2alsa.nix { };
 
   faust2csound = callPackage ../applications/audio/faust/faust2csound.nix { };
+
+  faust2sc = callPackage ../applications/audio/faust/faust2sc.nix { };
 
   faust2firefox = callPackage ../applications/audio/faust/faust2firefox.nix { };
 

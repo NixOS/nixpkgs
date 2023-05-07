@@ -50,7 +50,7 @@ let
 
 
     passthru = {
-      inherit wrap wrapWithBuildEnv;
+      inherit wrap wrapWithBuildEnv faust2ApplBase;
     };
 
 
