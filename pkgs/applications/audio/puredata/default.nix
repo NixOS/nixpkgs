@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "puredata";
-  version = "0.50-2";
+  version = "0.53-2";
 
   src = fetchurl {
     url = "http://msp.ucsd.edu/Software/pd-${version}.src.tar.gz";
-    sha256 = "0dz6r6jy0zfs1xy1xspnrxxks8kddi9c7pxz4vpg2ygwv83ghpg5";
+    sha256 = "sha256-Z/QAHq+22cuoxwkAUN2EuBTgAMrorSosrW0ST2Mt5ok=";
   };
 
   nativeBuildInputs = [ autoreconfHook gettext makeWrapper ];
@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.goibhniu ];
     mainProgram = "pd";
+    changelog = "https://msp.puredata.info/Pd_documentation/x5.htm#s1";
   };
 }
