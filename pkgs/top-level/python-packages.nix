@@ -6999,6 +6999,8 @@ self: super: with self; {
 
   odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
 
+  oelint-parser = callPackage ../development/python-modules/oelint-parser { };
+
   offtrac = callPackage ../development/python-modules/offtrac { };
 
   ofxclient = callPackage ../development/python-modules/ofxclient { };
