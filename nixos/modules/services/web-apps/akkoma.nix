@@ -265,8 +265,7 @@ let
         psql -tAc "CREATE DATABASE "${escapeShellArg (escapeSqlId db.database)}"
           OWNER "${escapeShellArg (escapeSqlId db.username)}"
           TEMPLATE template0
-          ENCODING 'utf8'
-          LOCALE 'C'"
+          ENCODING 'utf8'"
 
       psql -f "$setupSql"
     '';
