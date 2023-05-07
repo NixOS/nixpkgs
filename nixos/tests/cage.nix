@@ -20,13 +20,13 @@ import ./make-test-python.nix ({ pkgs, ...} :
     };
 
     # Need to switch to a different GPU driver than the default one (-vga std) so that Cage can launch:
-    virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
+    virtualisation.qemu.options = [ "-vga none" "-device virtio-vga-gl" "-display gtk,gl=on" ];
   };
 
   enableOCR = true;
 
   testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
+    user = nodes.machine.users.users.alice;
   in ''
     with subtest("Wait for cage to boot up"):
         start_all()
