@@ -11365,6 +11365,8 @@ with pkgs;
 
   profile-sync-daemon = callPackage ../tools/misc/profile-sync-daemon { };
 
+  profile-sync-daemon-user = callPackage ../tools/misc/profile-sync-daemon-user { };
+
   projectlibre = callPackage ../applications/misc/projectlibre {
     jre = jre8;
     jdk = jdk8;

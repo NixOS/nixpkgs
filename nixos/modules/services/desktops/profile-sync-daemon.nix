@@ -13,6 +13,14 @@ in {
         Whether to enable the Profile Sync daemon.
       '';
     };
+    package = mkOption {
+      type = package;
+      default = pkgs.profile-sync-daemon;
+      example = literalExpression "pkgs.profile-sync-daemon-user";
+      description = ''
+        Profile Sync daemon package to use.
+      '';
+    };
     resyncTimer = mkOption {
       type = str;
       default = "1h";
@@ -36,15 +44,15 @@ in {
             description = "Profile Sync daemon";
             wants = [ "psd-resync.service" ];
             wantedBy = [ "default.target" ];
-            path = with pkgs; [ rsync kmod gawk nettools util-linux profile-sync-daemon ];
+            path = with pkgs; [ rsync kmod gawk nettools util-linux cfg.package ];
             unitConfig = {
               RequiresMountsFor = [ "/home/" ];
             };
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = "yes";
-              ExecStart = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon sync";
-              ExecStop = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon unsync";
+              ExecStart = "${cfg.package}/bin/profile-sync-daemon sync";
+              ExecStop = "${cfg.package}/bin/profile-sync-daemon unsync";
             };
           };
 
@@ -58,7 +66,7 @@ in {
             path = with pkgs; [ rsync kmod gawk nettools util-linux profile-sync-daemon ];
             serviceConfig = {
               Type = "oneshot";
-              ExecStart = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon resync";
+              ExecStart = "${cfg.package}/bin/profile-sync-daemon resync";
             };
           };
         };
