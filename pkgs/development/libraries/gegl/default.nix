@@ -47,6 +47,10 @@ stdenv.mkDerivation rec {
     sha256 = "CkzbQWNeQGoISc0NPwPK99l8q4qhPShwfVMtAInVYSY=";
   };
 
+  patches = [
+    ./reproducibility_fix.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     gettext
