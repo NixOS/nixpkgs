@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wthrr";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "tobealive";
     repo = "wthrr-the-weathercrab";
     rev = "v${version}";
-    hash = "sha256-iyla63CbsYavPRbkrnqr3gyULyWbvUKc3evKaB/W9jU=";
+    hash = "sha256-JHSUjQJyi5vHfUtKEGwO9EXqKT4EwFtrVnK/iNEPkYM=";
   };
 
-  cargoHash = "sha256-izJ0TT69QnnOTLOGi1bqvy0AHJw1mMI/io5twa2Y4x0=";
+  cargoHash = "sha256-OUn40cKutFSW4hMSKyUqcI1oqKBHnm2+wVi09ZED4qA=";
 
   nativeBuildInputs = [
     pkg-config
