@@ -19,6 +19,7 @@ let
       { imports =
           [ ./hardware-configuration.nix
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
+            ./amendments.nix
           ];
 
         documentation.enable = false;
@@ -72,7 +73,7 @@ let
   # partitions and filesystems.
   testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice, grubUseEfi
                   , grubIdentifier, preBootCommands, postBootCommands, extraConfig
-                  , testSpecialisationConfig
+                  , testSpecialisationConfig, amendConfig
                   }:
     let iface = if grubVersion == 1 then "ide" else "virtio";
         isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
@@ -129,6 +130,9 @@ let
               "/mnt/etc/nixos/configuration.nix",
           )
           machine.copy_from_host("${pkgs.writeText "secret" "secret"}", "/mnt/etc/nixos/secret")
+          amendments = '{}'
+          ${amendConfig}
+          machine.succeed(f"printf '{amendments}' > /mnt/etc/nixos/amendments.nix")
 
       with subtest("Perform the installation"):
           machine.succeed("nixos-install < /dev/null >&2")
@@ -281,7 +285,7 @@ let
 
 
   makeInstallerTest = name:
-    { createPartitions, preBootCommands ? "", postBootCommands ? "", extraConfig ? ""
+    { createPartitions, preBootCommands ? "", postBootCommands ? "", extraConfig ? "", amendConfig ? ""
     , extraInstallerConfig ? {}
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
     , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
@@ -392,7 +396,7 @@ let
 
       testScript = testScriptFun {
         inherit bootLoader createPartitions preBootCommands postBootCommands
-                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
+                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig amendConfig
                 testSpecialisationConfig;
       };
     };
@@ -1015,6 +1019,56 @@ in {
           "mkdir /mnt/boot",
           "mount -o defaults,subvol=boot LABEL=root /mnt/boot",
       )
+    '';
+  };
+} // optionalAttrs systemdStage1 {
+  stratisRoot = makeInstallerTest "stratisRoot" {
+    createPartitions = ''
+      machine.succeed(
+          "sgdisk --zap-all /dev/vda",
+          "sgdisk --new=1:0:+100M --typecode=0:ef00 /dev/vda", # /boot
+          "sgdisk --new=2:0:+1G --typecode=0:8200 /dev/vda", # swap
+          "sgdisk --new=3:0:+5G --typecode=0:8300 /dev/vda", # /
+          "udevadm settle",
+
+          "mkfs.vfat /dev/vda1",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "stratis pool create my-pool /dev/vda3",
+          "stratis filesystem create my-pool nixos",
+          "udevadm settle",
+
+          "mount /dev/stratis/my-pool/nixos /mnt",
+          "mkdir -p /mnt/boot",
+          "mount /dev/vda1 /mnt/boot"
+      )
+    '';
+    bootLoader = "systemd-boot";
+    extraInstallerConfig = { modulesPath, ...}: {
+      imports = [ (modulesPath + "/tasks/stratis.nix") ];
+      config = {
+        services.stratis.enable = true;
+        environment.systemPackages = [
+          pkgs.stratis-cli
+          pkgs.thin-provisioning-tools
+          pkgs.lvm2.bin
+          pkgs.stratisd.initrd
+        ];
+      };
+    };
+    amendConfig = ''
+      # This comment is here for Python indentation purposes
+          (header, pool_line) = machine.succeed("stratis pool list").splitlines()
+          index = header.find("UUID")
+          uuid = pool_line[index - 32: index + 4]
+          amendments = f"""{{ modulesPath, ... }}: {{
+            imports = [
+              (modulesPath + "/system/boot/stratisroot.nix")
+            ];
+            config = {{
+              boot.stratis.rootPoolUuid = "{uuid}";
+            }};
+          }}"""
     '';
   };
 }
