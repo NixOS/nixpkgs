@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "yojson";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://github.com/ocaml-community/yojson/releases/download/${version}/yojson-${version}.tbz";
-    sha256 = "sha256-h2u284r3OoSilDij2jXkhXxgoUVWpgZSWxSMb9vlRhs=";
+    sha256 = "sha256-n8sf8ttYqyWfkih5awraR5Tq6XF3sYMzcTgMTk+QsV0=";
   };
 
   nativeBuildInputs = [ cppo ];
