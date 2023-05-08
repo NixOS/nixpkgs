@@ -10366,6 +10366,8 @@ self: super: with self; {
 
   requirements-parser = callPackage ../development/python-modules/requirements-parser { };
 
+  reretry = callPackage ../development/python-modules/reretry { };
+
   resampy = callPackage ../development/python-modules/resampy { };
 
   resolvelib = callPackage ../development/python-modules/resolvelib { };
@@ -11880,6 +11882,8 @@ self: super: with self; {
   thrift = callPackage ../development/python-modules/thrift { };
 
   thriftpy2 = callPackage ../development/python-modules/thriftpy2 { };
+
+  throttler = callPackage ../development/python-modules/throttler { };
 
   thumborPexif = callPackage ../development/python-modules/thumborpexif { };
 
