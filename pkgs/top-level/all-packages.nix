@@ -10967,6 +10967,8 @@ with pkgs;
 
   pappl = callPackage ../applications/printing/pappl { };
 
+  pappl-retrofit = callPackage ../applications/printing/pappl-retrofit { };
+
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
   parallel = callPackage ../tools/misc/parallel { };
@@ -29330,6 +29332,8 @@ with pkgs;
 
   bottles-unwrapped = callPackage ../applications/misc/bottles { };
 
+  braille-printer-app = callPackage ../applications/printing/braille-printer-app { };
+
   brave = callPackage ../applications/networking/browsers/brave { };
 
   break-time = callPackage ../applications/misc/break-time {
@@ -29623,6 +29627,10 @@ with pkgs;
   cum = callPackage ../applications/misc/cum { };
 
   cuneiform = callPackage ../tools/graphics/cuneiform { };
+
+  cups-browsed = callPackage ../applications/printing/cups-browsed {
+    inherit (darwin) libresolv;
+  };
 
   curseradio = callPackage ../applications/audio/curseradio { };
 
@@ -31060,6 +31068,8 @@ with pkgs;
 
   levant = callPackage ../applications/networking/cluster/levant { };
 
+  lprint = callPackage ../applications/printing/lprint { };
+
   lwm = callPackage ../applications/window-managers/lwm { };
 
   marker = callPackage ../applications/editors/marker { };
@@ -31109,6 +31119,8 @@ with pkgs;
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
 
   popura = callPackage ../tools/networking/popura { };
+
+  ps-printer-app = callPackage ../applications/printing/ps-printer-app { };
 
   pureref = callPackage ../applications/graphics/pureref { };
 
@@ -38480,6 +38492,10 @@ with pkgs;
   cups = callPackage ../misc/cups { };
 
   cups-filters = callPackage ../misc/cups/filters.nix { };
+
+  libcupsfilters = callPackage ../misc/cups/libcupsfilters.nix { };
+
+  libppd = callPackage ../misc/cups/libppd.nix { };
 
   cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
 

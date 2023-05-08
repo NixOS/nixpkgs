@@ -1,0 +1,13 @@
+--- a/cupsfilters/ghostscript.c	1970-01-01 01:00:01.000000000 +0100
++++ b/cupsfilters/ghostscript.c	2023-02-11 00:28:19.849126731 +0100
+@@ -613,7 +613,9 @@
+     }
+ 
+     // Execute Ghostscript command line ...
+-    execvpe(filename, gsargv, envp);
++    extern char **environ;
++    environ = envp;
++    execvp(filename, gsargv);
+     if (log) log(ld, CF_LOGLEVEL_ERROR,
+ 		 "cfFilterGhostscript: Unable to launch Ghostscript: %s: %s",
+ 		 filename, strerror(errno));
