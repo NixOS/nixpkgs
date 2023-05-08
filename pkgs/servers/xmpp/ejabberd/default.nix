@@ -1,6 +1,7 @@
 { stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
 , erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, util-linux, procps, gd
 , flock, autoreconfHook
+, gawk
 , nixosTests
 , withMysql ? false
 , withPgsql ? false
@@ -12,7 +13,7 @@
 }:
 
 let
-  ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils util-linux procps ];
+  ctlpath = lib.makeBinPath [ bash gnused gnugrep gawk coreutils util-linux procps ];
 in stdenv.mkDerivation rec {
   pname = "ejabberd";
   version = "23.01";
