@@ -616,6 +616,8 @@ self: super: with self; {
 
   aqipy-atmotech = callPackage ../development/python-modules/aqipy-atmotech { };
 
+  aqt = callPackage ../development/python-modules/aqt { };
+
   aqualogic = callPackage ../development/python-modules/aqualogic { };
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
