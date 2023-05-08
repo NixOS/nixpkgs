@@ -11383,6 +11383,18 @@ final: prev:
     meta.homepage = "https://github.com/Twinside/vim-hoogle/";
   };
 
+  vim-horizon = buildVimPluginFrom2Nix {
+    pname = "vim-horizon";
+    version = "2023-03-17";
+    src = fetchFromGitHub {
+      owner = "ntk148v";
+      repo = "vim-horizon";
+      rev = "3864f6281b0b852712d8e9ef86edde512f94c1d2";
+      sha256 = "152v4x7sj3nidj0710ick0p7xh020cjvhd8bjd28vfqd8xlv2nqw";
+    };
+    meta.homepage = "https://github.com/ntk148v/vim-horizon/";
+  };
+
   vim-html-template-literals = buildVimPluginFrom2Nix {
     pname = "vim-html-template-literals";
     version = "2021-06-03";
@@ -14650,18 +14662,6 @@ final: prev:
       sha256 = "0gbnwf535mk29yhn39sdy9bifzk2y8x6ldkybn8l3pwjrlr42cks";
     };
     meta.homepage = "https://github.com/nanotee/zoxide.vim/";
-  };
-
-  vim-horizon = buildVimPluginFrom2Nix {
-    pname = "vim-horizon";
-    version = "2023-03-17";
-    src = fetchFromGitHub {
-      owner = "ntk148v";
-      repo = "vim-horizon";
-      rev = "3864f6281b0b852712d8e9ef86edde512f94c1d2";
-      sha256 = "152v4x7sj3nidj0710ick0p7xh020cjvhd8bjd28vfqd8xlv2nqw";
-    };
-    meta.homepage = "https://github.com/ntk148v/vim-horizon/";
   };
 
   catppuccin-nvim = buildVimPluginFrom2Nix {
