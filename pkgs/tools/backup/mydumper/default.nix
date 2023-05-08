@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "High-perfomance MySQL backup tool";
+    description = "High-performance MySQL backup tool";
     homepage = "https://github.com/maxbube/mydumper";
     changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
     license = licenses.gpl3Plus;

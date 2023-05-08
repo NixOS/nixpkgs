@@ -261,7 +261,7 @@ rec {
     concatMap (opt:
       let
         name = showOption opt.loc;
-        docOption = rec {
+        docOption = {
           loc = opt.loc;
           inherit name;
           description = opt.description or null;
@@ -280,9 +280,9 @@ rec {
               renderOptionValue opt.example
             );
         }
-        // optionalAttrs (opt ? default) {
+        // optionalAttrs (opt ? defaultText || opt ? default) {
           default =
-            builtins.addErrorContext "while evaluating the default value of option `${name}`" (
+            builtins.addErrorContext "while evaluating the ${if opt?defaultText then "defaultText" else "default value"} of option `${name}`" (
               renderOptionValue (opt.defaultText or opt.default)
             );
         }
