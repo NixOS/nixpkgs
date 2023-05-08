@@ -7665,6 +7665,8 @@ self: super: with self; {
 
   pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
 
+  pyuca = callPackage ../development/python-modules/pyuca { };
+
   pyutil = callPackage ../development/python-modules/pyutil { };
 
   pyzbar = callPackage ../development/python-modules/pyzbar { };
