@@ -18759,6 +18759,8 @@ with pkgs;
 
   sawjap = callPackage ../development/tools/java/sawjap { };
 
+  sbomnix = python3.pkgs.callPackage ../tools/security/sbomnix { };
+
   sd-local = callPackage ../development/tools/sd-local { };
 
   seer = libsForQt5.callPackage ../development/tools/misc/seer { };
