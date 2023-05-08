@@ -34098,6 +34098,8 @@ with pkgs;
     syncthing-discovery
     syncthing-relay;
 
+  stc-cli = callPackage ../applications/networking/stc-cli { };
+
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
   syncthingtray = libsForQt5.callPackage ../applications/misc/syncthingtray { };
