@@ -8,6 +8,7 @@ let
       (cfg.package.python.pkgs.toPythonModule cfg.package)
     ];
   };
+  ui = cfg.package.ui;
   pythonPath = "${penv}/${cfg.package.python.sitePackages}/";
   defaultEnvironment = cfg.environment // {
     PYTHONPATH = pythonPath;
@@ -119,8 +120,31 @@ in
             '';
           };
         };
+        baserow-nuxt = {
+          description = "Baserow Nuxt service (frontend)";
+          wantedBy = [ "baserow.target" ];
+          requires = [ "baserow-prepare.service" ];
+          after = [ "baserow-prepare.service" ];
+
+          environment = defaultEnvironment // {
+            NODE_MODULES = "${ui}/node_modules";
+            NODE_OPTIONS = "--openssl-legacy-provider";
+          };
+
+          preStart = ''
+            ln -sf ${ui}/.nuxt /var/lib/baserow/.nuxt
+          '';
+
+          serviceConfig = defaultServiceConfig // {
+            WorkingDirectory = "/var/lib/baserow";
+            # https://github.com/nuxt/nuxt/issues/20714
+            ExecStart = ''
+              ${ui}/node_modules/.bin/nuxt start
+            '';
+          };
+        };
         baserow-wsgi = {
-          description = "Baserow WSGI service";
+          description = "Baserow WSGI service (backend)";
           wantedBy = [ "baserow.target" ];
           requires = [ "baserow-prepare.service" ];
           after = [ "baserow-prepare.service" ];
