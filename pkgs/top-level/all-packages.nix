@@ -34485,6 +34485,8 @@ with pkgs;
 
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 
+  ueberzugpp = callPackage ../tools/graphics/ueberzugpp { };
+
   uefi-run = callPackage ../tools/virtualization/uefi-run { };
 
   uhhyou.lv2 = callPackage ../applications/audio/uhhyou.lv2 { };
