@@ -7149,6 +7149,16 @@ self: super: with self; {
 
   opentelemetry-util-http = callPackage ../development/python-modules/opentelemetry-util-http { };
 
+  opentelemetry-instrumentation-requests = callPackage ../development/python-modules/opentelemetry-instrumentation-requests { };
+  opentelemetry-instrumentation-redis = callPackage ../development/python-modules/opentelemetry-instrumentation-redis { };
+  opentelemetry-instrumentation-psycopg2 = callPackage ../development/python-modules/opentelemetry-instrumentation-psycopg2 { };
+  opentelemetry-instrumentation-logging = callPackage ../development/python-modules/opentelemetry-instrumentation-logging { };
+  opentelemetry-instrumentation-grpc = callPackage ../development/python-modules/opentelemetry-instrumentation-grpc { };
+  opentelemetry-instrumentation-dbapi = callPackage ../development/python-modules/opentelemetry-instrumentation-dbapi { };
+  opentelemetry-instrumentation-celery = callPackage ../development/python-modules/opentelemetry-instrumentation-celery { };
+  opentelemetry-instrumentation-botocore = callPackage ../development/python-modules/opentelemetry-instrumentation-botocore { };
+  opentelemetry-instrumentation-aiohttp-client = callPackage ../development/python-modules/opentelemetry-instrumentation-aiohttp-client { };
+
   openturns = toPythonModule (pkgs.openturns.override {
     python3Packages = self;
     enablePython = true;
