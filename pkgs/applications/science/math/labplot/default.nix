@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
     homepage = "https://labplot.kde.org";
     license = with licenses; [ asl20 bsd3 cc-by-30 cc0 gpl2Only gpl2Plus gpl3Only gpl3Plus lgpl3Plus mit ];
     maintainers = with maintainers; [ hqurve ];
+    mainProgram = "labplot2";
     platforms = platforms.unix;
   };
 }
