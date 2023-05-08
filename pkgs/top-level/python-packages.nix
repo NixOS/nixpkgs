@@ -11485,6 +11485,8 @@ self: super: with self; {
 
   stashy = callPackage ../development/python-modules/stashy { };
 
+  static3 = callPackage ../development/python-modules/static3 { };
+
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statistics = callPackage ../development/python-modules/statistics { };
