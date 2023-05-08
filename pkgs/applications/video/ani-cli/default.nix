@@ -15,9 +15,13 @@
 , aria2
 , player ? "mpv"
 , chromecastSupport ? false
-, sync ? false
+, syncSupport ? false
 }:
 
+let player = lib.optional (player == "mpv") mpv
+  ++ lib.optional (player == "vlc") vlc
+  ++ lib.optional (player == "iina") iina
+in
 stdenvNoCC.mkDerivation rec {
   pname = "ani-cli";
   version = "4.2";
@@ -31,11 +35,9 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   runtimeDependencies = [ gnugrep gnused curl fzf ffmpeg aria2 ]
-    ++ lib.optional (player == "mpv") mpv
-    ++ lib.optional (player == "vlc") vlc
-    ++ lib.optional (player == "iina") iina
+    ++ player
     ++ lib.optional chromecastSupport catt
-    ++ lib.optional sync syncplay;
+    ++ lib.optional syncSupport syncplay;
 
   installPhase = ''
     runHook preInstall
