@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # i686 builds fail with hardening enabled (due to -Wformat-overflow). Disable
+  # -Werror altogether to make this derivation less fragile to toolchain
+  # updates.
+  NOWERROR = "TRUE";
+
   # We can handle stripping ourselves.
   # Unless we are on Darwin. Upstream makefiles degrade coreutils install to cp if _APPLE is detected.
   INSTALLFLAGS = lib.optionals (!stdenv.isDarwin) "-m 555";
