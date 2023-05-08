@@ -17172,10 +17172,11 @@ with pkgs;
   smiley-sans = callPackage ../data/fonts/smiley-sans { };
 
   inherit (callPackages ../applications/networking/cluster/spark { })
+    spark_3_4
     spark_3_2
     spark_3_1
     spark_2_4;
-  spark3 = spark_3_2;
+  spark3 = spark_3_4;
   spark2 = spark_2_4;
   spark = spark3;
 
