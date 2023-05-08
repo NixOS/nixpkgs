@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 # TODO: OTEL stuff
 let
-  inherit (lib) mkIf mkOption mkEnableOption mkPackageOptionMD mkDefault mdDoc;
+  inherit (lib) mkIf mkOption mkEnableOption mkPackageOptionMD mkDefault mdDoc concatStringsSep mapAttrsToList;
   cfg = config.services.baserow;
   penv = cfg.package.python.buildEnv.override {
     extraLibs = [
@@ -13,10 +13,23 @@ let
   defaultEnvironment = cfg.environment // {
     PYTHONPATH = pythonPath;
   };
+  templateNuxtProdConfig = pkgs.writeText "nuxt.config.prod.js.in" ''
+  import base from './nuxt.config.base.js';
+
+  export default base(
+    @baseModules@,
+    @premiumModules@,
+    @enterpriseModules@
+  )
+  '';
+  environmentAsFile = pkgs.writeText "baserow-environment" (concatStringsSep "\n"
+    (mapAttrsToList (key: value: "${key}=\"${toString value}\"") cfg.environment));
   # TODO: handle env file and secrets.
   baserowManageScript = pkgs.writeShellScriptBin "baserow-manage" ''
     set -a
     export PYTHONPATH=${cfg.package.pythonPath}
+    source ${cfg.secretFile}
+    source ${environmentAsFile}
     sudo=exec
     if [[ "$USER" != baserow ]]; then
       sudo='exec /run/wrappers/bin/sudo -u baserow --preserve-env'
@@ -67,6 +80,8 @@ in
         DJANGO_REDIS_URL = mkDefault "unix://${config.services.redis.servers.baserow.unixSocket}";
         DJANGO_CHANNEL_REDIS_URL = mkDefault "unix://${config.services.redis.servers.baserow.unixSocket}";
         DJANGO_SETTINGS_MODULE = mkDefault "baserow.config.settings.base";
+        BASEROW_TRIGGER_SYNC_TEMPLATES_AFTER_MIGRATION = mkDefault "false";
+        NUXT_TELEMETRY_DISABLED = mkDefault "1";
       };
 
       services.redis.servers.baserow.enable = true;
@@ -114,9 +129,7 @@ in
             Type = "oneshot";
             ExecStart = ''
               ${baserowManageScript}/bin/baserow-manage migrate
-              # When BASEROW_TRIGGER_SYNC_TEMPLATES_AFTER_MIGRATION is true
-              # We don't need to do it.
-              # baserow-manage sync_templates
+              ${baserowManageScript}/bin/baserow-manage sync_templates
             '';
           };
         };
@@ -128,18 +141,31 @@ in
 
           environment = defaultEnvironment // {
             NODE_MODULES = "${ui}/node_modules";
-            NODE_OPTIONS = "--openssl-legacy-provider";
+            NODE_OPTIONS = "--openssl-legacy-provider --dns-result-order=verbatim";
           };
 
           preStart = ''
-            ln -sf ${ui}/.nuxt /var/lib/baserow/.nuxt
+            ln -sf ${ui}/web-frontend/.nuxt /var/lib/baserow/frontend/
+            ln -sf ${ui}/premium /var/lib/baserow/
+            ln -sf ${ui}/enterprise /var/lib/baserow/
+            ln -sf ${ui}/web-frontend/modules /var/lib/baserow/frontend/
+            mkdir -p /var/lib/baserow/frontend/config
+            ${pkgs.xorg.lndir}/bin/lndir -ignorelinks ${ui}/web-frontend/config /var/lib/baserow/frontend/config
+            ln -sf ${(pkgs.substituteAll {
+              src = templateNuxtProdConfig;
+              baseImport = "${ui}/web-frontend/config/nuxt.config.base.js";
+              baseModules = "${ui}/web-frontend";
+              premiumModules = "${ui}/premium/web-frontend";
+              enterpriseModules = "${ui}/enterprise/web-frontend";
+            })} /var/lib/baserow/frontend/config/nuxt.config.prod.js
           '';
 
           serviceConfig = defaultServiceConfig // {
-            WorkingDirectory = "/var/lib/baserow";
+            WorkingDirectory = "/var/lib/baserow/frontend";
+            StateDirectory = [ "baserow" "baserow/frontend" ];
             # https://github.com/nuxt/nuxt/issues/20714
             ExecStart = ''
-              ${ui}/node_modules/.bin/nuxt start
+              ${ui}/web-frontend/node_modules/.bin/nuxt start --config-file config/nuxt.config.local.js
             '';
           };
         };
