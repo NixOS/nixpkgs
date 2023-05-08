@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.8.0";
+  version = "2.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    hash = "sha256-gHGsbGXxhewsdv6FCflNmf6ggFGf3CBvkIqSDV4F/kM=";
+    hash = "sha256-VkyXK1blS4MUHzlc4/aiW/4gk9YdE/m4HQU4ThnbmNo=";
   };
 
   nativeBuildInputs = [
@@ -75,12 +75,6 @@ buildPythonPackage rec {
   ];
 
   LC_ALL = "en_US.UTF-8";
-
-  preCheck = ''
-    # Disable doctest plugin because it causes pytest to hang
-    substituteInPlace pytest.ini \
-      --replace "--doctest-modules" ""
-  '';
 
   disabledTestPaths = [
     "tests/test_proxy_connect.py"
