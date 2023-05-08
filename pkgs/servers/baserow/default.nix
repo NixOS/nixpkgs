@@ -5,6 +5,7 @@
 , callPackage
 , antlr4_9
 , nixosTests
+, extraPremiumPatches ? []
 }:
 
 let
@@ -18,6 +19,8 @@ let
         pname = "baserow_premium";
         version = "1.16.0";
         foramt = "setuptools";
+
+        patches = extraPremiumPatches;
 
         src = fetchFromGitHub {
           owner = "bram2w";
