@@ -88,6 +88,11 @@ in
 
       # Override defaults in upstream unit.
       services.systemd-repart = {
+        # systemd-repart tries to create directories in /var/tmp by default to
+        # store large temporary files that benefit from persistence on disk. In
+        # the initrd, however, /var/tmp does not provide more persistence than
+        # /tmp, so we re-use it here.
+        environment."TMPDIR" = "/tmp";
         # Unset the conditions as they cannot be met before activation because
         # the definition files are not stored in the expected locations.
         unitConfig.ConditionDirectoryNotEmpty = [
@@ -119,5 +124,4 @@ in
       ];
     };
   };
-
 }
