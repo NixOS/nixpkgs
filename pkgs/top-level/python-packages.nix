@@ -13034,7 +13034,9 @@ self: super: with self; {
 
   yoyo-migrations = callPackage ../development/python-modules/yoyo-migrations { };
 
-  yt-dlp = callPackage ../tools/misc/yt-dlp { };
+  yt-dlp = callPackage ../tools/misc/yt-dlp {
+    ffmpeg = pkgs.ffmpeg-headless;
+  };
 
   yt-dlp-light = callPackage ../tools/misc/yt-dlp {
     atomicparsleySupport = false;
