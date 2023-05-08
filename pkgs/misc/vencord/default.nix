@@ -58,6 +58,6 @@ buildNpmPackage rec {
     description = "Vencord web extension";
     homepage = "https://github.com/Vendicated/Vencord";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ FlafyDev NotAShelf ];
+    maintainers = with maintainers; [ FlafyDev NotAShelf Scrumplex ];
   };
 }
