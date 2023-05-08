@@ -14,8 +14,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ xorg.libX11 ];
 
-  propagatedBuildInputs = [ spotify ];
-
   installPhase = ''
     runHook preInstall
 
