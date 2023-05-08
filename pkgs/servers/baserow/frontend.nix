@@ -7,13 +7,16 @@
 , fixup_yarn_lock
 , pkg-config
 , libsass
-, nodejs-16_x
+, nodejs_16
 }:
 
 let
   # For Node.js 16.x: https://gitlab.com/baserow/baserow/-/issues/1714
-  yarn_env = (pkgs.yarn.override { nodejs = nodejs-16_x; });
-  node = nodejs-16_x;
+  yarn_env = (pkgs.yarn.override { nodejs = nodejs_16; });
+  node = nodejs_16;
+  # Fix me for later: computation of `baserow_${modDir}` is very incorrect.
+  mkBaserowFrontendModule = modDir: "${modDir}/web-frontend/modules/baserow_${modDir}/module.js";
+  modules = lib.concatStringsSep "," (map mkBaserowFrontendModule [ "$out/premium" "$out/enterprise" ]);
 in
 stdenv.mkDerivation rec {
   pname = "baserow-front";
@@ -25,7 +28,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-6kjZNM4tOEmM/wt3mqLk+iCQav7gR4y8psCViRlJMgo=";
   };
 
-  nativeBuildInputs = [ python3 yarn_env fixup_yarn_lock nodejs-16_x pkg-config libsass ];
+  nativeBuildInputs = [ python3 yarn_env fixup_yarn_lock nodejs_16 pkg-config libsass ];
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/web-frontend/yarn.lock";
@@ -56,11 +59,21 @@ stdenv.mkDerivation rec {
 
     NUXT_TELEMETRY_DISABLED=1 yarn build-local
     cd ../
+
     runHook postBuild
   '';
 
   installPhase = ''
-    cp -r web-frontend $out
+    mkdir -p $out
+    cp -r web-frontend $out/web-frontend
+    # Built-in plugins
+    mkdir -p $out/premium
+    cp -r premium/web-frontend $out/premium/web-frontend
+    mkdir -p $out/enterprise
+    cp -r enterprise/web-frontend $out/enterprise/web-frontend
+    # Wrap nuxt with `ADDITIONAL_MODULES`
+    # wrapProgram $out/node_modules/.bin/nuxt \
+    #  --set ADDITIONAL_MODULES "${modules}"
   '';
 
   distPhase = "true";

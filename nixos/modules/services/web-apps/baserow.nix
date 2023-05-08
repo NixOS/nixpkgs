@@ -14,7 +14,7 @@ let
     PYTHONPATH = pythonPath;
   };
   environmentAsFile = pkgs.writeText "baserow-environment" (concatStringsSep "\n"
-    (mapAttrsToList (key: value: "${key}=\"${toString value}\"")));
+    (mapAttrsToList (key: value: "${key}=\"${toString value}\"") cfg.environment));
   # TODO: handle env file and secrets.
   baserowManageScript = pkgs.writeShellScriptBin "baserow-manage" ''
     set -a
@@ -71,6 +71,7 @@ in
         DJANGO_REDIS_URL = mkDefault "unix://${config.services.redis.servers.baserow.unixSocket}";
         DJANGO_CHANNEL_REDIS_URL = mkDefault "unix://${config.services.redis.servers.baserow.unixSocket}";
         DJANGO_SETTINGS_MODULE = mkDefault "baserow.config.settings.base";
+        NUXT_TELEMETRY_DISABLED = mkDefault "1";
       };
 
       services.redis.servers.baserow.enable = true;
@@ -136,14 +137,14 @@ in
           };
 
           preStart = ''
-            ln -sf ${ui}/.nuxt /var/lib/baserow/
+            ln -sf ${ui}/web-frontend/.nuxt /var/lib/baserow/
           '';
 
           serviceConfig = defaultServiceConfig // {
             WorkingDirectory = "/var/lib/baserow";
             # https://github.com/nuxt/nuxt/issues/20714
             ExecStart = ''
-              ${ui}/node_modules/.bin/nuxt start
+              ${ui}/web-frontend/node_modules/.bin/nuxt start
             '';
           };
         };
