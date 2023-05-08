@@ -7,13 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
-  version = "20221020";
+  version = "20230331";
 
   src = fetchurl {
-    # 20221020 has a weird filename published: https://acpica.org/node/201
-    name = "acpica-unix-${version}.tar.gz";
-    url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar_0.gz";
-    hash = "sha256-M6LjlKygylfUAYr+PaNA361etFsbkwDoHdWV/aB88cU=";
+    url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
+    hash = "sha256-DF1pXWBaqmFwnzxj9XoambiQIpFyOZhEawgTtXrDEOI=";
   };
 
   nativeBuildInputs = [ bison flex ];
