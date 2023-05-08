@@ -10,7 +10,12 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
       enable = true;
       environment = {
         # Needed for the frontend.
+        PUBLIC_BACKEND_URL = "http://localhost/api/";
+        BASEROW_DISABLE_PUBLIC_URL_CHECK = "1";
+        PRIVATE_BACKEND_URL = "http://[::1]:8000";
         BASEROW_PUBLIC_URL = "http://localhost";
+        BASEROW_BACKEND_DEBUG = "on";
+        BASEROW_BACKEND_LOG_LEVEL = "DEBUG";
         # Ensure we are allowed to do those requests.
         BASEROW_EXTRA_ALLOWED_HOSTS	= "localhost,[::1],127.0.0.1";
       };
@@ -37,7 +42,7 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
           '';
         };
         locations."/" = {
-          proxyPass = "http://127.0.0.1:3000";
+          proxyPass = "http://[::1]:3000";
         };
       };
     };
@@ -52,10 +57,21 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
 
     # Backend
     print(machine.succeed(
-        "curl -sSfL http://localhost/api/settings/"
+        "curl -sSfL http://localhost/api/_health/"
     ))
 
     # Frontend
+    machine.wait_for_unit("baserow-nuxt.service")
     machine.wait_for_open_port(3000)
+    # Test connection to backend through frontend
+    print(machine.succeed(
+        "curl -sSfL http://localhost/login/"
+    ))
+    print(machine.succeed(
+        "curl -sSfL http://localhost/_health/"
+    ))
+
+
+
   '';
 })
