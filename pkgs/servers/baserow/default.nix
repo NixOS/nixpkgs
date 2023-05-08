@@ -110,6 +110,10 @@ with python.pkgs; buildPythonApplication rec {
     sed 's/\"hosts\": \[REDIS_URL\]/\"hosts\": \[os.getenv("DJANGO_CHANNEL_REDIS_URL", REDIS_URL)\]/' -i src/baserow/config/settings/base.py
   '';
 
+  patches = [
+    ./0001-backend-package-HTML-templates.patch
+  ];
+
   nativeBuildInputs = [
     makeWrapper
   ];
