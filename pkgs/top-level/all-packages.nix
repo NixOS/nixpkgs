@@ -19586,8 +19586,6 @@ with pkgs;
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
   inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
-    boost165
-    boost166
     boost168
     boost169
     boost170
@@ -34099,6 +34097,8 @@ with pkgs;
     syncthing
     syncthing-discovery
     syncthing-relay;
+
+  stc-cli = callPackage ../applications/networking/stc-cli { };
 
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
