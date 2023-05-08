@@ -14795,7 +14795,7 @@
     name = "Christoph Honal";
   };
   star-szr = {
-    email = "nixpkgs@scottr.mailworks.org";
+    email = "nixpkgs@szr.fastmail.com";
     github = "star-szr";
     githubId = 327943;
     name = "Scott Zhu Reeves";
