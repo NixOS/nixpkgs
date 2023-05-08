@@ -1,6 +1,10 @@
 pkgs: lib: self: super:
 
 ### Deprecated aliases - for backward compatibility
+###
+### !!! NOTE !!!
+### Use `./remove-attr.py [attrname]` in this directory to remove your alias
+### from the `nodePackages` set without regenerating the entire file.
 
 with self;
 
