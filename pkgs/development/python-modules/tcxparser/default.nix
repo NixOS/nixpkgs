@@ -39,6 +39,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/vkurup/python-tcxparser";
     license = licenses.bsd2;
     maintainers = with maintainers; [ firefly-cpp ];
+    pypiName = "python-tcxparser";
   };
 }
 

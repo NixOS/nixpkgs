@@ -63,5 +63,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/keboola/sapi-python-client/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ mrmebelman ];
+    pypiName = "kbcstorage";
   };
 }

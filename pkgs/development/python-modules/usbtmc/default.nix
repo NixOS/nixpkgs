@@ -18,5 +18,6 @@ buildPythonPackage rec {
     homepage = "http://alexforencich.com/wiki/en/python-usbtmc/start";
     license = licenses.mit;
     maintainers = with maintainers; [ bjornfor ];
+    pypiName = "python-usbtmc";
   };
 }

@@ -53,6 +53,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/tmontaigu/laszip-python";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
+    pypiName = "laszip";
   };
 }
 

@@ -77,5 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/trinodb/trino-python-client";
     license = licenses.asl20;
     maintainers = with maintainers; [ cpcloud ];
+    pypiName = "trino";
   };
 }

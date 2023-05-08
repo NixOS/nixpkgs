@@ -60,5 +60,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/napari/npe2";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];
+    pypiName = "npe2";
   };
 }

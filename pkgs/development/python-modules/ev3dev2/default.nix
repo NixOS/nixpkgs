@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ev3dev/ev3dev-lang-python";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ emilytrau ];
+    pypiName = "python-ev3dev2";
   };
 }

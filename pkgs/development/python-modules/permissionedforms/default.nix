@@ -35,5 +35,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/wagtail/permissionedforms/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sephi ];
+    pypiName = "django-permissionedforms";
   };
 }

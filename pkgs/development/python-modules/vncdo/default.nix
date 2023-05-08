@@ -33,6 +33,7 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ elitak ];
     platforms = with platforms; linux ++ darwin;
+    pypiName = "vncdotool";
   };
 
 }

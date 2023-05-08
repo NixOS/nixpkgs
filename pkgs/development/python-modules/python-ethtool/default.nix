@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fedora-python/python-ethtool";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ elohmeier ];
+    pypiName = "ethtool";
   };
 }

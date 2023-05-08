@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/byrnereese/mkdocs-minify-plugin";
     license = licenses.mit;
     maintainers = with maintainers; [ tfc ];
+    pypiName = "mkdocs-minify-plugin";
   };
 }

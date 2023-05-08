@@ -71,7 +71,7 @@ def _get_values(attribute, text):
     return values
 
 
-def _get_attr_value(attr_path: str) -> Optional[Any]:
+def _get_attr_value(attr_path: str, def_value: Optional[Any] = None) -> Optional[Any]:
     try:
         response = subprocess.check_output([
             "nix",
@@ -83,7 +83,7 @@ def _get_attr_value(attr_path: str) -> Optional[Any]:
         ])
         return json.loads(response.decode())
     except (subprocess.CalledProcessError, ValueError):
-        return None
+        return def_value
 
 
 def _get_unique_value(attribute, text):
@@ -205,18 +205,26 @@ def _determine_latest_version(current_version, target, versions):
     return (max(sorted(versions))).raw_version
 
 
-def _get_latest_version_pypi(package, extension, current_version, target):
-    """Get latest version and hash from PyPI."""
-    url = "{}/{}/json".format(INDEX, package)
-    json = _fetch_page(url)
+def _get_latest_version_pypi(pypi_name, old_version, target):
+    if pypi_name is None:
+        raise ValueError(f"meta.pypiName is null")
+
+    json = _fetch_page(f'{INDEX}/{pypi_name}/json')
 
     versions = json['releases'].keys()
-    version = _determine_latest_version(current_version, target, versions)
+    new_version = _determine_latest_version(old_version, target, versions)
 
     try:
-        releases = json['releases'][version]
+        releases = json['releases'][new_version]
     except KeyError as e:
-        raise KeyError('Could not find version {} for {}'.format(version, package)) from e
+        raise KeyError(f"Could not find version {new_version} for {pypi_name}") from e
+
+    return new_version, releases
+
+
+def _get_latest_from_pypi(attr_path, pypi_name, extension, old_version, target):
+    """Get latest version and hash from PyPI."""
+    version, releases = _get_latest_version_pypi(pypi_name, old_version, target)
     for release in releases:
         if release['filename'].endswith(extension):
             # TODO: In case of wheel we need to do further checks!
@@ -227,7 +235,7 @@ def _get_latest_version_pypi(package, extension, current_version, target):
     return version, sha256, None
 
 
-def _get_latest_version_github(package, extension, current_version, target):
+def _get_latest_from_git(attr_path, pypi_name, extension, old_version, target):
     def strip_prefix(tag):
         return re.sub("^[^0-9]*", "", tag)
 
@@ -235,77 +243,97 @@ def _get_latest_version_github(package, extension, current_version, target):
         matches = re.findall(r"^([^0-9]*)", string)
         return next(iter(matches), "")
 
-    # when invoked as an updateScript, UPDATE_NIX_ATTR_PATH will be set
-    # this allows us to work with packages which live outside of python-modules
-    attr_path = os.environ.get("UPDATE_NIX_ATTR_PATH", f"python3Packages.{package}")
+    gitRepoUrl = _get_attr_value(f'{attr_path}.src.gitRepoUrl')
+    if gitRepoUrl is None:
+        raise ValueError(f"no gitRepoUrl for {attr_path}")
+
+    # First, try to get the latest published version from PyPI. Then, if this
+    # is a GitHub repo, get the latest release published there. After that, if
+    # we still don't have a new version, use the latest Git tag as a last
+    # resort.
+    version = None
     try:
-        homepage = subprocess.check_output(
-            ["nix", "eval", "-f", f"{NIXPKGS_ROOT}/default.nix", "--raw", f"{attr_path}.src.meta.homepage"])\
-            .decode('utf-8')
+        version = _get_latest_version_pypi(pypi_name, old_version, target)[0]
+    except ValueError:
+        if gitRepoUrl.startswith('https://github.com/'):
+            owner = _get_attr_value(f'{attr_path}.src.owner')
+            repo = _get_attr_value(f'{attr_path}.src.repo')
+            all_releases = _fetch_github(f'https://api.github.com/repos/{owner}/{repo}/releases')
+            releases = [x for x in all_releases if not x['prerelease']]
+
+            if len(releases) > 0:
+                versions = (strip_prefix(x['tag_name']) for x in releases)
+                version = _determine_latest_version(old_version, target, versions)
+
+    prefix = None
+    raw_tags = subprocess.check_output(
+        [GIT, 'ls-remote', '--tags', '--ref', '--sort=-v:refname', gitRepoUrl])\
+        .decode('utf-8').strip()
+    tags = [] if raw_tags == '' else [line.split('refs/tags/', 1)[1] for line in raw_tags.split('\n')]
+    if version is None:
+        if len(tags) == 0:
+            raise ValueError(f"{gitRepoUrl} contains no tags")
+        version = _determine_latest_version(old_version, target, map(strip_prefix, tags))
+    for tag_name in tags:
+        if strip_prefix(tag_name) == version:
+            prefix = get_prefix(tag_name)
+            break
+    if prefix is None:
+        raise ValueError(f"{gitRepoUrl} does not contain a tag matching {version}")
+
+    try:
+        src_data = json.loads(subprocess.check_output([
+            'nix',
+            '--extra-experimental-features', 'nix-command',
+            'eval', '--impure', '--json', '--expr',
+            f'''
+                with import {NIXPKGS_ROOT}/default.nix {{ }};
+                lib.filterAttrs
+                   (k: v: builtins.elem k ["name" "url" "fetchSubmodules" "fetchLFS" "leaveDotGit"])
+                   ({attr_path}.src.override {{ rev = "refs/tags/{tag_name}"; }})
+            '''])
+            .decode('utf-8'))
     except Exception as e:
-        raise ValueError(f"Unable to determine homepage: {e}")
-    owner_repo = homepage[len("https://github.com/"):]  # remove prefix
-    owner, repo = owner_repo.split("/")
+        raise ValueError(f"Unable to read from {attr_path}.src") from e
 
-    url = f"https://api.github.com/repos/{owner}/{repo}/releases"
-    all_releases = _fetch_github(url)
-    releases = list(filter(lambda x: not x['prerelease'], all_releases))
-
-    if len(releases) == 0:
-        raise ValueError(f"{homepage} does not contain any stable releases")
-
-    versions = map(lambda x: strip_prefix(x['tag_name']), releases)
-    version = _determine_latest_version(current_version, target, versions)
-
-    release = next(filter(lambda x: strip_prefix(x['tag_name']) == version, releases))
-    prefix = get_prefix(release['tag_name'])
-
-    # some attributes require using the fetchgit
-    git_fetcher_args = []
-    if (_get_attr_value(f"{attr_path}.src.fetchSubmodules")):
-        git_fetcher_args.append("--fetch-submodules")
-    if (_get_attr_value(f"{attr_path}.src.fetchLFS")):
-        git_fetcher_args.append("--fetch-lfs")
-    if (_get_attr_value(f"{attr_path}.src.leaveDotGit")):
-        git_fetcher_args.append("--leave-dotGit")
-
-    if git_fetcher_args:
+    url = src_data['url']
+    if url == gitRepoUrl:
         algorithm = "sha256"
         cmd = [
-            "nix-prefetch-git",
-            f"https://github.com/{owner}/{repo}.git",
-            "--hash", algorithm,
-            "--rev", f"refs/tags/{release['tag_name']}"
+            'nix-prefetch-git',
+            gitRepoUrl,
+            '--hash', algorithm,
+            '--rev', f'refs/tags/{tag_name}'
         ]
-        cmd.extend(git_fetcher_args)
+        if src_data.get('fetchSubmodules'):
+            cmd.append('--fetch-submodules')
+        if src_data.get('fetchLFS'):
+            cmd.append('--fetch-lfs')
+        if src_data.get('leaveDotGit'):
+            cmd.append('--leave-dotGit')
+
         response = subprocess.check_output(cmd)
         document = json.loads(response.decode())
         hash = _hash_to_sri(algorithm, document[algorithm])
     else:
-        try:
-            hash = subprocess.check_output([
-                "nix-prefetch-url",
-                "--type", "sha256",
-                "--unpack",
-                f"{release['tarball_url']}"
-            ], stderr=subprocess.DEVNULL).decode('utf-8').strip()
-        except (subprocess.CalledProcessError, UnicodeError):
-            # this may fail if they have both a branch and a tag of the same name, attempt tag name
-            tag_url = str(release['tarball_url']).replace("tarball","tarball/refs/tags")
-            hash = subprocess.check_output([
-                "nix-prefetch-url",
-                "--type", "sha256",
-                "--unpack",
-                tag_url
-            ], stderr=subprocess.DEVNULL).decode('utf-8').strip()
+        hash = subprocess.check_output([
+            "nix-prefetch-url",
+            "--type", "sha256",
+            "--unpack",
+            '--name', src_data['name'],
+            # ^ keeps nix-store-forbidden characters in URL (see fetchFromGitLab) from causing problems
+            url
+        ], stderr=subprocess.DEVNULL).decode('utf-8').strip()
 
     return version, hash, prefix
 
 
 FETCHERS = {
-    'fetchFromGitHub'   :   _get_latest_version_github,
-    'fetchPypi'         :   _get_latest_version_pypi,
-    'fetchurl'          :   _get_latest_version_pypi,
+    'fetchgit'          :   _get_latest_from_git,
+    'fetchFromGitHub'   :   _get_latest_from_git,
+    'fetchFromGitLab'   :   _get_latest_from_git,
+    'fetchPypi'         :   _get_latest_from_pypi,
+    'fetchurl'          :   _get_latest_from_pypi,
 }
 
 
@@ -365,7 +393,7 @@ def _determine_extension(text, fetcher):
         if 'pypi' not in url:
             raise ValueError('url does not point to PyPI.')
 
-    elif fetcher == 'fetchFromGitHub':
+    else:
         extension = "tar.gz"
 
     return extension
@@ -377,11 +405,17 @@ def _update_package(path, target):
     with open(path, 'r') as f:
         text = f.read()
 
-    # Determine pname. Many files have more than one pname
-    pnames = _get_values('pname', text)
+    # when invoked as an updateScript, UPDATE_NIX_ATTR_PATH will be set
+    # this allows us to work with packages which live outside of python-modules
+    if env_attr_path := os.environ.get('UPDATE_NIX_ATTR_PATH'):
+        pnames = [_get_attr_value(f'{env_attr_path}.pname')]
+        old_version = _get_attr_value(f'{env_attr_path}.version')
+    else:
+        # Determine pname. Many files have more than one pname
+        pnames = _get_values('pname', text)
 
-    # Determine version.
-    version = _get_unique_value('version', text)
+        # Determine version.
+        old_version = _get_unique_value('version', text)
 
     # First we check how many fetchers are mentioned.
     fetcher = _determine_fetcher(text)
@@ -391,22 +425,26 @@ def _update_package(path, target):
     # Attempt a fetch using each pname, e.g. backports-zoneinfo vs backports.zoneinfo
     successful_fetch = False
     for pname in pnames:
-        if BULK_UPDATE and _skip_bulk_update(f"python3Packages.{pname}"):
+        attr_path = env_attr_path or f'python3Packages.{pname}'
+
+        if BULK_UPDATE and _skip_bulk_update(attr_path):
             raise ValueError(f"Bulk update skipped for {pname}")
         try:
-            new_version, new_sha256, prefix = FETCHERS[fetcher](pname, extension, version, target)
+            pypi_name = _get_attr_value(f'{attr_path}.meta.pypiName', pname)
+            new_version, new_sha256, prefix = FETCHERS[fetcher](attr_path, pypi_name, extension, old_version, target)
             successful_fetch = True
             break
-        except ValueError:
+        except ValueError as e:
+            logging.info(f"Error attempting {pname}: {e}")
             continue
 
     if not successful_fetch:
         raise ValueError(f"Unable to find correct package using these pnames: {pnames}")
 
-    if new_version == version:
+    if new_version == old_version:
         logging.info("Path {}: no update available for {}.".format(path, pname))
         return False
-    elif Version(new_version) <= Version(version):
+    elif Version(new_version) <= Version(old_version):
         raise ValueError("downgrade for {}.".format(pname))
     if not new_sha256:
         raise ValueError("no file available for {}.".format(pname))
@@ -418,7 +456,7 @@ def _update_package(path, target):
     sri_hash = _hash_to_sri("sha256", new_sha256)
 
     # retrieve the old output hash for a more precise match
-    if old_hash := _get_attr_value(f"python3Packages.{pname}.src.outputHash"):
+    if old_hash := _get_attr_value(f'{attr_path}.src.outputHash'):
         # fetchers can specify a sha256, or a sri hash
         try:
             text = _replace_value('hash', sri_hash, text, old_hash)
@@ -427,8 +465,8 @@ def _update_package(path, target):
     else:
         raise ValueError(f"Unable to retrieve old hash for {pname}")
 
-    if fetcher == 'fetchFromGitHub':
-        # in the case of fetchFromGitHub, it's common to see `rev = version;` or `rev = "v${version}";`
+    if prefix is not None:
+        # in the case of fetchFromGit{Hub,Lab}, it's common to see `rev = version;` or `rev = "v${version}";`
         # in which no string value is meant to be substituted. However, we can just overwrite the previous value.
         regex = r'(rev\s+=\s+[^;]*;)'
         regex = re.compile(regex)
@@ -447,13 +485,13 @@ def _update_package(path, target):
     with open(path, 'w') as f:
         f.write(text)
 
-        logging.info("Path {}: updated {} from {} to {}".format(path, pname, version, new_version))
+        logging.info(f"Path {path}: updated {pname} from {old_version} to {new_version}")
 
     result = {
         'path'  : path,
         'target': target,
         'pname': pname,
-        'old_version'   : version,
+        'old_version'   : old_version,
         'new_version'   : new_version,
         #'fetcher'       : fetcher,
         }
