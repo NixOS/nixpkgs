@@ -37163,7 +37163,10 @@ with pkgs;
 
   mopac = callPackage ../applications/science/chemistry/mopac { };
 
-  nwchem = callPackage ../applications/science/chemistry/nwchem { };
+  nwchem = callPackage ../applications/science/chemistry/nwchem {
+    blas = blas-ilp64;
+    lapack = lapack-ilp64;
+  };
 
   octopus = callPackage ../applications/science/chemistry/octopus { };
 
