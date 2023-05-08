@@ -279,7 +279,7 @@ in
             ''}
           '';
           checkPhase = lib.optionalString cfg.checkRuleset ''
-            cp $out ruleset.conf
+            cp ${if lib.isStorePath cfg.rulesetFile then cfg.rulesetFile else "$out"} ruleset.conf
             sed 's|include "${deletionsScriptVar}"||' -i ruleset.conf
             ${cfg.preCheckRuleset}
             export NIX_REDIRECTS=/etc/protocols=${pkgs.buildPackages.iana-etc}/etc/protocols:/etc/services=${pkgs.buildPackages.iana-etc}/etc/services
