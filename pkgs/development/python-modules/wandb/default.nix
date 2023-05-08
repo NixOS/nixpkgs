@@ -243,6 +243,12 @@ buildPythonPackage rec {
     # See https://github.com/wandb/wandb/issues/5423
     "tests/pytest_tests/unit_tests/test_docker.py"
     "tests/pytest_tests/unit_tests/test_library_public.py"
+  ] ++ lib.optionals stdenv.isLinux [
+    # Same as above
+    "tests/pytest_tests/unit_tests/test_artifacts/test_storage.py"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # Same as above
+    "tests/pytest_tests/unit_tests/test_lib/test_filesystem.py"
   ];
 
   # Disable test that fails on darwin due to issue with python3Packages.psutil:
