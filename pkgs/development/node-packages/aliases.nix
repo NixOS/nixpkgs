@@ -39,5 +39,5 @@ mapAliases {
   "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   manta = pkgs.node-manta; # Added 2023-05-06
-  trito = pkgs.triton; # Added 2023-05-06
+  triton = pkgs.triton; # Added 2023-05-06
 }
