@@ -76,20 +76,4 @@ in
     version = "3.4.0";
     sha256 = "sha256-0y80dRYzb6Ceu6MlGQHtpMdzOob/TBg6kf8dtF6KyCk=";
   };
-  spark_3_2 = spark rec {
-    pname = "spark";
-    version = "3.2.2";
-    sha256 = "sha256-yKoTyD/IqvsJQs0jB67h1zqwYaLuikdoa5fYIXtvhz0=";
-  };
-  spark_3_1 = spark rec {
-    pname = "spark";
-    version = "3.1.3";
-    sha256 = "sha256-RIQyN5YjxFLfNIrETR3Vv99zsHxt77rhOXHIThCI2Y8=";
-  };
-  spark_2_4 = spark rec {
-    pname = "spark";
-    version = "2.4.8";
-    sha256 = "1mkyq0gz9fiav25vr0dba5ivp0wh0mh7kswwnx8pvsmb6wbwyfxv";
-    extraMeta.knownVulnerabilities = [ "CVE-2021-38296" ];
-  };
 }
