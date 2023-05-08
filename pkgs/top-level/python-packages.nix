@@ -12542,6 +12542,8 @@ self: super: with self; {
 
   varint = callPackage ../development/python-modules/varint { };
 
+  vat-moss = callPackage ../development/python-modules/vat-moss { };
+
   vcrpy = callPackage ../development/python-modules/vcrpy { };
 
   vcver = callPackage ../development/python-modules/vcver { };
