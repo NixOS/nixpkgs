@@ -10,6 +10,7 @@
     appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${short}";
   in "${if matched == null then base else builtins.head matched}${appendShort}";
 in
+lib.makeOverridable (
 { url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
@@ -107,3 +108,4 @@ stdenvNoCC.mkDerivation {
     gitRepoUrl = url;
   };
 }
+)

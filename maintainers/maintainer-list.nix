@@ -1520,6 +1520,12 @@
     githubId = 12958979;
     name = "Mika Naylor";
   };
+  autrimpo = {
+    email = "michal@koutensky.net";
+    github = "autrimpo";
+    githubId = 5968483;
+    name = "Michal Koutenský";
+  };
   autumnal = {
     name = "Sven Friedrich";
     email = "sven@autumnal.de";
@@ -2096,6 +2102,12 @@
     githubId = 16330;
     name = "Mathijs Kwik";
   };
+  blusk = {
+    email = "bluskript@gmail.com";
+    github = "Bluskript";
+    githubId = 52386117;
+    name = "Blusk";
+  };
   bmilanov = {
     name = "Biser Milanov";
     email = "bmilanov11+nixpkgs@gmail.com";
@@ -2399,6 +2411,12 @@
     github = "CactiChameleon9";
     githubId = 51231053;
     name = "Daniel";
+  };
+  cadkin = {
+    email = "cva@siliconslumber.net";
+    name = "Cameron Adkins";
+    github = "cadkin";
+    githubId = 34077838;
   };
   cafkafk = {
     email = "christina@cafkafk.com";
@@ -14261,6 +14279,12 @@
     github = "VShell";
     githubId = 251028;
     name = "Shell Turner";
+  };
+  shhht = {
+    name = "shhht";
+    email = "stp.tjeerd@gmail.com";
+    github = "shhht";
+    githubId = 118352823;
   };
   shikanime = {
     name = "William Phetsinorath";

@@ -11291,6 +11291,8 @@ self: super: with self; {
     inherit (pkgs) mscgen;
   };
 
+  sphinxcontrib-log-cabinet = callPackage ../development/python-modules/sphinxcontrib-log-cabinet { };
+
   sphinxcontrib-nwdiag = callPackage ../development/python-modules/sphinxcontrib-nwdiag { };
 
   sphinxcontrib_newsfeed = callPackage ../development/python-modules/sphinxcontrib_newsfeed { };
@@ -11334,6 +11336,8 @@ self: super: with self; {
   sphinxemoji = callPackage ../development/python-modules/sphinxemoji { };
 
   sphinx-inline-tabs = callPackage ../development/python-modules/sphinx-inline-tabs { };
+
+  sphinx-issues = callPackage ../development/python-modules/sphinx-issues { };
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 

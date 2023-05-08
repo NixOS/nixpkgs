@@ -10,12 +10,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "glslang";
-  version = "1.3.243.0";
+  version = "12.1.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "sdk-${version}";
+    rev = version;
     hash = "sha256-U45/7G02o82EP4zh7i2Go0VCnsO1B7vxDwIokjyo5Rk=";
   };
 

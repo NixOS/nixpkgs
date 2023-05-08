@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-playwright";
-  version = "0.3.0";
+  version = "0.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-pytest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fHzQxbQBSEkCFu/ualjzSmIt3SiEa2ktTvIJKPZLT9Q=";
+    hash = "sha256-2xdRW8Q10x6mtNs/EdAsgrOtVmvLAOdbIGXfyeB8ZAg=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

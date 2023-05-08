@@ -36,27 +36,27 @@ let
   '';
 in
 assert assertXWayland;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = "hyprland";
-    rev = "v${version}";
-    hash = "sha256-zbtxX0NezuNg46PAKscmDfFfNID4rAq2qGNf1BE3Cqc=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Npf48UUfywneFYGEc7NQ59xudwvw7EJjwweT4tHguIY=";
   };
 
   patches = [
     # make meson use the provided dependencies instead of the git submodules
-    "${src}/nix/meson-build.patch"
+    "${finalAttrs.src}/nix/meson-build.patch"
   ];
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
     sed -i "s#/usr#$out#" src/render/OpenGL.cpp
     substituteInPlace meson.build \
-      --replace "@GIT_COMMIT_HASH@" '${version}' \
+      --replace "@GIT_COMMIT_HASH@" '${finalAttrs.src.rev}' \
       --replace "@GIT_DIRTY@" ""
   '';
 
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "man"
+    "dev"
   ];
 
   buildInputs =
@@ -103,7 +104,6 @@ stdenv.mkDerivation rec {
     (lib.optional withSystemd "-Dsystemd=enabled")
   ];
 
-
   passthru.providedSessions = [ "hyprland" ];
 
   meta = with lib; {
@@ -114,4 +114,4 @@ stdenv.mkDerivation rec {
     mainProgram = "Hyprland";
     platforms = wlroots.meta.platforms;
   };
-}
+})
