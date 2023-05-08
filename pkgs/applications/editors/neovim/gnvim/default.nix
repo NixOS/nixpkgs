@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gnvim-unwrapped";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "vhakulinen";
     repo = "gnvim";
     rev = "v${version}";
-    hash = "sha256-736pb+GR2vWoVXfBVeIwAwPeH18c7ZuG1Cwp3ScaRfg=";
+    hash = "sha256-VyyHlyMW/9zYECobQwngFARQYqcoXmopyCHUwHolXfo=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;
@@ -19,8 +19,6 @@ rustPlatform.buildRustPackage rec {
     glib
   ];
   buildInputs = [ glib gtk4 ];
-
-  patches = [./fix-cargo-lock.patch];
 
   # The default build script tries to get the version through Git, so we
   # replace it
