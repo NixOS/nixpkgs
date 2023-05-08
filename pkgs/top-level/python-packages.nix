@@ -11061,6 +11061,8 @@ self: super: with self; {
 
   slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
 
+  slimit = callPackage ../development/python-modules/slimit { };
+
   slixmpp = callPackage ../development/python-modules/slixmpp {
     inherit (pkgs) gnupg;
   };
