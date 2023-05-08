@@ -10,8 +10,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   testScript = ''
     machine.wait_for_unit("headscale")
     machine.wait_for_open_port(8080)
-    # Test basic funcionality
-    machine.succeed("headscale namespaces create test")
-    machine.succeed("headscale preauthkeys -n test create")
+    # Test basic functionality
+    machine.succeed("headscale users create test")
+    machine.succeed("headscale preauthkeys -u test create")
   '';
 })
