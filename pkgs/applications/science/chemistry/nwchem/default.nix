@@ -2,6 +2,7 @@
 , stdenv
 , pkgs
 , fetchFromGitHub
+, fetchurl
 , which
 , openssh
 , gcc
@@ -24,11 +25,29 @@ assert blas.isILP64 == lapack.isILP64;
 let
   versionGA = "5.8.2"; # Fixed by nwchem
 
-  ga_src = fetchFromGitHub {
+  gaSrc = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
     rev = "v${versionGA}";
     hash = "sha256-2ffQIg9topqKX7ygnWaa/UunL9d0Lj9qr9xucsjLuoY=";
+  };
+
+  dftd3Src = fetchurl {
+    url = "https://www.chemiebn.uni-bonn.de/pctc/mulliken-center/software/dft-d3/dftd3.tgz";
+    hash = "sha256-2Xz5dY9hqoH9hUJUSPv0pujOB8EukjZzmDGjrzKID1k=";
+  };
+
+  versionLibxc = "6.1.0";
+  libxcSrc = fetchurl {
+    url = "https://gitlab.com/libxc/libxc/-/archive/${versionLibxc}/libxc-${versionLibxc}.tar.gz";
+    hash = "sha256-9ZN0X6R+v7ndxGeqr9wvoSdfDXJQxpLOl2E4mpDdjq8=";
+  };
+
+  plumedSrc = fetchFromGitHub {
+    owner = "edoapra";
+    repo = "plumed2";
+    rev = "e7c908da50bde1c6399c9f0e445d6ea3330ddd9b";
+    hash = "sha256-CNlb6MTEkD977hj3xonYqZH1/WlQ1EdVD7cvL//heRM=";
   };
 
 in
@@ -63,8 +82,17 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ mpi ];
 
   postUnpack = ''
-    cp -r ${ga_src}/ source/src/tools/ga-${versionGA}
+    # These run 'configure' in source tree and
+    # require a writable directory
+    cp -r ${gaSrc}/ source/src/tools/ga-${versionGA}
     chmod -R u+w source/src/tools/ga-${versionGA}
+
+    cp -r ${plumedSrc} source/src/libext/plumed/plumed2
+    chmod -R u+w source/src/libext/plumed/plumed2
+
+    # Provide tarball in expected location
+    ln -s ${dftd3Src} source/src/nwpw/nwpwlib/nwpwxc/dftd3.tgz
+    ln -s ${libxcSrc} source/src/libext/libxc/libxc-${versionLibxc}.tar.gz
   '';
 
   postPatch = ''
@@ -104,10 +132,6 @@ stdenv.mkDerivation rec {
     export LAPACK_LIB="-L${lapack}/lib -llapack"
     export BLAS_SIZE=${if blas.isILP64 then "8" else "4"}
 
-    # Requires DFT-D3 tgz file
-    # See nwchem/src/nwpw/nwpwlib/nwpwxc/build_dftd3a.sh
-    export NO_NWPWXC_VDW3A=1
-
     # extra TCE related options
     export MRCC_METHODS="y"
     export EACCSD="y"
@@ -123,7 +147,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preBuild = ''
-    ln -s ${ga_src} src/tools/ga-${versionGA}.tar.gz
+    ln -s ${gaSrc} src/tools/ga-${versionGA}.tar.gz
     cd src
     make nwchem_config
     ${lib.optionalString (!blas.isILP64) "make 64_to_32"}
