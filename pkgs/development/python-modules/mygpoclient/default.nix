@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, buildPythonPackage, nose, minimock }:
 
 buildPythonPackage rec {
-  pname = "mypgoclient";
+  pname = "mygpoclient";
   version = "1.8";
 
   src = fetchFromGitHub {

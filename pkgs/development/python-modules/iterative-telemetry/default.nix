@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "iterative-telemtry";
+  pname = "iterative-telemetry";
   version = "0.0.7";
   format = "pyproject";
 
