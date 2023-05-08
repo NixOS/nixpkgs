@@ -7135,6 +7135,8 @@ with pkgs;
 
   wallutils = callPackage ../tools/graphics/wallutils { };
 
+  wayback = callPackage ../tools/misc/wayback { };
+
   worker-build = callPackage ../development/tools/worker-build {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
