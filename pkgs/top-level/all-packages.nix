@@ -33811,7 +33811,7 @@ with pkgs;
     syncthing-discovery
     syncthing-relay;
 
-  syncthing-cli = callPackage ../applications/networking/syncthing-cli { };
+  stc-cli = callPackage ../applications/networking/stc-cli { };
 
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
