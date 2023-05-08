@@ -22,8 +22,8 @@ let
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
-    rev = "v${version}";
-    hash = "sha256-LpYi5Ty6OBcW0zokCliMDhujJ7tPPl1XdPs5ad1tv5s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-03DyvPht4E4uysKqgyfu8hxu1qh+YzWsTI09E4ftiSs=";
   };
 
 in
