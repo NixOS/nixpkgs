@@ -5,7 +5,7 @@
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
 # This is the default binutils, but with *this* version of LLD rather
-# than the default LLVM verion's, if LLD is the choice. We use these for
+# than the default LLVM version's, if LLD is the choice. We use these for
 # the `useLLVM` bootstrapping below.
 , bootBintoolsNoLibc ?
     if stdenv.targetPlatform.linker == "lld"

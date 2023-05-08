@@ -1474,7 +1474,7 @@ self: super: {
     ]
           (doDistribute (unmarkBroken (dontCheck (doJailbreak super.reflex-dom-core))))));
 
-  # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarbal of jsaddle-warp.
+  # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarball of jsaddle-warp.
   jsaddle-warp = dontCheck super.jsaddle-warp;
 
   # 2020-06-24: Jailbreaking because of restrictive test dep bounds
@@ -1867,7 +1867,7 @@ self: super: {
   # Issue reported upstream, no bug tracker url yet.
   darcs = doJailbreak super.darcs;
 
-  # Too strict verion bounds on cryptonite and github.
+  # Too strict version bounds on cryptonite and github.
   # PRs are merged, will be fixed next release or Hackage revision.
   nix-thunk = appendPatches [
     (fetchpatch {
