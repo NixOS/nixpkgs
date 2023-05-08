@@ -3625,7 +3625,7 @@ with pkgs;
 
   play-with-mpv = callPackage ../tools/video/play-with-mpv { };
 
-  plausible = callPackage ../servers/web-apps/plausible { nodejs = nodejs_16; };
+  plausible = callPackage ../servers/web-apps/plausible { };
 
   pam-reattach = callPackage ../os-specific/darwin/pam-reattach { };
 
