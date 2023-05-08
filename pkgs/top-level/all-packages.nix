@@ -32995,6 +32995,8 @@ with pkgs;
 
   osmium-tool = callPackage ../applications/misc/osmium-tool { };
 
+  osmtogeojson = callPackage ../applications/misc/osmtogeojson { };
+
   owamp = callPackage ../applications/networking/owamp { };
 
   owofetch = callPackage ../tools/misc/owofetch {
