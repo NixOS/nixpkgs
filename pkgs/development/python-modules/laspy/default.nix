@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "laspy";
-  version = "2.3.0";
+  version = "2.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Wdbp6kjuZkJh+pp9OVczdsRNgn41/Tdt7nGFvewcQ1w=";
+    sha256 = "sha256-E8rsxzJcsiQsslOUmE0hs7X3lsiLy0S8LtLTzxuXKsQ=";
   };
 
   propagatedBuildInputs = [
