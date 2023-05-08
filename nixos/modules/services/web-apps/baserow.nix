@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 # TODO: OTEL stuff
 let
-  inherit (lib) mkIf mkOption mkEnableOption mkPackageOptionMD mkDefault mdDoc;
+  inherit (lib) mkIf mkOption mkEnableOption mkPackageOptionMD mkDefault mdDoc concatStringsSep mapAttrsToList;
   cfg = config.services.baserow;
   penv = cfg.package.python.buildEnv.override {
     extraLibs = [
@@ -13,10 +13,14 @@ let
   defaultEnvironment = cfg.environment // {
     PYTHONPATH = pythonPath;
   };
+  environmentAsFile = pkgs.writeText "baserow-environment" (concatStringsSep "\n"
+    (mapAttrsToList (key: value: "${key}=\"${toString value}\"")));
   # TODO: handle env file and secrets.
   baserowManageScript = pkgs.writeShellScriptBin "baserow-manage" ''
     set -a
     export PYTHONPATH=${cfg.package.pythonPath}
+    source ${cfg.secretFile}
+    source ${environmentAsFile}
     sudo=exec
     if [[ "$USER" != baserow ]]; then
       sudo='exec /run/wrappers/bin/sudo -u baserow --preserve-env'
@@ -132,7 +136,7 @@ in
           };
 
           preStart = ''
-            ln -sf ${ui}/.nuxt /var/lib/baserow/.nuxt
+            ln -sf ${ui}/.nuxt /var/lib/baserow/
           '';
 
           serviceConfig = defaultServiceConfig // {
