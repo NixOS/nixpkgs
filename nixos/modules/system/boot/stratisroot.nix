@@ -5,18 +5,19 @@ in
 {
   options.boot.stratis = {
     rootPoolUuid = lib.mkOption {
-      type = types.uniq types.str;
-      description = lib.mdoc ''
+      type = types.uniq (types.nullOr types.str);
+      description = lib.mdDoc ''
         UUID of the stratis pool that the root fs is located in
       '';
       example = "04c68063-90a5-4235-b9dd-6180098a20d9";
+      default = null;
     };
   };
-  config = {
+  config = lib.mkIf (config.boot.stratis.rootPoolUuid != null) {
     assertions = [
       {
         assertion = config.boot.initrd.systemd.enable;
-        message = "stratis root fs requires systemd initrd";
+        message = "stratis root fs requires systemd stage 1";
       }
     ];
     boot.initrd = {
