@@ -9837,6 +9837,8 @@ self: super: with self; {
 
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
 
+  python-u2flib-server = callPackage ../development/python-modules/python-u2flib-server { };
+
   python-uinput = callPackage ../development/python-modules/python-uinput { };
 
   python-unshare = callPackage ../development/python-modules/python-unshare { };
