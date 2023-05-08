@@ -514,6 +514,8 @@ self: super: with self; {
 
   aniso8601 = callPackage ../development/python-modules/aniso8601 { };
 
+  anki = callPackage ../development/python-modules/anki { };
+
   annexremote = callPackage ../development/python-modules/annexremote { };
 
   annotated-types = callPackage ../development/python-modules/annotated-types { };
