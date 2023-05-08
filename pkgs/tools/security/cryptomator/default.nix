@@ -35,7 +35,6 @@ let
       find $out/.m2 -type f -iname '*.pom' -exec sed -i -e 's/\r\+$//' {} \;
     '';
 
-    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
     outputHash = "sha256-2nCaSL7OlS9f+PZPh0YiMvnjOaAqlQimkKWDSjSP+bQ=";
 
