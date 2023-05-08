@@ -11,6 +11,7 @@
 , libXcursor
 , freetype
 , alsa-lib
+, Accelerate
 , Cocoa
 , WebKit
 , CoreServices
@@ -76,6 +77,7 @@ stdenv.mkDerivation rec {
     freetype
     alsa-lib
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Accelerate
     Cocoa
     WebKit
     CoreServices
