@@ -6339,6 +6339,8 @@ self: super: with self; {
     enablePython = true;
   });
 
+  mmcif-pdbx = callPackage ../development/python-modules/mmcif-pdbx { };
+
   mmcv = callPackage ../development/python-modules/mmcv { };
 
   mmengine = callPackage ../development/python-modules/mmengine { };
