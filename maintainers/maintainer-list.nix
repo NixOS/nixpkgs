@@ -8188,6 +8188,11 @@
     githubId = 55951;
     name = "Joe DeVivo";
   };
+  joedupuis = {
+    github = "JoeDupuis";
+    githubId = 1518299;
+    name = "Joé Dupuis";
+  };
   joelancaster = {
     email = "joe.a.lancas@gmail.com";
     github = "JoeLancaster";
