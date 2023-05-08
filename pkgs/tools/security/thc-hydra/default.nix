@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, zlib, openssl, ncurses, libidn, pcre, libssh, libmysqlclient, postgresql
-, withGUI ? false, makeWrapper, pkg-config, gtk2 }:
+, withGUI ? false, makeWrapper, pkg-config, gtk2, freerdp }:
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = lib.optionals withGUI [ pkg-config makeWrapper ];
 
   buildInputs = [
-    zlib openssl ncurses libidn pcre libssh libmysqlclient postgresql
+    zlib openssl ncurses libidn pcre libssh libmysqlclient postgresql freerdp
   ] ++ lib.optional withGUI gtk2;
 
   enableParallelBuilding = true;
