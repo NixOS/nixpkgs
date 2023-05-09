@@ -330,6 +330,8 @@ with pkgs;
 
   bingo = callPackage ../development/tools/bingo { };
 
+  bin2c = callPackage ../development/tools/bin2c { };
+
   binserve = callPackage ../servers/binserve {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
