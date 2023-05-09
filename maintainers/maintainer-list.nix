@@ -3161,7 +3161,7 @@
   considerate = {
     email = "viktor.kronvall@gmail.com";
     github = "considerate";
-ame = "Your name";    githubId = 217918;
+    githubId = 217918;
     name = "Viktor Kronvall";
   };
   contrun = {
