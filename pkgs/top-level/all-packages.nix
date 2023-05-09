@@ -39481,6 +39481,8 @@ with pkgs;
 
   tfswitch = callPackage ../applications/networking/cluster/tfswitch { };
 
+  tfupdate = callPackage ../applications/networking/cluster/tfupdate { };
+
   tgswitch = callPackage ../applications/networking/cluster/tgswitch { };
 
   tilt = callPackage ../applications/networking/cluster/tilt { };
