@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   name = "sssd-ldap";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ bbigras ];
+    maintainers = [ bbigras s1341 ];
   };
 
   nodes.machine = { pkgs, ... }: {
@@ -25,7 +25,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       urlList = [ "ldap:///" "ldaps:///" ];
       settings = {
         attrs = {
-          olcLogLevel = "conns config";
           olcTLSCACertificateFile = "/etc/cert.pem";
           olcTLSCertificateFile = "/etc/cert.pem";
           olcTLSCertificateKeyFile = "/etc/key.pem";
@@ -154,14 +153,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.wait_until_tty_matches("1", "Reenter new Password: ")
         machine.send_chars("${testNewPassword}\n")
         machine.wait_until_tty_matches("1", "passwd: password updated successfully")
-        machine.send_chars("exit\n")
 
-    with subtest("Log in as ${testUser} with new password"):
-        machine.wait_until_tty_matches("1", "login: ")
+    with subtest("Log in as ${testUser} with new password in virtual console 2"):
+        machine.send_key("alt-f2")
+        machine.wait_until_succeeds("[ $(fgconsole) = 2 ]")
+        machine.wait_for_unit("getty@tty2.service")
+        machine.wait_until_succeeds("pgrep -f 'agetty.*tty2'")
+
+        machine.wait_until_tty_matches("2", "login: ")
         machine.send_chars("${testUser}\n")
-        machine.wait_until_tty_matches("1", "login: ${testUser}")
+        machine.wait_until_tty_matches("2", "login: ${testUser}")
         machine.wait_until_succeeds("pgrep login")
-        machine.wait_until_tty_matches("1", "Password: ")
+        machine.wait_until_tty_matches("2", "Password: ")
         machine.send_chars("${testNewPassword}\n")
         machine.wait_until_succeeds("pgrep -u ${testUser} bash")
         machine.send_chars("touch done2\n")
