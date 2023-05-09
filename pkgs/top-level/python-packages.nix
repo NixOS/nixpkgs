@@ -2049,6 +2049,8 @@ self: super: with self; {
 
   contexttimer = callPackage ../development/python-modules/contexttimer { };
 
+  contextvars = callPackage ../development/python-modules/contextvars { };
+
   contourpy = callPackage ../development/python-modules/contourpy { };
 
   convertdate = callPackage ../development/python-modules/convertdate { };
