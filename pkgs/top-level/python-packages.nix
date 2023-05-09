@@ -5777,6 +5777,8 @@ self: super: with self; {
     inherit (pkgs) lmdb;
   };
 
+  lmfit = callPackage ../development/python-modules/lmfit { };
+
   lml = callPackage ../development/python-modules/lml { };
 
   lmnotify = callPackage ../development/python-modules/lmnotify { };
