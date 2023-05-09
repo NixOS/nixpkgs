@@ -81,7 +81,7 @@ let
       # "--trace-expand"
     ];
 
-    postInstall = ''
+    postInstall = lib.optionalString (!stdenv.isDarwin) ''
       mkdir -p $out/share/Jupyter
       cp -r /build/clang/tools/cling/tools/Jupyter/kernel $out/share/Jupyter
     '';
