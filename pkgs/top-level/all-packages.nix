@@ -36765,6 +36765,8 @@ with pkgs;
 
   steam-acf = callPackage ../tools/games/steam-acf { };
 
+  steam-gyro-for-cemuhook = callPackage ../applications/misc/steam-gyro-for-cemuhook { };
+
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     inherit winetricks steam-run yad;
   };
