@@ -1,13 +1,18 @@
 { lib
 , buildPythonPackage
-, callPackage
 , fetchFromGitHub
+
+# bootstrap
 , flit-core
+, installer
+, python
+
+# tests
 , unittestCheckHook
 
-  # important downstream dependencies
-, flit
+ # important downstream dependencies
 , black
+, flit
 , mypy
 , setuptools-scm
 }:
@@ -15,20 +20,39 @@
 buildPythonPackage rec {
   pname = "tomli";
   version = "2.0.1";
-  format = "pyproject";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "hukkin";
-    repo = pname;
-    rev = version;
+    repo = "tomli";
+    rev = "refs/tags/${version}";
     hash = "sha256-v0ZMrHIIaGeORwD4JiBeLthmnKZODK5odZVL0SY4etA=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [
+    flit-core
+    installer
+  ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  buildPhase = ''
+    runHook preBuild
+    ${python.interpreter} -m flit_core.wheel
+    runHook postBuild
+  '';
 
-  pythonImportsCheck = [ "tomli" ];
+  installPhase = ''
+    runHook preInstall
+    ${python.interpreter} -m installer --prefix "$out" dist/*.whl
+    runHook postInstall
+  '';
+
+  pythonImportsCheck = [
+    "tomli"
+  ];
+
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
   passthru.tests = {
     # test downstream dependencies
