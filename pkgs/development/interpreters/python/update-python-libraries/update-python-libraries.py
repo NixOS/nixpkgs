@@ -65,7 +65,7 @@ def _get_values(attribute, text):
 
     :returns: List of matches.
     """
-    regex = '{}\s+=\s+"(.*)";'.format(re.escape(attribute))
+    regex = fr'{re.escape(attribute)}\s+=\s+"(.*)";'
     regex = re.compile(regex)
     values = regex.findall(text)
     return values
@@ -430,7 +430,7 @@ def _update_package(path, target):
     if fetcher == 'fetchFromGitHub':
         # in the case of fetchFromGitHub, it's common to see `rev = version;` or `rev = "v${version}";`
         # in which no string value is meant to be substituted. However, we can just overwrite the previous value.
-        regex = '(rev\s+=\s+[^;]*;)'
+        regex = r'(rev\s+=\s+[^;]*;)'
         regex = re.compile(regex)
         matches = regex.findall(text)
         n = len(matches)
@@ -519,7 +519,7 @@ environment variables:
 
     if len(packages) > 1:
         global BULK_UPDATE
-        BULK_UPDATE = true
+        BULK_UPDATE = True
 
     logging.info("Updating packages...")
 
