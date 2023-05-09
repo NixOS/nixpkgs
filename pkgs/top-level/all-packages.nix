@@ -7528,6 +7528,8 @@ with pkgs;
 
   feedgnuplot = callPackage ../tools/graphics/feedgnuplot { };
 
+  fermyon-spin = callPackage ../development/tools/fermyon-spin { };
+
   fbcat = callPackage ../tools/misc/fbcat { };
 
   fbv = callPackage ../tools/graphics/fbv { };
