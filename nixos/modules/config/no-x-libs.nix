@@ -47,7 +47,7 @@ with lib;
       libva = super.libva-minimal;
       limesuite = super.limesuite.override { withGui = false; };
       mc = super.mc.override { x11Support = false; };
-      mpv-unwrapped = super.mpv-unwrapped.override { sdl2Support = false; x11Support = false; };
+      mpv-unwrapped = super.mpv-unwrapped.override { sdl2Support = false; x11Support = false; waylandSupport = false; };
       msmtp = super.msmtp.override { withKeyring = false; };
       neofetch = super.neofetch.override { x11Support = false; };
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
