@@ -8287,6 +8287,8 @@ self: super: with self; {
 
   pydicom = callPackage ../development/python-modules/pydicom { };
 
+  pydicom-seg = callPackage ../development/python-modules/pydicom-seg { };
+
   pydigiham = callPackage ../development/python-modules/pydigiham { };
 
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
