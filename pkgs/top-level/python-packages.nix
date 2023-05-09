@@ -4569,6 +4569,8 @@ self: super: with self; {
 
   htmlmin = callPackage ../development/python-modules/htmlmin { };
 
+  htmltools = callPackage ../development/python-modules/htmltools { };
+
   html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
   html-text = callPackage ../development/python-modules/html-text { };
@@ -10552,6 +10554,8 @@ self: super: with self; {
 
   rsa = callPackage ../development/python-modules/rsa { };
 
+  rsconnect-jupyter = callPackage ../development/python-modules/rsconnect-jupyter { };
+
   rsskey = callPackage ../development/python-modules/rsskey { };
 
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
@@ -10904,6 +10908,8 @@ self: super: with self; {
   shiboken2 = toPythonModule (callPackage ../development/python-modules/shiboken2 {
     inherit (pkgs) cmake llvmPackages qt5;
   });
+
+  shiny = callPackage ../development/python-modules/shiny { };
 
   shippai = callPackage ../development/python-modules/shippai { };
 
