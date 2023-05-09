@@ -121,7 +121,7 @@ rec {
         ({
           linux-kernel = args.linux-kernel or {};
           gcc = args.gcc or {};
-          rustc = args.rust or {};
+          rustc = args.rustc or {};
         } // platforms.select final)
         linux-kernel gcc rustc;
 
