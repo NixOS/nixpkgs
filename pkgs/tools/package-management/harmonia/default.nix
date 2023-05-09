@@ -39,8 +39,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Nix binary cache";
-    homepage = "https://github.com/helsinki-systems/harmonia";
+    homepage = "https://github.com/nix-community/harmonia";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab mic92 ];
   };
 }
