@@ -25,7 +25,7 @@ buildPythonPackage rec {
     httpx
   ];
 
-  # disable coverage options as they don't provide us value, and they break the defalt pytestCheckHook
+  # disable coverage options as they don't provide us value, and they break the default pytestCheckHook
   preCheck = ''
     sed -i '/addopts/d' ./setup.cfg
   '';

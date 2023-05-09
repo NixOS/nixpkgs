@@ -27,7 +27,7 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "Browser with unified devtools targeting responsability and acessibility";
+    description = "Browser with unified devtools targeting responsability and accessibility";
     longDescription = ''
       The stand-alone browser for ambitious developers that want to build responsive,
       accessible and performant websites in a fraction of the time it takes with other browsers.
