@@ -8406,6 +8406,8 @@ with pkgs;
 
   headscale = callPackage ../servers/headscale { };
 
+  health = callPackage ../applications/misc/health { };
+
   healthchecks = callPackage ../servers/web-apps/healthchecks { };
 
   heisenbridge = callPackage ../servers/heisenbridge { };
