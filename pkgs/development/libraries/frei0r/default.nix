@@ -7,8 +7,8 @@
 , opencv
 , pcre
 , pkg-config
-, cudaSupport ? (config.cudaSupport or false)
-, cudaPackages ? { }
+, cudaSupport ? config.cudaSupport or false
+, cudaPackages
 }:
 
 stdenv.mkDerivation rec {
