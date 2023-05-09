@@ -63,7 +63,7 @@ let
     # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
-    broken = stdenv.isAarch64;
+    broken = stdenv.isAarch64 || stdenv.isDarwin;
   };
 
   cudatoolkit_joined = symlinkJoin {
