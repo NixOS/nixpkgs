@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tldr";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tldr-cpp-client";
     rev = "v${version}";
-    sha256 = "sha256-xim5SB9/26FMjLqhiV+lj+Rm5Tk5luSIqwyYb3kXoFY=";
+    sha256 = "sha256-2cd16cd956d15b1d33d7a5e2a2566500ab5766d2fa1b9ee7e49e64acc0352785";
   };
 
   buildInputs = [ curl libzip ];
