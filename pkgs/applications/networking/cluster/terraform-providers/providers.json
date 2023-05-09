@@ -437,24 +437,24 @@
     "vendorHash": "sha256-SLFpH7isx4OM2X9bzWYYD4VlejlgckBovOxthg47OOQ="
   },
   "google": {
-    "hash": "sha256-8uRIvFZsuPyisJMRmqL5zNxea6h1VwxZS+lmmvZslfo=",
+    "hash": "sha256-0spzfAsinmWsdarpoxIfrQFIPGEV47H50IVw5Kfyqxs=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google",
     "owner": "hashicorp",
     "proxyVendor": true,
     "repo": "terraform-provider-google",
-    "rev": "v4.63.1",
+    "rev": "v4.64.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Xm1P6P2tMLqjV9QFX6D7koBPzg4umTH6jCQesyt0A/A="
+    "vendorHash": "sha256-rjLvmKymUiuAIwiZRpgivbYbP88MLVSBlrirlJxZpcw="
   },
   "google-beta": {
-    "hash": "sha256-avE1EnjCItz1NcF0KzsSgUnQABr2D0IC7kLGgIj+j6g=",
+    "hash": "sha256-VMJdTj9LUhoj0Qvmt9lUYh00sOJQctgEggem4ZRVsVw=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "proxyVendor": true,
     "repo": "terraform-provider-google-beta",
-    "rev": "v4.63.1",
+    "rev": "v4.64.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Xm1P6P2tMLqjV9QFX6D7koBPzg4umTH6jCQesyt0A/A="
+    "vendorHash": "sha256-rjLvmKymUiuAIwiZRpgivbYbP88MLVSBlrirlJxZpcw="
   },
   "googleworkspace": {
     "hash": "sha256-dedYnsKHizxJZibuvJOMbJoux0W6zgKaK5fxIofKqCY=",
@@ -728,11 +728,11 @@
     "vendorHash": "sha256-QxbZv6YMa5/I4bTeQBNdmG3EKtLEmstnH7HMiZzFJrI="
   },
   "minio": {
-    "hash": "sha256-LL3jOuNNCd5isNPyt+I35j5BdxAbnWRQ2o2RBLSOc/E=",
+    "hash": "sha256-1VO0ofT+6JU8pMSfrSfgEJlTb5GM64AVYQ1hvbWPzCw=",
     "homepage": "https://registry.terraform.io/providers/aminueza/minio",
     "owner": "aminueza",
     "repo": "terraform-provider-minio",
-    "rev": "v1.15.0",
+    "rev": "v1.15.1",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-Xz6WxAxzvLfgJTD2oDgZoeHffcdA7dyfgwY1g6lFkbk="
   },
@@ -764,13 +764,13 @@
     "vendorHash": null
   },
   "newrelic": {
-    "hash": "sha256-+awQtvyJBLSm+WYH2gp+VM2uNbWeEfIbwqw7VsikQEA=",
+    "hash": "sha256-YD7RpzhFgX9BwXzZ4OO3XdPPGLurTvEA6Y0iXnVxTPg=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.21.3",
+    "rev": "v3.22.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-fqO3hlDUPY8/9SSMpNVD81pyaQE12zwNKDLSI54UF3M="
+    "vendorHash": "sha256-LWIqCc4hn4ExG4LkFKD5NLM6djWpKgYQdqZM7atTez8="
   },
   "nomad": {
     "hash": "sha256-1TmcFS+ul7xpSGqQohcCdeQ2zuDD429xGI0X2Add5HQ=",

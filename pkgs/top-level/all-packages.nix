@@ -1503,6 +1503,8 @@ with pkgs;
 
   copier = callPackage ../tools/misc/copier { };
 
+  gabutdm = callPackage ../applications/networking/gabutdm { };
+
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
@@ -22152,6 +22154,12 @@ with pkgs;
 
   libosmocore = callPackage ../applications/misc/libosmocore { };
 
+  libosmo-abis = callPackage ../development/libraries/libosmo-abis { };
+
+  libosmo-netif = callPackage ../development/libraries/libosmo-netif { };
+
+  libosmo-sccp = callPackage ../development/libraries/libosmo-sccp { };
+
   libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
 
   libotr = callPackage ../development/libraries/libotr { };
@@ -23168,10 +23176,10 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_4
-    libressl_3_5
-    libressl_3_6;
+    libressl_3_6
+    libressl_3_7;
 
-  libressl = libressl_3_6;
+  libressl = libressl_3_7;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
@@ -26444,7 +26452,9 @@ with pkgs;
 
   criu = callPackage ../os-specific/linux/criu { };
 
-  cryptomator = callPackage ../tools/security/cryptomator { };
+  cryptomator = callPackage ../tools/security/cryptomator {
+    jdk = jdk.override { enableJavaFX = true; };
+  };
 
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
 
@@ -27914,6 +27924,8 @@ with pkgs;
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
 
   dotcolon-fonts = callPackage ../data/fonts/dotcolon-fonts { };
+
+  dracula-icon-theme = callPackage ../data/icons/dracula-icon-theme { };
 
   e17gtk = callPackage ../data/themes/e17gtk { };
 
@@ -32432,7 +32444,7 @@ with pkgs;
     inherit lua;
   };
 
-  # Wraps without trigerring a rebuild
+  # Wraps without triggering a rebuild
   wrapMpv = callPackage ../applications/video/mpv/wrapper.nix { };
   mpv = wrapMpv mpv-unwrapped { };
 
@@ -33123,7 +33135,7 @@ with pkgs;
   peek = callPackage ../applications/video/peek { };
 
   peertube = callPackage ../servers/peertube {
-    nodejs = nodejs_16;
+    nodejs = nodejs_18;
   };
 
   peroxide = callPackage ../applications/networking/peroxide { };
@@ -34641,9 +34653,7 @@ with pkgs;
   neovim-qt-unwrapped = libsForQt5.callPackage ../applications/editors/neovim/neovim-qt.nix { };
   neovim-qt = libsForQt5.callPackage ../applications/editors/neovim/qt.nix { };
 
-  gnvim-unwrapped = callPackage ../applications/editors/neovim/gnvim {
-    gtk = gtk3;
-  };
+  gnvim-unwrapped = callPackage ../applications/editors/neovim/gnvim { };
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
 
@@ -39623,7 +39633,7 @@ with pkgs;
 
   wasm-pack = callPackage ../development/tools/wasm-pack {
     inherit (darwin.apple_sdk.frameworks) Security;
-    libressl = libressl_3_5;
+    libressl = libressl_3_6;
   };
 
   wasynth = callPackage ../development/tools/wasynth { };
@@ -40105,7 +40115,7 @@ with pkgs;
 
   dapper = callPackage ../development/tools/dapper { };
 
-  kube3d =  callPackage ../applications/networking/cluster/kube3d {
+  k3d = callPackage ../applications/networking/cluster/k3d {
     buildGoModule = buildGo118Module; # tests fail with 1.19
   };
 

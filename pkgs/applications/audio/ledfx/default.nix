@@ -1,35 +1,22 @@
 { lib
-, fetchpatch
 , python3
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.64";
+  version = "2.0.67";
   format = "setuptools";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-TKRa4PcMd0Jl94XD2WubOhmsxZaUplZeWKsuKz83Rl4=";
+    hash = "sha256-lFxAMjglQZXCySr83PtvStU6hw2ucQu+rSjIHo1yZBk=";
   };
-
-  patches = [
-    # replace tcp-latency which is not packaged with icmplib
-    (fetchpatch {
-      url = "https://github.com/LedFx/LedFx/commit/98cd4256846ae3bdae7094eeacb3b02a4807dc6f.patch";
-      excludes = [
-        # only used in win.spec file which is windows specific
-        "hiddenimports.py"
-      ];
-      hash = "sha256-p9fiLdjZI5fe5Qy2xbJIAtblp/7BwUxAvwjHQy5l9nQ=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace '"openrgb-python~=0.2.10",' "" \
-      --replace '"pyupdater>=3.1.0",' "" \
       --replace "'rpi-ws281x>=4.3.0; platform_system == \"Linux\"'," "" \
+      --replace '"sentry-sdk==1.14.0",' "" \
       --replace "~=" ">="
   '';
 
@@ -49,6 +36,7 @@ python3.pkgs.buildPythonPackage rec {
     psutil
     pyserial
     pystray
+    python-rtmidi
     # rpi-ws281x # not packaged
     requests
     sacn

@@ -1,4 +1,4 @@
-# Do not use overrides in this file to add  `meta.mainProgram` to packges. Use `./main-programs.nix`
+# Do not use overrides in this file to add  `meta.mainProgram` to packages. Use `./main-programs.nix`
 # instead.
 { pkgs, nodejs }:
 
