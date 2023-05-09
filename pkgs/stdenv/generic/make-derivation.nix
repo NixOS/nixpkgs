@@ -550,6 +550,8 @@ lib.extendDerivation
        # inputDerivation produces the inputs; not the outputs, so any
        # restrictions on what used to be the outputs don't serve a purpose
        # anymore.
+       allowedReferences = null;
+       allowedRequisites = null;
        disallowedReferences = [ ];
        disallowedRequisites = [ ];
      });

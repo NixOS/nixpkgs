@@ -41,8 +41,6 @@ buildPythonPackage {
     fi
   '';
 
-  outputs = [ "out" "dev" ];
-
   buildInputs = [ protobuf ];
 
   propagatedNativeBuildInputs = [

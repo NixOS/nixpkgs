@@ -3,10 +3,13 @@
 , stdenv
 , fetchFromGitHub
 , makeWrapper
-, nodejs
+, nodejs_18
 , pkgs
 }:
 
+let
+  nodejs = nodejs_18;
+in
 stdenv.mkDerivation rec {
   pname = "haste-server";
   version = "b52b394bad909ddf151073987671e843540d91d6";

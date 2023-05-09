@@ -169,6 +169,20 @@ in {
           See: <https://learn.netdata.cloud/docs/agent/anonymous-statistics>
         '';
       };
+
+      deadlineBeforeStopSec = mkOption {
+        type = types.int;
+        default = 120;
+        description = lib.mdDoc ''
+          In order to detect when netdata is misbehaving, we run a concurrent task pinging netdata (wait-for-netdata-up)
+          in the systemd unit.
+
+          If after a while, this task does not succeed, we stop the unit and mark it as failed.
+
+          You can control this deadline in seconds with this option, it's useful to bump it
+          if you have (1) a lot of data (2) doing upgrades (3) have low IOPS/throughput.
+        '';
+      };
     };
   };
 
@@ -205,7 +219,7 @@ in {
           while [ "$(${pkgs.netdata}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
         '';
 
-        TimeoutStopSec = 60;
+        TimeoutStopSec = cfg.deadlineBeforeStopSec;
         Restart = "on-failure";
         # User and group
         User = cfg.user;

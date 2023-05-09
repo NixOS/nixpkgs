@@ -13,7 +13,6 @@
 , cffi
 , pkg-config
 , pytestCheckHook
-, pytest-benchmark
 , pytest-subtests
 , pythonOlder
 , pretend
@@ -46,6 +45,11 @@ buildPythonPackage rec {
     hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--benchmark-disable" ""
+  '';
+
   cargoRoot = "src/rust";
 
   nativeBuildInputs = lib.optionals (!isPyPy) [
@@ -72,7 +76,6 @@ buildPythonPackage rec {
     pretend
     py
     pytestCheckHook
-    pytest-benchmark
     pytest-subtests
     pytz
   ];
@@ -81,7 +84,10 @@ buildPythonPackage rec {
     "--disable-pytest-warnings"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTestPaths = [
+    # save compute time by not running benchmarks
+    "tests/bench"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # aarch64-darwin forbids W+X memory, but this tests depends on it:
     # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
     "tests/hazmat/backends/test_openssl_memleak.py"

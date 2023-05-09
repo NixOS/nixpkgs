@@ -193,6 +193,7 @@ with lib;
             sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
           };
           patches = [
+            # Proxmox' VMA tool is published as a particular patch upon QEMU
             (pkgs.fetchpatch {
               url =
                 let
@@ -201,6 +202,21 @@ with lib;
                 in "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;hb=${rev};f=${path}";
               hash = "sha256-2Dz+ceTwrcyYYxi76RtyY3v15/2pwGcDhFuoZWlgbjc=";
             })
+
+            # Proxmox' VMA tool uses O_DIRECT which fails on tmpfs
+            # Filed to upstream issue tracker: https://bugzilla.proxmox.com/show_bug.cgi?id=4710
+            (pkgs.writeText "inline.patch" ''
+                --- a/vma-writer.c   2023-05-01 15:11:13.361341177 +0200
+                +++ b/vma-writer.c   2023-05-01 15:10:51.785293129 +0200
+                @@ -306,7 +306,7 @@
+                             /* try to use O_NONBLOCK */
+                             fcntl(vmaw->fd, F_SETFL, fcntl(vmaw->fd, F_GETFL)|O_NONBLOCK);
+                         } else  {
+                -            oflags = O_NONBLOCK|O_DIRECT|O_WRONLY|O_EXCL;
+                +            oflags = O_NONBLOCK|O_WRONLY|O_EXCL;
+                             vmaw->fd = qemu_create(filename, oflags, 0644, errp);
+                         }
+            '')
           ];
 
           buildInputs = super.buildInputs ++ [ pkgs.libuuid ];

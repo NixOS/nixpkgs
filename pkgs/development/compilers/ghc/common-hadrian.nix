@@ -41,7 +41,7 @@
               || stdenv.targetPlatform.isSparc
               || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
               || stdenv.targetPlatform.isGhcjs)
-, # LLVM is conceptually a run-time-only depedendency, but for
+, # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
   buildTargetLlvmPackages

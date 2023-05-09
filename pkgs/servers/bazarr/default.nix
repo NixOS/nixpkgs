@@ -8,19 +8,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bazarr";
-  version = "1.2.0";
+  version = "1.2.1";
 
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/morpheus65535/bazarr/releases/download/v${version}/bazarr.zip";
-    sha256 = "sha256-rlph8On/dc9Xyx8/KQzp4vX49wY4fr1oTtBEyfVhrsc=";
+    sha256 = "sha256-PuVK1jrNjxagESYvgqRBfxzsV/KxFhTdOyliO8smwec=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
 
   buildInputs = [
-    (python3.withPackages (ps: [ ps.lxml ps.numpy ps.gevent ps.gevent-websocket ]))
+    (python3.withPackages (ps: [ ps.lxml ps.numpy ps.gevent ps.gevent-websocket ps.pillow ]))
   ] ++ runtimeProgDeps;
 
   installPhase = ''

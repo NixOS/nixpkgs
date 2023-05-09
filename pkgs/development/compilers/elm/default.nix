@@ -3,7 +3,7 @@
 let
 
   # To control nodejs version we pass down
-  nodejs = pkgs.nodejs_16;
+  nodejs = pkgs.nodejs_18;
 
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
 
@@ -123,7 +123,7 @@ let
 in lib.makeScope pkgs.newScope (self: with self; {
   inherit fetchElmDeps nodejs;
 
-  /* Node/NPM based dependecies can be upgraded using script `packages/generate-node-packages.sh`.
+  /* Node/NPM based dependencies can be upgraded using script `packages/generate-node-packages.sh`.
 
       * Packages which rely on `bin-wrap` will fail by default
         and can be patched using `patchBinwrap` function defined in `packages/lib.nix`.
