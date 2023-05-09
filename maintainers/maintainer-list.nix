@@ -3161,7 +3161,7 @@
   considerate = {
     email = "viktor.kronvall@gmail.com";
     github = "considerate";
-    githubId = 217918;
+ame = "Your name";    githubId = 217918;
     name = "Viktor Kronvall";
   };
   contrun = {
@@ -8553,6 +8553,12 @@
     github = "krostar";
     githubId = 5759930;
     name = "Alexis Destrez";
+  };
+  krutonium = {
+    email = "PFCKrutonium@gmail.com";
+    github = "krutonium";
+    githubId = 3945538;
+    name = "Kenton Boadway";
   };
   ktf = {
     email = "giulio.eulisse@cern.ch";

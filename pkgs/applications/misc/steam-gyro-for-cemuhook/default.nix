@@ -26,7 +26,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "Steam Gyro for Cemuhook is an application that enables Gyro controls for various emulators with the Steam Controller";
+    description = "An application that enables Gyro controls for various emulators with the Steam Controller";
     homepage = "https://github.com/FrogTheFrog/steam-gyro-for-cemuhook";
     license = licenses.mit;
     maintainers = with maintainers; [ krutonium ];
