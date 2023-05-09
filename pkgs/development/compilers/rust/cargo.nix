@@ -1,6 +1,6 @@
 { lib, stdenv, pkgsBuildHost, pkgsHostHost
 , file, curl, pkg-config, python3, openssl, cmake, zlib
-, installShellFiles, makeWrapper, rustPlatform, rust, rustc
+, installShellFiles, makeWrapper, rustPlatform, rustc
 , CoreFoundation, Security
 , auditable ? !cargo-auditable.meta.broken
 , cargo-auditable
@@ -114,6 +114,6 @@ rustPlatform.buildRustPackage.override {
     platforms = platforms.unix;
   };
 }
-// lib.optionalAttrs (rust.toRustTarget stdenv.buildPlatform != rust.toRustTarget stdenv.hostPlatform) {
+// lib.optionalAttrs (stdenv.buildPlatform.rust.target != stdenv.hostPlatform.rust.target) {
   HOST_PKG_CONFIG_PATH="${pkgsBuildBuild.pkg-config}/bin/pkg-config";
 })

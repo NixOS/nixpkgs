@@ -1,8 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, rust, rustPlatform, cargo-c, python3 }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, rustPlatform, cargo-c, python3 }:
 
-let
-  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
-in
 rustPlatform.buildRustPackage rec {
   pname = "libimagequant";
   version = "4.1.1";
@@ -28,13 +25,13 @@ rustPlatform.buildRustPackage rec {
 
   postBuild = ''
     pushd imagequant-sys
-    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.targetSpec}
     popd
   '';
 
   postInstall = ''
     pushd imagequant-sys
-    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.targetSpec}
     popd
   '';
 

@@ -14,7 +14,6 @@
 , libobjc
 , rustPlatform
 , rustc
-, rust
 , cargo-auditable-cargo-wrapper
 , gi-docgen
 , python3Packages
@@ -92,7 +91,7 @@ stdenv.mkDerivation rec {
 
     "--enable-always-build-tests"
   ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${rust.toRustTarget stdenv.hostPlatform}";
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${stdenv.hostPlatform.rust.target}";
 
   doCheck = false; # all tests fail on libtool-generated rsvg-convert not being able to find coreutils
 

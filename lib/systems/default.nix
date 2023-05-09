@@ -125,6 +125,71 @@ rec {
         } // platforms.select final)
         linux-kernel gcc rustc;
 
+      rust = {
+        # https://doc.rust-lang.org/reference/conditional-compilation.html#target_arch
+        targetArch =
+          /**/ if final ? rustc.platform then final.rustc.platform.arch
+          else if final.isAarch32 then "arm"
+          else if final.isMips64  then "mips64"     # never add "el" suffix
+          else if final.isPower64 then "powerpc64"  # never add "le" suffix
+          else final.parsed.cpu.name;
+
+        # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os
+        targetOs =
+          /**/ if final ? rustc.platform then final.rustc.platform.os or "none"
+          else if final.isDarwin then "macos"
+          else final.parsed.kernel.name;
+
+        # https://doc.rust-lang.org/reference/conditional-compilation.html#target_family
+        targetFamily =
+          if final ? rustc.platform.target-family
+          then
+            (
+              # Since https://github.com/rust-lang/rust/pull/84072
+              # `target-family` is a list instead of single value.
+              let
+                f = final.rustc.platform.target-family;
+              in
+                if builtins.isList f then f else [ f ]
+            )
+          else lib.optional final.isUnix "unix"
+               ++ lib.optional final.isWindows "windows";
+
+        # https://doc.rust-lang.org/reference/conditional-compilation.html#target_vendor
+        targetVendor = let
+          inherit (final.parsed) vendor;
+        in final.rustc.platform.vendor or {
+          "w64" = "pc";
+        }.${vendor.name} or vendor.name;
+
+        # The name of the rust target, even if it is custom. Adjustments are
+        # because rust has slightly different naming conventions than we do.
+        target = let
+          inherit (final.parsed) cpu kernel abi;
+          cpu_ = final.rustc.platform.arch or {
+            "armv7a" = "armv7";
+            "armv7l" = "armv7";
+            "armv6l" = "arm";
+            "armv5tel" = "armv5te";
+            "riscv64" = "riscv64gc";
+          }.${cpu.name} or cpu.name;
+          vendor_ = final.rust.targetVendor;
+        in final.rustc.config
+          or "${cpu_}-${vendor_}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+
+        # The name of the rust target if it is standard, or the json file
+        # containing the custom target spec.
+        targetSpec =
+          if final ? rustc.platform
+          then builtins.toFile (final.rust.target + ".json") (builtins.toJSON final.rustc.platform)
+          else final.rust.target;
+
+        # True if the target is no_std
+        # https://github.com/rust-lang/rust/blob/2e44c17c12cec45b6a682b1e53a04ac5b5fcc9d2/src/bootstrap/config.rs#L415-L421
+        isNoStdTarget =
+          builtins.any (t: lib.hasInfix t final.rust.target) ["-none" "nvptx" "switch" "-uefi"];
+      };
+
       linuxArch =
         if final.isAarch32 then "arm"
         else if final.isAarch64 then "arm64"

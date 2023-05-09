@@ -1,5 +1,4 @@
 { lib
-, rust
 , stdenv
 , rustPlatform
 , fetchCrate
@@ -14,8 +13,6 @@
 }:
 
 let
-  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
-
   # TODO: if another package starts using cargo-c (seems likely),
   # factor this out into a makeCargoChook expression in
   # pkgs/build-support/rust/hooks/default.nix
@@ -23,14 +20,12 @@ let
   cxxForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  rustBuildPlatform = rust.toRustTarget stdenv.buildPlatform;
-  rustTargetPlatform = rust.toRustTarget stdenv.hostPlatform;
   setEnvVars = ''
     env \
-      "CC_${rustBuildPlatform}"="${ccForBuild}" \
-      "CXX_${rustBuildPlatform}"="${cxxForBuild}" \
-      "CC_${rustTargetPlatform}"="${ccForHost}" \
-      "CXX_${rustTargetPlatform}"="${cxxForHost}" \
+      "CC_${stdenv.buildPlatform.rust.target}"="${ccForBuild}" \
+      "CXX_${stdenv.buildPlatform.rust.target}"="${cxxForBuild}" \
+      "CC_${stdenv.hostPlatform.rust.target}"="${ccForHost}" \
+      "CXX_${stdenv.hostPlatform.rust.target}"="${cxxForHost}" \
   '';
 
 in rustPlatform.buildRustPackage rec {
@@ -59,12 +54,12 @@ in rustPlatform.buildRustPackage rec {
 
   postBuild =  ''
     ${setEnvVars} \
-    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.targetSpec}
   '';
 
   postInstall = ''
     ${setEnvVars} \
-    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.targetSpec}
   '';
 
   meta = with lib; {

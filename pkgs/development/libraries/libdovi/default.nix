@@ -2,12 +2,9 @@
 , rustPlatform
 , fetchCrate
 , cargo-c
-, rust
 , stdenv
 }:
-let
-  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
-in
+
 rustPlatform.buildRustPackage rec {
   pname = "libdovi";
   version = "3.1.2";
@@ -28,19 +25,19 @@ rustPlatform.buildRustPackage rec {
 
   buildPhase = ''
     runHook preBuild
-    cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.targetSpec}
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.targetSpec}
     runHook postInstall
   '';
 
   checkPhase = ''
     runHook preCheck
-    cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.targetSpec}
     runHook postCheck
   '';
 

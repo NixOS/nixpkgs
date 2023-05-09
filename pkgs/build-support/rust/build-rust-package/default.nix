@@ -1,7 +1,6 @@
 { lib
 , importCargoLock
 , fetchCargoTarball
-, rust
 , stdenv
 , callPackage
 , cargoBuildHook
@@ -79,7 +78,7 @@ let
       sha256 = args.cargoSha256;
     } // depsExtraArgs);
 
-  target = rust.toRustTargetSpec stdenv.hostPlatform;
+  target = stdenv.hostPlatform.rust.targetSpec;
   targetIsJSON = lib.hasSuffix ".json" target;
   useSysroot = targetIsJSON && !__internal_dontAddSysroot;
 

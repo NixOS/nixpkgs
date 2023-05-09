@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, rust
 , rustPlatform
 , fetchFromGitHub
 , substituteAll
@@ -43,7 +42,7 @@ in rustPlatform.buildRustPackage rec {
   patches = [
     (substituteAll {
       src = ./target-dir.patch;
-      rustTarget = rust.toRustTarget stdenv.hostPlatform;
+      rustTarget = stdenv.hostPlatform.rust.target;
     })
   ];
 

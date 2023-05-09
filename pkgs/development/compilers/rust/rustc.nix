@@ -1,7 +1,7 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
-, darwin, cmake, rust, rustPlatform
+, darwin, cmake, rustPlatform
 , pkg-config, openssl, xz
 , libiconv
 , which, libffi
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
   # but it does support checking these idiosyncratic PKG_CONFIG_${TRIPLE}
   # environment variables.
   # [1]: https://github.com/rust-lang/pkg-config-rs/issues/53
-  "PKG_CONFIG_${builtins.replaceStrings ["-"] ["_"] (rust.toRustTarget stdenv.buildPlatform)}" =
+  "PKG_CONFIG_${builtins.replaceStrings ["-"] ["_"] stdenv.buildPlatform.rust.target}" =
     "${pkgsBuildHost.stdenv.cc.targetPrefix}pkg-config";
 
   NIX_LDFLAGS = toString (
@@ -62,9 +62,9 @@ in stdenv.mkDerivation rec {
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = let
-    setBuild  = "--set=target.${rust.toRustTarget stdenv.buildPlatform}";
-    setHost   = "--set=target.${rust.toRustTarget stdenv.hostPlatform}";
-    setTarget = "--set=target.${rust.toRustTarget stdenv.targetPlatform}";
+    setBuild  = "--set=target.${stdenv.buildPlatform.rust.target}";
+    setHost   = "--set=target.${stdenv.hostPlatform.rust.target}";
+    setTarget = "--set=target.${stdenv.targetPlatform.rust.target}";
     ccForBuild  = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}cc";
     cxxForBuild = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}c++";
     ccForHost  = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}cc";
@@ -77,23 +77,23 @@ in stdenv.mkDerivation rec {
     "--set=build.cargo=${rustPlatform.rust.cargo}/bin/cargo"
     "--enable-rpath"
     "--enable-vendor"
-    "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
-    "--host=${rust.toRustTargetSpec stdenv.hostPlatform}"
+    "--build=${stdenv.buildPlatform.rust.targetSpec}"
+    "--host=${stdenv.hostPlatform.rust.targetSpec}"
     # std is built for all platforms in --target.
     "--target=${concatStringsSep "," ([
-      (rust.toRustTargetSpec stdenv.targetPlatform)
+      stdenv.targetPlatform.rust.targetSpec
 
     # (build!=target): When cross-building a compiler we need to add
     # the build platform as well so rustc can compile build.rs
     # scripts.
     ] ++ optionals (stdenv.buildPlatform != stdenv.targetPlatform) [
-      (rust.toRustTargetSpec stdenv.buildPlatform)
+      stdenv.buildPlatform.rust.targetSpec
 
     # (host!=target): When building a cross-targeting compiler we
     # need to add the host platform as well so rustc can compile
     # build.rs scripts.
     ] ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform) [
-      (rust.toRustTargetSpec stdenv.hostPlatform)
+      stdenv.hostPlatform.rust.targetSpec
     ])}"
 
     "${setBuild}.cc=${ccForBuild}"
@@ -124,7 +124,7 @@ in stdenv.mkDerivation rec {
     "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.isMusl [
     "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
-  ] ++ optionals (rust.IsNoStdTarget stdenv.targetPlatform) [
+  ] ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
     "--disable-docs"
   ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # https://github.com/rust-lang/rust/issues/92173

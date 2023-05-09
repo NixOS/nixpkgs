@@ -6,10 +6,9 @@
 , lib
 , makeSetupHook
 , maturin
-, rust
 , rustc
 , stdenv
-, target ? rust.toRustTargetSpec stdenv.hostPlatform
+, target ? stdenv.hostPlatform.rust.targetSpec
 }:
 
 let
@@ -24,9 +23,9 @@ let
   cxxForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  rustBuildPlatform = rust.toRustTarget stdenv.buildPlatform;
-  rustTargetPlatform = rust.toRustTarget stdenv.hostPlatform;
-  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+  rustBuildPlatform = stdenv.buildPlatform.rust.target;
+  rustTargetPlatform = stdenv.hostPlatform.rust.target;
+  rustTargetPlatformSpec = stdenv.hostPlatform.rust.targetSpec;
 in {
   cargoBuildHook = callPackage ({ }:
     makeSetupHook {
@@ -77,7 +76,7 @@ in {
         diff = "${lib.getBin buildPackages.diffutils}/bin/diff";
 
         cargoConfig = ''
-          [target."${rust.toRustTarget stdenv.buildPlatform}"]
+          [target."${stdenv.buildPlatform.rust.target}"]
           "linker" = "${ccForBuild}"
           ${lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
             [target."${shortTarget}"]

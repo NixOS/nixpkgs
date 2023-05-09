@@ -10,7 +10,6 @@
 , fetchCrate
 , pkgsBuildBuild
 , rustc
-, rust
 , cargo
 , jq
 , libiconv
@@ -310,7 +309,7 @@ crate_: lib.makeOverridable
           depsMetadata = lib.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
           hashedMetadata = builtins.hashString "sha256"
             (crateName + "-" + crateVersion + "___" + toString (mkRustcFeatureArgs crateFeatures) +
-              "___" + depsMetadata + "___" + rustAttrs.toRustTarget stdenv.hostPlatform);
+              "___" + depsMetadata + "___" + stdenv.hostPlatform.rust.target);
         in
         lib.substring 0 10 hashedMetadata;
 

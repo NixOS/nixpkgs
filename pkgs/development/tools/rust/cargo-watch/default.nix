@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, Cocoa, CoreServices, Foundation, rust, libiconv }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, Cocoa, CoreServices, Foundation, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-watch";
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   # `test with_cargo` tries to call cargo-watch as a cargo subcommand
   # (calling cargo-watch with command `cargo watch`)
   preCheck = ''
-    export PATH="$(pwd)/target/${rust.toRustTarget stdenv.hostPlatform}/release:$PATH"
+    export PATH="$(pwd)/target/${stdenv.hostPlatform.rust.target}/release:$PATH"
   '';
 
   meta = with lib; {
