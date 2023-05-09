@@ -3071,6 +3071,8 @@ with pkgs;
 
   base16-universal-manager = callPackage ../applications/misc/base16-universal-manager { };
 
+  base16384 = callPackage ../tools/text/base16384 { };
+
   bashate = python3Packages.callPackage ../development/tools/bashate { };
 
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
@@ -3625,7 +3627,7 @@ with pkgs;
 
   play-with-mpv = callPackage ../tools/video/play-with-mpv { };
 
-  plausible = callPackage ../servers/web-apps/plausible { nodejs = nodejs_16; };
+  plausible = callPackage ../servers/web-apps/plausible { };
 
   pam-reattach = callPackage ../os-specific/darwin/pam-reattach { };
 
@@ -7475,9 +7477,7 @@ with pkgs;
 
   findutils = callPackage ../tools/misc/findutils { };
 
-  findup = callPackage ../tools/misc/findup {
-    zig = buildPackages.zig_0_9;
-  };
+  findup = callPackage ../tools/misc/findup { };
 
   fingerprintx = callPackage ../tools/security/fingerprintx { };
 
@@ -34487,6 +34487,8 @@ with pkgs;
 
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 
+  ueberzugpp = callPackage ../tools/graphics/ueberzugpp { };
+
   uefi-run = callPackage ../tools/virtualization/uefi-run { };
 
   uhhyou.lv2 = callPackage ../applications/audio/uhhyou.lv2 { };
@@ -37516,6 +37518,8 @@ with pkgs;
 
   brial = callPackage ../development/libraries/science/math/brial { };
 
+  cantor = libsForQt5.cantor;
+
   clblas = callPackage ../development/libraries/science/math/clblas {
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo OpenCL;
   };
@@ -37533,6 +37537,8 @@ with pkgs;
   gurobi = callPackage ../applications/science/math/gurobi { };
 
   jags = callPackage ../applications/science/math/jags { };
+
+  labplot = libsForQt5.callPackage ../applications/science/math/labplot { };
 
   lapack = callPackage ../build-support/alternatives/lapack { };
 

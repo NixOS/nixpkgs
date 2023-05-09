@@ -110,11 +110,13 @@ in stdenv.mkDerivation {
       cp -a resources/icons $out/share
 
       interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-      patchelf --set-interpreter $interp $out/share/1password/{1password,1Password-BrowserSupport,1Password-KeyringHelper,op-ssh-sign}
-      patchelf --set-rpath ${rpath}:$out/share/1password $out/share/1password/{1password,1Password-BrowserSupport,1Password-KeyringHelper,op-ssh-sign}
+      patchelf --set-interpreter $interp $out/share/1password/{1password,1Password-BrowserSupport,1Password-HIDHelper,1Password-KeyringHelper,1Password-LastPass-Exporter,op-ssh-sign}
+      patchelf --set-rpath ${rpath}:$out/share/1password $out/share/1password/{1password,1Password-BrowserSupport,1Password-HIDHelper,1Password-KeyringHelper,1Password-LastPass-Exporter,op-ssh-sign}
       for file in $(find $out -type f -name \*.so\* ); do
         patchelf --set-rpath ${rpath}:$out/share/1password $file
       done
+
+      ln -s $out/share/1password/op-ssh-sign $out/bin/op-ssh-sign
 
       runHook postInstall
     '';
