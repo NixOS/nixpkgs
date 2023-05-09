@@ -1,4 +1,5 @@
 { buildPythonApplication
+, python3
 , poetry-core
 , yubikey-manager
 , fido2
@@ -18,6 +19,12 @@ buildPythonApplication {
 
   sourceRoot = "${src.name}/helper";
   format = "pyproject";
+
+  nativeBuildInputs = [
+    python3.pkgs.pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [ "yubikey-manager" ];
 
   postPatch = ''
     sed -i \
