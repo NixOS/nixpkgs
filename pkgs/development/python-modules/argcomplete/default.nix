@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "2.1.1";
+  version = "3.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cuCDQIUtMlREWcDBmq0bSKosOpbejG5XQkVrT1OMpS8=";
+    hash = "sha256-ucqWRI4U+kWddFCkq1oiu/nO5Lp63d8D5lw5i12u6ig=";
   };
 
   postPatch = ''
