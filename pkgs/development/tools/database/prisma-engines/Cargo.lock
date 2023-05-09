@@ -262,6 +262,7 @@ name = "black-box-tests"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "enumflags2",
  "indoc",
  "insta",
  "query-engine-tests",
@@ -523,12 +524,9 @@ dependencies = [
 
 [[package]]
 name = "connection-string"
-version = "0.1.13"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b97faeec45f49581c458f8bf81992c5e3ec17d82cda99f59d3cea14eff62698d"
-dependencies = [
- "wasm-bindgen",
-]
+checksum = "510ca239cf13b7f8d16a2b48f263de7b4f8c566f0af58d901031473c76afb1e3"
 
 [[package]]
 name = "console"
@@ -573,12 +571,10 @@ name = "core-tests"
 version = "0.1.0"
 dependencies = [
  "dissimilar",
- "prisma-models",
  "psl",
  "query-core",
  "request-handlers",
  "schema",
- "schema-builder",
  "serde_json",
  "user-facing-errors",
 ]
@@ -866,18 +862,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8c97b9233581d84b8e1e689cdd3a47b6f69770084fc246e86a7f78b0d9c1d4a5"
 
 [[package]]
-name = "dml"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "cuid",
- "nanoid",
- "prisma-value",
- "psl-core",
- "uuid 1.1.2",
-]
-
-[[package]]
 name = "dmmf"
 version = "0.1.0"
 dependencies = [
@@ -892,7 +876,6 @@ dependencies = [
  "prisma-models",
  "psl",
  "schema",
- "schema-builder",
  "serde",
  "serde_json",
  "similar",
@@ -1036,13 +1019,13 @@ dependencies = [
 
 [[package]]
 name = "errno"
-version = "0.2.8"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f639046355ee4f37944e44f60642c6f3a7efa3cf6b78c78a0d989a8ce6c396a1"
+checksum = "4bcfec3a70f97c962c307b2d2c56e358cf1d00b558d74262b5f929ee8cc7e73a"
 dependencies = [
  "errno-dragonfly",
  "libc",
- "winapi",
+ "windows-sys 0.48.0",
 ]
 
 [[package]]
@@ -2073,8 +2056,9 @@ dependencies = [
 
 [[package]]
 name = "mobc"
-version = "0.7.3"
-source = "git+https://github.com/prisma/mobc?tag=1.0.6#80462c4870a2bf6aab49da15c88c021bae531da8"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fc79c4a77e312fee9c7bd4b957c12ad1196db73c4a81e5c0b13f02083c4f7f2f"
 dependencies = [
  "async-trait",
  "futures-channel",
@@ -2222,7 +2206,7 @@ checksum = "e5ce46fe64a9d73be07dcbe690a38ce1b293be448fd8ce1e6c1b8062c9f72c6a"
 [[package]]
 name = "mysql_async"
 version = "0.31.3"
-source = "git+https://github.com/prisma/mysql_async?branch=vendored-openssl#d39990b6db77ab5116ee5b5d821b27bd5f54f268"
+source = "git+https://github.com/prisma/mysql_async?branch=vendored-openssl#dad187b50dc7e8ce2b61fec126822e8e172a9c8a"
 dependencies = [
  "bytes",
  "crossbeam",
@@ -2614,9 +2598,9 @@ dependencies = [
 
 [[package]]
 name = "os_str_bytes"
-version = "6.4.1"
+version = "6.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b7820b9daea5457c9f21c69448905d723fbd21136ccf521748f23fd49e723ee"
+checksum = "ceedf44fb00f2d1984b0bc98102627ce622e083e49a5bacdb3e514fa4238e267"
 
 [[package]]
 name = "output_vt100"
@@ -2877,6 +2861,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "postgres"
+version = "0.19.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "960c214283ef8f0027974c03e9014517ced5db12f021a9abb66185a5751fab0a"
+dependencies = [
+ "bytes",
+ "fallible-iterator",
+ "futures-util",
+ "log",
+ "tokio",
+ "tokio-postgres 0.7.7 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "postgres-native-tls"
 version = "0.5.0"
 source = "git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode#00d4815e58859261bdfca71c75be7dc657303f7d"
@@ -2884,7 +2882,7 @@ dependencies = [
  "native-tls",
  "tokio",
  "tokio-native-tls",
- "tokio-postgres",
+ "tokio-postgres 0.7.7 (git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode)",
 ]
 
 [[package]]
@@ -2905,6 +2903,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "postgres-protocol"
+version = "0.6.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "78b7fa9f396f51dffd61546fd8573ee20592287996568e6175ceb0f8699ad75d"
+dependencies = [
+ "base64 0.21.0",
+ "byteorder",
+ "bytes",
+ "fallible-iterator",
+ "hmac",
+ "md-5",
+ "memchr",
+ "rand 0.8.5",
+ "sha2 0.10.5",
+ "stringprep",
+]
+
+[[package]]
 name = "postgres-types"
 version = "0.2.4"
 source = "git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode#00d4815e58859261bdfca71c75be7dc657303f7d"
@@ -2913,10 +2929,21 @@ dependencies = [
  "bytes",
  "chrono",
  "fallible-iterator",
- "postgres-protocol",
+ "postgres-protocol 0.6.4",
  "serde",
  "serde_json",
  "uuid 1.1.2",
+]
+
+[[package]]
+name = "postgres-types"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f028f05971fe20f512bcc679e2c10227e57809a3af86a7606304435bc8896cd6"
+dependencies = [
+ "bytes",
+ "fallible-iterator",
+ "postgres-protocol 0.6.5",
 ]
 
 [[package]]
@@ -2986,18 +3013,21 @@ name = "prisma-models"
 version = "0.0.0"
 dependencies = [
  "bigdecimal",
- "dml",
+ "chrono",
+ "cuid",
  "itertools",
+ "nanoid",
  "prisma-value",
  "psl",
  "thiserror",
+ "uuid 1.1.2",
 ]
 
 [[package]]
 name = "prisma-value"
 version = "0.1.0"
 dependencies = [
- "base64 0.12.3",
+ "base64 0.13.1",
  "bigdecimal",
  "chrono",
  "once_cell",
@@ -3154,7 +3184,6 @@ dependencies = [
 [[package]]
 name = "quaint"
 version = "0.2.0-alpha.13"
-source = "git+https://github.com/prisma/quaint#5a708313ed488da9016e37edbb2f774fd7893250"
 dependencies = [
  "async-trait",
  "base64 0.12.3",
@@ -3176,14 +3205,14 @@ dependencies = [
  "num_cpus",
  "percent-encoding",
  "postgres-native-tls",
- "postgres-types",
+ "postgres-types 0.2.4",
  "rusqlite",
  "serde_json",
  "sqlformat",
  "thiserror",
  "tiberius",
  "tokio",
- "tokio-postgres",
+ "tokio-postgres 0.7.7 (git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode)",
  "tokio-util 0.6.10",
  "tracing",
  "tracing-core",
@@ -3231,9 +3260,9 @@ name = "query-core"
 version = "0.1.0"
 dependencies = [
  "async-trait",
- "base64 0.12.3",
  "bigdecimal",
  "chrono",
+ "connection-string",
  "crossbeam-channel",
  "cuid",
  "enumflags2",
@@ -3245,12 +3274,10 @@ dependencies = [
  "opentelemetry",
  "petgraph 0.4.13",
  "prisma-models",
- "prisma-value",
  "psl",
  "query-connector",
  "query-engine-metrics",
  "schema",
- "schema-builder",
  "serde",
  "serde_json",
  "thiserror",
@@ -3269,7 +3296,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-trait",
- "base64 0.12.3",
+ "base64 0.13.1",
  "connection-string",
  "enumflags2",
  "graphql-parser",
@@ -3278,7 +3305,6 @@ dependencies = [
  "mongodb-query-connector",
  "opentelemetry",
  "opentelemetry-otlp",
- "prisma-models",
  "psl",
  "quaint",
  "query-connector",
@@ -3356,6 +3382,7 @@ dependencies = [
  "base64 0.13.1",
  "chrono",
  "colored",
+ "enumflags2",
  "futures",
  "indoc",
  "insta",
@@ -3378,10 +3405,7 @@ name = "query-test-macros"
 version = "0.1.0"
 dependencies = [
  "darling",
- "indoc",
- "itertools",
  "proc-macro2",
- "query-tests-setup",
  "quote",
  "syn 1.0.99",
 ]
@@ -3398,8 +3422,8 @@ dependencies = [
  "indexmap",
  "indoc",
  "itertools",
- "lazy_static",
  "nom",
+ "once_cell",
  "parse-hyperlinks",
  "prisma-models",
  "psl",
@@ -3595,6 +3619,7 @@ name = "request-handlers"
 version = "0.1.0"
 dependencies = [
  "bigdecimal",
+ "codspeed-criterion-compat",
  "connection-string",
  "dmmf",
  "futures",
@@ -3606,7 +3631,7 @@ dependencies = [
  "prisma-models",
  "psl",
  "query-core",
- "schema-builder",
+ "schema",
  "serde",
  "serde_json",
  "sql-query-connector",
@@ -3738,9 +3763,9 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "0.36.9"
+version = "0.36.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fd5c6ff11fecd55b40746d1995a02f2eb375bf8c00d192d521ee09f42bef37bc"
+checksum = "3a38f9520be93aba504e8ca974197f46158de5dcaa9fa04b57c57cd6a679d658"
 dependencies = [
  "bitflags 1.3.2",
  "errno",
@@ -3830,9 +3855,12 @@ dependencies = [
 name = "schema"
 version = "0.1.0"
 dependencies = [
+ "codspeed-criterion-compat",
  "once_cell",
  "prisma-models",
  "psl",
+ "rustc-hash",
+ "tracing",
 ]
 
 [[package]]
@@ -3842,18 +3870,6 @@ dependencies = [
  "diagnostics",
  "pest",
  "pest_derive",
-]
-
-[[package]]
-name = "schema-builder"
-version = "0.1.0"
-dependencies = [
- "codspeed-criterion-compat",
- "once_cell",
- "prisma-models",
- "psl",
- "rustc-hash",
- "schema",
 ]
 
 [[package]]
@@ -4245,7 +4261,6 @@ dependencies = [
  "psl",
  "quaint",
  "schema-connector",
- "serde_json",
  "sql-schema-connector",
  "sql-schema-describer",
  "test-macros",
@@ -4300,8 +4315,10 @@ dependencies = [
  "cuid",
  "futures",
  "itertools",
+ "mysql_async",
  "once_cell",
  "opentelemetry",
+ "postgres",
  "prisma-models",
  "prisma-value",
  "psl",
@@ -4312,6 +4329,7 @@ dependencies = [
  "serde_json",
  "thiserror",
  "tokio",
+ "tokio-postgres 0.7.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "tracing",
  "tracing-futures",
  "tracing-opentelemetry",
@@ -4620,9 +4638,9 @@ dependencies = [
 
 [[package]]
 name = "tiberius"
-version = "0.11.6"
+version = "0.11.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3cff04849bffc92a61210e3fea7a1e83faf3666cf55b26edc4d7656ea879293b"
+checksum = "66303a42b7c5daffb95c10cd8f3007a9c29b3e90128cf42b3738f58102aa2516"
 dependencies = [
  "async-native-tls",
  "async-trait",
@@ -4757,6 +4775,30 @@ dependencies = [
 [[package]]
 name = "tokio-postgres"
 version = "0.7.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "29a12c1b3e0704ae7dfc25562629798b29c72e6b1d0a681b6f29ab4ae5e7f7bf"
+dependencies = [
+ "async-trait",
+ "byteorder",
+ "bytes",
+ "fallible-iterator",
+ "futures-channel",
+ "futures-util",
+ "log",
+ "parking_lot 0.12.1",
+ "percent-encoding",
+ "phf",
+ "pin-project-lite",
+ "postgres-protocol 0.6.5",
+ "postgres-types 0.2.5",
+ "socket2",
+ "tokio",
+ "tokio-util 0.7.3",
+]
+
+[[package]]
+name = "tokio-postgres"
+version = "0.7.7"
 source = "git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode#00d4815e58859261bdfca71c75be7dc657303f7d"
 dependencies = [
  "async-trait",
@@ -4770,8 +4812,8 @@ dependencies = [
  "percent-encoding",
  "phf",
  "pin-project-lite",
- "postgres-protocol",
- "postgres-types",
+ "postgres-protocol 0.6.4",
+ "postgres-types 0.2.4",
  "socket2",
  "tokio",
  "tokio-util 0.7.3",
@@ -5295,12 +5337,11 @@ dependencies = [
 
 [[package]]
 name = "walkdir"
-version = "2.3.2"
+version = "2.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "808cf2735cd4b6866113f648b791c6adc5714537bc222d9347bb203386ffda56"
+checksum = "36df944cda56c7d8d8b7496af378e6b16de9284591917d307c9b4d313c44e698"
 dependencies = [
  "same-file",
- "winapi",
  "winapi-util",
 ]
 
@@ -5515,13 +5556,13 @@ version = "0.42.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5a3e1820f08b8513f676f7ab6c1f99ff312fb97b553d30ff4dd86f9f15728aa7"
 dependencies = [
- "windows_aarch64_gnullvm",
- "windows_aarch64_msvc",
- "windows_i686_gnu",
- "windows_i686_msvc",
- "windows_x86_64_gnu",
- "windows_x86_64_gnullvm",
- "windows_x86_64_msvc",
+ "windows_aarch64_gnullvm 0.42.1",
+ "windows_aarch64_msvc 0.42.1",
+ "windows_i686_gnu 0.42.1",
+ "windows_i686_msvc 0.42.1",
+ "windows_x86_64_gnu 0.42.1",
+ "windows_x86_64_gnullvm 0.42.1",
+ "windows_x86_64_msvc 0.42.1",
 ]
 
 [[package]]
@@ -5530,7 +5571,16 @@ version = "0.45.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "75283be5efb2831d37ea142365f009c02ec203cd29a3ebecbc093d52315b66d0"
 dependencies = [
- "windows-targets",
+ "windows-targets 0.42.1",
+]
+
+[[package]]
+name = "windows-sys"
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "677d2418bec65e3338edb076e806bc1ec15693c5d0104683f2efe857f61056a9"
+dependencies = [
+ "windows-targets 0.48.0",
 ]
 
 [[package]]
@@ -5539,13 +5589,28 @@ version = "0.42.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8e2522491fbfcd58cc84d47aeb2958948c4b8982e9a2d8a2a35bbaed431390e7"
 dependencies = [
- "windows_aarch64_gnullvm",
- "windows_aarch64_msvc",
- "windows_i686_gnu",
- "windows_i686_msvc",
- "windows_x86_64_gnu",
- "windows_x86_64_gnullvm",
- "windows_x86_64_msvc",
+ "windows_aarch64_gnullvm 0.42.1",
+ "windows_aarch64_msvc 0.42.1",
+ "windows_i686_gnu 0.42.1",
+ "windows_i686_msvc 0.42.1",
+ "windows_x86_64_gnu 0.42.1",
+ "windows_x86_64_gnullvm 0.42.1",
+ "windows_x86_64_msvc 0.42.1",
+]
+
+[[package]]
+name = "windows-targets"
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7b1eb6f0cd7c80c79759c929114ef071b87354ce476d9d94271031c0497adfd5"
+dependencies = [
+ "windows_aarch64_gnullvm 0.48.0",
+ "windows_aarch64_msvc 0.48.0",
+ "windows_i686_gnu 0.48.0",
+ "windows_i686_msvc 0.48.0",
+ "windows_x86_64_gnu 0.48.0",
+ "windows_x86_64_gnullvm 0.48.0",
+ "windows_x86_64_msvc 0.48.0",
 ]
 
 [[package]]
@@ -5555,10 +5620,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8c9864e83243fdec7fc9c5444389dcbbfd258f745e7853198f365e3c4968a608"
 
 [[package]]
+name = "windows_aarch64_gnullvm"
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "91ae572e1b79dba883e0d315474df7305d12f569b400fcf90581b06062f7e1bc"
+
+[[package]]
 name = "windows_aarch64_msvc"
 version = "0.42.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4c8b1b673ffc16c47a9ff48570a9d85e25d265735c503681332589af6253c6c7"
+
+[[package]]
+name = "windows_aarch64_msvc"
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b2ef27e0d7bdfcfc7b868b317c1d32c641a6fe4629c171b8928c7b08d98d7cf3"
 
 [[package]]
 name = "windows_i686_gnu"
@@ -5567,10 +5644,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "de3887528ad530ba7bdbb1faa8275ec7a1155a45ffa57c37993960277145d640"
 
 [[package]]
+name = "windows_i686_gnu"
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "622a1962a7db830d6fd0a69683c80a18fda201879f0f447f065a3b7467daa241"
+
+[[package]]
 name = "windows_i686_msvc"
 version = "0.42.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf4d1122317eddd6ff351aa852118a2418ad4214e6613a50e0191f7004372605"
+
+[[package]]
+name = "windows_i686_msvc"
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4542c6e364ce21bf45d69fdd2a8e455fa38d316158cfd43b3ac1c5b1b19f8e00"
 
 [[package]]
 name = "windows_x86_64_gnu"
@@ -5579,16 +5668,34 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c1040f221285e17ebccbc2591ffdc2d44ee1f9186324dd3e84e99ac68d699c45"
 
 [[package]]
+name = "windows_x86_64_gnu"
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ca2b8a661f7628cbd23440e50b05d705db3686f894fc9580820623656af974b1"
+
+[[package]]
 name = "windows_x86_64_gnullvm"
 version = "0.42.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "628bfdf232daa22b0d64fdb62b09fcc36bb01f05a3939e20ab73aaf9470d0463"
 
 [[package]]
+name = "windows_x86_64_gnullvm"
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7896dbc1f41e08872e9d5e8f8baa8fdd2677f29468c4e156210174edc7f7b953"
+
+[[package]]
 name = "windows_x86_64_msvc"
 version = "0.42.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "447660ad36a13288b1db4d4248e857b510e8c3a225c822ba4fb748c0aafecffd"
+
+[[package]]
+name = "windows_x86_64_msvc"
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1a515f5799fe4961cb532f983ce2b23082366b898e52ffbce459c86f67c8378a"
 
 [[package]]
 name = "winreg"
