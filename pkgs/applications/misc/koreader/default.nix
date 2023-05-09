@@ -9,14 +9,17 @@
 , luajit
 , sdcv
 , SDL2 }:
+let
+  luajit_lua52 = luajit.override { enable52Compat = true; };
+in
 stdenv.mkDerivation rec {
   pname = "koreader";
-  version = "2022.08";
+  version = "2023.04";
 
   src = fetchurl {
     url =
       "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-    sha256 = "sha256-+JBJNJTAnC5gpuo8cehfe/3YwGIW5iFA8bZ8nfz9qsk=";
+    sha256 = "sha256-tRUeRB1+UcWT49dchN0YDvd0L5n1YRdtMSFc8yy6m5o=";
   };
 
   src_repo = fetchFromGitHub {
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "koreader";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-MHQYEzMyZMEQrzR8+Rvci8XjDK2DMUPxjsiWTrrKiAw=";
+    sha256 = "sha256-c3j6hs0W0H2jDg6JVfU6ov7r7kucbqrQqf9PAvYBcJ0=";
   };
 
   sourceRoot = ".";
@@ -33,7 +36,7 @@ stdenv.mkDerivation rec {
     glib
     gnutar
     gtk3-x11
-    luajit
+    luajit_lua52
     sdcv
     SDL2
   ];
@@ -45,7 +48,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -R usr/* $out/
-    ln -sf ${luajit}/bin/luajit $out/lib/koreader/luajit
+    ln -sf ${luajit_lua52}/bin/luajit $out/lib/koreader/luajit
     ln -sf ${sdcv}/bin/sdcv $out/lib/koreader/sdcv
     ln -sf ${gnutar}/bin/tar $out/lib/koreader/tar
     find ${src_repo}/resources/fonts -type d -execdir cp -r '{}' $out/lib/koreader/fonts \;
