@@ -123,6 +123,6 @@ in stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ immae izorkin matthiasbeyer mohe2015 stevenroose ];
+    maintainers = with maintainers; [ immae izorkin mohe2015 stevenroose ];
   };
 }
