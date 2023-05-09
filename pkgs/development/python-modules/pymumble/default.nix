@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
 , opuslib
 , protobuf
 , pytestCheckHook
@@ -11,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pymumble";
-  version = "1.7";
+  version = "1.6.1"; # Don't upgrade to 1.7, version was yanked
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "azlux";
     repo = "pymumble";
     rev = "refs/tags/${version}";
-    hash = "sha256-NMp1yZ+R9vmne7old7z9UvcxSi6C044g68ZQsofT0gA=";
+    hash = "sha256-+sT5pqdm4A2rrUcUUmvsH+iazg80+/go0zM1vr9oeuE=";
   };
 
   postPatch = ''
