@@ -10,11 +10,11 @@
 }:
 let
   pname = "jetbrains-toolbox";
-  version = "1.28.0.15158";
+  version = "1.28.1.15219";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
-    sha256 = "sha256-IHs3tQtFXGS9xa5lKwSEWvp8aNffrCjNcoVE4tGX9ak=";
+    sha256 = "sha256-4P73MC5Go8wLACBtjh1y3Ao0czE/3hsSI4728mNjKxA=";
     stripRoot = false;
   };
 
