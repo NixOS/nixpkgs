@@ -2,7 +2,7 @@
 , lib
 , stdenv
 , fetchFromGitHub
-, python3Packages
+, python3
 , ffmpeg
 , makeWrapper
 , nixosTests
@@ -37,8 +37,21 @@ let
     src = src + "/web";
   })).nodeDependencies;
 
+  python = python3.override {
+    packageOverrides = self: super: {
+      pymumble = super.pymumble.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-+sT5pqdm4A2rrUcUUmvsH+iazg80+/go0zM1vr9oeuE=";
+        };
+      });
+    };
+  };
+
   # Python needed to instantiate the html templates
-  buildPython = python3Packages.python.withPackages (ps: [ ps.jinja2 ]);
+  buildPython = python.withPackages (ps: [ ps.jinja2 ]);
 in
 stdenv.mkDerivation rec {
   pname = "botamusique";
@@ -70,10 +83,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    python3Packages.wrapPython
+    python.pkgs.wrapPython
   ];
 
-  pythonPath = with python3Packages; [
+  pythonPath = with python.pkgs; [
     flask
     magic
     mutagen
