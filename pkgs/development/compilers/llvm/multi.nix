@@ -46,7 +46,13 @@ let
       libc = gcc_multi_sysroot;
     };
 
-    gccForLibs = gcc_multi_sysroot // { inherit (glibc_multi) libgcc; };
+    gccForLibs = gcc_multi_sysroot // {
+      inherit (glibc_multi) libgcc;
+      langCC =
+        assert (gcc64.cc.langCC != gcc32.cc.langCC)
+               -> throw "(gcc64.cc.langCC=${gcc64.cc.langCC}) != (gcc32.cc.langCC=${gcc32.cc.langCC})";
+        gcc64.cc.langCC;
+    };
   };
 
 in clangMulti
