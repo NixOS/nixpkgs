@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage {
     (placeholder "out")
     "--set"
     "bin-src"
-    "target/${rust.lib.toRustTargetSpecShort stdenv.hostPlatform}/release/cosmic-settings"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-settings"
   ];
 
   meta = with lib; {
