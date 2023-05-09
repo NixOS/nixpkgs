@@ -16222,6 +16222,7 @@ with pkgs;
   cargo-bloat = callPackage ../development/tools/rust/cargo-bloat { };
   cargo-bolero = callPackage ../development/tools/rust/cargo-bolero { };
   cargo-bundle = callPackage ../development/tools/rust/cargo-bundle { };
+  cargo-bundle-licenses = callPackage ../development/tools/rust/cargo-bundle-licenses { };
   cargo-cache = callPackage ../development/tools/rust/cargo-cache {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
