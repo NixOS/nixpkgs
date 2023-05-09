@@ -6792,6 +6792,15 @@
     githubId = 54999;
     name = "Ariel Nunez";
   };
+  Intuinewin = {
+    email = "antoinelabarussias@gmail.com";
+    github = "Intuinewin";
+    githubId = 13691729;
+    name = "Antoine Labarussias";
+    keys = [{
+      fingerprint = "5CB5 9AA0 D180 1997 2FB3  E0EC 943A 1DE9 372E BE4E";
+    }];
+  };
   ionutnechita = {
     email = "ionut_n2001@yahoo.com";
     github = "ionutnechita";
