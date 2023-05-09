@@ -14,7 +14,7 @@ let
       false;
 in
 buildGoModule rec {
-  pname = "kube3d";
+  pname = "k3d";
   version = "5.4.4";
 
   src = fetchFromGitHub {
@@ -30,10 +30,10 @@ buildGoModule rec {
   excludedPackages = [ "tools" "docgen" ];
 
   ldflags =
-    let t = "github.com/k3d-io/k3d/v5/version"; in
+    let t = "github.com/k3d-io/k3d/v${lib.versions.major version}/version"; in
     [ "-s" "-w" "-X ${t}.Version=v${version}" ] ++ lib.optionals k3sVersionSet [ "-X ${t}.K3sVersion=v${k3sVersion}" ];
 
-   preCheck = ''
+  preCheck = ''
     # skip test that uses networking
     substituteInPlace version/version_test.go \
       --replace "TestGetK3sVersion" "SkipGetK3sVersion"
@@ -57,7 +57,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/k3d-io/k3d/";
     changelog = "https://github.com/k3d-io/k3d/blob/v${version}/CHANGELOG.md";
-    description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container - k3d";
+    description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
     longDescription = ''
       k3s is the lightweight Kubernetes distribution by Rancher: rancher/k3s
 
@@ -67,6 +67,5 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ricochet ];
     platforms = platforms.linux ++ platforms.darwin;
-    mainProgram = "k3d";
   };
 }
