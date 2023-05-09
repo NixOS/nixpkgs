@@ -183,16 +183,14 @@ in {
       };
     } ./setuptools-check-hook.sh) {};
 
-    setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust, rust }:
+    setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust }:
       makePythonHook {
         name = "setuptools-rust-setup-hook";
         propagatedBuildInputs = [ setuptools-rust ];
         substitutions = {
           pyLibDir = "${python}/lib/${python.libPrefix}";
-          cargoBuildTarget = rust.toRustTargetSpec stdenv.hostPlatform;
-          cargoLinkerVar = lib.toUpper (
-              builtins.replaceStrings ["-"] ["_"] (
-                rust.toRustTarget stdenv.hostPlatform));
+          cargoBuildTarget = stdenv.hostPlatform.rust.rustcTargetSpec;
+          cargoLinkerVar = stdenv.hostPlatform.rust.cargoEnvVarTarget;
           targetLinker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
         };
       } ./setuptools-rust-hook.sh) {};

@@ -8,7 +8,6 @@
 , ninja
 , python3
 , pkg-config
-, rust
 , rustc
 , cargo
 , cargo-c
@@ -208,7 +207,7 @@ stdenv.mkDerivation rec {
   ] ++ (let
     crossFile = writeText "cross-file.conf" ''
       [binaries]
-      rust = [ 'rustc', '--target', '${rust.toRustTargetSpec stdenv.hostPlatform}' ]
+      rust = [ 'rustc', '--target', '${stdenv.hostPlatform.rust.rustcTargetSpec}' ]
     '';
   in lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "--cross-file=${crossFile}"
