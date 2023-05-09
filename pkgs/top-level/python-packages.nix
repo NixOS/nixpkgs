@@ -10366,6 +10366,8 @@ self: super: with self; {
 
   requirements-parser = callPackage ../development/python-modules/requirements-parser { };
 
+  reretry = callPackage ../development/python-modules/reretry { };
+
   resampy = callPackage ../development/python-modules/resampy { };
 
   resolvelib = callPackage ../development/python-modules/resolvelib { };
@@ -10587,6 +10589,8 @@ self: super: with self; {
   ruff-lsp = callPackage ../development/python-modules/ruff-lsp { };
 
   ruffus = callPackage ../development/python-modules/ruffus { };
+
+  rules = callPackage ../development/python-modules/rules { };
 
   ruuvitag-ble = callPackage ../development/python-modules/ruuvitag-ble { };
 
@@ -11881,6 +11885,8 @@ self: super: with self; {
 
   thriftpy2 = callPackage ../development/python-modules/thriftpy2 { };
 
+  throttler = callPackage ../development/python-modules/throttler { };
+
   thumborPexif = callPackage ../development/python-modules/thumborpexif { };
 
   tkinter = callPackage ../development/python-modules/tkinter {
@@ -12457,6 +12463,8 @@ self: super: with self; {
   urlgrabber = callPackage ../development/python-modules/urlgrabber { };
 
   urllib3 = callPackage ../development/python-modules/urllib3 { };
+
+  urlman = callPackage ../development/python-modules/urlman { };
 
   urlpy = callPackage ../development/python-modules/urlpy { };
 
