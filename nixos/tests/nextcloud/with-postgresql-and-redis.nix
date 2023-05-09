@@ -25,6 +25,7 @@ in {
           redis = true;
           memcached = false;
         };
+        database.createLocally = true;
         config = {
           dbtype = "pgsql";
           inherit adminuser;
