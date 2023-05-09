@@ -108,6 +108,7 @@ buildPythonPackage rec {
     "test_spec"
   ] ++ lib.optionals (stdenv.hostPlatform.isi686) [
     "test_type1mm_inputs"
+    "test_dump_option"
   ];
 
   passthru.tests = {
