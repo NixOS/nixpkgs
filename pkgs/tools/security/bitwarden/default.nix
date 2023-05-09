@@ -2,7 +2,7 @@
 , applyPatches
 , buildNpmPackage
 , dbus
-, electron
+, electron_24
 , fetchFromGitHub
 , fetchpatch
 , glib
@@ -25,6 +25,7 @@ let
   icon = "bitwarden";
 
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
+  electron = electron_24;
 
   version = "2023.4.0";
   src = applyPatches {
@@ -113,6 +114,11 @@ buildNpmPackage' {
   ];
 
   preBuild = ''
+    if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
+      echo 'ERROR: electron version mismatch'
+      exit 1
+    fi
+
     jq 'del(.scripts.postinstall)' apps/desktop/package.json | sponge apps/desktop/package.json
     jq '.scripts.build = ""' apps/desktop/desktop_native/package.json | sponge apps/desktop/desktop_native/package.json
     cp ${desktop-native}/lib/libdesktop_native.so apps/desktop/desktop_native/desktop_native.linux-x64-musl.node
