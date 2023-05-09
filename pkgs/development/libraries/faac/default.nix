@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open source MPEG-4 and MPEG-2 AAC encoder";
-    license     = licenses.unfreeRedistributable;
+    license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;
   };
