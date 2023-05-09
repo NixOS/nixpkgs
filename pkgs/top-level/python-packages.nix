@@ -11125,7 +11125,9 @@ self: super: with self; {
 
   snowflake-connector-python = callPackage ../development/python-modules/snowflake-connector-python { };
 
-  snowflake-sqlalchemy = callPackage ../development/python-modules/snowflake-sqlalchemy { };
+  snowflake-sqlalchemy = callPackage ../development/python-modules/snowflake-sqlalchemy {
+    sqlalchemy = sqlalchemy_1;
+  };
 
   snscrape = callPackage ../development/python-modules/snscrape { };
 
@@ -11411,13 +11413,28 @@ self: super: with self; {
 
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
+  sqlalchemy_1 = callPackage ../development/python-modules/sqlalchemy/1.nix { };
+
   sqlalchemy-citext = callPackage ../development/python-modules/sqlalchemy-citext { };
 
-  sqlalchemy-continuum = callPackage ../development/python-modules/sqlalchemy-continuum { };
+  sqlalchemy-continuum = callPackage ../development/python-modules/sqlalchemy-continuum rec {
+    sqlalchemy = sqlalchemy_1;
+    flask-sqlalchemy = self.flask-sqlalchemy.override {
+      inherit sqlalchemy;
+    };
+    sqlalchemy-utils = self.sqlalchemy-utils.override {
+      inherit sqlalchemy;
+    };
+    sqlalchemy-i18n = self.sqlalchemy-i18n.override {
+      inherit sqlalchemy sqlalchemy-utils;
+    };
+  };
 
   sqlalchemy-i18n = callPackage ../development/python-modules/sqlalchemy-i18n { };
 
-  sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
+  sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield {
+    sqlalchemy = sqlalchemy_1;
+  };
 
   sqlalchemy-migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
@@ -11726,7 +11743,9 @@ self: super: with self; {
     inherit (pkgs) openssl;
   };
 
-  telethon-session-sqlalchemy = callPackage ../development/python-modules/telethon-session-sqlalchemy { };
+  telethon-session-sqlalchemy = callPackage ../development/python-modules/telethon-session-sqlalchemy {
+    sqlalchemy = sqlalchemy_1;
+  };
 
   teletype = callPackage ../development/python-modules/teletype { };
 
