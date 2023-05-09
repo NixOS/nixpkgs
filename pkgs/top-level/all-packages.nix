@@ -27916,6 +27916,8 @@ with pkgs;
 
   dotcolon-fonts = callPackage ../data/fonts/dotcolon-fonts { };
 
+  dracula-icon-theme = callPackage ../data/icons/dracula-icon-theme { };
+
   e17gtk = callPackage ../data/themes/e17gtk { };
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
