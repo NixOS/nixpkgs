@@ -1,4 +1,5 @@
 { lib
+, applyPatches
 , buildNpmPackage
 , dbus
 , electron
@@ -25,20 +26,22 @@ let
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_16; };
 
   version = "2023.4.0";
-  src = fetchFromGitHub {
-    owner = "bitwarden";
-    repo = "clients";
-    rev = "desktop-v${version}";
-    sha256 = "sha256-TTKDl6Py3k+fAy/kcyiMbAAKQdhVnZTyRXV8D/VpKBE=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "bitwarden";
+      repo = "clients";
+      rev = "desktop-v${version}";
+      sha256 = "sha256-TTKDl6Py3k+fAy/kcyiMbAAKQdhVnZTyRXV8D/VpKBE=";
+    };
+
+    patches = [ ];
   };
 
   desktop-native = rustPlatform.buildRustPackage {
     pname = "bitwarden-desktop-native";
     inherit src version;
-    sourceRoot = "source/apps/desktop/desktop_native";
+    sourceRoot = "source-patched/apps/desktop/desktop_native";
     cargoSha256 = "sha256-VW9DmSh9jvqFCZjH1SAYkydSGjXSVEbv4CmtoJBiw5Y=";
-
-    patchFlags = [ "-p4" ];
 
     nativeBuildInputs = [
       pkg-config
