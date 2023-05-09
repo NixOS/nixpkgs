@@ -1,17 +1,15 @@
 { lib, stdenv
 , fetchurl
 , makeWrapper
+, fetchFromGitHub
 , dpkg
 , glib
 , gnutar
 , gtk3-x11
 , luajit
 , sdcv
-, SDL2
-, noto-fonts
-, nerdfonts }:
-let font-droid = nerdfonts.override { fonts = [ "DroidSansMono" ]; };
-in stdenv.mkDerivation rec {
+, SDL2 }:
+stdenv.mkDerivation rec {
   pname = "koreader";
   version = "2022.08";
 
@@ -19,6 +17,14 @@ in stdenv.mkDerivation rec {
     url =
       "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
     sha256 = "sha256-+JBJNJTAnC5gpuo8cehfe/3YwGIW5iFA8bZ8nfz9qsk=";
+  };
+
+  src_repo = fetchFromGitHub {
+    repo = "koreader";
+    owner = "koreader";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-MHQYEzMyZMEQrzR8+Rvci8XjDK2DMUPxjsiWTrrKiAw=";
   };
 
   sourceRoot = ".";
@@ -42,11 +48,8 @@ in stdenv.mkDerivation rec {
     ln -sf ${luajit}/bin/luajit $out/lib/koreader/luajit
     ln -sf ${sdcv}/bin/sdcv $out/lib/koreader/sdcv
     ln -sf ${gnutar}/bin/tar $out/lib/koreader/tar
-    find $out -xtype l -delete
-    for i in ${noto-fonts}/share/fonts/truetype/noto/*; do
-        ln -s "$i" $out/lib/koreader/fonts/noto/
-    done
-    ln -s "${font-droid}/share/fonts/opentype/NerdFonts/Droid Sans Mono Nerd Font Complete Mono.otf" $out/lib/koreader/fonts/droid/DroidSansMono.ttf
+    find ${src_repo}/resources/fonts -type d -execdir cp -r '{}' $out/lib/koreader/fonts \;
+    find $out -xtype l -print -delete
     wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [ gtk3-x11 SDL2 glib ]
     }
