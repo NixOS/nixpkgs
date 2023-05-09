@@ -5,6 +5,8 @@
 , jsoncpp
 , fetchFromGitHub
 , fetchpatch2
+, Foundation
+, AppKit
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ jsoncpp libGL ];
+  buildInputs = [ jsoncpp libGL ] ++ lib.optionals stdenv.isDarwin [ Foundation AppKit ];
 
   cmakeFlags = [ "-DUSE_SYSTEM_JSONCPP=ON" "-DBUILD_SHARED=1" ];
 
