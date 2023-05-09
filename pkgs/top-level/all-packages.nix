@@ -8638,7 +8638,7 @@ with pkgs;
 
   imgurbash2 = callPackage ../tools/graphics/imgurbash2 { };
 
-  in-formant = callPackage ../applications/audio/in-formant { };
+  in-formant = qt6Packages.callPackage ../applications/audio/in-formant { };
 
   inadyn = callPackage ../tools/networking/inadyn { };
 
