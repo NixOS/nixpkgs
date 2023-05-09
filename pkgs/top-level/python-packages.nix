@@ -11955,6 +11955,8 @@ self: super: with self; {
 
   tld = callPackage ../development/python-modules/tld { };
 
+  tlds = callPackage ../development/python-modules/tlds { };
+
   tldextract = callPackage ../development/python-modules/tldextract { };
 
   tlsh = callPackage ../development/python-modules/tlsh { };
