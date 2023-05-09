@@ -45,7 +45,7 @@
 , buildFeatures ? [ ]
 , checkFeatures ? buildFeatures
 , useNextest ? false
-, auditable ? true
+, auditable ? !cargo-auditable.meta.broken
 
 , depsExtraArgs ? {}
 
