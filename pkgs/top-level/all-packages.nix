@@ -35045,6 +35045,8 @@ with pkgs;
     qtermwidget = lxqt.qtermwidget;
   };
 
+  virt-v2v = callPackage ../applications/virtualization/virt-v2v { };
+
   virtscreen = callPackage ../tools/admin/virtscreen { };
 
   virtual-ans = callPackage ../applications/audio/virtual-ans { };
