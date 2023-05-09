@@ -17,7 +17,6 @@
 , libadwaita
 , librsvg
 , rustc
-, writeText
 , cargo
 }:
 
@@ -58,16 +57,6 @@ stdenv.mkDerivation rec {
     libadwaita
     librsvg
   ];
-
-  mesonFlags =
-    let
-      # ERROR: 'rust' compiler binary not defined in cross or native file
-      crossFile = writeText "cross-file.conf" ''
-        [binaries]
-        rust = [ 'rustc', '--target', '${stdenv.hostPlatform.rust.targetSpec}' ]
-      '';
-    in
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
 
   passthru = {
     updateScript = gnome.updateScript {

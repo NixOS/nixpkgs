@@ -428,6 +428,7 @@ else let
 
             [binaries]
             llvm-config = 'llvm-config-native'
+            rust = ['rustc', '--target=${stdenv.targetPlatform.rust.targetSpec}']
           '';
           crossFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
         in crossFlags ++ explicitFlags;
