@@ -1,7 +1,7 @@
 { lib, stdenv, python, makeWrapper, unzip
 , pipInstallHook
 , setuptoolsBuildHook
-, wheel, pip, setuptools
+, wheel, pip, setuptools, flit
 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   inherit (pip) version;
   name = "${python.libPrefix}-bootstrapped-${pname}-${version}";
 
-  srcs = [ wheel.src pip.src setuptools.src ];
+  srcs = [ wheel.src pip.src setuptools.src flit.src ];
   sourceRoot = ".";
 
   dontUseSetuptoolsBuild = true;
@@ -38,9 +38,10 @@ stdenv.mkDerivation rec {
     mv pip* pip
     mv setuptools* setuptools
     mv wheel* wheel
+    mv flit* flit
     # Set up PYTHONPATH. The above folders need to be on PYTHONPATH
     # $out is where we are installing to and takes precedence
-    export PYTHONPATH="$out/${python.sitePackages}:$(pwd)/pip/src:$(pwd)/setuptools:$(pwd)/setuptools/pkg_resources:$(pwd)/wheel:$PYTHONPATH"
+    export PYTHONPATH="$out/${python.sitePackages}:$(pwd)/pip/src:$(pwd)/setuptools:$(pwd)/setuptools/pkg_resources:$(pwd)/wheel:$(pwd)/flit/flit_core:$PYTHONPATH"
 
     echo "Building setuptools wheel..."
     pushd setuptools
