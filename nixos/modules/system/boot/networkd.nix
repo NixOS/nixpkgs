@@ -2848,7 +2848,7 @@ let
         ''
         + optionalString (def.tokenBucketFilterConfig != { }) ''
           [TokenBucketFilter]
-          ${attrsToSection def.tockenBucketFilterConfig}
+          ${attrsToSection def.tokenBucketFilterConfig}
         ''
         + optionalString (def.pieConfig != { }) ''
           [PIE]
