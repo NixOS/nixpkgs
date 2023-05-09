@@ -49,17 +49,31 @@ stdenv.mkDerivation rec {
     "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
   ];
 
-  # Extract and copy executable in $out/bin
   installPhase = ''
+    # Extract and copy executable in $out/bin
     mkdir -p $out/share/applications $out/bin $out/opt/bin $out/share/icons/hicolor/scalable/apps/
     # we can't unzip it in $out/lib, because nw.js will start with
     # an empty screen. Therefore it will be unzipped in a non-typical
     # folder and symlinked.
     unzip -q $src -d $out/opt/popcorntime
-
     ln -s $out/opt/popcorntime/Popcorn-Time $out/bin/popcorntime
-
     ln -s $out/opt/popcorntime/src/app/images/icon.png $out/share/icons/hicolor/scalable/apps/popcorntime.png
+
+    # Create an application launcher
+    mkdir -p $out/share/applications
+    cat > $out/share/applications/popcorntime.desktop <<EOF
+    [Desktop Entry]
+    Version = 1.0
+    Name = Popcorn Time
+    Type = Application
+    Comment=Watch Movies and TV Shows instantly
+    Exec = $out/opt/popcorntime/Popcorn-Time
+    Icon = $out/opt/popcorntime/src/app/images/icon.png
+    Categories = Application;AudioVideo;Video;Network;Player;P2P;
+    MimeType = application/x-bittorrent;x-scheme-handler/magnet;
+    StartupNotify = false
+    Terminal = false
+    EOF
   '';
 
   # GSETTINGS_SCHEMAS_PATH is not set in installPhase
