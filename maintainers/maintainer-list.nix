@@ -579,6 +579,12 @@
     githubId = 20405311;
     name = "Aksh Gupta";
   };
+  alanpearce = {
+    email = "alan@alanpearce.eu";
+    github = "alanpearce";
+    githubId = 850317;
+    name = "Alan Pearce";
+  };
   alapshin = {
     email = "alapshin@fastmail.com";
     github = "alapshin";

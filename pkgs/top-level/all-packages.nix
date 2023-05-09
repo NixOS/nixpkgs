@@ -1567,6 +1567,8 @@ with pkgs;
 
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
 
+  hblock = callPackage ../tools/networking/hblock { };
+
   headsetcontrol = callPackage ../tools/audio/headsetcontrol { };
 
   headset-charge-indicator = callPackage ../tools/audio/headset-charge-indicator { };

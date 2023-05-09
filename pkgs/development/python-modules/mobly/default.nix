@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "mobly";
-  version = "1.12.1";
+  version = "1.12.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mobly";
     rev = "refs/tags/${version}";
-    hash = "sha256-8ZcjxxAv+x8vTsgVKLFb55M02gElkZcZo/nrLwG7k6k=";
+    hash = "sha256-leUOC8AQwbuPNphDg4bIFWW+9tTnYvM3/ejHgZDMR44=";
   };
 
   propagatedBuildInputs = [
