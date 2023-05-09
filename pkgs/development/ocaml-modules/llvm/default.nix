@@ -43,6 +43,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (libllvm.meta) license homepage;
     inherit (ocaml.meta) platforms;
+    # Error copying file "/tmp/nix-build-ocaml-llvm-10.0.1.drv-0/llvm-10.0.1.src/build/bindings/ocaml/llvm/dllllvm.dylib" to "/tmp/nix-build-ocaml-llvm-10.0.1.drv-0/llvm-10.0.1.src/build/./lib/ocaml/llvm/".
+    broken = stdenv.isDarwin;
     description = "OCaml bindings distributed with LLVM";
     maintainers = with lib.maintainers; [ vbgl ];
   };

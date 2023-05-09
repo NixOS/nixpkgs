@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, soundtouch }:
+{ lib, stdenv, buildDunePackage, fetchFromGitHub, dune-configurator, soundtouch }:
 
 buildDunePackage rec {
   pname = "soundtouch";
@@ -17,6 +17,8 @@ buildDunePackage rec {
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-soundtouch";
     description = "Bindings for the soundtouch library which provides functions for changing pitch and timestretching audio data";
+    # fatal error: 'vector' file not found
+    broken = stdenv.isDarwin;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ dandellion ];
   };

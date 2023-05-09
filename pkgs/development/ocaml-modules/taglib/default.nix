@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, pkg-config, taglib, zlib }:
+{ lib, stdenv, buildDunePackage, fetchFromGitHub, dune-configurator, pkg-config, taglib, zlib }:
 
 buildDunePackage rec {
   pname = "taglib";
@@ -20,6 +20,8 @@ buildDunePackage rec {
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-taglib";
     description = "Bindings for the taglib library which provides functions for reading tags in headers of audio files";
+    # fatal error: 'string' file not found
+    broken = stdenv.isDarwin;
     license = with licenses; [ lgpl21Plus "link-exception" ]; # GNU Library Public License 2 Linking Exception
     maintainers = with maintainers; [ dandellion ];
   };

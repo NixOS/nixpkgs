@@ -415,6 +415,17 @@ in buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
     platforms = with platforms; linux ++ lib.optionals (!cudaSupport || !rocmSupport) darwin;
-    broken = rocmSupport && cudaSupport; # CUDA and ROCm are mutually exclusive
+    # For darwin:
+    #   last 10 log lines:
+    #   >   void *ptr = ::aligned_alloc(align,(size+align-1)&(~(align-1)));
+    #   >               ^~~~~~~~~~~~~~~
+    #   >               aligned_alloc
+    #   > /tmp/nix-build-python3.10-torch-2.0.0.drv-0/source/third_party/pocketfft/pocketfft_hdronly.h:153:14: note: 'aligned_alloc' declared here
+    #   > inline void *aligned_alloc(size_t align, size_t size)
+    #   >              ^
+    #   > 1 error generated.
+    #   > [4848/5670] Building CXX object caffe2/CMakeFiles/torch_cpu.dir/__/aten/src/ATen/native/mkldnn/ConvPrepack.cpp.op.o
+    #   > ninja: build stopped: subcommand failed.
+    broken = stdenv.isDarwin && stdenv.isx86_64 || rocmSupport && cudaSupport; # CUDA and ROCm are mutually exclusive
   };
 }
