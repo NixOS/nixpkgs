@@ -28,7 +28,9 @@ let
 
 
     # includes
-    ln -s ${glibc_multi.dev}/include $out/
+    mkdir -p $out/include
+    ln -s ${glibc_multi.dev}/include/* $out/include
+    ln -s ${gcc64.cc}/include/c++ $out/include/c++
 
     # dynamic linkers
     mkdir -p $out/lib/32
