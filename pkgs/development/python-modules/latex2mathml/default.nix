@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "latex2mathml";
-  version = "3.75.3";
+  version = "3.75.5";
 
   disabled = pythonOlder "3.8";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "roniemartinez";
     repo = pname;
     rev = version;
-    hash = "sha256-i1OJ6hmF04cdDOG1gfyseCJu+e0LEr1I3UwLXbdQJqQ=";
+    hash = "sha256-ezSksOUvSUqo8MktjKU5ZWhAxtFHwFkSAOJ8rG2jgoU=";
   };
 
   format = "pyproject";
