@@ -23,14 +23,16 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    "--with-openssl=${openssl.dev}"
+    "--localstatedir=/var"
     "--sysconfdir=/etc"
+    "--with-openssl=${openssl.dev}"
   ];
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
   ];
+
   buildInputs = [
     libpcap
     libxcrypt
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec {
       scripts/{pon,poff,plog}
   '';
 
+  enableParallelBuilding = true;
+
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
@@ -57,11 +61,8 @@ stdenv.mkDerivation rec {
     "sysconfdir=$(out)/etc"
   ];
 
-  preInstall = ''
-    mkdir -p $out/bin
-  '';
   postInstall = ''
-    install -D -m 755 scripts/{pon,poff,plog} $out/bin
+    install -Dm755 -t $out/bin scripts/{pon,poff,plog}
   '';
 
   postFixup = ''

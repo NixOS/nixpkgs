@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -16,7 +17,22 @@ buildGoModule rec {
 
   vendorHash = "sha256-Y/4UgG/2Vp+gxBnGrNpAgRNfPZWJXhVo8TVa/VfOYt0=";
 
-  ldflags = [ "-s" "-w" ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/plumber-cd/terraform-backend-git/cmd.Version=${version}"
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd terraform-backend-git \
+      --bash <($out/bin/terraform-backend-git completion bash) \
+      --fish <($out/bin/terraform-backend-git completion fish) \
+      --zsh <($out/bin/terraform-backend-git completion zsh)
+  '';
 
   meta = with lib; {
     description = "Terraform HTTP Backend implementation that uses Git repository as storage";

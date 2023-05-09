@@ -113,10 +113,15 @@ let
     ]};
   '') (filterAttrs (name: conf: conf.enable) cfg.proxyCachePath));
 
+  toUpstreamParameter = key: value:
+    if builtins.isBool value
+    then lib.optionalString value key
+    else "${key}=${toString value}";
+
   upstreamConfig = toString (flip mapAttrsToList cfg.upstreams (name: upstream: ''
     upstream ${name} {
       ${toString (flip mapAttrsToList upstream.servers (name: server: ''
-        server ${name} ${optionalString server.backup "backup"};
+        server ${name} ${concatStringsSep " " (mapAttrsToList toUpstreamParameter server)};
       ''))}
       ${upstream.extraConfig}
     }
@@ -922,6 +927,7 @@ in
           options = {
             servers = mkOption {
               type = types.attrsOf (types.submodule {
+                freeformType = types.attrsOf (types.oneOf [ types.bool types.int types.str ]);
                 options = {
                   backup = mkOption {
                     type = types.bool;
@@ -935,9 +941,11 @@ in
               });
               description = lib.mdDoc ''
                 Defines the address and other parameters of the upstream servers.
+                See [the documentation](https://nginx.org/en/docs/http/ngx_http_upstream_module.html#server)
+                for the available parameters.
               '';
               default = {};
-              example = { "127.0.0.1:8000" = {}; };
+              example = lib.literalMD "see [](#opt-services.nginx.upstreams)";
             };
             extraConfig = mkOption {
               type = types.lines;
@@ -952,14 +960,23 @@ in
           Defines a group of servers to use as proxy target.
         '';
         default = {};
-        example = literalExpression ''
-          "backend_server" = {
-            servers = { "127.0.0.1:8000" = {}; };
-            extraConfig = ''''
+        example = {
+          "backend" = {
+            servers = {
+              "backend1.example.com:8080" = { weight = 5; };
+              "backend2.example.com" = { max_fails = 3; fail_timeout = "30s"; };
+              "backend3.example.com" = {};
+              "backup1.example.com" = { backup = true; };
+              "backup2.example.com" = { backup = true; };
+            };
+            extraConfig = ''
               keepalive 16;
-            '''';
+            '';
           };
-        '';
+          "memcached" = {
+            servers."unix:/run//memcached/memcached.sock" = {};
+          };
+        };
       };
 
       virtualHosts = mkOption {

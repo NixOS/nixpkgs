@@ -11,21 +11,19 @@ if [[ "$currentVersion" == "$latestVersion" ]]; then
   exit 0
 fi
 
-update-source-version ariang 0 0000000000000000000000000000000000000000000000000000000000000000
+update-source-version ariang 0 sha256-0000000000000000000000000000000000000000000=
 update-source-version ariang "$latestVersion"
 
 # use patched source
 store_src="$(nix-build . -A ariang.src --no-out-link)"
-echo $store_src
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 node2nix \
-  --nodejs-14 \
+  --nodejs-18 \
   --development \
   --node-env ../../development/node-packages/node-env.nix \
   --output ./node-deps.nix \
   --input "$store_src/package.json" \
   --lock "$store_src/package-lock.json" \
-  --composition ./node-composition.nix \
-  ;
+  --composition ./node-composition.nix

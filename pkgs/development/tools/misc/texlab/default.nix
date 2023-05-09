@@ -15,16 +15,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "5.5.0";
+  version = "5.5.1";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = "texlab";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xff6Wj1ZYn3jGrj/snr4ATabLUmL1Jw2LjsjpoG3ZjI=";
+    hash = "sha256-8m7GTD4EX7mWe1bYPuz+4g7FaPuW8++Y/fpIRsdxo6g=";
   };
 
-  cargoHash = "sha256-gEwsnVXY84mTO+JZvcI7EEYCOnVFM07m4VvcWI6zFT0=";
+  cargoHash = "sha256-dcKVhHYODTFw46o3wM8EH0IpT6DkUfOHvdDmbMQmsX0=";
 
   outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   # generate the man page
   postInstall = lib.optionalString (!isCross) ''
     # TexLab builds man page separately in CI:
-    # https://github.com/latex-lsp/texlab/blob/v5.5.0/.github/workflows/publish.yml#L127-L131
+    # https://github.com/latex-lsp/texlab/blob/v5.5.1/.github/workflows/publish.yml#L127-L131
     help2man --no-info "$out/bin/texlab" > texlab.1
     installManPage texlab.1
   '';

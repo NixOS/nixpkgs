@@ -1,5 +1,6 @@
 { fetchgit, fetchhg, fetchzip, lib }:
 
+lib.makeOverridable (
 { owner
 , repo, rev
 , domain ? "sr.ht"
@@ -48,3 +49,4 @@ in cases.${fetcher}.fetch cases.${fetcher}.arguments // {
   inherit rev;
   meta.homepage = "${baseUrl}";
 }
+)

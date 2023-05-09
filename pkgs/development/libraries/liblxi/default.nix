@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liblxi";
-  version = "1.18";
+  version = "1.19";
 
   src = fetchFromGitHub {
     owner = "lxi-tools";
     repo = "liblxi";
     rev = "v${version}";
-    sha256 = "sha256-2tZWIN58J6zNHG3dahNfg5eNiS8ykWFQyRSyikuzdjE=";
+    sha256 = "sha256-TdIUPAXBogGT9OQrX4wkSmPFjR9McdS9gnQ7c24U4qs=";
   };
 
   nativeBuildInputs = [ meson ninja cmake pkg-config rpcsvc-proto ];

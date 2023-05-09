@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "aiac";
-  version = "2.2.0";
+  version = "2.4.0";
   excludedPackages = [".ci"];
 
   src = fetchFromGitHub {
     owner = "gofireflyio";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Ju2LoCDY4lQaiJ3OSkt01SaOqVLrDGiTAwxxRnbnz/0=";
+    hash = "sha256-C9eQdN8S8Qe0x+Uly69nbYNXDKpi1uZ6qNBetn2P4Gk=";
   };
 
-  vendorHash = "sha256-UaC3Ez/i+kPQGOJYtCRtaD2pn3kVZPTaoCcNG7LiFbY=";
+  vendorHash = "sha256-Uqr9wH7hCLdZEu6DXddgB7NuLtqcjUbOPJ2YX+9ehKM=";
   ldflags = [ "-s" "-w" "-X github.com/gofireflyio/aiac/v3/libaiac.Version=v${version}" ];
 
   meta = with lib; {

@@ -31,6 +31,10 @@ in
 
   inherit (kdeFrameworks) kcoreaddons;
 
+  qtkeychain = callPackage ../development/libraries/qtkeychain {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
   quazip = callPackage ../development/libraries/quazip { };

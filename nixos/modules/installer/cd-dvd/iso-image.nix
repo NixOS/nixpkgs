@@ -473,7 +473,7 @@ in
     };
 
     isoImage.squashfsCompression = mkOption {
-      default = with pkgs.stdenv.targetPlatform; "xz -Xdict-size 100% "
+      default = with pkgs.stdenv.hostPlatform; "xz -Xdict-size 100% "
                 + lib.optionalString isx86 "-Xbcj x86"
                 # Untested but should also reduce size for these platforms
                 + lib.optionalString isAarch "-Xbcj arm"
@@ -483,6 +483,7 @@ in
         Compression settings to use for the squashfs nix store.
       '';
       example = "zstd -Xcompression-level 6";
+      type = types.str;
     };
 
     isoImage.edition = mkOption {

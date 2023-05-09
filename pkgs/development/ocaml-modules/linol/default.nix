@@ -5,7 +5,7 @@ rec {
   pname = "linol";
   version = "2023-04-25";
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.14";
   duneVersion = "3";
 
   src = fetchFromGitHub {

@@ -67,6 +67,9 @@ buildGoPackage rec {
     substituteInPlace inputdevices/layout_list.go \
       --replace "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
 
+    substituteInPlace system/uadp/crypto.go \
+      --replace "/usr/share/uadp" "/var/lib/dde-daemon/uadp"
+
     substituteInPlace appearance/background/{background.go,custom_wallpapers.go} accounts/user.go bin/dde-system-daemon/wallpaper.go \
      --replace "/usr/share/wallpapers" "/run/current-system/sw/share/wallpapers"
 

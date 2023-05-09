@@ -80,6 +80,7 @@
 , withSsh ? withHeadlessDeps # SFTP protocol
 , withSvg ? withFullDeps # SVG protocol
 , withSvtav1 ? withFullDeps && !stdenv.isAarch64 # AV1 encoder/decoder (focused on speed and correctness)
+, withTensorflow ? false # Tensorflow dnn backend support
 , withTheora ? withHeadlessDeps # Theora encoder
 , withV4l2 ? withFullDeps && !stdenv.isDarwin # Video 4 Linux support
 , withV4l2M2m ? withV4l2
@@ -213,6 +214,7 @@
 , libplacebo
 , librsvg
 , libssh
+, libtensorflow
 , libtheora
 , libv4l
 , libva
@@ -475,6 +477,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withSvg "librsvg")
     (enableFeature withSrt "libsrt")
     (enableFeature withSsh "libssh")
+    (enableFeature withTensorflow "libtensorflow")
     (enableFeature withTheora "libtheora")
     (enableFeature withV4l2 "libv4l2")
     (enableFeature withV4l2M2m "v4l2-m2m")
@@ -600,6 +603,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withSsh [ libssh ]
   ++ optionals withSvg [ librsvg ]
   ++ optionals withSvtav1 [ svt-av1 ]
+  ++ optionals withTensorflow [ libtensorflow ]
   ++ optionals withTheora [ libtheora ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
   ++ optionals withVdpau [ libvdpau ]

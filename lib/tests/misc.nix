@@ -919,6 +919,30 @@ runTests {
     expected  = "«foo»";
   };
 
+  testToPlist =
+    let
+      deriv = derivation { name = "test"; builder = "/bin/sh"; system = "aarch64-linux"; };
+    in {
+    expr = mapAttrs (const (generators.toPlist { })) {
+      value = {
+        nested.values = rec {
+          int = 42;
+          float = 0.1337;
+          bool = true;
+          emptystring = "";
+          string = "fn\${o}\"r\\d";
+          newlinestring = "\n";
+          path = /. + "/foo";
+          null_ = null;
+          list = [ 3 4 "test" ];
+          emptylist = [];
+          attrs = { foo = null; "foo b/ar" = "baz"; };
+          emptyattrs = {};
+        };
+      };
+    };
+    expected = { value = builtins.readFile ./test-to-plist-expected.plist; };
+  };
 
   testToLuaEmptyAttrSet = {
     expr = generators.toLua {} {};

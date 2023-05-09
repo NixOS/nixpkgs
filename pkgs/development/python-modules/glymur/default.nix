@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "glymur";
-  version = "0.12.4";
+  version = "0.12.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "quintusdias";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-H7aA1nHd8JI3+4dzZhu+GOv/0Y2KRdDkn6Fvc76ny/A=";
+    hash = "sha256-9NMSAt5yFRnlCUDP37/ozhDsS8FTdRkfjUz8kQwWzVc=";
   };
 
   nativeBuildInputs = [

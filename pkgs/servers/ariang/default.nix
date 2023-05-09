@@ -1,19 +1,19 @@
-{ lib
+{ lib ? pkgs.lib
 , stdenv
 , pkgs
 , fetchFromGitHub
-, nodejs ? pkgs.nodejs_14
+, nodejs ? pkgs.nodejs_18
 }:
 
 stdenv.mkDerivation rec {
   pname = "ariang";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "mayswind";
     repo = "AriaNg";
     rev = version;
-    hash = "sha256-kh2XdsrZhR0i+vUhTrzXu5z5Ahv9otNEEjqlCUnVmqE=";
+    hash = "sha256-jprx1JIh+Q0Cv2NkLj9dMnGr+nR/0T08N02gXGknC1Q=";
   };
 
   buildPhase =
@@ -57,5 +57,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-
-
