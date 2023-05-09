@@ -4,6 +4,7 @@
 , dbus
 , electron
 , fetchFromGitHub
+, fetchpatch
 , glib
 , gnome
 , gtk3
@@ -12,7 +13,7 @@
 , makeDesktopItem
 , makeWrapper
 , moreutils
-, nodejs_16
+, nodejs_18
 , pkg-config
 , python3
 , rustPlatform
@@ -23,7 +24,7 @@ let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
 
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_16; };
+  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
 
   version = "2023.4.0";
   src = applyPatches {
@@ -34,7 +35,13 @@ let
       sha256 = "sha256-TTKDl6Py3k+fAy/kcyiMbAAKQdhVnZTyRXV8D/VpKBE=";
     };
 
-    patches = [ ];
+    patches = [
+      # Bump electron to 24 and node to 18
+      (fetchpatch {
+        url = "https://github.com/bitwarden/clients/pull/5205.patch";
+        hash = "sha256-sKSrh8RHXtxGczyZScjTeiGZgTZCQ7f45ULj/j9cp6M=";
+      })
+    ];
   };
 
   desktop-native = rustPlatform.buildRustPackage {
@@ -94,7 +101,7 @@ buildNpmPackage' {
   npmBuildFlags = [
     "--workspace apps/desktop"
   ];
-  npmDepsHash = "sha256-Y7yGM1poNMALipa0mr/iiTLP1zk3K1BqVBdopy6f6fE=";
+  npmDepsHash = "sha256-UXDn09qyM8GwfUiWLDhhyrGFZeKtTRmQArstw+tm5iE=";
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -114,7 +121,7 @@ buildNpmPackage' {
   postBuild = ''
     pushd apps/desktop
 
-    "$(npm bin)"/electron-builder \
+    npm exec electron-builder -- \
       --dir \
       -c.electronDist=${electron}/lib/electron \
       -c.electronVersion=${electron.version}
