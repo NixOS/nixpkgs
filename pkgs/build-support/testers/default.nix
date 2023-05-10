@@ -124,4 +124,6 @@
   hasPkgConfigModule = callPackage ./hasPkgConfigModule/tester.nix { };
 
   testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
+
+  testDarwinCodesign = callPackage ./testDarwinCodesign/tester.nix { };
 }
