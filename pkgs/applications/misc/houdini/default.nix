@@ -3,6 +3,12 @@
 buildFHSEnv rec {
   name = "houdini-${unwrapped.version}";
 
+  # houdini spawns hserver (and other license tools) that is supposed to live beyond the lifespan of houdini process
+  dieWithParent = false;
+
+  # houdini needs to communicate with hserver process that it seem to be checking to be present in running processes
+  unsharePid = false;
+
   targetPkgs = pkgs: with pkgs; [
     libGLU
     libGL
