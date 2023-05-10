@@ -881,6 +881,8 @@ self: super: with self; {
 
   awswrangler = callPackage ../development/python-modules/awswrangler { };
 
+  ax = callPackage ../development/python-modules/ax { };
+
   axis = callPackage ../development/python-modules/axis { };
 
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
@@ -1438,6 +1440,8 @@ self: super: with self; {
   boto = callPackage ../development/python-modules/boto { };
 
   botocore = callPackage ../development/python-modules/botocore { };
+
+  botorch = callPackage ../development/python-modules/botorch { };
 
   bottle = callPackage ../development/python-modules/bottle { };
 
@@ -4235,6 +4239,8 @@ self: super: with self; {
 
   gpy = callPackage ../development/python-modules/gpy { };
 
+  gpytorch = callPackage ../development/python-modules/gpytorch { };
+
   gpt-2-simple = callPackage ../development/python-modules/gpt-2-simple { };
 
   gpyopt = callPackage ../development/python-modules/gpyopt { };
@@ -5717,6 +5723,8 @@ self: super: with self; {
   limits = callPackage ../development/python-modules/limits { };
 
   limnoria = callPackage ../development/python-modules/limnoria { };
+
+  linear_operator = callPackage ../development/python-modules/linear_operator { };
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
 
