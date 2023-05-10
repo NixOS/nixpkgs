@@ -1,19 +1,20 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, lib, ... }:
+
 {
   name = "harmonia";
+
   nodes = {
     harmonia = {
       services.harmonia = {
         enable = true;
-        signKeyPath = pkgs.writeText "cache-key"
-          "cache.example.com-1:9FhO0w+7HjZrhvmzT1VlAZw4OSAlFGTgC24Seg3tmPl4gZBdwZClzTTHr9cVzJpwsRSYLTu7hEAQe3ljy92CWg==";
+        signKeyPath = pkgs.writeText "cache-key" "cache.example.com-1:9FhO0w+7HjZrhvmzT1VlAZw4OSAlFGTgC24Seg3tmPl4gZBdwZClzTTHr9cVzJpwsRSYLTu7hEAQe3ljy92CWg==";
       };
 
       networking.firewall.allowedTCPPorts = [ 5000 ];
-      system.extraDependencies = [ pkgs.hello ];
+      system.extraDependencies = [ pkgs.emptyFile ];
     };
 
-    client01 = { lib, ... }: {
+    client01 = {
       nix.settings = {
         substituters = lib.mkForce [ "http://harmonia:5000" ];
         trusted-public-keys = lib.mkForce [ "cache.example.com-1:eIGQXcGQpc00x6/XFcyacLEUmC07u4RAEHt5Y8vdglo=" ];
@@ -21,13 +22,14 @@ import ./make-test-python.nix ({ pkgs, ... }:
     };
   };
 
-  testScript = ''
+  testScript = { nodes, ... }: ''
     start_all()
 
-    client01.wait_until_succeeds("curl -f http://harmonia:5000/version")
-    client01.succeed("curl -f http://harmonia:5000/nix-cache-info")
+    harmonia.wait_for_unit("harmonia.service")
+    client01.wait_until_succeeds("curl -f http://harmonia:5000/nix-cache-info")
+    client01.succeed("curl -f http://harmonia:5000/version | grep '${nodes.harmonia.services.harmonia.package.version}' >&2")
 
     client01.succeed("cat /etc/nix/nix.conf >&2")
-    client01.wait_until_succeeds("nix-store --realise ${pkgs.hello} --store /root/other-store")
+    client01.succeed("nix-store --realise ${pkgs.emptyFile} --store /root/other-store")
   '';
-})
+}
