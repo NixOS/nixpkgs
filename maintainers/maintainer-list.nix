@@ -8106,7 +8106,7 @@
     github = "kbdharun";
     githubId = 26346867;
     name = "K.B.Dharun Krishna";
-  };    
+  };
   kcalvinalvin = {
     email = "calvin@kcalvinalvin.info";
     github = "kcalvinalvin";
