@@ -5,36 +5,67 @@
 , fetchpatch
 , numpy
 , scipy
-, cython
+, torch
 , networkx
-, joblib
-, pandas
+, apricot-select
+, scikit-learn
+, pytestCheckHook
 , nose
-, pyyaml
 }:
 
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "0.14.8";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "jmschrei";
-    # no tags for recent versions: https://github.com/jmschrei/pomegranate/issues/974
-    rev = "0652e955c400bc56df5661db3298a06854c7cce8";
-    sha256 = "16g49nl2bgnh6nh7bd21s393zbksdvgp9l13ww2diwhplj6hlly3";
+    rev = "v${version}";
+    hash = "sha256-EnxKlRRfsOIDLAhYOq7bUSbI/NvPoSyYCZ9D5VCXFGQ=";
   };
 
-  propagatedBuildInputs = [ numpy scipy cython networkx joblib pyyaml ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    torch
+    networkx
+    scikit-learn
+    apricot-select
+  ];
 
-  nativeCheckInputs = [ pandas nose ];  # as of 0.13.5, it depends explicitly on nose, rather than pytest.
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+  ];
+
+  # These tests seem to be broken as of 1.0.0
+  disabledTests = [
+    "sample"
+    "test_learn_structure_chow_liu"
+    "test_learn_structure_exact"
+    "test_categorical_chow_liu"
+    "test_categorical_exact"
+    "test_categorical_learn_structure"
+  ];
+
+  pythonImportsCheck = [
+    "pomegranate"
+    "pomegranate.distributions"
+    "pomegranate.gmm"
+    "pomegranate.bayes_classifier"
+    "pomegranate.hmm"
+    "pomegranate.markov_chain"
+    "pomegranate.bayesian_network"
+    "pomegranate.factor_graph"
+  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "Probabilistic and graphical models for Python, implemented in cython for speed";
+    description = "Fast, flexible and easy to use probabilistic modelling in Python.";
     homepage = "https://github.com/jmschrei/pomegranate";
     license = licenses.mit;
     maintainers = with maintainers; [ rybern ];
+    changelog = "https://github.com/jmschrei/${pname}/releases/tag/v${version}";
   };
 }
