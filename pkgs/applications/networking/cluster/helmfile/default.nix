@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, pluginsDir ? null
+}:
 
 buildGoModule rec {
   pname = "helmfile";
@@ -19,9 +25,14 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X go.szostok.io/version.version=v${version}" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs =
+    [ installShellFiles ] ++
+    lib.optional (pluginsDir != null) makeWrapper;
 
-  postInstall = ''
+  postInstall = lib.optionalString (pluginsDir != null) ''
+    wrapProgram $out/bin/helmfile \
+      --set HELM_PLUGINS "${pluginsDir}"
+  '' + ''
     installShellCompletion --cmd helmfile \
       --bash <($out/bin/helmfile completion bash) \
       --fish <($out/bin/helmfile completion fish) \
