@@ -13219,6 +13219,8 @@ with pkgs;
 
   unfs3 = callPackage ../servers/unfs3 { };
 
+  unixbench = callPackage ../development/tools/misc/unixbench { };
+
   unoconv = callPackage ../tools/text/unoconv { };
 
   unrtf = callPackage ../tools/text/unrtf { };
