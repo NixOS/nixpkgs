@@ -6222,6 +6222,12 @@
     githubId = 982322;
     name = "Henrik Olsson";
   };
+  henrirosten = {
+    email = "henri.rosten@unikie.com";
+    github = "henrirosten";
+    githubId = 49935860;
+    name = "Henri Rosten";
+  };
   henrytill = {
     email = "henrytill@gmail.com";
     github = "henrytill";
