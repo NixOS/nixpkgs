@@ -2101,6 +2101,8 @@ self: super: with self; {
 
   contexttimer = callPackage ../development/python-modules/contexttimer { };
 
+  contextvars = callPackage ../development/python-modules/contextvars { };
+
   contourpy = callPackage ../development/python-modules/contourpy { };
 
   convertdate = callPackage ../development/python-modules/convertdate { };
@@ -11185,6 +11187,8 @@ self: super: with self; {
   shiboken6 = toPythonModule (callPackage ../development/python-modules/shiboken6 {
     inherit (pkgs) cmake llvmPackages qt6;
   });
+
+  shiny = callPackage ../development/python-modules/shiny { };
 
   shippai = callPackage ../development/python-modules/shippai { };
 
