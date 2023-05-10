@@ -69,7 +69,7 @@ in buildPythonPackage rec {
     ln -sf $out/include/pybind11 $out/include/${python.libPrefix}/pybind11
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     catch
     numpy
     pytestCheckHook
