@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "23.0.1";
+  version = "23.1.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-BSonlwKmegrlrQTTIL0avPi61/TY2M0f7kOZpSzPRQk=";
+    hash = "sha256-bnvpSV6KSY+c3w7FSgTTgBXjBp2/RYbpCBC8DvzYPwY=";
     name = "${pname}-${version}-source";
   };
 
@@ -49,5 +49,6 @@ buildPythonPackage rec {
     homepage = "https://pip.pypa.io/";
     changelog = "https://pip.pypa.io/en/stable/news/#v${lib.replaceStrings [ "." ] [ "-" ] version}";
     priority = 10;
+    maintainers = lib.teams.python.members;
   };
 }
