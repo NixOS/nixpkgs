@@ -8395,6 +8395,8 @@ with pkgs;
 
   hcl2json = callPackage ../applications/misc/hcl2json { };
 
+  hcledit = callPackage ../tools/text/hcledit { };
+
   hcxtools = callPackage ../tools/security/hcxtools { };
 
   hcxdumptool = callPackage ../tools/security/hcxdumptool { };
