@@ -1,7 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+
+# build
 , flit-core
+, installer
+, python
+
+# tests
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -12,11 +18,11 @@
 buildPythonPackage rec {
   pname = "pyproject-hooks";
   version = "1.0.0";
-  format = "pyproject";
+  format = "other";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi rec {
+  src = fetchPypi {
     pname = "pyproject_hooks";
     inherit version;
     hash = "sha256-8nGymLl/WVXVP7ErcsH7GUjCLBprcLMVxUztrKAmTvU=";
@@ -24,12 +30,27 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
+    installer
   ];
 
   propagatedBuildInputs = [
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
+
+  buildPhase = ''
+    runHook preBuild
+    ${python.interpreter} -m flit_core.wheel
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    ${python.interpreter} -m installer --prefix "$out" dist/*.whl
+    runHook postInstall
+  '';
+
+  doCheck = false;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -52,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/pyproject-hooks";
     changelog = "https://github.com/pypa/pyproject-hooks/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = teams.python.members;
   };
 }
