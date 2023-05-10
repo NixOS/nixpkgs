@@ -28576,6 +28576,8 @@ with pkgs;
 
   skeu = callPackage ../data/themes/skeu { };
 
+  shantell-sans = callPackage ../data/fonts/shantell-sans { };
+
   sweet = callPackage ../data/themes/sweet { };
 
   sweet-nova = callPackage ../data/themes/sweet-nova { };
