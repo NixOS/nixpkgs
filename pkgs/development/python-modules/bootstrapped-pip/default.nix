@@ -43,14 +43,14 @@ stdenv.mkDerivation rec {
     # $out is where we are installing to and takes precedence
     export PYTHONPATH="$out/${python.sitePackages}:$(pwd)/pip/src:$(pwd)/setuptools:$(pwd)/setuptools/pkg_resources:$(pwd)/wheel:$(pwd)/flit/flit_core:$PYTHONPATH"
 
-    echo "Building setuptools wheel..."
-    pushd setuptools
-    rm pyproject.toml
+    echo "Building wheel wheel..."
+    pushd wheel
     ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
     popd
 
-    echo "Building wheel wheel..."
-    pushd wheel
+    echo "Building setuptools wheel..."
+    pushd setuptools
+    rm pyproject.toml
     ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
     popd
 
