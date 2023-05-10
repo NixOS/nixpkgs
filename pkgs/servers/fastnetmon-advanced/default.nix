@@ -40,6 +40,9 @@ stdenv.mkDerivation rec {
     cp -r opt/fastnetmon/app/bin $out/bin
     cp -r opt/fastnetmon/libraries $out/libexec/fastnetmon
 
+    ln -s $out/libexec/fastnetmon/libraries/gobgp_2_27_0/gobgpd $out/bin/fnm-gobgpd
+    ln -s $out/libexec/fastnetmon/libraries/gobgp_2_27_0/gobgp $out/bin/fnm-gobgp
+
     addAutoPatchelfSearchPath $out/libexec/fastnetmon/libraries
   '';
 
@@ -48,6 +51,8 @@ stdenv.mkDerivation rec {
     set +o pipefail
     $out/bin/fastnetmon 2>&1 | grep "Can't open log file"
     $out/bin/fcli 2>&1 | grep "Please run this tool with root rights"
+    $out/bin/fnm-gobgp --help 2>&1 | grep "Available Commands"
+    $out/bin/fnm-gobgpd --help 2>&1 | grep "Application Options"
   '';
 
   meta = with lib; {
