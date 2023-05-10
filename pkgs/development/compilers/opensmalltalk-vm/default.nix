@@ -77,6 +77,7 @@ let
 
       preConfigure = ''
         cd building/${platformDir}/${vmName}/build
+        # Exits with non-zero code if the check fails, counterintuitively
         ../../../../scripts/checkSCCSversion && exit 1
         cp ../plugins.int ../plugins.ext .
         configureFlagsArray=${configureFlagsArray}
