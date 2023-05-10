@@ -1,5 +1,5 @@
 { lib
-, gcc12Stdenv
+, stdenv
 , cmake
 , llvm
 , fetchFromGitHub
@@ -32,7 +32,7 @@ let
   };
 
 in
-gcc12Stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "imhex";
   inherit version;
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost curl openssl log4shib xercesc xml-security-c ];
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.isDarwin) "-std=c++14";
 
   enableParallelBuilding = true;
 

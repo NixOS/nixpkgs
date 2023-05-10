@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , llvmPackages
@@ -28,6 +29,14 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-RuzaRJr1n21MbHSeHBt8CjEm5AwbDbvX9Nw5PeBTl+w=";
   };
+
+  patches = [
+   # fix build on aarch64-linux, see https://github.com/Aloxaf/silicon/pull/210
+    (fetchpatch {
+      url = "https://github.com/Aloxaf/silicon/commit/f666c95d3dab85a81d60067e2f25d29ee8ab59e7.patch";
+      hash = "sha256-L6tF9ndC38yVn5ZNof1TMxSImmaqZ6bJ/NYhb0Ebji4=";
+    })
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
