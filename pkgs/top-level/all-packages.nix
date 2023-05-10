@@ -6838,9 +6838,12 @@ with pkgs;
 
   dleyna-server = callPackage ../development/libraries/dleyna-server { };
 
-  dmd = callPackage ../development/compilers/dmd {
+  dmd = callPackage ../development/compilers/dmd ({
     inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
+  } // lib.optionalAttrs stdenv.isLinux {
+    # https://github.com/NixOS/nixpkgs/pull/206907#issuecomment-1527034123
+    stdenv = gcc11Stdenv;
+  });
 
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
@@ -8394,6 +8397,8 @@ with pkgs;
   hayagriva = callPackage ../tools/typesetting/hayagriva { };
 
   hcl2json = callPackage ../applications/misc/hcl2json { };
+
+  hcledit = callPackage ../tools/text/hcledit { };
 
   hcxtools = callPackage ../tools/security/hcxtools { };
 
@@ -16451,6 +16456,10 @@ with pkgs;
 
   squirrel-sql = callPackage ../development/tools/database/squirrel-sql {
     drivers = [ jtds_jdbc mssql_jdbc mysql_jdbc postgresql_jdbc ];
+  };
+
+  surrealdb-migrations = callPackage ../development/tools/database/surrealdb-migrations {
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   stalin = callPackage ../development/compilers/stalin { };

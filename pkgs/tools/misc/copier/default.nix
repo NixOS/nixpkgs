@@ -9,7 +9,11 @@ python3.pkgs.buildPythonApplication rec {
     owner = "copier-org";
     repo = "copier";
     rev = "v${version}";
-    sha256 = "sha256-8lTvyyKfAkvnUvw3e+r9C/49QASR8Zeokm509jxGK2g=";
+    # Conflict on APFS on darwin
+    postFetch = ''
+      rm $out/tests/demo/doc/ma*ana.txt
+    '';
+    hash = "sha256-i8HqMW36YtRxu/DLJWNiCfw6+ce3Gw8r8VBBo9l9aDI=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
