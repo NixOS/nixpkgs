@@ -87,6 +87,11 @@ buildFHSEnv rec {
     chmod +x $EXECUTABLES
   '';
 
+  extraBwrapArgs = [
+    "--ro-bind-try /run/opengl-driver/etc/OpenCL/vendors /etc/OpenCL/vendors"  # this is the case of NixOS
+    "--ro-bind-try /etc/OpenCL/vendors /etc/OpenCL/vendors"  # this is the case of not NixOS
+  ];
+
   runScript = writeScript "${name}-wrapper" ''
     exec $@
   '';
