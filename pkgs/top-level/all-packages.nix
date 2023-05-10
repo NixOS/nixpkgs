@@ -18955,6 +18955,8 @@ with pkgs;
 
   rsass = callPackage ../development/tools/misc/rsass { };
 
+  rsconnect-python = callPackage ../development/libraries/rsconnect-python { };
+
   rsonpath = callPackage ../development/tools/misc/rsonpath { };
 
   rufo = callPackage ../development/tools/rufo { };
