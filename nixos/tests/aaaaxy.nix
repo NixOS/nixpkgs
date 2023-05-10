@@ -3,14 +3,16 @@
   meta.maintainers = with lib.maintainers; [ Luflosi ];
 
   nodes.machine = {
-    hardware.opengl.enable = true;
+    imports = [
+      ./common/x11.nix
+    ];
   };
 
   # This starts the game from a known state, feeds it a prerecorded set of button presses
   # and then checks if the final game state is identical to the expected state.
   # This is also what AAAAXY's CI system does and serves as a good sanity check.
   testScript = ''
-    machine.wait_for_unit("basic.target")
+    machine.wait_for_x()
 
     machine.succeed(
       # benchmark.dem needs to be in a mutable directory,
@@ -18,7 +20,6 @@
       "mkdir -p '/tmp/aaaaxy/assets/demos/'",
       "ln -s '${pkgs.aaaaxy.testing_infra}/assets/demos/benchmark.dem' '/tmp/aaaaxy/assets/demos/'",
       """
-        '${pkgs.xvfb-run}/bin/xvfb-run' \
         '${pkgs.aaaaxy.testing_infra}/scripts/regression-test-demo.sh' \
         'aaaaxy' 'on track for Any%, All Paths and No Teleports' \
         '${pkgs.aaaaxy}/bin/aaaaxy' '/tmp/aaaaxy/assets/demos/benchmark.dem'
