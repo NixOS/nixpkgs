@@ -1,4 +1,4 @@
-{ lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
+{ lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
 , darwin, cmake, rust, rustPlatform
@@ -21,7 +21,7 @@ let
   inherit (lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
 in stdenv.mkDerivation rec {
-  pname = "${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}rustc";
+  pname = "${targetPackages.stdenv.cc.targetPrefix}rustc";
   inherit version;
 
   src = fetchurl {
