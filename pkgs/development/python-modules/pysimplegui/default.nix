@@ -3,6 +3,7 @@
 , fetchPypi
 , tkinter
 , pythonOlder
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,7 @@ buildPythonPackage rec {
     description = "Python GUIs for Humans";
     homepage = "https://github.com/PySimpleGUI/PySimpleGUI";
     license = licenses.lgpl3Plus;
+    broken = stdenv.isDarwin; # build is broken on darwin
     maintainers = with maintainers; [ lucasew ];
   };
 }
