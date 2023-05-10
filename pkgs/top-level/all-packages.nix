@@ -10825,6 +10825,8 @@ with pkgs;
 
   oscclip = callPackage ../tools/misc/oscclip { };
 
+  oui = callPackage ../tools/networking/oui { };
+
   owncast = callPackage ../servers/owncast { };
 
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
