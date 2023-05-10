@@ -16,8 +16,12 @@
 , tenacity
 , bash
   # optional dependencies
+, anthropic
+, cohere
 , openai
+, nlpcloud
 , huggingface-hub
+, manifest-ml
 , torch
 , transformers
 , qdrant-client
@@ -105,12 +109,12 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     llms = [
-      # anthropic
-      # cohere
+      anthropic
+      cohere
       openai
-      # nlpcloud
+      nlpcloud
       huggingface-hub
-      # manifest-ml
+      manifest-ml
       torch
       transformers
     ];
@@ -121,7 +125,7 @@ buildPythonPackage rec {
       openai
     ];
     cohere = [
-      # cohere
+      cohere
     ];
     embeddings = [
       sentence-transformers
@@ -133,13 +137,13 @@ buildPythonPackage rec {
       azure-core
     ];
     all = [
-      # anthropic
-      # cohere
+      anthropic
+      cohere
       openai
-      # nlpcloud
+      nlpcloud
       huggingface-hub
       # jina
-      # manifest-ml
+      manifest-ml
       elasticsearch
       opensearch-py
       # google-search-results

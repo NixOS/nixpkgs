@@ -116,6 +116,7 @@ in buildFHSEnv rec {
     SDL2
     libusb1
     dbus-glib
+    gsettings-desktop-schemas
     ffmpeg
     libudev0-shim
 

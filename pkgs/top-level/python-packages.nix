@@ -516,6 +516,8 @@ self: super: with self; {
 
   ansiwrap = callPackage ../development/python-modules/ansiwrap { };
 
+  anthropic = callPackage ../development/python-modules/anthropic { };
+
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
     inherit (pkgs) antlr4;
   };
@@ -1656,6 +1658,8 @@ self: super: with self; {
   censys = callPackage ../development/python-modules/censys { };
 
   cexprtk = callPackage ../development/python-modules/cexprtk { };
+
+  cohere = callPackage ../development/python-modules/cohere { };
 
   coincurve = callPackage ../development/python-modules/coincurve {
     inherit (pkgs) secp256k1;
@@ -3666,6 +3670,10 @@ self: super: with self; {
   flax = callPackage ../development/python-modules/flax { };
 
   fleep = callPackage ../development/python-modules/fleep { };
+
+  flet = callPackage ../development/python-modules/flet { };
+
+  flet-core = callPackage ../development/python-modules/flet-core { };
 
   flexmock = callPackage ../development/python-modules/flexmock { };
 
@@ -5909,6 +5917,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
+  manifest-ml = callPackage ../development/python-modules/manifest-ml { };
+
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix { };
 
   manuel = callPackage ../development/python-modules/manuel { };
@@ -6659,6 +6669,8 @@ self: super: with self; {
   nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
 
   nkdfu = callPackage ../development/python-modules/nkdfu { };
+
+  nlpcloud = callPackage ../development/python-modules/nlpcloud { };
 
   nltk = callPackage ../development/python-modules/nltk { };
 
@@ -8278,6 +8290,8 @@ self: super: with self; {
   pydexcom = callPackage ../development/python-modules/pydexcom { };
 
   pydicom = callPackage ../development/python-modules/pydicom { };
+
+  pydicom-seg = callPackage ../development/python-modules/pydicom-seg { };
 
   pydigiham = callPackage ../development/python-modules/pydigiham { };
 
@@ -10323,6 +10337,8 @@ self: super: with self; {
   reolink-aio = callPackage ../development/python-modules/reolink-aio { };
 
   reparser = callPackage ../development/python-modules/reparser { };
+
+  repath = callPackage ../development/python-modules/repath { };
 
   repeated-test = callPackage ../development/python-modules/repeated-test { };
 
