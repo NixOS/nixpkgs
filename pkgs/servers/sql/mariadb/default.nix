@@ -262,8 +262,8 @@ in
     };
     mariadb_108 = self.callPackage generic {
       # Supported until 2023-05. TODO: remove ahead of 23.05 branchoff
-      version = "10.8.7";
-      hash = "sha256-A6uqsKMvNTjqZZFbrUBBWf2mHEJE9HZJpC6xdUIGuAI=";
+      version = "10.8.8";
+      hash = "sha256-jeGhUYQpdqSS1jMbVD0O2HJZ/ru8A7nrzgfIDXVNY2E=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
