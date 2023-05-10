@@ -21404,6 +21404,8 @@ with pkgs;
 
   libcollectdclient = callPackage ../development/libraries/libcollectdclient { };
 
+  libcpr = callPackage ../development/libraries/libcpr { };
+
   libcredis = callPackage ../development/libraries/libcredis { };
 
   libctb = callPackage ../development/libraries/libctb { };
