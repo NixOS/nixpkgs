@@ -14362,6 +14362,12 @@
     githubId = 487050;
     name = "Shea Levy";
   };
+  shlok = {
+    email = "sd-nix-maintainer@quant.is";
+    github = "shlok";
+    githubId = 3000933;
+    name = "Shlok Datye";
+  };
   shmish111 = {
     email = "shmish111@gmail.com";
     github = "shmish111";
