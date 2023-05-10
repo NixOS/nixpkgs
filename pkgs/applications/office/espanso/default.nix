@@ -23,6 +23,8 @@
 , IOKit
 , waylandSupport ? false
 , x11Support ? stdenv.isLinux
+, testers
+, espanso
 }:
 # espanso does not support building with both X11 and Wayland support at the same time
 assert stdenv.isLinux -> x11Support != waylandSupport;
@@ -103,6 +105,10 @@ rustPlatform.buildRustPackage rec {
         ]
       )}
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = espanso;
+  };
 
   meta = with lib; {
     description = "Cross-platform Text Expander written in Rust";
