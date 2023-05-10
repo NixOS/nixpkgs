@@ -193,6 +193,10 @@ self: super: {
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
 
+  # Test ldap server test/ldap.js is missing from sdist
+  # https://github.com/supki/ldap-client/issues/18
+  ldap-client-og = dontCheck super.ldap-client-og;
+
   # For -fghc-lib see cabal.project in haskell-language-server.
   stylish-haskell = if lib.versionAtLeast super.ghc.version "9.2"
     then enableCabalFlag "ghc-lib"
