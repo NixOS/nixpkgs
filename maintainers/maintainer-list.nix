@@ -15901,6 +15901,12 @@
     githubId = 8577941;
     name = "Kevin Rauscher";
   };
+  tomaskala = {
+    email = "public+nixpkgs@tomaskala.com";
+    github = "tomaskala";
+    githubId = 7727887;
+    name = "Tomas Kala";
+  };
   tomberek = {
     email = "tomberek@gmail.com";
     matrix = "@tomberek:matrix.org";
