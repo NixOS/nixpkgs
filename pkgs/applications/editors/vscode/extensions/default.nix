@@ -1415,6 +1415,22 @@ let
         };
       };
 
+      graphql.vscode-graphql-syntax = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-graphql-syntax";
+          publisher = "GraphQL";
+          version = "1.1.0";
+          sha256 = "sha256-qazU0UyZ9de6Huj2AYZqqBo4jVW/ZQmFJhV7XXAblxo=";
+        };
+        meta = {
+          description = "Adds full GraphQL syntax highlighting and language support such as bracket matching.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql-syntax";
+          homepage = "https://github.com/graphql/graphiql/tree/main/packages/vscode-graphql-syntax";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.Enzime ];
+        };
+      };
+
       gruntfuggly.todo-tree = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "todo-tree";
