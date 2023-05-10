@@ -31450,10 +31450,7 @@ with pkgs;
 
   inkscape-extensions = recurseIntoAttrs (callPackages ../applications/graphics/inkscape/extensions.nix {});
 
-  inlyne = callPackage ../applications/misc/inlyne {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) AppKit ApplicationServices CoreFoundation CoreGraphics CoreServices CoreText CoreVideo Foundation Metal QuartzCore Security;
-  };
+  inlyne = darwin.apple_sdk_11_0.callPackage ../applications/misc/inlyne { };
 
   inspectrum = callPackage ../applications/radio/inspectrum { };
 
