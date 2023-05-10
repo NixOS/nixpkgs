@@ -24,4 +24,6 @@ lib.makeScope
 
     gnupatch = callPackage ./gnupatch { tinycc = tinycc-mes; };
 
+    gnumake = callPackage ./gnumake { tinycc = tinycc-mes; };
+
   })
