@@ -3766,13 +3766,6 @@
     githubId = 62989;
     name = "Demyan Rogozhin";
   };
-  dennajort = {
-    email = "gosselinjb@gmail.com";
-    matrix = "@dennajort:matrix.org";
-    github = "dennajort";
-    githubId = 1536838;
-    name = "Jean-Baptiste Gosselin";
-  };
   derchris = {
     email = "derchris@me.com";
     github = "derchrisuk";
@@ -7107,6 +7100,13 @@
     github = "jbgi";
     githubId = 221929;
     name = "Jean-Baptiste Giraudeau";
+  };
+  jbgosselin = {
+    email = "gosselinjb@gmail.com";
+    matrix = "@dennajort:matrix.org";
+    github = "jbgosselin";
+    githubId = 1536838;
+    name = "Jean-Baptiste Gosselin";
   };
   jboy = {
     email = "jboy+nixos@bius.moe";
