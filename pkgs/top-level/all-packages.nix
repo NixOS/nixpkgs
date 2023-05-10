@@ -24312,6 +24312,8 @@ with pkgs;
 
   wangle = callPackage ../development/libraries/wangle { };
 
+  wapp = callPackage ../development/libraries/wapp { };
+
   wavpack = callPackage ../development/libraries/wavpack { };
 
   wayland = darwin.apple_sdk_11_0.callPackage ../development/libraries/wayland { };
