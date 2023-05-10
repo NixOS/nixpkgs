@@ -15749,8 +15749,10 @@ with pkgs;
 
   mitama-cpp-result = callPackage ../development/libraries/mitama-cpp-result { };
 
-  mitscheme = callPackage ../development/compilers/mit-scheme
-    { texLive = texlive.combine { inherit (texlive) scheme-small epsf texinfo; }; };
+  mitscheme = callPackage ../development/compilers/mit-scheme {
+    texLive = texlive.combine { inherit (texlive) scheme-small epsf texinfo; };
+    texinfo = texinfo6;
+  };
 
   mitschemeX11 = mitscheme.override {
     enableX11 = true;
