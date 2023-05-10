@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  passthru.tests.test = nixosTests.terminal-emulators.kgx;
+  passthru.tests.test = nixosTests.terminal-emulators.gnome-console;
 
   meta = with lib; {
     description = "Simple user-friendly terminal emulator for the GNOME desktop";

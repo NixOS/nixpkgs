@@ -51,9 +51,9 @@ let tests = {
 
       kermit.pkg = p: p.kermit-terminal;
 
-      kgx.pkg = p: p.kgx;
-      kgx.cmd = "kgx -e $command";
-      kgx.kill = true;
+      gnome-console.pkg = p: p.gnome-console;
+      gnome-console.cmd = "kgx -e $command";
+      gnome-console.kill = true;
 
       kitty.pkg = p: p.kitty;
       kitty.cmd = "kitty $command";
@@ -118,7 +118,7 @@ in mapAttrs (name: { pkg, executable ? name, cmd ? "SHELL=$command ${executable}
     maintainers = [ jjjollyjim ];
   };
 
-  machine = { pkgsInner, ... }:
+  nodes.machine = { pkgsInner, ... }:
 
   {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
