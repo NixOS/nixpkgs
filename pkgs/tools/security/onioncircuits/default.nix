@@ -1,23 +1,36 @@
-{ stdenv, lib, fetchgit, python3, intltool, gtk3, gobject-introspection, gnome }:
+{ stdenv, lib, fetchFromGitLab, python3, intltool, gtk3, gobject-introspection, gnome }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "onioncircuits";
-  version = "0.5";
+  version = "0.7";
 
-  src = fetchgit {
-    url = "https://git-tails.immerda.ch/onioncircuits/";
+  # uses distutils, but in a way setuptools doesn't like
+  format = "other";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.tails.boum.org";
+    owner = "tails";
+    repo = pname;
     rev = version;
-    sha256 = "13mqif9b9iajpkrl9ijspdnvy82kxhprxd5mw3njk68rcn4z2pcm";
+    hash = "sha256-O4tSbKBTmve4u8bXVg128RLyuxvTbU224JV8tQ+aDAQ=";
   };
 
-  nativeBuildInputs = [ intltool ];
+  nativeBuildInputs = [ intltool python3.pkgs.distutils_extra ];
   buildInputs = [ gtk3 gobject-introspection ];
-  propagatedBuildInputs =  with python3.pkgs; [ stem distutils_extra pygobject3 ];
+  propagatedBuildInputs = with python3.pkgs; [ stem pygobject3 ];
 
   postFixup = ''
     wrapProgram "$out/bin/onioncircuits" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix XDG_DATA_DIRS : "$out/share:${gnome.adwaita-icon-theme}/share"
+  '';
+
+  dontConfigure = true;
+  dontBuild = true;
+  installPhase = ''
+    runHook preInstall
+    python setup.py install --home="$out"
+    runHook postInstall
   '';
 
   meta = with lib; {
