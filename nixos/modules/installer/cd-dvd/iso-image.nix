@@ -483,6 +483,7 @@ in
         Compression settings to use for the squashfs nix store.
       '';
       example = "zstd -Xcompression-level 6";
+      type = types.str;
     };
 
     isoImage.edition = mkOption {

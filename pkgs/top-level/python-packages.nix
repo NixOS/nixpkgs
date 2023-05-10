@@ -516,6 +516,8 @@ self: super: with self; {
 
   ansiwrap = callPackage ../development/python-modules/ansiwrap { };
 
+  anthropic = callPackage ../development/python-modules/anthropic { };
+
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
     inherit (pkgs) antlr4;
   };
@@ -1657,6 +1659,8 @@ self: super: with self; {
 
   cexprtk = callPackage ../development/python-modules/cexprtk { };
 
+  cohere = callPackage ../development/python-modules/cohere { };
+
   coincurve = callPackage ../development/python-modules/coincurve {
     inherit (pkgs) secp256k1;
   };
@@ -2408,6 +2412,8 @@ self: super: with self; {
 
   deform = callPackage ../development/python-modules/deform { };
 
+  defusedcsv = callPackage ../development/python-modules/defusedcsv { };
+
   defusedxml = callPackage ../development/python-modules/defusedxml { };
 
   deid = callPackage ../development/python-modules/deid { };
@@ -2669,6 +2675,8 @@ self: super: with self; {
   django_hijack = callPackage ../development/python-modules/django-hijack { };
   # This package may need an older version of Django. Override the package set and set e.g. `django = super.django_1_9`. See the Nixpkgs manual for examples on how to override the package set.
 
+  django-i18nfield = callPackage ../development/python-modules/django-i18nfield { };
+
   django-import-export = callPackage ../development/python-modules/django-import-export { };
 
   django-ipware = callPackage ../development/python-modules/django-ipware { };
@@ -2698,6 +2706,8 @@ self: super: with self; {
   django-maintenance-mode = callPackage ../development/python-modules/django-maintenance-mode { };
 
   django-mptt = callPackage ../development/python-modules/django-mptt { };
+
+  django-mysql = callPackage ../development/python-modules/django-mysql { };
 
   django_nose = callPackage ../development/python-modules/django_nose { };
 
@@ -2944,6 +2954,8 @@ self: super: with self; {
   drf-spectacular = callPackage ../development/python-modules/drf-spectacular { };
 
   drf-spectacular-sidecar = callPackage ../development/python-modules/drf-spectacular-sidecar { };
+
+  drf-ujson2 = callPackage ../development/python-modules/drf-ujson2 { };
 
   drf-writable-nested = callPackage ../development/python-modules/drf-writable-nested { };
 
@@ -3658,6 +3670,10 @@ self: super: with self; {
   flax = callPackage ../development/python-modules/flax { };
 
   fleep = callPackage ../development/python-modules/fleep { };
+
+  flet = callPackage ../development/python-modules/flet { };
+
+  flet-core = callPackage ../development/python-modules/flet-core { };
 
   flexmock = callPackage ../development/python-modules/flexmock { };
 
@@ -5901,6 +5917,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
+  manifest-ml = callPackage ../development/python-modules/manifest-ml { };
+
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix { };
 
   manuel = callPackage ../development/python-modules/manuel { };
@@ -6652,6 +6670,8 @@ self: super: with self; {
 
   nkdfu = callPackage ../development/python-modules/nkdfu { };
 
+  nlpcloud = callPackage ../development/python-modules/nlpcloud { };
+
   nltk = callPackage ../development/python-modules/nltk { };
 
   nnpdf = toPythonModule (pkgs.nnpdf.override {
@@ -7228,6 +7248,10 @@ self: super: with self; {
 
   paver = callPackage ../development/python-modules/paver { };
 
+  paypal-checkout-serversdk = callPackage ../development/python-modules/paypal-checkout-serversdk { };
+
+  paypalhttp = callPackage ../development/python-modules/paypalhttp { };
+
   paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
 
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
@@ -7652,6 +7676,8 @@ self: super: with self; {
   pythonfinder = callPackage ../development/python-modules/pythonfinder { };
 
   pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
+
+  pyuca = callPackage ../development/python-modules/pyuca { };
 
   pyutil = callPackage ../development/python-modules/pyutil { };
 
@@ -8264,6 +8290,8 @@ self: super: with self; {
   pydexcom = callPackage ../development/python-modules/pydexcom { };
 
   pydicom = callPackage ../development/python-modules/pydicom { };
+
+  pydicom-seg = callPackage ../development/python-modules/pydicom-seg { };
 
   pydigiham = callPackage ../development/python-modules/pydigiham { };
 
@@ -9825,6 +9853,8 @@ self: super: with self; {
 
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
 
+  python-u2flib-server = callPackage ../development/python-modules/python-u2flib-server { };
+
   python-uinput = callPackage ../development/python-modules/python-uinput { };
 
   python-unshare = callPackage ../development/python-modules/python-unshare { };
@@ -10307,6 +10337,8 @@ self: super: with self; {
   reolink-aio = callPackage ../development/python-modules/reolink-aio { };
 
   reparser = callPackage ../development/python-modules/reparser { };
+
+  repath = callPackage ../development/python-modules/repath { };
 
   repeated-test = callPackage ../development/python-modules/repeated-test { };
 
@@ -11045,6 +11077,8 @@ self: super: with self; {
 
   slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
 
+  slimit = callPackage ../development/python-modules/slimit { };
+
   slixmpp = callPackage ../development/python-modules/slixmpp {
     inherit (pkgs) gnupg;
   };
@@ -11466,6 +11500,8 @@ self: super: with self; {
   starline = callPackage ../development/python-modules/starline { };
 
   stashy = callPackage ../development/python-modules/stashy { };
+
+  static3 = callPackage ../development/python-modules/static3 { };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
@@ -11954,6 +11990,8 @@ self: super: with self; {
   titlecase = callPackage ../development/python-modules/titlecase { };
 
   tld = callPackage ../development/python-modules/tld { };
+
+  tlds = callPackage ../development/python-modules/tlds { };
 
   tldextract = callPackage ../development/python-modules/tldextract { };
 
@@ -12521,6 +12559,8 @@ self: super: with self; {
   variants = callPackage ../development/python-modules/variants { };
 
   varint = callPackage ../development/python-modules/varint { };
+
+  vat-moss = callPackage ../development/python-modules/vat-moss { };
 
   vcrpy = callPackage ../development/python-modules/vcrpy { };
 

@@ -145,6 +145,7 @@ rec {
         else if final.isS390 && !final.isS390x then null
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
+        else if final.isMips64 then "mips64${lib.optionalString final.isLittleEndian "el"}"
         else final.uname.processor;
 
       # Name used by UEFI for architectures.

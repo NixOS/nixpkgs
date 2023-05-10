@@ -3,7 +3,7 @@
 Matomo is a real-time web analytics application. This module configures
 php-fpm as backend for Matomo, optionally configuring an nginx vhost as well.
 
-An automatic setup is not suported by Matomo, so you need to configure Matomo
+An automatic setup is not supported by Matomo, so you need to configure Matomo
 itself in the browser-based Matomo setup.
 
 ## Database Setup {#module-services-matomo-database-setup}
