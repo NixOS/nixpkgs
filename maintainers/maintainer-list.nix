@@ -12990,6 +12990,12 @@
     githubId = 903072;
     name = "Raghav Sood";
   };
+  ragingpastry = {
+    email = "senior.crepe@gmail.com";
+    github = "ragingpastry";
+    githubId = 6778250;
+    name = "Nick Wilburn";
+  };
   raitobezarius = {
     email = "ryan@lahfa.xyz";
     matrix = "@raitobezarius:matrix.org";
