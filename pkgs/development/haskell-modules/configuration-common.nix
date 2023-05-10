@@ -209,9 +209,6 @@ self: super: {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
-  # Remove when Stackage LTS advances to this version, should be LTS-20.20
-  utility-ht = doDistribute self.utility-ht_0_0_17;
-
   vector = overrideCabal (old: {
     # Too strict bounds on doctest which isn't used, but is part of the configuration
     jailbreak = true;
