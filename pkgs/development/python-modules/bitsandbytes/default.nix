@@ -5,7 +5,7 @@
 , pythonOlder
 , pytestCheckHook
 , setuptools
-, torch
+, torch-bin
 , einops
 , lion-pytorch
 , scipy
@@ -79,7 +79,7 @@ buildPythonPackage {
   buildInputs = lib.optionals torch.cudaSupport [ cuda-redist ];
 
   propagatedBuildInputs = [
-    torch
+    torch-bin
   ];
 
   doCheck = false;  # tests require CUDA and also GPU access
