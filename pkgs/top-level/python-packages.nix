@@ -6275,6 +6275,8 @@ self: super: with self; {
 
   monai = callPackage ../development/python-modules/monai { };
 
+  monai-deploy = callPackage ../development/python-modules/monai-deploy { };
+
   monero = callPackage ../development/python-modules/monero { };
 
   mongomock = callPackage ../development/python-modules/mongomock { };
