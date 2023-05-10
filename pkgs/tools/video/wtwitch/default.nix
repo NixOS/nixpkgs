@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wtwitch";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "krathalan";
     repo = pname;
     rev = version;
-    hash = "sha256-CHIAxUF0kvt8iV5xRbX5zuOCIecH7NoviQOYiOK0CgY=";
+    hash = "sha256-kXUocEBxEyjWOEUPVO1oPWEu7MAVoD2r4Umi1LPNKjc=";
   };
 
   # hardcode SCRIPT_NAME because #150841

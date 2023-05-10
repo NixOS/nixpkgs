@@ -571,6 +571,11 @@ let
       git-binary = pkgs.git;
     };
 
+    github = callPackage ../development/ocaml-modules/github {  };
+    github-data = callPackage ../development/ocaml-modules/github/data.nix {  };
+    github-jsoo = callPackage ../development/ocaml-modules/github/jsoo.nix {  };
+    github-unix = callPackage ../development/ocaml-modules/github/unix.nix {  };
+
     gluten = callPackage ../development/ocaml-modules/gluten { };
     gluten-lwt = callPackage ../development/ocaml-modules/gluten/lwt.nix { };
     gluten-lwt-unix = callPackage ../development/ocaml-modules/gluten/lwt-unix.nix { };
@@ -1350,6 +1355,8 @@ let
     ppx_deriving_cmdliner = callPackage ../development/ocaml-modules/ppx_deriving_cmdliner {};
 
     ppx_deriving_protobuf = callPackage ../development/ocaml-modules/ppx_deriving_protobuf {};
+
+    ppx_deriving_qcheck = callPackage ../development/ocaml-modules/qcheck/ppx_deriving_qcheck.nix {};
 
     ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
 

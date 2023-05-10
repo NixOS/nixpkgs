@@ -12,8 +12,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "release/5.7",
-            "revision": "9305648b0a8700434fa2e55eeacf7c7f4402a0d5"
+            "branch": "release/5.8",
+            "revision": "6caa12ab3bb6245eee4e09dce7677e64720c6545"
           },
           "name": "sourceControlCheckout"
         },
@@ -63,8 +63,8 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "ddb07e896a2a8af79512543b1c7eb9797f8898a5",
-            "version": "1.1.7"
+            "revision": "75ec60b8b4cc0f085c3ac414f3dca5625fa3588e",
+            "version": "2.2.4"
           },
           "name": "sourceControlCheckout"
         },
@@ -80,8 +80,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "release/5.7",
-            "revision": "82b274af66cfbb8f3131677676517b34d01e30fd"
+            "branch": "release/5.8",
+            "revision": "7cfe0c0b6e6297efe88a3ce34e6138ee7eda969e"
           },
           "name": "sourceControlCheckout"
         },
@@ -97,8 +97,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "release/5.7",
-            "revision": "564424db5fdb62dcb5d863bdf7212500ef03a87b"
+            "branch": "release/5.8",
+            "revision": "dccfc2e127a34b89a849407594cf2d604b598ba9"
           },
           "name": "sourceControlCheckout"
         },
@@ -114,12 +114,29 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "release/5.7",
-            "revision": "c6e40adbfc78acc60ca464ae482b56442f9f34f4"
+            "branch": "release/5.8",
+            "revision": "6651d98a4ce3c6faa82768256ca286412bf4a04d"
           },
           "name": "sourceControlCheckout"
         },
         "subpath": "swift-package-manager"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-syntax",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-syntax.git",
+          "name": "SwiftSyntax"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.8",
+            "revision": "cd793adf5680e138bf2bcbaacc292490175d0dcd"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-syntax"
       },
       {
         "basedOn": null,
@@ -148,8 +165,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "release/5.7",
-            "revision": "286b48b1d73388e1d49b2bb33aabf995838104e3"
+            "branch": "release/5.8",
+            "revision": "ac4871e01ef338cb95b5d28328cab0ec1dfae935"
           },
           "name": "sourceControlCheckout"
         },
@@ -165,8 +182,8 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "9ff1cc9327586db4e0c8f46f064b6a82ec1566fa",
-            "version": "4.0.6"
+            "revision": "f47ba4838c30dbd59998a4e4c87ab620ff959e8a",
+            "version": "5.0.5"
           },
           "name": "sourceControlCheckout"
         },
@@ -174,5 +191,5 @@
       }
     ]
   },
-  "version": 5
+  "version": 6
 }

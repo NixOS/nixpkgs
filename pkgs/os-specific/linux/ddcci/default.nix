@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcci-driver";
-  version = "0.4.2";
+  version = "0.4.3";
   name = "${pname}-${kernel.version}-${version}";
 
   src = fetchFromGitLab {
     owner = "${pname}-linux";
     repo = "${pname}-linux";
     rev = "v${version}";
-    sha256 = "sSmL8PqxqHHQiume62si/Kc9El58/b4wkB93iG0dnNM=";
+    hash = "sha256-1Z6V/AorD4aslLKaaCZpmkD2OiQnmpu3iroOPlNPtLE=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -30,14 +30,6 @@ stdenv.mkDerivation rec {
     "KVER=${kernel.modDirVersion}"
     "KERNEL_MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
     "INCLUDEDIR=$(out)/include"
-  ];
-
-  patches = [
-    # fix to support linux 6.1
-    (fetchpatch {
-      url = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/commit/ce52d6ac5e5ed7119a0028eed8823117a004766e.patch";
-      sha256 = "sha256-Tmf4oiMWLR5ma/3X0eoFuriK29HwDqy6dBT7WdqE3mI=";
-    })
   ];
 
   meta = with lib; {

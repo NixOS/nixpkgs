@@ -545,11 +545,19 @@ lib.extendDerivation
        # binaries). By writing this to $out, Nix can find and register
        # them as runtime dependencies (since Nix greps for store paths
        # through $out to find them)
-       args = [ "-c" "export > $out" ];
+       args = [ "-c" ''
+         export > $out
+         for var in $passAsFile; do
+             pathVar="''${var}Path"
+             printf "%s" "$(< "''${!pathVar}")" >> $out
+         done
+       '' ];
 
        # inputDerivation produces the inputs; not the outputs, so any
        # restrictions on what used to be the outputs don't serve a purpose
        # anymore.
+       allowedReferences = null;
+       allowedRequisites = null;
        disallowedReferences = [ ];
        disallowedRequisites = [ ];
      });

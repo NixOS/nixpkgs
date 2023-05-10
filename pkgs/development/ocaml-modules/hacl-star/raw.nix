@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
+  patches = [
+    ./aligned-alloc.patch
+  ];
+
   minimalOCamlVersion = "4.08";
 
   # strictoverflow is disabled because it breaks aarch64-darwin

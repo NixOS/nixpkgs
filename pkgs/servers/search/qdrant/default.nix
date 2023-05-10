@@ -5,18 +5,19 @@
 , stdenv
 , pkg-config
 , openssl
+, nix-update-script
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.1.1";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Kjao5TjVT8QVV2tKt7TTt9cYmYXRl/oPLi8UK1tc/nA=";
+    sha256 = "sha256-CGGJLyhhwQvW9AIzA7Fg85CvPbnuyELR+mmhoc4hJtk=";
   };
 
   cargoLock = {
@@ -41,6 +42,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ protobuf rustPlatform.bindgenHook pkg-config ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Vector Search Engine for the next generation of AI applications";

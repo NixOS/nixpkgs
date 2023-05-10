@@ -364,9 +364,9 @@ stdenv.mkDerivation {
     ''
     # this ensures that when clang passes -lgcc_s to lld (as it does
     # when building e.g. firefox), lld is able to find libgcc_s.so
-    + lib.optionalString (gccForLibs?libgcc) ''
-      echo "-L${gccForLibs.libgcc}/lib" >> $out/nix-support/cc-ldflags
-    '')
+    + concatMapStrings (libgcc: ''
+      echo "-L${libgcc}/lib" >> $out/nix-support/cc-ldflags
+    '') (lib.toList (gccForLibs.libgcc or [])))
 
     ##
     ## General libc support
@@ -518,7 +518,7 @@ stdenv.mkDerivation {
     ''
 
     # TODO: categorize these and figure out a better place for them
-    + optionalString hostPlatform.isCygwin ''
+    + optionalString targetPlatform.isWindows ''
       hardening_unsupported_flags+=" pic"
     '' + optionalString targetPlatform.isMinGW ''
       hardening_unsupported_flags+=" stackprotector fortify"

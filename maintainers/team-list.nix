@@ -149,6 +149,15 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  cuda = {
+    members = [
+      SomeoneSerge
+    ];
+    scope = "Maintain CUDA-enabled packages";
+    shortName = "Cuda";
+    githubTeams = [ "cuda-maintainers" ];
+  };
+
   darwin = {
     members = [
       toonn

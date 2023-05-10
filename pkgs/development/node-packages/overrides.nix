@@ -1,4 +1,4 @@
-# Do not use overrides in this file to add  `meta.mainProgram` to packges. Use `./main-programs.nix`
+# Do not use overrides in this file to add  `meta.mainProgram` to packages. Use `./main-programs.nix`
 # instead.
 { pkgs, nodejs }:
 
@@ -38,8 +38,6 @@ final: prev: {
       darwin.apple_sdk.frameworks.Security
     ];
   };
-
-  "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli;
 
   "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override (oldAttrs: {
     nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
@@ -281,20 +279,6 @@ final: prev: {
       ${lib.optionalString stdenv.isLinux "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""}
     '';
   };
-
-  manta = prev.manta.override ( oldAttrs: {
-    nativeBuildInputs = with pkgs; [ nodejs_14 installShellFiles ];
-    postInstall = ''
-      # create completions, following upstream procedure https://github.com/joyent/node-manta/blob/v5.2.3/Makefile#L85-L91
-      completion_cmds=$(find ./bin -type f -printf "%f\n")
-
-      node ./lib/create_client.js
-      for cmd in $completion_cmds; do
-        installShellCompletion --cmd $cmd --bash <(./bin/$cmd --completion)
-      done
-    '';
-    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ teutat3s ]; };
-  });
 
   mermaid-cli = prev."@mermaid-js/mermaid-cli".override (
   if stdenv.isDarwin
@@ -561,14 +545,6 @@ final: prev: {
       rm -r node_modules/node-gyp
     '';
   };
-
-  triton = prev.triton.override (oldAttrs: {
-    nativeBuildInputs = [ pkgs.installShellFiles ];
-    postInstall = ''
-      installShellCompletion --cmd triton --bash <($out/bin/triton completion)
-    '';
-    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ teutat3s ]; };
-  });
 
   ts-node = prev.ts-node.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];

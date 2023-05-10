@@ -4780,7 +4780,7 @@ dependencies = [
 
 [[package]]
 name = "ukmm"
-version = "0.8.0"
+version = "0.8.2"
 dependencies = [
  "anyhow",
  "anyhow_ext",

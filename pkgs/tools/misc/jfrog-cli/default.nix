@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "jfrog-cli";
-  version = "2.36.1";
-  vendorHash = "sha256-i0iZhYcVRxkcCWd9+liX5vvwXCyem3v1sRZYqmsNbgY=";
+  version = "2.37.0";
+  vendorHash = "sha256-0u4sVqquMW3WyF5Uy/DrxwRZLPDARf0rACylc0R22IA=";
 
   src = fetchFromGitHub {
     owner = "jfrog";
     repo = "jfrog-cli";
     rev = "v${version}";
-    sha256 = "sha256-C3XoBtJyTQQDC5QKmNAyvdYt4ZyBhHs33bW4DDlv9lU=";
+    sha256 = "sha256-4BqlKJZQt9X3zIsImGWwGLm9M60XF2oStSV4ef+3L7Q=";
   };
 
   postInstall = ''

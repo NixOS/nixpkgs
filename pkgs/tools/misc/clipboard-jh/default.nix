@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clipboard-jh";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
     rev = version;
-    hash = "sha256-o3yCWAy7hlFKAFW3tVRG+hL0SRWlNY4hvnhUoDK8GkI=";
+    hash = "sha256-+1GgIa0kIOliI0ACiU9zQe24R6488xWEZ7n9nuxv3dY";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     libffi
     wayland-protocols
     wayland
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Slackadays/clipboard";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "clipboard";
+    platforms = platforms.all;
+    mainProgram = "cb";
   };
 }

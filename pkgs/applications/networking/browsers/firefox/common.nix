@@ -541,6 +541,7 @@ buildStdenv.mkDerivation ({
   '';
 
   passthru = {
+    inherit application extraPatches;
     inherit updateScript;
     inherit version;
     inherit alsaSupport;

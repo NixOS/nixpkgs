@@ -19,6 +19,7 @@
 , pkg-config, glib, libsecret
 , gzip # needed at runtime by gitweb.cgi
 , withSsh ? false
+, sysctl
 , doInstallCheck ? !stdenv.isDarwin  # extremely slow on darwin
 , tests
 }:
@@ -293,6 +294,8 @@ stdenv.mkDerivation (finalAttrs: {
     "DEFAULT_TEST_TARGET=prove"
     "PERL_PATH=${buildPackages.perl}/bin/perl"
   ];
+
+  nativeInstallCheckInputs = lib.optional stdenv.isDarwin sysctl;
 
   preInstallCheck = ''
     installCheckFlagsArray+=(

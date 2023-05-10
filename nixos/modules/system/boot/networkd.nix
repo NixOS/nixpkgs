@@ -70,6 +70,9 @@ let
           "CombinedChannels"
           "RxBufferSize"
           "TxBufferSize"
+          "ReceiveQueues"
+          "TransmitQueues"
+          "TransmitQueueLength"
         ])
         (assertValueOneOf "MACAddressPolicy" ["persistent" "random" "none"])
         (assertMacAddress "MACAddress")
@@ -96,6 +99,9 @@ let
         (assertRange "CombinedChannels" 1 4294967295)
         (assertInt "RxBufferSize")
         (assertInt "TxBufferSize")
+        (assertRange "ReceiveQueues" 1 4096)
+        (assertRange "TransmitQueues" 1 4096)
+        (assertRange "TransmitQueueLength" 1 4294967294)
       ];
     };
 
@@ -2842,7 +2848,7 @@ let
         ''
         + optionalString (def.tokenBucketFilterConfig != { }) ''
           [TokenBucketFilter]
-          ${attrsToSection def.tockenBucketFilterConfig}
+          ${attrsToSection def.tokenBucketFilterConfig}
         ''
         + optionalString (def.pieConfig != { }) ''
           [PIE]
