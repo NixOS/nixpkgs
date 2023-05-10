@@ -51,6 +51,14 @@ Below is a short excerpt of some points in there:
 
 See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 
+## First Time contributors
+
+You will need to add yourself to [maintainers](https://nixos.org/manual/nixpkgs/unstable/#var-meta-maintainers)
+
+Your pr should have two commits:
+- `maintainers: add lizelive`
+- `starsector: 0.95.1a-RC6 -> 0.96a-RC7`
+
 ## Writing good commit messages
 
 In addition to writing properly formatted commit messages, it's important to include relevant information so other developers can later understand *why* a change was made. While this information usually can be found by digging code, mailing list/Discourse archives, pull request discussions or upstream changes, it may require a lot of work.
