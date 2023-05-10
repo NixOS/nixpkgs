@@ -3,7 +3,7 @@
 let
 
   inherit (lib) concatMapStringsSep concatStringsSep isInt isList literalExpression;
-  inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption optional types;
+  inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption mkRenamedOptionModule optional types;
 
   cfg = config.services.automysqlbackup;
   pkg = pkgs.automysqlbackup;
@@ -26,6 +26,10 @@ let
 
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "automysqlbackup" "config" ] [ "services" "automysqlbackup" "settings" ])
+  ];
+
   # interface
   options = {
     services.automysqlbackup = {
@@ -40,7 +44,7 @@ in
         '';
       };
 
-      config = mkOption {
+      settings = mkOption {
         type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
         default = {};
         description = lib.mdDoc ''
