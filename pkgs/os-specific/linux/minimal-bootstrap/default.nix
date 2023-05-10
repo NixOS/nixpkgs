@@ -21,4 +21,7 @@ lib.makeScope
 
     tinycc-bootstrappable = callPackage ./tinycc/bootstrappable.nix { };
     tinycc-mes = callPackage ./tinycc/mes.nix { };
+
+    gnupatch = callPackage ./gnupatch { tinycc = tinycc-mes; };
+
   })
