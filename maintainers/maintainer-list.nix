@@ -1547,6 +1547,12 @@
     githubId = 1060224;
     name = "Alexey Vakhrenev";
   };
+  avanderbergh = {
+    email = "avanderbergh@gmail.com";
+    github = "avanderbergh";
+    githubId = 493849;
+    name = "Adriaan van der Bergh";
+  };
   avaq = {
     email = "nixpkgs@account.avaq.it";
     github = "Avaq";
