@@ -41,6 +41,6 @@ rustPlatform.buildRustPackage rec {
     description = "Nix binary cache";
     homepage = "https://github.com/nix-community/harmonia";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }
