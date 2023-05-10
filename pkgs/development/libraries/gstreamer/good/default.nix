@@ -34,6 +34,7 @@
 , qt6Support ? false, qt6
 , raspiCameraSupport ? false, libraspberrypi
 , enableJack ? true, libjack2
+, enableGl ? gst-plugins-base.glEnabled
 , libXdamage
 , libXext
 , libXfixes
@@ -147,6 +148,8 @@ stdenv.mkDerivation rec {
     "-Dqt5=disabled"
   ] ++ lib.optionals (!qt6Support) [
     "-Dqt6=disabled"
+  ] ++ lib.optionals (!enableGl) [
+    "-Dgl=disabled"
   ] ++ lib.optionals (!gtkSupport) [
     "-Dgtk3=disabled"
   ] ++ lib.optionals (!enableJack) [
