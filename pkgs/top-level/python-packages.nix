@@ -2099,6 +2099,8 @@ self: super: with self; {
 
   crayons = callPackage ../development/python-modules/crayons { };
 
+  crc = callPackage ../development/python-modules/crc { };
+
   crc16 = callPackage ../development/python-modules/crc16 { };
 
   crc32c = callPackage ../development/python-modules/crc32c { };
