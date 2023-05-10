@@ -3,6 +3,7 @@ import io
 import os
 import pty
 import subprocess
+import tempfile
 
 from test_driver.logger import rootlog
 
@@ -13,6 +14,7 @@ class VLan:
     """
 
     nr: int
+    socket_tmp: tempfile.TemporaryDirectory
     socket_dir: Path
 
     process: subprocess.Popen
@@ -24,7 +26,10 @@ class VLan:
 
     def __init__(self, nr: int, tmp_dir: Path):
         self.nr = nr
-        self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
+        self.socket_tmp = tempfile.TemporaryDirectory(
+            prefix=f"vde{self.nr}.ctl", dir=tmp_dir
+        )
+        self.socket_dir = Path(self.socket_tmp.name)
 
         # TODO: don't side-effect environment here
         os.environ[f"QEMU_VDE_SOCKET_{self.nr}"] = str(self.socket_dir)
@@ -60,3 +65,4 @@ class VLan:
         rootlog.info(f"kill vlan (pid {self.pid})")
         self.fd.close()
         self.process.terminate()
+        self.socket_tmp.cleanup()
