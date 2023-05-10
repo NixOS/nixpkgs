@@ -18,11 +18,19 @@ buildFHSEnv rec {
     libxkbcommon
     libudev0-shim
     tbb
+    xwayland
+    qt5.qtwayland
+    nettools  # needed by licensing tools
+    bintools  # needed for ld and other tools, so ctypes can find/load sos from python
+    ocl-icd  # needed for opencl
+    numactl  # needed by hfs ocl backend
+    ncurses5  # needed by hfs ocl backend
   ] ++ (with xorg; [
     libICE
     libSM
     libXmu
     libXi
+    libXt
     libXext
     libX11
     libXrender
@@ -34,6 +42,14 @@ buildFHSEnv rec {
     libXtst
     libxcb
     libXScrnSaver
+    libXrandr
+    libxcb
+    xcbutil
+    xcbutilimage
+    xcbutilrenderutil
+    xcbutilcursor
+    xcbutilkeysyms
+    xcbutilwm
   ]);
 
   passthru = {
