@@ -8,7 +8,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = let
     testScript = pkgs.writers.writePython3 "test_memcache" {
-      libraries = with pkgs.python3Packages; [ memcached ];
+      libraries = with pkgs.python3Packages; [ python-memcached ];
     } ''
       import memcache
       c = memcache.Client(['localhost:11211'])

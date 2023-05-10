@@ -45,7 +45,7 @@ import ./make-test-python.nix (
               "f /root/pw 0666 root root - ${password}"
             ];
             environment.systemPackages = [
-              pkgs.nagiosPluginsOfficial
+              pkgs.monitoring-plugins
             ];
           };
 

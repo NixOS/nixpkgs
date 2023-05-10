@@ -24,7 +24,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     };
 
     environment.systemPackages = with pkgs;
-      [ dnsutils powerdns mariadb ];
+      [ dnsutils pdns mariadb ];
   };
 
   testScript = ''
@@ -37,7 +37,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     with subtest("Loading the MySQL schema works"):
         server.succeed(
             "sudo -u pdns mysql -u pdns -D powerdns <"
-            "${pkgs.powerdns}/share/doc/pdns/schema.mysql.sql"
+            "${pkgs.pdns}/share/doc/pdns/schema.mysql.sql"
         )
 
     with subtest("PowerDNS server starts"):
