@@ -869,6 +869,8 @@ self: super: with self; {
 
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
 
+  aws-secretsmanager-caching = callPackage ../development/python-modules/aws-secretsmanager-caching { };
+
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
   awscrt = callPackage ../development/python-modules/awscrt {
