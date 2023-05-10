@@ -10145,6 +10145,11 @@
     githubId = 9469313;
     name = "Gregoire Martinache";
   };
+  mgregson = {
+    github = "mgregson";
+    githubId = 333572;
+    name = "Michael Gregson";
+  };
   mgttlinger = {
     email = "megoettlinger@gmail.com";
     github = "mgttlinger";
