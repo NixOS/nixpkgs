@@ -12,7 +12,7 @@
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.14.0";
+  version = "0.15.1";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
