@@ -9133,6 +9133,10 @@ self: super: with self; {
     inherit (pkgs) cmake ninja qt5;
   });
 
+  pyside6 = toPythonModule (callPackage ../development/python-modules/pyside6 {
+    inherit (pkgs) cmake ninja qt6;
+  });
+
   pyside = callPackage ../development/python-modules/pyside {
     inherit (pkgs) mesa;
   };
