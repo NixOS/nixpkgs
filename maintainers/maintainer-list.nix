@@ -6792,6 +6792,15 @@
     githubId = 54999;
     name = "Ariel Nunez";
   };
+  Intuinewin = {
+    email = "antoinelabarussias@gmail.com";
+    github = "Intuinewin";
+    githubId = 13691729;
+    name = "Antoine Labarussias";
+    keys = [{
+      fingerprint = "5CB5 9AA0 D180 1997 2FB3  E0EC 943A 1DE9 372E BE4E";
+    }];
+  };
   ionutnechita = {
     email = "ionut_n2001@yahoo.com";
     github = "ionutnechita";
@@ -7904,6 +7913,12 @@
     github = "junjihashimoto";
     githubId = 2469618;
     name = "Junji Hashimoto";
+  };
+  jurraca = {
+    email = "julienu@pm.me";
+    github = "jurraca";
+    githubId = 5124422;
+    name = "Julien Urraca";
   };
   justinas = {
     email = "justinas@justinas.org";
@@ -9025,6 +9040,12 @@
     keys = [{
       fingerprint = "74F5 E5CC 19D3 B5CB 608F  6124 68FF 81E6 A785 0F49";
     }];
+  };
+  lizelive = {
+    email = "nixpkgs@lize.live";
+    github = "lizelive";
+    githubId = 40217331;
+    name = "LizeLive";
   };
   lluchs = {
     email = "lukas.werling@gmail.com";

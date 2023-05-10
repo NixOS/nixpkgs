@@ -51,6 +51,14 @@ in
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
+
+      # fix bug with the gsub directive
+      # https://github.com/neovim/neovim/pull/23015
+      (fetchpatch {
+        name = "use-the-correct-replacement-args-for-gsub-directive.patch";
+        url = "https://github.com/neovim/neovim/commit/ccc0980f86c6ef9a86b0e5a3a691f37cea8eb776.patch";
+        hash = "sha256-sZWM6M8jCL1e72H0bAc51a6FrH0mFFqTV1gGLwKT7Zo=";
+      })
     ];
 
     dontFixCmake = true;

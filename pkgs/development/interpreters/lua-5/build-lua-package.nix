@@ -2,6 +2,7 @@
 { lib
 , lua
 , wrapLua
+, luarocks
 
 # Whether the derivation provides a lua module or not.
 , luarocksCheckHook
@@ -89,7 +90,7 @@ let
 
   nativeBuildInputs = [
     wrapLua
-    lua.pkgs.luarocks
+    luarocks
   ];
 
   inherit doCheck extraVariables rockspecFilename knownRockspec externalDeps nativeCheckInputs;
