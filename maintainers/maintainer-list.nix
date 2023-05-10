@@ -8103,7 +8103,7 @@
   kbdharun = {
     email = "kbdharunkrishna@gmail.com";
     matrix = "@kbdk:matrix.org";
-    github = "kbdharun"
+    github = "kbdharun";
     githubId = 26346867;
     name = "K.B.Dharun Krishna";
   };    
