@@ -25656,7 +25656,6 @@ with pkgs;
     mariadb_104
     mariadb_105
     mariadb_106
-    mariadb_108
     mariadb_109
     mariadb_1010
     mariadb_1011
