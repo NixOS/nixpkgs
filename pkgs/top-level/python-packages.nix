@@ -10827,6 +10827,8 @@ self: super: with self; {
 
   rsa = callPackage ../development/python-modules/rsa { };
 
+  rsconnect-jupyter = callPackage ../development/python-modules/rsconnect-jupyter { };
+
   rsconnect-python = callPackage ../development/python-modules/rsconnect-python { };
 
   rsskey = callPackage ../development/python-modules/rsskey { };
