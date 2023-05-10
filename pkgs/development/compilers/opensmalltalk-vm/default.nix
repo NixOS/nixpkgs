@@ -1,20 +1,194 @@
-{ stdenv, lib, callPackage }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchurl
+, alsa-lib
+, coreutils
+, file
+, freetype
+, gnugrep
+, libpulseaudio
+, libtool
+, libuuid
+, openssl
+, pango
+, pkg-config
+, xorg
+}:
 let
-  vmData = import ./vms.nix;
-  buildVM = callPackage ./build-vm.nix { };
-  vmDerivs = builtins.mapAttrs
-    (platformDir: vms:
-      lib.mapAttrs'
-        (vmName: args: {
-          name = builtins.replaceStrings [ "." ] [ "-" ] vmName;
-          value = buildVM ({ inherit platformDir vmName; } // args);
-        })
-        vms)
-    vmData;
+  buildVM =
+    {
+      # VM-specific information, manually extracted from building/<platformDir>/<vmName>/build/mvm
+      platformDir
+    , vmName
+    , configureFlagsArray
+    , configureFlags
+    }:
+    let
+      owner = "OpenSmalltalk";
+      repo = "opensmalltalk-vm";
+      version = "202206021410";
+      commitHash = "c9fd36530d2c4030649e33020b7b91272a465e31";
+      srcHash = "sha256-QqElPiJuqD5svFjWrLz1zL0Tf+pHxQ2fPvkVRn2lyBI=";
+
+      src = fetchFromGitHub {
+        inherit owner repo;
+        rev = version;
+        hash = srcHash;
+      };
+    in
+    stdenv.mkDerivation {
+      pname =
+        let vmNameNoDots = builtins.replaceStrings [ "." ] [ "-" ] vmName;
+        in "opensmalltalk-vm-${platformDir}-${vmNameNoDots}";
+      inherit version;
+
+      inherit src;
+
+      postPatch =
+        let
+          inherit (builtins) substring;
+          year = substring 0 4 version;
+          month = substring 4 2 version;
+          day = substring 6 2 version;
+          hour = substring 8 2 version;
+          minute = substring 10 2 version;
+          date = "${year}-${month}-${day}T${hour}:${minute}+0000";
+          abbrevHash = substring 0 12 commitHash;
+        in
+        ''
+          vmVersionDate=$(date -u '+%a %b %-d %T %Y %z' -d "${date}")
+          vmVersionFiles=$(sed -n 's/^versionfiles="\(.*\)"/\1/p' ./scripts/updateSCCSVersions)
+          for vmVersionFile in $vmVersionFiles; do
+            substituteInPlace "$vmVersionFile" \
+              --replace "\$Date\$" "\$Date: ''${vmVersionDate} \$" \
+              --replace "\$URL\$" "\$URL: ${src.url} \$" \
+              --replace "\$Rev\$" "\$Rev: ${version} \$" \
+              --replace "\$CommitHash\$" "\$CommitHash: ${abbrevHash} \$"
+          done
+          patchShebangs --build ./building/${platformDir} scripts
+          substituteInPlace ./platforms/unix/config/mkmf \
+            --replace "/bin/rm" "rm"
+          substituteInPlace ./platforms/unix/config/configure \
+            --replace "/usr/bin/file" "file" \
+            --replace "/usr/bin/pkg-config" "pkg-config" \
+        '';
+
+      preConfigure = ''
+        cd building/${platformDir}/${vmName}/build
+        ../../../../scripts/checkSCCSversion && exit 1
+        cp ../plugins.int ../plugins.ext .
+        configureFlagsArray=${configureFlagsArray}
+      '';
+
+      configureScript = "../../../../platforms/unix/config/configure";
+
+      inherit configureFlags;
+
+      buildFlags = "all";
+
+      enableParallelBuilding = true;
+
+      nativeBuildInputs = [
+        file
+        pkg-config
+      ];
+
+      buildInputs = [
+        alsa-lib
+        freetype
+        libpulseaudio
+        libtool
+        libuuid
+        openssl
+        pango
+        xorg.libX11
+        xorg.libXrandr
+      ];
+
+      postInstall = ''
+        rm "$out/squeak"
+        cd "$out/bin"
+        BIN="$(find ../lib -type f -name squeak)"
+        for f in $(find . -type f); do
+          rm "$f"
+          ln -s "$BIN" "$f"
+        done
+      '';
+
+      meta = {
+        description = "The cross-platform virtual machine for Squeak, Pharo, Cuis, and Newspeak.";
+        homepage = "https://opensmalltalk.org/";
+        license = with lib.licenses; [ mit ];
+        maintainers = with lib.maintainers; [ jakewaksbaum ];
+        platforms = [ stdenv.targetPlatform.system ];
+      };
+    };
+
 in
-if stdenv.targetPlatform.system == "aarch64-linux" then vmDerivs."linux64ARMv8"
-else if stdenv.targetPlatform.system == "x86_64-linux" then vmDerivs."linux64x64"
-else
+if stdenv.targetPlatform.system == "aarch64-linux" then
+  {
+    "squeak-cog-spur" = buildVM {
+      platformDir = "linux64ARMv8";
+      vmName = "squeak.cog.spur";
+      configureFlagsArray = ''(
+        CFLAGS="-march=armv8-a -mtune=cortex-a72 -g -O2 -DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
+        LIBS="-lrt"
+      )'';
+      configureFlags = [
+        "--with-vmversion=5.0"
+        "--with-src=src/spur64.cog"
+        "--without-npsqueak"
+        "--with-scriptname=spur64"
+        "--enable-fast-bitblt"
+      ];
+    };
+    "squeak-stack-spur" = buildVM {
+      platformDir = "linux64ARMv8";
+      vmName = "squeak.stack.spur";
+      configureFlagsArray = ''(
+        CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
+        TARGET_ARCH="-march=armv8-a"
+      )'';
+      configureFlags = [
+        "--with-vmversion=5.0"
+        "--with-src=src/spur64.stack"
+        "--disable-cogit"
+        "--without-npsqueak"
+        "--with-scriptname=spur64"
+      ];
+    };
+  }
+else if stdenv.targetPlatform.system == "x86_64-linux" then {
+  "newspeak-cog-spur" = buildVM {
+    platformDir = "linux64x64";
+    vmName = "newspeak.cog.spur";
+    configureFlagsArray = ''(
+        CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -msse2"
+        TARGET_ARCH="-m64"
+      )'';
+    configureFlags = [
+      "--with-vmversion=5.0"
+      "--with-src=src/spur64.cog.newspeak"
+      "--without-vm-display-fbdev"
+      "--without-npsqueak"
+    ];
+  };
+  "squeak.cog.spur" = buildVM {
+    platformDir = "linux64x64";
+    vmName = "squeak.cog.spur";
+    configureFlagsArray = ''(
+        CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -msse2 -DCOGMTVM=0"
+        TARGET_ARCH="-m64"
+      )'';
+    configureFlags = [
+      "--with-vmversion=5.0"
+      "--with-src=src/spur64.cog"
+      "--with-scriptname=spur64"
+      "--without-npsqueak"
+    ];
+  };
+} else
   throw "Unsupported platform: only the following platforms are supported.
     - aarch64-linux
     - x86_64-linux
