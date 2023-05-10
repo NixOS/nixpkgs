@@ -2693,6 +2693,8 @@ self: super: with self; {
 
   django-js-reverse = callPackage ../development/python-modules/django-js-reverse { };
 
+  django-libsass = callPackage ../development/python-modules/django-libsass { };
+
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
 
   django-login-required-middleware = callPackage ../development/python-modules/django-login-required-middleware { };
