@@ -10,20 +10,21 @@ lib.makeScope
   # declared here.
   (extra: lib.callPackageWith ({ inherit lib config buildPlatform hostPlatform; } // extra))
   (self: with self; {
-    inherit (callPackage ./utils.nix { }) fetchurl derivationWithMeta writeTextFile writeText runCommand;
-
-    inherit (callPackage ./stage0-posix { }) kaem m2libc mescc-tools mescc-tools-extra;
-
-    mes = callPackage ./mes { };
-    mes-libc = callPackage ./mes/libc.nix { };
-
-    ln-boot = callPackage ./ln-boot { };
-
-    tinycc-bootstrappable = callPackage ./tinycc/bootstrappable.nix { };
-    tinycc-mes = callPackage ./tinycc/mes.nix { };
 
     gnupatch = callPackage ./gnupatch { tinycc = tinycc-mes; };
 
     gnumake = callPackage ./gnumake { tinycc = tinycc-mes; };
+
+    ln-boot = callPackage ./ln-boot { };
+
+    mes = callPackage ./mes { };
+    mes-libc = callPackage ./mes/libc.nix { };
+
+    inherit (callPackage ./stage0-posix { }) kaem m2libc mescc-tools mescc-tools-extra;
+
+    tinycc-bootstrappable = callPackage ./tinycc/bootstrappable.nix { };
+    tinycc-mes = callPackage ./tinycc/mes.nix { };
+
+    inherit (callPackage ./utils.nix { }) fetchurl derivationWithMeta writeTextFile writeText runCommand;
 
   })
