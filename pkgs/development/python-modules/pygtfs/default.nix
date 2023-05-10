@@ -22,6 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-sGJwtf8DVIrE4hcU3IksnyAAt8yf67UBJIiVILDSsv8=";
   };
 
+  postPatch = ''
+    # https://github.com/jarondl/pygtfs/pull/72
+    substituteInPlace setup.py \
+      --replace "pytz>=2012d" "pytz"
+  '';
+
   nativeBuildInputs = [
     setuptools-scm
   ];
