@@ -1,28 +1,27 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
-, writeScript
 }:
 
-let
-  otelcontribcol = writeScript "otelcontribcol" ''
-    echo 'ERROR: otelcontribcol is now in `pkgs.opentelemetry-collector-contrib`, call the collector with `otelcorecol` or move to `pkgs.opentelemetry-collector-contrib`' >&2
-    exit 1
-  '';
-in
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.76.1";
+  version = "0.77.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    sha256 = "sha256-e+IdEGrJzDRUaAViUSyXdkYv9Hfub0ytmh3pl1f/nGM=";
+    hash = "sha256-koPkEOtB5KnePdx67hJ/WNBojNDqKvf9kqYb59bwh8k=";
   };
   # there is a nested go.mod
   sourceRoot = "source/cmd/otelcorecol";
-  vendorHash = "sha256-8OkKPrK0xLWK5hIPaI7hgCGY0g7sWbaS/1HHqoTuqxk=";
+  vendorHash = "sha256-M1fLrQFrcfCRCcunkgEzUicVfi5Mz/Or6tFpcGfWf4E=";
+
+  patches = [
+    # remove when fixed upstream
+    # https://github.com/open-telemetry/opentelemetry-collector/issues/7668
+    ./update_go-m1cpu_fix_aarch64-darwin.patch
+  ];
 
   preBuild = ''
     # set the build version, can't be done via ldflags
@@ -31,14 +30,10 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  postInstall = ''
-    cp ${otelcontribcol} $out/bin/otelcontribcol
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector";
     changelog = "https://github.com/open-telemetry/opentelemetry-collector/blob/v${version}/CHANGELOG.md";
-    description = "OpenTelemetry Collector offers a vendor-agnostic implementation on how to receive, process and export telemetry data";
+    description = "A vendor-agnostic implementation on how to receive, process and export telemetry data";
     longDescription = ''
       The OpenTelemetry Collector offers a vendor-agnostic implementation on how
       to receive, process and export telemetry data. In addition, it removes the
