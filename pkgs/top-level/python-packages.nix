@@ -2628,6 +2628,8 @@ self: super: with self; {
 
   django-configurations = callPackage ../development/python-modules/django-configurations { };
 
+  django-context-decorator = callPackage ../development/python-modules/django-context-decorator { };
+
   django_contrib_comments = callPackage ../development/python-modules/django_contrib_comments { };
 
   django-cors-headers = callPackage ../development/python-modules/django-cors-headers { };
