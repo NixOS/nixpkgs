@@ -64,8 +64,13 @@ buildFHSEnv rec {
 
   extraInstallCommands = let
     executables = [
-      "bin/houdini"
-      "bin/hkey"
+      "bin/houdini"  # houdini flavours
+      "bin/houdinicore"
+      "bin/houdinifx"
+      "bin/hgpuinfo"  # houdini ocl config tool
+      "bin/hotl"  # hda/otl manipulation tool
+      "bin/hython"  # hython
+      "bin/hkey"  # license administration
       "houdini/sbin/sesinetd"
     ];
   in ''
