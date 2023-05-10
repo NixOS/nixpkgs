@@ -66,7 +66,6 @@ mapAliases ({
   ag = throw "'ag' has been renamed to/replaced by 'silver-searcher'"; # Converted to throw 2022-02-22
   aircrackng = throw "'aircrackng' has been renamed to/replaced by 'aircrack-ng'"; # Converted to throw 2022-02-22
   airtame = throw "airtame has been removed due to being unmaintained"; # Added 2022-01-19
-  alarm-clock-applet = throw "'alarm-clock-applet' has been abandoned upstream and depends on deprecated GNOME2/GTK2"; # Added 2022-06-16
   aleth = throw "aleth (previously packaged as cpp_ethereum) has been removed; abandoned upstream"; # Added 2020-11-30
   alsaLib = alsa-lib; # Added 2021-06-09
   alsaOss = alsa-oss; # Added 2021-06-10
@@ -1517,6 +1516,10 @@ mapAliases ({
   soldat-unstable = opensoldat; # Added 2022-07-02
   solr_8 = throw "'solr' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-03-16
   solr = throw "'solr' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-03-16
+  spark2 = throw "'spark2' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
+  spark_2_4 = throw "'spark_2_4' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
+  spark_3_1 = throw "'spark_3_1' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
+  spark_3_2 = throw "'spark_3_2' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
 
   # Added 2020-02-10
   sourceHanSansPackages = {

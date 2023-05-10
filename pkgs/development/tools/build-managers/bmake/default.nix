@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20230126";
+  version = "20230414";
 
   src = fetchurl {
     url = "http://www.crufty.net/ftp/pub/sjg/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hk9yGFgs95Dsc7ILcQVCXLn/ozUiJUF3LwMTMGtqC8Q=";
+    hash = "sha256-KcsdJqrn3p3vkr2us6rUUg6JlRzpey518LibrhuVOZ8=";
   };
 
   # Make tests work with musl

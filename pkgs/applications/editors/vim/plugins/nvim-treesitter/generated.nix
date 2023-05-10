@@ -1597,12 +1597,12 @@
   };
   slint = buildGrammar {
     language = "slint";
-    version = "0.0.0+rev=0754752";
+    version = "0.0.0+rev=6f12865";
     src = fetchFromGitHub {
       owner = "jrmoulton";
       repo = "tree-sitter-slint";
-      rev = "07547525cdf4627343dca5891f1743ae45e879bb";
-      hash = "sha256-FB5uDzvJKBN3KH+g71kn2/SX8KIZdLv3OamX8f1NeVE=";
+      rev = "6f128658eb22cfd15a801f52369d517c25253d5c";
+      hash = "sha256-zW6WlzVSea8F1E2HJP5DPNEnxnFQMFLXnyRECiIkXR8=";
     };
     meta.homepage = "https://github.com/jrmoulton/tree-sitter-slint";
   };

@@ -6222,6 +6222,12 @@
     githubId = 982322;
     name = "Henrik Olsson";
   };
+  henrirosten = {
+    email = "henri.rosten@unikie.com";
+    github = "henrirosten";
+    githubId = 49935860;
+    name = "Henri Rosten";
+  };
   henrytill = {
     email = "henrytill@gmail.com";
     github = "henrytill";
@@ -9040,6 +9046,12 @@
     keys = [{
       fingerprint = "74F5 E5CC 19D3 B5CB 608F  6124 68FF 81E6 A785 0F49";
     }];
+  };
+  lizelive = {
+    email = "nixpkgs@lize.live";
+    github = "lizelive";
+    githubId = 40217331;
+    name = "LizeLive";
   };
   lluchs = {
     email = "lukas.werling@gmail.com";

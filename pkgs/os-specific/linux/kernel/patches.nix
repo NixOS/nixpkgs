@@ -62,4 +62,13 @@
     name = "fix-em-ice-bonding";
     patch = ./fix-em-ice-bonding.patch;
   };
+
+  CVE-2023-32233 = rec {
+    name = "CVE-2023-32233";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=c1592a89942e9678f7d9c8030efa777c0d57edab";
+      hash = "sha256-DYPWgraXPNeFkjtuDYkFXHnCJ4yDewrukM2CCAqC2BE=";
+    };
+  };
 }
