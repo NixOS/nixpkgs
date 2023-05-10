@@ -3007,6 +3007,7 @@ dont-distribute-packages:
  - pandoc-crossref_0_3_15_2
  - pandoc-highlighting-extensions
  - pandoc-japanese-filters
+ - pandoc-symreg
  - pandora-io
  - papa
  - papa-base
