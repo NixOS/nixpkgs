@@ -1,20 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, bootstrapped-pip
-, setuptools
+
+# build
+, flit-core
+, python
+
+# install
+, installer
 }:
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.38.4";
+  version = "0.40.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = version;
-    hash = "sha256-yZLU0t/nz6kfnnoLL15bybOxN4+SJUaTJsCpGffl1QU=";
+    hash = "sha256-WZ0KUy2Y6uWoalwQ1jxipo2XvLHlxMoCqbpNWW6H4PQ=";
     name = "${pname}-${version}-source";
     postFetch = ''
       cd $out
@@ -25,9 +30,21 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    bootstrapped-pip
-    setuptools
+    flit-core
+    installer
   ];
+
+  buildPhase = ''
+    runHook preBuild
+    ${python.interpreter} -m flit_core.wheel
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    ${python.interpreter} -m installer --prefix "$out" dist/*.whl
+    runHook postInstall
+  '';
 
   # No tests in archive
   doCheck = false;
@@ -52,6 +69,6 @@ buildPythonPackage rec {
       and as such there is no stable, public API.
     '';
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ siriobalmelli ];
+    maintainers = teams.python.members;
   };
 }
