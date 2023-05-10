@@ -11194,6 +11194,8 @@ self: super: with self; {
 
   shiny = callPackage ../development/python-modules/shiny { };
 
+  shinywidgets = callPackage ../development/python-modules/shinywidgets { };
+
   shippai = callPackage ../development/python-modules/shippai { };
 
   shiv = callPackage ../development/python-modules/shiv { };

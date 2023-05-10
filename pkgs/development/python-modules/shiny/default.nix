@@ -10,6 +10,7 @@
 , uvicorn
 , starlette
 , contextvars
+, watchfiles
 , websockets
 , python-multipart
 , htmltools
@@ -36,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "shiny";
-  version = "0.3.3";
+  version = "0.4.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -44,7 +45,7 @@ buildPythonPackage rec {
     owner = "rstudio";
     repo = "py-shiny";
     rev = "v${version}";
-    hash = "sha256-xaLVaiVKzCTGzTdRDRCkmCr+ZebYl4OdRihsTh+cd88=";
+    hash = "sha256-u53/Pb6Z2Gg3WRpi8I2i6lfQPnya8z7savE26/n7tHY=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     uvicorn
     starlette
     contextvars
+    watchfiles
     websockets
     python-multipart
     htmltools

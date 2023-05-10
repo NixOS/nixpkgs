@@ -6,7 +6,7 @@
 
 # setup requirements
 , setuptools
-, setuptools_scm
+, setuptools-scm
 , toml
 , wheel
 
@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "rsconnect-python";
-  version = "1.16.0";
+  version = "1.18.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "rstudio";
     repo = "rsconnect-python";
     rev = "${version}";
-    hash = "sha256-DWfr2baGfAp6CdDS/cCinG12XBGoViwEFkxW8zPT86Q=";
+    hash = "sha256-87S5Kt+LhojhUOGMep8VVZcwh1GhY5DWnixp2idycto=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    setuptools_scm
+    setuptools-scm
     toml
     wheel
   ];
@@ -65,11 +65,12 @@ buildPythonPackage rec {
     ipykernel
   ];
 
+  # skip test that tries to use conda
   checkPhase = ''
     runHook preCheck
     # Needed to avoid /homeless-shelter error
     export HOME=$(mktemp -d)
-    pytest tests/
+    pytest tests/ -k "not test_conda_env_export"
     runHook postCheck
   '';
 
