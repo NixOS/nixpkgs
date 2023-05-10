@@ -33007,6 +33007,8 @@ with pkgs;
 
   opera = callPackage ../applications/networking/browsers/opera { };
 
+  oranda = callPackage ../applications/misc/oranda { };
+
   orca = python3Packages.callPackage ../applications/misc/orca {
     inherit pkg-config;
   };
