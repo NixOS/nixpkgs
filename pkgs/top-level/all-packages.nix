@@ -28231,6 +28231,8 @@ with pkgs;
 
   lightly-qt = libsForQt5.callPackage ../data/themes/lightly-qt { };
 
+  lightly-boehs = libsForQt5.callPackage ../data/themes/lightly-boehs { };
+
   linden-hill = callPackage ../data/fonts/linden-hill { };
 
   line-awesome = callPackage ../data/fonts/line-awesome { };
