@@ -30,7 +30,7 @@ let
                 variants = lib.genAttrs [ "profile" "release" ]
                   (variant: [
                     { archive = "artifacts.zip"; }
-                    { archive = "${lib.toLower hostPlatform.uname.system}-x64.zip"; }
+                    { subdirectory = true; archive = "${lib.toLower hostPlatform.uname.system}-x64.zip"; }
                   ]);
               })) //
           {
