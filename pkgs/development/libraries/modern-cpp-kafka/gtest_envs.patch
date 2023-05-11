@@ -1,0 +1,59 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 4b069a6..faa328e 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -21,30 +21,42 @@ link_directories(${Boost_LIBRARY_DIRS})
+ #---------------------------
+ # googletest
+ #---------------------------
+-if (DEFINED ENV{GTEST_ROOT})
+-    set(GTEST_ROOT $ENV{GTEST_ROOT})
++if (DEFINED ENV{GTEST_INCLUDE_DIR})
++    set(GTEST_INCLUDE_DIR $ENV{GTEST_INCLUDE_DIR})
+ else ()
+     if (EXISTS "/usr/local/include/gtest/gtest.h")
+-        set(GTEST_ROOT /usr/local)
++        set(GTEST_INCLUDE_DIR /usr/local/include)
+     elseif (EXISTS "/opt/homebrew/include/gtest/gtest.h")
+-        set(GTEST_ROOT /opt/homebrew)
++        set(GTEST_INCLUDE_DIR /opt/homebrew/include)
+     endif ()
+ endif ()
+ 
+-if (NOT EXISTS "${GTEST_ROOT}/include/gtest/gtest.h")
++if (DEFINED ENV{GTEST_LIBRARY_DIR})
++    set(GTEST_LIBRARY_DIR $ENV{GTEST_LIBRARY_DIR})
++else ()
++    if (EXISTS "/usr/local/lib/libgtest_main.a"
++         OR EXISTS "/usr/local/lib/libgtest_main.so"
++         OR EXISTS "/usr/local/lib/gtest_main.lib")
++        set(GTEST_LIBRARY_DIR /usr/local/lib)
++    elseif (EXISTS "/opt/homebrew/lib/libgtest_main.a"
++         OR EXISTS "/opt/homebrew/lib/libgtest_main.so"
++         OR EXISTS "/opt/homebrew/lib/gtest_main.lib")
++        set(GTEST_LIBRARY_DIR /opt/homebrew/lib)
++    endif ()
++endif ()
++
++if (NOT EXISTS "${GTEST_INCLUDE_DIR}/gtest/gtest.h")
+     message(FATAL_ERROR "Could not find headers for gtest!")
+ endif ()
+ 
+-if (NOT (EXISTS "${GTEST_ROOT}/lib/libgtest_main.a"
+-         OR EXISTS "${GTEST_ROOT}/lib/libgtest_main.so"
+-         OR EXISTS "${GTEST_ROOT}/lib/gtest_main.lib"))
++if (NOT (EXISTS "${GTEST_LIBRARY_DIR}/libgtest_main.a"
++         OR EXISTS "${GTEST_LIBRARY_DIR}/libgtest_main.so"
++         OR EXISTS "${GTEST_LIBRARY_DIR}/gtest_main.lib"))
+     message(FATAL_ERROR "Could not find library for gtest!")
+ endif ()
+ 
+-message(STATUS "googletest root directory: ${GTEST_ROOT}")
+-
+-include_directories(SYSTEM ${GTEST_ROOT}/include)
+-link_directories(${GTEST_ROOT}/lib ${GTEST_ROOT}/bin)
++include_directories(SYSTEM ${GTEST_INCLUDE_DIR})
++link_directories(${GTEST_LIBRARY_DIR})
+ 
+ 
+ #---------------------------
