@@ -40050,6 +40050,9 @@ with pkgs;
 
   wiremock = callPackage ../tools/networking/wiremock { };
 
+  wireworld = callPackage ../games/wireworld { };
+
+
   teseq = callPackage ../applications/misc/teseq {  };
 
   ape = callPackage ../applications/misc/ape { };
