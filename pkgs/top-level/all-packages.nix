@@ -37021,6 +37021,7 @@ with pkgs;
   arcanPackages = recurseIntoAttrs (callPackage ../desktops/arcan { });
 
   budgie = recurseIntoAttrs (callPackage ../desktops/budgie { });
+  budgiePlugins = recurseIntoAttrs (callPackage ../desktops/budgie/plugins { });
 
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
 
