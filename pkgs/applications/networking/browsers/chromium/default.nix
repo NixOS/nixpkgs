@@ -1,5 +1,7 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
-, llvmPackages_14, ed, gnugrep, coreutils, xdg-utils
+, llvmPackages_14
+, llvmPackages_16
+, ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
@@ -52,6 +54,9 @@ let
           inherit (upstream-info.deps.gn) url rev sha256;
         };
       });
+    } // lib.optionalAttrs (chromiumVersionAtLeast "113") rec {
+      llvmPackages = llvmPackages_16;
+      stdenv = llvmPackages_16.stdenv;
     });
 
     browser = callPackage ./browser.nix {
