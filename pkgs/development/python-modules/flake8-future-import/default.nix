@@ -43,7 +43,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ six ];
 
   checkPhase = ''
+    runHook preCheck
+
     ${python.interpreter} -m test_flake8_future_import
+
+    runHook postCheck
   '';
 
   meta = with lib; {
