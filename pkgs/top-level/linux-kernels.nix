@@ -178,7 +178,6 @@ in {
         kernelPatches.request_key_helper
         kernelPatches.make-maple-state-reusable-after-mas_empty_area
         kernelPatches.fix-em-ice-bonding
-        kernelPatches.CVE-2023-32233
       ];
     };
 
