@@ -4324,6 +4324,8 @@ self: super: with self; {
 
   grpc-google-iam-v1 = callPackage ../development/python-modules/grpc-google-iam-v1 { };
 
+  grpc-interceptor = callPackage ../development/python-modules/grpc-interceptor { };
+
   grpcio = callPackage ../development/python-modules/grpcio { };
 
   grpcio-gcp = callPackage ../development/python-modules/grpcio-gcp { };
