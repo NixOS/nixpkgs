@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-1k6TsaXI9nwrBXTj3hncblkQuN/bvDudWDCsx4E4iwY=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ meson ninja nasm pkg-config ];
   # TODO: doxygen (currently only HTML and not build by default).
   buildInputs = [ xxHash ]
