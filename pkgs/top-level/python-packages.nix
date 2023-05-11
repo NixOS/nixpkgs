@@ -10632,6 +10632,8 @@ self: super: with self; {
 
   ruamel-yaml-clib = callPackage ../development/python-modules/ruamel-yaml-clib { };
 
+  ruamel-yaml-conda = callPackage ../development/python-modules/ruamel-yaml-conda { };
+
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
 
   ruff-lsp = callPackage ../development/python-modules/ruff-lsp { };
