@@ -10,6 +10,8 @@
 buildPythonPackage rec {
   pname = "pylibjpeg-libjpeg";
   version = "1.3.4";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -20,13 +22,18 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cython];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [
+    numpy
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
   doCheck = false;  # tests try to import 'libjpeg.data', which errors
 
   pythonImportsCheck = [
@@ -36,7 +43,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A JPEG, JPEG-LS and JPEG XT plugin for pylibjpeg";
     homepage = "https://github.com/pydicom/pylibjpeg-libjpeg";
-    license = licenses.gpl3;
+    changelog = "https://github.com/pydicom/pylibjpeg-libjpeg/releases/tag/v${version}";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ bcdarwin ];
   };
 }
