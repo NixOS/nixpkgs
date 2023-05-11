@@ -60,9 +60,7 @@ in
   # binary wrappers don't support --run
   postInstall = lib.optionalString withX ''
     wrapProgramShell $out/bin/gnuplot \
-       --prefix PATH : '${gnused}/bin' \
-       --prefix PATH : '${coreutils}/bin' \
-       --prefix PATH : '${fontconfig.bin}/bin' \
+       --prefix PATH : '${lib.makeBinPath [ gnused coreutils fontconfig.bin ]}' \
        "''${gappsWrapperArgs[@]}" \
        "''${qtWrapperArgs[@]}" \
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'

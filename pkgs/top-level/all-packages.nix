@@ -330,6 +330,8 @@ with pkgs;
 
   bingo = callPackage ../development/tools/bingo { };
 
+  bin2c = callPackage ../development/tools/bin2c { };
+
   binserve = callPackage ../servers/binserve {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -3679,9 +3681,7 @@ with pkgs;
 
   abootimg = callPackage ../development/mobile/abootimg { };
 
-  adbfs-rootless = callPackage ../development/mobile/adbfs-rootless {
-    adb = androidenv.androidPkgs_9_0.platform-tools;
-  };
+  adbfs-rootless = callPackage ../development/mobile/adbfs-rootless { };
 
   adb-sync = callPackage ../development/mobile/adb-sync {
     inherit (androidenv.androidPkgs_9_0) platform-tools;
@@ -8170,15 +8170,11 @@ with pkgs;
 
   grpc-client-cli = callPackage ../development/tools/misc/grpc-client-cli { };
 
-  grub = pkgsi686Linux.callPackage ../tools/misc/grub ({
-    stdenv = overrideCC stdenv buildPackages.pkgsi686Linux.gcc6;
-  } // (config.grub or {}));
-
   trustedGrub = pkgsi686Linux.callPackage ../tools/misc/grub/trusted.nix { };
 
   trustedGrub-for-HP = pkgsi686Linux.callPackage ../tools/misc/grub/trusted.nix { for_HP_laptop = true; };
 
-  grub2 = callPackage ../tools/misc/grub/2.0x.nix {
+  grub2 = callPackage ../tools/misc/grub/default.nix {
     # update breaks grub2
     gnulib = pkgs.gnulib.overrideAttrs (_: rec {
       version = "20200223";
@@ -16232,6 +16228,7 @@ with pkgs;
   cargo-bloat = callPackage ../development/tools/rust/cargo-bloat { };
   cargo-bolero = callPackage ../development/tools/rust/cargo-bolero { };
   cargo-bundle = callPackage ../development/tools/rust/cargo-bundle { };
+  cargo-bundle-licenses = callPackage ../development/tools/rust/cargo-bundle-licenses { };
   cargo-cache = callPackage ../development/tools/rust/cargo-cache {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -18989,6 +18986,8 @@ with pkgs;
   sauce-connect = callPackage ../development/tools/sauce-connect { };
 
   sawjap = callPackage ../development/tools/java/sawjap { };
+
+  sbomnix = python3.pkgs.callPackage ../tools/security/sbomnix { };
 
   sd-local = callPackage ../development/tools/sd-local { };
 
@@ -33010,6 +33009,8 @@ with pkgs;
 
   opera = callPackage ../applications/networking/browsers/opera { };
 
+  oranda = callPackage ../applications/misc/oranda { };
+
   orca = python3Packages.callPackage ../applications/misc/orca {
     inherit pkg-config;
   };
@@ -33023,6 +33024,8 @@ with pkgs;
   osmctools = callPackage ../applications/misc/osmctools { };
 
   osmium-tool = callPackage ../applications/misc/osmium-tool { };
+
+  osmtogeojson = callPackage ../applications/misc/osmtogeojson { };
 
   owamp = callPackage ../applications/networking/owamp { };
 
@@ -35362,6 +35365,8 @@ with pkgs;
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
   zammad = callPackage ../applications/networking/misc/zammad { };
+
+  zarf = callPackage ../applications/networking/cluster/zarf { };
 
   zathuraPkgs = callPackage ../applications/misc/zathura { };
   zathura = zathuraPkgs.zathuraWrapper;
@@ -37949,6 +37954,8 @@ with pkgs;
 
   keymapviz = callPackage ../tools/misc/keymapviz { };
 
+  killport = darwin.apple_sdk_11_0.callPackage ../tools/misc/killport { };
+
   lean = callPackage ../applications/science/logic/lean { };
   lean2 = callPackage ../applications/science/logic/lean2 { };
   lean3 = lean;
@@ -40235,7 +40242,7 @@ with pkgs;
 
   treefmt = callPackage ../development/tools/treefmt { };
 
-  bottom = callPackage ../tools/system/bottom { };
+  bottom = darwin.apple_sdk_11_0.callPackage ../tools/system/bottom { };
 
   cagebreak = callPackage ../applications/window-managers/cagebreak {
     wlroots = wlroots_0_15;

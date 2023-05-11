@@ -1,5 +1,7 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper, flex, bison, ncurses, buddy, tecla
 , libsigsegv, gmpxx, cln, yices
+# passthru.tests
+, tamarin-prover
 }:
 
 let
@@ -45,6 +47,11 @@ stdenv.mkDerivation {
   postInstall = ''
     for n in "$out/bin/"*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
   '';
+
+  passthru.tests = {
+    # tamarin-prover only supports specific versions of maude explicitly
+    inherit tamarin-prover;
+  };
 
   enableParallelBuilding = true;
 

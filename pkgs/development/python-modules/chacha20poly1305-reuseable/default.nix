@@ -17,7 +17,7 @@
 
 let
   pname = "chacha20poly1305-reuseable";
-  version = "0.2.2";
+  version = "0.2.5";
 in
 
 buildPythonPackage {
@@ -30,7 +30,7 @@ buildPythonPackage {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vMc5fgFYS06m01WDLRyna3T1uuR+JinqM6huXAQ34rI=";
+    hash = "sha256-T5mmHUMNbdvexeSaIDZIm/3yQcDKnWdor9IK63FE0no=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "ChaCha20Poly1305 that is reuseable for asyncio";
     homepage = "https://github.com/bdraco/chacha20poly1305-reuseable";
-    changelog = "https://github.com/bdraco/chacha20poly1305-reuseable/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/chacha20poly1305-reuseable/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];
   };

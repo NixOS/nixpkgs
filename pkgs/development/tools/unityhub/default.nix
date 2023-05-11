@@ -21,9 +21,6 @@ stdenv.mkDerivation rec {
     name = "${pname}-fhs-env";
     runScript = "";
 
-    # Seems to be needed for GTK filepickers to work in FHSUserEnv
-    profile = "XDG_DATA_DIRS=\"\$XDG_DATA_DIRS:/usr/share/\"";
-
     targetPkgs = pkgs: with pkgs; [
       xorg.libXrandr
 

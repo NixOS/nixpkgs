@@ -235,6 +235,7 @@
   ./programs/singularity.nix
   ./programs/skim.nix
   ./programs/slock.nix
+  ./programs/sniffnet.nix
   ./programs/spacefm.nix
   ./programs/ssh.nix
   ./programs/starship.nix
@@ -875,6 +876,7 @@
   ./services/networking/gobgpd.nix
   ./services/networking/gvpe.nix
   ./services/networking/hans.nix
+  ./services/networking/harmonia.nix
   ./services/networking/haproxy.nix
   ./services/networking/headscale.nix
   ./services/networking/hostapd.nix
