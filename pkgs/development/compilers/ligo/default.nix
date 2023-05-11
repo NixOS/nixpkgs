@@ -24,6 +24,24 @@ ocamlPackages.buildDunePackage rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace "vendors/tezos-ligo/src/lib_hacl/hacl.ml" \
+      --replace \
+        "Hacl.NaCl.Noalloc.Easy.secretbox ~pt:msg ~n:nonce ~key ~ct:cmsg" \
+        "Hacl.NaCl.Noalloc.Easy.secretbox ~pt:msg ~n:nonce ~key ~ct:cmsg ()" \
+      --replace \
+        "Hacl.NaCl.Noalloc.Easy.box_afternm ~pt:msg ~n:nonce ~ck:k ~ct:cmsg" \
+        "Hacl.NaCl.Noalloc.Easy.box_afternm ~pt:msg ~n:nonce ~ck:k ~ct:cmsg ()"
+
+    substituteInPlace "vendors/tezos-ligo/src/lib_crypto/crypto_box.ml" \
+      --replace \
+        "secretbox_open ~key ~nonce ~cmsg ~msg" \
+        "secretbox_open ~key ~nonce ~cmsg ~msg ()" \
+      --replace \
+        "Box.box_open ~k ~nonce ~cmsg ~msg" \
+        "Box.box_open ~k ~nonce ~cmsg ~msg ()"
+  '';
+
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
   CHANGELOG_PATH = "./changelog.txt";
