@@ -52,6 +52,7 @@
 , duckduckgo-search
 , lark
 , jq
+, protobuf
   # test dependencies
 , pytest-vcr
 , pytest-asyncio
@@ -66,7 +67,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.163";
+  version = "0.0.166";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -75,7 +76,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3oebRLMunzfz+fAS5h+HaabioIPXTJLJc0YAktLx4/U=";
+    hash = "sha256-i6CvboYZigky49a7X8RuQH2EfcucJPtEtFEzZxaNJG8=";
   };
 
   postPatch = ''
@@ -190,6 +191,9 @@ buildPythonPackage rec {
       # pyvespa
       # O365
       jq
+      # docarray
+      protobuf
+      # hnswlib
     ];
   };
 
