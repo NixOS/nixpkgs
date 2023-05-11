@@ -106,8 +106,8 @@ in
     ];
     systemd.services.syncplay = {
       description = "Syncplay Service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
 
       serviceConfig = {
         User = cfg.user;
