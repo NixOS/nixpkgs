@@ -69,6 +69,13 @@ buildPythonPackage rec {
       url = "https://github.com/mweinelt/twisted/commit/e69e652de671aac0abf5c7e6c662fc5172758c5a.patch";
       hash = "sha256-LmvKUTViZoY/TPBmSlx4S9FbJNZfB5cxzn/YcciDmoI=";
     })
+    # remove half broken pyasn1 integration that blow up with pyasn 0.5.0
+    # https://github.com/twisted/twisted/pull/11843
+    (fetchpatch {
+      url = "https://github.com/twisted/twisted/commit/bdee0eb835a76b2982beaf10c85269ff25ea09fa.patch";
+      excludes = [ "pyproject.toml" "tox.ini" ];
+      hash = "sha256-oGAHmZMpMWfK+2zEDjHD115sW7exCYqfORVOLw+Wa6M=";
+    })
   ] ++ lib.optionals (pythonAtLeast "3.11") [
     (fetchpatch {
       url = "https://github.com/twisted/twisted/pull/11734.diff";
@@ -95,6 +102,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"pyasn1 >= 0.4",' ""
+
     echo 'ListingTests.test_localeIndependent.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
     echo 'ListingTests.test_newFile.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
     echo 'ListingTests.test_newSingleDigitDayOfMonth.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
