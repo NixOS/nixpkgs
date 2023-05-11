@@ -39505,6 +39505,8 @@ with pkgs;
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt { };
 
+  tfautomv = callPackage ../applications/networking/cluster/tfautomv { };
+
   terranix = callPackage ../applications/networking/cluster/terranix { };
 
   terraspace = callPackage ../applications/networking/cluster/terraspace { };
