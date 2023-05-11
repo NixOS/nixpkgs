@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gittyup";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Murmele";
     repo = "Gittyup";
     rev = "gittyup_v${version}";
-    hash = "sha256-JJ20vls/NGkm0xV+vDguvuW5yqhOQf83TMvnn5Kx4IE=";
+    hash = "sha256-/8Uipz2R/LuA3KUcFsROOmldIKnCVLfIpIQ9YLpPA+k=";
     fetchSubmodules = true;
   };
 
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_LIBSSH2=ON"
     "-DUSE_SYSTEM_LUA=ON"
     "-DUSE_SYSTEM_OPENSSL=ON"
+    "-DENABLE_UPDATE_OVER_GUI=OFF"
   ];
 
   nativeBuildInputs = [
@@ -62,28 +63,8 @@ stdenv.mkDerivation rec {
   ]);
 
   postInstall = ''
-    mkdir -p $out/bin
-
-    # Move binaries to the proper place
-    # TODO: Tweak in the next release: https://github.com/Murmele/Gittyup/commit/5b93e7e514b887fafb00a8158be5986e6c12b2e3
-    mv $out/Gittyup $out/bin/gittyup
-    mv $out/{indexer,relauncher} $out/bin
-
     # Those are not program libs, just some Qt5 libs that the build system leaks for some reason
-    rm -f $out/*.so.*
-    rm -rf $out/{include,lib,Plugins,Resources}
- '' + lib.optionalString stdenv.isLinux ''
-    # Install icons
-    install -Dm0644 ${src}/rsrc/Gittyup.iconset/gittyup_logo.svg $out/share/icons/hicolor/scalable/apps/gittyup.svg
-    for res in 16x16 32x32 64x64 128x128 256x256 512x512; do
-      install -Dm0644 ${src}/rsrc/Gittyup.iconset/icon_$res.png $out/share/icons/hicolor/$res/apps/gittyup.png
-    done
-
-    # Install desktop file
-    install -Dm0644 ${src}/rsrc/linux/com.github.Murmele.Gittyup.desktop $out/share/applications/gittyup.desktop
-    # TODO: Remove in the next release: https://github.com/Murmele/Gittyup/commit/5b93e7e514b887fafb00a8158be5986e6c12b2e3
-    substituteInPlace $out/share/applications/gittyup.desktop \
-      --replace "Exec=Gittyup" "Exec=gittyup"
+    rm -rf $out/{include,lib}
   '';
 
   meta = with lib; {

@@ -140,6 +140,8 @@ stdenv.mkDerivation rec {
     "-DENABLE_SAMPLES:BOOL=OFF"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
+
   autoPatchelfIgnoreMissingDeps = [
     "libngraph_backend.so"
   ];
