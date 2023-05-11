@@ -13269,6 +13269,8 @@ self: super: with self; {
 
   xstatic = callPackage ../development/python-modules/xstatic { };
 
+  xstatic-font-awesome = callPackage ../development/python-modules/xstatic-font-awesome { };
+
   xstatic-jquery = callPackage ../development/python-modules/xstatic-jquery { };
 
   xstatic-jquery-file-upload = callPackage ../development/python-modules/xstatic-jquery-file-upload { };
