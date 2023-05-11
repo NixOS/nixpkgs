@@ -1,9 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, py
 , pyhamcrest
-, pytest-benchmark
 , pytestCheckHook
 , pythonOlder
 }:
@@ -20,10 +18,14 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    py
     pyhamcrest
-    pytest-benchmark
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # avoid dependency on pytest-benchmark
+    "test_decode_random"
+    "test_encode_random"
   ];
 
   pythonImportsCheck = [ "base58" ];
