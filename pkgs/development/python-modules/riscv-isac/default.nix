@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "riscv-isac";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = pname;
-    rev = version;
-    hash = "sha256-Krjr9bvpoOeNfMbYj/QbJ+Y+AVLjwrzj8KKMUXCfnMA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-I0RsvSCrSlNGVj8z+WUQx6vbdNkKCRyMFvNx+0mTBAE=";
   };
 
   postPatch = "substituteInPlace riscv_isac/requirements.txt --replace 'pyelftools==0.26' pyelftools";
