@@ -3,7 +3,7 @@
 }:
 
 let
-  dropDevOutput = { outputs, ... }: {
+  dropDocOutput = { outputs, ... }: {
     outputs = lib.filter (x: x != "doc") outputs;
   };
 
@@ -119,7 +119,7 @@ let
       flask-babel = (super.flask-babel.override {
         sphinxHook = null;
         furo = null;
-      }).overridePythonAttrs (old: (dropDevOutput old) // rec {
+      }).overridePythonAttrs (old: (dropDocOutput old) // rec {
         pname = "Flask-Babel";
         version = "2.0.0";
         format = "setuptools";
@@ -128,21 +128,29 @@ let
           inherit version;
           hash = "sha256:f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
         };
+        disabledTests = [
+          # AssertionError: assert 'Apr 12, 2010...46:00\u202fPM' == 'Apr 12, 2010, 1:46:00 PM'
+          # Note the `\u202f` (narrow, no-break space) vs space.
+          "test_basics"
+          "test_init_app"
+          "test_custom_locale_selector"
+          "test_refreshing"
+        ];
       });
       psycopg2 = (super.psycopg2.override {
         sphinxHook = null;
         sphinx-better-theme = null;
-      }).overridePythonAttrs dropDevOutput;
+      }).overridePythonAttrs dropDocOutput;
       hypothesis = super.hypothesis.override {
         enableDocumentation = false;
       };
       pyjwt = (super.pyjwt.override {
         sphinxHook = null;
         sphinx-rtd-theme = null;
-      }).overridePythonAttrs (old: (dropDevOutput old) // { format = "setuptools"; });
+      }).overridePythonAttrs (old: (dropDocOutput old) // { format = "setuptools"; });
       beautifulsoup4 = (super.beautifulsoup4.override {
         sphinxHook = null;
-      }).overridePythonAttrs dropDevOutput;
+      }).overridePythonAttrs dropDocOutput;
       pydash = (super.pydash.override {
         sphinx-rtd-theme = null;
       }).overridePythonAttrs (old: rec {
@@ -155,6 +163,10 @@ let
         format = "setuptools";
         doCheck = false;
       });
+      pyopenssl = (super.pyopenssl.override {
+        sphinxHook = null;
+        sphinx-rtd-theme = null;
+      }).overridePythonAttrs dropDocOutput;
     };
   };
 in
@@ -169,6 +181,14 @@ python3'.pkgs.buildPythonPackage rec {
     hash = "sha256-SYXw8PBCb514v3rcy15W/vZS5JyMsu81D2sJmviLRtw=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # https://github.com/privacyidea/privacyidea/pull/3611
+    (fetchpatch {
+      url = "https://github.com/privacyidea/privacyidea/commit/7db6509721726a34e8528437ddbd4210019b11ef.patch";
+      sha256 = "sha256-ZvtauCs1vWyxzGbA0B2+gG8q5JyUO8DF8nm/3/vcYmE=";
+    })
+  ];
 
   propagatedBuildInputs = with python3'.pkgs; [
     cryptography pyrad pymysql python-dateutil flask-versioned flask_script
