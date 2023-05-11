@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, writeText
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, writeText
 , graphviz, doxygen
 , ocamlPackages, ltl2ba, coq, why3
 , gdk-pixbuf, wrapGAppsHook
@@ -52,6 +52,14 @@ stdenv.mkDerivation rec {
     url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
     hash = "sha256-UT7ajIyu8e5vzrz2oBKDDrtZqUacgUP/TRi0/kz9Qkg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fixes-yojson-2_1-support.patch";
+      url = "https://git.frama-c.com/pub/frama-c/-/commit/647eace02ed8dac46e75452898c3470f82576818.patch";
+      hash = "sha256-XfLi4kW1Y2MCLjHHQZAD8DvXvfZuDH3OKd9hlTV0XCw=";
+    })
+  ];
 
   postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
 
