@@ -64,6 +64,18 @@ in
     patches = flutter3Patches;
   };
 
+  v37 = mkFlutter {
+    version = "3.7.12";
+    engineVersion = "1a65d409c7a1438a34d21b60bf30a6fd5db59314";
+    dartVersion = "2.19.6";
+    hash = "sha256-5ExDBQXIpoZ5NwS66seY3m9/V8xDiyq/RdzldAyHdEE=";
+    dartHash = {
+      x86_64-linux = "sha256-4ezRuwhQHVCxZg5WbzU/tBUDvZVpfCo6coDE4K0UzXo=";
+      aarch64-linux = "sha256-pYmClIqOo0sRPOkrcF4xQbo0mHlrr1TkhT1fnNyYNck=";
+    };
+    patches = flutter3Patches;
+  };
+
   v2 = mkFlutter {
     version = "2.10.5";
     engineVersion = "57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab";
