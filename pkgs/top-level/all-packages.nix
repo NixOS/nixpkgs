@@ -38746,6 +38746,8 @@ with pkgs;
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
 
+  helm-dashboard = callPackage ../applications/networking/cluster/helm-dashboard { };
+
   helmsman = callPackage ../applications/networking/cluster/helmsman { };
 
   velero = callPackage ../applications/networking/cluster/velero { };
