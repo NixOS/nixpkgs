@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "0.14.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,6 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast runtime type checking for Python";
     homepage = "https://github.com/beartype/beartype";
+    changelog = "https://github.com/beartype/beartype/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };
