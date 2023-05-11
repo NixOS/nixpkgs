@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, bundlerEnv, ruby, makeWrapper, nixosTests }:
 
 let
-  version = "4.2.10";
+  version = "5.0.5";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
     inherit ruby;
     gemdir = ./.;
-    groups = [ "development" "ldap" "markdown" "minimagick" "openid" "test" ];
+    groups = [ "ldap" "markdown" "minimagick" ];
   };
 in
   stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ in
 
     src = fetchurl {
       url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
-      sha256 = "sha256-byY4jCOJKWJVLKSR1e/tq9QtrIiGHdnYC8M0WPZb4ek=";
+      hash = "sha256-qJrRxLub8CXmUnx3qxjI+vd0nJSpdcryz9u6AOsSpIE=";
     };
 
     nativeBuildInputs = [ makeWrapper ];
