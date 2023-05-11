@@ -14488,7 +14488,9 @@ with pkgs;
     openjdk = openjdk11_headless;
   };
 
-  beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
+  beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { ultimate = false; };
+
+  beekeeper-studio-ultimate = callPackage ../development/tools/database/beekeeper-studio { ultimate = true; };
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
