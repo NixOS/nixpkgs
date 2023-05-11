@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-VAn4zXypOugPIVyXQ/8Yt0rCDM7hVdIY+jpmoTHqssU=";
   };
 
-  buildInputs = [ qt5.qtwayland ];
+  buildInputs = lib.optionals stdenv.isLinux [ qt5.qtwayland ];
   propagatedBuildInputs = with python3Packages; [ git pyqt5 qtpy send2trash ];
   nativeBuildInputs = [ gettext qt5.wrapQtAppsHook ];
   nativeCheckInputs = with python3Packages; [ git pytestCheckHook ];

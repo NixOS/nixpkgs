@@ -51,6 +51,7 @@
 , atlassian-python-api
 , duckduckgo-search
 , lark
+, jq
   # test dependencies
 , pytest-vcr
 , pytest-asyncio
@@ -65,7 +66,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.158";
+  version = "0.0.163";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -74,7 +75,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-R8l7Y33CiTL4px5A7rB6PHMnSjvINZBrgANwUMFkls8=";
+    hash = "sha256-3oebRLMunzfz+fAS5h+HaabioIPXTJLJc0YAktLx4/U=";
   };
 
   postPatch = ''
@@ -188,6 +189,7 @@ buildPythonPackage rec {
       pexpect
       # pyvespa
       # O365
+      jq
     ];
   };
 

@@ -881,6 +881,8 @@ self: super: with self; {
 
   awswrangler = callPackage ../development/python-modules/awswrangler { };
 
+  ax = callPackage ../development/python-modules/ax { };
+
   axis = callPackage ../development/python-modules/axis { };
 
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
@@ -1438,6 +1440,8 @@ self: super: with self; {
   boto = callPackage ../development/python-modules/boto { };
 
   botocore = callPackage ../development/python-modules/botocore { };
+
+  botorch = callPackage ../development/python-modules/botorch { };
 
   bottle = callPackage ../development/python-modules/bottle { };
 
@@ -2602,6 +2606,8 @@ self: super: with self; {
 
   django-bootstrap3 = callPackage ../development/python-modules/django-bootstrap3 { };
 
+  django-bootstrap4 = callPackage ../development/python-modules/django-bootstrap4 { };
+
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
 
   django-cacheops = callPackage ../development/python-modules/django-cacheops { };
@@ -2627,6 +2633,8 @@ self: super: with self; {
   django-compression-middleware = callPackage ../development/python-modules/django-compression-middleware { };
 
   django-configurations = callPackage ../development/python-modules/django-configurations { };
+
+  django-context-decorator = callPackage ../development/python-modules/django-context-decorator { };
 
   django_contrib_comments = callPackage ../development/python-modules/django_contrib_comments { };
 
@@ -2688,6 +2696,8 @@ self: super: with self; {
   django-js-asset = callPackage ../development/python-modules/django-js-asset { };
 
   django-js-reverse = callPackage ../development/python-modules/django-js-reverse { };
+
+  django-libsass = callPackage ../development/python-modules/django-libsass { };
 
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
 
@@ -4229,6 +4239,8 @@ self: super: with self; {
 
   gpy = callPackage ../development/python-modules/gpy { };
 
+  gpytorch = callPackage ../development/python-modules/gpytorch { };
+
   gpt-2-simple = callPackage ../development/python-modules/gpt-2-simple { };
 
   gpyopt = callPackage ../development/python-modules/gpyopt { };
@@ -5711,6 +5723,8 @@ self: super: with self; {
   limits = callPackage ../development/python-modules/limits { };
 
   limnoria = callPackage ../development/python-modules/limnoria { };
+
+  linear_operator = callPackage ../development/python-modules/linear_operator { };
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
 
@@ -10549,6 +10563,8 @@ self: super: with self; {
   ropgadget = callPackage ../development/python-modules/ropgadget { };
 
   ropper = callPackage ../development/python-modules/ropper { };
+
+  rouge-score = callPackage ../development/python-modules/rouge-score { };
 
   routes = callPackage ../development/python-modules/routes { };
 

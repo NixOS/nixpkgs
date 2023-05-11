@@ -1270,7 +1270,6 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_0_9_5
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1284,6 +1283,7 @@ dont-distribute-packages:
  - doc-review
  - domain
  - domain-aeson
+ - domain-aeson_0_1_1_1
  - domain-cereal
  - domaindriven
  - dormouse-client
@@ -3007,6 +3007,7 @@ dont-distribute-packages:
  - pandoc-crossref_0_3_15_2
  - pandoc-highlighting-extensions
  - pandoc-japanese-filters
+ - pandoc-symreg
  - pandora-io
  - papa
  - papa-base
@@ -3247,7 +3248,6 @@ dont-distribute-packages:
  - quickcheck-relaxng
  - quickcheck-state-machine
  - quickcheck-state-machine-distributed
- - quickcheck-state-machine_0_7_2
  - quicktest
  - quipper
  - quipper-algorithms
