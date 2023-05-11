@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "skyfield";
-  version = "1.42";
+  version = "1.45";
 
   src = fetchFromGitHub {
     owner = "skyfielders";
     repo = "python-skyfield";
     rev = version;
-    hash = "sha256-aoSkuLhZcEy+13EJQOBHV2/rgmN6aZQHqfj4OOirOG0=";
+    hash = "sha256-kZrXNVE+JGPGiVsd6CTwOqfciYLsD2A4pTS3FpqO+Dk=";
   };
 
   propagatedBuildInputs = [ certifi numpy sgp4 jplephem ];
