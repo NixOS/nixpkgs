@@ -56,22 +56,23 @@ let
             {
               base = [
                 ({ archive = "artifacts.zip"; } // lib.optionalAttrs (arch == "arm64") {
-                  # For some reason, the arm64 artifacts are missing shader code.
+                  # For some reason, the arm64 artifacts are missing shader code in Flutter < 3.10.0.
                   postPatch = ''
-                    if [ -d shader_lib ]; then
-                      The shader_lib directory has been included in the artifact archive.
-                      This patch should be removed.
+                    if [ ! -d shader_lib ]; then
+                      ln -s ${lib.findSingle
+                        (pkg: lib.getName pkg == "flutter-artifact-linux-x64-artifacts")
+                        (throw "Could not find the x64 artifact archive.")
+                        (throw "Could not find the correct x64 artifact archive.")
+                        artifactDerivations.platform.linux.x64.base
+                      }/shader_lib .
                     fi
-                    ln -s ${lib.findSingle
-                      (pkg: lib.getName pkg == "flutter-artifact-linux-x64-artifacts")
-                      (throw "Could not find the x64 artifact archive.")
-                      (throw "Could not find the correct x64 artifact archive.")
-                      artifactDerivations.platform.linux.x64.base
-                    }/shader_lib .
                   '';
                 })
                 { archive = "font-subset.zip"; }
-                linux-flutter-gtk
+                (linux-flutter-gtk // {
+                  # https://github.com/flutter/flutter/commit/9d94a51b607600a39c14470c35c676eb3e30eed6
+                  variant = "debug";
+                })
               ];
               variants = lib.genAttrs [ "debug" "profile" "release" ] (variant: [
                 linux-flutter-gtk
