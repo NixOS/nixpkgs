@@ -21,6 +21,12 @@
 , Cocoa
 , Foundation
 , IOKit
+, Kernel
+, AVFoundation
+, Carbon
+, QTKit
+, AVKit
+, WebKit
 , waylandSupport ? false
 , x11Support ? stdenv.isLinux
 , testers
@@ -47,6 +53,10 @@ rustPlatform.buildRustPackage rec {
       "yaml-rust-0.4.6" = "sha256-wXFy0/s4y6wB3UO19jsLwBdzMy7CGX4JoUt5V6cU7LU=";
     };
   };
+
+  cargoPatches = lib.optionals stdenv.isDarwin [
+    ./inject-wx-on-darwin.patch
+  ];
 
   nativeBuildInputs = [
     extra-cmake-modules
@@ -79,6 +89,12 @@ rustPlatform.buildRustPackage rec {
     Cocoa
     Foundation
     IOKit
+    Kernel
+    AVFoundation
+    Carbon
+    QTKit
+    AVKit
+    WebKit
   ] ++ lib.optionals waylandSupport [
     wl-clipboard
   ] ++ lib.optionals x11Support [
