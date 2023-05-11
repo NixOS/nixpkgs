@@ -522,6 +522,12 @@
     githubId = 44871469;
     name = "Etienne Wodey";
   };
+  aither64 = {
+    email = "aither@havefun.cz";
+    github = "aither64";
+    githubId = 4717906;
+    name = "Jakub Skokan";
+  };
   ajgrf = {
     email = "a@ajgrf.com";
     github = "ajgrf";
