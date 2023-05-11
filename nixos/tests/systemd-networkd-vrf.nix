@@ -54,7 +54,7 @@ in {
           linkConfig.RequiredForOnline = "no";
           networkConfig = {
             VRF = "vrf1";
-            Address = "192.168.1.1";
+            Address = "192.168.1.1/24";
             IPForward = "yes";
           };
         };
@@ -63,7 +63,7 @@ in {
           linkConfig.RequiredForOnline = "no";
           networkConfig = {
             VRF = "vrf2";
-            Address = "192.168.2.1";
+            Address = "192.168.2.1/24";
             IPForward = "yes";
           };
         };
@@ -87,7 +87,7 @@ in {
           matchConfig.Name = "eth1";
           linkConfig.RequiredForOnline = "no";
           networkConfig = {
-            Address = "192.168.1.2";
+            Address = "192.168.1.2/24";
             IPForward = "yes";
           };
         };
@@ -108,7 +108,7 @@ in {
           matchConfig.Name = "eth2";
           linkConfig.RequiredForOnline = "no";
           networkConfig = {
-            Address = "192.168.2.3";
+            Address = "192.168.2.3/24";
             IPForward = "yes";
           };
         };
@@ -129,7 +129,7 @@ in {
           matchConfig.Name = "eth2";
           linkConfig.RequiredForOnline = "no";
           networkConfig = {
-            Address = "192.168.2.4";
+            Address = "192.168.2.4/24";
             IPForward = "yes";
           };
         };
