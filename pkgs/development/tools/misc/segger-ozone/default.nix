@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "segger-ozone";
-  version = "3.22a";
+  version = "3.28e";
 
   src = fetchurl {
     url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${(lib.replaceStrings ["."] [""] version)}_x86_64.tgz";
-    sha256 = "0v1r8qvp1w2f3yip9fys004pa0smlmq69p7w77lfvghs1rmg1649";
+    sha256 = "BfmKBAKyTA0V31zkwFLrbT0Xob221KfHa6v0VxKFsSI=";
   };
 
   rpath = lib.makeLibraryPath [
