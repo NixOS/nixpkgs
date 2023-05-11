@@ -160,7 +160,7 @@ let
 
     configurePhase = ''
       runHook preConfigure
-      dart pub get --offline
+      doPubGet dart pub get --offline
       runHook postConfigure
     '';
 
