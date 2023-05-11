@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -10,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pylibjpeg-libjpeg";
-  version = "1.3.3";
+  version = "1.3.4";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = pname;
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-fv3zX+P2DWMdxPKsvSPhPCV8cDX3tAMO/h5coMHBHN8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VmqeoMU8riLpWyC+yKqq56TkruxOie6pjbg+ozivpBk=";
     fetchSubmodules = true;
   };
 
