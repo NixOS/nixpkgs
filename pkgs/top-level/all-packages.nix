@@ -19265,6 +19265,8 @@ with pkgs;
 
   uisp = callPackage ../development/embedded/uisp { };
 
+  wch-isp = callPackage ../development/embedded/wch-isp { };
+
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
   universal-ctags = callPackage ../development/tools/misc/universal-ctags { };
