@@ -1,5 +1,6 @@
 { lib
 , mkDerivation
+, fetchpatch
 , cmake
 , extra-cmake-modules
 , kconfig
@@ -15,6 +16,14 @@
 
 mkDerivation {
   pname = "mauikit-imagetools";
+
+  patches = [
+    (fetchpatch {
+      name = "remove-unused-method.patch";
+      url = "https://invent.kde.org/maui/mauikit-imagetools/-/commit/344852044d407b144bca01c41a409ceaa548bec0.patch";
+      hash = "sha256-Cpq/XzDgrKD8YVex2z9VxGTA+iDI5703+fHwkn0cIWA=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
