@@ -25,30 +25,6 @@ llvmPackages.stdenv.mkDerivation rec {
     ./fix-include-qt-headers.patch
   ];
 
-  # Due to Shiboken.abi3.so being linked to libshiboken6.abi3.so.6.5 in the build tree,
-  # we need to remove the build tree reference from the RPATH and then add the correct
-  # directory to the RPATH. On Linux, the second part is handled by autoPatchelfHook.
-  # https://bugreports.qt.io/browse/PYSIDE-2233
-  postBuild = ''
-    echo "fixing RPATH of Shiboken.abi3.so"
-  '' + (if stdenv.isDarwin then ''
-    invalid_rpaths=$(otool -l Shiboken.abi3.so | awk '
-        /^[^ ]/ {f = 0}
-        $2 == "LC_RPATH" && $1 == "cmd" {f = 1}
-        f && gsub(/^ *path | \(offset [0-9]+\)$/, "") == 2
-    ' | grep --invert-match /nix/store)
-    install_name_tool $(echo $invalid_rpaths | sed 's/^/-delete_rpath /' | tr '\n' ' ' | sed 's/ $//') Shiboken.abi3.so
-    install_name_tool -add_rpath $out/lib Shiboken.abi3.so
-  '' else ''
-    patchelf Shiboken.abi3.so --shrink-rpath --allowed-rpath-prefixes /nix/store
-  '');
-
-  cmakeFlags = [
-    "-DBUILD_TESTS=OFF"
-  ];
-
-  dontWrapQtApps = true;
-
   nativeBuildInputs = [
     cmake
     python
@@ -60,16 +36,31 @@ llvmPackages.stdenv.mkDerivation rec {
     llvmPackages.llvm
     llvmPackages.libclang
     qt6.qtbase
-  ] ++ (lib.optionals (python.pythonOlder "3.9") [
-    # see similar issue: 202262
-    # libxcrypt is required for crypt.h for building older python modules
-    libxcrypt
-  ]);
+  ];
+
+  cmakeFlags = [
+    "-DBUILD_TESTS=OFF"
+  ];
+
+  # Due to Shiboken.abi3.so being linked to libshiboken6.abi3.so.6.5 in the build tree,
+  # we need to remove the build tree reference from the RPATH and then add the correct
+  # directory to the RPATH. On Linux, the second part is handled by autoPatchelfHook.
+  # https://bugreports.qt.io/browse/PYSIDE-2233
+  preFixup = ''
+    echo "fixing RPATH of Shiboken.abi3.so"
+  '' + lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change {@rpath,$out/lib}/libshiboken6.abi3.6.5.dylib $out/${python.sitePackages}/shiboken6/Shiboken.abi3.so
+  '' + lib.optionalString stdenv.isLinux ''
+    patchelf $out/${python.sitePackages}/shiboken6/Shiboken.abi3.so --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir}
+  '';
+
+  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "Generator for the pyside6 Qt bindings";
     license = with licenses; [ lgpl3Only gpl2Only gpl3Only ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner Enzime ];
+    platforms = platforms.all;
   };
 }
