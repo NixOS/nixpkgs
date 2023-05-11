@@ -4,7 +4,7 @@ let
   is_arm = stdenv.hostPlatform.isAarch64;
   arm_postfix = if is_arm then "-arm64" else "";
 
-  pname = "beekeeper-studio";
+  pname = "beekeeper-studio-ultimate";
   version = "3.9.9";
 
   sha512 =
@@ -13,4 +13,7 @@ let
   ;
 
   url = "https://github.com/beekeeper-studio/ultimate-releases/releases/download/v${version}/Beekeeper-Studio-Ultimate-${version}${arm_postfix}.AppImage";
-in callPackage ./common.nix { inherit url sha512 pname version; }
+in callPackage ./common.nix {
+  inherit url sha512 pname version;
+  internalName = "beekeeper-studio";
+}

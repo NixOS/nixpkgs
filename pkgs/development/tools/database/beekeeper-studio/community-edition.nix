@@ -13,4 +13,7 @@ let
   ;
 
   url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${version}/Beekeeper-Studio-${version}${arm_postfix}.AppImage";
-in callPackage ./common.nix { inherit url sha512 pname version; }
+in callPackage ./common.nix {
+  inherit url sha512 pname version;
+  internalName = pname;
+}

@@ -1,11 +1,11 @@
-{ lib, fetchurl, appimageTools, version, url, sha512, pname }:
+{ lib, fetchurl, appimageTools, version, url, sha512, pname, internalName }:
 
 let
   name = "${pname}-${version}";
 
   src = fetchurl {
     inherit sha512 url;
-    name = "${pname}-${version}.AppImage";
+    name = "${internalName}-${version}.AppImage";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -20,8 +20,9 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     ln -s $out/bin/${name} $out/bin/${pname}
-    install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
-    install -m 444 -D ${appimageContents}/${pname}.png \
+    install -m 444 -D ${appimageContents}/${internalName}.desktop \
+      $out/share/applications/${pname}.desktop
+    install -m 444 -D ${appimageContents}/${internalName}.png \
       $out/share/icons/hicolor/512x512/apps/${pname}.png
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
