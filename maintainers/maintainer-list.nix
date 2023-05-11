@@ -7439,6 +7439,12 @@
       fingerprint = "B768 6CD7 451A 650D 9C54  4204 6710 CF0C 1CBD 7762";
     }];
   };
+  jleightcap = {
+    email = "jack@leightcap.com";
+    github = "jleightcap";
+    githubId = 30168080;
+    name = "Jack Leightcap";
+  };
   jlesquembre = {
     email = "jl@lafuente.me";
     github = "jlesquembre";
