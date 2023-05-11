@@ -1135,6 +1135,8 @@ self: super: with self; {
 
   bambi = callPackage ../development/python-modules/bambi { };
 
+  backgroundremover = callPackage ../development/python-modules/backgroundremover { };
+
   pad4pi = callPackage ../development/python-modules/pad4pi { };
 
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
@@ -1994,6 +1996,8 @@ self: super: with self; {
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
 
   comm = callPackage ../development/python-modules/comm { };
+
+  commandlines = callPackage ../development/python-modules/commandlines { };
 
   commandparse = callPackage ../development/python-modules/commandparse { };
 
@@ -4574,6 +4578,8 @@ self: super: with self; {
   hs-dbus-signature = callPackage ../development/python-modules/hs-dbus-signature { };
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
+
+  hsh = callPackage ../development/python-modules/hsh { };
 
   hsluv = callPackage ../development/python-modules/hsluv { };
 
@@ -8700,6 +8706,8 @@ self: super: with self; {
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
+
+  pymatting = callPackage ../development/python-modules/pymatting { };
 
   pymaven-patch = callPackage ../development/python-modules/pymaven-patch { };
 
