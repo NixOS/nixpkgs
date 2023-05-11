@@ -11835,6 +11835,13 @@
     githubId = 2072185;
     name = "Marc Scholten";
   };
+  mrcjkb = {
+    email = "marc@jakobi.dev";
+    matrix = "@mrcjk:matrix.org";
+    name = "Marc Jakobi";
+    github = "mrcjkb";
+    githubId = 12857160;
+  };
   mredaelli = {
     email = "massimo@typish.io";
     github = "mredaelli";
