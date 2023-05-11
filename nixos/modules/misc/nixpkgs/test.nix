@@ -1,3 +1,5 @@
+# [nixpkgs]$ nix-build -A nixosTests.nixpkgs --show-trace
+
 { evalMinimalConfig, pkgs, lib, stdenv }:
 let
   eval = mod: evalMinimalConfig {
@@ -27,6 +29,47 @@ let
     let
       uncheckedEval = lib.evalModules { modules = [ ../nixpkgs.nix module ]; };
     in map (ass: ass.message) (lib.filter (ass: !ass.assertion) uncheckedEval.config.assertions);
+
+  readOnlyUndefined = evalMinimalConfig {
+    imports = [ ./read-only.nix ];
+  };
+
+  readOnlyBad = evalMinimalConfig {
+    imports = [ ./read-only.nix ];
+    nixpkgs.pkgs = { };
+  };
+
+  readOnly = evalMinimalConfig {
+    imports = [ ./read-only.nix ];
+    nixpkgs.pkgs = pkgs;
+  };
+
+  readOnlyBadConfig = evalMinimalConfig {
+    imports = [ ./read-only.nix ];
+    nixpkgs.pkgs = pkgs;
+    nixpkgs.config.allowUnfree = true; # do in pkgs instead!
+  };
+
+  readOnlyBadOverlays = evalMinimalConfig {
+    imports = [ ./read-only.nix ];
+    nixpkgs.pkgs = pkgs;
+    nixpkgs.overlays = [ (_: _: {}) ]; # do in pkgs instead!
+  };
+
+  readOnlyBadHostPlatform = evalMinimalConfig {
+    imports = [ ./read-only.nix ];
+    nixpkgs.pkgs = pkgs;
+    nixpkgs.hostPlatform = "foo-linux"; # do in pkgs instead!
+  };
+
+  readOnlyBadBuildPlatform = evalMinimalConfig {
+    imports = [ ./read-only.nix ];
+    nixpkgs.pkgs = pkgs;
+    nixpkgs.buildPlatform = "foo-linux"; # do in pkgs instead!
+  };
+
+  throws = x: ! (builtins.tryEval x).success;
+
 in
 lib.recurseIntoAttrs {
   invokeNixpkgsSimple =
@@ -64,6 +107,22 @@ lib.recurseIntoAttrs {
         nixpkgs.hostPlatform = pkgs.stdenv.hostPlatform;
         nixpkgs.pkgs = pkgs;
       } == [];
+
+
+    # Tests for the read-only.nix module
+    assert readOnly._module.args.pkgs.stdenv.hostPlatform.system == pkgs.stdenv.hostPlatform.system;
+    assert throws readOnlyBad._module.args.pkgs.stdenv;
+    assert throws readOnlyUndefined._module.args.pkgs.stdenv;
+    assert throws readOnlyBadConfig._module.args.pkgs.stdenv;
+    assert throws readOnlyBadOverlays._module.args.pkgs.stdenv;
+    assert throws readOnlyBadHostPlatform._module.args.pkgs.stdenv;
+    assert throws readOnlyBadBuildPlatform._module.args.pkgs.stdenv;
+    # read-only.nix does not provide legacy options, for the sake of simplicity
+    # If you're bothered by this, upgrade your configs to use the new *Platform
+    # options.
+    assert !readOnly.options.nixpkgs?system;
+    assert !readOnly.options.nixpkgs?localSystem;
+    assert !readOnly.options.nixpkgs?crossSystem;
 
     pkgs.emptyFile;
 }
