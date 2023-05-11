@@ -6,6 +6,9 @@
 # - Creating Merge Requests and merging them
 # - Opening and closing issues.
 # - Downloading repository archives as tar.gz and tar.bz2
+# Run with
+# [nixpkgs]$ nix-build -A nixosTests.gitlab
+
 { pkgs, lib, ... }:
 
 with lib;
