@@ -27800,6 +27800,8 @@ with pkgs;
 
   jnetmap = callPackage ../applications/networking/jnetmap {};
 
+  jxplorer  = callPackage ../applications/networking/jxplorer {};
+
   join-desktop = callPackage ../applications/misc/join-desktop { };
 
   json-plot = callPackage ../applications/graphics/json-plot {};
