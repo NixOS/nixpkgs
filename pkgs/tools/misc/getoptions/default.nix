@@ -11,6 +11,8 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-kUQ0dPjPr/A/btgFQu13ZLklnI284Ij74hCYbGgzF3A=";
   };
 
+  SHELLCHECK_OPTS = "-e SC2317";
+
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   doCheck = true;
