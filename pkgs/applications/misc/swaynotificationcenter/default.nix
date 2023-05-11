@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     changelog = "https://github.com/ErikReider/SwayNotificationCenter/releases/tag/v${version}";
     license = licenses.gpl3;
     platforms = platforms.linux;
+    mainProgram = "swaync";
     maintainers = with maintainers; [ berbiche pedrohlc ];
   };
 })
