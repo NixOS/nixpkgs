@@ -44,7 +44,6 @@ ocamlPackages.buildDunePackage rec {
 
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
-  CHANGELOG_PATH = "./changelog.txt";
 
   # This is a hack to work around the hack used in the dune files
   OPAM_SWITCH_PREFIX = "${tezos-rust-libs}";
@@ -132,13 +131,6 @@ ocamlPackages.buildDunePackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
-
-  preBuild = ''
-    # The scripts use `nix-shell` in the shebang which seems to fail
-    sed -i -e '1,5d' ./scripts/changelog-generation.sh
-    sed -i -e '1,5d' ./scripts/changelog-json.sh
-    ./scripts/changelog-generation.sh
-  '';
 
   nativeCheckInputs = [
     cacert
