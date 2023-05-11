@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 let
   cfg = config.services.harmonia;
-
   format = pkgs.formats.toml { };
 in
 {
@@ -12,21 +11,23 @@ in
       signKeyPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = lib.mdDoc "Path to the signing key to use for signing the cache";
+        description = lib.mdDoc "Path to the signing key that will be used for signing the cache";
       };
 
       package = lib.mkPackageOptionMD pkgs "harmonia" { };
 
       settings = lib.mkOption {
         inherit (format) type;
-        description = lib.mdDoc "Settings to merge with the default configuration";
+        default = { };
+        description = lib.mdDoc ''
+          Settings to merge with the default configuration.
+          For the list of the default configuration, see <https://github.com/nix-community/harmonia/tree/master#configuration>.
+        '';
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    services.harmonia.settings.bind = lib.mkDefault "[::]:5000";
-
     systemd.services.harmonia = {
       description = "harmonia binary cache service";
 
@@ -45,17 +46,14 @@ in
 
       serviceConfig = {
         ExecStart = lib.getExe cfg.package;
-
         User = "harmonia";
         Group = "harmonia";
         DynamicUser = true;
         PrivateUsers = true;
         DeviceAllow = [ "" ];
         UMask = "0066";
-
         RuntimeDirectory = "harmonia";
-        LoadCredential = lib.optional (cfg.signKeyPath != null) "sign-key:${cfg.signKeyPath}";
-
+        LoadCredential = lib.mkIf (cfg.signKeyPath != null) [ "sign-key:${cfg.signKeyPath}" ];
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
@@ -74,7 +72,6 @@ in
         ProtectProc = "invisible";
         RestrictNamespaces = true;
         SystemCallArchitectures = "native";
-
         PrivateNetwork = false;
         PrivateTmp = true;
         PrivateDevices = true;
@@ -84,7 +81,6 @@ in
         ProtectHome = true;
         LockPersonality = true;
         RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
-
         LimitNOFILE = 65536;
       };
     };
