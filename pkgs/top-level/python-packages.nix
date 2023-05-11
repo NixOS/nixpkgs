@@ -853,6 +853,10 @@ self: super: with self; {
 
   avro-python3 = callPackage ../development/python-modules/avro-python3 { };
 
+  aw-client = callPackage ../development/python-modules/aw-client { };
+
+  aw-core = callPackage ../development/python-modules/aw-core { };
+
   awacs = callPackage ../development/python-modules/awacs { };
 
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify { };
@@ -7348,6 +7352,8 @@ self: super: with self; {
 
   persim = callPackage ../development/python-modules/persim { };
 
+  persist-queue = callPackage ../development/python-modules/persist-queue { };
+
   persistent = callPackage ../development/python-modules/persistent { };
 
   persisting-theory = callPackage ../development/python-modules/persisting-theory { };
@@ -11721,6 +11727,8 @@ self: super: with self; {
 
   tailscale = callPackage ../development/python-modules/tailscale { };
 
+  takethetime = callPackage ../development/python-modules/takethetime { };
+
   tank-utility = callPackage ../development/python-modules/tank-utility { };
 
   tappy = callPackage ../development/python-modules/tappy { };
@@ -11990,6 +11998,8 @@ self: super: with self; {
   time-machine = callPackage ../development/python-modules/time-machine { };
 
   timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
+
+  timeslot = callPackage ../development/python-modules/timeslot { };
 
   timetagger = callPackage ../development/python-modules/timetagger { };
 

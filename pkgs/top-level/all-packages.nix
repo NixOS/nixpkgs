@@ -28951,6 +28951,14 @@ with pkgs;
 
   acorn = callPackage ../applications/networking/cluster/acorn { };
 
+  inherit (qt6Packages.callPackage ../applications/office/activitywatch { })
+    aw-qt
+    aw-server-rust
+    aw-watcher-afk
+    aw-watcher-window;
+
+  activitywatch = callPackage ../applications/office/activitywatch/wrapper.nix { };
+
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
 
   adl = callPackage ../applications/video/adl { };
