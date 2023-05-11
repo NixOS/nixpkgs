@@ -6,7 +6,10 @@
 # - Creating Merge Requests and merging them
 # - Opening and closing issues.
 # - Downloading repository archives as tar.gz and tar.bz2
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+# Run with
+# [nixpkgs]$ nix-build -A nixosTests.gitlab
+
+{ pkgs, lib, ... }:
 
 with lib;
 
@@ -174,7 +177,7 @@ in {
         gitlab.wait_for_unit("gitlab.service")
         gitlab.wait_for_unit("gitlab-pages.service")
         gitlab.wait_for_unit("gitlab-sidekiq.service")
-        gitlab.wait_for_file("${nodes.gitlab.config.services.gitlab.statePath}/tmp/sockets/gitlab.socket")
+        gitlab.wait_for_file("${nodes.gitlab.services.gitlab.statePath}/tmp/sockets/gitlab.socket")
         gitlab.wait_until_succeeds("curl -sSf http://gitlab/users/sign_in")
       '';
 
@@ -419,15 +422,15 @@ in {
     + ''
       gitlab.systemctl("start gitlab-backup.service")
       gitlab.wait_for_unit("gitlab-backup.service")
-      gitlab.wait_for_file("${nodes.gitlab.config.services.gitlab.statePath}/backup/dump_gitlab_backup.tar")
+      gitlab.wait_for_file("${nodes.gitlab.services.gitlab.statePath}/backup/dump_gitlab_backup.tar")
       gitlab.systemctl("stop postgresql.service gitlab.target")
       gitlab.succeed(
-          "find ${nodes.gitlab.config.services.gitlab.statePath} -mindepth 1 -maxdepth 1 -not -name backup -execdir rm -r {} +"
+          "find ${nodes.gitlab.services.gitlab.statePath} -mindepth 1 -maxdepth 1 -not -name backup -execdir rm -r {} +"
       )
       gitlab.succeed("systemd-tmpfiles --create")
-      gitlab.succeed("rm -rf ${nodes.gitlab.config.services.postgresql.dataDir}")
+      gitlab.succeed("rm -rf ${nodes.gitlab.services.postgresql.dataDir}")
       gitlab.systemctl("start gitlab-config.service gitaly.service gitlab-postgresql.service")
-      gitlab.wait_for_file("${nodes.gitlab.config.services.gitlab.statePath}/tmp/sockets/gitaly.socket")
+      gitlab.wait_for_file("${nodes.gitlab.services.gitlab.statePath}/tmp/sockets/gitaly.socket")
       gitlab.succeed(
           "sudo -u gitlab -H gitlab-rake gitlab:backup:restore RAILS_ENV=production BACKUP=dump force=yes"
       )
@@ -435,4 +438,4 @@ in {
     ''
     + waitForServices
     + test false;
-})
+}
