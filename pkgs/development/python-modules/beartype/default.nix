@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "beartype";
-  version = "0.13.1";
+  version = "0.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KQOUeooetgMCZOMBCKpyyxqAXPyQUMD0AUxK7ToXoAs=";
+    hash = "sha256-VG5ujc3aHW2fkG6k6xUYqgHJxfWkQOSVkXstr1PL1Zg=";
   };
 
   nativeCheckInputs = [
