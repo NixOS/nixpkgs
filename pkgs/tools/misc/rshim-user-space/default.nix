@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, autoreconfHook
 , autoconf
 , automake
 , pkg-config
@@ -22,7 +21,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook
     autoconf
     automake
     pkg-config
