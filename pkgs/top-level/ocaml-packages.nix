@@ -1107,10 +1107,7 @@ let
 
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
-    ocaml_expat =
-      if lib.versionAtLeast ocaml.version "4.02"
-        then callPackage ../development/ocaml-modules/expat { }
-        else callPackage ../development/ocaml-modules/expat/0.9.nix { };
+    ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
     ocaml-freestanding = callPackage ../development/ocaml-modules/ocaml-freestanding { };
 
