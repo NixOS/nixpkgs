@@ -112,8 +112,8 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        LoadCredential = (lib.optional (cfg.passwordFile != null) "password:${cfg.passwordFile}")
-          ++ (lib.optional (cfg.saltFile != null) "salt:${cfg.saltFile}");
+        LoadCredential = lib.optional (cfg.passwordFile != null) "password:${cfg.passwordFile}"
+          ++ lib.optional (cfg.saltFile != null) "salt:${cfg.saltFile}";
       };
 
       script = ''
