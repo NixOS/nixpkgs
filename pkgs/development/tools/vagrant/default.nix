@@ -79,7 +79,8 @@ in buildRubyGem rec {
     in ''
     wrapProgram "$out/bin/vagrant" \
       --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
-      --prefix PATH ':' ${pathAdditions}
+      --prefix PATH ':' ${pathAdditions} \
+      --set VAGRANT_CHECKPOINT_DISABLE '✓'
 
     mkdir -p "$out/vagrant-plugins/plugins.d"
     echo '{}' > "$out/vagrant-plugins/plugins.json"
