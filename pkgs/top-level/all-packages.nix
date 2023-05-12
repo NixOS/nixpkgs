@@ -34902,6 +34902,9 @@ with pkgs;
       inherit (wayfireApplications-unwrapped) wayfire;
     }
   );
+
+  weave-gitops = callPackage ../applications/networking/cluster/weave-gitops { };
+
   wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
 
   waypipe = callPackage ../applications/networking/remote/waypipe { };
