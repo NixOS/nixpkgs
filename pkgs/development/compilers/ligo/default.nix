@@ -15,18 +15,35 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.64.2";
+  version = "0.65.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-/XUJFDH1pv65VeZt57P+AiCegTwCn7OWdaa0D8sw7CI=";
+    sha256 = "sha256-vBvgagXK9lOXRI+iBwkPKmUvncZjrqHpKI3UAqOzHvc=";
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace "vendors/tezos-ligo/src/lib_hacl/hacl.ml" \
+      --replace \
+        "Hacl.NaCl.Noalloc.Easy.secretbox ~pt:msg ~n:nonce ~key ~ct:cmsg" \
+        "Hacl.NaCl.Noalloc.Easy.secretbox ~pt:msg ~n:nonce ~key ~ct:cmsg ()" \
+      --replace \
+        "Hacl.NaCl.Noalloc.Easy.box_afternm ~pt:msg ~n:nonce ~ck:k ~ct:cmsg" \
+        "Hacl.NaCl.Noalloc.Easy.box_afternm ~pt:msg ~n:nonce ~ck:k ~ct:cmsg ()"
+
+    substituteInPlace "vendors/tezos-ligo/src/lib_crypto/crypto_box.ml" \
+      --replace \
+        "secretbox_open ~key ~nonce ~cmsg ~msg" \
+        "secretbox_open ~key ~nonce ~cmsg ~msg ()" \
+      --replace \
+        "Box.box_open ~k ~nonce ~cmsg ~msg" \
+        "Box.box_open ~k ~nonce ~cmsg ~msg ()"
+  '';
+
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
-  CHANGELOG_PATH = "./changelog.txt";
 
   # This is a hack to work around the hack used in the dune files
   OPAM_SWITCH_PREFIX = "${tezos-rust-libs}";
@@ -114,13 +131,6 @@ ocamlPackages.buildDunePackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
-
-  preBuild = ''
-    # The scripts use `nix-shell` in the shebang which seems to fail
-    sed -i -e '1,5d' ./scripts/changelog-generation.sh
-    sed -i -e '1,5d' ./scripts/changelog-json.sh
-    ./scripts/changelog-generation.sh
-  '';
 
   nativeCheckInputs = [
     cacert
