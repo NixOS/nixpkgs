@@ -1,34 +1,48 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , fltk
+, fmt
 , rtmidi
 , libsamplerate
+, libmpg123
 , libsndfile
 , jack2
 , alsa-lib
 , libpulseaudio
 , libXpm
+, libXrandr
 , flac
 , libogg
 , libvorbis
 , libopus
+, nlohmann_json
 }:
 
 stdenv.mkDerivation rec {
   pname = "giada";
-  version = "unstable-2021-09-24";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = pname;
-    # Using master with https://github.com/monocasual/giada/pull/509 till a new release is done.
-    rev = "f117a8b8eef08d904ef1ab22c45f0e1fad6b8a56";
-    sha256 = "01hb981lrsyk870zs8xph5fm0z7bbffpkxgw04hq487r804mkx9j";
+    rev = "v${version}";
+    sha256 = "sha256-pKzc+RRW3o5vYaiGqW9/VjYZZJvr6cg1kdjP9qRkHwM=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Remove when updating to the next release, this PR is already merged
+    # Fix fmt type error: https://github.com/monocasual/giada/pull/635
+    (fetchpatch {
+      name = "fix-fmt-type-error.patch";
+      url = "https://github.com/monocasual/giada/commit/032af4334f6d2bb7e77a49e7aef5b4c4d696df9a.patch";
+      hash = "sha256-QuxETvBWzA1v2ifyNzlNMGfQ6XhYQF03sGZA9rBx1xU=";
+    })
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-w"
@@ -48,8 +62,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     rtmidi
     fltk
+    fmt
+    libmpg123
     libsndfile
     libsamplerate
+    nlohmann_json
     alsa-lib
     libXpm
     libpulseaudio
@@ -58,19 +75,8 @@ stdenv.mkDerivation rec {
     libogg
     libvorbis
     libopus
+    libXrandr
   ];
-
-  postPatch = ''
-    local fixup_list=(
-      src/core/kernelMidi.cpp
-      src/gui/elems/config/tabMidi.cpp
-      src/utils/ver.cpp
-    )
-    for f in "''${fixup_list[@]}"; do
-      substituteInPlace "$f" \
-        --replace "<RtMidi.h>" "<${rtmidi.src}/RtMidi.h>"
-    done
-  '';
 
   meta = with lib; {
     description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
