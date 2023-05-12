@@ -32567,6 +32567,7 @@ with pkgs;
     mpvacious = callPackage ../applications/video/mpv/scripts/mpvacious.nix { };
     simple-mpv-webui = callPackage ../applications/video/mpv/scripts/simple-mpv-webui.nix { };
     sponsorblock = callPackage ../applications/video/mpv/scripts/sponsorblock.nix { };
+    thumbfast = callPackage ../applications/video/mpv/scripts/thumbfast.nix { };
     thumbnail = callPackage ../applications/video/mpv/scripts/thumbnail.nix { };
     uosc = callPackage ../applications/video/mpv/scripts/uosc.nix { };
     vr-reversal = callPackage ../applications/video/mpv/scripts/vr-reversal.nix { };
