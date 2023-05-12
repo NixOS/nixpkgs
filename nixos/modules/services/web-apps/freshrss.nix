@@ -3,7 +3,9 @@
 with lib;
 let
   cfg = config.services.freshrss;
-
+  useMysql = cfg.database.type == "mysql";
+  usePostgresql = cfg.database.type == "postgres";
+  useSqlite = cfg.database.type == "sqlite";
   poolName = "freshrss";
 in
 {
@@ -273,7 +275,7 @@ in
 
       systemd.services.freshrss-updater = {
         description = "FreshRSS feed updater";
-        after = [ "freshrss-config.service" ];
+        after = [ "freshrss-config.service" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";;
         wantedBy = [ "multi-user.target" ];
         startAt = "*:0/5";
         environment = {
