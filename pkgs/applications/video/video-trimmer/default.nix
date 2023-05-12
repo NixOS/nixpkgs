@@ -16,20 +16,20 @@
 
 stdenv.mkDerivation rec {
   pname = "video-trimmer";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-0zhQoxzU1GikYP5OwqMl34RsnefJtdZox5EuTqOFnas=";
+    hash = "sha256-nr0PAvp4wlswQBNN2LLyYQMpk3IIleHf3+978XhUGGQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-kH9AfEskh7TTXF+PZwOZNWVJmnEeMJrSEEuDGyP5A5o=";
+    hash = "sha256-YFbLMpQbHUtxRrBVarcoIeDsvc26NWc1YhMeCaLgJAc=";
   };
 
   nativeBuildInputs = [
