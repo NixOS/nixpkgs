@@ -264,6 +264,8 @@ with pkgs;
 
   asnmap = callPackage ../tools/security/asnmap { };
 
+  ast-grep = callPackage ../development/tools/misc/ast-grep { };
+
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
