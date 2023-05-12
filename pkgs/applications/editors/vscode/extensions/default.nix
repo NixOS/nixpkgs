@@ -1442,11 +1442,31 @@ let
         mktplcRef = {
           name = "vscode-graphql";
           publisher = "GraphQL";
-          version = "0.8.6";
-          sha256 = "sha256-iQWDYdz/TG8pxPEq9RirNtY4kwhpK+gO0It6OTdrM+0=";
+          version = "0.8.7";
+          sha256 = "sha256-u3VcpgLKiEeUr1I6w71wleKyaO6v0gmHiw5Ama6fv88=";
         };
         meta = {
+          description = "GraphQL extension for VSCode built with the aim to tightly integrate the GraphQL Ecosystem with VSCode for an awesome developer experience.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql";
+          homepage = "https://github.com/graphql/graphiql/tree/main/packages/vscode-graphql";
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.Enzime ];
+        };
+      };
+
+      graphql.vscode-graphql-syntax = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-graphql-syntax";
+          publisher = "GraphQL";
+          version = "1.1.0";
+          sha256 = "sha256-qazU0UyZ9de6Huj2AYZqqBo4jVW/ZQmFJhV7XXAblxo=";
+        };
+        meta = {
+          description = "Adds full GraphQL syntax highlighting and language support such as bracket matching.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql-syntax";
+          homepage = "https://github.com/graphql/graphiql/tree/main/packages/vscode-graphql-syntax";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.Enzime ];
         };
       };
 
