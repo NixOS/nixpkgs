@@ -53,80 +53,96 @@ let
       ./qtdeclarative-default-disable-qmlcache.patch
     ];
     qtpim = [
-      ## Reverts of Qt6-specific changes
+      ## Upstream patches after the Qt6 transition that apply without problems & fix bugs
 
-      # Remove usages of deprecated QQmlListProperty constructors
-      # QML code does not compile with this
+      # Fixes QList -> QSet conversion
       (fetchpatch {
-        url = "https://github.com/qt/qtpim/commit/8f05d1bcba8d2c63d8d85117719b49992bcaea3d.patch";
-        revert = true;
-        hash = "sha256-XjmW2EpjW+cjaJTulUxLG+85ywp5EE/h0/NKRiEqo54=";
+        url = "https://github.com/qt/qtpim/commit/f337e281e28904741a3b1ac23d15c3a83ef2bbc9.patch";
+        hash = "sha256-zlxD45JnbhIgdJxMmGxGMUBcQPcgzpu3s4bLX939jL0=";
       })
-
-      # Use QMetaType::Type instead of the deprecated QVariant::Type
-      # Looks like this would be fine to have in Qt5, but patching failures and build says nah
+      # Fixes invalid syntax from a previous bad patch in tests
       (fetchpatch {
-        url = "https://github.com/qt/qtpim/commit/e7607c33998b7c89603e6299d9affcd32e68049a.patch";
-        revert = true;
-        hash = "sha256-Gp/2tfgIUGYqk+c+2fTBgI4Ii532PONwfjmG9m9E8DU=";
+        url = "https://github.com/qt/qtpim/commit/2aefdd8bd28a4decf9ef8381f5b255f39f1ee90c.patch";
+        hash = "sha256-mg93QF3hi50igw1/Ok7fEs9iCaN6co1+p2/5fQtxTmc=";
       })
-
-      # Ensure we throw away the BOM in the qversitreader test
-      # Description says that something in string encoding works differently "now" (Qt6?), but we don't even run the tests
+      # Unit test account for QList index change
       (fetchpatch {
-        url = "https://github.com/qt/qtpim/commit/9bcae917730ce083ebb3d45392a4b8ccf57ee306.patch";
-        revert = true;
-        hash = "sha256-/OHAGoSa2j4aPpEJunBN2TpODQpEosYguQ8ZKNZ+fAU=";
+        url = "https://github.com/qt/qtpim/commit/79b41af6a4117f5efb0298289e20c30b4d0b0b2e.patch";
+        hash = "sha256-u+cLl4lu6r2+j5GAiasqbB6/OZPz5A6GpSB33vd/VBg=";
       })
-
-      # Adapt to Qt6 behavior changes
+      # Remove invalid method overload which confuses the QML engine
       (fetchpatch {
-        url = "https://github.com/qt/qtpim/commit/0d7a97f0717cef8a16cdba6b37de860a531f9407.patch";
-        revert = true;
-        hash = "sha256-+ByiLY5+deUctL1O0V1uH/3lAT6SXTcZn2klUjnyAtk=";
+        url = "https://github.com/qt/qtpim/commit/5679a6141c76ae7d64c3acc8a87b1adb048289e0.patch";
+        hash = "sha256-z8f8kLhC9CqBOfGPL8W9KJq7MwALAAicXfRkHiQEVJ4=";
       })
-
-      # Add missing include
-      # Builds fine without the includes, causes patching failures further down the line unless reverted
+      # Specify enum flag type properly in unit test
       (fetchpatch {
-        url = "https://github.com/qt/qtpim/commit/a86100eb0e37a764399b1e06f73da0ceda5b00e9.patch";
-        revert = true;
-        hash = "sha256-gqSpCjgDmmD6MXH/D+4iadztrFpakKqaHBSYIl3o5gs=";
+        url = "https://github.com/qt/qtpim/commit/a43cc24e57db8d3c3939fa540d67da3294dcfc5c.patch";
+        hash = "sha256-SsYkxX6prxi8VRZr4az+wqawcRN8tR3UuIFswJL+3T4=";
       })
-
-      # Don't use QStringRef
-      # QStringView preferred in Qt6, but that doesn't matter to us
+      # Update qHash methods to return size_t instead of uint
       (fetchpatch {
-        url = "https://github.com/qt/qtpim/commit/c4769f347111773a96b70b46c7f695847a162ace.patch";
-        revert = true;
-        hash = "sha256-aCihfoDUjIDVzNdlnYr36uB2wF46nzE3T1w5ah/378k=";
+        url = "https://github.com/qt/qtpim/commit/9c698155d82fc2b68a87c59d0443c33f9085b117.patch";
+        hash = "sha256-rb8D8taaglhQikYSAPrtLvazgIw8Nga/a9+J21k8gIo=";
       })
-
-      # QTextCodec is now part of the Qt5Compat library
-      # Qt5Compat is a library that eases with porting Qt5->Qt6
+      # Mark virtual methods with override keyword
       (fetchpatch {
-        url = "https://github.com/qt/qtpim/commit/fdaa78b4ab7f02f9213fdec2a8e18d896d504a45.patch";
-        revert = true;
-        hash = "sha256-CRl9KhSrgtNmeO199Vns4ZdVM5cVg5sZzLZ5PY3p5LI=";
+        url = "https://github.com/qt/qtpim/commit/f34cf2ff2b0f428d5b8a70763b29088075ebbd1c.patch";
+        hash = "sha256-tNPOEVpx1eqHx5T23ueW32KxMQ/SB+TBCJ4PZ6SA3LI=";
+      })
+      # Fix calendardemo example
+      (fetchpatch {
+        url = "https://github.com/qt/qtpim/commit/a66590d473753bc49105d3132fb9e4150c92a14a.patch";
+        hash = "sha256-RPRtGQ24NQYewnv6+IqYITpwD/XxuK68a1iKgFmKm3c=";
+      })
+      # Make the tests pass on big endian systems
+      (fetchpatch {
+        url = "https://github.com/qt/qtpim/commit/7802f038ed1391078e27fa3f37d785a69314537b.patch";
+        hash = "sha256-hogUXyPXjGE0q53PWOjiQbQ2YzOsvrJ7mo9djGIbjVQ=";
+      })
+      # Fix some deprecated QChar constructor issues in unit tests
+      (fetchpatch {
+        url = "https://github.com/qt/qtpim/commit/114615812dcf9398c957b0833e860befe15f840f.patch";
+        hash = "sha256-yZ1qs8y5DSq8FDXRPyuSPRIzjEUTWAhpVide/b+xaLQ=";
+      })
+      # Accessors should be const
+      (fetchpatch {
+        url = "https://github.com/qt/qtpim/commit/a2bf7cdf05c264b5dd2560f799760b5508f154e4.patch";
+        hash = "sha256-+YfPrKyOKnPkqFokwW/aDsEivg4TzdJwQpDdAtM+rQE=";
+      })
+      # Enforce detail access constraints in contact operations by default
+      (fetchpatch {
+        url = "https://github.com/qt/qtpim/commit/8765a35233aa21a932ee92bbbb92a5f8edd4dc68.patch";
+        hash = "sha256-vp/enerVecEXz4zyxQ66DG+fVVWxI4bYnLj92qaaqNk=";
+      })
+      # Fixes broken file generation, which breaks reverse dependencies that try to find one of its modules
+      (fetchpatch {
+        url = "https://github.com/qt/qtpim/commit/4b2bdce30bd0629c9dc0567af6eeaa1d038f3152.patch";
+        hash = "sha256-2dXhkZyxPvY2KQq2veerAlpXkpU5/FeArWRlm1aOcEY=";
       })
 
       ## Patches that haven't been upstreamed
 
+      # Fix tst_QContactManager::compareVariant_data test
+      (fetchpatch {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtpim/-/raw/360682f88457b5ae7c92f32f574e51ccc5edbea0/debian/patches/1001_fix-qtdatetime-null-comparison.patch";
+        hash = "sha256-k/rO9QjwSlRChwFTZLkxDjZWqFkua4FNbaNf1bJKLxc=";
+      })
       # Avoid crash while parsing vCards from different threads
       (fetchpatch {
         url = "https://salsa.debian.org/qt-kde-team/qt/qtpim/-/raw/360682f88457b5ae7c92f32f574e51ccc5edbea0/debian/patches/1002_Avoid-crash-while-parsing-vcards-from-different-threads.patch";
         hash = "sha256-zhayAoWgcmKosEGVBy2k6a2e6BxyVwfGX18tBbzqEk8=";
       })
-
       # Adapt to JSON parser behavior change in Qt 5.15
       (fetchpatch {
         url = "https://salsa.debian.org/qt-kde-team/qt/qtpim/-/raw/360682f88457b5ae7c92f32f574e51ccc5edbea0/debian/patches/1003_adapt_to_json_parser_change.patch";
         hash = "sha256-qAIa48hmDd8vMH/ywqW+22vISKai76XnjgFuB+tQbIU=";
       })
-
-      # MODULE_VERSION was only properly set with Qt6 transition, so extra patch instead of revert
-      # https://github.com/qt/qtpim/commit/713bb697fa24f6d6d4e2521ee3db2de237ea6f05
-      ./qtpim-MODULE_VERSION.patch
+      # Fix version being 0.0.0
+      (fetchpatch {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtpim/-/raw/360682f88457b5ae7c92f32f574e51ccc5edbea0/debian/patches/2000_revert_module_version.patch";
+        hash = "sha256-6wg/eVu9J83yvIO428U1FX3otz58tAy6pCvp7fqOBKU=";
+      })
     ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
