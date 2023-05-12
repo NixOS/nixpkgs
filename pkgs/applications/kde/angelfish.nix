@@ -19,26 +19,17 @@
 , rustPlatform
 , srcs
 
-# These must be updated in tandem with package updates.
-, cargoShaForVersion ? "23.04.0"
-, cargoSha256 ? "sha256-96Qe8zdLZdOrU/t6J+JJ6V0PXyFOnJF18qDrk4PZGsA="
+# provided as callPackage input to enable easier overrides through overlays
+, cargoSha256 ? "sha256-whMfpElpFB7D+dHHJrbwINFL4bVpHTlcZX+mdBfiqEE="
 }:
-
-# Guard against incomplete updates.
-# Values are provided as callPackage inputs to enable easier overrides through overlays.
-if cargoShaForVersion != srcs.angelfish.version
-then builtins.throw ''
-  angelfish package update is incomplete.
-         Hash for cargo dependencies is declared for version ${cargoShaForVersion}, but we're building ${srcs.angelfish.version}.
-         Update the cargoSha256 and cargoShaForVersion for angelfish.
-'' else
 
 mkDerivation rec {
   pname = "angelfish";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    src = srcs.angelfish.src;
+    # include version in the name so we invalidate the FOD
     name = "${pname}-${srcs.angelfish.version}";
+    inherit (srcs.angelfish) src;
     sha256 = cargoSha256;
   };
 
