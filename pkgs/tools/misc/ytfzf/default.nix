@@ -9,7 +9,7 @@
 , gnused
 , jq
 , mpv
-, ueberzug
+, ueberzugpp
 , yt-dlp
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram "$out/bin/ytfzf" \
       --prefix PATH : ${lib.makeBinPath [
-        coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
+        coreutils curl dmenu fzf gnused jq mpv ueberzugpp yt-dlp
       ]} \
       --set YTFZF_SYSTEM_ADDON_DIR "$out/share/ytfzf/addons"
   '';
