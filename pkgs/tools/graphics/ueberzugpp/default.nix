@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.8.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-PTI+jIsXq4yh8TBAT1p1CLbBMDW1U323WgPoASz2pwA=";
+    hash = "sha256-9FGuElHWuqTuzHNcb9p0HX0AFMmZc+MRc5+EP5cvBaA=";
   };
 
   nativeBuildInputs = [
