@@ -208,10 +208,10 @@ buildPythonPackage rec {
     responses
   ];
 
-  preCheck = ''
+  pytestFlagsArray = [
     # integration_tests have many network, db access and require `OPENAI_API_KEY`, etc.
-    rm -r tests/integration_tests
-  '';
+    "--ignore=tests/integration_tests"
+  ];
 
   disabledTests = [
     # these tests have db access
