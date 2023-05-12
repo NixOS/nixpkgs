@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "icnsutil";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "relikd";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-TfQvAbP7iCpRQg2G+ejl245NCYo9DpYwMgiwY2BuJnY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tiq8h6s2noWLBIOIWcj8jfSqJFN01ee2uoHN4aFwn7s=";
   };
 
   doCheck = true;
