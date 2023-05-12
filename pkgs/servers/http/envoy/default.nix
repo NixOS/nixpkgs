@@ -1,5 +1,5 @@
 { lib
-, bazel_5
+, bazel_6
 , bazel-gazelle
 , buildBazelPackage
 , fetchFromGitHub
@@ -24,19 +24,19 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.25.1";
-    rev = "bae2e9d642a6a8ae6c5d3810f77f3e888f0d97da";
+    version = "1.26.1";
+    rev = "c7e8e7356d3a969c1b8e4e1f2687699acd91c6a1";
   };
 in
 buildBazelPackage rec {
   pname = "envoy";
   inherit (srcVer) version;
-  bazel = bazel_5;
+  bazel = bazel_6;
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
     inherit (srcVer) rev;
-    sha256 = "sha256-qA3+bta2vXGtAYX3mg+CmSIEitk4576JQB/QLPsj9Vc=";
+    sha256 = "sha256-WHedup6z/9t/Jg6CBrwtDy9xv6IwO3gUuBqos4h+k2s=";
 
     postFetch = ''
       chmod -R +w $out
@@ -80,8 +80,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "sha256-koz08NWUq5Fkca++1G7WEmg24G6FuMQOgRN3+HBtNIk=";
-      aarch64-linux = "sha256-oSybAw58yK0BUhS8MU2Y9hRo0mU/7xT7VKU3tDW4xN0=";
+      x86_64-linux = "sha256-jx8RavJKlBtZQtZf4GrUkOlhM6qI4LO5lK3HRgn1vzE=";
+      aarch64-linux = "sha256-toEPrGVh61sHsVbhsideMmnX8uXIN+2x8LuZpczTEdw=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -176,13 +176,5 @@ buildBazelPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    knownVulnerabilities = [
-      "CVE-2023-27487"
-      "CVE-2023-27488"
-      "CVE-2023-27491"
-      "CVE-2023-27492"
-      "CVE-2023-27493"
-      "CVE-2023-27496"
-    ];
   };
 }
