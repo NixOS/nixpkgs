@@ -18,7 +18,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "imaginer";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "ImaginerApp";
