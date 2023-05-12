@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "3.15.4";
+  version = "3.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XmHr/+++32KwdR195WL/1ThHF8juat/KTqbrFQ0BLhw=";
+    hash = "sha256-QjpSZRijJQXFKTMo5fJS5su/IOSzEkcz9w0Q/A1oI8k=";
   };
 
   postPatch = ''

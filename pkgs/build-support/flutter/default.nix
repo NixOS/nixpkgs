@@ -16,7 +16,7 @@
 , customPackageOverrides ? { }
 , autoDepsList ? false
 , depsListFile ? null
-, vendorHash
+, vendorHash ? ""
 , pubspecLockFile ? null
 , nativeBuildInputs ? [ ]
 , preUnpack ? ""
