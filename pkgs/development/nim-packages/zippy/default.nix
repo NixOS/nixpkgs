@@ -2,7 +2,7 @@
 
 buildNimPackage rec {
   pname = "zippy";
-  version = "0.7.3";
+  version = "0.9.11";
 
   nativeBuildInputs = [ unzip ];
 
@@ -10,7 +10,7 @@ buildNimPackage rec {
     owner = "guzba";
     repo = pname;
     rev = version;
-    hash = "sha256-w64ENRyP3mNTtESSt7CDDxUkjYSfziNVVedkO4HIuJ8=";
+    hash = "sha256-niugXeePxdy58bb+o0MIwH6vuhjW7kBAjqQT+mRpXt8=";
   };
 
   doCheck = true;
