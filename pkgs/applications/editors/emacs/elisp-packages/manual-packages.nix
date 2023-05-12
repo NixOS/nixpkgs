@@ -35,8 +35,6 @@ in
 
   haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
 
-  header-file-mode = callPackage ./manual-packages/header-file-mode { };
-
   helm-words = callPackage ./manual-packages/helm-words { };
 
   idris2-mode = callPackage ./manual-packages/idris2-mode { };
