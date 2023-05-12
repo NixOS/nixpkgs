@@ -11681,6 +11681,8 @@ self: super: with self; {
 
   stringly = callPackage ../development/python-modules/stringly { };
 
+  stringparser = callPackage ../development/python-modules/stringparser { };
+
   stripe = callPackage ../development/python-modules/stripe { };
 
   striprtf = callPackage ../development/python-modules/striprtf { };
