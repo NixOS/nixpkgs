@@ -40473,4 +40473,6 @@ with pkgs;
   zf = callPackage ../tools/misc/zf { };
 
   isolate = callPackage ../tools/security/isolate { };
+
+  buck2 = callPackage ../development/tools/build-managers/buck2 { };
 }
