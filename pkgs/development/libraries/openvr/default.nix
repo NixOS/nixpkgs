@@ -47,7 +47,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DUSE_SYSTEM_JSONCPP=ON" "-DBUILD_SHARED=1" ];
 
-  meta = with lib;{
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/ValveSoftware/openvr";
     description = "An API and runtime that allows access to VR hardware from multiple vendors without requiring that applications have specific knowledge of the hardware they are targeting";
     license = licenses.bsd3;
