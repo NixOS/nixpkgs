@@ -55,11 +55,6 @@ let
 
   };
 
-  selectPartitionTableLayout = { useEFIBoot, useDefaultFilesystems }:
-  if useDefaultFilesystems then
-    if useEFIBoot then "efi" else "legacy"
-  else "none";
-
   driveCmdline = idx: { file, driveExtraOpts, deviceExtraOpts, ... }:
     let
       drvId = "drive${toString idx}";
@@ -221,6 +216,8 @@ let
 
   regInfo = pkgs.closureInfo { rootPaths = config.virtualisation.additionalPaths; };
 
+  selectPartitionTableLayout = { useEFIBoot, useDefaultPartitionTable }: if useDefaultPartitionTable then (if useEFIBoot then "efi" else "legacy") else "none";
+
   # System image is akin to a complete NixOS install with
   # a boot partition and root partition.
   systemImage = import ../../lib/make-disk-image.nix {
@@ -228,7 +225,7 @@ let
     additionalPaths = [ regInfo ];
     format = "qcow2";
     onlyNixStore = false;
-    partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultFilesystems useEFIBoot; };
+    partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultPartitionTable useEFIBoot; };
     # Bootloader should be installed on the system image only if we are booting through bootloaders.
     # Though, if a user is not using our default filesystems, it is possible to not have any ESP
     # or a strange partition table that's incompatible with GRUB configuration.
@@ -810,12 +807,27 @@ in
         default = true;
         description =
           lib.mdDoc ''
-            If enabled, the boot disk of the virtual machine will be
+            If enabled, the system disk of the virtual machine will be
             formatted and mounted with the default filesystems for
             testing. Swap devices and LUKS will be disabled.
 
             If disabled, a root filesystem has to be specified and
             formatted (for example in the initial ramdisk).
+          '';
+        };
+
+    virtualisation.useDefaultPartitionTable =
+      mkOption {
+        type = types.bool;
+        default = true;
+        description =
+          lib.mdDoc ''
+            If enabled, the partition table of the system disk for the virtual machine
+            will be initialized according to your boot configuration.
+            e.g. GPT for UEFI, MBR for BIOS.
+
+            If disabled, UEFI cannot be used as we have no way to determine if you are passing
+            a GPT partition table for the bootloader installation phase.
           '';
       };
 
@@ -861,6 +873,21 @@ in
               ''
                 Invalid virtualisation.forwardPorts.<entry ${toString i}>.guest.address:
                   The address must be in the default VLAN (10.0.2.0/24).
+              '';
+          }
+          { assertion = cfg.useDefaultFilesystems -> cfg.useDefaultPartitionTable;
+            message =
+              ''
+                You cannot use a non-default partition table with the default filesystems.
+              '';
+          }
+          {
+            assertion = !cfg.useDefaultPartitionTable -> !cfg.useEFIBoot;
+            message =
+              ''
+                You cannot use UEFI with a non-default partition table.
+                This is a limitation of the NixOS module, please open an issue explaining your needs
+                if you run into this.
               '';
           }
         ]));
