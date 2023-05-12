@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, makeBinaryWrapper
 }:
 
 buildGoModule rec {
@@ -16,6 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-DPJ6+akisNtMsbDdHWEWavZ2GJfeWjFIV6K+bV91FEY=";
 
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
+
   ldflags = [
     "-s"
     "-w"
@@ -23,6 +28,10 @@ buildGoModule rec {
   ];
 
   doCheck = false;
+
+  postInstall = ''
+    wrapProgram $out/bin/cloud-nuke --set-default DISABLE_TELEMETRY true
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/gruntwork-io/cloud-nuke";
