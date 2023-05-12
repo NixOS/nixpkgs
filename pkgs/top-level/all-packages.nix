@@ -282,6 +282,8 @@ with pkgs;
 
   fishnet = callPackage ../servers/fishnet { };
 
+  s-search = callPackage ../tools/misc/s-search { };
+
   fission = callPackage ../development/tools/fission { };
 
   apko = callPackage ../development/tools/apko { };
