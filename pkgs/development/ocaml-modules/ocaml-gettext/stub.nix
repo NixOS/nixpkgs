@@ -6,6 +6,8 @@ buildDunePackage rec {
 
   inherit (ocaml_gettext) src version;
 
+  minimalOCamlVersion = "4.06";
+
   buildInputs = [ dune-configurator ];
 
   propagatedBuildInputs = [ ocaml_gettext ];
