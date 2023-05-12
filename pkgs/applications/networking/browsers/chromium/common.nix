@@ -36,6 +36,7 @@
 , curl
 , libffi
 , libepoxy
+, libevdev
 # postPatch:
 , glibc # gconv + locale
 # postFixup:
@@ -154,6 +155,8 @@ let
       curl
       libepoxy
       libffi
+    ] ++ lib.optionals (chromiumVersionAtLeast "114") [
+      libevdev
     ] ++ lib.optional systemdSupport systemd
       ++ lib.optionals cupsSupport [ libgcrypt cups ]
       ++ lib.optional pulseSupport libpulseaudio;

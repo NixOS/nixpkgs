@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "raycast";
-  version = "1.50.0";
+  version = "1.51.1";
 
   src = fetchurl {
     # https://github.com/NixOS/nixpkgs/pull/223495
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     # to host GitHub Actions to periodically check for updates
     # and re-release the `.dmg` file to Internet Archive (https://archive.org/details/raycast)
     url = "https://archive.org/download/raycast/raycast-${version}.dmg";
-    sha256 = "sha256-+LvQDQZjbj/p8VT/af9XwKSKkKd65YzcwrKF9hoXCog=";
+    sha256 = "sha256-6U0dsDlIuU4OjgF8lvXbtVQ+xFB54KZpasvd307jca4=";
   };
 
   dontPatch = true;

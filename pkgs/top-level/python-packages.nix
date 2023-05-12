@@ -853,6 +853,10 @@ self: super: with self; {
 
   avro-python3 = callPackage ../development/python-modules/avro-python3 { };
 
+  aw-client = callPackage ../development/python-modules/aw-client { };
+
+  aw-core = callPackage ../development/python-modules/aw-core { };
+
   awacs = callPackage ../development/python-modules/awacs { };
 
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify { };
@@ -868,6 +872,8 @@ self: super: with self; {
   aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
 
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
+
+  aws-secretsmanager-caching = callPackage ../development/python-modules/aws-secretsmanager-caching { };
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
@@ -2102,6 +2108,8 @@ self: super: with self; {
   crate = callPackage ../development/python-modules/crate { };
 
   crayons = callPackage ../development/python-modules/crayons { };
+
+  crc = callPackage ../development/python-modules/crc { };
 
   crc16 = callPackage ../development/python-modules/crc16 { };
 
@@ -5777,6 +5785,8 @@ self: super: with self; {
     inherit (pkgs) lmdb;
   };
 
+  lmfit = callPackage ../development/python-modules/lmfit { };
+
   lml = callPackage ../development/python-modules/lml { };
 
   lmnotify = callPackage ../development/python-modules/lmnotify { };
@@ -6288,6 +6298,8 @@ self: super: with self; {
   mohawk = callPackage ../development/python-modules/mohawk { };
 
   monai = callPackage ../development/python-modules/monai { };
+
+  monai-deploy = callPackage ../development/python-modules/monai-deploy { };
 
   monero = callPackage ../development/python-modules/monero { };
 
@@ -7345,6 +7357,8 @@ self: super: with self; {
   permissionedforms = callPackage ../development/python-modules/permissionedforms { };
 
   persim = callPackage ../development/python-modules/persim { };
+
+  persist-queue = callPackage ../development/python-modules/persist-queue { };
 
   persistent = callPackage ../development/python-modules/persistent { };
 
@@ -9175,6 +9189,10 @@ self: super: with self; {
     inherit (pkgs) cmake ninja qt5;
   });
 
+  pyside6 = toPythonModule (callPackage ../development/python-modules/pyside6 {
+    inherit (pkgs) cmake ninja qt6;
+  });
+
   pyside = callPackage ../development/python-modules/pyside {
     inherit (pkgs) mesa;
   };
@@ -10953,6 +10971,10 @@ self: super: with self; {
     inherit (pkgs) cmake llvmPackages qt5;
   });
 
+  shiboken6 = toPythonModule (callPackage ../development/python-modules/shiboken6 {
+    inherit (pkgs) cmake llvmPackages qt6;
+  });
+
   shippai = callPackage ../development/python-modules/shippai { };
 
   shiv = callPackage ../development/python-modules/shiv { };
@@ -11711,6 +11733,8 @@ self: super: with self; {
 
   tailscale = callPackage ../development/python-modules/tailscale { };
 
+  takethetime = callPackage ../development/python-modules/takethetime { };
+
   tank-utility = callPackage ../development/python-modules/tank-utility { };
 
   tappy = callPackage ../development/python-modules/tappy { };
@@ -11980,6 +12004,8 @@ self: super: with self; {
   time-machine = callPackage ../development/python-modules/time-machine { };
 
   timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
+
+  timeslot = callPackage ../development/python-modules/timeslot { };
 
   timetagger = callPackage ../development/python-modules/timetagger { };
 
@@ -13007,6 +13033,8 @@ self: super: with self; {
   xml-marshaller = callPackage ../development/python-modules/xml-marshaller { };
 
   xmodem = callPackage ../development/python-modules/xmodem { };
+
+  xnatpy = callPackage ../development/python-modules/xnatpy { };
 
   xnd = callPackage ../development/python-modules/xnd { };
 

@@ -10259,6 +10259,8 @@ with pkgs;
 
   ndisc6 = callPackage ../tools/networking/ndisc6 { };
 
+  netassert = callPackage ../tools/networking/netassert { };
+
   netboot = callPackage ../tools/networking/netboot { };
 
   netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
@@ -16292,6 +16294,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-readme = callPackage ../development/tools/rust/cargo-readme { };
+  cargo-risczero = callPackage ../development/tools/rust/cargo-risczero { };
   cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks { };
 
   cargo-show-asm = callPackage ../development/tools/rust/cargo-show-asm { };
@@ -17356,6 +17359,8 @@ with pkgs;
   pharo-launcher = callPackage ../development/pharo/launcher { };
 
   protege-distribution = callPackage ../development/web/protege-distribution { };
+
+  publii = callPackage ../development/web/publii {};
 
   umr = callPackage ../development/misc/umr {
     llvmPackages = llvmPackages_14;
@@ -19260,6 +19265,8 @@ with pkgs;
 
   uisp = callPackage ../development/embedded/uisp { };
 
+  wch-isp = callPackage ../development/embedded/wch-isp { };
+
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
   universal-ctags = callPackage ../development/tools/misc/universal-ctags { };
@@ -20748,6 +20755,8 @@ with pkgs;
 
   gnome-menus = callPackage ../development/libraries/gnome-menus { };
 
+  gnote = callPackage ../applications/office/gnote { };
+
   elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
 
   gtk2 = callPackage ../development/libraries/gtk/2.x.nix {
@@ -21402,6 +21411,8 @@ with pkgs;
   libcangjie = callPackage ../development/libraries/libcangjie { };
 
   libcollectdclient = callPackage ../development/libraries/libcollectdclient { };
+
+  libcpr = callPackage ../development/libraries/libcpr { };
 
   libcredis = callPackage ../development/libraries/libcredis { };
 
@@ -25651,8 +25662,6 @@ with pkgs;
     mariadb_104
     mariadb_105
     mariadb_106
-    mariadb_108
-    mariadb_109
     mariadb_1010
     mariadb_1011
   ;
@@ -28224,6 +28233,8 @@ with pkgs;
 
   lightly-qt = libsForQt5.callPackage ../data/themes/lightly-qt { };
 
+  lightly-boehs = libsForQt5.callPackage ../data/themes/lightly-boehs { };
+
   linden-hill = callPackage ../data/fonts/linden-hill { };
 
   line-awesome = callPackage ../data/fonts/line-awesome { };
@@ -28943,6 +28954,14 @@ with pkgs;
   };
 
   acorn = callPackage ../applications/networking/cluster/acorn { };
+
+  inherit (qt6Packages.callPackage ../applications/office/activitywatch { })
+    aw-qt
+    aw-server-rust
+    aw-watcher-afk
+    aw-watcher-window;
+
+  activitywatch = callPackage ../applications/office/activitywatch/wrapper.nix { };
 
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
 
@@ -31667,6 +31686,8 @@ with pkgs;
   kubedog = callPackage ../applications/networking/cluster/kubedog { };
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
+
+  kubefirst = callPackage ../applications/networking/cluster/kubefirst { };
 
   kube-score = callPackage ../applications/networking/cluster/kube-score { };
 
@@ -39488,6 +39509,8 @@ with pkgs;
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt { };
 
+  tfautomv = callPackage ../applications/networking/cluster/tfautomv { };
+
   terranix = callPackage ../applications/networking/cluster/terranix { };
 
   terraspace = callPackage ../applications/networking/cluster/terraspace { };
@@ -39875,6 +39898,12 @@ with pkgs;
 
   dart-sass = callPackage ../development/tools/misc/dart-sass { };
 
+  fetchDartDeps = callPackage ../build-support/dart/fetch-dart-deps { };
+
+  buildDartApplication = callPackage ../build-support/dart/build-dart-application { };
+
+  dartHooks = callPackage ../build-support/dart/build-dart-application/hooks { };
+
   httrack = callPackage ../tools/backup/httrack { };
 
   httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
@@ -40047,6 +40076,9 @@ with pkgs;
   wire-desktop = callPackage ../applications/networking/instant-messengers/wire-desktop { };
 
   wiremock = callPackage ../tools/networking/wiremock { };
+
+  wireworld = callPackage ../games/wireworld { };
+
 
   teseq = callPackage ../applications/misc/teseq {  };
 
