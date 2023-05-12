@@ -23453,18 +23453,6 @@ with pkgs;
     inherit lib pkgs qt5;
   });
 
-  # TODO: remove once no package needs this anymore or together with OpenSSL 1.1
-  # Current users: mumble, murmur
-  qt5_openssl_1_1 = qt5.overrideScope (_: super: {
-    qtbase = super.qtbase.override {
-      openssl = openssl_1_1;
-      libmysqlclient = libmysqlclient.override {
-        openssl = openssl_1_1;
-        curl = curl.override { openssl = openssl_1_1; };
-      };
-    };
-  });
-
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt5;
 
@@ -32499,14 +32487,12 @@ with pkgs;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
       grpcSupport = config.murmur.grpcSupport or true;
-      qt5 = qt5_openssl_1_1;
     }).murmur;
 
   mumble = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
-      qt5 = qt5_openssl_1_1;
     }).mumble;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {

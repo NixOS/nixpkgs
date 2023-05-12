@@ -20,6 +20,10 @@ let
     pname = overrides.type;
     version = source.version;
 
+    patches = [
+      ./0001-BUILD-crypto-Migrate-to-OpenSSL-3.0-compatible-API.patch
+    ];
+
     nativeBuildInputs = [ cmake pkg-config python3 qt5.wrapQtAppsHook qt5.qttools ]
       ++ (overrides.nativeBuildInputs or [ ]);
 
