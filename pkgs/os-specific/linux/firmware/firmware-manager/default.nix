@@ -2,7 +2,9 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, cargo
 , pkg-config
+, rustc
 , openssl
 , udev
 , gtk3
@@ -32,11 +34,11 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace '$(DESTDIR)/etc' '$(DESTDIR)$(prefix)/etc'
   '';
 
-  nativeBuildInputs = with rustPlatform; [
-    rust.cargo
-    rust.rustc
+  nativeBuildInputs = [
+    cargo
+    rustc
     pkg-config
-    cargoSetupHook
+    rustPlatform.cargoSetupHook
     wrapGAppsHook
   ];
 

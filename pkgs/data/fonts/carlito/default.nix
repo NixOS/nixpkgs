@@ -1,25 +1,27 @@
-{ lib, fetchurl, stdenvNoCC }:
+{ lib, fetchFromGitHub, stdenvNoCC }:
 
 stdenvNoCC.mkDerivation rec {
-  pname = "carlito";
-  version = "20130920";
+  pname = "carlito-unstable";
+  version = "20230309";
 
-  src = fetchurl {
-    url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-carlito-${version}.tar.gz";
-    sha256 = "sha256-S9ErbLwyHBzxbaduLFhcklzpVqCAZ65vbGTv9sz9r1o=";
+  src = fetchFromGitHub {
+    owner = "googlefonts";
+    repo = "carlito";
+    rev = "3a810cab78ebd6e2e4eed42af9e8453c4f9b850a";
+    hash = "sha256-U4TvZZ7n7dr1/14oZkF1Eo96ZcdWIDWron70um77w+E=";
   };
 
   installPhase = ''
     mkdir -p $out/etc/fonts/conf.d
     mkdir -p $out/share/fonts/truetype
-    cp -v *.ttf $out/share/fonts/truetype
+    cp -v fonts/ttf/*.ttf $out/share/fonts/truetype
     cp -v ${./calibri-alias.conf} $out/etc/fonts/conf.d/30-calibri.conf
   '';
 
   meta = with lib; {
     # This font doesn't appear to have any official web site but this
     # one provides some good information and samples.
-    homepage = "http://openfontlibrary.org/en/font/carlito";
+    homepage = "https://github.com/googlefonts/carlito";
     description = "A sans-serif font metric-compatible with Microsoft Calibri";
     longDescription = ''
       Carlito is a free font that is metric-compatible with the

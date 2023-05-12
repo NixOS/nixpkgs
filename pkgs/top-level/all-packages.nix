@@ -2212,6 +2212,8 @@ with pkgs;
 
   collapseos-cvm = callPackage ../applications/emulators/collapseos-cvm { };
 
+  coltrane = callPackage ../applications/misc/coltrane { };
+
   craftos-pc = callPackage ../applications/emulators/craftos-pc { };
 
   darcnes = callPackage ../applications/emulators/darcnes { };
@@ -5641,7 +5643,7 @@ with pkgs;
 
   waitron = callPackage ../tools/networking/waitron { };
 
-  pyCA = python3Packages.callPackage ../applications/video/pyca { };
+  pyCA = callPackage ../applications/video/pyca { };
 
   pyznap = python3Packages.callPackage ../tools/backup/pyznap { };
 
@@ -15519,12 +15521,13 @@ with pkgs;
 
   julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
   julia_18-bin = callPackage ../development/compilers/julia/1.8-bin.nix { };
+  julia_19-bin = callPackage ../development/compilers/julia/1.9-bin.nix { };
 
   julia_18 = callPackage ../development/compilers/julia/1.8.nix { };
   julia_19 = callPackage ../development/compilers/julia/1.9.nix { };
 
   julia-lts-bin = julia_16-bin;
-  julia-stable-bin = julia_18-bin;
+  julia-stable-bin = julia_19-bin;
   julia-bin = julia-stable-bin;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
@@ -17480,6 +17483,8 @@ with pkgs;
   millet = callPackage ../development/tools/language-servers/millet { };
 
   nil = callPackage ../development/tools/language-servers/nil { };
+
+  pylyzer = callPackage ../development/tools/language-servers/pylyzer { };
 
   rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
 
@@ -26152,6 +26157,8 @@ with pkgs;
   shaarli = callPackage ../servers/web-apps/shaarli { };
 
   shiori = callPackage ../servers/web-apps/shiori { };
+
+  slskd = callPackage ../servers/web-apps/slskd { };
 
   inherit (callPackages ../servers/web-apps/matomo {})
     matomo

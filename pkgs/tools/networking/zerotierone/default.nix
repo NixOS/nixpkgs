@@ -4,11 +4,13 @@
 , fetchFromGitHub
 
 , buildPackages
+, cargo
 , iproute2
 , lzo
 , openssl
 , pkg-config
 , ronn
+, rustc
 , zlib
 }:
 
@@ -53,8 +55,8 @@ in stdenv.mkDerivation {
     pkg-config
     ronn
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
   ];
   buildInputs = [
     iproute2

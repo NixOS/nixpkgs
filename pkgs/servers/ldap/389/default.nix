@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , autoconf
 , automake
+, cargo
 , libtool
 , pkg-config
 , cracklib
@@ -25,6 +26,7 @@
 , pcre2
 , python3
 , rustPlatform
+, rustc
 , openssl
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , zlib
@@ -57,8 +59,8 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
     python3
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
   ]
   ++ lib.optional withCockpit rsync;
 

@@ -3,7 +3,9 @@
 , fetchFromGitHub
 , buildPythonPackage
 , rustPlatform
+, cargo
 , pkg-config
+, rustc
 , rustfmt
 , setuptools-rust
 , openssl
@@ -34,11 +36,10 @@ buildPythonPackage rec {
     pkg-config
     rustfmt
     setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 

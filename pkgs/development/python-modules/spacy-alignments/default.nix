@@ -1,10 +1,12 @@
 { lib
 , stdenv
+, cargo
 , fetchPypi
 , fetchpatch
 , buildPythonPackage
 , isPy3k
 , rustPlatform
+, rustc
 , setuptools-rust
 , libiconv
 }:
@@ -28,11 +30,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 

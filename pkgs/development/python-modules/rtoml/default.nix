@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
+, cargo
 , fetchFromGitHub
 , libiconv
 , pytestCheckHook
 , pythonOlder
 , rustPlatform
+, rustc
 , setuptools-rust
 }:
 
@@ -29,9 +31,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = with rustPlatform; [
     setuptools-rust
-    rust.rustc
-    rust.cargo
-    cargoSetupHook
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
   ];
 
   buildInputs = [
