@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, cargo
 , cmake
 , openssl
 , perl
@@ -45,10 +46,9 @@ stdenv.mkDerivation rec {
     cmake
     perl
     pkg-config
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-  ]) ++ lib.optionals stdenv.isDarwin [
+    rustPlatform.cargoSetupHook
+    cargo
+  ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
 

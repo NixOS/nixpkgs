@@ -2,10 +2,12 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
+, cargo
 , cmake
 , ninja
 , pkg-config
 , rustPlatform
+, rustc
 , curl
 , freetype
 , libGLU
@@ -52,8 +54,8 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     pkg-config
-    rustPlatform.rust.rustc
-    rustPlatform.rust.cargo
+    rustc
+    cargo
     rustPlatform.cargoSetupHook
   ];
 

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, cargo
 , meson
 , ninja
 , pkg-config
@@ -8,6 +9,7 @@
 , libsecret
 , libadwaita
 , rustPlatform
+, rustc
 , desktop-file-utils
 , wrapGAppsHook4
 }:
@@ -40,11 +42,10 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     libadwaita

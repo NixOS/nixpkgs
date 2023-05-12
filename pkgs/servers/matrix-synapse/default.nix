@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, openssl, rustPlatform
+{ lib, stdenv, fetchFromGitHub, python3, openssl, cargo, rustPlatform, rustc
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform python3.pkgs.systemd
 , nixosTests
 , enableRedis ? true
@@ -38,10 +38,9 @@ buildPythonApplication rec {
     poetry-core
     rustPlatform.cargoSetupHook
     setuptools-rust
-  ] ++ (with rustPlatform.rust; [
     cargo
     rustc
-  ]);
+  ];
 
   buildInputs = [ openssl ];
 
