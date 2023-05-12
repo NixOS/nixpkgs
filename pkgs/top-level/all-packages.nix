@@ -17481,6 +17481,8 @@ with pkgs;
 
   nil = callPackage ../development/tools/language-servers/nil { };
 
+  pylyzer = callPackage ../development/tools/language-servers/pylyzer { };
+
   rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
 
   svls = callPackage ../development/tools/language-servers/svls { };
