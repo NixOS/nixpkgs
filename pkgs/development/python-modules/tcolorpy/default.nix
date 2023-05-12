@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "tcolorpy";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-duMbeKygEuGVcg4+gQRfClww3rs5AsmJR1VQBo7KWFY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NUlDEMvd6l2GJ9tIXC3zo/8Ji7t0oV0GNVP9UF106yo=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
