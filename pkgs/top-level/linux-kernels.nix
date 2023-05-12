@@ -174,6 +174,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.make-maple-state-reusable-after-mas_empty_area
         kernelPatches.fix-em-ice-bonding
         kernelPatches.CVE-2023-32233
       ];
@@ -183,6 +184,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.make-maple-state-reusable-after-mas_empty_area
         kernelPatches.fix-em-ice-bonding
         kernelPatches.export-rt-sched-migrate
         kernelPatches.CVE-2023-32233
@@ -193,6 +195,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.make-maple-state-reusable-after-mas_empty_area
         kernelPatches.fix-em-ice-bonding
         kernelPatches.CVE-2023-32233
       ];
@@ -202,6 +205,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.make-maple-state-reusable-after-mas_empty_area
         kernelPatches.fix-em-ice-bonding
         kernelPatches.CVE-2023-32233
       ];
@@ -212,6 +216,7 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
+          kernelPatches.make-maple-state-reusable-after-mas_empty_area
         ];
       };
       latest = packageAliases.linux_latest.kernel;
