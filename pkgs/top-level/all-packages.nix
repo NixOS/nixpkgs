@@ -32071,10 +32071,6 @@ with pkgs;
 
   meld = callPackage ../applications/version-management/meld { };
 
-  meli = callPackage ../applications/networking/mailreaders/meli {
-    openssl = openssl_1_1;
-  };
-
   melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
 
   melody = callPackage ../tools/misc/melody { };
