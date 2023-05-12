@@ -104,7 +104,7 @@ in
       smtpq = 64;
       supybot = 65;
       iodined = 66;
-      #libvirtd = 67; # unused
+      #libvirt = 67; # unused
       graphite = 68;
       #statsd = 69; # removed 2018-11-14
       transmission = 70;
@@ -429,7 +429,7 @@ in
       smtpq = 64;
       supybot = 65;
       iodined = 66;
-      libvirtd = 67;
+      libvirt = 67;
       graphite = 68;
       #statsd = 69; # removed 2018-11-14
       transmission = 70;
