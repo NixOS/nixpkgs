@@ -10110,6 +10110,8 @@ self: super: with self; {
 
   pyvisa-py = callPackage ../development/python-modules/pyvisa-py { };
 
+  pyvisa-sim = callPackage ../development/python-modules/pyvisa-sim { };
+
   pyvista = callPackage ../development/python-modules/pyvista { };
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
