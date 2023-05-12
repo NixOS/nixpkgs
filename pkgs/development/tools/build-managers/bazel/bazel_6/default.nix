@@ -394,6 +394,7 @@ stdenv.mkDerivation rec {
       for wrapper in "''${wrappers[@]}"; do
         sed -i -e "s,/usr/bin/gcc,${stdenv.cc}/bin/clang,g" $wrapper
         sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
+        sed -i -e "s,/usr/bin/xcrun install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
       done
     '';
 

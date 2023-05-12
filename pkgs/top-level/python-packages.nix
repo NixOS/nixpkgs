@@ -4859,6 +4859,8 @@ self: super: with self; {
 
   inkex = callPackage ../development/python-modules/inkex { };
 
+  inlinestyler = callPackage ../development/python-modules/inlinestyler { };
+
   inotify = callPackage ../development/python-modules/inotify { };
 
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
