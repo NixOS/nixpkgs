@@ -10204,6 +10204,10 @@ self: super: with self; {
 
   qcengine = callPackage ../development/python-modules/qcengine { };
 
+  qcodes = callPackage ../development/python-modules/qcodes { };
+
+  qcodes-loop = callPackage ../development/python-modules/qcodes-loop { };
+
   qcs-api-client = callPackage ../development/python-modules/qcs-api-client { };
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
