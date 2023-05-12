@@ -23163,6 +23163,8 @@ with pkgs;
 
   openpa = callPackage ../development/libraries/openpa { };
 
+  openpgm = callPackage ../development/libraries/openpgm { };
+
   openpgp-card-tools = callPackage ../tools/security/openpgp-card-tools {
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
