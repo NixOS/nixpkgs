@@ -8,6 +8,8 @@ in
   options.services.vector = {
     enable = mkEnableOption (lib.mdDoc "Vector");
 
+    package = mkPackageOptionMD pkgs "vector" { };
+
     journaldAccess = mkOption {
       type = types.bool;
       default = false;
@@ -47,7 +49,7 @@ in
             '';
         in
         {
-          ExecStart = "${pkgs.vector}/bin/vector --config ${validateConfig conf}";
+          ExecStart = "${getExe cfg.package} --config ${validateConfig conf}";
           DynamicUser = true;
           Restart = "no";
           StateDirectory = "vector";
