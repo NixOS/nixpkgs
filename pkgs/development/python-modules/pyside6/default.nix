@@ -4,6 +4,7 @@
 , ninja
 , qt6
 , python
+, moveBuildTree
 , shiboken6
 , libxcrypt
 }:
@@ -15,7 +16,9 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "pyside-setup-everywhere-src-${lib.versions.majorMinor version}/sources/${pname}";
 
-  postPatch = ''
+  # FIXME: cmake/Macros/PySideModules.cmake supposes that all Qt frameworks on macOS
+  # reside in the same directory as QtCore.framework, which is not true for Nix.
+  postPatch = lib.optionalString stdenv.isLinux ''
     # Don't ignore optional Qt modules
     substituteInPlace cmake/PySideHelpers.cmake \
       --replace \
@@ -27,11 +30,14 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     python
+  ] ++ lib.optionals stdenv.isDarwin [
+    moveBuildTree
   ];
 
   buildInputs = with qt6; [
     # required
     qtbase
+  ] ++ lib.optionals stdenv.isLinux [
     # optional
     qt3d
     qtcharts
@@ -51,10 +57,6 @@ stdenv.mkDerivation rec {
     qtwebchannel
     qtwebengine
     qtwebsockets
-  ] ++ lib.optionals (python.pythonOlder "3.9") [
-    # see similar issue: 202262
-    # libxcrypt is required for crypt.h for building older python modules
-    libxcrypt
   ];
 
   propagatedBuildInputs = [
@@ -72,6 +74,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ lgpl3Only gpl2Only gpl3Only ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner Enzime ];
-    broken = stdenv.isDarwin;
+    platforms = platforms.all;
   };
 }
