@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   # Necessary so it uses `gcc` instead of `ld` for linking.
   # https://github.com/mruby/mruby/blob/35be8b252495d92ca811d76996f03c470ee33380/tasks/toolchains/gcc.rake#L25
-  preBuild = if stdenv.isLinux then "unset LD" else null;
+  preBuild = "unset LD";
 
   installPhase = ''
     mkdir $out
