@@ -1,5 +1,6 @@
 { lib
 , mkDerivation
+, cargo
 , cmake
 , corrosion
 , extra-cmake-modules
@@ -17,6 +18,7 @@
 , qqc2-desktop-style
 , qtwebengine
 , rustPlatform
+, rustc
 , srcs
 
 # These must be updated in tandem with package updates.
@@ -46,11 +48,10 @@ mkDerivation rec {
     cmake
     corrosion
     extra-cmake-modules
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     kconfig

@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , buildPythonPackage
 , rustPlatform
+, cargo
+, rustc
 , setuptools-rust
 , unittestCheckHook
 }:
@@ -26,11 +28,12 @@ buildPythonPackage rec {
 
   sourceRoot = "source";
 
-  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs = [
+    setuptools-rust
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 

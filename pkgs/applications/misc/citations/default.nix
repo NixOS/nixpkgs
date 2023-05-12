@@ -1,4 +1,5 @@
-{ darwin
+{ cargo
+, darwin
 , desktop-file-utils
 , fetchFromGitLab
 , gettext
@@ -12,6 +13,7 @@
 , pkg-config
 , poppler
 , rustPlatform
+, rustc
 , stdenv
 , testers
 , wrapGAppsHook4
@@ -43,8 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     wrapGAppsHook4
   ];
 

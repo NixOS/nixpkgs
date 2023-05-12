@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, napi-rs-cli, nodejs, libiconv }:
+{ lib, stdenv, fetchFromGitHub
+, cargo, rustPlatform, rustc, napi-rs-cli, nodejs, libiconv
+}:
 
 stdenv.mkDerivation rec {
   pname = "matrix-sdk-crypto-nodejs";
@@ -26,8 +28,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     napi-rs-cli
     nodejs
   ];
