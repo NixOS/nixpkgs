@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sysdig";
-  version = "0.31.4";
+  version = "0.31.5";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "sha256-9WzvO17Q4fLwJNoDLk8xN8mqIcrBhcMyxfRhUXkQ5vI=";
+    sha256 = "sha256-RuoPqVulATtn7jSga/8fECs7weNfjt/YFh7iHmfCKjw=";
   };
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];

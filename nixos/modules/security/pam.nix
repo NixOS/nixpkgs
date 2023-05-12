@@ -638,7 +638,7 @@ let
             password sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
           optionalString config.services.sssd.enable ''
-            password sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_authtok
+            password sufficient ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
           optionalString config.security.pam.krb5.enable ''
             password sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass

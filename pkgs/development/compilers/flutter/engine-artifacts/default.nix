@@ -30,7 +30,7 @@ let
                 variants = lib.genAttrs [ "profile" "release" ]
                   (variant: [
                     { archive = "artifacts.zip"; }
-                    { archive = "${lib.toLower hostPlatform.uname.system}-x64.zip"; }
+                    { subdirectory = true; archive = "${lib.toLower hostPlatform.uname.system}-x64.zip"; }
                   ]);
               })) //
           {
@@ -80,7 +80,7 @@ let
       };
     };
 
-  mkArtifactDerivation = { platform ? null, variant ? null, archive, ... }@args:
+  mkArtifactDerivation = { platform ? null, variant ? null, subdirectory ? null, archive, ... }@args:
     let
       artifactDirectory = if platform == null then null else "${platform}${lib.optionalString (variant != null) "-${variant}"}";
       archiveBasename = lib.removeSuffix ".${(lib.last (lib.splitString "." archive))}" archive;
@@ -97,7 +97,14 @@ let
 
       nativeBuildInputs = [ autoPatchelfHook ];
 
-      installPhase = "cp -r . $out";
+      installPhase =
+        let
+          destination = "$out/${if subdirectory == true then archiveBasename else if subdirectory != null then subdirectory else "."}";
+        in
+        ''
+          mkdir -p "${destination}"
+          cp -r . "${destination}"
+        '';
     } // args);
 
   artifactDerivations = {

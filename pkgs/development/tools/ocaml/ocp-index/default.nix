@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "ocp-index";
   version = "1.3.4";
 
+  duneVersion = "3";
+
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {

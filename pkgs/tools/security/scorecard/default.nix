@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchgit, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchgit
+, installShellFiles
+, testers
+, scorecard
+}:
 
 buildGoModule rec {
   pname = "scorecard";
@@ -66,6 +73,12 @@ buildGoModule rec {
     # $out/bin/scorecard version 2>&1 | grep "v${version}"
     runHook postInstallCheck
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = scorecard;
+    command = "scorecard version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ossf/scorecard";

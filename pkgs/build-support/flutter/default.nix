@@ -16,7 +16,7 @@
 , customPackageOverrides ? { }
 , autoDepsList ? false
 , depsListFile ? null
-, vendorHash
+, vendorHash ? ""
 , pubspecLockFile ? null
 , nativeBuildInputs ? [ ]
 , preUnpack ? ""
@@ -135,11 +135,11 @@ let
   packageOverrideRepository = (callPackage ../../development/compilers/flutter/package-overrides { }) // customPackageOverrides;
   productPackages = builtins.filter (package: package.kind != "dev")
     (if autoDepsList
-    then builtins.fromJSON (builtins.readFile deps.depsListFile)
+    then lib.importJSON deps.depsListFile
     else
       if depsListFile == null
       then [ ]
-      else builtins.fromJSON (builtins.readFile depsListFile));
+      else lib.importJSON depsListFile);
 in
 builtins.foldl'
   (prev: package:

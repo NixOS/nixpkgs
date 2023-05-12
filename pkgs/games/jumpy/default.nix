@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , makeWrapper
 , pkg-config
 , zstd
@@ -17,34 +16,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jumpy";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "fishfolk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-03VPfSIlGB8Cc1jWzZSj9MBFBBmMjyx+RdHr3r3oolU=";
+    sha256 = "sha256-krO/iPGnzXeY3W8xSFerlKa1DvDl7ss00bGaAMkHUtw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "bevy_simple_tilemap-0.10.1" = "sha256-Q/AsBZjsr+uTIh/oN0OsIJxntZ4nuc1AReo0Ronj930=";
       "bones_asset-0.1.0" = "sha256-YyY5OsbRLkpAgvNifRiXfmzfsgFw/oFV1nQVCkXG4j4=";
     };
   };
 
   patches = [
-    # removes unused patch in patch.crates-io, which cases the build to fail
-    # error: failed to load source for dependency `bevy_simple_tilemap`
-    # Caused by: attempting to update a git repository, but --frozen was specified
-    ./remove-unused-patch.patch
-
-    # the crate version is outdated
-    (fetchpatch {
-      name = "bump-version-to-0-6-1.patch";
-      url = "https://github.com/fishfolk/jumpy/commit/15081c425056cdebba1bc90bfcaba50a2e24829f.patch";
-      hash = "sha256-dxLfy1HMdjh2VPbqMb/kwvDxeuptFi3W9tLzvg6TLsE=";
-    })
+    # jumpy uses an outdated version of mimalloc
+    # which fails to build on aarch64-linux
+    ./update-mimalloc.patch
   ];
 
   nativeBuildInputs = [

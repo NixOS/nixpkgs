@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication {
   pname = "chatgpt-retrieval-plugin";
   version = "unstable-2023-03-28";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "openai";
@@ -17,14 +18,13 @@ python3Packages.buildPythonApplication {
     hash = "sha256-fCNGzK5Uji6wGDTEwAf4FF/i+RC7ny3v4AsvQwIbehY=";
   };
 
-  format = "pyproject";
-
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'fastapi = "^0.92.0"' 'fastapi = ">=0.92.0"' \
       --replace 'python-dotenv = "^0.21.1"' 'python-dotenv = "*"' \
       --replace 'python-multipart = "^0.0.6"' 'python-multipart = "^0.0.5"' \
-      --replace 'tiktoken = "^0.2.0"' 'tiktoken = "^0.3.0"' \
       --replace 'redis = "4.5.1"' 'redis = "^4.5.1"' \
+      --replace 'tiktoken = "^0.2.0"' 'tiktoken = "^0.3.0"' \
       --replace 'packages = [{include = "server"}]' 'packages = [{include = "server"}, {include = "models"}, {include = "datastore"}, {include = "services"}]'
 
     substituteInPlace server/main.py \
@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication {
 
   meta = with lib; {
     homepage = "https://github.com/openai/chatgpt-retrieval-plugin";
-    description = "The ChatGPT Retrieval Plugin lets you easily search and find personal or work documents by asking questions in everyday language. ";
+    description = "Tool to search and find personal or work documents by asking questions in everyday language";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
   };

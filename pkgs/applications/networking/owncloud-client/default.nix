@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , mkDerivation
 , pkg-config
@@ -7,12 +8,13 @@
 , callPackage
 , qtbase
 , qtkeychain
+, wrapQtAppsHook
 , qttools
 , sqlite
 , libsecret
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "owncloud-client";
   version = "3.2.1";
 
@@ -25,12 +27,8 @@ mkDerivation rec {
     hash = "sha256-39tpvzlTy3KRxg8DzCQW2VnsaLqJ+dNQRur2TqRZytE=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake extra-cmake-modules ];
-  buildInputs = [ qtbase qttools qtkeychain sqlite libsecret libregraph ];
-
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
-  ];
+  nativeBuildInputs = [ pkg-config cmake extra-cmake-modules wrapQtAppsHook qttools ];
+  buildInputs = [ qtbase qtkeychain sqlite libsecret libregraph ];
 
   cmakeFlags = [
     "-UCMAKE_INSTALL_LIBDIR"

@@ -50,6 +50,7 @@ rec {
         else if final.isFreeBSD             then "fblibc"
         else if final.isNetBSD              then "nblibc"
         else if final.isAvr                 then "avrlibc"
+        else if final.isGhcjs               then null
         else if final.isNone                then "newlib"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
@@ -120,7 +121,7 @@ rec {
         ({
           linux-kernel = args.linux-kernel or {};
           gcc = args.gcc or {};
-          rustc = args.rust or {};
+          rustc = args.rustc or {};
         } // platforms.select final)
         linux-kernel gcc rustc;
 
@@ -144,6 +145,7 @@ rec {
         else if final.isS390 && !final.isS390x then null
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
+        else if final.isMips64 then "mips64${lib.optionalString final.isLittleEndian "el"}"
         else final.uname.processor;
 
       # Name used by UEFI for architectures.

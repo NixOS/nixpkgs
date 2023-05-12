@@ -1700,10 +1700,10 @@ src:
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1qsycf92z2797m9v6calp4yhz565vdsfazi7rj0rxy3jxvlv4lgv";
+      sha256 = "0qvl49xpl2mwxgcj6aj11qrjk94xrqhbnpl5vp1y2275crnkddv4";
       type = "gem";
     };
-    version = "2.4.1";
+    version = "2.5.0";
   };
   faraday-httpclient = {
     groups = ["danger" "default" "development" "test"];
@@ -2157,10 +2157,10 @@ src:
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0zhsdnr3zbsym6j689d039hrd9if07jbircyl6ns4f5abwhc7w3y";
+      sha256 = "13npl2yqcapsxwzm3b84537sa5s1cplcvba43nlwdcb1d22skfip";
       type = "gem";
     };
-    version = "3.8.0";
+    version = "3.9.0";
   };
   gitlab-experiment = {
     dependencies = ["activesupport" "request_store"];

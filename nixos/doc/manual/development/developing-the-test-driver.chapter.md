@@ -25,6 +25,8 @@ These include `pkgs.nixosTest`, `testing-python.nix` and `make-test-python.nix`.
 
 ## Testing changes to the test framework {#sec-test-the-test-framework}
 
+We currently have limited unit tests for the framework itself. You may run these with `nix-build -A nixosTests.nixos-test-driver`.
+
 When making significant changes to the test framework, we run the tests on Hydra, to avoid disrupting the larger NixOS project.
 
 For this, we use the `python-test-refactoring` branch in the `NixOS/nixpkgs` repository, and its [corresponding Hydra jobset](https://hydra.nixos.org/jobset/nixos/python-test-refactoring).

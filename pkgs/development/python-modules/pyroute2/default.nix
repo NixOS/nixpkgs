@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.7.7";
+  version = "0.7.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j0mxWXwPbjD/W2wdqh17L0FP2eREI8IusLL9cuySGAY=";
+    hash = "sha256-mJRHQ08XyyD9kvwfFV8LxqRoKr9hH94qeslaYed3f/0=";
   };
 
   nativeBuildInputs = [

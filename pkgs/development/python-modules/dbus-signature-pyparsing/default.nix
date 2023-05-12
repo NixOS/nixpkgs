@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "dbus-signature-pyparsing";
-  version = "0.04";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-IXyepfq7pLTRkTolKWsKGrYDoxukVC9JTrxS9xV7s2I=";
+    hash = "sha256-+jY8kg3jBDpZr5doih3DiyUEcSskq7TgubmW3qdBoZM=";
   };
 
   propagatedBuildInputs = [ pyparsing ];

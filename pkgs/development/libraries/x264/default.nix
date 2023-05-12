@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://www.videolan.org/developers/x264.html";
     license     = licenses.gpl2Plus;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ spwhitt tadeokondrak ];
+    maintainers = with maintainers; [ tadeokondrak ];
   };
 }
