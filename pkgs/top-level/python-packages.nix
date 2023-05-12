@@ -7400,6 +7400,8 @@ self: super: with self; {
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
+  openapi-python-client-integration-tests = callPackage ../development/python-modules/openapi-python-client-integration-tests { };
+
   overly = callPackage ../development/python-modules/overly { };
 
   overpy = callPackage ../development/python-modules/overpy { };
