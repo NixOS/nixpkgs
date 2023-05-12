@@ -54,6 +54,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    # completions are not yet implemented
+    # so we can safely remove this without installing the completions
+    rm $out/bin/diffsitter_completions
+
     wrapProgram "$out/bin/diffsitter" \
       --prefix LD_LIBRARY_PATH : "${libPath}"
   '';
