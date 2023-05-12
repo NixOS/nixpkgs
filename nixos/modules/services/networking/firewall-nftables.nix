@@ -93,14 +93,12 @@ in
 
           ${optionalString (ifaceSet != "") ''iifname { ${ifaceSet} } accept comment "trusted interfaces"''}
 
-          # Some ICMPv6 types like NDP is untracked
           ct state vmap {
             invalid : drop,
             established : accept,
             related : accept,
-            new : jump input-allow,
-            untracked: jump input-allow,
           }
+          jump input-allow
 
           ${optionalString cfg.logRefusedConnections ''
             tcp flags syn / fin,syn,rst,ack log level info prefix "refused connection: "
