@@ -19,12 +19,13 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ ocaml findlib ];
-  buildInputs = [ expat ounit ];
+  buildInputs = [ expat ];
 
   strictDeps = true;
 
-  doCheck = lib.versionOlder ocaml.version "4.06";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkTarget = "testall";
+  checkInputs = [ ounit ];
 
   createFindlibDestdir = true;
 
