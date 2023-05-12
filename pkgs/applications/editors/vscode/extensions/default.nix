@@ -645,6 +645,22 @@ let
         };
       };
 
+      coder.coder-remote = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "coder-remote";
+          publisher = "coder";
+          version = "0.1.18";
+          sha256 = "soNGZuyvG5+haWRcwYmYB+0OcyDAm4UQ419UnEd8waA=";
+        };
+        meta = {
+          description = "An extension for Visual Studio Code to open any Coder workspace in VS Code with a single click.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=coder.coder-remote";
+          homepage = "https://github.com/coder/vscode-coder";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
       codezombiech.gitignore = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gitignore";

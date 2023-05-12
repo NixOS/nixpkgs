@@ -22,7 +22,7 @@ let
       # JIT
       , jitSupport ? false
       , nukeReferences, patchelf, llvmPackages
-      , makeRustPlatform, buildPgxExtension, rustPlatform
+      , makeRustPlatform, buildPgxExtension, cargo, rustc
 
       # detection of crypt fails when using llvm stdenv, so we add it manually
       # for <13 (where it got removed: https://github.com/postgres/postgres/commit/c45643d618e35ec2fe91438df15abd4f3c0d85ca)
@@ -215,7 +215,7 @@ let
             stdenv = stdenv';
             rustPlatform = makeRustPlatform {
               stdenv = stdenv';
-              inherit (rustPlatform.rust) rustc cargo;
+              inherit rustc cargo;
             };
           };
         };

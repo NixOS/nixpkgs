@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitLab
 , appstream-glib
+, cargo
 , desktop-file-utils
 , itstool
 , meson
@@ -9,6 +10,7 @@
 , pkg-config
 , python3
 , rustPlatform
+, rustc
 , wrapGAppsHook4
 , glib
 , gtk4
@@ -46,11 +48,10 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     glib
