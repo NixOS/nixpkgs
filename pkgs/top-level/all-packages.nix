@@ -2212,6 +2212,8 @@ with pkgs;
 
   collapseos-cvm = callPackage ../applications/emulators/collapseos-cvm { };
 
+  coltrane = callPackage ../applications/misc/coltrane { };
+
   craftos-pc = callPackage ../applications/emulators/craftos-pc { };
 
   darcnes = callPackage ../applications/emulators/darcnes { };
