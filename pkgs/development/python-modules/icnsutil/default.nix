@@ -22,10 +22,11 @@ buildPythonPackage rec {
     ${python.interpreter} tests/test_cli.py
   '';
 
-  meta = {
+  meta = with lib; {
+    description = "Create and extract .icns files";
     homepage = "https://github.com/relikd/icnsutil";
-    description = "Create and extract .icns files.";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.reckenrode ];
+    changelog = "https://github.com/relikd/icnsutil/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ reckenrode ];
   };
 }
