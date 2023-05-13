@@ -59,6 +59,10 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
   meta = with lib; {
     description = "Fast and multi-platform Spotify client with native GUI";
     homepage = "https://github.com/jpochyla/psst";
