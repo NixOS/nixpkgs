@@ -106,6 +106,7 @@ buildPythonPackage rec {
     "test_compare_map"
     "test_dataraster_coloring"
     "test_dataraster_query_point"
+    "test_geometry_type"
     "test_good_files"
     "test_layer_init"
     "test_load_save_map"
