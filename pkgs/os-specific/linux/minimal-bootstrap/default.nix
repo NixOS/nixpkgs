@@ -20,7 +20,9 @@ lib.makeScope
     mes = callPackage ./mes { };
     mes-libc = callPackage ./mes/libc.nix { };
 
-    inherit (callPackage ./stage0-posix { }) kaem m2libc mescc-tools mescc-tools-extra;
+    stage0-posix = callPackage ./stage0-posix { };
+
+    inherit (self.stage0-posix) kaem m2libc mescc-tools mescc-tools-extra;
 
     tinycc-bootstrappable = callPackage ./tinycc/bootstrappable.nix { };
     tinycc-mes = callPackage ./tinycc/mes.nix { };
