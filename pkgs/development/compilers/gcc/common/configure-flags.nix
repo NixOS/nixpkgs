@@ -24,7 +24,7 @@
 , langObjC
 , langObjCpp
 , langJit
-, disableBootstrap ? stdenv.targetPlatform != stdenv.hostPlatform
+, disableBootstrap ? true
 }:
 
 assert !enablePlugin -> disableGdbPlugin;
@@ -45,7 +45,13 @@ let
     buildPlatform hostPlatform targetPlatform;
 
   # See https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903
-  disableBootstrap' = disableBootstrap && !langFortran && !langGo;
+  disableBootstrap' = disableBootstrap
+     # Local libraries always have to be built with inplace gcc.
+     # Otherwise we risk using wrong gcc version that does not support
+     # required features.
+     && (stdenv.buildPlatform == stdenv.hostPlatform && stdenv.hostPlatform == stdenv.targetPlatform)
+     && !langFortran
+     && !langGo;
 
   crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
