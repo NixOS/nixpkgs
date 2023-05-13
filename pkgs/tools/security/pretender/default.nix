@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "pretender";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-iWAejgI/q1lh8daybPItzQA91Ayg3ZgddGFXWm3cuww=";
+    hash = "sha256-3i7zNzwURSNSleiW+KBkxdqBv9yshtBu1hLKtjWe9OE=";
   };
 
   vendorHash = "sha256-uw3mpf27OH5uNKmvCFcTw+YFoxVEqT4Fz/CSl9Wjbv0=";
