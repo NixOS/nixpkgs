@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "easeprobe";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "megaease";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FBraLP/wsoJiVLjAqNZettMDOd8W8l1j4t8ETyvqrcQ=";
+    sha256 = "sha256-z+qwmVsznzm6TjvDOT1/8Zy3wUDPFDrjcpxXXHnb4oo=";
   };
 
-  vendorHash = "sha256-Z2JLFLVTdPGFFHnjNA1JS1lYjGimdvMLiXQyNi+91Hc=";
+  vendorHash = "sha256-N32uSuHAbTfGg+Y1bmngzw4RTx5gR4DGKbSBB0BT+8I=";
 
   subPackages = [ "cmd/easeprobe" ];
 
