@@ -1,6 +1,5 @@
 import ./generic.nix {
-  version = "2.100.2";
-  dmdSha256 = "sha256-o4+G3ARXIGObYHtHooYZKr+Al6kHpiwpMIog3i4BlDM=";
-  druntimeSha256 = "sha256-qXvY1ECN4mPwOGgOE1FWwvxoRvlSww3tGLWgBdhzAKo=";
-  phobosSha256 = "sha256-kTHRaAKG7cAGb4IE/NGHWaZ8t7ZceKj03l6E8wLzJzs=";
+  version = "2.101.2";
+  dmdSha256 = "sha256-qxhDb8CD3ou+eQLiVnR9K1/FYEv2HhSNtapV9VXtS5w=";
+  phobosSha256 = "sha256-XKpTm/GdaRY8TTjWQ2h2jbUlSZZ7VRP6MyLJyDUjKiE=";
 }
