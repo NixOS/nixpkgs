@@ -5121,6 +5121,18 @@ final: prev:
     meta.homepage = "https://github.com/chikamichi/mediawiki.vim/";
   };
 
+  melange-nvim = buildVimPluginFrom2Nix {
+    pname = "melange-nvim";
+    version = "2023-04-06";
+    src = fetchFromGitHub {
+      owner = "savq";
+      repo = "melange-nvim";
+      rev = "f15922543dd70b360335effb61411c05c710b99c";
+      sha256 = "19swmv0xzlxp7bcmgdm2qfam28wi9igqvfn5q7wq8qshb2wqzph1";
+    };
+    meta.homepage = "https://github.com/savq/melange-nvim/";
+  };
+
   mini-nvim = buildVimPluginFrom2Nix {
     pname = "mini.nvim";
     version = "2023-05-07";
