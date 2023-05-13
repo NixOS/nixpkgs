@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "docker";
-  version = "6.0.1";
+  version = "6.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iWxCguXHr1xF6LaDsLDDOTKXT+blD8aQagqDYWqz2pc=";
+    hash = "sha256-3MCIrcLsTnz8WU4nXYvSyXOMVsgI3pdHaTnvZ9ta+MI=";
   };
 
   nativeBuildInputs = [
