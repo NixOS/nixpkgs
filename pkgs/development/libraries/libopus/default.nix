@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "docs" false)
   ];
 
+  preBuild = ''
+    patchShebangs meson/get-version.py
+  '';
+
   doCheck = !stdenv.isi686 && !stdenv.isAarch32; # test_unit_LPC_inv_pred_gain fails
 
   meta = with lib; {
