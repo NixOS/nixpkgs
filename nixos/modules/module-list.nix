@@ -564,6 +564,7 @@
   ./services/home-automation/home-assistant.nix
   ./services/home-automation/homeassistant-satellite.nix
   ./services/home-automation/zigbee2mqtt.nix
+  ./services/home-automation/zwave-js.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/filebeat.nix

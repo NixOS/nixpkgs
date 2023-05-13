@@ -310,5 +310,4 @@
 , "@yaegassy/coc-nginx"
 , "yalc"
 , "yarn"
-, "@zwave-js/server"
 ]
