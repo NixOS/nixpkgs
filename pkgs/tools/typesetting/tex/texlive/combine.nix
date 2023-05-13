@@ -248,6 +248,17 @@ in (buildEnv {
     done
     }
   '' +
+  # texlive postactions (see TeXLive::TLUtils::_do_postaction_script)
+  (lib.concatMapStrings (pkg: ''
+    postaction='${pkg.postactionScript}'
+    case "$postaction" in
+      *.pl) postInterp=perl ;;
+      *.texlua) postInterp=texlua ;;
+      *) postInterp= ;;
+    esac
+    echo "postaction install script for ${pkg.pname}: ''${postInterp:+$postInterp }$postaction install $TEXMFROOT"
+    $postInterp "$TEXMFROOT/$postaction" install "$TEXMFROOT"
+  '') (lib.filter (pkg: pkg ? postactionScript) pkgList.tlpkg)) +
   # texlive post-install actions
   ''
     ln -sf "$TEXMFDIST"/scripts/texlive/updmap.pl "$out"/bin/updmap

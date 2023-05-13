@@ -13966,6 +13966,7 @@
   deps = [
     "glyphlist"
   ];
+  postactionScript = "tlpkg/tlpostcode/dvipdfmx.pl";
   sha512.run = "6dd78f4b5cabb51c3bd9988fa46bf90a5a79b3d3293257a4c563a8a76a5a03eb167ce3ec0d4ce6ed05412a551eb201f2379a50a97ac5355ebe833f7b34cee4b4";
   sha512.doc = "00dce9b36eefd1788bbe455b2e5104efd9afc8bd891aeafb2cd9bdee406eeb25ab520e42e614e9d2363eb6a7273232bc3c4805bacd82a22099c5ffc438e852cb";
   hasRunfiles = true;
@@ -18806,6 +18807,7 @@
 };
 "haranoaji" = {
   revision = 66119;
+  postactionScript = "tlpkg/tlpostcode/haranoaji-tlpost.pl";
   sha512.run = "96100a78ab4292a4dc656fb70e2973f75ece3964f3a0d85d9f9153b7052ea90c14f074b195d31e46465dc52ea0516541a16981239abf552861dbca16fac3ab1d";
   sha512.doc = "bb4161c95b760c9c103f086c134d7f7528dafd92f82623dd95322ea644b86c35e2baef05170c3c67a7f1c4905dc8a5fd40108db1c65074b558eec69f0e3c6910";
   hasRunfiles = true;
@@ -31282,6 +31284,7 @@
 };
 "ptex-fontmaps" = {
   revision = 59711;
+  postactionScript = "tlpkg/tlpostcode/ptex-fontmaps-tlpost.pl";
   sha512.run = "16afa97812d830b2b98f657f67ef690da420afe63ccf6f002131101f3ce9a03ff6e5170db1b316e9db521e4cdf89c7aedf26c57be162bf1c5b48fa4226e5e029";
   sha512.doc = "affd6dde30276fa680a0d99d0a51650ee95260535dff717801d61ccb8165c5526047e46ad6478367a439e9a84721500128062b8cb6a1f33a25a65fadae4547f1";
   sha512.source = "eb450119b3897f9e8374d29a3a9512819a05263d5829c81d56dc00dd35995133d1a3cfcadc59ce2aea52ac8b5bc195d27446f159356e63b433e235d1098e93b5";
@@ -31304,6 +31307,7 @@
 };
 "ptex2pdf" = {
   revision = 64072;
+  postactionScript = "tlpkg/tlpostcode/ptex2pdf-tlpost.pl";
   sha512.run = "1893a49eb389914d7a9247dece7f67d9d6af05efca77801130726d6422b1a0150b56f29d3f133f433d70989f6ffcc2b44d209cd044c84ee0833c2f77b87f3e46";
   sha512.doc = "f193b44004b487d93f025b34b72a17cbaf4111b1a6e1ceb4ac1b69c6c07aa4dce46cde510cbd01fb71fb08c06f7bbb415a4a8051de5861f1f586b756060f386f";
   hasRunfiles = true;
@@ -39929,6 +39933,7 @@
     "xetexconfig"
   ];
   hasFormats = true;
+  postactionScript = "tlpkg/tlpostcode/xetex.pl";
   sha512.run = "e9f0aebda0a7fb36e2cbce4dd49e965335438c4ebf2d41eb8e19eabe29617239dd67e7e3433a8c75fd40f072a2c6753a7d0762afd34fca4130929e51888aaabf";
   sha512.doc = "31f03ee1ae00bc7883109ab7b7374feedc384d86b491873e90797658eae12299dd60b95edc1c86f1faa61a0b7a952cca23993e991863b37e49c27afd6c21c034";
   hasRunfiles = true;

@@ -66,6 +66,9 @@ $a}
     s/^.*\n//          # remove saved lines, resume processing
   }
 
+  # extract postaction scripts (right now, at most one per package, so a string suffices)
+  s/^postaction script file=(.*)$/  postactionScript = "\1";/p
+
   # extract hyphenation patterns and formats
   # (this may create duplicate lines, use uniq to remove them)
   /^execute\sAddHyphen/i\  hasHyphens = true;

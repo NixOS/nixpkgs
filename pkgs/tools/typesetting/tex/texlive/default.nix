@@ -178,6 +178,8 @@ let
           } // lib.optionalAttrs (tlType == "run") {
             hasFormats = args.hasFormats or false;
             hasHyphens = args.hasHyphens or false;
+          } // lib.optionalAttrs (tlType == "tlpkg" && args ? postactionScript) {
+            postactionScript = args.postactionScript;
           };
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
