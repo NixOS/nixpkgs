@@ -1755,6 +1755,8 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
+  yarn-lock-converter = callPackage ../tools/package-management/yarn-lock-converter { };
+
   archi = callPackage ../tools/misc/archi { };
 
   breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
