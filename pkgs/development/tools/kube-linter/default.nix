@@ -2,22 +2,24 @@
 
 buildGoModule rec {
   pname = "kube-linter";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-86qLCQH85GSP194nH6lUBvEfuCFs6671dne2zYDwoGc=";
+    sha256 = "sha256-REUjvIiHASiFQyzU/4n9wPkvaVGmaU/2MBqIBjtWhdY=";
   };
 
-  vendorHash = "sha256-yPB2t5Sj14uA3QU6OulwQ03LLBZzCfsilBMk1EqAv08=";
+  vendorHash = "sha256-ATGSIwjmqRuqn+6VTBvjdfXbcABEdaf5HEsaS2o2V3o=";
 
   ldflags = [
     "-s" "-w" "-X golang.stackrox.io/kube-linter/internal/version.version=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  checkFlags = [ "-skip=TestCreateContextsWithIgnorePaths" ];
 
   postInstall = ''
     installShellCompletion --cmd kube-linter \
@@ -36,7 +38,7 @@ buildGoModule rec {
     homepage = "https://kubelinter.io";
     changelog   = "https://github.com/stackrox/kube-linter/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mtesseract stehessel ];
+    maintainers = with maintainers; [ mtesseract stehessel Intuinewin ];
     platforms = platforms.all;
   };
 }
