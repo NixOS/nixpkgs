@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "mawk";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     ];
     sha256 = "sha256-bbejKsecURB60xpAfU+SxrhC3eL2inUztOe3sD6JAL4=";
   };
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   meta = with lib; {
     description = "Interpreter for the AWK Programming Language";
