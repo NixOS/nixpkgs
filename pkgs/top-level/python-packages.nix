@@ -612,6 +612,8 @@ self: super: with self; {
 
   argparse-addons = callPackage ../development/python-modules/argparse-addons { };
 
+  argparse-dataclass = callPackage ../development/python-modules/argparse-dataclass { };
+
   args = callPackage ../development/python-modules/args { };
 
   aria2p = callPackage ../development/python-modules/aria2p { };
