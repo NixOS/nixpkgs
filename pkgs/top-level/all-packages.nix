@@ -28159,6 +28159,8 @@ with pkgs;
 
   kreative-square-fonts = callPackage ../data/fonts/kreative-square-fonts { };
 
+  intel-one-mono = callPackage ../data/fonts/intel-one-mono { };
+
   la-capitaine-icon-theme = callPackage ../data/icons/la-capitaine-icon-theme {
     inherit (plasma5Packages) breeze-icons;
     inherit (pantheon) elementary-icon-theme;
