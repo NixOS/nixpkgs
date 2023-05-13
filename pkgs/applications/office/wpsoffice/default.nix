@@ -13,6 +13,7 @@
 , cups
 , udev
 , xorg
+, pango
 , makeWrapper
 , useChineseVersion ? false
 }:
@@ -56,8 +57,9 @@ stdenv.mkDerivation rec {
     udev
   ];
 
-  runtimeDependencies = [
-    cups.lib
+  runtimeDependencies = map lib.getLib [
+    cups
+    pango
   ];
 
   installPhase = ''
