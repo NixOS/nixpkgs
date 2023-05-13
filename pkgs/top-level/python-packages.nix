@@ -11908,6 +11908,8 @@ self: super: with self; {
 
   testscenarios = callPackage ../development/python-modules/testscenarios { };
 
+  test-stages = callPackage ../development/python-modules/test-stages { };
+
   testtools = callPackage ../development/python-modules/testtools { };
 
   test-tube = callPackage ../development/python-modules/test-tube { };
