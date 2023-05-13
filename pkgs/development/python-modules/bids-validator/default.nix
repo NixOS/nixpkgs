@@ -1,11 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "bids-validator";
   version = "1.11.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
