@@ -1,38 +1,35 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
+, desktop-file-utils
 , meson
 , ninja
 , pkg-config
-, desktop-file-utils
 , python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook4
 , evolution-data-server
-, libical
-, libgee
-, json-glib
 , glib
 , glib-networking
+, gtk4
+, json-glib
+, libadwaita
+, libgee
+, libical
+, pantheon
 , sqlite
-, libsoup
-, libgdata
-, gtk3
-, pantheon /* granite, icons, maintainers */
-, webkitgtk
-, libpeas
-, libhandy
-, curl
+, webkitgtk_6_0
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-planner";
-  version = "2.7";
+  version = "unstable-2023-04-20";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planner";
-    rev = version;
-    sha256 = "sha256-3eFPGRcZWhzFYi52TbHmpFNLI0pWYcHbbBI7efqZwYE=";
+    rev = "97c0f1c30d087e2ac459241bfdb9b606a12a77ce";
+    sha256 = "sha256-W4Hfa9zgKpGKfd7QSTLF2FT0vSJ5mQMV+W9WWltZlL4=";
   };
 
   nativeBuildInputs = [
@@ -42,64 +39,40 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     evolution-data-server
     glib
     glib-networking
-    gtk3
+    gtk4
     json-glib
+    libadwaita
     libgee
     libical
-    libpeas
-    libsoup
-    pantheon.elementary-icon-theme
-    pantheon.granite
+    pantheon.granite7
     sqlite
-    webkitgtk
-    libhandy
-    curl
+    webkitgtk_6_0
+  ];
+
+  mesonFlags = [
+    "-Dproduction=true"
   ];
 
   postPatch = ''
-    # The GTK theme has been renamed in elementary OS 6
-    # https://github.com/elementary/flatpak-platform/blob/6.1.0/io.elementary.Sdk.json#L182
-    # Remove this in https://github.com/NixOS/nixpkgs/pull/159249
-    substituteInPlace src/Application.vala \
-      --replace '"gtk-theme-name", "elementary"' '"gtk-theme-name", "io.elementary.stylesheet.blueberry"'
-
-    # Fix build with vala 0.56
-    # https://github.com/alainm23/planner/pull/884
-    substituteInPlace src/Application.vala \
-      --replace "public const OptionEntry[] PLANNER_OPTIONS" "private const OptionEntry[] PLANNER_OPTIONS"
-
     chmod +x build-aux/meson/post_install.py
     patchShebangs build-aux/meson/post_install.py
-  '';
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      # The GTK theme is hardcoded.
-      --prefix XDG_DATA_DIRS : "${pantheon.elementary-gtk-theme}/share"
-      # The icon theme is hardcoded.
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
-    )
-  '';
-
-  postFixup = ''
-    ln -s $out/bin/com.github.alainm23.planner $out/bin/planner
+    substituteInPlace build-aux/meson/post_install.py \
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   meta = with lib; {
-    description = "Task manager with Todoist support designed for GNU/Linux 🚀️";
-    homepage = "https://planner-todo.web.app";
-    license = licenses.gpl3;
+    description = "Task manager with Todoist support designed for GNU/Linux";
+    homepage = "https://useplanner.com";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
     platforms = platforms.linux;
-    mainProgram = "com.github.alainm23.planner";
-    broken = true; # https://github.com/alainm23/planner/issues/928
+    mainProgram = "com.github.alainm23.task-planner";
   };
 }
-
