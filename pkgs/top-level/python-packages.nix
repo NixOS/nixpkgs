@@ -7376,6 +7376,8 @@ self: super: with self; {
 
   pexpect = callPackage ../development/python-modules/pexpect { };
 
+  pfzy = callPackage ../development/python-modules/pfzy { };
+
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
   pgcli = callPackage ../development/python-modules/pgcli { };
