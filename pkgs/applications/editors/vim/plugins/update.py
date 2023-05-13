@@ -23,15 +23,13 @@ import sys
 import logging
 import subprocess
 import textwrap
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from pathlib import Path
-
-import git
 
 log = logging.getLogger()
 
 sh = logging.StreamHandler()
-formatter = logging.Formatter('%(name)s:%(levelname)s: %(message)s')
+formatter = logging.Formatter('%(levelname)s:%(funcName)s:%(lineno)s: %(message)s')
 sh.setFormatter(formatter)
 log.addHandler(sh)
 
@@ -67,9 +65,13 @@ def isNeovimPlugin(plug: pluginupdate.Plugin) -> bool:
 class VimEditor(pluginupdate.Editor):
     nvim_treesitter_updated = False
 
-    def generate_nix(self, plugins: List[Tuple[PluginDesc, pluginupdate.Plugin]], outfile: str):
-        sorted_plugins = sorted(plugins, key=lambda v: v[0].name.lower())
-        nvim_treesitter_rev = pluginupdate.run_nix_expr("(import <localpkgs> { }).vimPlugins.nvim-treesitter.src.rev")
+    # TODO pass a cache of plugin instead
+    def rewrite_output(self, plugins: Dict[PluginDesc, pluginupdate.Plugin], outfile: str):
+        print("TYPE of plugins", type(plugins))
+        sorted_pdescs = sorted(plugins)
+        print("TYPE of sorted_pdescs", type(sorted_pdescs))
+        nvim_treesitter_rev = pluginupdate.run_nix_expr(
+                "(import <localpkgs> { }).vimPlugins.nvim-treesitter.src.rev")
 
         with open(outfile, "w+") as f:
             f.write(HEADER)
@@ -80,7 +82,12 @@ class VimEditor(pluginupdate.Editor):
                 {
                 """
             ))
-            for pdesc, plugin in sorted_plugins:
+
+
+            # TODO we should check for duplicates, aka we should use a set instead of a dict
+            print("sorted_pdescs", type(sorted_pdescs))
+            for pdesc, plugin in sorted_pdescs.items():
+                # plugin
                 content = self.plugin2nix(pdesc, plugin)
                 f.write(content)
                 if plugin.name == "nvim-treesitter" and plugin.commit != nvim_treesitter_rev:
@@ -93,6 +100,7 @@ class VimEditor(pluginupdate.Editor):
         repo = pdesc.repo
         isNeovim = isNeovimPlugin(plugin)
 
+        # TODO wrap by hand
         content = f"  {plugin.normalized_name} = "
         src_nix = repo.as_nix(plugin)
         content += """{buildFn} {{
@@ -103,7 +111,8 @@ class VimEditor(pluginupdate.Editor):
   }};
 
 """.format(
-        buildFn="buildNeovimPluginFrom2Nix" if isNeovim else "buildVimPluginFrom2Nix", plugin=plugin, src_nix=src_nix, repo=repo)
+        buildFn="buildNeovimPluginFrom2Nix" if isNeovim else "buildVimPluginFrom2Nix",
+        plugin=plugin, src_nix=src_nix, repo=repo)
         log.debug(content)
         return content
 

@@ -14,6 +14,7 @@ import argparse
 import csv
 import functools
 import http
+import http.client
 import json
 import os
 import subprocess
@@ -185,7 +186,7 @@ class RepoGitHub(Repo):
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def latest_commit(self) -> Tuple[str, datetime]:
         commit_url = self.url(f"commits/{self.branch}.atom")
-        log.debug("Sending request to %s", commit_url)
+        # log.debug("Sending request to %s", commit_url)
         commit_req = make_request(commit_url, self.token)
         with urllib.request.urlopen(commit_req, timeout=10) as req:
             self._check_for_redirect(commit_url, req)
@@ -243,15 +244,18 @@ class RepoGitHub(Repo):
 
 @dataclass(frozen=True)
 class PluginDesc:
+    '''immutable plugin spec defined by commiter in self.default_in i.e, the plugin list'''
     repo: Repo
     branch: str
     alias: Optional[str]
 
     @property
-    def name(self):
-        if self.alias is None:
+    def name(self) -> str:
+        # log.debug("name called")
+        if self.alias is None or self.alias == "":
             return self.repo.name
         else:
+            print("Returning alias: ", self.alias)
             return self.alias
 
     def __lt__(self, other):
@@ -259,10 +263,14 @@ class PluginDesc:
 
     @staticmethod
     def load_from_csv(config: FetchConfig, row: Dict[str, str]) -> 'PluginDesc':
+        log.debug("Loading PluginDesc") # from row %s" % row)
         branch = row["branch"]
         repo = make_repo(row['repo'], branch.strip())
         repo.token = config.github_token
-        return PluginDesc(repo, branch.strip(), row["alias"])
+
+        pdesc = PluginDesc(repo, branch.strip(), row["alias"])
+        # log.debug("Generated pdesc %s" % pdesc)
+        return pdesc
 
 
     @staticmethod
@@ -281,6 +289,10 @@ class PluginDesc:
 
 @dataclass
 class Plugin:
+    '''
+    Necessary information to generate the nix code
+    Loadable from current output and from cache
+    '''
     name: str
     commit: str
     has_submodules: bool
@@ -289,7 +301,9 @@ class Plugin:
 
     @property
     def normalized_name(self) -> str:
-        return self.name.replace(".", "-")
+        # print(self.pdesc)
+        # print(self.pdesc.name)
+        return (self.name).replace(".", "-")
 
     @property
     def version(self) -> str:
@@ -335,7 +349,6 @@ class Editor:
         default_in: Optional[Path] = None,
         default_out: Optional[Path] = None,
         deprecated: Optional[Path] = None,
-        cache_file: Optional[str] = None,
     ):
         log.debug("get_plugins:", get_plugins)
         self.name = name
@@ -344,39 +357,92 @@ class Editor:
         self.default_in = default_in or root.joinpath(f"{name}-plugin-names")
         self.default_out = default_out or root.joinpath("generated.nix")
         self.deprecated = deprecated or root.joinpath("deprecated.json")
-        self.cache_file = cache_file or f"{name}-plugin-cache.json"
+        log.debug("Creating cache:", get_plugins)
+        self.cache = Cache(f"{name}-plugin-cache.json")
+
         self.nixpkgs_repo = None
 
     def add(self, args):
-        '''CSV spec'''
+        '''Command'''
         log.debug("called the 'add' command")
         fetch_config = FetchConfig(args.proc, args.github_token)
-        editor = self
+        # self.cache.load_from_plugins(self.get_current_plugins())
+        plugins = self.get_current_plugins()
+        all_pdescs = self.read_input(fetch_config, args.input_file)
+        plugin_map =  {}
+
+        for pdesc in all_pdescs:
+            # { pdesc, plugin for pdesc }
+            log.debug(f"Looking for 'Plugin' with name {pdesc.name}")
+            print("names", pdesc.name, "from repo", pdesc.repo.name)
+            found = False
+            for plugin in plugins:
+                if plugin.name == pdesc.name:
+                    print("Found a match from available plugins", plugin)
+                    plugin_map.update(pdesc = plugin)
+                    found = True
+                    break
+
+            if not found:
+                # prefetch, todo pass a cache
+                print("No cache found for  ", pdesc.name, pdesc)
+                new_plugin, _ = prefetch_plugin(pdesc, )
+                plugin_map.update(pdesc = new_plugin)
+
+            # print(f"{pdesc} mapped to ")
+
+
         for plugin_line in args.add_plugins:
-            log.debug("using plugin_line", plugin_line)
+            log.info("Adding plugin_line %s" % plugin_line)
             pdesc = PluginDesc.load_from_string(fetch_config, plugin_line)
-            log.debug("loaded as pdesc", pdesc)
-            append = [ pdesc ]
-            editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, append=append)
-            plugin, _ = prefetch_plugin(pdesc, )
+            all_pdescs = self.rewrite_input(fetch_config, args.input_file,
+                            self.deprecated, new_plugins=[ pdesc ])
             autocommit = not args.no_commit
+            log.debug("Adding plugin pdesc %s" % pdesc)
+            new_plugin, _ = prefetch_plugin(pdesc, )
+
+
+            print("TYPE of plugins", type(plugin_map))
+            plugin_map = sorted(plugin_map)
+            print("TYPE of sorted plugin_map", type(plugin_map))
+            # TODO now map the pdesc
+            self.rewrite_output(plugin_map, args.outfile)
             if autocommit:
-                commit(
-                    editor.nixpkgs_repo,
+                self.commit(
                     "{drv_name}: init at {version}".format(
-                        drv_name=editor.get_drv_name(plugin.normalized_name),
-                        version=plugin.version
+                        drv_name=self.get_drv_name(new_plugin.normalized_name),
+                        version=new_plugin.version
                     ),
                     [args.outfile, args.input_file],
                 )
 
+
+    def commit(self, message: str, files: List[Path]):
+        import git.repo.fun
+        if not self.nixpkgs_repo:
+            if git.repo.fun.is_git_dir(self.root):
+                self.nixpkgs_repo = git.Repo(self.root, search_parent_directories=True)
+            else:
+                print("Disable autocommit when not in a nixpkgs repository")
+                sys.exit(1)
+        repo = self.nixpkgs_repo
+        repo.index.add([str(f.resolve()) for f in files])
+
+        if repo.index.diff("HEAD"):
+            print(f'committing to nixpkgs "{message}"')
+            repo.index.commit(message)
+        else:
+            print("no changes in working tree to commit")
+
+
     # Expects arguments generated by 'update' subparser
-    def update(self, args ):
+    def update(self, args):
         '''CSV spec'''
         print("the update member function should be overriden in subclasses")
 
     def get_current_plugins(self) -> List[Plugin]:
         """To fill the cache"""
+        log.debug("get_current_plugins")
         data = run_nix_expr(self.get_plugins)
         plugins = []
         for name, attr in data.items():
@@ -384,30 +450,36 @@ class Editor:
             plugins.append(p)
         return plugins
 
-    def load_plugin_spec(self, config: FetchConfig, plugin_file) -> List[PluginDesc]:
+    def read_input(self, config: FetchConfig, input_file) -> List[PluginDesc]:
         '''CSV spec'''
-        return load_plugins_from_csv(config, plugin_file)
+        log.info("Reading input file %s" % input_file)
+        return load_plugins_from_csv(config, input_file)
 
-    def generate_nix(self, _plugins, _outfile: str):
+    def rewrite_output(self, __plugins, _outfile: str):
         '''Returns nothing for now, writes directly to outfile'''
         raise NotImplementedError()
 
+    def generate_nix(self, __plugins, _outfile: str):
+        '''Returns nothing for now, writes directly to outfile'''
+        raise NotImplementedError("Renamed to rewrite_output")
+
     def get_update(self, input_file: str, outfile: str, config: FetchConfig):
-        cache: Cache = Cache(self.get_current_plugins(), self.cache_file)
-        _prefetch = functools.partial(prefetch, cache=cache)
+        self.cache.load_from_plugins(self.get_current_plugins())
+        self.cache.load_from_file()
+        _prefetch = functools.partial(prefetch, cache=self.cache)
 
         def update() -> dict:
-            plugins = self.load_plugin_spec(config, input_file)
+            all_pdescs = self.read_input(config, input_file)
 
             try:
                 pool = Pool(processes=config.proc)
-                results = pool.map(_prefetch, plugins)
+                results = pool.map(_prefetch, all_pdescs)
             finally:
-                cache.store()
+                self.cache.store()
 
             plugins, redirects = check_results(results)
 
-            self.generate_nix(plugins, outfile)
+            self.rewrite_output(plugins, outfile)
 
             return redirects
 
@@ -421,8 +493,46 @@ class Editor:
     def get_drv_name(self, name: str):
         return self.attr_path + "." + name
 
-    def rewrite_input(self, *args, **kwargs):
-        return rewrite_input(*args, **kwargs)
+    def rewrite_input(self, config: FetchConfig, input_file: Path, deprecated: Path,
+        # old pluginDesc and the new
+        redirects: Redirects = {}, new_plugins: List[PluginDesc] = [],
+    ) -> List[PluginDesc]:
+        log.info("Start rewriting input...")
+        all_pdescs = self.read_input(config, input_file,)
+
+        all_pdescs.extend(new_plugins)
+
+        if redirects:
+            log.debug("Handling redirections...")
+
+            cur_date_iso = datetime.now().strftime("%Y-%m-%d")
+            with open(deprecated, "r") as f:
+                deprecations = json.load(f)
+            for pdesc, new_repo in redirects.items():
+                new_pdesc = PluginDesc(new_repo, pdesc.branch, pdesc.alias)
+                old_plugin, _ = prefetch_plugin(pdesc)
+                new_plugin, _ = prefetch_plugin(new_pdesc)
+                if old_plugin.normalized_name != new_plugin.normalized_name:
+                    deprecations[old_plugin.normalized_name] = {
+                        "new": new_plugin.normalized_name,
+                        "date": cur_date_iso,
+                    }
+            with open(deprecated, "w") as f:
+                json.dump(deprecations, f, indent=4, sort_keys=True)
+                f.write("\n")
+
+        # TODO rewrite so this is pdesc dependant as input format may vary
+        with open(input_file, "w") as f:
+            log.debug("Writing into %s", input_file)
+            # fields = dataclasses.fields(PluginDesc)
+            fieldnames = ['repo', 'branch', 'alias']
+            writer = csv.DictWriter(f, fieldnames, dialect='unix', quoting=csv.QUOTE_NONE)
+            writer.writeheader()
+            for plugin in sorted(all_pdescs):
+                print("Writing plugin", plugin)
+                writer.writerow(asdict(plugin))
+
+        return all_pdescs
 
     def create_parser(self):
         common = argparse.ArgumentParser(
@@ -543,16 +653,17 @@ def prefetch_plugin(
     name = alias or p.repo.name
     commit = None
     log.info(f"Fetching last commit for plugin {name} from {repo.uri}@{branch}")
+    # raise Exception("DEBUG")
     commit, date = repo.latest_commit()
     cached_plugin = cache[commit] if cache else None
     if cached_plugin is not None:
-        log.debug("Cache hit !")
+        log.debug(f"Cache hit for commit {commit} !")
         cached_plugin.name = name
         cached_plugin.date = date
         return cached_plugin, repo.redirect
 
     has_submodules = repo.has_submodules()
-    log.debug(f"prefetch {name}")
+    # log.debug(f"prefetch {name}")
     sha256 = repo.prefetch(commit)
 
     return (
@@ -611,30 +722,39 @@ def make_repo(uri: str, branch) -> Repo:
     return repo
 
 
-def get_cache_path(cache_file_name: str) -> Optional[Path]:
-    xdg_cache = os.environ.get("XDG_CACHE_HOME", None)
-    if xdg_cache is None:
-        home = os.environ.get("HOME", None)
-        if home is None:
-            return None
-        xdg_cache = str(Path(home, ".cache"))
-
-    return Path(xdg_cache, cache_file_name)
-
-
 class Cache:
-    def __init__(self, initial_plugins: List[Plugin], cache_file_name: str) -> None:
-        self.cache_file = get_cache_path(cache_file_name)
+    '''
+    "0407c340a77380e4122dc349efa10fc846c928b4": {
+        "commit": "0407c340a77380e4122dc349efa10fc846c928b4",
+        "has_submodules": false,
+        "name": "nvim-lint",
+        "sha256": "1cagndfqdk505q18iq4wgmwav3hh04vmgxj7h8924v9ffj8wr0wx"
+    },
+    '''
+    def __init__(self, cache_file_name: str) -> None:
+        self.cache_file = self.get_cache_path(cache_file_name)
+        self.downloads = {}
 
-        downloads = {}
+    @staticmethod
+    def get_cache_path(cache_file_name: str) -> Optional[Path]:
+        xdg_cache = os.environ.get("XDG_CACHE_HOME", None)
+        if xdg_cache is None:
+            home = os.environ.get("HOME", None)
+            if home is None:
+                return None
+            xdg_cache = str(Path(home, ".cache"))
+
+        return Path(xdg_cache, cache_file_name)
+
+    def load_plugin(self, initial_plugins: List[Plugin]):
+        log.info(f"Loading plugins into cache")
         for plugin in initial_plugins:
-            downloads[plugin.commit] = plugin
-        downloads.update(self.load())
-        self.downloads = downloads
+            self.downloads[plugin.name] = plugin
 
-    def load(self) -> Dict[str, Plugin]:
+    def load_from_file(self) -> 'Cache':
+        log.info(f"Loading XXX into cache")
         if self.cache_file is None or not self.cache_file.exists():
-            return {}
+            return self
 
         downloads: Dict[str, Plugin] = {}
         with open(self.cache_file) as f:
@@ -644,7 +764,9 @@ class Cache:
                     attr["name"], attr["commit"], attr["has_submodules"], attr["sha256"]
                 )
                 downloads[attr["commit"]] = p
-        return downloads
+                log.debug(f"Loaded {p.name} into cache")
+        self.downloads.update(downloads)
+        return self
 
     def store(self) -> None:
         if self.cache_file is None:
@@ -676,55 +798,6 @@ def prefetch(
 
 
 
-def rewrite_input(
-    config: FetchConfig,
-    input_file: Path,
-    deprecated: Path,
-    # old pluginDesc and the new
-    redirects: Redirects = {},
-    append: List[PluginDesc] = [],
-):
-    plugins = load_plugins_from_csv(config, input_file,)
-
-    plugins.extend(append)
-
-    if redirects:
-
-        cur_date_iso = datetime.now().strftime("%Y-%m-%d")
-        with open(deprecated, "r") as f:
-            deprecations = json.load(f)
-        for pdesc, new_repo in redirects.items():
-            new_pdesc = PluginDesc(new_repo, pdesc.branch, pdesc.alias)
-            old_plugin, _ = prefetch_plugin(pdesc)
-            new_plugin, _ = prefetch_plugin(new_pdesc)
-            if old_plugin.normalized_name != new_plugin.normalized_name:
-                deprecations[old_plugin.normalized_name] = {
-                    "new": new_plugin.normalized_name,
-                    "date": cur_date_iso,
-                }
-        with open(deprecated, "w") as f:
-            json.dump(deprecations, f, indent=4, sort_keys=True)
-            f.write("\n")
-
-    with open(input_file, "w") as f:
-        log.debug("Writing into %s", input_file)
-        # fields = dataclasses.fields(PluginDesc)
-        fieldnames = ['repo', 'branch', 'alias']
-        writer = csv.DictWriter(f, fieldnames, dialect='unix', quoting=csv.QUOTE_NONE)
-        writer.writeheader()
-        for plugin in sorted(plugins):
-            writer.writerow(asdict(plugin))
-
-
-def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
-    repo.index.add([str(f.resolve()) for f in files])
-
-    if repo.index.diff("HEAD"):
-        print(f'committing to nixpkgs "{message}"')
-        repo.index.commit(message)
-    else:
-        print("no changes in working tree to commit")
-
 
 
 def update_plugins(editor: Editor, args):
@@ -740,14 +813,12 @@ def update_plugins(editor: Editor, args):
     autocommit = not args.no_commit
 
     if autocommit:
-        editor.nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
-        commit(editor.nixpkgs_repo, f"{editor.attr_path}: update", [args.outfile])
+        editor.commit(f"{editor.attr_path}: update", [args.outfile])
 
     if redirects:
         update()
         if autocommit:
-            commit(
-                editor.nixpkgs_repo,
+            editor.commit(
                 f"{editor.attr_path}: resolve github repository redirects",
                 [args.outfile, args.input_file, editor.deprecated],
             )

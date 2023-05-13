@@ -75,7 +75,7 @@ class LuaEditor(pluginupdate.Editor):
     def get_current_plugins(self):
         return []
 
-    def load_plugin_spec(self, input_file) -> List[LuaPlugin]:
+    def read_input(self, input_file) -> List[LuaPlugin]:
         luaPackages = []
         csvfilename=input_file
         log.info("Loading package descriptions from %s", csvfilename)
@@ -91,7 +91,7 @@ class LuaEditor(pluginupdate.Editor):
     def update(self, args):
         update_plugins(self, args)
 
-    def generate_nix(
+    def rewrite_output(
         self,
         results: List[Tuple[LuaPlugin, str]],
         outfilename: str
@@ -126,7 +126,7 @@ class LuaEditor(pluginupdate.Editor):
         _prefetch = generate_pkg_nix
 
         def update() -> dict:
-            plugin_specs = self.load_plugin_spec(input_file)
+            plugin_specs = self.read_input(input_file)
             sorted_plugin_specs = sorted(plugin_specs, key=lambda v: v.name.lower())
 
             try:
