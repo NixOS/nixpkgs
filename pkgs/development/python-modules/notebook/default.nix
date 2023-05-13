@@ -82,5 +82,6 @@ buildPythonPackage rec {
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
+    mainProgram = "jupyter-notebook";
   };
 }
