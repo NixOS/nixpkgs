@@ -1,14 +1,37 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, zlib, gnupg, gpgme, libidn2, libunistring, gobject-introspection
-, vala }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, glib
+, zlib
+, gnupg
+, gpgme
+, libidn2
+, libunistring
+, gobject-introspection
+, vala
+}:
 
 stdenv.mkDerivation rec {
-  version = "3.2.12";
+  version = "3.2.13";
   pname = "gmime";
 
-  src = fetchurl { # https://github.com/jstedfast/gmime/releases
+  src = fetchurl {
+    # https://github.com/jstedfast/gmime/releases
     url = "https://github.com/jstedfast/gmime/releases/download/${version}/gmime-${version}.tar.xz";
-    sha256 = "sha256-OPm3aBgjQsSExBIobbjVgRaX/4FiQ3wFea3w0G4icFs=";
+    hash = "sha256-LhClTUgh2vixbAGa1dVn4PuOdm+P/l/sPUxqNzc9ZAY=";
   };
+
+  # remove with version 3.2.14 or later
+  patches = [
+    # https://github.com/jstedfast/gmime/issues/133
+    (fetchpatch {
+      url = "https://github.com/jstedfast/gmime/commit/1a33a55baafc73b0a6d7f83cf4c30ad9e169669f.patch";
+      hash = "sha256-1sDVoXkNpT+UBBnQt66lCQqd+wk1asO8q29GFwJU1Cs=";
+      name = "fix_for_issue_133.patch";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
