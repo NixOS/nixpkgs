@@ -10,15 +10,16 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "antoniomika";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-6PCZtiXsDQfPZFw3r1n3rwgxigSnWgggHXzZdBT/fxA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6PCZtiXsDQfPZFw3r1n3rwgxigSnWgggHXzZdBT/fxA=";
   };
 
-  vendorSha256 = "sha256-RnvkEUvL/bQTTTlg0RF0xjjvVniltequNKRD3z0H3O8=";
+  vendorHash = "sha256-RnvkEUvL/bQTTTlg0RF0xjjvVniltequNKRD3z0H3O8=";
 
   meta = with lib; {
     description = "HTTP(S)/WS(S)/TCP Tunnels to localhost";
     homepage = "https://github.com/antoniomika/sish";
+    changelog = "https://github.com/antoniomika/sish/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
