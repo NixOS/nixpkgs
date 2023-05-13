@@ -5177,6 +5177,12 @@
     githubId = 2489598;
     name = "Felix Breidenstein";
   };
+  flemzord = {
+    email = "maxence@maireaux.fr";
+    github = "flemzord";
+    githubId = 1952914;
+    name = "Maxence Maireaux";
+  };
   flexagoon = {
     email = "flexagoon@pm.me";
     github = "flexagoon";
