@@ -1,8 +1,8 @@
 { lib
-, runCommand
 , fetchurl
 , writeText
 , callPackage
+, kaem
 , m2libc
 , mescc-tools
 }:
@@ -43,7 +43,7 @@ let
   sourceArchive = out: sources:
     "catm ${out} ${lib.concatMapStringsSep " " (replaceExt ".s") sources}";
 in
-runCommand "${pname}-${version}" {
+kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
   passthru = { inherit src nyacc; };

@@ -1,5 +1,5 @@
 { lib
-, runCommand
+, kaem
 , mes
 }:
 let
@@ -8,7 +8,7 @@ let
 
   src = ./ln.c;
 in
-runCommand "${pname}-${version}" {
+kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
   meta = with lib; {
