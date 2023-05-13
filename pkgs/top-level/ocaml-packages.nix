@@ -196,6 +196,8 @@ let
 
     class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
 
+    cmarkit = callPackage ../development/ocaml-modules/cmarkit { };
+
     # The 1.1.0 release broke a lot of packages and is not compatible with
     # OCaml < 4.08.
     cmdliner =
