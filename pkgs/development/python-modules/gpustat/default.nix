@@ -8,19 +8,21 @@
 , pytest-runner
 , pythonRelaxDepsHook
 , pytestCheckHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "gpustat";
-  version = "1.0.0";
+  version = "1.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WB6P+FjDLJWjIruPA/HZ3D0Xe07LM93L7Sw3PGf04/E=";
+    hash = "sha256-yPwQVASqwRiE9w7S+gbP0hDTzTicyuSpvDhXnHJGDO4=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-  pythonRelaxDeps = [ "nvidia-ml-py" ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     blessed
