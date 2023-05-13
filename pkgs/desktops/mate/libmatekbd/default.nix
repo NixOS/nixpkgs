@@ -3,7 +3,7 @@
 , fetchurl
 , pkg-config
 , gettext
-, gtk3
+, gtk3-x11
 , libxklavier
 , mateUpdateScript
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3
+    gtk3-x11
     libxklavier
   ];
 
