@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, copyDesktopItems, unzip
-, appimage-run }:
+, appimage-run, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "ldtk";
@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
       mimeTypes = [ "application/json" ];
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Modern, lightweight and efficient 2D level editor";
