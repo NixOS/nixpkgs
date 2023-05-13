@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "schwifty";
-  version = "2023.2.0";
+  version = "2023.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YEBBrU+Xcl5zFPEt/EvPD5eFPUYSpGJ3ZoIK6PRVwlc=";
+    hash = "sha256-Un9J1Yzt080vZ3rzoVURNpMcAObBS8Jsn5kEQKUVxf0=";
   };
 
   propagatedBuildInputs = [
