@@ -100,7 +100,6 @@ buildFHSEnv {
     openal
     openldap
     openssl
-    openssl_1_1
     pango
     pipewire
     samba4
