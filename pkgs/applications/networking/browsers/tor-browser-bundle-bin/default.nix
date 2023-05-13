@@ -2,6 +2,7 @@
 , fetchurl
 , makeDesktopItem
 , writeText
+, callPackage
 
 # Common run-time dependencies
 , zlib
@@ -94,7 +95,7 @@ let
 
   lang = "ALL";
 
-  srcs = {
+  sources = {
     x86_64-linux = fetchurl {
       urls = [
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
@@ -133,7 +134,7 @@ stdenv.mkDerivation rec {
   pname = "tor-browser-bundle-bin";
   inherit version;
 
-  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -445,6 +446,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    inherit sources;
+    updateScript = callPackage ./update.nix {
+      inherit pname version meta;
+    };
+  };
+
   meta = with lib; {
     description = "Tor Browser Bundle built by torproject.org";
     longDescription = ''
@@ -458,7 +466,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.torproject.org/";
     changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
-    platforms = attrNames srcs;
+    platforms = attrNames sources;
     maintainers = with maintainers; [ offline matejc thoughtpolice joachifm hax404 KarlJoad ];
     mainProgram = "tor-browser";
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
