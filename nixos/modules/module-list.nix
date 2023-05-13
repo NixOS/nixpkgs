@@ -249,6 +249,7 @@
   ./programs/thunar.nix
   ./programs/tmux.nix
   ./programs/traceroute.nix
+  ./programs/trippy.nix
   ./programs/tsm-client.nix
   ./programs/turbovnc.nix
   ./programs/udevil.nix
