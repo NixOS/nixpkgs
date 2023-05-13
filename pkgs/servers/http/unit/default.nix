@@ -30,14 +30,14 @@ let
   php82-unit = php82.override phpConfig;
 
 in stdenv.mkDerivation rec {
-  version = "1.29.1";
+  version = "1.30.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Jk/rzPJq1FWWTe31Fa2Ah+MoWP5mh6XNSmiYIY42vvk=";
+    sha256 = "sha256-QLTzlW1OsU+gwaPKozLcBKfuTXbYg1ONqTVZpGX6mrQ=";
   };
 
   nativeBuildInputs = [ which ];
@@ -76,10 +76,6 @@ in stdenv.mkDerivation rec {
     ${optionalString withRuby_2_7   "./configure ruby   --module=ruby27   --ruby=${ruby_2_7}/bin/ruby"}
     ${optionalString withRuby_3_0   "./configure ruby   --module=ruby30   --ruby=${ruby_3_0}/bin/ruby"}
     ${optionalString withRuby_3_1   "./configure ruby   --module=ruby31   --ruby=${ruby_3_1}/bin/ruby"}
-  '';
-
-  postInstall = ''
-    rmdir $out/state
   '';
 
   passthru.tests.unit-php = nixosTests.unit-php;
