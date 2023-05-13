@@ -2065,6 +2065,8 @@ self: super: with self; {
 
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
 
+  contextlib-chdir = callPackage ../development/python-modules/contextlib-chdir { };
+
   contexttimer = callPackage ../development/python-modules/contexttimer { };
 
   contourpy = callPackage ../development/python-modules/contourpy { };
