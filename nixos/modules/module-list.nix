@@ -1342,6 +1342,7 @@
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/powerdns-admin.nix
+  ./services/web-apps/pretalx.nix
   ./services/web-apps/prosody-filer.nix
   ./services/web-apps/restya-board.nix
   ./services/web-apps/rimgo.nix
