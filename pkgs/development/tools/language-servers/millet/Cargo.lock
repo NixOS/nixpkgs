@@ -28,7 +28,7 @@ dependencies = [
 
 [[package]]
 name = "analysis"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "config",
  "diagnostic",
@@ -52,9 +52,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.70"
+version = "1.0.71"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7de8ce5e0f9f8d88245311066a578d72b7af3e7088f32783804676302df237e4"
+checksum = "9c7d0618f0e0b7e8ff11427422b64564d5fb0be1940354bfe2e0529b18a9d9b8"
 
 [[package]]
 name = "autocfg"
@@ -72,7 +72,7 @@ dependencies = [
  "cc",
  "cfg-if",
  "libc",
- "miniz_oxide",
+ "miniz_oxide 0.6.2",
  "object",
  "rustc-demangle",
 ]
@@ -107,7 +107,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "chain-map"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "fast-hash",
  "str-util",
@@ -116,11 +116,11 @@ dependencies = [
 [[package]]
 name = "char-name"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 
 [[package]]
 name = "cm-syntax"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "lex-util",
  "paths",
@@ -132,14 +132,14 @@ dependencies = [
 [[package]]
 name = "code-h2-md-map"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 dependencies = [
  "fast-hash",
 ]
 
 [[package]]
 name = "config"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "fast-hash",
  "serde",
@@ -206,7 +206,7 @@ dependencies = [
 [[package]]
 name = "diagnostic"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 
 [[package]]
 name = "diff"
@@ -223,7 +223,7 @@ checksum = "9bda8e21c04aca2ae33ffc2fd8c23134f3cac46db123ba97bd9d3f3b8a4a85e1"
 [[package]]
 name = "elapsed"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 dependencies = [
  "log",
 ]
@@ -271,7 +271,7 @@ dependencies = [
 [[package]]
 name = "event-parse"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 dependencies = [
  "drop_bomb",
  "rowan",
@@ -281,25 +281,25 @@ dependencies = [
 [[package]]
 name = "fast-hash"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 dependencies = [
  "rustc-hash",
 ]
 
 [[package]]
 name = "flate2"
-version = "1.0.25"
+version = "1.0.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a8a2db397cb1c8772f31494cb8917e48cd1e64f0fa7efac59fbd741a0a8ce841"
+checksum = "3b9429470923de8e8cbd4d2dc513535400b4b3fef0319fb5c4e1f520a7bef743"
 dependencies = [
  "crc32fast",
- "miniz_oxide",
+ "miniz_oxide 0.7.1",
 ]
 
 [[package]]
 name = "fmt-util"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 
 [[package]]
 name = "form_urlencoded"
@@ -352,7 +352,7 @@ checksum = "9a3a5bfb195931eeb336b2a7b4d761daec841b97f947d34394601737a7bba5e4"
 [[package]]
 name = "identifier-case"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 
 [[package]]
 name = "idna"
@@ -367,7 +367,10 @@ dependencies = [
 [[package]]
 name = "idx"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
+dependencies = [
+ "nohash-hasher",
+]
 
 [[package]]
 name = "indexmap"
@@ -381,7 +384,7 @@ dependencies = [
 
 [[package]]
 name = "input"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "cm-syntax",
  "config",
@@ -440,7 +443,7 @@ checksum = "1dabfe0d01e15fde0eba33b9de62475c59e681a47ce4ffe0534af2577a3f8524"
 
 [[package]]
 name = "lang-srv"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "analysis",
  "anyhow",
@@ -468,19 +471,29 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lex-util"
-version = "0.9.4"
+version = "0.9.7"
 
 [[package]]
 name = "libc"
-version = "0.2.142"
+version = "0.2.143"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6a987beff54b60ffa6d51982e1aa1146bc42f19bd26be28b0586f252fccf5317"
+checksum = "edc207893e85c5d6be840e969b496b53d94cec8be2d501b214f50daa97fa8024"
+
+[[package]]
+name = "line-index"
+version = "0.1.0-pre.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2cad96769710c1745e11d4f940a8ff36000ade4bbada4285b001cb8aa2f745ce"
+dependencies = [
+ "nohash-hasher",
+ "text-size",
+]
 
 [[package]]
 name = "linux-raw-sys"
-version = "0.3.3"
+version = "0.3.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b085a4f2cde5781fc4b1717f2e86c62f5cda49de7ba99a7c2eae02b61c9064c"
+checksum = "ece97ea872ece730aed82664c424eb4c8291e1ff2480247ccf7409044bc6479f"
 
 [[package]]
 name = "log"
@@ -533,7 +546,7 @@ dependencies = [
 
 [[package]]
 name = "millet-cli"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "analysis",
  "config",
@@ -548,7 +561,7 @@ dependencies = [
 
 [[package]]
 name = "millet-ls"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "anyhow",
  "env_logger",
@@ -567,8 +580,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "miniz_oxide"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e7810e0be55b428ada41041c41f32c9f1a42817901b4ccf45fa3d4b6561e74c7"
+dependencies = [
+ "adler",
+]
+
+[[package]]
 name = "mlb-hir"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "fast-hash",
  "paths",
@@ -579,7 +601,7 @@ dependencies = [
 
 [[package]]
 name = "mlb-statics"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "config",
  "diagnostic",
@@ -603,7 +625,7 @@ dependencies = [
 
 [[package]]
 name = "mlb-syntax"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "lex-util",
  "paths",
@@ -612,6 +634,12 @@ dependencies = [
  "str-util",
  "text-size-util",
 ]
+
+[[package]]
+name = "nohash-hasher"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2bf50223579dc7cdcfb3bfcacf7069ff68243f8c363f62ffa99cf000a6b9c451"
 
 [[package]]
 name = "num-bigint"
@@ -669,7 +697,7 @@ dependencies = [
 
 [[package]]
 name = "panic-hook"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "better-panic",
 ]
@@ -677,18 +705,19 @@ dependencies = [
 [[package]]
 name = "paths"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 dependencies = [
  "fast-hash",
  "glob",
  "idx",
+ "nohash-hasher",
  "str-util",
 ]
 
 [[package]]
 name = "pattern-match"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 dependencies = [
  "fast-hash",
 ]
@@ -749,9 +778,9 @@ dependencies = [
 
 [[package]]
 name = "regex"
-version = "1.8.0"
+version = "1.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ac6cf59af1067a3fb53fbe5c88c053764e930f932be1d71d3ffe032cbe147f59"
+checksum = "af83e617f331cc6ae2da5443c602dfa5af81e517212d9d611a5b3ba1777b5370"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -760,9 +789,9 @@ dependencies = [
 
 [[package]]
 name = "regex-syntax"
-version = "0.7.0"
+version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b6868896879ba532248f33598de5181522d8b3d9d724dfd230911e1a7d4822f5"
+checksum = "a5996294f19bd3aae0453a862ad728f60e6600695733dd5df01da90c54363a3c"
 
 [[package]]
 name = "rowan"
@@ -791,9 +820,9 @@ checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 
 [[package]]
 name = "rustix"
-version = "0.37.13"
+version = "0.37.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f79bef90eb6d984c72722595b5b1348ab39275a5e5123faca6863bf07d75a4e0"
+checksum = "acf8729d8542766f1b2cf77eb034d52f40d375bb8b615d0b147089946e16613d"
 dependencies = [
  "bitflags",
  "errno",
@@ -811,18 +840,18 @@ checksum = "f91339c0467de62360649f8d3e185ca8de4224ff281f66000de5eb2a77a79041"
 
 [[package]]
 name = "serde"
-version = "1.0.160"
+version = "1.0.162"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bb2f3770c8bce3bcda7e149193a069a0f4365bda1fa5cd88e03bca26afc1216c"
+checksum = "71b2f6e1ab5c2b98c05f0f35b236b22e8df7ead6ffbf51d7808da7f8817e7ab6"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.160"
+version = "1.0.162"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "291a097c63d8497e00160b166a967a4a79c64f3facdd01cbd7502231688d77df"
+checksum = "a2a0814352fd64b58489904a44ea8d90cb1a91dcb6b4f5ebabc32c8318e93cb6"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -862,7 +891,7 @@ dependencies = [
 
 [[package]]
 name = "slash-var-path"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "fast-hash",
  "str-util",
@@ -870,23 +899,40 @@ dependencies = [
 
 [[package]]
 name = "sml-comment"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "sml-syntax",
 ]
 
 [[package]]
 name = "sml-dynamics"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "fast-hash",
- "sml-mir",
- "uniq",
+ "fmt-util",
+ "sml-hir",
+ "sml-statics-types",
+ "str-util",
+]
+
+[[package]]
+name = "sml-dynamics-tests"
+version = "0.9.7"
+dependencies = [
+ "config",
+ "sml-dynamics",
+ "sml-file-syntax",
+ "sml-fixity",
+ "sml-hir",
+ "sml-path",
+ "sml-statics",
+ "sml-statics-types",
+ "str-util",
 ]
 
 [[package]]
 name = "sml-file-syntax"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "config",
  "elapsed",
@@ -900,7 +946,7 @@ dependencies = [
 
 [[package]]
 name = "sml-fixity"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "fast-hash",
  "once_cell",
@@ -909,7 +955,7 @@ dependencies = [
 
 [[package]]
 name = "sml-hir"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "la-arena",
  "sml-lab",
@@ -920,7 +966,7 @@ dependencies = [
 
 [[package]]
 name = "sml-hir-lower"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "config",
  "diagnostic",
@@ -934,14 +980,14 @@ dependencies = [
 
 [[package]]
 name = "sml-lab"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "str-util",
 ]
 
 [[package]]
 name = "sml-lex"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "diagnostic",
  "lex-util",
@@ -954,26 +1000,8 @@ version = "0.1.0"
 source = "git+https://github.com/azdavis/sml-libs.git#7ae671a607a143fd8529e34019f96f6fb275df45"
 
 [[package]]
-name = "sml-mir"
-version = "0.9.4"
-dependencies = [
- "sml-lab",
- "sml-scon",
- "uniq",
-]
-
-[[package]]
-name = "sml-mir-lower"
-version = "0.9.4"
-dependencies = [
- "sml-hir",
- "sml-mir",
- "uniq",
-]
-
-[[package]]
 name = "sml-naive-fmt"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "fast-hash",
  "sml-comment",
@@ -982,11 +1010,11 @@ dependencies = [
 
 [[package]]
 name = "sml-namespace"
-version = "0.9.4"
+version = "0.9.7"
 
 [[package]]
 name = "sml-parse"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "diagnostic",
  "event-parse",
@@ -998,14 +1026,14 @@ dependencies = [
 
 [[package]]
 name = "sml-path"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "str-util",
 ]
 
 [[package]]
 name = "sml-scon"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "num-bigint",
  "num-traits",
@@ -1014,7 +1042,7 @@ dependencies = [
 
 [[package]]
 name = "sml-statics"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "chain-map",
  "config",
@@ -1035,7 +1063,7 @@ dependencies = [
 
 [[package]]
 name = "sml-statics-types"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "chain-map",
  "code-h2-md-map",
@@ -1052,7 +1080,7 @@ dependencies = [
 
 [[package]]
 name = "sml-syntax"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "char-name",
  "code-h2-md-map",
@@ -1065,7 +1093,7 @@ dependencies = [
 
 [[package]]
 name = "sml-ty-var-scope"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "fast-hash",
  "sml-hir",
@@ -1083,7 +1111,7 @@ dependencies = [
 [[package]]
 name = "str-util"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 dependencies = [
  "smol_str",
 ]
@@ -1113,7 +1141,7 @@ dependencies = [
 [[package]]
 name = "syntax-gen"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 dependencies = [
  "fast-hash",
  "identifier-case",
@@ -1133,7 +1161,7 @@ dependencies = [
 
 [[package]]
 name = "tests"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "analysis",
  "cm-syntax",
@@ -1158,9 +1186,9 @@ dependencies = [
 [[package]]
 name = "text-pos"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 dependencies = [
- "fast-hash",
+ "line-index",
  "text-size-util",
 ]
 
@@ -1173,7 +1201,7 @@ checksum = "288cb548dbe72b652243ea797201f3d481a0609a967980fcc5b2315ea811560a"
 [[package]]
 name = "text-size-util"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 dependencies = [
  "text-size",
 ]
@@ -1196,7 +1224,7 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 [[package]]
 name = "token"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 
 [[package]]
 name = "toml"
@@ -1235,7 +1263,7 @@ dependencies = [
 [[package]]
 name = "topo-sort"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 
 [[package]]
 name = "ungrammar"
@@ -1282,7 +1310,7 @@ checksum = "c0edd1e5b14653f783770bce4a4dabb4a5108a5370a5f5d8cfe8710c361f6c8b"
 [[package]]
 name = "uniq"
 version = "0.1.0"
-source = "git+https://github.com/azdavis/language-util.git#d0882b43cfeb7efc3d33b686629ae060360fe032"
+source = "git+https://github.com/azdavis/language-util.git#13b015c6a11357b2b9a7e8615477b5ec64ddc656"
 
 [[package]]
 name = "url"
@@ -1458,16 +1486,16 @@ checksum = "1a515f5799fe4961cb532f983ce2b23082366b898e52ffbce459c86f67c8378a"
 
 [[package]]
 name = "winnow"
-version = "0.4.1"
+version = "0.4.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ae8970b36c66498d8ff1d66685dc86b91b29db0c7739899012f63a63814b4b28"
+checksum = "61de7bac303dc551fe038e2b3cef0f571087a47571ea6e79a87692ac99b99699"
 dependencies = [
  "memchr",
 ]
 
 [[package]]
 name = "xtask"
-version = "0.9.4"
+version = "0.9.7"
 dependencies = [
  "anyhow",
  "flate2",
