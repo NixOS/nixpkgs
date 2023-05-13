@@ -1,45 +1,66 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config
-, libsodium, libarchive, openssl, zeromq }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, protobuf
+, libsodium
+, openssl
+, xz
+, zeromq
+, cacert
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "habitat";
-  # Newer versions required protobuf, which requires some finesse to get to
-  # compile with the vendored protobuf crate.
-  version = "0.90.6";
+  version = "1.6.652";
 
   src = fetchFromGitHub {
     owner = "habitat-sh";
     repo = "habitat";
     rev = version;
-    sha256 = "0rwi0lkmhlq4i8fba3s9nd9ajhz2dqxzkgfp5i8y0rvbfmhmfd6b";
+    hash = "sha256-aWQ4A8NxTOauwad1q58Q4IFDUImX/L/4YTCeVLaq8gw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ipc-channel-0.9.0" = "sha256-ZinW3vTsb6dWDRN1/P4TlOlbjiQSHkE6n6f1yEiKsbA=";
-      "nats-0.3.2" = "sha256-ebZSSczF76FMsYRC9hc4n9yTQVyAD4JgaqpFvGG+01U=";
-      "zmq-0.8.3" = "sha256-ZydP7ThHvLMWc8snm52Wlhji35Gn5Y2TzzN75UH5xLE=";
+      "clap-2.33.1" = "sha256-ixyNr91VNB2ce2cIr0CdPmvKYRlckhKLeaSbqxouIAY=";
+      "configopt-0.1.0" = "sha256-DvpC4WDIzknN5A6+68H7p8bG5lwZ2f+kc9yYhTl16ZM=";
+      "rants-0.6.0" = "sha256-B8uDoiqddCki3j7aC8kilEcmJjvB4ICjZjjTun2UEkY=";
+      "retry-1.0.0" = "sha256-ZaHnzOCelV4V0+MTIbH3DXxdz8QZVgcMq2YeV0S6X6o=";
+      "structopt-0.3.15" = "sha256-0vIX7J7VktKytT3ZnOm45qPRMHDkdJg20eU6pZBIH+Q=";
+      "zmq-0.9.2" = "sha256-bsDCPYLb9hUr6htPQ7rSoasKAqoWBx5FiEY1gOOtdJQ=";
     };
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libsodium libarchive openssl zeromq ];
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+  ];
 
-  cargoBuildFlags = ["--package hab"];
+  buildInputs = [
+    libsodium
+    openssl
+    xz
+    zeromq
+  ];
 
-  checkPhase = ''
-    runHook preCheck
-    echo "Running cargo test"
-    cargo test --package hab
-    runHook postCheck
-  '';
+  cargoBuildFlags = [ "-p" "hab" ];
+  cargoTestFlags = cargoBuildFlags;
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+    SODIUM_USE_PKG_CONFIG = true;
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  };
 
   meta = with lib; {
     description = "An application automation framework";
     homepage = "https://www.habitat.sh";
+    changelog = "https://github.com/habitat-sh/habitat/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ rushmorem ];
+    mainProgram = "hab";
     platforms = [ "x86_64-linux" ];
   };
 }
