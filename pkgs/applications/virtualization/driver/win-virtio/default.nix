@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, p7zip }:
 stdenv.mkDerivation rec {
   pname = "win-virtio";
-  version = "0.1.196-1";
+  version = "0.1.229-1";
 
   dontUnpack = true;
 
   src = fetchurl {
     url = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-${version}/virtio-win.iso";
-    sha256 = "1zj53xybygps66m3v5kzi61vqy987zp6bfgk0qin9pja68qq75vx";
+    hash = "sha256-yIoN3jRgXq7mz4ifPioMKvPK65G130WhJcpPcBrLu+A=";
   };
 
   buildPhase = ''
