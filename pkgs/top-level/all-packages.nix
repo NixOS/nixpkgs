@@ -23222,6 +23222,8 @@ with pkgs;
 
   orcania = callPackage ../development/libraries/orcania { };
 
+  orogene = callPackage ../development/tools/misc/orogene { };
+
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
 
   osmid = callPackage ../applications/audio/osmid { };
