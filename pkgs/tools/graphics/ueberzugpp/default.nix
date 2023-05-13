@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     mainProgram = "ueberzug";
     maintainers = with maintainers; [ aleksana ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.isDarwin;
   };
 }
