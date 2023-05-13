@@ -1,15 +1,17 @@
-{ buildPythonPackage
-, lib
+{ lib
+, buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , ruamel-yaml
 , python-dateutil
 }:
 
 buildPythonPackage rec {
-  version = "1.7.3";
   pname = "strictyaml";
-  disabled = isPy27;
+  version = "1.7.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,12 +23,18 @@ buildPythonPackage rec {
       --replace "ruamel.yaml==0.17.4" "ruamel.yaml"
   '';
 
-  propagatedBuildInputs = [ ruamel-yaml python-dateutil ];
+  propagatedBuildInputs = [
+    ruamel-yaml
+    python-dateutil
+  ];
 
   # Library tested with external tool
   # https://hitchdev.com/approach/contributing-to-hitch-libraries/
   doCheck = false;
-  pythonImportsCheck = [ "strictyaml" ];
+
+  pythonImportsCheck = [
+    "strictyaml"
+  ];
 
   meta = with lib; {
     description = "Strict, typed YAML parser";
