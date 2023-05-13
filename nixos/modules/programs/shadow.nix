@@ -41,6 +41,8 @@ let
       # This should be made configurable.
       #CHFN_RESTRICT frwh
 
+      # The default crypt() method, keep in sync with the PAM default
+      ENCRYPT_METHOD YESCRYPT
     '';
 
   mkSetuidRoot = source:

@@ -122,6 +122,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers.patch
+  ] ++ lib.optionals (python.pkgs.pythonAtLeast "3.11") [
+    # Fix build against Python 3.11
+    (fetchpatch {
+      url = "https://github.com/root-project/root/commit/484deb056dacf768aba4954073b41105c431bffc.patch";
+      hash = "sha256-4qur2e3SxMIPgOg4IjlvuULR2BObuP7xdvs+LmNT2/s=";
+    })
   ];
 
   # Fix build against vanilla LLVM 9

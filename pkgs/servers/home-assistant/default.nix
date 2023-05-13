@@ -34,15 +34,6 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      advantage-air = super.advantage-air.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.1";
-        src = super.fetchPypi {
-          pname = "advantage_air";
-          inherit version;
-          hash = "sha256-I9HMDLZX9xKDJuYSAweM2r4v3ZKevHTn5dHTYxN3EuE=";
-        };
-      });
-
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.1";
         src = fetchFromGitHub {
@@ -166,6 +157,16 @@ let
         };
       });
 
+      py-synologydsm-api = super.py-synologydsm-api.overridePythonAttrs (oldAttrs: rec {
+        version = "2.1.4";
+        src = fetchFromGitHub {
+          owner = "mib1185";
+          repo = "py-synologydsm-api";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-37JzdhMny6YDTBO9NRzfrZJAVAOPnpcr95fOKxisbTg=";
+        };
+      });
+
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
@@ -183,6 +184,16 @@ let
           inherit (oldAttrs.src) owner repo;
           rev = "refs/tags/v${version}";
           hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
+        };
+      });
+
+      python-roborock = super.python-roborock.overridePythonAttrs (oldAttrs: rec {
+        version = "0.8.3";
+        src = fetchFromGitHub {
+          owner = "humbertogontijo";
+          repo = "python-roborock";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-O7MjxCQ4JwFFC2ibdU8hCPhFPQhV5/LsmDO6vRdyYL0=";
         };
       });
 
@@ -235,11 +246,11 @@ let
       });
 
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.9";
+        version = "2.0.12";
         src = super.fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
-          hash = "sha256-lXGSFePscze59Xw8LtoOanYZvhlKUWbAfB5Zn2r8IPo=";
+          hash = "sha256-vd/FvR3uXbD93J2rJvgAwoPzJD5ygbvxByAP7TASX5w=";
         };
       });
 
@@ -310,7 +321,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.4.6";
+  hassVersion = "2023.5.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -326,7 +337,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-054MOhLU7sImD5Sl5vUuik6mt7GCupMeBI2pdtpWuls=";
+    hash = "sha256-vBDYNnwx+9fjiVkMelDoaDtYwBKEq5BibLEs8iwIIFo=";
   };
 
   # Secondary source is git for tests
@@ -334,7 +345,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-/SYJUW028HvxLMNHhm6cqQ6jv0J+8NatbZ7h7HyGYXs=";
+    hash = "sha256-4YvGxBr8YmOz5kzPJ9ve7mlWxwe9BfkQgLxjst4IIJ8=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

@@ -2,27 +2,44 @@
 , fetchFromGitHub
 , lib
 , stdenv
+, systemdMinimal
+, withSystemd ? false
 }:
 
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
-  version = "0.66.0";
+  version = "0.76.1";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
-    sha256 = "sha256-FT5AoqCHNf2sdKyejALOsL/zHrrxP7vdntagR9vA00I=";
+    sha256 = "sha256-Aeiq9IJReUxJUpeq5mSReK5foC5aY4fMSZli0ZUjYPc=";
   };
   # proxy vendor to avoid hash missmatches between linux and macOS
   proxyVendor = true;
-  vendorSha256 = "sha256-65bfTCMRJ8iL5ABGPqvkayw4zSn4KkCriEkWYa0Pe68=";
+  vendorSha256 = "sha256-vLbx/qmSZuteuvChnyA/wcEcIjU3zWkxSjfk8VBdgU4=";
 
-  subPackages = [ "cmd/otelcontribcol" ];
+  # there is a nested go.mod
+  sourceRoot = "source/cmd/otelcontribcol";
 
   # CGO_ENABLED=0 required for mac - "error: 'TARGET_OS_MAC' is not defined, evaluates to 0"
   # https://github.com/shirou/gopsutil/issues/976
   CGO_ENABLED = if stdenv.isLinux then 1 else 0;
+
+  # journalctl is required in-$PATH for the journald receiver tests.
+  nativeCheckInputs = lib.optionals stdenv.isLinux [ systemdMinimal ];
+
+  # We don't inject the package into propagatedBuildInputs unless
+  # asked to avoid hard-requiring a large package. For the journald
+  # receiver to work, journalctl will need to be available in-$PATH,
+  # so expose this as an option for those who want more control over
+  # it instead of trusting the global $PATH.
+  propagatedBuildInputs = lib.optionals withSystemd [ systemdMinimal ];
+
+  # This test fails on darwin for mysterious reasons.
+  checkFlags = lib.optionals stdenv.isDarwin
+    [ "-skip" "TestDefaultExtensions/memory_ballast" ];
 
   ldflags = [
     "-s"

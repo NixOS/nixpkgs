@@ -4,14 +4,14 @@
 , griffe
 , mkdocs-material
 , mkdocstrings
-, pdm-pep517
+, pdm-backend
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "0.9.0";
+  version = "0.10.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,11 +20,11 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = "python";
     rev = version;
-    hash = "sha256-PM6J21yT5paukDB8uJkcIyy+miYwN4+gk8Ej1xI8Q1A=";
+    hash = "sha256-VGPlOHQNtXrfmcne93xDIxN20KDGlTQrjeAKhX/L6K0=";
   };
 
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = [

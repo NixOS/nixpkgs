@@ -54,6 +54,11 @@ let
       };
       kernelPatches = kernel.kernelPatches ++ [
         kernelPatches.hardened.${kernel.meta.branch}
+      ] ++ lib.optionals (lib.versionAtLeast version "5.15") [
+        # Needed as long as hardened kernels are behind the first patch release
+        # containing the fix for CVE-2023-32233. Can most likely be removed after the
+        # next hardened kernel update.
+        kernelPatches.CVE-2023-32233
       ];
       isHardened = true;
   };
@@ -115,6 +120,7 @@ in {
         [ kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
           kernelPatches.modinst_arg_list_too_long
+          kernelPatches.CVE-2023-32233
         ];
     };
 
@@ -123,6 +129,7 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.rtl8761b_support
+        kernelPatches.CVE-2023-32233
       ];
     };
 
@@ -130,6 +137,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.CVE-2023-32233
       ];
     };
 
@@ -137,6 +145,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.CVE-2023-32233
       ];
     };
 
@@ -145,6 +154,7 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.export-rt-sched-migrate
+        kernelPatches.CVE-2023-32233
       ];
     };
 
@@ -178,6 +188,7 @@ in {
         kernelPatches.request_key_helper
         kernelPatches.fix-em-ice-bonding
         kernelPatches.export-rt-sched-migrate
+        kernelPatches.CVE-2023-32233
       ];
     };
 

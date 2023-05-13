@@ -28,6 +28,12 @@ stdenv.mkDerivation {
 
   configurePhase = generated.configure;
 
+  # We only install the docc binary, so don't need the other products.
+  # This works around a failure building generate-symbol-graph:
+  #  Sources/generate-symbol-graph/main.swift:13:18: error: module 'SwiftDocC' was not compiled for testing
+  # TODO: Figure out the cause. It doesn't seem to happen outside Nixpkgs.
+  swiftpmFlags = "--product docc";
+
   # TODO: Tests depend on indexstore-db being provided by an existing Swift
   # toolchain. (ie. looks for `../lib/libIndexStore.so` relative to swiftc.
   #doCheck = true;

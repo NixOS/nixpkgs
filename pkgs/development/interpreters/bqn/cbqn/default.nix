@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
-  ]
-  ++ lib.optional enableReplxx "REPLXX=1";
+  ];
 
   buildFlags = [
     # interpreter binary
     (lib.flatten (if enableSingeli then ["o3n-singeli" "f='-mavx2'"] else ["o3"]))
+    "REPLXX=${if enableReplxx then "1" else "0"}"
   ] ++ lib.optionals enableLibcbqn [
     # embeddable interpreter as a shared lib
     "shared-o3"

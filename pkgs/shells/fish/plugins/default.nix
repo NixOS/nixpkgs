@@ -32,6 +32,8 @@ lib.makeScope newScope (self: with self; {
 
   fzf-fish = callPackage ./fzf-fish.nix { };
 
+  github-copilot-cli-fish = callPackage ./github-copilot-cli-fish.nix { };
+
   grc = callPackage ./grc.nix { };
 
   humantime-fish = callPackage ./humantime-fish.nix { };
@@ -45,6 +47,8 @@ lib.makeScope newScope (self: with self; {
   puffer = callPackage ./puffer.nix { };
 
   pure = callPackage ./pure.nix { };
+
+  sdkman-for-fish = callPackage ./sdkman-for-fish.nix { };
 
   sponge = callPackage ./sponge.nix { };
 

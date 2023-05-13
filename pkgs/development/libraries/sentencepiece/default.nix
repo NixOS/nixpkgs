@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sentencepiece";
-  version = "0.1.98";
+  version = "0.1.99";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-afODoC4G3ibVXMLEIxusmju4wkTcOtlEzS17+EuyIZw=";
+    sha256 = "sha256-RxzysZsfTdhAtJCO3JOa/bSBNnHBRWkqBdwBa8sB74I=";
   };
 
   nativeBuildInputs = [ cmake ];

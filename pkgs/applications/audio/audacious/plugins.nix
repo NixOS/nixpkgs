@@ -46,11 +46,11 @@
 
 stdenv.mkDerivation rec {
   pname = "audacious-plugins";
-  version = "4.3";
+  version = "4.3.1";
 
   src = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
-    sha256 = "sha256-Zi72yMS9cNDzX9HF8IuRVJuUNmOLZfihozlWsJ34n8Y=";
+    sha256 = "sha256-Leom469YOi1oTfJAsnsrKTK81lPfTbUAqF9P5dX9yKY=";
   };
 
   patches = [ ./0001-Set-plugindir-to-PREFIX-lib-audacious.patch ];

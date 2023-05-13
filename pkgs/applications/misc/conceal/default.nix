@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "conceal";
@@ -34,5 +34,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/TD-Sky/conceal";
     license = licenses.mit;
     maintainers = with maintainers; [ jedsek ];
+    broken = stdenv.isDarwin;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, rustPlatform
+{ stdenv, lib, fetchFromGitHub, cargo, pkg-config, rustPlatform
 , bzip2, curl, zlib, zstd, libiconv, CoreServices
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config rustPlatform.cargoSetupHook rustPlatform.rust.cargo
+    pkg-config rustPlatform.cargoSetupHook cargo
   ];
 
   buildInputs = [ bzip2 curl zlib zstd ]

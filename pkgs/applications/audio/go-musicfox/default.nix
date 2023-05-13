@@ -4,6 +4,7 @@
 , pkg-config
 , alsa-lib
 , flac
+, nix-update-script
 }:
 
 buildGoModule rec {
@@ -37,6 +38,8 @@ buildGoModule rec {
     alsa-lib
     flac
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Terminal netease cloud music client written in Go";

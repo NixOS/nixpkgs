@@ -3,7 +3,11 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
+, cryptography
+, nibabel
 , numpy
+, pydicom
+, simpleitk
 }:
 
 buildPythonPackage rec {
@@ -18,14 +22,20 @@ buildPythonPackage rec {
     hash = "sha256-iHbClOrtYkHT1Nar+5j/ig4Krya8LdQdFB4Mmm5B9bg=";
   };
 
-  # relax Python dep to work with 3.10.x
+  # relax Python dep to work with 3.10.x and 3.11.x
   postPatch = ''
-    substituteInPlace setup.cfg --replace "!=3.10.*," ""
+    substituteInPlace setup.cfg --replace "!=3.10.*," "" --replace "!=3.11.*" ""
   '';
 
   propagatedBuildInputs = [ numpy ];
 
-  doCheck = false;  # requires SimpleITK python package (not in Nixpkgs)
+  nativeCheckInputs = [
+    pytestCheckHook
+    cryptography
+    nibabel
+    pydicom
+    simpleitk
+  ];
 
   pythonImportsCheck = [
     "pymedio"

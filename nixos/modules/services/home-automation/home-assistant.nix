@@ -461,6 +461,7 @@ in {
           "mopeka"
           "oralb"
           "qingping"
+          "rapt_ble"
           "ruuvi_gateway"
           "ruuvitag_ble"
           "sensirion_ble"

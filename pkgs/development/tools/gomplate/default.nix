@@ -7,10 +7,6 @@ buildGoModule rec {
   pname = "gomplate";
   version = "3.11.5";
 
-  # gomplate is currently built w/ go 1.19 (see pkgs/top-level/all-packages.nix), but
-  # it seems the reported "go 1.20 build failure" does no longer occurr.
-  # TODO remove indication to use go 1.19 in pkgs/top-level/all-packages.nix when next upgrading gomplate
-
   src = fetchFromGitHub {
     owner = "hairyhenderson";
     repo = pname;

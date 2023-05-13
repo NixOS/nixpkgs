@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ hexa ];
     platforms = [ "x86_64-linux" ];
-    broken = kernel.kernelOlder "6.1.7";
+    # requires 6.1.7 https://github.com/intel/ipu6-drivers/pull/84
+    # fails to build on 6.3 https://github.com/intel/ipu6-drivers/issues/140
+    broken = kernel.kernelOlder "6.1.7" || kernel.kernelAtLeast "6.3";
   };
 }

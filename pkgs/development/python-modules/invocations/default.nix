@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "invocations";
-  version = "3.0.2";
+  version = "3.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pyinvoke";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-sXMxTOi0iCz7Zq0lXkpproUtkId5p/GCqP1TvgqYlME=";
+    hash = "sha256-NlYoikv43oD5+Iz2CeeCGG3Fm648UgA3YZQFOfWSy58=";
   };
 
   postPatch = ''

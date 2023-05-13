@@ -4,6 +4,8 @@
 , fetchPypi
 , pythonOlder
 , rustPlatform
+, cargo
+, rustc
 , setuptools-rust
 , libiconv
 , requests
@@ -40,7 +42,9 @@ buildPythonPackage {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     setuptools-rust
-  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+    cargo
+    rustc
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 

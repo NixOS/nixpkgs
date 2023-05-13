@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , imageio
+, matplotlib
 , numpy
 , pillow
 , pooch
@@ -11,18 +12,19 @@
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.38.5";
+  version = "0.39.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2EH9S67xj3Z2wHWAvBt7alZPZj5/K5787cQnE53lzA0=";
+    hash = "sha256-PQOkwpyaKZ0oubDCzIKHXylpk1HWH39O0zonJ7Gfly4=";
   };
 
   propagatedBuildInputs = [
     imageio
+    matplotlib
     numpy
     pillow
     pooch

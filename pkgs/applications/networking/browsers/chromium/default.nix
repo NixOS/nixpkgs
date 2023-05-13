@@ -1,5 +1,5 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
-, llvmPackages_15
+, llvmPackages_16
 , ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
@@ -18,7 +18,7 @@
 }:
 
 let
-  llvmPackages = llvmPackages_15;
+  llvmPackages = llvmPackages_16;
   stdenv = llvmPackages.stdenv;
 
   upstream-info = (lib.importJSON ./upstream-info.json).${channel};

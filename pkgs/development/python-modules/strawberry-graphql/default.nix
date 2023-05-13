@@ -26,6 +26,7 @@
 , pytest-django
 , pytest-emoji
 , pytest-flask
+, pytest-mock
 , pytest-snapshot
 , pytestCheckHook
 , python-dateutil
@@ -41,7 +42,7 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.176.0";
+  version = "0.176.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -50,7 +51,7 @@ buildPythonPackage rec {
     owner = "strawberry-graphql";
     repo = "strawberry";
     rev = "refs/tags/${version}";
-    hash = "sha256-e61wLFqc3HLCWUiVW3Gzbay1Oi8b7HsLT3+jPnbA4YY=";
+    hash = "sha256-O57gCJiLlR3k45V6cRNd9AHo9EGoWd7WRMmnV/8xFyQ=";
   };
 
   patches = [
@@ -149,6 +150,7 @@ buildPythonPackage rec {
     mypy
     pytest-asyncio
     pytest-emoji
+    pytest-mock
     pytest-snapshot
     pytestCheckHook
     sanic-testing

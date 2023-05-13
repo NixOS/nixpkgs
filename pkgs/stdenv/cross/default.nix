@@ -72,7 +72,7 @@ in lib.init bootStages ++ [
            else if crossSystem.isDarwin
              then buildPackages.llvmPackages.libcxxClang
            else if crossSystem.useLLVM or false
-             then buildPackages.llvmPackages.clangUseLLVM
+             then buildPackages.llvmPackages.clang
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs

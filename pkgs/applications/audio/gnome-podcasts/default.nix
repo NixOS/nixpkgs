@@ -3,11 +3,13 @@
 , rustPlatform
 , fetchFromGitLab
 , fetchpatch
+, cargo
 , meson
 , ninja
 , gettext
 , python3
 , pkg-config
+, rustc
 , glib
 , libhandy
 , gtk3
@@ -55,9 +57,9 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     python3
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook
     glib
   ];

@@ -1,11 +1,11 @@
 { lib
 , fetchFromGitLab
 , imagemagick
-, flutter
+, flutter37
 , makeDesktopItem
 }:
 
-flutter.buildFlutterApplication rec {
+flutter37.buildFlutterApplication rec {
   version = "1.11.0";
   name = "fluffychat";
 
