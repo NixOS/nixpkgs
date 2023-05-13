@@ -5,7 +5,7 @@
 , ninja
 , pkg-config
 , vala
-, budgie-desktop
+, budgie
 , gtk3
 , libpeas
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    budgie-desktop
+    budgie.budgie-desktop
     gtk3
     libpeas
   ];

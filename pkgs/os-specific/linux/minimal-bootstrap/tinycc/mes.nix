@@ -5,9 +5,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 { lib
-, runCommand
 , fetchurl
 , callPackage
+, kaem
 , tinycc-bootstrappable
 }:
 let
@@ -20,7 +20,7 @@ let
     url = "https://repo.or.cz/tinycc.git/snapshot/${rev}.tar.gz";
     sha256 = "11idrvbwfgj1d03crv994mpbbbyg63j1k64lw1gjy7mkiifw2xap";
   };
-  src = (runCommand "tinycc-${version}-source" {} ''
+  src = (kaem.runCommand "tinycc-${version}-source" {} ''
     ungz --file ${tarball} --output tinycc.tar
     mkdir -p ''${out}
     cd ''${out}
@@ -35,7 +35,7 @@ let
     platforms = [ "i686-linux" ];
   };
 
-  tccdefs = runCommand "tccdefs-${version}" {} ''
+  tccdefs = kaem.runCommand "tccdefs-${version}" {} ''
     mkdir ''${out}
     ${tinycc-bootstrappable}/bin/tcc -static -DC2STR -o c2str ${src}/conftest.c
     ./c2str ${src}/include/tccdefs.h ''${out}/tccdefs_.h

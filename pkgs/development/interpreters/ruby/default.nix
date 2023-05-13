@@ -84,8 +84,8 @@ let
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
-          ++ (op (lib.versionOlder ver.majMin "3.0" && opensslSupport) openssl_1_1)
-          ++ (op (atLeast30 && opensslSupport) openssl_1_1)
+          ++ (op (!atLeast31 && opensslSupport) openssl_1_1)
+          ++ (op (atLeast31 && opensslSupport) openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
           # Looks like ruby fails to build on darwin without readline even if curses

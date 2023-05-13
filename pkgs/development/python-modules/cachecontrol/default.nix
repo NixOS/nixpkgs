@@ -27,6 +27,13 @@ buildPythonPackage rec {
     hash = "sha256-uUPIQz/n347Q9G7NDOGuB760B/KxOglUxiS/rYjt5Po=";
   };
 
+  postPatch = ''
+    # https://github.com/ionrock/cachecontrol/issues/297
+    substituteInPlace tests/test_etag.py --replace \
+      "requests.adapters.HTTPResponse.from_httplib" \
+      "urllib3.response.HTTPResponse.from_httplib"
+  '';
+
   propagatedBuildInputs = [
     msgpack
     requests

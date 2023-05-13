@@ -8,9 +8,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 { lib
-, runCommand
 , callPackage
 , fetchurl
+, kaem
 , mes
 , mes-libc
 }:
@@ -24,7 +24,7 @@ let
     url = "https://gitlab.com/janneke/tinycc/-/archive/${rev}/tinycc-${rev}.tar.gz";
     sha256 = "1a0cw9a62qc76qqn5sjmp3xrbbvsz2dxrw21lrnx9q0s74mwaxbq";
   };
-  src = (runCommand "tinycc-bootstrappable-${version}-source" {} ''
+  src = (kaem.runCommand "tinycc-bootstrappable-${version}-source" {} ''
     ungz --file ${tarball} --output tinycc.tar
     mkdir -p ''${out}
     cd ''${out}
@@ -39,7 +39,7 @@ let
     platforms = [ "i686-linux" ];
   };
 
-  tinycc-boot-mes = runCommand "tinycc-boot-mes-${version}" {} ''
+  tinycc-boot-mes = kaem.runCommand "tinycc-boot-mes-${version}" {} ''
     catm config.h
     ${mes}/bin/mes --no-auto-compile -e main ${mes}/bin/mescc.scm -- \
       -S \

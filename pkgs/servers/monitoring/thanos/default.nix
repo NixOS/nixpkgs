@@ -12,7 +12,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-bNQwDttJ7YuQFrpp0alqe37/lue0CX5gB2UDRWWtTXQ=";
 
-  doCheck = false;
+  doCheck = true;
 
   subPackages = "cmd/thanos";
 

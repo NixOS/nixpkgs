@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "docker-slim";
-  version = "1.40.1";
+  version = "1.40.2";
 
   src = fetchFromGitHub {
     owner = "slimtoolkit";
     repo = "slim";
     rev = version;
-    hash = "sha256-ec5Qedt6NrcWZilcN9dhosAN59orgS2xxjXWO9XDxVE=";
+    hash = "sha256-pRIfIgEM0olUi0LL8maB7vczcq4p67eDuWssoeOT4Tk=";
   };
 
   vendorHash = null;
