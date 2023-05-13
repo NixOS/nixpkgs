@@ -24,12 +24,16 @@ stdenv.mkDerivation {
   # it's unclear which headers are intended to be part of the public interface
   # so we may find ourselves having to add more here over time
   installPhase = ''
+    runHook preInstall
+
     install -vD -t $out/bin bwa
     install -vD -t $out/lib libbwa.a
     install -vD -t $out/include bntseq.h
     install -vD -t $out/include bwa.h
     install -vD -t $out/include bwamem.h
     install -vD -t $out/include bwt.h
+
+    runHook postInstall
   '';
 
   meta = with lib; {
