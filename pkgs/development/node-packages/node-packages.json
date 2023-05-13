@@ -215,7 +215,6 @@
 , "lv_font_conv"
 , "madoko"
 , "markdownlint-cli"
-, "markdownlint-cli2"
 , "markdown-link-check"
 , {"markdown-preview-nvim": "../../applications/editors/vim/plugins/markdown-preview-nvim"}
 , "mastodon-bot"

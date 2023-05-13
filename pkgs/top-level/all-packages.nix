@@ -18622,6 +18622,8 @@ with pkgs;
 
   malt = callPackage ../development/tools/profiling/malt { };
 
+  markdownlint-cli2 = callPackage ../development/tools/analysis/markdownlint-cli2 { };
+
   marksman = callPackage ../development/tools/marksman { };
 
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
