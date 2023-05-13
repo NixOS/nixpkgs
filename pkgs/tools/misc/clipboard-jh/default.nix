@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clipboard-jh";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
     rev = version;
-    hash = "sha256-+1GgIa0kIOliI0ACiU9zQe24R6488xWEZ7n9nuxv3dY";
+    hash = "sha256-RLb7R4BXnP7J5gX8hsE9yi6N3kezsutP1HqkmjR3yRs=";
   };
 
   postPatch = ''
