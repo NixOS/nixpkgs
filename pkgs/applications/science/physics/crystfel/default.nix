@@ -109,10 +109,10 @@ let
 
   xgandalf = stdenv.mkDerivation rec {
     pname = "xgandalf";
-    version = "c15afa2381d5f87d4aefcc8181a15b4a6fd3a955";
+    version = "c6c5003ff1086e8c0fb5313660b4f02f3a3aab7b";
     src = fetchurl {
       url = "https://gitlab.desy.de/thomas.white/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
-      sha256 = "11i1w57a3rpnb4x5y4n8d3iffn5m9w1zydl69syzljdk3aqg2pv8";
+      hash = "sha256-/uZlBwAINSoYqgLQFTMz8rS1Rpadu79JkO6Bu/+Nx9E=";
     };
 
     nativeBuildInputs = [ meson pkg-config ninja ];
@@ -121,10 +121,10 @@ let
 
   pinkIndexer = stdenv.mkDerivation rec {
     pname = "pinkindexer";
-    version = "8a828788f8272a89d484b00afbd2500c2c1ff974";
+    version = "5d4e016941eb2a9e50a10df96ded7ff1e2464503";
     src = fetchurl {
       url = "https://gitlab.desy.de/thomas.white/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
-      sha256 = "1mkgf1xd91ay0z0632kzxm0z3wcxf0cayjvs6a3znds72dkhfsyh";
+      hash = "sha256-VnJOJJ247dNoBlos4Fu3GQBlAnTk9el+yZDRiicJtu0=";
     };
 
     nativeBuildInputs = [ meson pkg-config ninja ];
@@ -133,10 +133,10 @@ let
 
   fdip = stdenv.mkDerivation rec {
     pname = "fdip";
-    version = "29da626f17f66d5c0780fc59b1eafb7c85b81dd6";
+    version = "5628fedddd79323b4b26df9b85e9543d83286d4c";
     src = fetchurl {
-      url = "https://gitlab.desy.de/philipp.middendorf/fdip/-/archive/${version}/fdip-${version}.tar.gz";
-      sha256 = "184l76r4fgznq54rnhgjk7dg41kqdl0d1da02vr5y4cs2fyqppky";
+      url = "https://gitlab.desy.de/thomas.white/fdip/-/archive/${version}/fdip-${version}.tar.gz";
+      hash = "sha256-EaihnW7p//ecgMn+KKlfmBeXrnAqs+HdhN+ovuSrtiQ=";
     };
 
     nativeBuildInputs = [ meson ninja pkg-config ];
