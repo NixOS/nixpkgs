@@ -1,24 +1,25 @@
 { lib
 , buildPythonPackage
+, config
 , fetchFromGitHub
 , cmake
 , pkg-config
 , ninja
 , pybind11
 , torch
-, cudaSupport ? false
+, cudaSupport ? config.cudaSupport or false
 , cudaPackages
 }:
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     rev = "v${version}";
-    hash = "sha256-qrDWFY+6eVV9prUzUzb5yzyFYtEvaSyEW0zeKqAg2Vk=";
+    hash = "sha256-9lB4gLXq0nXHT1+DNOlbJQqNndt2I6kVoNwhMO/2qlE=";
   };
 
   postPatch = ''
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   buildInputs = [
     pybind11
   ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
     cudaPackages.cudnn
   ];
   propagatedBuildInputs = [
