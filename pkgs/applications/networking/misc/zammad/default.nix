@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, nixosTests
 , fetchFromGitHub
 , applyPatches
 , bundlerEnv
@@ -135,6 +136,7 @@ stdenv.mkDerivation {
   passthru = {
     inherit rubyEnv yarnEnv;
     updateScript = [ "${callPackage ./update.nix {}}/bin/update.sh" pname (toString ./.) ];
+    tests = { inherit (nixosTests) zammad; };
   };
 
   meta = with lib; {
