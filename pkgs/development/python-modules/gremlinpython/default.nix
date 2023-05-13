@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "gremlinpython";
-  version = "3.6.1";
+  version = "3.6.3";
 
   # pypi tarball doesn't include tests
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tinkerpop";
     rev = version;
-    hash = "sha256-FMA9hJdq7gYkDtQO04Bwpjq2Q7nXGuN9wrBD4b9GgwY=";
+    hash = "sha256-CmVWaRebJaZHJGzhaBdYXPF3BZ8+Cvc5P/KOpsG+dX4=";
   };
 
   sourceRoot = "source/gremlin-python/src/main/python";
