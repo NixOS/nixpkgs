@@ -42,6 +42,17 @@ rec {
     openSha256 = "sha256-etbtw6LMRUcFoZC9EDDRrTDekV8JFRYmkp3idLaMk5g=";
     settingsSha256 = "sha256-8KB6T9f+gWl8Ni+uOyrJKiiH5mNx9eyfCcW/RjPTQQA=";
     persistencedSha256 = "sha256-zrstlt/0YVGnsPGUuBbR9ULutywi2wNDVxh7OhJM7tM=";
+
+    prePatch = "pushd kernel";
+    postPatch = "popd";
+
+    patches = [
+      # source: https://gist.github.com/joanbm/77f0650d45747b9a4dc8e330ade2bf5c
+      (fetchpatch {
+        url = "https://gist.github.com/joanbm/77f0650d45747b9a4dc8e330ade2bf5c/raw/688b612624945926676de28059fe749203b4b549/nvidia-470xx-fix-linux-6.4.patch";
+        hash = "sha256-OyRmezyzqAi7mSJHDjsWQVocSsgJPTW5DvHDFVNX7Dk=";
+      })
+    ];
   });
 
   beta = selectHighestVersion latest (generic {
