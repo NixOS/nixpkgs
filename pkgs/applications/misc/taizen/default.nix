@@ -1,4 +1,12 @@
-{ rustPlatform, lib, fetchFromGitHub, ncurses, openssl, pkg-config, Security, stdenv }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, ncurses
+, openssl
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "taizen";
@@ -11,15 +19,28 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-cMykIh5EDGYZMJ5EPTU6G8YDXxfUzzfRfEICWmDUdrA=";
   };
 
-  buildInputs = [ ncurses openssl ] ++ lib.optional stdenv.isDarwin Security;
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
+
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "sha256-E2Wd8y47yd1thY/Bo1raP4tPd5YqdWWP4R/e0NWOc/A=";
+  buildInputs = [
+    ncurses
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  # update Cargo.lock to work with openssl 3
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   meta = with lib; {
+    description = "curses based mediawiki browser";
     homepage = "https://github.com/nerdypepper/taizen";
     license = licenses.mit;
-    description = "curses based mediawiki browser";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ figsoda ];
   };
 }
