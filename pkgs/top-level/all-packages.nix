@@ -33816,9 +33816,7 @@ with pkgs;
 
   spike = callPackage ../applications/virtualization/spike { };
 
-  tensorman = callPackage ../tools/misc/tensorman {
-    openssl = openssl_1_1;
-  };
+  tensorman = callPackage ../tools/misc/tensorman { };
 
   spideroak = callPackage ../applications/networking/spideroak { };
 
