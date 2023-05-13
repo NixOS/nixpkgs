@@ -17,7 +17,7 @@ buildPythonPackage rec {
   version = "3.31";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python CLI utility and library for manipulating SQLite databases";
     homepage = "https://github.com/simonw/sqlite-utils";
+    changelog = "https://github.com/simonw/sqlite-utils/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ meatcar techknowlogick ];
   };
