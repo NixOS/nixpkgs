@@ -643,6 +643,8 @@ with pkgs;
 
   riot-redis = callPackage ../development/tools/riot-redis { };
 
+  sea-orm-cli = callPackage ../development/tools/sea-orm-cli { };
+
   r3ctl = qt5.callPackage ../tools/misc/r3ctl { };
 
   ptouch-print = callPackage ../misc/ptouch-print { };
@@ -2209,6 +2211,8 @@ with pkgs;
   };
 
   collapseos-cvm = callPackage ../applications/emulators/collapseos-cvm { };
+
+  coltrane = callPackage ../applications/misc/coltrane { };
 
   craftos-pc = callPackage ../applications/emulators/craftos-pc { };
 
@@ -4145,9 +4149,7 @@ with pkgs;
                           { inherit (haskellPackages) alex happy Agda ghcWithPackages;
                           };
 
-  cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns {
-    openssl = openssl_1_1;
-  };
+  cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
   cf-terraforming = callPackage ../tools/misc/cf-terraforming { };
 
@@ -5639,7 +5641,7 @@ with pkgs;
 
   waitron = callPackage ../tools/networking/waitron { };
 
-  pyCA = python3Packages.callPackage ../applications/video/pyca { };
+  pyCA = callPackage ../applications/video/pyca { };
 
   pyznap = python3Packages.callPackage ../tools/backup/pyznap { };
 
@@ -6863,7 +6865,6 @@ with pkgs;
   dog = callPackage ../tools/system/dog { };
 
   dogdns = callPackage ../tools/networking/dogdns {
-    openssl = openssl_1_1;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -8333,9 +8334,7 @@ with pkgs;
 
   haveged = callPackage ../tools/security/haveged { };
 
-  habitat = callPackage ../applications/networking/cluster/habitat {
-    openssl = openssl_1_1;
-  };
+  habitat = callPackage ../applications/networking/cluster/habitat { };
 
   hashcash = callPackage ../tools/security/hashcash { };
 
@@ -10452,6 +10451,8 @@ with pkgs;
   phash = callPackage ../development/libraries/phash { };
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
+
+  present-cli = callPackage ../tools/misc/present-cli { };
 
   promexplorer = callPackage ../tools/misc/promexplorer { };
 
@@ -15372,7 +15373,7 @@ with pkgs;
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
-  hvm = callPackage ../development/compilers/hvm { };
+  hvm = darwin.apple_sdk_11_0.callPackage ../development/compilers/hvm { };
 
   iay = callPackage ../tools/misc/iay {
     inherit (darwin.apple_sdk.frameworks) AppKit Security Foundation Cocoa;
@@ -15515,12 +15516,13 @@ with pkgs;
 
   julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
   julia_18-bin = callPackage ../development/compilers/julia/1.8-bin.nix { };
+  julia_19-bin = callPackage ../development/compilers/julia/1.9-bin.nix { };
 
   julia_18 = callPackage ../development/compilers/julia/1.8.nix { };
   julia_19 = callPackage ../development/compilers/julia/1.9.nix { };
 
   julia-lts-bin = julia_16-bin;
-  julia-stable-bin = julia_18-bin;
+  julia-stable-bin = julia_19-bin;
   julia-bin = julia-stable-bin;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
@@ -16238,10 +16240,7 @@ with pkgs;
   cargo-cross = callPackage ../development/tools/rust/cargo-cross { };
   cargo-deny = callPackage ../development/tools/rust/cargo-deny { };
   cargo-depgraph = callPackage ../development/tools/rust/cargo-depgraph { };
-  cargo-dephell = callPackage ../development/tools/rust/cargo-dephell {
-    inherit (darwin.apple_sdk.frameworks) Security;
-    openssl = openssl_1_1;
-  };
+  cargo-dephell = callPackage ../development/tools/rust/cargo-dephell { };
   cargo-diet = callPackage ../development/tools/rust/cargo-diet { };
   cargo-dist = callPackage ../development/tools/rust/cargo-dist { };
   cargo-embed = callPackage ../development/tools/rust/cargo-embed {
@@ -17476,6 +17475,8 @@ with pkgs;
   millet = callPackage ../development/tools/language-servers/millet { };
 
   nil = callPackage ../development/tools/language-servers/nil { };
+
+  pylyzer = callPackage ../development/tools/language-servers/pylyzer { };
 
   rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
 
@@ -20925,9 +20926,7 @@ with pkgs;
 
   hydra_unstable = callPackage ../development/tools/misc/hydra/unstable.nix { nix = nixVersions.nix_2_13; };
 
-  hydra-cli = callPackage ../development/tools/misc/hydra-cli {
-    openssl = openssl_1_1;
-  };
+  hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
@@ -22176,9 +22175,7 @@ with pkgs;
 
   libow = callPackage ../development/libraries/libow { };
 
-  libp11 = callPackage ../development/libraries/libp11 {
-    openssl = openssl_1_1;
-  };
+  libp11 = callPackage ../development/libraries/libp11 { };
 
   libpam-wrapper = callPackage ../development/libraries/libpam-wrapper { };
 
@@ -23454,18 +23451,6 @@ with pkgs;
     inherit lib pkgs qt5;
   });
 
-  # TODO: remove once no package needs this anymore or together with OpenSSL 1.1
-  # Current users: mumble, murmur
-  qt5_openssl_1_1 = qt5.overrideScope (_: super: {
-    qtbase = super.qtbase.override {
-      openssl = openssl_1_1;
-      libmysqlclient = libmysqlclient.override {
-        openssl = openssl_1_1;
-        curl = curl.override { openssl = openssl_1_1; };
-      };
-    };
-  });
-
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt5;
 
@@ -24369,9 +24354,7 @@ with pkgs;
     wt3
     wt4;
 
-  wxformbuilder = callPackage ../development/tools/wxformbuilder {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
+  wxformbuilder = callPackage ../development/tools/wxformbuilder { };
 
   wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix {
     inherit (darwin.stubs) setfile;
@@ -25166,9 +25149,7 @@ with pkgs;
 
   inherit (callPackages ../servers/firebird { }) firebird_4 firebird_3 firebird_2_5 firebird;
 
-  freeradius = callPackage ../servers/freeradius {
-    openssl = openssl_1_1;
-  };
+  freeradius = callPackage ../servers/freeradius { };
 
   freshrss = callPackage ../servers/web-apps/freshrss { };
 
@@ -26147,6 +26128,8 @@ with pkgs;
   shaarli = callPackage ../servers/web-apps/shaarli { };
 
   shiori = callPackage ../servers/web-apps/shiori { };
+
+  slskd = callPackage ../servers/web-apps/slskd { };
 
   inherit (callPackages ../servers/web-apps/matomo {})
     matomo
@@ -27199,9 +27182,7 @@ with pkgs;
 
   odin = callPackage ../development/compilers/odin { };
 
-  odp-dpdk = callPackage ../os-specific/linux/odp-dpdk {
-    openssl = openssl_1_1;
-  };
+  odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
   odroid-xu3-bootloader = callPackage ../tools/misc/odroid-xu3-bootloader { };
 
@@ -32156,10 +32137,6 @@ with pkgs;
 
   meld = callPackage ../applications/version-management/meld { };
 
-  meli = callPackage ../applications/networking/mailreaders/meli {
-    openssl = openssl_1_1;
-  };
-
   melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
 
   melody = callPackage ../tools/misc/melody { };
@@ -32506,14 +32483,12 @@ with pkgs;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
       grpcSupport = config.murmur.grpcSupport or true;
-      qt5 = qt5_openssl_1_1;
     }).murmur;
 
   mumble = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
-      qt5 = qt5_openssl_1_1;
     }).mumble;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
@@ -32636,7 +32611,6 @@ with pkgs;
 
   p4 = callPackage ../applications/version-management/p4 {
     inherit (darwin.apple_sdk.frameworks) CoreServices Foundation Security;
-    openssl = openssl_1_1;
   };
   p4d = callPackage ../applications/version-management/p4d { };
   p4v = callPackage ../applications/version-management/p4v { };
@@ -32759,7 +32733,6 @@ with pkgs;
 
   synapse-bt = callPackage ../applications/networking/p2p/synapse-bt {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-    openssl = openssl_1_1;
   };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio { };
@@ -33858,7 +33831,6 @@ with pkgs;
 
   spotify-tui = callPackage ../applications/audio/spotify-tui {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
-    openssl = openssl_1_1;
   };
 
   sptlrx = callPackage ../applications/audio/sptlrx { };

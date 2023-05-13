@@ -2,9 +2,11 @@
 , lib
 , fetchFromGitHub
 , nix-update-script
+, cargo
 , meson
 , ninja
 , rustPlatform
+, rustc
 , pkg-config
 , glib
 , libshumate
@@ -44,9 +46,9 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook4
     rustPlatform.bindgenHook
     desktop-file-utils

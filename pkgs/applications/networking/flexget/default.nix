@@ -7,11 +7,11 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
-        version = "1.4.47";
+        version = "1.4.48";
         src = self.fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
-          hash = "sha256-lfwC9/wfMZmqpHqKdXQ3E0z2GOnZlMhO/9U/Uww4WG8=";
+          hash = "sha256-tHvChwltmJoIOM6W99jpZpFKJNqHftQadTHUS1XNuN8=";
         };
       });
     };
@@ -19,7 +19,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.6.3";
+  version = "3.7.0";
   format = "pyproject";
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -27,7 +27,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Z1tiIs4NHHsWa7agAl1dnwliQbgFEl/SPT6QLQkqTVA=";
+    hash = "sha256-H+R2NPHJbpQToKI1Op+DqPt82+w2xHxHC9NPpiF3aF0=";
   };
 
   postPatch = ''

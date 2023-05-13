@@ -2,6 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
+, cargo
+, rustc
 , pkg-config
 , asciidoc
 , ncurses
@@ -52,11 +54,11 @@ stdenv.mkDerivation rec {
       --replace udevadm               "${udev}/bin/udevadm"
   '';
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    bindgenHook
-    rust.cargo
-    rust.rustc
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.bindgenHook
+    cargo
+    rustc
     pkg-config
     asciidoc
     ncurses # tput

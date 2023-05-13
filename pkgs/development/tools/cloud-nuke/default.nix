@@ -1,20 +1,25 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, makeBinaryWrapper
 }:
 
 buildGoModule rec {
   pname = "cloud-nuke";
-  version = "0.30.0";
+  version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-H6W30OrkeMJGEIcNLAcdxWOz4bUXlklMCAgW4WkOAZ8=";
+    hash = "sha256-TTGC2lvqG+RYsruNzo7GApT5HMJyG4aoT12Rju9hTmY=";
   };
 
-  vendorHash = "sha256-4RVblG4Y+KLRYJ7iPbrcbwKQ3tz2WSZQyUrqCLeamgo=";
+  vendorHash = "sha256-DPJ6+akisNtMsbDdHWEWavZ2GJfeWjFIV6K+bV91FEY=";
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
 
   ldflags = [
     "-s"
@@ -23,6 +28,10 @@ buildGoModule rec {
   ];
 
   doCheck = false;
+
+  postInstall = ''
+    wrapProgram $out/bin/cloud-nuke --set-default DISABLE_TELEMETRY true
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/gruntwork-io/cloud-nuke";

@@ -6,6 +6,7 @@
 , lldap
 , nixosTests
 , rustPlatform
+, rustc
 , stdenv
 , wasm-bindgen-cli
 , wasm-pack
@@ -25,7 +26,7 @@ let
 
   # replace with upstream wasm rustc, after resolution of
   # https://github.com/NixOS/nixpkgs/issues/89426
-  rustc-wasm = (rustPlatform.rust.rustc.override {
+  rustc-wasm = (rustc.override {
     stdenv = stdenv.override {
       targetPlatform = stdenv.targetPlatform // {
         parsed = {

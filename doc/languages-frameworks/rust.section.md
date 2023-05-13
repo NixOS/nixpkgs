@@ -535,7 +535,9 @@ directory of the `tokenizers` project's source archive, we use
 ```nix
 { fetchFromGitHub
 , buildPythonPackage
+, cargo
 , rustPlatform
+, rustc
 , setuptools-rust
 }:
 
@@ -558,11 +560,12 @@ buildPythonPackage rec {
 
   sourceRoot = "source/bindings/python";
 
-  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs = [
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
+    setuptools-rust
+  ];
 
   # ...
 }

@@ -3529,6 +3529,8 @@ self: super: with self; {
 
   fints = callPackage ../development/python-modules/fints { };
 
+  finvizfinance = callPackage ../development/python-modules/finvizfinance { };
+
   fiona = callPackage ../development/python-modules/fiona { };
 
   fipy = callPackage ../development/python-modules/fipy { };
@@ -4858,6 +4860,8 @@ self: super: with self; {
   inkbird-ble = callPackage ../development/python-modules/inkbird-ble { };
 
   inkex = callPackage ../development/python-modules/inkex { };
+
+  inlinestyler = callPackage ../development/python-modules/inlinestyler { };
 
   inotify = callPackage ../development/python-modules/inotify { };
 

@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitLab
 , cairo
+, cargo
 , desktop-file-utils
 , gettext
 , glib
@@ -12,6 +13,7 @@
 , pango
 , pkg-config
 , rustPlatform
+, rustc
 , wrapGAppsHook4
 }:
 
@@ -40,9 +42,9 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook4
   ];
 
