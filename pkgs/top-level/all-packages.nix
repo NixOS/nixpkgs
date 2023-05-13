@@ -3569,6 +3569,8 @@ with pkgs;
 
   platformsh = callPackage ../misc/platformsh { };
 
+  prettierd = callPackage ../development/tools/prettierd { };
+
   inherd-quake = callPackage ../applications/misc/inherd-quake {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
