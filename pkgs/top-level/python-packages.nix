@@ -12770,6 +12770,8 @@ self: super: with self; {
 
   wheel-inspect = callPackage ../development/python-modules/wheel-inspect { };
 
+  wheezy-captcha = callPackage ../development/python-modules/wheezy-captcha { };
+
   wheezy-template = callPackage ../development/python-modules/wheezy-template { };
 
   whichcraft = callPackage ../development/python-modules/whichcraft { };
