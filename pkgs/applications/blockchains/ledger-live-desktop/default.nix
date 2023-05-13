@@ -6,7 +6,7 @@ let
 
   src = fetchurl {
     url = "https://download.live.ledger.com/${pname}-${version}-linux-x86_64.AppImage";
-    hash = "ssha256-y9D+RKAB/woYmnu8X0armsVaxu0CWbqZpRiEFcN7rYM=";
+    hash = "sha256-y9D+RKAB/woYmnu8X0armsVaxu0CWbqZpRiEFcN7rYM=";
   };
 
   appimageContents = appimageTools.extractType2 {
