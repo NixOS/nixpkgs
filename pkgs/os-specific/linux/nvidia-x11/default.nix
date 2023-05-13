@@ -43,9 +43,7 @@ rec {
     settingsSha256 = "sha256-8KB6T9f+gWl8Ni+uOyrJKiiH5mNx9eyfCcW/RjPTQQA=";
     persistencedSha256 = "sha256-zrstlt/0YVGnsPGUuBbR9ULutywi2wNDVxh7OhJM7tM=";
 
-    prePatch = "pushd kernel";
-    postPatch = "popd";
-
+    patchFlags = [ "-p1" "-d" "kernel" ];
     patches = [
       # source: https://gist.github.com/joanbm/77f0650d45747b9a4dc8e330ade2bf5c
       (fetchpatch {
@@ -89,9 +87,7 @@ rec {
     settingsSha256 = "sha256-TRKQ4brLnCbBZt1smGSIHTfwW+wEFPWWPEwDxjVXN7s=";
     persistencedSha256 = "sha256-fSJMx49z9trdNxx0iPI45oG57smvvhaqVNxsRnfXKCI=";
 
-    prePatch = "pushd kernel";
-    postPatch = "popd";
-
+    patchFlags = [ "-p1" "-d" "kernel" ];
     patches = [
       # source: https://gist.github.com/joanbm/d10e9cbbbb8e245b6e7e27b2db338faf
       (fetchpatch {
