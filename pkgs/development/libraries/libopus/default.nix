@@ -1,26 +1,45 @@
-{ lib, stdenv, fetchurl
-, fixedPoint ? false, withCustomModes ? true }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, python3
+, ninja
+, fixedPoint ? false
+, withCustomModes ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "libopus";
-  version = "1.3.1";
+  version = "1.4";
 
   src = fetchurl {
-    url = "mirror://mozilla/opus/opus-${version}.tar.gz";
-    sha256 = "17gz8kxs4i7icsc1gj713gadiapyklynlwqlf0ai98dj4lg8xdb5";
+    url = "https://downloads.xiph.org/releases/opus/opus-${version}.tar.gz";
+    sha256 = "sha256-ybMrQlO+WuY9H/Fu6ga5S18PKVG3oCrO71jjo85JxR8=";
   };
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = lib.optional fixedPoint "--enable-fixed-point"
-                ++ lib.optional withCustomModes "--enable-custom-modes";
+  nativeBuildInputs = [
+    meson
+    python3
+    ninja
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "fixed-point" fixedPoint)
+    (lib.mesonBool "custom-modes" withCustomModes)
+    (lib.mesonEnable "asm" stdenv.hostPlatform.isAarch)
+    (lib.mesonEnable "docs" false)
+  ];
 
   doCheck = !stdenv.isi686 && !stdenv.isAarch32; # test_unit_LPC_inv_pred_gain fails
 
   meta = with lib; {
     description = "Open, royalty-free, highly versatile audio codec";
-    license = lib.licenses.bsd3;
-    homepage = "https://www.opus-codec.org/";
+    homepage = "https://opus-codec.org/";
+    changelog = "https://gitlab.xiph.org/xiph/opus/-/releases/v${version}";
+    license = licenses.bsd3;
     platforms = platforms.all;
+    maintainers = [ ];
   };
 }
