@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dbus, glib, pkg-config, expat }:
+{ lib, stdenv, fetchurl, fetchpatch, dbus, glib, pkg-config, expat }:
 
 stdenv.mkDerivation rec {
   pname = "dbus-cplusplus";
@@ -17,23 +17,20 @@ stdenv.mkDerivation rec {
           + "dbus-c++/files/dbus-c++-0.9.0-gcc-4.7.patch";
       sha256 = "0rwcz9pvc13b3yfr0lkifnfz0vb5q6dg240bzgf37ni4s8rpc72g";
     })
-    (fetchurl {
+    (fetchpatch {
       name = "writechar.patch"; # since gcc7
-      url = "https://src.fedoraproject.org/cgit/rpms/dbus-c++.git/plain/"
-          + "dbus-c++-writechar.patch?id=7f371172f5c";
+      url = "https://src.fedoraproject.org/rpms/dbus-c++/raw/9f515ace0594c8b2b9f0d41ffe71bc5b78d30eee/f/dbus-c++-writechar.patch";
       sha256 = "1kkg4gbpm4hp87l25zw2a3r9c58g7vvgzcqgiman734i66zsbb9l";
     })
-    (fetchurl {
+    (fetchpatch {
       name = "threading.patch"; # since gcc7
-      url = "https://src.fedoraproject.org/cgit/rpms/dbus-c++.git/plain/"
-          + "dbus-c++-threading.patch?id=7f371172f5c";
+      url = "https://src.fedoraproject.org/rpms/dbus-c++/raw/9f515ace0594c8b2b9f0d41ffe71bc5b78d30eee/f/dbus-c++-threading.patch";
       sha256 = "1h362anx3wyxm5lq0v8girmip1jmkdbijrmbrq7k5pp47zkhwwrq";
     })
-    (fetchurl {
+    (fetchpatch {
       name = "template-operators.patch"; # since gcc12
-      url = "https://src.fedoraproject.org/cgit/rpms/dbus-c++.git/plain/"
-          + "dbus-c++-template-operators.patch?id=d3f0d8bb519c0af";
-      sha256 = "N25Y7jXDbr0qb7MfRr2yz3zRySppgGOe+oCfNQhRvVc=";
+      url = "https://src.fedoraproject.org/rpms/dbus-c++/raw/9f515ace0594c8b2b9f0d41ffe71bc5b78d30eee/f/dbus-c++-template-operators.patch";
+      hash = "sha256-B8S7z/YH2YEQgaRsBJBBVTx8vHQhHW7z171TZmogpL8=";
     })
   ];
 
