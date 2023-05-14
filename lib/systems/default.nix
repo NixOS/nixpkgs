@@ -9,6 +9,39 @@ rec {
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
 
+  /*
+    Elaborated systems contain functions, which means that they don't satisfy
+    `==` for a lack of reflexivity.
+
+    They might *appear* to satisfy `==` reflexivity when the same exact value is
+    compared to itself, because object identity is used as an "optimization";
+    compare the value with a reconstruction of itself, e.g. with `f == a: f a`,
+    or perhaps calling `elaborate` twice, and one will see reflexivity fail as described.
+
+    Hence a custom equality test.
+
+    Note that this does not canonicalize the systems, so you'll want to make sure
+    both arguments have been `elaborate`-d.
+  */
+  equals =
+    let uncomparable = { canExecute = null; emulator = null; emulatorAvailable = null; isCompatible = null; };
+    in a: b: a // uncomparable == b // uncomparable;
+
+  /*
+    Try to convert an elaborated system back to a simple string. If not possible,
+    return null. So we have the property:
+
+        sys: _valid_ sys ->
+          sys == elaborate (toLosslessStringMaybe sys)
+
+    NOTE: This property is not guaranteed when `sys` was elaborated by a different
+          version of Nixpkgs.
+  */
+  toLosslessStringMaybe = sys:
+    if lib.isString sys then sys
+    else if equals sys (elaborate sys.system) then sys.system
+    else null;
+
   /* List of all Nix system doubles the nixpkgs flake will expose the package set
      for. All systems listed here must be supported by nixpkgs as `localSystem`.
 
