@@ -177,7 +177,7 @@ in
         '';
 
         serviceConfig = {
-          ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} ${printerConfigPath}";
+          ExecStart = "${cfg.package}/bin/klippy ${klippyArgs} ${printerConfigPath}";
           RuntimeDirectory = "klipper";
           StateDirectory = "klipper";
           SupplementaryGroups = [ "dialout" ];
