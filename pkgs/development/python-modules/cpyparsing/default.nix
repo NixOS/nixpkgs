@@ -21,9 +21,13 @@ buildPythonPackage rec {
     hash = "sha256-HJ0I5DKZ2WV+1pXZCvJHA7Wih3Gkn7vL/ojXnTssKxw=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  nativeCheckInputs = [ pexpect ];
+  nativeCheckInputs = [
+    pexpect
+  ];
 
   checkPhase = ''
     ${python.interpreter} tests/cPyparsing_test.py
@@ -36,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cython PyParsing implementation";
     homepage = "https://github.com/evhub/cpyparsing";
+    changelog = "https://github.com/evhub/cpyparsing/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fabianhjr ];
   };
