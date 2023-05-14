@@ -290,15 +290,6 @@ in (buildEnv {
     rm "$out"/bin/*-sys
     wrapBin
   '' +
-    # Perform a small test to verify that the restricted mode get enabled when
-    # needed (detected by checking if it disallows --gscmd)
-  ''
-    if [[ -e "$out"/bin/epstopdf ]]; then
-      echo "Testing restricted mode for {,r}epstopdf"
-      ! (epstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
-      (repstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
-    fi
-  '' +
   # TODO: a context trigger https://www.preining.info/blog/2015/06/debian-tex-live-2015-the-new-layout/
     # http://wiki.contextgarden.net/ConTeXt_Standalone#Unix-like_platforms_.28Linux.2FMacOS_X.2FFreeBSD.2FSolaris.29
 

@@ -1,7 +1,7 @@
 [
   {
     "name": "fluffychat",
-    "version": "1.11.0+3254",
+    "version": "1.11.2+3360",
     "kind": "root",
     "source": "root",
     "dependencies": [

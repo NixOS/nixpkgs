@@ -6,9 +6,10 @@
 , DiskArbitration
 , Foundation
 , nixosTests
+, nix-update-script
 }:
 
-let version = "1.1.0";
+let version = "1.1.1";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -18,7 +19,7 @@ rustPlatform.buildRustPackage {
     owner = "meilisearch";
     repo = "MeiliSearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mwrWHrndcLwdXJo+UISJdPxZFDgtZh9jEquz7jIHGP0=";
+    hash = "sha256-catbSe4KT52vNaMD/rq4B7myw76Ki4NSBPX8nTgxT18=";
   };
 
   cargoBuildFlags = [
@@ -44,8 +45,11 @@ rustPlatform.buildRustPackage {
     Foundation
   ];
 
-  passthru.tests = {
-    meilisearch = nixosTests.meilisearch;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      meilisearch = nixosTests.meilisearch;
+    };
   };
 
   # Tests will try to compile with mini-dashboard features which downloads something from the internet.

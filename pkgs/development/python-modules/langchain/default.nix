@@ -53,6 +53,8 @@
 , lark
 , jq
 , protobuf
+, steamship
+, pdfminer-six
   # test dependencies
 , pytest-vcr
 , pytest-asyncio
@@ -67,7 +69,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.166";
+  version = "0.0.168";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -76,7 +78,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-i6CvboYZigky49a7X8RuQH2EfcucJPtEtFEzZxaNJG8=";
+    hash = "sha256-2L5yFkXr6dioEP1QAMXWX6x+IRbGUIW3cxLLxJJjkMI=";
   };
 
   postPatch = ''
@@ -194,6 +196,8 @@ buildPythonPackage rec {
       # docarray
       protobuf
       # hnswlib
+      steamship
+      pdfminer-six
     ];
   };
 
@@ -210,7 +214,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # integration_tests have many network, db access and require `OPENAI_API_KEY`, etc.
-    "--ignore=tests/integration_tests"
+    "tests/unit_tests"
   ];
 
   disabledTests = [
