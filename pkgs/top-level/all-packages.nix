@@ -31909,7 +31909,9 @@ with pkgs;
 
   feishu = callPackage ../applications/networking/instant-messengers/feishu { };
 
-  filezilla = callPackage ../applications/networking/ftp/filezilla { };
+  filezilla = darwin.apple_sdk_11_0.callPackage ../applications/networking/ftp/filezilla {
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreServices Security;
+  };
 
   fire = darwin.apple_sdk_11_0.callPackage ../applications/audio/fire {
     inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit CoreServices DiscRecording CoreAudioKit MetalKit;
