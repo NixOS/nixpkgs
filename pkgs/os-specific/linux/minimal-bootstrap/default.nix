@@ -29,4 +29,8 @@ lib.makeScope
 
     inherit (callPackage ./utils.nix { }) fetchurl derivationWithMeta writeTextFile writeText;
 
+    test = kaem.runCommand "minimal-bootstrap-test" {} ''
+      echo ${tinycc-mes.compiler.tests.chain}
+      mkdir ''${out}
+    '';
   })

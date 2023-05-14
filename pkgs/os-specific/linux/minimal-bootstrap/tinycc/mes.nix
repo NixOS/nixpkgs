@@ -37,7 +37,12 @@ let
 
   tccdefs = kaem.runCommand "tccdefs-${version}" {} ''
     mkdir ''${out}
-    ${tinycc-bootstrappable}/bin/tcc -static -DC2STR -o c2str ${src}/conftest.c
+    ${tinycc-bootstrappable.compiler}/bin/tcc \
+      -B ${tinycc-bootstrappable.libs}/lib \
+      -static \
+      -DC2STR \
+      -o c2str \
+      ${src}/conftest.c
     ./c2str ${src}/include/tccdefs.h ''${out}/tccdefs_.h
   '';
 
