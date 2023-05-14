@@ -12996,6 +12996,8 @@ self: super: with self; {
 
   xdg = callPackage ../development/python-modules/xdg { };
 
+  xdg-base-dirs = callPackage ../development/python-modules/xdg-base-dirs { };
+
   xdis = callPackage ../development/python-modules/xdis { };
 
   xdot = callPackage ../development/python-modules/xdot {
