@@ -24,20 +24,20 @@ let fetchurl = args@{url, hash, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "8.0";
+    version = "8.0.1";
     url = "https://dl.winehq.org/wine/source/8.0/wine-${version}.tar.xz";
-    hash = "sha256-AnLCCTj4chrkUQr6qLNgN0V91XZh5NZkIxB5uekceS4=";
+    hash = "sha256-IgNfODa0+cOxlArZD5uePBvgkjQjbSqA2JMYBTXHW30=";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
-      version = "2.47.3";
+      version = "2.47.4";
       url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86.msi";
-      hash = "sha256-5bmwbTzjVWRqjS5y4ETjfh4MjRhGTrGYWtzRh6f0jgE=";
+      hash = "sha256-Js7MR3BrCRkI9/gUvdsHTGG+uAYzGOnvxaf3iYV3k9Y=";
     };
     gecko64 = fetchurl rec {
-      version = "2.47.3";
+      version = "2.47.4";
       url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86_64.msi";
-      hash = "sha256-pT7pVDkrbR/j1oVF9uTiqXr7yNyLA6i0QzSVRc4TlnU=";
+      hash = "sha256-5ZC32YijLWqkzx2Ko6o9M3Zv3Uz0yJwtzCCV7LKNBm8=";
     };
 
     ## see http://wiki.winehq.org/Mono
