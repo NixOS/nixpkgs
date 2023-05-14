@@ -5,7 +5,7 @@
 , vulkan-loader
 , wayland
 , wrapQtAppsHook
-, withX11 ? true
+, x11Support ? true
 , qtx11extras
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     vulkan-loader
     wayland
-  ] ++ lib.lists.optionals withX11 [ qtx11extras ];
+  ] ++ lib.lists.optionals x11Support [ qtx11extras ];
 
   patchPhase = ''
     substituteInPlace vulkanCapsViewer.pro \
