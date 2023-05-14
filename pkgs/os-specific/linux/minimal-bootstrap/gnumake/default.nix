@@ -1,6 +1,6 @@
 { lib
-, runCommand
 , fetchurl
+, kaem
 , tinycc
 , gnupatch
 }:
@@ -145,7 +145,7 @@ let
 
   objects = map (x: lib.replaceStrings [".c"] [".o"] (builtins.baseNameOf x)) sources;
 in
-runCommand "${pname}-${version}" {
+kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [ tinycc gnupatch ];
