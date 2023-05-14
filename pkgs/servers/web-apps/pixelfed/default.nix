@@ -28,17 +28,20 @@ let
   });
 in package.override rec {
   pname = "pixelfed";
-  version = "0.11.5";
+  version = "0.11.6";
 
   # GitHub distribution does not include vendored files
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZrvYKMSx5WymWR46/UKr5jCsclXXzBeY21ju22zeqN0=";
+    hash = "sha256-gWsvPBqMeKnks3U1839NF3HOovSmhczMc4Vtuf4dxdY=";
   };
 
-  passthru.tests = { inherit (nixosTests) pixelfed; };
+  passthru = {
+    tests = { inherit (nixosTests) pixelfed; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "A federated image sharing platform";
