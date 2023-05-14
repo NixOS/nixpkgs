@@ -2,6 +2,7 @@
 , authlib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , tqdm
 , validators
 }:
@@ -9,6 +10,9 @@
 buildPythonPackage rec {
   pname = "weaviate-client";
   version = "3.18.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
