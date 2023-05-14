@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.4.2";
+  version = "1.4.3";
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "python-llfuse";
     repo = "python-llfuse";
-    rev = "release-${version}";
-    hash = "sha256-TnZnv439fLvg0WM96yx0dPSSz8Mrae6GDC9LiLFrgQ8=";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-37l6HrAKrXtEhlWTIdlw3L6wCGeOA7IW/aaJn3wf4QY=";
   };
 
   nativeBuildInputs = [ cython pkg-config ];
