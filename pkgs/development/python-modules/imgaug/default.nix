@@ -5,7 +5,7 @@
 , numpy
 , opencv3
 , pytestCheckHook
-, scikitimage
+, scikit-image
 , scipy
 , shapely
 , six
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     imagecorruptions
     numpy
     opencv3
-    scikitimage
+    scikit-image
     scipy
     shapely
     six
@@ -79,6 +79,6 @@ buildPythonPackage rec {
     platforms = platforms.linux;
     # Scikit-image 0.19 update broke API, see https://github.com/scikit-image/scikit-image/releases/tag/v0.19.0
     # and https://github.com/scikit-image/scikit-image/issues/6093
-    broken = lib.versionAtLeast scikitimage.version "0.19";
+    broken = lib.versionAtLeast scikit-image.version "0.19";
   };
 }

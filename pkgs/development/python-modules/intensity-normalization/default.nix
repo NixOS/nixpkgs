@@ -7,7 +7,7 @@
 , nibabel
 , numpy
 , scikit-fuzzy
-, scikitimage
+, scikit-image
 , scikit-learn
 , scipy
 , statsmodels
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     nibabel
     numpy
     scikit-fuzzy
-    scikitimage
+    scikit-image
     scikit-learn
     scipy
     statsmodels
