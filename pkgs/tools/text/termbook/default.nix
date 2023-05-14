@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , pkg-config
 , oniguruma
 , stdenv
@@ -23,6 +24,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
   ];
 
@@ -39,6 +41,13 @@ rustPlatform.buildRustPackage rec {
   # update dependencies to fix build failure caused by unaligned packed structs
   postPatch = ''
     ln -sf ${./Cargo.lock} Cargo.lock
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd termbook \
+      --bash <($out/bin/termbook completions bash) \
+      --fish <($out/bin/termbook completions fish) \
+      --zsh <($out/bin/termbook completions zsh)
   '';
 
   meta = with lib; {
