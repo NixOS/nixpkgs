@@ -20,15 +20,11 @@
       chmod a+x $out/bin/nom-build
       installShellCompletion --zsh --name _nom-build completions/completion.zsh
     '';
-    mainProgram = "nom";
   };
-  nom-pkg = haskellPackages.callPackage ./generated-package.nix { };
-  nom-pkg-with-scope = nom-pkg.overrideScope (hfinal: hprev: {
-    hermes-json = hfinal.hermes-json_0_2_0_1;
-  });
+  raw-pkg = haskellPackages.callPackage ./generated-package.nix {};
 in
-lib.pipe
-  nom-pkg-with-scope
+  lib.pipe
+  raw-pkg
   [
     (overrideCabal overrides)
     justStaticExecutables
