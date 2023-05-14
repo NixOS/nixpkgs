@@ -39,7 +39,6 @@ kaem.runCommand "${pname}-${version}" {
 
   # mescc compiled libc.a
   mkdir -p ''${out}/lib/x86-mes
-  cp ${mes}/lib/x86-mes/libc.a ''${out}/lib/x86-mes
 
   # libc.c
   catm ''${TMPDIR}/first.c ${lib.concatStringsSep " " firstLibc}
