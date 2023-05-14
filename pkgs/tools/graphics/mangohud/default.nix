@@ -30,6 +30,7 @@
 , glfw
 , xorg
 , gamescopeSupport ? true # build mangoapp and mangohudctl
+, lowerBitnessSupport ? stdenv.hostPlatform.is64bit # Support 32 bit on 64bit
 , nix-update-script
 }:
 
@@ -128,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace bin/mangohud.in \
       --subst-var-by libraryPath ${lib.makeSearchPath "lib/mangohud" ([
         (placeholder "out")
-      ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+      ] ++ lib.optionals lowerBitnessSupport [
         mangohud32
       ])} \
       --subst-var-by dataDir ${placeholder "out"}/share
@@ -184,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Support 32bit Vulkan applications by linking in 32bit Vulkan layers
   # This is needed for the same reason the 32bit preload workaround is needed.
-  postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
+  postInstall = lib.optionalString lowerBitnessSupport ''
     ln -s ${mangohud32}/share/vulkan/implicit_layer.d/MangoHud.x86.json \
       "$out/share/vulkan/implicit_layer.d"
 
