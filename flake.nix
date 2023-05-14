@@ -75,7 +75,25 @@
       modules = {
         /* Modules that are not specific to any application of the module system. */
         generic = {
-          nixpkgs = ./pkgs/top-level/module/module.nix;
+          nixpkgs = {
+            imports = [
+              ./pkgs/top-level/module/module.nix
+            ];
+            config = {
+              _memoize = { pkgs, inputsSet, ... }:
+                let system = lib.systems.toLosslessStringMaybe inputsSet.hostPlatform.value.system;
+                in
+                if lib.attrNames inputsSet == [ "hostPlatform" ] && system != null
+                then
+                  # As only hostPlatform matters in this invocation, we can save
+                  # memory by sharing the Nixpkgs invocation.
+                  # `pkgs` is never evaluated.
+                  self.legacyPackages.${system}
+                else
+                  # We let the module invoke Nixpkgs as usual.
+                  pkgs;
+            };
+          };
         };
       };
     };
