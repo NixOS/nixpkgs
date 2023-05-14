@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , testers
 , pokete
+, faketty
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -41,7 +42,8 @@ python3.pkgs.buildPythonApplication rec {
   passthru.tests = {
     pokete-version = testers.testVersion {
       package = pokete;
-      command = "pokete --help";
+      command = "${faketty}/bin/faketty pokete --help";
+      version = "v${version}";
     };
   };
 
