@@ -40,7 +40,7 @@ rec {
     , preferLocalBuild ? true
     }:
     derivationWithMeta {
-      inherit name text executable allowSubstitutes preferLocalBuild;
+      inherit name text allowSubstitutes preferLocalBuild;
       passAsFile = [ "text" ];
 
       builder = "${kaem}/bin/kaem";
@@ -48,20 +48,18 @@ rec {
         "--verbose"
         "--strict"
         "--file"
-        (builtins.toFile "write-text-file.kaem" ''
+        (builtins.toFile "write-text-file.kaem" (''
           target=''${out}''${destination}
-          if match x''${mkdirDestination} x1; then
-            mkdir -p ''${out}''${destinationDir}
-          fi
+        '' + lib.optionalString (builtins.dirOf destination == ".") ''
+          mkdir -p ''${out}''${destinationDir}
+        '' + ''
           cp ''${textPath} ''${target}
-          if match x''${executable} x1; then
-            chmod 555 ''${target}
-          fi
-        '')
+        '' + lib.optionalString executable ''
+          chmod 555 ''${target}
+        ''))
       ];
 
       PATH = lib.makeBinPath [ mescc-tools-extra ];
-      mkdirDestination = if builtins.dirOf destination == "." then "0" else "1";
       destinationDir = builtins.dirOf destination;
       inherit destination;
     };
