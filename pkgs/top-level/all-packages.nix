@@ -19212,6 +19212,10 @@ with pkgs;
 
   c2ffi = callPackage ../development/tools/misc/c2ffi { };
 
+  c0 = callPackage ../development/compilers/c0 {
+    stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
+  };
+
   c3c = callPackage ../development/compilers/c3c { };
 
   swfmill = callPackage ../tools/video/swfmill { stdenv = gcc10StdenvCompat; };
