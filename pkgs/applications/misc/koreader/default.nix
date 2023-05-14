@@ -16,9 +16,12 @@ stdenv.mkDerivation rec {
   pname = "koreader";
   version = "2023.04";
 
-  src = fetchurl {
-    url =
-      "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
+
+  src = if stdenv.isAarch64 then fetchurl {
+    url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-arm64.deb";
+    sha256 = "sha256-uuspjno0750hQMIB5HEhbV63wCna2izKOHEGIg/X0bU=";
+  } else fetchurl {
+    url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
     sha256 = "sha256-tRUeRB1+UcWT49dchN0YDvd0L5n1YRdtMSFc8yy6m5o=";
   };
 
@@ -63,7 +66,7 @@ stdenv.mkDerivation rec {
     description =
       "An ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = intersectLists platforms.x86_64 platforms.linux;
+    platforms = with platforms; intersectLists linux (x86_64 ++ aarch64);
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ contrun neonfuz];
   };
