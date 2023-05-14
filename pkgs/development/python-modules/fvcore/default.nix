@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "fvcore";
-  version = "0.1.5.post20210402";
+  version = "0.1.5.post20221221";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zrb1dhiqdmjs6s36a2wrk4m4hry34zdy27l7rflwzc2q093rmji";
+    hash = "sha256-8vsLuQVyrmUcEceOIEk+0ZsiQFUKfku7LW3oe90DeGA=";
   };
 
   # There's an actual, proper test failure in here. Might blow up later
