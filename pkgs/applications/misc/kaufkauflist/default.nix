@@ -3,40 +3,36 @@
 let
   esbuild' = buildPackages.esbuild.override {
     buildGoModule = args: buildPackages.buildGoModule (args // rec {
-      version = "0.16.15";
+      version = "0.17.19";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-iTAtPHjrBvHweSIiAbkkbBLgjF3v68jipJEzc0I4G04=";
+        hash = "sha256-PLC7OJLSOiDq4OjvrdfCawZPfbfuZix4Waopzrj8qsU=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
   };
 in buildNpmPackage rec {
   pname = "kaufkauflist";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "kaufkauflist";
     rev = "v${version}";
-    hash = "sha256-oXrb6n1oD27bHt/zPWP0REQyCyZXI8BB57pdR/q42gY=";
+    hash = "sha256-a7C4yHTHPhL5/p1/XsrMA0PnbIzer6FShDiwUMOg69Y=";
   };
 
-  npmDepsHash = "sha256-lSnGLK7+ac/wEpAxlpkZS/kgr9F+8WK+nRjCzkrPJt0=";
+  npmDepsHash = "sha256-uQ4XoaR3JjvPm8EQ2pnDM+x4zjVn4PEHq7BRqVbvFyw=";
 
   ESBUILD_BINARY_PATH = "${lib.getExe esbuild'}";
 
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
     mkdir -p $out/share/kaufkauflist $out/share/pocketbase
     cp -vr build/* $out/share/kaufkauflist/
     cp -v pb_schema.json $out/share/pocketbase/
-
-    runHook postInstall
   '';
 
   # Uncomment this when nix-update-script supports Gitea.
