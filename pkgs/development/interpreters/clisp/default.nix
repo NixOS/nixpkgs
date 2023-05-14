@@ -101,8 +101,7 @@ stdenv.mkDerivation rec {
     homepage = "http://clisp.cons.org";
     maintainers = lib.teams.lisp.members;
     platforms = lib.platforms.unix;
-    # problems on Darwin: https://github.com/NixOS/nixpkgs/issues/20062
-    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     license = lib.licenses.gpl2;
   };
 }
