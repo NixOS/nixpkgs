@@ -4,11 +4,11 @@
 # the ngspice derivation.
 stdenv.mkDerivation rec {
   pname = "libngspice";
-  version = "37";
+  version = "40";
 
   src = fetchurl {
     url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
-    sha256 = "1gpcic6b6xk3g4956jcsqljf33kj5g43cahmydq6m8rn39sadvlv";
+    sha256 = "sha256-4wPKe8D1lOLWqoT2h4VCPmvwyNrQCbsgvk1XQliOiQ0=";
   };
 
   nativeBuildInputs = [ flex bison ];
