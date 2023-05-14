@@ -2005,6 +2005,8 @@ self: super: with self; {
 
   comm = callPackage ../development/python-modules/comm { };
 
+  commandlines = callPackage ../development/python-modules/commandlines { };
+
   commandparse = callPackage ../development/python-modules/commandparse { };
 
   commentjson = callPackage ../development/python-modules/commentjson { };
