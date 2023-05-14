@@ -21,7 +21,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "validators>=0.18.2,<0.20.0" "validators>=0.18.2,<0.21.0"
+      --replace "validators>=0.18.2,<0.20.0" "validators>=0.18.2" \
+      --replace "requests>=2.28.0,<2.29.0" "requests>=2.28.0"
   '';
 
   propagatedBuildInputs = [
