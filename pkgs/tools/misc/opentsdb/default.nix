@@ -276,6 +276,29 @@ in stdenv.mkDerivation rec {
     hash = "sha256-899m1H0UCLsI/bnSrNFnnny4MxSw3XBzf7rgDuEajDs=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-25826.prerequisite.0.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/a82a4f85f0fc1af554a104f28cc495451b26b1f6.patch";
+      hash = "sha256-GgoRZUGdKthK+ZwMpgSQQ4V2oHyqi8SwWGZT571gltQ=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-25826.prerequisite.1.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/22b27ea30a859a6dbdcd65fcdf61190d46e1b677.patch";
+      hash = "sha256-pXo6U7d4iy2squAiFvV2iDAQcNDdrl0pIOQEXfkJ3a8=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-25826.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/07c4641471c6f5c2ab5aab615969e97211eb50d9.patch";
+      hash = "sha256-88gIOhAhLCQC/UesIdYtjf0UgKNfnO0W2icyoMmiC3U=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-25827.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/fa88d3e4b5369f9fb73da384fab0b23e246309ba.patch";
+      hash = "sha256-FJHUiEmGhBIHoyOwNZtUWA36ENbrqDkUT8HfccmMSe8=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake
