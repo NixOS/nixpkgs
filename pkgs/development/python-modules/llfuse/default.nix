@@ -8,12 +8,15 @@
 , pkg-config
 , pytestCheckHook
 , python
+, setuptools
 , which
 }:
 
 buildPythonPackage rec {
   pname = "llfuse";
   version = "1.4.3";
+
+  format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
@@ -24,7 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-37l6HrAKrXtEhlWTIdlw3L6wCGeOA7IW/aaJn3wf4QY=";
   };
 
-  nativeBuildInputs = [ cython pkg-config ];
+  nativeBuildInputs = [ cython pkg-config setuptools ];
 
   buildInputs = [ fuse ];
 
