@@ -23,6 +23,7 @@
 , sqlite
 , nose
 , pytestCheckHook
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -98,6 +99,9 @@ buildPythonPackage rec {
   preCheck = ''
     # import from $out
     rm -r mapnik
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Replace the hardcoded /tmp references with $TMPDIR
+    sed -i "s,/tmp,$TMPDIR,g" test/python_tests/*.py
   '';
 
   # https://github.com/mapnik/python-mapnik/issues/255
@@ -129,6 +133,8 @@ buildPythonPackage rec {
     "test_visual_zoom_all_rendering1"
     "test_visual_zoom_all_rendering2"
     "test_wgs84_inverse_forward"
+  ] ++ lib.optional stdenv.isDarwin [
+    "test_passing_pycairo_context_pdf"
   ];
 
   pythonImportsCheck = [ "mapnik" ];
