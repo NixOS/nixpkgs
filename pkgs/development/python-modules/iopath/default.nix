@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , portalocker
-, pytorch
+, torch
 , tqdm
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     tqdm
     portalocker
-    pytorch
+    torch
   ];
 
   meta = with lib; {
