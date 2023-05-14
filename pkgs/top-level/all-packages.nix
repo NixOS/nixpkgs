@@ -3968,6 +3968,8 @@ with pkgs;
 
   plausible = callPackage ../servers/web-apps/plausible { };
 
+  privatebin = callPackage ../servers/web-apps/privatebin { };
+
   pam-reattach = callPackage ../os-specific/darwin/pam-reattach { };
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace { };
