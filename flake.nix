@@ -71,5 +71,12 @@
         */
         readOnlyPkgs = ./nixos/modules/misc/nixpkgs/read-only.nix;
       };
+
+      modules = {
+        /* Modules that are not specific to any application of the module system. */
+        generic = {
+          nixpkgs = ./pkgs/top-level/module/module.nix;
+        };
+      };
     };
 }

@@ -191,6 +191,13 @@ list-id: configuration-variable-list
 source: ../config-options.json
 ```
 
+## Calling Nixpkgs from the Module System {#sec-invoke-nixpkgs-by-module}
+
+For [module system](#module-system) application authors, Nixpkgs provides a reusable module for the purpose of invoking Nixpkgs. Most users should not have to be aware of this. The documentation for its options is meant to be re-exposed in the application's documentation and is therefore not repeated here.
+
+Applications can import the implementation file [`"${nixpkgs}/pkgs/top-level/module/module.nix"`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/module/module.nix).
+
+The flake attribute (experimental) for this module is `.modules.generic.nixpkgs`.
 
 ## Declarative Package Management {#sec-declarative-package-management}
 
