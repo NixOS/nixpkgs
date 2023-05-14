@@ -61,6 +61,7 @@ beamPackages.mixRelease {
     export HOME=$TMPDIR
     export NODE_OPTIONS=--openssl-legacy-provider # required for webpack compatibility with OpenSSL 3 (https://github.com/webpack/webpack/issues/14532)
     ln -sf ${yarnDeps}/node_modules assets/node_modules
+    substituteInPlace assets/package.json --replace '$(npm bin)/' 'npx '
     npm run deploy --prefix ./assets
 
     # for external task you need a workaround for the no deps check flag
@@ -70,8 +71,6 @@ beamPackages.mixRelease {
 
   meta = with lib; {
     license = licenses.agpl3Plus;
-    # broken since the deprecation of nodejs_16
-    broken = true;
     homepage = "https://plausible.io/";
     description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics.";
     maintainers = with maintainers; [ ];

@@ -66,7 +66,7 @@ buildPythonPackage rec {
     elasticsearch
     mock
     whoosh
-  ];
+  ] ++ beautifulsoup4.optional-dependencies.lxml;
 
   checkPhase = ''
     cd $NIX_BUILD_TOP/$sourceRoot
