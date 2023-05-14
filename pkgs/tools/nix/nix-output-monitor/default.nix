@@ -1,14 +1,18 @@
 {
   haskell,
-  expect,
   haskellPackages,
   installShellFiles,
-  lib
+  lib,
 }: let
   inherit (haskell.lib.compose) justStaticExecutables overrideCabal;
+
   overrides = {
     passthru.updateScript = ./update.sh;
+
+    # nom has unit-tests and golden-tests
+    # golden-tests call nix and thus can’t be run in a nix build.
     testTarget = "unit-tests";
+
     buildTools = [installShellFiles];
     postInstall = ''
       ln -s nom "$out/bin/nom-build"
