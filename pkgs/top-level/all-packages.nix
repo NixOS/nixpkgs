@@ -13357,6 +13357,8 @@ with pkgs;
 
   vcstool = callPackage ../development/tools/vcstool { };
 
+  vdexExtractor = callPackage ../development/tools/vdexExtractor { };
+
   verco = callPackage ../applications/version-management/verco { };
 
   verilator = callPackage ../applications/science/electronics/verilator { };
