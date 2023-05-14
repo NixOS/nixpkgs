@@ -32533,6 +32533,8 @@ with pkgs;
 
   open-in-mpv = callPackage ../applications/video/open-in-mpv { };
 
+  mpv-shim-default-shaders = callPackage ../applications/video/mpv-shim-default-shaders { };
+
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
 
   mtpaint = callPackage ../applications/graphics/mtpaint { };
