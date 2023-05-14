@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, authlib, tqdm, validators }:
+{ lib
+, authlib
+, buildPythonPackage
+, fetchPypi
+, tqdm
+, validators
+}:
 
 buildPythonPackage rec {
   pname = "weaviate-client";
@@ -14,7 +20,11 @@ buildPythonPackage rec {
       --replace "validators>=0.18.2,<0.20.0" "validators>=0.18.2,<0.21.0"
   '';
 
-  propagatedBuildInputs = [ authlib tqdm validators ];
+  propagatedBuildInputs = [
+    authlib
+    tqdm
+    validators
+  ];
 
   doCheck = false;
 
