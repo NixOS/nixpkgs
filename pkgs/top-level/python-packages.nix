@@ -9618,6 +9618,8 @@ self: super: with self; {
 
   python-arango = callPackage ../development/python-modules/python-arango { };
 
+  python-aravis = callPackage ../development/python-modules/python-aravis { };
+
   python-awair = callPackage ../development/python-modules/python-awair { };
 
   python3-saml = callPackage ../development/python-modules/python3-saml { };
