@@ -23,6 +23,16 @@ in
         description = lib.mdDoc "The Klipper package.";
       };
 
+      logFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/var/lib/klipper/klipper.log";
+        description = lib.mdDoc ''
+          Path of the file Klipper should log to.
+          If `null`, it logs to stdout, which is not recommended by upstream.
+        '';
+      };
+
       inputTTY = mkOption {
         type = types.path;
         default = "/run/klipper/tty";
@@ -151,7 +161,9 @@ in
     systemd.services.klipper =
       let
         klippyArgs = "--input-tty=${cfg.inputTTY}"
-          + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}";
+          + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}"
+          + optionalString (cfg.logFile != null) " --logfile=${cfg.logFile}"
+        ;
         printerConfigPath =
           if cfg.mutableConfig
           then cfg.mutableConfigFolder + "/printer.cfg"
@@ -177,7 +189,7 @@ in
         '';
 
         serviceConfig = {
-          ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} ${printerConfigPath}";
+          ExecStart = "${cfg.package}/bin/klippy ${klippyArgs} ${printerConfigPath}";
           RuntimeDirectory = "klipper";
           StateDirectory = "klipper";
           SupplementaryGroups = [ "dialout" ];
