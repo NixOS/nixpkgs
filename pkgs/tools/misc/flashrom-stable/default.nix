@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
     libgpiod
     libjaylink
     libusb1
-    pciutils
-  ];
+  ]
+  lib.optional (!stdenv.isDarwin) [ pciutils ];
 
   makeFlags = [ "PREFIX=$(out)" "libinstall" ];
 
@@ -41,6 +41,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2 gpl2Plus ];
     maintainers = with maintainers; [ felixsinger ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # requires DirectHW
   };
 }
