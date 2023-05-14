@@ -1,10 +1,6 @@
-# We assert that the new algorithmic way of generating these lists matches the
-# way they were hard-coded before.
-#
-# One might think "if we exhaustively test, what's the point of procedurally
-# calculating the lists anyway?". The answer is one can mindlessly update these
-# tests as new platforms become supported, and then just give the diff a quick
-# sanity check before committing :).
+# Run:
+# [nixpkgs]$ nix-instantiate --eval --strict lib/tests/systems.nix
+# Expected output: [], or the failed cases
 let
   lib = import ../default.nix;
   mseteq = x: y: {
@@ -12,7 +8,16 @@ let
     expected = lib.sort lib.lessThan y;
   };
 in
-with lib.systems.doubles; lib.runTests {
+lib.runTests (
+# We assert that the new algorithmic way of generating these lists matches the
+# way they were hard-coded before.
+#
+# One might think "if we exhaustively test, what's the point of procedurally
+# calculating the lists anyway?". The answer is one can mindlessly update these
+# tests as new platforms become supported, and then just give the diff a quick
+# sanity check before committing :).
+
+(with lib.systems.doubles; {
   testall = mseteq all (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ wasi ++ windows ++ embedded ++ mmix ++ js ++ genode ++ redox);
 
   testarm = mseteq arm [ "armv5tel-linux" "armv6l-linux" "armv6l-netbsd" "armv6l-none" "armv7a-linux" "armv7a-netbsd" "armv7l-linux" "armv7l-netbsd" "arm-none" "armv7a-darwin" ];
@@ -39,4 +44,44 @@ with lib.systems.doubles; lib.runTests {
   testopenbsd = mseteq openbsd [ "i686-openbsd" "x86_64-openbsd" ];
   testwindows = mseteq windows [ "i686-cygwin" "x86_64-cygwin" "i686-windows" "x86_64-windows" ];
   testunix = mseteq unix (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ cygwin ++ redox);
+})
+
+// {
+  test_equals_example_x86_64-linux = {
+    expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") (lib.systems.elaborate "x86_64-linux");
+    expected = true;
+  };
+
+  test_toLosslessStringMaybe_example_x86_64-linux = {
+    expr = lib.systems.toLosslessStringMaybe (lib.systems.elaborate "x86_64-linux");
+    expected = "x86_64-linux";
+  };
+  test_toLosslessStringMaybe_fail = {
+    expr = lib.systems.toLosslessStringMaybe (lib.systems.elaborate "x86_64-linux" // { something = "extra"; });
+    expected = null;
+  };
 }
+
+# Generate test cases to assert that a change in any non-function attribute makes a platform unequal
+// lib.concatMapAttrs (platformAttrName: origValue: {
+
+  ${"test_equals_unequal_${platformAttrName}"} =
+    let modified =
+          assert origValue != arbitraryValue;
+          lib.systems.elaborate "x86_64-linux" // { ${platformAttrName} = arbitraryValue; };
+        arbitraryValue = "<<modified>>";
+    in {
+      expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") modified;
+      expected = {
+        # Changes in these attrs are not detectable because they're function.
+        # The functions should be derived from the data, so this is not a problem.
+        canExecute = null;
+        emulator = null;
+        emulatorAvailable = null;
+        isCompatible = null;
+      }?${platformAttrName};
+    };
+
+}) (lib.systems.elaborate "x86_64-linux" /* arbitrary choice, just to get all the elaborated attrNames */)
+
+)
