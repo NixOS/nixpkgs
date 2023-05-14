@@ -194,16 +194,26 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
   '';
 
-  postFixup = ''
+  postFixup = let
+    archMap = {
+      "x86_64-linux" = "x86_64";
+      "i686-linux" = "x86";
+    };
+    layerPlatform = archMap."${stdenv.hostPlatform.system}" or null;
+    # We need to give the different layers separate names or else the loader
+    # might try the 32-bit one first, fail and not attempt to load the 64-bit
+    # layer under the same name.
+  in lib.optionalString (layerPlatform != null) ''
+    substituteInPlace $out/share/vulkan/implicit_layer.d/MangoHud.${layerPlatform}.json \
+      --replace "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
+  '' + ''
     # Add OpenGL driver path to RUNPATH to support NVIDIA cards
     addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
-    ${lib.optionalString gamescopeSupport ''
-      addOpenGLRunpath "$out/bin/mangoapp"
-    ''}
-    ${lib.optionalString finalAttrs.doCheck ''
-      # libcmocka.so is only used for tests
-      rm "$out/lib/libcmocka.so"
-    ''}
+  '' + lib.optionalString gamescopeSupport ''
+    addOpenGLRunpath "$out/bin/mangoapp"
+  '' + lib.optionalString finalAttrs.doCheck ''
+    # libcmocka.so is only used for tests
+    rm "$out/lib/libcmocka.so"
   '';
 
   passthru.updateScript = nix-update-script { };
