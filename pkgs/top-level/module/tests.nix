@@ -18,6 +18,15 @@
 rec {
   inherit (lib) evalModules;
 
+  # Helper functions
+  noValues = lib.mapAttrs (_: _: null);
+  shouldBe = actual: expected: if actual == expected then true else
+    builtins.trace "actual:"
+    builtins.trace actual
+    builtins.trace "expected:"
+    builtins.trace expected
+    false;
+
   invokeModule = callerModule: evalModules { modules = [ ./module.nix callerModule ]; };
 
   basic = invokeModule { hostPlatform = "x86_64-linux"; };
@@ -46,6 +55,36 @@ rec {
     };
   };
 
+  optimizedSimple = invokeModule {
+    hostPlatform = "x86_64-linux";
+    _memoize = args@{ pkgs, inputsSet, ... }:
+      # Don't do this in production. _memoize should be transparent.
+      pkgs // { testData = args; };
+  };
+
+  optimizedAllOpts = invokeModule {
+    config = {
+      buildPlatform = "x86_64-linux";
+      hostPlatform = "aarch64-linux";
+      config = { allowAliases = false; allowUnfree = true; };
+      overlays = [ overlayExample ];
+      _memoize = args@{ pkgs, inputsSet, ... }:
+        # Don't do this in production. _memoize should be transparent.
+        pkgs // { testData = args; };
+    };
+  };
+
+  # All inputs that affect the construction of the package set / arguments to _memoize.
+  # Not `_memoize` because it is not an argument to itself.
+  # Not `pkgs` because it is not an argument and the result of the `_memoize` call.
+  # Not any options that are implemented by only setting one or more of the already listed options (and would be possible to move to a separate module). See the test case with removeAttrs below.
+  allInputsSet = {
+    buildPlatform = null;
+    hostPlatform = null;
+    config = null;
+    overlays = null;
+  };
+
   tests =
     assert basic.config.pkgs.hello == basicExpect.hello;
 
@@ -54,6 +93,28 @@ rec {
     assert overlay.config.pkgs.hello.name == "helloFromOverlay";
 
     assert havingConfig.config.pkgs.perlPackages.just-a-proof-of-use;
+
+    assert noValues optimizedSimple.config.pkgs.testData.inputsSet == { hostPlatform = null; };
+
+    assert noValues optimizedAllOpts.config.pkgs.testData.inputsSet == allInputsSet;
+
+    # Make sure that all necessary options are part of inputsSet. This will fail
+    # if an option is added without considering this. If the new option is a new
+    # addition to the unique key, it should be added to allInputsSet.
+    assert shouldBe
+      (builtins.removeAttrs (noValues optimizedAllOpts.options) [
+        # All options that do not directly affect the construction of pkgs.
+        # If a new option's effect is implemented by setting one of the options
+        # already in `inputsSet`, it does not need to be listed here.
+        #
+        # See comment on `allInputsSet`.
+        # Defined by us
+        "pkgs" "_memoize"
+
+        # From the module system itself
+        "_module"
+      ])
+      allInputsSet;
 
     emptyFile;
 }
