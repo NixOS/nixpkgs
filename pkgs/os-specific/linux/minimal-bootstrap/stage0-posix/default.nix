@@ -10,7 +10,6 @@ lib.makeScope newScope (self: with self; {
   hex0 = callPackage ./hex0.nix { };
 
   kaem = callPackage ./kaem { };
-  kaem-minimal = callPackage ./kaem/minimal.nix { };
 
   inherit (callPackage ./stage0-posix-x86.nix { }) blood-elf-0 hex2 kaem-unwrapped M1 M2;
 
