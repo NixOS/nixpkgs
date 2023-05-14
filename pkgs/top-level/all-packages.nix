@@ -33365,6 +33365,8 @@ with pkgs;
 
   pika-backup = callPackage ../applications/backup/pika-backup { };
 
+  pretalx = callPackage ../servers/web-apps/pretalx { };
+
   pur = callPackage ../development/tools/pur { };
 
   purple-discord = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-discord { };
