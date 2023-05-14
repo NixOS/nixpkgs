@@ -74,6 +74,7 @@ let
         ${src}/tcc.c
       mkdir -p ''${out}/bin
       ${mes}/bin/mes --no-auto-compile -e main ${mes}/bin/mescc.scm -- \
+        -L ${mes}/lib \
         -l c+tcc \
         -o ''${out}/bin/tcc \
         tcc.s

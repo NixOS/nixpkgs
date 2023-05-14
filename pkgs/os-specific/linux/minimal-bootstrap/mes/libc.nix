@@ -11,8 +11,6 @@ let
   sources = (import ./sources.nix).x86.linux.gcc;
   inherit (sources) libtcc1_SOURCES libc_gnu_SOURCES;
 
-  prefix = "${mes}/share/mes-${version}";
-
   # Concatenate all source files into a convenient bundle
   # "gcc" variants of source files (eg. "lib/linux/x86-mes-gcc") can also be
   # compiled by tinycc
@@ -37,11 +35,11 @@ kaem.runCommand "${pname}-${version}" {
     platforms = [ "i686-linux" ];
   };
 } ''
-  cd ${prefix}
+  cd ${mes.srcPrefix}
 
   # mescc compiled libc.a
   mkdir -p ''${out}/lib/x86-mes
-  cp lib/x86-mes/libc.a ''${out}/lib/x86-mes
+  cp ${mes}/lib/x86-mes/libc.a ''${out}/lib/x86-mes
 
   # libc.c
   catm ''${TMPDIR}/first.c ${lib.concatStringsSep " " firstLibc}
@@ -59,5 +57,5 @@ kaem.runCommand "${pname}-${version}" {
   cp lib/posix/getopt.c ''${out}/lib/libgetopt.c
 
   # Install headers
-  ln -s ${prefix}/include ''${out}/include
+  ln -s ${mes.srcPrefix}/include ''${out}/include
 ''
