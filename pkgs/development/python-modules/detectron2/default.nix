@@ -15,7 +15,7 @@
 , pytest
 , torch
 , pyyaml
-, tensorflow-tensorboard
+, tensorboard
 , tqdm
 , which
 }:
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     fvcore
     matplotlib
     pycocotools
-    tensorflow-tensorboard
+    tensorboard
     hydra-core
   ];
 
