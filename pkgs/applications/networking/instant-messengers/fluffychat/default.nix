@@ -3,6 +3,7 @@
 , imagemagick
 , flutter37
 , makeDesktopItem
+, gnome
 }:
 
 flutter37.buildFlutterApplication rec {
@@ -27,8 +28,9 @@ flutter37.buildFlutterApplication rec {
     genericName = "Chat with your friends (matrix client)";
     categories = [ "Chat" "Network" "InstantMessaging" ];
   };
-  nativeBuildInputs = [ imagemagick ];
 
+  nativeBuildInputs = [ imagemagick ];
+  extraWrapProgramArgs = "--prefix PATH : ${gnome.zenity}/bin";
   postInstall = ''
     FAV=$out/app/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons
