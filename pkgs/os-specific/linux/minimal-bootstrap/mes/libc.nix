@@ -6,7 +6,7 @@
 }:
 let
   pname = "mes-libc";
-  inherit (mes) version;
+  inherit (mes.compiler) version;
 
   sources = (import ./sources.nix).x86.linux.gcc;
   inherit (sources) libtcc1_SOURCES libc_gnu_SOURCES;

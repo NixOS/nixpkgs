@@ -49,7 +49,7 @@ let
       '';
     } ''
       catm config.h
-      ${mes}/bin/mes --no-auto-compile -e main ${mes}/bin/mescc.scm -- \
+      ${mes.compiler}/bin/mes --no-auto-compile -e main ${mes.srcPost.bin}/bin/mescc.scm -- \
         -S \
         -o tcc.s \
         -I . \
@@ -73,8 +73,8 @@ let
         -D ONE_SOURCE=1 \
         ${src}/tcc.c
       mkdir -p ''${out}/bin
-      ${mes}/bin/mes --no-auto-compile -e main ${mes}/bin/mescc.scm -- \
-        -L ${mes}/lib \
+      ${mes.compiler}/bin/mes --no-auto-compile -e main ${mes.srcPost.bin}/bin/mescc.scm -- \
+        -L ${mes.libs}/lib \
         -l c+tcc \
         -o ''${out}/bin/tcc \
         tcc.s

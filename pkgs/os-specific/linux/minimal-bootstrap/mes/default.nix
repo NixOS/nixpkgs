@@ -170,59 +170,70 @@ let
   libc = mkLib "libc" libc_SOURCES;
   libc_tcc = mkLib "libc+tcc" libc_tcc_SOURCES;
 
-in kaem.runCommand "${pname}-${version}" {
-  inherit pname version;
+  # Recompile Mes and Mes C library using mes-m2 bootstrapped Mes
+  libs = kaem.runCommand "${pname}-m2-libs-${version}" {
+    inherit pname version;
 
-  passthru = { inherit src srcPost srcPrefix nyacc; };
-  passthru.tests.get-version = result: kaem.runCommand "${pname}-get-version-${version}" {} ''
-    ${result}/bin/mes --version
-    mkdir ''${out}
+    passthru.tests.get-version = result: kaem.runCommand "${pname}-get-version-${version}" {} ''
+      ${result}/bin/mes --version
+      mkdir ''${out}
+    '';
+
+    inherit meta;
+  }
+  ''
+    LIBDIR=''${out}/lib
+    mkdir -p ''${out} ''${LIBDIR}
+
+    mkdir -p ''${LIBDIR}/x86-mes
+
+    # crt1.o
+    cp ${crt1}/crt1.o ''${LIBDIR}/x86-mes
+    cp ${crt1}/crt1.s ''${LIBDIR}/x86-mes
+
+    # libc-mini.a
+    cp ${libc-mini}/lib/libc-mini.a ''${LIBDIR}/x86-mes
+    cp ${libc-mini}/lib/libc-mini.s ''${LIBDIR}/x86-mes
+
+    # libmescc.a
+    cp ${libmescc}/lib/libmescc.a ''${LIBDIR}/x86-mes
+    cp ${libmescc}/lib/libmescc.s ''${LIBDIR}/x86-mes
+
+    # libc.a
+    cp ${libc}/lib/libc.a ''${LIBDIR}/x86-mes
+    cp ${libc}/lib/libc.s ''${LIBDIR}/x86-mes
+
+    # libc+tcc.a
+    cp ${libc_tcc}/lib/libc+tcc.a ''${LIBDIR}/x86-mes
+    cp ${libc_tcc}/lib/libc+tcc.s ''${LIBDIR}/x86-mes
   '';
 
-  inherit meta;
-}
-''
-  LIBDIR=''${out}/lib
-  BINDIR=''${out}/bin
-
-  mkdir -p ''${out} ''${LIBDIR} ''${BINDIR}
-
-  cp ${srcPost.bin}/bin/mescc.scm ''${BINDIR}/mescc.scm
-  cp ${srcPost.bin}/bin/mes-m2 ''${BINDIR}/mes-m2
-  chmod 555 ''${BINDIR}/mes-m2
-
-  # Recompile Mes and Mes C library using mes-m2 bootstrapped Mes
-  mkdir -p ''${LIBDIR}/x86-mes
-
-  # crt1.o
-  cp ${crt1}/crt1.o ''${LIBDIR}/x86-mes
-  cp ${crt1}/crt1.s ''${LIBDIR}/x86-mes
-
-  # libc-mini.a
-  cp ${libc-mini}/lib/libc-mini.a ''${LIBDIR}/x86-mes
-  cp ${libc-mini}/lib/libc-mini.s ''${LIBDIR}/x86-mes
-
-  # libmescc.a
-  cp ${libmescc}/lib/libmescc.a ''${LIBDIR}/x86-mes
-  cp ${libmescc}/lib/libmescc.s ''${LIBDIR}/x86-mes
-
-  # libc.a
-  cp ${libc}/lib/libc.a ''${LIBDIR}/x86-mes
-  cp ${libc}/lib/libc.s ''${LIBDIR}/x86-mes
-
-  # libc+tcc.a
-  cp ${libc_tcc}/lib/libc+tcc.a ''${LIBDIR}/x86-mes
-  cp ${libc_tcc}/lib/libc+tcc.s ''${LIBDIR}/x86-mes
-
   # Build mes itself
-  ''${out}/bin/mes-m2 -e main ''${out}/bin/mescc.scm -- \
-    --base-address 0x08048000 \
-    -L ''${srcPrefix}/lib \
-    -L ''${LIBDIR} \
-    -lc \
-    -lmescc \
-    -nostdlib \
-    -o ''${out}/bin/mes \
-    ''${LIBDIR}/x86-mes/crt1.o \
-    ${lib.concatMapStringsSep " " (getRes ".o") (map compile mes_SOURCES)}
-''
+  compiler = kaem.runCommand "${pname}-${version}" {
+    inherit pname version;
+
+    passthru.tests.get-version = result: kaem.runCommand "${pname}-get-version-${version}" {} ''
+      ${result}/bin/mes --version
+      mkdir ''${out}
+    '';
+
+    inherit meta;
+  }
+  ''
+    mkdir -p ''${out}/bin
+
+    ${srcPost.bin}/bin/mes-m2 -e main ${srcPost.bin}/bin/mescc.scm -- \
+      --base-address 0x08048000 \
+      -L ''${srcPrefix}/lib \
+      -L ${libs}/lib \
+      -lc \
+      -lmescc \
+      -nostdlib \
+      -o ''${out}/bin/mes \
+      ${libs}/lib/x86-mes/crt1.o \
+      ${lib.concatMapStringsSep " " (getRes ".o") (map compile mes_SOURCES)}
+  '';
+in {
+  inherit srcPost srcPrefix nyacc;
+  inherit compiler libs;
+}
