@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pods";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "marhkb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5euSMmyumZbUFsZuP7fa3wCm4n0Hx+F8bPlv4Xw/Hvw=";
+    sha256 = "sha256-wZZBtvSMC83P38jzbZ1fX5f42WTPI68XGB1aG3gMYG0=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

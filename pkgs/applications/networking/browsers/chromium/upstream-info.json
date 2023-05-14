@@ -19,9 +19,9 @@
     }
   },
   "beta": {
-    "version": "114.0.5735.16",
-    "sha256": "1pynbzbc8wwc6g8ikx0hr95ylncpdx97y27c6wmfygwgvp91a6wa",
-    "sha256bin64": "098aclrhifz6cpxcjdaqvi76j3g8r84p3b6cs4fbsj4cmczj4frw",
+    "version": "114.0.5735.26",
+    "sha256": "0v73vzgyg08683my0bc29nvbqqpq3zx9qdnxvdvp72rmyrbc5aiy",
+    "sha256bin64": "0viy4ibzh04vnkv111vcz4y0s7vg3f2470j2s1b4nzwxmqadxi3n",
     "deps": {
       "gn": {
         "version": "2023-04-19",
@@ -32,15 +32,15 @@
     }
   },
   "dev": {
-    "version": "115.0.5750.0",
-    "sha256": "1y0yq7k5rcv4lfxdlr4psap4hxcnrwjps6vl42hwvpw6zxscw1lv",
-    "sha256bin64": "0h2d4csrznavalfnzvn59pc2jmj6ci1paslp7y2rlpv1jqjrpgq9",
+    "version": "115.0.5762.4",
+    "sha256": "0jlqnd4cmbm3c4xz6dcgs7p8clraldl7hncm4wc28yxv5bsxhyqi",
+    "sha256bin64": "1zcpzji22fpb04bfhqlp0wy3rnjk3ylfh39r1c2zgqks31n6niz6",
     "deps": {
       "gn": {
-        "version": "2023-04-19",
+        "version": "2023-05-09",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "5a004f9427a050c6c393c07ddb85cba8ff3849fa",
-        "sha256": "01xrh9m9m6x8lz0vxwdw2mrhrvnw93zpg09hwdhqakj06agf4jjk"
+        "rev": "ad1e5ce10f06ef9a1a1d91b2e48231d6b3eecbe2",
+        "sha256": "1m00wqkkvgs52a9bikirnmvsw2d9kfzk59a45mg4n8m4sgpvmxc7"
       }
     }
   },
