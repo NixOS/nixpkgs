@@ -1,5 +1,5 @@
 { lib
-, runCommand
+, kaem
 , mes-libc
 , ln-boot
 }:
@@ -17,7 +17,7 @@
       options = lib.strings.concatStringsSep " " buildOptions;
       libtccOptions = lib.strings.concatStringsSep " " libtccBuildOptions;
     in
-    runCommand "${pname}-${version}" {
+    kaem.runCommand "${pname}-${version}" {
       inherit pname version meta;
       nativeBuildInputs = [ ln-boot ];
     } ''

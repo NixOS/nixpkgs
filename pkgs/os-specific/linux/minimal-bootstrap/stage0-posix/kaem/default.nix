@@ -1,6 +1,9 @@
 { lib
 , derivationWithMeta
+, writeText
+, kaem
 , kaem-unwrapped
+, mescc-tools
 , mescc-tools-extra
 , version
 }:
@@ -22,6 +25,21 @@ derivationWithMeta {
     '')
   ];
   PATH = lib.makeBinPath [ mescc-tools-extra ];
+
+  passthru.runCommand = name: env: buildCommand:
+    derivationWithMeta ({
+      inherit name;
+
+      builder = "${kaem}/bin/kaem";
+      args = [
+        "--verbose"
+        "--strict"
+        "--file"
+        (writeText "${name}-builder" buildCommand)
+      ];
+
+      PATH = lib.makeBinPath ((env.nativeBuildInputs or []) ++ [ kaem mescc-tools mescc-tools-extra ]);
+    } // (builtins.removeAttrs env [ "nativeBuildInputs" ]));
 
   meta = with lib; {
     description = "Minimal build tool for running scripts on systems that lack any shell";

@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
   # Fixes build with GCC 6
   env.NIX_CFLAGS_COMPILE = "-std=c++03";
 
+  # Remove once updated past 0.3.5
+  env.NIX_LDFLAGS = "-lz";
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxslt freetype libpng libxml2 ];
 

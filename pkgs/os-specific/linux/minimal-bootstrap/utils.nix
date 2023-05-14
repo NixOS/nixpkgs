@@ -2,7 +2,6 @@
 , buildPlatform
 , callPackage
 , kaem
-, mescc-tools
 , mescc-tools-extra
 }:
 
@@ -64,20 +63,5 @@ rec {
     };
 
   writeText = name: text: writeTextFile {inherit name text;};
-
-  runCommand = name: env: buildCommand:
-    derivationWithMeta ({
-      inherit name;
-
-      builder = "${kaem}/bin/kaem";
-      args = [
-        "--verbose"
-        "--strict"
-        "--file"
-        (writeText "${name}-builder" buildCommand)
-      ];
-
-      PATH = lib.makeBinPath ((env.nativeBuildInputs or []) ++ [ kaem mescc-tools mescc-tools-extra ]);
-    } // (builtins.removeAttrs env [ "nativeBuildInputs" ]));
 
 }

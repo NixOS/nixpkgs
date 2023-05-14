@@ -1,6 +1,6 @@
 { lib
-, runCommand
 , fetchurl
+, kaem
 , nyacc
 }:
 let
@@ -15,7 +15,7 @@ let
     sha256 = "065ksalfllbdrzl12dz9d9dcxrv97wqxblslngsc6kajvnvlyvpk";
   };
 in
-runCommand "${pname}-${version}" {
+kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
   passthru.guilePath = "${nyacc}/share/${pname}-${version}/module";

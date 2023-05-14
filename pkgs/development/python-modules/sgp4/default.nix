@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "sgp4";
-  version = "2.21";
+  version = "2.22";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YXm4dQRId+lBYzwgr3ci/SMaiNiomvAb8wvWTzPN7O8=";
+    hash = "sha256-F/Ci6q0tygZbbeJcHOqpQP98+ozGcSDLQRGgDxd7hvk=";
   };
 
   nativeCheckInputs = [ numpy ];

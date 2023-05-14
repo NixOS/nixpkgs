@@ -25,6 +25,6 @@ lib.makeScope
     tinycc-bootstrappable = callPackage ./tinycc/bootstrappable.nix { };
     tinycc-mes = callPackage ./tinycc/mes.nix { };
 
-    inherit (callPackage ./utils.nix { }) fetchurl derivationWithMeta writeTextFile writeText runCommand;
+    inherit (callPackage ./utils.nix { }) fetchurl derivationWithMeta writeTextFile writeText;
 
   })
