@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , freezegun
 , isodate
 , lxml
@@ -21,6 +22,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-xPPR2z3h8RpoAROpKpu9ZoDxGq5Stm9wQVt4Stj/6fg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "test-expired.patch";
+      url = "https://github.com/SAML-Toolkits/python3-saml/commit/bd65578e5a21494c89320094c61c1c77250bea33.diff";
+      hash = "sha256-9Trew6R5JDjtc0NRGoklqMVDEI4IEqFOdK3ezyBU6gI=";
+    })
+  ];
 
   propagatedBuildInputs = [
     isodate

@@ -64,7 +64,7 @@ in rec {
     outputs = [ "out" "man" "stubbyExampleJson" ];
 
     inherit (getdns) src;
-    sourceRoot = "${getdns.name}/stubby";
+    sourceRoot = "${getdns.pname}-${getdns.version}/stubby";
 
     nativeBuildInputs = [ cmake doxygen yq ];
 

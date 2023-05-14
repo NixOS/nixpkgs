@@ -551,6 +551,19 @@ in {
       default = true;
     };
 
+    configureRedis = lib.mkOption {
+      type = lib.types.bool;
+      default = config.services.nextcloud.notify_push.enable;
+      defaultText = literalExpression "config.services.nextcloud.notify_push.enable";
+      description = lib.mdDoc ''
+        Wether to configure nextcloud to use the recommended redis settings for small instances.
+
+        ::: {.note}
+        The `notify_push` app requires redis to be configured. If this option is turned off, this must be configured manually.
+        :::
+      '';
+    };
+
     caching = {
       apcu = mkOption {
         type = types.bool;
@@ -1042,6 +1055,25 @@ in {
           name = cfg.config.dbuser;
           ensurePermissions = { "DATABASE ${cfg.config.dbname}" = "ALL PRIVILEGES"; };
         }];
+      };
+
+      services.redis.servers.nextcloud = lib.mkIf cfg.configureRedis {
+        enable = true;
+        user = "nextcloud";
+      };
+
+      services.nextcloud = lib.mkIf cfg.configureRedis {
+        caching.redis = true;
+        extraOptions = {
+          memcache = {
+            distributed = ''\OC\Memcache\Redis'';
+            locking = ''\OC\Memcache\Redis'';
+          };
+          redis = {
+            host = config.services.redis.servers.nextcloud.unixSocket;
+            port = 0;
+          };
+        };
       };
 
       services.nginx.enable = mkDefault true;

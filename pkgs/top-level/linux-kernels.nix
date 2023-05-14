@@ -558,10 +558,14 @@ in {
 
     zenpower = callPackage ../os-specific/linux/zenpower { };
 
-    inherit (callPackage ../os-specific/linux/zfs {
-        configFile = "kernel";
-        inherit pkgs kernel;
-      }) zfsStable zfsUnstable;
+    zfsStable = callPackage ../os-specific/linux/zfs/stable.nix {
+      configFile = "kernel";
+      inherit pkgs kernel;
+    };
+    zfsUnstable = callPackage ../os-specific/linux/zfs/unstable.nix {
+      configFile = "kernel";
+      inherit pkgs kernel;
+    };
     zfs = zfsStable;
 
     can-isotp = callPackage ../os-specific/linux/can-isotp { };

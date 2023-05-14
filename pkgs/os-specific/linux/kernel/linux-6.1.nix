@@ -15,6 +15,4 @@ buildLinux (args // rec {
     url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
     sha256 = "1w56qgf1vgk3dmh4xw6699kjm5pdqvyfzr19ah5yy3xj50a4q2bs";
   };
-  # TODO: possible to remove after any rebuild, e.g. after update.
-  extraConfig = lib.optionalString (buildPackages.stdenv.system == "x86_64-linux") "\n";
 } // (args.argsOverride or { }))

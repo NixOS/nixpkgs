@@ -1,5 +1,5 @@
 { lib
-, runCommand
+, kaem
 , ln-boot
 , mes
 , mes-libc
@@ -21,7 +21,8 @@ let
   # the operation in two
   firstLibc = lib.take 100 libc_gnu_SOURCES;
   lastLibc = lib.drop 100 libc_gnu_SOURCES;
-in runCommand "${pname}-${version}" {
+in
+kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [ ln-boot ];

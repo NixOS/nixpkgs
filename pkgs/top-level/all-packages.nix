@@ -6153,9 +6153,7 @@ with pkgs;
 
   checkmake = callPackage ../development/tools/checkmake { };
 
-  chit = callPackage ../development/tools/chit {
-    openssl = openssl_1_1;
-  };
+  chit = callPackage ../development/tools/chit { };
 
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
@@ -10568,9 +10566,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  nzbget = callPackage ../tools/networking/nzbget {
-    openssl = openssl_1_1;
-  };
+  nzbget = callPackage ../tools/networking/nzbget { };
 
   nzbhydra2 = callPackage ../servers/nzbhydra2 {
     # You need Java (at least 8, at most 15)
@@ -14807,6 +14803,7 @@ with pkgs;
   gcc10Stdenv = overrideCC gccStdenv buildPackages.gcc10;
   gcc11Stdenv = overrideCC gccStdenv buildPackages.gcc11;
   gcc12Stdenv = overrideCC gccStdenv buildPackages.gcc12;
+  gcc13Stdenv = overrideCC gccStdenv buildPackages.gcc13;
 
   # Meant for packages that fail with newer than gcc10.
   gcc10StdenvCompat = if stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11" then gcc10Stdenv else stdenv;
@@ -15020,7 +15017,19 @@ with pkgs;
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
 
-  gcc_latest = gcc12;
+  gcc13 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/13 {
+    inherit noSysDirs;
+
+    reproducibleBuild = true;
+    profiledCompiler = false;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+
+    isl = if !stdenv.isDarwin then isl_0_20 else null;
+  }));
+
+  gcc_latest = gcc13;
 
   # Use the same GCC version as the one from stdenv by default
   gfortran = wrapCC (gcc.cc.override {
@@ -15103,6 +15112,14 @@ with pkgs;
     profiledCompiler = false;
   });
 
+  gfortran13 = wrapCC (gcc13.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
   libgccjit = gcc.cc.override {
     name = "libgccjit";
     langFortran = false;
@@ -15166,6 +15183,29 @@ with pkgs;
       else stdenv;
   });
 
+  gnat13 = wrapCC (gcc13.cc.override {
+    name = "gnat";
+    langC = true;
+    langCC = false;
+    langAda = true;
+    profiledCompiler = false;
+    # As per upstream instructions building a cross compiler
+    # should be done with a (native) compiler of the same version.
+    # If we are cross-compiling GNAT, we may as well do the same.
+    gnat-bootstrap =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+      then buildPackages.gnat-bootstrap12
+      else buildPackages.gnat13;
+    stdenv =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+         && stdenv.buildPlatform.isDarwin
+         && stdenv.buildPlatform.isx86_64
+      then overrideCC stdenv gnat-bootstrap12
+      else stdenv;
+  });
+
   gnat-bootstrap = gnat-bootstrap12;
   gnat-bootstrap11 = wrapCC (callPackage ../development/compilers/gnat-bootstrap { majorVersion = "11"; });
   gnat-bootstrap12 = wrapCCWith ({
@@ -15189,6 +15229,18 @@ with pkgs;
   });
 
   gccgo12 = wrapCC (gcc12.cc.override {
+    name = "gccgo";
+    langCC = true; #required for go.
+    langC = true;
+    langGo = true;
+    langJit = true;
+    profiledCompiler = false;
+  } // {
+    # not supported on darwin: https://github.com/golang/go/issues/463
+    meta.broken = stdenv.hostPlatform.isDarwin;
+  });
+
+  gccgo13 = wrapCC (gcc13.cc.override {
     name = "gccgo";
     langCC = true; #required for go.
     langC = true;
@@ -18018,10 +18070,6 @@ with pkgs;
 
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
-  libgcc = callPackage ../development/libraries/gcc/libgcc {
-    stdenvNoLibs = gccStdenvNoLibs; # cannot be built with clang it seems
-  };
-
   # This is for e.g. LLVM libraries on linux.
   gccForLibs =
     if stdenv.targetPlatform == stdenv.hostPlatform && targetPackages.stdenv.cc.isGNU
@@ -18116,9 +18164,9 @@ with pkgs;
 
   dot2tex = with python3.pkgs; toPythonApplication dot2tex;
 
-  doxygen = callPackage ../development/tools/documentation/doxygen {
+  doxygen = darwin.apple_sdk_11_0.callPackage ../development/tools/documentation/doxygen {
     qt5 = null;
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreServices;
   };
 
   doxygen_gui = lowPrio (doxygen.override { inherit qt5; });
@@ -20963,8 +21011,11 @@ with pkgs;
   icu72 = callPackage ../development/libraries/icu/72.nix ({
     nativeBuildRoot = buildPackages.icu72.override { buildRootOnly = true; };
   });
+  icu73 = callPackage ../development/libraries/icu/73.nix ({
+    nativeBuildRoot = buildPackages.icu72.override { buildRootOnly = true; };
+  });
 
-  icu = icu72;
+  icu = icu73;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
@@ -23170,7 +23221,9 @@ with pkgs;
 
   openvdb = callPackage ../development/libraries/openvdb { };
 
-  openvr = callPackage ../development/libraries/openvr { };
+  openvr = callPackage ../development/libraries/openvr {
+    inherit (darwin.apple_sdk.frameworks) Foundation AppKit;
+  };
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_4
@@ -26088,7 +26141,11 @@ with pkgs;
 
   tailspin = callPackage ../tools/misc/tailspin { };
 
-  thanos = callPackage ../servers/monitoring/thanos { };
+  thanos = callPackage ../servers/monitoring/thanos {
+    # Fails to run with go1.20 due to go4.org/unsafe/assume-no-moving-gc not being
+    # update to be compatible with Go 1.20
+    buildGoModule = buildGo119Module;
+  };
 
   trafficserver = callPackage ../servers/http/trafficserver { };
 
@@ -27654,10 +27711,12 @@ with pkgs;
 
   zenmonitor = callPackage ../os-specific/linux/zenmonitor { };
 
-  inherit (callPackages ../os-specific/linux/zfs {
+  zfsStable = callPackage ../os-specific/linux/zfs/stable.nix {
     configFile = "user";
-  }) zfsStable zfsUnstable;
-
+  };
+  zfsUnstable = callPackage ../os-specific/linux/zfs/unstable.nix {
+    configFile = "user";
+  };
   zfs = zfsStable;
 
   ### DATA
@@ -31102,6 +31161,8 @@ with pkgs;
 
   pixel2svg = python310Packages.callPackage ../tools/graphics/pixel2svg { };
 
+  pixelfed = callPackage ../servers/web-apps/pixelfed { };
+
   pixelnuke = callPackage ../applications/graphics/pixelnuke { };
 
   pixelorama = callPackage ../applications/editors/pixelorama { };
@@ -32457,6 +32518,8 @@ with pkgs;
     youtube-quality = callPackage ../applications/video/mpv/scripts/youtube-quality.nix { };
     cutter = callPackage ../applications/video/mpv/scripts/cutter.nix { };
   };
+
+  open-in-mpv = callPackage ../applications/video/open-in-mpv { };
 
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
 
@@ -34138,10 +34201,7 @@ with pkgs;
 
   tailor = callPackage ../applications/version-management/tailor { };
 
-  taizen = callPackage ../applications/misc/taizen {
-    inherit (darwin.apple_sdk.frameworks) Security;
-    openssl = openssl_1_1;
-  };
+  taizen = callPackage ../applications/misc/taizen { };
 
   talosctl = callPackage ../applications/networking/cluster/talosctl { };
 
@@ -35429,6 +35489,7 @@ with pkgs;
   balanceofsatoshis = nodePackages.balanceofsatoshis;
 
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     boost = boost17x;
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
@@ -36398,7 +36459,7 @@ with pkgs;
 
   mindustry = callPackage ../games/mindustry { };
   mindustry-wayland = callPackage ../games/mindustry {
-    glew = glew-egl;
+    enableWayland = true;
   };
 
   mindustry-server = callPackage ../games/mindustry {
