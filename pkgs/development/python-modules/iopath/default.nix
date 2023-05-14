@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "iopath";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "iopath";
     rev = "v${version}";
-    sha256 = "1v79z6rja4q21na31mzs6ff63as8k6gpssi2d0wpikgzk84xva0l";
+    hash = "sha256-Qubf/mWKMgYz9IVoptMZrwy4lQKsNGgdqpJB1j/u5s8=";
   };
 
   # A few tests do HTTP. One could disable them individually
