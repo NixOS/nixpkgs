@@ -18,14 +18,18 @@ rec {
       passthru = attrs.passthru or {};
       validity = checkMeta.assertValidity { inherit meta attrs; };
       meta = checkMeta.commonMeta { inherit validity attrs; };
+      baseDrv = derivation ({
+        inherit (buildPlatform) system;
+        inherit (meta) name;
+      } // (builtins.removeAttrs attrs [ "meta" "passthru" ]));
+      passthru' = passthru // lib.optionalAttrs (passthru ? tests) {
+        tests = lib.mapAttrs (_: f: f baseDrv) passthru.tests;
+      };
     in
     lib.extendDerivation
       validity.handled
-      ({ inherit meta passthru; } // passthru)
-      (derivation ({
-        inherit (buildPlatform) system;
-        inherit (meta) name;
-      } // (builtins.removeAttrs attrs [ "meta" "passthru" ])));
+      ({ inherit meta; passthru = passthru'; } // passthru')
+      baseDrv;
 
   writeTextFile =
     { name # the name of the derivation
