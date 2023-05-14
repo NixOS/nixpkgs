@@ -8739,6 +8739,8 @@ self: super: with self; {
 
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
 
+  pymatting = callPackage ../development/python-modules/pymatting { };
+
   pymaven-patch = callPackage ../development/python-modules/pymaven-patch { };
 
   pymavlink = callPackage ../development/python-modules/pymavlink { };
