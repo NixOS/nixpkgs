@@ -305,6 +305,10 @@ in stdenv.mkDerivation rec {
     homepage = "http://opentsdb.net";
     license = licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # maven dependencies
+    ];
     maintainers = [ ];
   };
 }
