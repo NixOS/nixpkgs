@@ -1,0 +1,40 @@
+From 69a6ab80cf0908c2a44430c297932ef3659a1655 Mon Sep 17 00:00:00 2001
+From: Jiajie Chen <c@jia.je>
+Date: Wed, 22 Jun 2022 16:24:10 +0800
+Subject: [PATCH 1/2] Fix detection of quartz in gdk-3.0 target
+
+The GTK+3 built by Nix targets ``broadway quartz`` instead of only `quartz`,
+thus the target check is wrong. The script is modified to look up `quartz` in a
+loop. The variable name is renamed to `targets` in `gdk-3.0.pc` as well.
+
+---
+ configure | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/configure b/configure
+index 628a80f..9cb88d5 100755
+--- a/configure
++++ b/configure
+@@ -7361,7 +7361,10 @@ $as_echo "yes" >&6; }
+ fi
+         GTK_VER=`$PKG_CONFIG gtk+-3.0 --modversion`
+ 
+-        _gdk_tgt=`$PKG_CONFIG --variable=target gdk-3.0`
++        # gdk-3.0 may have multiple targets e.g. "broadway quartz"
++        _gdk_tgts=`$PKG_CONFIG --variable=targets gdk-3.0`
++        for _gdk_tgt in $_gdk_tgts;
++        do
+         if test "x$_gdk_tgt" = xquartz; then
+ 
+ pkg_failed=no
+@@ -7466,6 +7469,7 @@ fi
+            COCOA_GTK_LDFLAGS="-framework Cocoa -framework ApplicationServices"
+ 
+         fi
++        done
+ 
+         if test x$with_gconf = xyes; then
+ 
+-- 
+2.36.1
+

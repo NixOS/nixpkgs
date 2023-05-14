@@ -1,0 +1,19 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    iostruct (0.0.4)
+    rainbow (3.0.0)
+    zpng (0.3.1)
+      rainbow
+    zsteg (0.2.2)
+      iostruct
+      zpng (>= 0.3.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  zsteg
+
+BUNDLED WITH
+   2.1.4

@@ -1,0 +1,24 @@
+diff --git a/build.xml b/build.xml
+index 1ba08e0..9248b76 100644
+--- a/build.xml
++++ b/build.xml
+@@ -56,10 +56,16 @@
+
+     <target name="compilejni" unless="isWindows">
+         <description>JNI compilation task (builds libarecafs.so ... for unix-like operating systems only)</description>
++
+         <!--Generate the JNI header-->
+-        <javah destdir="${root}/jni" force="yes" classpath="${root}/lib/areca.jar">
+-            <class name="com.myJava.file.metadata.posix.jni.wrapper.FileAccessWrapper"/>
+-        </javah>
++	<exec executable="javah">
++		<arg value="-d"/>
++		<arg value="${root}/jni"/>
++		<arg value="-force"/>
++		<arg value="-classpath"/>
++		<arg value="${root}/lib/areca.jar"/>
++		<arg value="com.myJava.file.metadata.posix.jni.wrapper.FileAccessWrapper"/>
++	</exec>
+
+         <!-- Compile the JNI code -->
+         <exec dir="${root}/jni" executable="gcc">

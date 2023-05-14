@@ -1,0 +1,13 @@
+diff --git i/setup.py w/setup.py
+index cfe2665..5795874 100755
+--- i/setup.py
++++ w/setup.py
+@@ -179,7 +179,7 @@ class build_ext(_build_ext):
+             driver_build_function = self._build_win_driver 
+             self._build_win_compression()
+ 
+-        if not self.skip_driver:
++        if True:
+             driver_build_function()
+ 
+     def get_source_files(self):

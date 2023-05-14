@@ -1,0 +1,15 @@
+diff -Naur source-old/src/CMakeLists.txt source-new/src/CMakeLists.txt
+--- source-old/src/CMakeLists.txt	1969-12-31 21:00:01.000000000 -0300
++++ source-new/src/CMakeLists.txt	2021-10-29 12:03:06.461399341 -0300
+@@ -362,10 +360,8 @@
+ 	if (EXISTS ${EXTERNAL_SRC_DIR}/git/openal AND STATIC_OPENAL)
+ 		amsg("${CL_YEL}Building OpenAL static from external/git mirror${CL_RST}")
+ 		ExternalProject_Add(OpenAL
+-			SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/openal
++			SOURCE_DIR "${EXTERNAL_SRC_DIR}/git/openal"
+ 			BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/openal_static
+-			UPDATE_COMMAND ""
+-			GIT_REPOSITORY "${EXTERNAL_SRC_DIR}/git/openal"
+ 			${EXTERNAL_DEFS}
+ 			${CMAKE_EXTERNAL_DEFS}
+ 			-DALSOFT_BACKEND_DSOUND=OFF
