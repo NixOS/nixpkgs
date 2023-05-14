@@ -7707,6 +7707,8 @@ with pkgs;
 
   edk2-uefi-shell = callPackage ../tools/misc/edk2-uefi-shell { };
 
+  lanzaboote-uefi-stub = callPackage ../os-specific/uefi/lanzaboote-stub { };
+
   edl = callPackage ../development/embedded/edl { };
 
   edlib = callPackage ../development/libraries/science/biology/edlib { };
