@@ -13,7 +13,7 @@
 , pycocotools
 , pydot
 , pytest
-, pytorch
+, torch
 , pyyaml
 , tensorflow-tensorboard
 , tqdm
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     omegaconf
     pybind11
     pyyaml
-    pytorch
+    torch
     pydot
     tqdm
     cloudpickle
