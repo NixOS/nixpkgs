@@ -31,6 +31,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/iwalton3/plex-mpv-shim";
     description = "Allows casting of videos to MPV via the Plex mobile and web app";
+    maintainers = with maintainers; [ devusb ];
     license = licenses.mit;
   };
 }
