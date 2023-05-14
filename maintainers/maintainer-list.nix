@@ -4121,6 +4121,13 @@
       fingerprint = "4749 0887 CF3B 85A1 6355  C671 78C7 DD40 DF23 FB16";
     }];
   };
+  dpc = {
+    name = "Dawid Ciężarkiewicz";
+    email = "dpc@dpc.pw";
+    matrix = "@dpc:matrix.org";
+    github = "dpc";
+    githubId = 9209;
+  };
   DPDmancul = {
     name = "Davide Peressoni";
     email = "davide.peressoni@tuta.io";

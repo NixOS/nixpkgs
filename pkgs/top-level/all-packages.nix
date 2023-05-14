@@ -28167,6 +28167,8 @@ with pkgs;
 
   input-fonts = callPackage ../data/fonts/input-fonts { };
 
+  intel-one-mono = callPackage ../data/fonts/intel-one-mono { };
+
   inriafonts = callPackage ../data/fonts/inriafonts { };
 
   iosevka = callPackage ../data/fonts/iosevka { };
