@@ -5,6 +5,7 @@
 , cryptography
 , fetchFromGitHub
 , frozendict
+, html5lib
 , multitasking
 , numpy
 , pandas
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     beautifulsoup4
     cryptography
     frozendict
+    html5lib
     multitasking
     numpy
     pandas
