@@ -32500,6 +32500,8 @@ with pkgs;
     cutter = callPackage ../applications/video/mpv/scripts/cutter.nix { };
   };
 
+  open-in-mpv = callPackage ../applications/video/open-in-mpv { };
+
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
 
   mtpaint = callPackage ../applications/graphics/mtpaint { };
