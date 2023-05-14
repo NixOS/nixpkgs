@@ -34,15 +34,15 @@ let
         inherit wrapFlutter mkCustomFlutter mkFlutter;
         buildFlutterApplication = callPackage ../../../build-support/flutter {
           # Package a minimal version of Flutter that only uses Linux desktop release artifacts.
-          flutter = wrapFlutter
-            (mkCustomFlutter (args // {
-              includedEngineArtifacts = {
-                common = [ "flutter_patched_sdk_product" ];
-                platform.linux = lib.optionals stdenv.hostPlatform.isLinux
-                  (lib.genAttrs ((lib.optional stdenv.hostPlatform.isx86_64 "x64") ++ (lib.optional stdenv.hostPlatform.isAarch64 "arm64"))
-                    (architecture: [ "release" ]));
-              };
-            }));
+          flutter = (wrapFlutter (mkCustomFlutter args)).override {
+            supportsAndroid = false;
+            includedEngineArtifacts = {
+              common = [ "flutter_patched_sdk_product" ];
+              platform.linux = lib.optionals stdenv.hostPlatform.isLinux
+                (lib.genAttrs ((lib.optional stdenv.hostPlatform.isx86_64 "x64") ++ (lib.optional stdenv.hostPlatform.isAarch64 "arm64"))
+                  (architecture: [ "release" ]));
+            };
+          };
         };
       };
     });

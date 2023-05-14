@@ -8,13 +8,7 @@
       "flutter_patched_sdk"
       "flutter_patched_sdk_product"
     ];
-    platform = {
-      android = lib.optionalAttrs stdenv.hostPlatform.isx86_64
-        ((lib.genAttrs [ "arm" "arm64" "x64" ] (architecture: [ "profile" "release" ])) // { x86 = [ "jit-release" ]; });
-      linux = lib.optionals stdenv.hostPlatform.isLinux
-        (lib.genAttrs ((lib.optional stdenv.hostPlatform.isx86_64 "x64") ++ (lib.optional stdenv.hostPlatform.isAarch64 "arm64"))
-          (architecture: [ "debug" "profile" "release" ]));
-    };
+    platform = { };
   }
 
 , lib
