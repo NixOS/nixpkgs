@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-4FYTFUIvGjea3bh2GbQYG7hSswVDdNS3S+jWQ9+inpg=";
   };
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
   dontConfigure = true;
   enableParallelBuilding = true;
 
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     makeFlags="$makeFlags -C ${KSRC} M=$(pwd)"
-'';
+  '';
   installTargets = [ "modules_install" ];
 
   meta = with lib; {
