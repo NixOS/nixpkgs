@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tome4";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchurl {
     url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "sha256-w1NPM/SMnPAnAl6z9E6Xsj3mEqZtXzFe1IMPmlKr8qQ=";
+    sha256 = "sha256-SjZbENFcEGXiDhk4h7TAHhzOEmlpnp0bPkUzvVjISto=";
   };
 
   desktop = makeDesktopItem {
