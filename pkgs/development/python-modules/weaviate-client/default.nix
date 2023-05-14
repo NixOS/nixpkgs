@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools-scm
 , tqdm
 , validators
 }:
@@ -19,11 +20,17 @@ buildPythonPackage rec {
     hash = "sha256-QjpSZRijJQXFKTMo5fJS5su/IOSzEkcz9w0Q/A1oI8k=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "validators>=0.18.2,<0.20.0" "validators>=0.18.2" \
       --replace "requests>=2.28.0,<2.29.0" "requests>=2.28.0"
   '';
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     authlib
