@@ -41,10 +41,6 @@ let
     in
       "${if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile}/Caddyfile";
 
-  adminDisabled = lib.fileContents (pkgs.runCommand "caddy-config-adapted" {} ''
-    ${cfg.package}/bin/caddy adapt --config ${configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"} | ${pkgs.jq}/bin/jq .admin.disabled > $out
-  '') == "true";
-
   etcConfigFile = "caddy/caddy_config";
 
   configPath = "/etc/${etcConfigFile}";
@@ -311,9 +307,6 @@ in
     assertions = [
       { assertion = cfg.configFile == configFile -> cfg.adapter == "caddyfile" || cfg.adapter == null;
         message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
-      }
-      { assertion = cfg.enableReload -> !adminDisabled;
-        message = "You need to remove `admin off` from your Caddy configuration in order to use `services.caddy.enableReload`";
       }
     ] ++ map (name: mkCertOwnershipAssertion {
       inherit (cfg) group user;
