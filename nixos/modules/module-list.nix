@@ -1374,6 +1374,7 @@
   ./tasks/filesystems/cifs.nix
   ./tasks/filesystems/ecryptfs.nix
   ./tasks/filesystems/envfs.nix
+  ./tasks/filesystems/erofs.nix
   ./tasks/filesystems/exfat.nix
   ./tasks/filesystems/ext.nix
   ./tasks/filesystems/f2fs.nix
