@@ -2,34 +2,27 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
-
-# build time
 , astropy-extension-helpers
 , astropy-helpers
 , cython
 , jinja2
 , setuptools-scm
-
-# runtime
 , numpy
 , packaging
 , pyerfa
 , pyyaml
 }:
 
-let
+buildPythonPackage rec {
   pname = "astropy";
-  version = "5.2.1";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "5.2.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8"; # according to setup.cfg
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9q4noHf46oSQPvp2x5C5hWFzQaAISw0hw5H3o/MyrCM=";
+    hash = "sha256-5qnjRxa9pZRXiDU8Y/BkRyHuflRH0Wsc3LWMSKlrDZw=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -57,6 +50,6 @@ buildPythonPackage {
     homepage = "https://www.astropy.org";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [ maintainers.kentjames ];
+    maintainers = with maintainers; [ kentjames ];
   };
 }
