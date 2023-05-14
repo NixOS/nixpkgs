@@ -1143,6 +1143,8 @@ self: super: with self; {
 
   bambi = callPackage ../development/python-modules/bambi { };
 
+  backgroundremover = callPackage ../development/python-modules/backgroundremover { };
+
   pad4pi = callPackage ../development/python-modules/pad4pi { };
 
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
