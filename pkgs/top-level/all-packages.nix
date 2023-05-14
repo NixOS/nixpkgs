@@ -6153,9 +6153,7 @@ with pkgs;
 
   checkmake = callPackage ../development/tools/checkmake { };
 
-  chit = callPackage ../development/tools/chit {
-    openssl = openssl_1_1;
-  };
+  chit = callPackage ../development/tools/chit { };
 
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
