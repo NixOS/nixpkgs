@@ -19,6 +19,7 @@ PKG_SET = "pkgs.python3Packages"
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
     "dnspython": "dnspython",
+    "elasticsearch-dsl": "elasticsearch-dsl",
     "google-api-python-client": "google-api-python-client",
     "psycopg2-binary": "psycopg2",
     "requests_toolbelt": "requests-toolbelt",
