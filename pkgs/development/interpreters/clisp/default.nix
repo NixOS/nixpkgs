@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   inherit libsigsegv gettext coreutils;
 
-  ffcallAvailable = stdenv.isLinux && (libffcall != null);
+  ffcallAvailable = libffcall != null;
 
   buildInputs = [libsigsegv]
   ++ lib.optional (gettext != null) gettext
