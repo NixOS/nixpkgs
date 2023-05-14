@@ -1,5 +1,5 @@
-{ lib, buildPythonApplication, fetchFromGitHub, mpv, requests, python-mpv-jsonipc, pystray, tkinter
-, wrapGAppsHook, gobject-introspection }:
+{ lib, buildPythonApplication, fetchFromGitHub, python, mpv, requests, python-mpv-jsonipc, pystray, tkinter
+, wrapGAppsHook, gobject-introspection, mpv-shim-default-shaders }:
 
 buildPythonApplication rec {
   pname = "plex-mpv-shim";
@@ -25,6 +25,11 @@ buildPythonApplication rec {
   '';
   dontWrapGApps = true;
 
+  postInstall = ''
+    # put link to shaders where upstream package expects them
+    ln -s ${mpv-shim-default-shaders}/share/mpv-shim-default-shaders $out/${python.sitePackages}/plex_mpv_shim/default_shader_pack
+  '';
+
   # does not contain tests
   doCheck = false;
 
@@ -33,5 +38,6 @@ buildPythonApplication rec {
     description = "Allows casting of videos to MPV via the Plex mobile and web app";
     maintainers = with maintainers; [ devusb ];
     license = licenses.mit;
+    platforms = platforms.linux;
   };
 }
