@@ -26,18 +26,9 @@ in {
             keyPath = "${certs.${domain}.key}";
           }];
         };
-        # Enable TLS listeners. Configuring this via the module is not yet
-        # implemented.
-        config = builtins.replaceStrings [
-          "imap tcp://0.0.0.0:143"
-          "submission tcp://0.0.0.0:587"
-        ] [
-          "imap tls://0.0.0.0:993 tcp://0.0.0.0:143"
-          "submission tls://0.0.0.0:465 tcp://0.0.0.0:587"
-        ] options.services.maddy.config.default;
+        submission.tlsEnable = true;
+        imap.tlsEnable = true;
       };
-      # Not covered by openFirewall yet
-      networking.firewall.allowedTCPPorts = [ 993 465 ];
     };
 
     client = { nodes, ... }: {
