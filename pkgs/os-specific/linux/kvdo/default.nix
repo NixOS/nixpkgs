@@ -1,14 +1,15 @@
 { stdenv, lib, fetchFromGitHub, vdo, kernel }:
 
 stdenv.mkDerivation rec {
-  inherit (vdo) version;
+  inherit (vdo);
   pname = "kvdo";
+  version = "8.2.1.6"; # bump this version with vdo
 
   src = fetchFromGitHub {
     owner = "dm-vdo";
     repo = "kvdo";
     rev = version;
-    hash = "sha256-4FYTFUIvGjea3bh2GbQYG7hSswVDdNS3S+jWQ9+inpg=";
+    hash = "sha256-S5r2Rgx5pWk4IsdIwmfZkuGL/oEQ3prquyVqxjR3cO0=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
