@@ -12,6 +12,7 @@
 , withConnPrometheus ? false, snappy
 , withSsl ? true, openssl
 , withDebug ? false
+, fetchpatch
 }:
 
 with lib;
@@ -59,6 +60,17 @@ in stdenv.mkDerivation rec {
     # Avoid build-only inputs in closure leaked by configure command:
     #   https://github.com/NixOS/nixpkgs/issues/175693#issuecomment-1143344162
     ./skip-CONFIGURE_COMMAND.patch
+
+    (fetchpatch {
+      # https://github.com/netdata/netdata/pull/14063
+      name = "fix-stream-authentication.patch";
+      url = "https://github.com/netdata/netdata/commit/811028aea2f146cc0ac2bc403f7d692add400d63.patch";
+      hash = "sha256-Evp5EXcBrdqNwigofequALxOvmUr62hCC5YtXcvBhao=";
+    })
+
+      # Fixing injection vulnerability: https://github.com/netdata/netdata/pull/14064
+      ## The patch cannot be made directly from the commmit with fetchpatch
+      ./fix-alarm-notification-commands.patch
   ];
 
   # Guard against unused buld-time development inputs in closure. Without
