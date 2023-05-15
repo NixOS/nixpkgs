@@ -11709,6 +11709,8 @@ with pkgs;
 
   redmine = callPackage ../applications/version-management/redmine { };
 
+  redpanda = callPackage ../servers/redpanda { };
+
   redpanda-rpk = callPackage ../servers/redpanda-rpk { };
 
   redpanda-server = redpanda-rpk.server;
