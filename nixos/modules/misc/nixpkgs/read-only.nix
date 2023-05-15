@@ -19,6 +19,7 @@ in
 {
   disabledModules = [
     ../nixpkgs.nix
+    ./no-legacy.nix
   ];
   options = {
     nixpkgs = {

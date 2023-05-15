@@ -12,6 +12,20 @@
       lib = import ./lib;
 
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
+
+      pkgsMemoizer = { pkgs, inputsSet, ... }:
+        let system = lib.systems.toLosslessStringMaybe inputsSet.hostPlatform.value.system;
+        in
+        if lib.attrNames inputsSet == [ "hostPlatform" ] && system != null
+        then
+          # As only hostPlatform matters in this invocation, we can save
+          # memory by sharing the Nixpkgs invocation.
+          # `pkgs` is never evaluated.
+          self.legacyPackages.${system}
+        else
+          # We let the module invoke Nixpkgs as usual.
+          pkgs;
+
     in
     {
       lib = lib.extend (final: prev: {
@@ -70,6 +84,18 @@
               }
         */
         readOnlyPkgs = ./nixos/modules/misc/nixpkgs/read-only.nix;
+
+        /*
+          Replaces the module for `nixpkgs.*` by a simpler module that can
+          reuse `legacyPackages`, but does not have any backwards compatibility,
+          so no `nixpkgs.*System`, etc.
+
+          Ignored when `readOnlyPkgs` is imported.
+         */
+        noLegacyPkgs = {
+          imports = [ ./nixos/modules/misc/nixpkgs/no-legacy.nix ];
+          nixpkgs._memoize = pkgsMemoizer;
+        };
       };
 
       modules = {
@@ -79,20 +105,7 @@
             imports = [
               ./pkgs/top-level/module/module.nix
             ];
-            config = {
-              _memoize = { pkgs, inputsSet, ... }:
-                let system = lib.systems.toLosslessStringMaybe inputsSet.hostPlatform.value.system;
-                in
-                if lib.attrNames inputsSet == [ "hostPlatform" ] && system != null
-                then
-                  # As only hostPlatform matters in this invocation, we can save
-                  # memory by sharing the Nixpkgs invocation.
-                  # `pkgs` is never evaluated.
-                  self.legacyPackages.${system}
-                else
-                  # We let the module invoke Nixpkgs as usual.
-                  pkgs;
-            };
+            config._memoize = pkgsMemoizer;
           };
         };
       };
