@@ -4887,6 +4887,8 @@ self: super: with self; {
 
   imgaug = callPackage ../development/python-modules/imgaug { };
 
+  imgdiff = callPackage ../development/python-modules/imgdiff { };
+
   imgsize = callPackage ../development/python-modules/imgsize { };
 
   iminuit = callPackage ../development/python-modules/iminuit { };
