@@ -3,7 +3,6 @@
 , runCommandWith
 , writeShellScript
 , fetchFromGitHub
-, fetchpatch
 
 , freetype
 , libjpeg
@@ -107,14 +106,14 @@ let
   ];
 in stdenv.mkDerivation {
   pname = "darling";
-  version = "unstable-2023-05-02";
+  version = "unstable-2023-05-14";
 
   src = fetchFromGitHub {
     owner = "darlinghq";
     repo = "darling";
-    rev = "557e7e9dece394a3f623825679474457e5b64fd0";
+    rev = "dec20ddf3892ff35f0a688a047d8931faf4471c4";
     fetchSubmodules = true;
-    hash = "sha256-SOoLaV7wg33qRHPQXkdMvrY++CvoG85kwd6IU6DkYa0=";
+    hash = "sha256-ofoS+JiUhtTn9NPCsYyHXucWlxQ20D60wnNAM9GwdPg=";
   };
 
   outputs = [ "out" "sdk" ];
@@ -130,6 +129,9 @@ in stdenv.mkDerivation {
 
     substituteInPlace src/startup/CMakeLists.txt --replace SETUID ""
     substituteInPlace src/external/basic_cmds/CMakeLists.txt --replace SETGID ""
+
+    # https://github.com/darlinghq/darling-wtf/pull/3
+    rm src/external/WTF/darling/include/wtf/mac/AppKitCompatibilityDeclarations.h
   '';
 
   nativeBuildInputs = [
