@@ -2480,6 +2480,8 @@ self: super: with self; {
 
   dfdatetime = callPackage ../development/python-modules/dfdatetime { };
 
+  dfwinreg = callPackage ../development/python-modules/dfwinreg { };
+
   diagrams = callPackage ../development/python-modules/diagrams { };
 
   diceware = callPackage ../development/python-modules/diceware { };
