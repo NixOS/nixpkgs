@@ -5735,6 +5735,8 @@ self: super: with self; {
     (p: p.py)
   ];
 
+  libsmdev-python = callPackage ../development/python-modules/libsmdev-python { };
+
   libsoundtouch = callPackage ../development/python-modules/libsoundtouch { };
 
   libthumbor = callPackage ../development/python-modules/libthumbor { };
