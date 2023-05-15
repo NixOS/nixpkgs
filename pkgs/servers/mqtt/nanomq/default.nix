@@ -32,5 +32,11 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
+    knownVulnerabilities = [
+      "CVE-2023-29994"
+      "CVE-2023-29995"
+      "CVE-2023-29996"
+      "https://github.com/emqx/nanomq/issues/1050"  # not individually assigned CVEs
+    ];
   };
 }
