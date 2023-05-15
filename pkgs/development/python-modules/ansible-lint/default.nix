@@ -1,35 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , setuptools-scm
-, ansible-compat
 , ansible-core
 , black
-, enrich
 , filelock
 , flaky
 , jsonschema
+, packaging
 , pythonOlder
-, pytest
 , pytest-xdist
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pyyaml
 , rich
 , ruamel-yaml
+, subprocess-tee
 , wcmatch
 , yamllint
 }:
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "6.15.0";
+  version = "6.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TOeQzwAGdgugHYuUbYAwNwL8dFS9GcazB53ZjUBRfm8=";
+    hash = "sha256-34Lzk18SCeMHRAjurl6DfM7G/VLB0xJmif9BJKuwpcs=";
   };
 
   postPatch = ''
@@ -39,20 +40,26 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "ruamel.yaml"
   ];
 
   propagatedBuildInputs = [
-    ansible-compat
+    # https://github.com/ansible/ansible-lint/blob/master/.config/requirements.in
     ansible-core
     black
-    enrich
     filelock
     jsonschema
-    pytest # yes, this is an actual runtime dependency
+    packaging
     pyyaml
     rich
     ruamel-yaml
+    subprocess-tee
     wcmatch
     yamllint
   ];
