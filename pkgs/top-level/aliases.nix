@@ -641,6 +641,7 @@ mapAliases ({
   grafana-mimir = throw "'grafana-mimir' has been renamed to/replaced by 'mimir'"; # Added 2022-06-07
   gr-ais = gnuradio3_7.pkgs.ais; # Added 2019-05-27, changed 2020-10-16
   grantlee5 = throw "'grantlee5' has been renamed to/replaced by 'libsForQt5.grantlee'"; # Converted to throw 2022-02-22
+  graylog = throw "graylog is now available in versions 3.3 up to 5.0. Please mind the upgrade path and choose the appropriate version. Direct upgrading from 3.3 to 4.3 or above is not supported"; # Added 2023-04-24
   gr-gsm = gnuradio3_7.pkgs.gsm; # Added 2019-05-27, changed 2020-10-16
   grib-api = throw "grib-api has been replaced by ecCodes => https://confluence.ecmwf.int/display/ECC/GRIB-API+migration"; # Added 2022-01-05
   gringo = clingo; # added 2022-11-27
@@ -714,6 +715,7 @@ mapAliases ({
   imagemagick7_light = imagemagick_light; # Added 2021-02-22
   imlib = throw "imlib has been dropped due to the lack of maintenance from upstream since 2004"; # Added 2023-01-04
   impressive = throw "impressive has been removed due to lack of released python 2 support and maintainership in nixpkgs"; # Added 2022-01-27
+  insync-v3 = throw "insync-v3 has been merged into the insync package; use insync instead"; #Added 2023-05-13
   i-score = throw "i-score has been removed: abandoned upstream"; # Added 2020-11-21
   inboxer = throw "inboxer has been removed as it is no longer maintained and no longer works as Google shut down the inbox service this package wrapped";
   index-fm = libsForQt5.mauiPackages.index; # added 2022-05-17

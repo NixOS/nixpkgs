@@ -167,6 +167,9 @@ let
         sphinxHook = null;
         sphinx-rtd-theme = null;
       }).overridePythonAttrs dropDocOutput;
+      deprecated = (super.deprecated.override {
+        sphinxHook = null;
+      }).overridePythonAttrs dropDocOutput;
     };
   };
 in
@@ -239,5 +242,6 @@ python3'.pkgs.buildPythonPackage rec {
     license = licenses.agpl3Plus;
     homepage = "http://www.privacyidea.org";
     maintainers = with maintainers; [ globin ma27 ];
+    platforms = platforms.linux;
   };
 }

@@ -5,6 +5,8 @@
 , installShellFiles
 , stdenv
 , darwin
+  # tests
+, ruff-lsp
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -63,6 +65,10 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/ruff generate-shell-completion fish) \
       --zsh <($out/bin/ruff generate-shell-completion zsh)
   '';
+
+  passthru.tests = {
+    inherit ruff-lsp;
+  };
 
   meta = with lib; {
     description = "An extremely fast Python linter";
