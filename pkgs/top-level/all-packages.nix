@@ -1121,6 +1121,8 @@ with pkgs;
   closureInfo = callPackage ../build-support/closure-info.nix { };
 
   serverspec = callPackage ../tools/misc/serverspec { };
+  
+  sfwbar = callPckage ../applications/misc/sfwbar { };
 
   setupSystemdUnits = callPackage ../build-support/setup-systemd-units.nix { };
 
