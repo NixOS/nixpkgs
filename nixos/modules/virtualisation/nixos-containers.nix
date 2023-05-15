@@ -515,6 +515,10 @@ in
                     in [ extraConfig ] ++ (map (x: x.value) defs);
                   prefix = [ "containers" name ];
                   inherit (config) specialArgs;
+
+                  # The system is inherited from the host above.
+                  # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
+                  system = null;
                 }).config;
               };
             };

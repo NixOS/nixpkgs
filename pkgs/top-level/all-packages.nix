@@ -5222,6 +5222,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  klipperscreen = callPackage ../applications/misc/klipperscreen { };
+
   klog = qt5.callPackage ../applications/radio/klog { };
 
   komga = callPackage ../servers/komga { };
@@ -9503,6 +9505,8 @@ with pkgs;
 
   jbofihe = callPackage ../tools/text/jbofihe { };
 
+  jbrowse = callPackage ../applications/science/biology/jbrowse { };
+
   jumanpp = callPackage ../tools/text/jumanpp { };
 
   jump = callPackage ../tools/system/jump { };
@@ -13176,6 +13180,8 @@ with pkgs;
   };
 
   twitch-chat-downloader = python3Packages.callPackage ../applications/misc/twitch-chat-downloader { };
+
+  twitch-dl = callPackage ../tools/misc/twitch-dl { };
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap { };
 
@@ -19003,6 +19009,8 @@ with pkgs;
 
   rolespec = callPackage ../development/tools/misc/rolespec { };
 
+  rome = callPackage ../development/tools/rome { };
+
   rr = callPackage ../development/tools/analysis/rr { };
 
   rsass = callPackage ../development/tools/misc/rsass { };
@@ -19207,6 +19215,10 @@ with pkgs;
   swigWithJava = swig;
 
   c2ffi = callPackage ../development/tools/misc/c2ffi { };
+
+  c0 = callPackage ../development/compilers/c0 {
+    stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
+  };
 
   c3c = callPackage ../development/compilers/c3c { };
 
@@ -34352,9 +34364,7 @@ with pkgs;
 
   ticker = callPackage ../applications/misc/ticker { };
 
-  tickrs = callPackage ../applications/misc/tickrs {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  tickrs = callPackage ../applications/misc/tickrs { };
 
   tilemaker = callPackage ../applications/misc/tilemaker { };
 
@@ -39028,6 +39038,10 @@ with pkgs;
                   then configuration
                   else [configuration]
                 );
+
+                # The system is inherited from the current pkgs above.
+                # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
+                system = null;
             };
       in
         c.config.system.build // c;
@@ -39207,6 +39221,8 @@ with pkgs;
   r128gain = callPackage ../applications/audio/r128gain { };
 
   resp-app = libsForQt5.callPackage ../applications/misc/resp-app { };
+
+  resumed = callPackage ../applications/misc/resumed { };
 
   robin-map = callPackage ../development/libraries/robin-map { };
 
