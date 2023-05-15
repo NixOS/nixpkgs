@@ -5591,6 +5591,8 @@ self: super: with self; {
 
   libesedb-python = callPackage ../development/python-modules/libesedb-python { };
 
+  libevt-python = callPackage ../development/python-modules/libevt-python { };
+
   libfdt = toPythonModule (pkgs.dtc.override {
     inherit python;
     pythonSupport = true;
