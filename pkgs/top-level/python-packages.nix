@@ -5604,6 +5604,8 @@ self: super: with self; {
 
   libfsapfs-python = callPackage ../development/python-modules/libfsapfs-python { };
 
+  libfsext-python = callPackage ../development/python-modules/libfsext-python { };
+
   libgpiod = toPythonModule (pkgs.libgpiod.override {
     enablePython = true;
     python3 = python;
