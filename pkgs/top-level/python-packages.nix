@@ -15792,6 +15792,8 @@ self: super: with self; {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
+  toptica-lasersdk = callPackage ../development/python-modules/toptica-lasersdk { };
+
   torch = callPackage ../development/python-modules/torch { };
 
   # Required to test triton
