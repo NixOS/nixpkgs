@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "5.2.0";
+  version = "5.2.1";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
-    sha256 = "sha256-URBHQA3UU5F3VCyEpegNfpetc9KpmG/81s2FtMxxH78=";
+    sha256 = "sha256-cWTJ/NkQzzOfoh0WoYpwHg4TCbjtSJomtQarhsSFg48=";
   };
 
   strictDeps = true;
