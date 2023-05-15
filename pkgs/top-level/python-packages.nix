@@ -5710,6 +5710,7 @@ self: super: with self; {
 
   libregf-python = callPackage ../development/python-modules/libregf-python { };
 
+  libscca-python = callPackage ../development/python-modules/libscca-python { };
 
   libsixel = callPackage ../development/python-modules/libsixel {
     inherit (pkgs) libsixel;
