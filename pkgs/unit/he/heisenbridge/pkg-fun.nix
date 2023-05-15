@@ -39,6 +39,7 @@ in python.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
+    pytestCheckHook
   ];
 
   meta = with lib; {
