@@ -5708,6 +5708,8 @@ self: super: with self; {
 
   libqcow-python = callPackage ../development/python-modules/libqcow-python { };
 
+  libregf-python = callPackage ../development/python-modules/libregf-python { };
+
 
   libsixel = callPackage ../development/python-modules/libsixel {
     inherit (pkgs) libsixel;
