@@ -5270,6 +5270,8 @@ self: super: with self; {
 
   inotifyrecursive = callPackage ../development/python-modules/inotifyrecursive { };
 
+  inputs = callPackage ../development/python-modules/inputs { };
+
   inquirer = callPackage ../development/python-modules/inquirer { };
 
   inquirerpy = callPackage ../development/python-modules/inquirerpy { };
