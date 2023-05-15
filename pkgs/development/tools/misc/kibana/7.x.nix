@@ -17,9 +17,10 @@ let
   plat = elemAt info 1;
   shas =
     {
-      x86_64-linux  = "b657d82c8189acc8a8f656ab949e1484aaa98755a16c33f48c318fb17180343f";
-      x86_64-darwin = "ac2b5a639ad83431db25e4161f811111d45db052eb845091e18f847016a34a55";
-      aarch64-linux = "a1f7ab9e874799bf380b94394e5bb1ce28f38019896293dde8797d74ad273e67";
+      x86_64-linux  = "f0f9f65b6ba3cc401a519f764314854f6f1f22a9c3b55dfc5a4921455d64fc0d5b8352d267217076da82157553f235ab3d2506497132f23789b126205177e86b";
+      x86_64-darwin = "2ba707a0e7a5c34be98ee5e299b8f1d9ace99a626112efd48ca08bfc9640374ec37fc1761c9ef91599e7a5bf5055d2731759b0337952d7767b02d9c46640be71";
+      aarch64-linux = "6899c46a06cceb3bfa5db22cdad90db3063b3859c6059a379ac29ce5755073e45b6914491c7c0ec92c48344c1658ea68f7453992d1a39b70782f699315d175de";
+      aarch64-darwin = "194b7288f394ff39af3e114099a8f0f847091fd50231ee50c12105189e2b1dfdff8971795c2c22275ff113734e543cfaf51940682d77576c89d2d5bce9b26b92";
     };
 
 in stdenv.mkDerivation rec {
@@ -28,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/kibana/${pname}-${version}-${plat}-${arch}.tar.gz";
-    sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
+    sha512 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   patches = [

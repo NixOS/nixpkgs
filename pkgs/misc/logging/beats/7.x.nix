@@ -8,10 +8,10 @@ let beat = package: extraArgs: buildGoModule (rec {
     owner = "elastic";
     repo = "beats";
     rev = "v${version}";
-    sha256 = "sha256-DE7XpzVBu9qL7fMXXYRYLdVXrr0WB0IL0KAG0Zc3TVo=";
+    hash = "sha256-BGi2fGUz0J7BuLo3JA4c2yUlWXdLpjn+AcMHkDGd3js=";
   };
 
-  vendorSha256 = "sha256-TQrXUcLv7rFo3PP3bVx0wEC1WbtkJDsCm+/izHAxqBc=";
+  vendorHash = "sha256-FtFHfxCIZ4G1aFfGUgRfTz+zL4OE4SLPuDzXqL6CDyo=";
 
   subPackages = [ package ];
 
