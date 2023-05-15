@@ -9,8 +9,9 @@
 , glib
 , gtk3
 , qtbase
+, qt5
 , qtwayland
-, pantheon
+, cinnamon
 , substituteAll
 , gsettings-desktop-schemas
 , useQt6 ? false
@@ -18,20 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "qgnomeplatform";
-  version = "0.8.4";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "QGnomePlatform";
     rev = version;
-    sha256 = "sha256-DaIBtWmce+58OOhqFG5802c3EprBAtDXhjiSPIImoOM=";
+    sha256 = "sha256-X+iJIbZL4/jKECIg2gTcenjzMA9nMy6gO6rNrAiVsKI=";
   };
 
   patches = [
-    # Hardcode GSettings schema path to avoid crashes from missing schemas
+    # Hardcode GSettings schema path
     (substituteAll {
       src = ./hardcode-gsettings.patch;
       gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
+      cinnamon_gsettings_path = glib.getSchemaPath cinnamon.cinnamon-desktop;
     })
   ];
 
@@ -46,6 +48,7 @@ stdenv.mkDerivation rec {
     qtbase
     qtwayland
   ] ++ lib.optionals (!useQt6) [
+    qt5.qtquickcontrols2
     adwaita-qt
   ] ++ lib.optionals useQt6 [
     adwaita-qt6
