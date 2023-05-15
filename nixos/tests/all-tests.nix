@@ -554,6 +554,7 @@ in {
   opentabletdriver = handleTest ./opentabletdriver.nix {};
   owncast = handleTest ./owncast.nix {};
   image-contents = handleTest ./image-contents.nix {};
+  openvscode-server = handleTest ./openvscode-server.nix {};
   orangefs = handleTest ./orangefs.nix {};
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
   osrm-backend = handleTest ./osrm-backend.nix {};
