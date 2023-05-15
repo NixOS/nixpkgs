@@ -2848,6 +2848,8 @@ self: super: with self; {
 
   dj-search-url = callPackage ../development/python-modules/dj-search-url { };
 
+  dj-static = callPackage ../development/python-modules/dj-static { };
+
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
   dlib = callPackage ../development/python-modules/dlib {
