@@ -255,6 +255,7 @@
   ./programs/usbtop.nix
   ./programs/vim.nix
   ./programs/wavemon.nix
+  ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
   ./programs/wayland/waybar.nix
   ./programs/weylus.nix

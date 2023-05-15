@@ -150,9 +150,8 @@ in {
           };
         };
         # To make a Sway session available if a display manager like SDDM is enabled:
-        services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ];
-      }
-      (import ./wayland-session.nix { inherit lib; })
+        services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ]; }
+      (import ./wayland-session.nix { inherit lib pkgs; })
     ]);
 
   meta.maintainers = with lib.maintainers; [ primeos colemickens ];
