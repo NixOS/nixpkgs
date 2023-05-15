@@ -72,26 +72,12 @@
       nixosModules = {
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;
 
-        /*
-          Make the `nixpkgs.*` configuration read-only. Guarantees that `pkgs`
-          is the way you initialize it.
-
-          Example:
-
-              {
-                imports = [ nixpkgs.nixosModules.readOnlyPkgs ];
-                nixpkgs.pkgs = nixpkgs.legacyPackages.x86_64-linux;
-              }
-        */
+        # See nixos/doc/manual/nixos-optional-modules.md
+        # TODO: online manual link
         readOnlyPkgs = ./nixos/modules/misc/nixpkgs/read-only.nix;
 
-        /*
-          Replaces the module for `nixpkgs.*` by a simpler module that can
-          reuse `legacyPackages`, but does not have any backwards compatibility,
-          so no `nixpkgs.*System`, etc.
-
-          Ignored when `readOnlyPkgs` is imported.
-         */
+        # See nixos/doc/manual/nixos-optional-modules.md
+        # TODO: online manual link
         noLegacyPkgs = {
           imports = [ ./nixos/modules/misc/nixpkgs/no-legacy.nix ];
           nixpkgs._memoize = pkgsMemoizer;

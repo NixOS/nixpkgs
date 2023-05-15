@@ -51,6 +51,10 @@ contributing-to-this-manual.chapter.md
 nixos-options.md
 ```
 
+```{=include=} appendix html:into-file=//optional-modules.html
+nixos-optional-modules.md
+```
+
 ```{=include=} appendix html:into-file=//release-notes.html
 release-notes/release-notes.md
 ```
