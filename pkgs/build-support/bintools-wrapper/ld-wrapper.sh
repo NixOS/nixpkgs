@@ -20,6 +20,8 @@ if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
+extraAfter=()
+extraBefore=()
 expandResponseParams "$@"
 
 # NIX_LINK_TYPE is set if ld has been called through our cc wrapper. We take
@@ -29,6 +31,21 @@ if [[ -n "${NIX_LINK_TYPE_@suffixSalt@:-}" ]]; then
     linkType=$NIX_LINK_TYPE_@suffixSalt@
 else
     linkType=$(checkLinkType "${params[@]}")
+fi
+
+# `lld` supports specifying the linker flavor (i.e. gnu, link, ld64, wasm, etc)
+# via the `-flavor` argument:
+# https://github.com/llvm/llvm-project/blob/1ba9ec0d10c8c95216d8d7fc47f028344c1640bb/lld/tools/lld/lld.cpp#L125-L142
+#
+# However, this must be the *first* argument to `lld`. So, if `-flavor` is the
+# first arg in `params`, we hoist it to the front of `extraBefore`:
+if [[ ${#params[@]} -ge 2 ]] && [[ ${params[0]} == "-flavor" ]]; then
+    # As per the link above, only `-flavor <flavor name>` is supported. Not
+    # `--flavor`, `-flavor=...`, `/flavor:...`, etc.
+    linkFlavor="${params[1]}"
+    extraBefore=(-flavor "$linkFlavor" "${extraBefore[@]}")
+
+    params=("${params[@]:2}")
 fi
 
 # Optionally filter out paths not refering to the store.
@@ -75,8 +92,7 @@ fi
 
 source @out@/nix-support/add-hardening.sh
 
-extraAfter=()
-extraBefore=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
+extraBefore+=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
 
 if [ -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ]; then
     extraAfter+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_@suffixSalt@))
