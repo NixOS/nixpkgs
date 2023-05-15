@@ -29,6 +29,7 @@
 , protobuf
 , psutil
 , pydantic
+, pyfakefs
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
@@ -50,7 +51,7 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.15.0";
+  version = "0.15.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -59,7 +60,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-UULsvvk9BsWUrJ8eD7uD2UnUJqmPrmjrJvCA7WRC/Cw=";
+    hash = "sha256-cAmX3r6XhCBUnC/fNNPakZUNEcDFke0DJMi2PW7sOho=";
   };
 
   patches = [
@@ -111,6 +112,7 @@ buildPythonPackage rec {
     pandas
     parameterized
     pydantic
+    pyfakefs
     pytest-mock
     pytest-xdist
     pytestCheckHook
@@ -131,6 +133,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
+    "tests/pytest_tests/system_tests/test_notebooks/test_notebooks.py"
     "tests/pytest_tests/unit_tests_old/test_cli.py"
     "tests/pytest_tests/unit_tests_old/test_data_types.py"
     "tests/pytest_tests/unit_tests_old/test_file_stream.py"
@@ -156,7 +159,6 @@ buildPythonPackage rec {
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_docker.py"
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_kubernetes.py"
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch.py"
-    "tests/pytest_tests/unit_tests_old/tests_s_nb/test_notebooks.py"
     "tests/pytest_tests/unit_tests/test_cli.py"
     "tests/pytest_tests/unit_tests/test_data_types.py"
     "tests/pytest_tests/unit_tests/test_internal_api.py"
@@ -206,9 +208,11 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/test_importers/test_import_mlflow.py"
     "tests/pytest_tests/system_tests/test_sweep/test_public_api.py"
     "tests/pytest_tests/system_tests/test_sweep/test_sweep_scheduler.py"
+    "tests/pytest_tests/system_tests/test_sweep/test_sweep_utils.py"
     "tests/pytest_tests/system_tests/test_sweep/test_wandb_agent_full.py"
     "tests/pytest_tests/system_tests/test_sweep/test_wandb_agent.py"
     "tests/pytest_tests/system_tests/test_sweep/test_wandb_sweep.py"
+    "tests/pytest_tests/system_tests/test_system_metrics/test_open_metrics.py"
     "tests/pytest_tests/system_tests/tests_launch/test_github_reference.py"
     "tests/pytest_tests/system_tests/tests_launch/test_job.py"
     "tests/pytest_tests/system_tests/tests_launch/test_launch_add.py"
@@ -216,6 +220,7 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/tests_launch/test_launch_kubernetes.py"
     "tests/pytest_tests/system_tests/tests_launch/test_launch_local_container.py"
     "tests/pytest_tests/system_tests/tests_launch/test_launch_run.py"
+    "tests/pytest_tests/system_tests/tests_launch/test_launch_sweep_cli.py"
     "tests/pytest_tests/system_tests/tests_launch/test_launch_sweep.py"
     "tests/pytest_tests/system_tests/tests_launch/test_launch.py"
     "tests/pytest_tests/system_tests/tests_launch/test_wandb_reference.py"
