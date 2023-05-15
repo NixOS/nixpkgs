@@ -5700,6 +5700,8 @@ self: super: with self; {
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
 
+  libmsiecf-python = callPackage ../development/python-modules/libmsiecf-python { };
+
 
   libsixel = callPackage ../development/python-modules/libsixel {
     inherit (pkgs) libsixel;
