@@ -5579,6 +5579,8 @@ self: super: with self; {
     inherit (pkgs) libasyncns;
   };
 
+  libbde-python = callPackage ../development/python-modules/libbde-python { };
+
   libcloud = callPackage ../development/python-modules/libcloud { };
 
   libcst = callPackage ../development/python-modules/libcst { };
