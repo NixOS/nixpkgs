@@ -6,6 +6,7 @@
 , autoPatchelfHook
 , cairo
 , cups
+, curl
 , dbus
 , dpkg
 , expat
@@ -37,6 +38,7 @@
 , libgcrypt
 , libglvnd
 , libnotify
+, libpulseaudio
 , libuuid
 , libxcb
 , libxkbcommon
@@ -61,13 +63,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.18.11";
+  version = "6.1.11";
   pname = "feishu";
-  packageHash = "9d89b152d581"; # A hash value used in the download url
+  packageHash = "e82bd3ef"; # A hash value used in the download url
 
   src = fetchurl {
     url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/${packageHash}/Feishu-linux_x64-${version}.deb";
-    hash = "sha256-93LEybYePIEbmE8mjRL95haMuBuY0xH6/8fhwF7/ctM=";
+    hash = "sha256-IBNMNOcOYIdiTlr4+Ziju7Pbf9XJV0O+w2arHTa1zZ0=";
   };
 
   nativeBuildInputs = [
@@ -82,9 +84,12 @@ stdenv.mkDerivation rec {
     # for autopatchelf
     alsa-lib
     cups
+    curl
     libXdamage
+    libXtst
     libdrm
     libgcrypt
+    libpulseaudio
     libxshmfence
     mesa
     nspr
@@ -98,6 +103,7 @@ stdenv.mkDerivation rec {
     atk
     cairo
     cups
+    curl
     dbus
     expat
     fontconfig
@@ -125,6 +131,7 @@ stdenv.mkDerivation rec {
     libgcrypt
     libglvnd
     libnotify
+    libpulseaudio
     libuuid
     libxcb
     libxkbcommon
@@ -174,6 +181,12 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     ln -s $out/opt/bytedance/feishu/bytedance-feishu $out/bin/bytedance-feishu
+
+    # feishu comes with a bundled libcurl.so
+    # and has many dependencies that are hard to satisfy
+    # e.g. openldap version 2.4
+    # so replace it with our own libcurl.so
+    ln -sf ${curl}/lib/libcurl.so $out/opt/bytedance/feishu/libcurl.so
   '';
 
   meta = with lib; {

@@ -9,6 +9,7 @@ args@{ pkgs, nextcloudVersion ? 25, ... }:
     services.nextcloud = {
       enable = true;
       config.adminpassFile = "${pkgs.writeText "adminpass" adminpass}";
+      database.createLocally = true;
       package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
     };
   };

@@ -39,3 +39,8 @@ _setupPubCache() {
         exit 1
     fi
 }
+
+# Performs the given pub get command with an appropriate environment.
+doPubGet() {
+    PATH="@gitSourceWrapper@/bin:$PATH" "$@"
+}

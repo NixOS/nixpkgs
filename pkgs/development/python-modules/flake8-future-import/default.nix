@@ -33,12 +33,21 @@ buildPythonPackage rec {
     ./skip-test.patch
   ];
 
+  postPatch = ''
+    substituteInPlace "test_flake8_future_import.py" \
+      --replace "'flake8'" "'${lib.getExe flake8}'"
+  '';
+
   propagatedBuildInputs = [ flake8 ];
 
   nativeCheckInputs = [ six ];
 
   checkPhase = ''
+    runHook preCheck
+
     ${python.interpreter} -m test_flake8_future_import
+
+    runHook postCheck
   '';
 
   meta = with lib; {

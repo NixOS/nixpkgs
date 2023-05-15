@@ -13,8 +13,7 @@ buildDunePackage rec {
     sha256 = "sha256-9XTb0ozQ/DorlVJcS7ld320fZAi7T+EhV/pTeIT5h/0=";
   };
 
-  # dune 3 is required for tests to pass
-  duneVersion = if doCheck then "3" else "2";
+  duneVersion = "3";
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ astring cmdliner fpath result tyxml odoc-parser fmt ];

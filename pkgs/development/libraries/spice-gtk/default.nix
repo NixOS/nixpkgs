@@ -40,7 +40,7 @@
 }:
 
 # If this package is built with polkit support (withPolkit=true),
-# usb redirection reqires spice-client-glib-usb-acl-helper to run setuid root.
+# usb redirection requires spice-client-glib-usb-acl-helper to run setuid root.
 # The helper confirms via polkit that the user has an active session,
 # then adds a device acl entry for that user.
 # Example NixOS config to create a setuid wrapper for the helper:

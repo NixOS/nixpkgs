@@ -38,6 +38,14 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
 
+  # relax lints to fix an error caused by invalid macro_export
+  # error: `log_error` isn't a valid `#[macro_export]` argument
+  # note: `#[deny(invalid_macro_export_arguments)]` implied by `#[deny(warnings)]`
+  postPatch = ''
+    substituteInPlace src/lib.rs \
+      --replace '#![deny(' '#![warn('
+  '';
+
   # TODO export TREMOR_PATH($out/lib) variable
   postInstall = ''
     # Copy the standard library to $out/lib

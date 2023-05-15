@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "felix";
-  version = "2.2.6";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "kyoheiu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-t/BCRKqCCXZ76bFYyblNnKHB9y0oJ6ajqsbdIGq/YVM=";
+    sha256 = "sha256-ShC6V3NAD5Gv5nLG5e6inoOEEpZn4EuQkaRoGn94Z1g=";
   };
 
   cargoLock = {
@@ -39,8 +39,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # extra test files not shipped with the repository
     "--skip=functions::tests::test_list_up_contents"
-    "--skip=magic_image::tests::test_inspect_image"
-    "--skip=magic_packed::tests::test_inspect_signature"
+    "--skip=state::tests::test_has_write_permission"
   ];
 
   meta = with lib; {

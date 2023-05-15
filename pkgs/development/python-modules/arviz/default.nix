@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , emcee
+, h5netcdf
 , matplotlib
 , netcdf4
 , numba
@@ -31,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.15.0";
+  version = "0.15.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -40,10 +41,11 @@ buildPythonPackage rec {
     owner = "arviz-devs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-LcdITCT9Bvycfj/taXhzkjn4IfZrxWX9MYXD6+MifOs=";
+    hash = "sha256-jjA+yltvpPZldIxXXqu1bXCLqpiU5/NBYTPlI9ImGVs=";
   };
 
   propagatedBuildInputs = [
+    h5netcdf
     matplotlib
     netcdf4
     numpy
@@ -80,11 +82,6 @@ buildPythonPackage rec {
     "arviz/tests/base_tests/"
   ];
 
-  disabledTestPaths = [
-    # Remove tests as dependency creates a circular dependency
-    "arviz/tests/external_tests/test_data_pymc.py"
-  ];
-
   disabledTests = [
     # Tests require network access
     "test_plot_separation"
@@ -94,6 +91,8 @@ buildPythonPackage rec {
     "test_plot_kde"
     "test_plot_kde_2d"
     "test_plot_pair"
+    # Array mismatch
+    "test_plot_ts"
   ];
 
   pythonImportsCheck = [
@@ -103,6 +102,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for exploratory analysis of Bayesian models";
     homepage = "https://arviz-devs.github.io/arviz/";
+    changelog = "https://github.com/arviz-devs/arviz/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ omnipotententity ];
   };

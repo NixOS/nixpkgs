@@ -107,6 +107,7 @@ buildPythonPackage rec {
     # https://github.com/adobe-type-tools/afdko/issues/1425
     "test_spec"
   ] ++ lib.optionals (stdenv.hostPlatform.isi686) [
+    "test_dump_option"
     "test_type1mm_inputs"
   ];
 

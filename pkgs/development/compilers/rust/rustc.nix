@@ -1,7 +1,7 @@
-{ lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
+{ lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
-, darwin, cmake, rust, rustPlatform
+, darwin, cargo, cmake, rust, rustc, rustPlatform
 , pkg-config, openssl, xz
 , libiconv
 , which, libffi
@@ -21,7 +21,7 @@ let
   inherit (lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
 in stdenv.mkDerivation rec {
-  pname = "${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}rustc";
+  pname = "${targetPackages.stdenv.cc.targetPrefix}rustc";
   inherit version;
 
   src = fetchurl {
@@ -73,8 +73,8 @@ in stdenv.mkDerivation rec {
     cxxForTarget = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}c++";
   in [
     "--release-channel=stable"
-    "--set=build.rustc=${rustPlatform.rust.rustc}/bin/rustc"
-    "--set=build.cargo=${rustPlatform.rust.cargo}/bin/cargo"
+    "--set=build.rustc=${rustc}/bin/rustc"
+    "--set=build.cargo=${cargo}/bin/cargo"
     "--enable-rpath"
     "--enable-vendor"
     "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
@@ -180,7 +180,7 @@ in stdenv.mkDerivation rec {
   depsBuildBuild = [ pkgsBuildHost.stdenv.cc pkg-config ];
 
   nativeBuildInputs = [
-    file python3 rustPlatform.rust.rustc cmake
+    file python3 rustc cmake
     which libffi removeReferencesTo pkg-config xz
   ];
 

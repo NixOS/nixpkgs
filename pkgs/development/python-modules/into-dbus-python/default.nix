@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "into-dbus-python";
-  version = "0.08";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Z8e6oAvRMIisMjG4HcS5jSH1znGVc7pGpMITo5fXYVs=";
+    hash = "sha256-Ld/DyhVaDiWUXgqmvSmEHqFW2dcoRNM0O4X5DXE3UtM=";
   };
 
   propagatedBuildInputs = [

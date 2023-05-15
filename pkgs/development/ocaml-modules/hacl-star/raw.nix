@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
+  patches = [
+    ./aligned-alloc.patch
+  ];
+
   minimalOCamlVersion = "4.08";
 
   # strictoverflow is disabled because it breaks aarch64-darwin
@@ -38,12 +42,14 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
+  preInstall = ''
+    mkdir $out
+    mkdir -p $OCAMLFIND_DESTDIR/stublibs
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    echo $OCAMLFIND_DESTDIR
-    mkdir $out
-    mkdir -p $OCAMLFIND_DESTDIR/stublibs
     make -C hacl-star-raw install
 
     runHook postInstall

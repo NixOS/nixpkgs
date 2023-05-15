@@ -48,6 +48,9 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # thread 'python_data_access::tests::test_copy_string' panicked at 'called `Result::unwrap()` on an `Err`
     "--skip=python_data_access::tests::test_copy_string"
+  ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+    # panicked at 'called `Result::unwrap()` on an `Err` value: failed to get os threadid
+    "--skip=test_thread_reuse"
   ];
 
   meta = with lib; {

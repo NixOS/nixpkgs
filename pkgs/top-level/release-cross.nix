@@ -6,6 +6,10 @@
    e.g.
 
    $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nixUnstable --arg supportedSystems '[builtins.currentSystem]'
+
+   To build all of the bootstrapFiles bundles on every enabled platform, use:
+
+   $ nix-build --expr 'with import ./pkgs/top-level/release-cross.nix {supportedSystems = [builtins.currentSystem];}; builtins.mapAttrs (k: v: v.build) bootstrapTools'
 */
 
 { # The platforms *from* which we cross compile.
@@ -242,8 +246,9 @@ in
     # so it will fail unless buildPlatform.canExecute hostPlatform.
     # Unfortunately `bootstrapTools` also clobbers its own `system`
     # attribute, so there is no way to detect this -- we must add it
-    # as a special case.
-    (builtins.removeAttrs tools ["bootstrapTools"]);
+    # as a special case.  We filter the "test" attribute (only from
+     # *cross*-built bootstrapTools) for the same reason.
+    (builtins.mapAttrs (_: v: builtins.removeAttrs v ["bootstrapTools" "test"]) tools);
 
   # Cross-built nixStatic for platforms for enabled-but-unsupported platforms
   mips64el-nixCrossStatic = mapTestOnCross lib.systems.examples.mips64el-linux-gnuabi64 nixCrossStatic;

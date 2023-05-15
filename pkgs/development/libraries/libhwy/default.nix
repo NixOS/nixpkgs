@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   dontUseCmakeBuildDir = true;
 
   cmakeFlags = let
-    libExt = stdenv.hostPlatform.extensions.sharedLibrary;
+    libExt = stdenv.hostPlatform.extensions.library;
   in [
     "-GNinja"
     "-DCMAKE_INSTALL_LIBDIR=lib"

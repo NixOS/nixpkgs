@@ -1,35 +1,41 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pyasn1
-, pytest
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyasn1-modules";
-  version = "0.2.8";
+  version = "0.3.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "905f84c712230b2c592c19470d3ca8d552de726050d1d1716282a1f6146be65e";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "pyasn1";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AAS1VuppCIxgswpLSHFAc6q9cyJBLpdDuU9D1KU13vg=";
   };
 
-  propagatedBuildInputs = [ pyasn1 ];
-
-  nativeCheckInputs = [
-    pytest
+  propagatedBuildInputs = [
+    pyasn1
   ];
 
-  # running tests through setup.py fails only for python2 for some reason:
-  # AttributeError: 'module' object has no attribute 'suitetests'
-  checkPhase = ''
-    py.test
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pyasn1_modules"
+  ];
 
   meta = with lib; {
     description = "A collection of ASN.1-based protocols modules";
-    homepage = "https://pypi.python.org/pypi/pyasn1-modules";
+    homepage = "https://github.com/pyasn1/pyasn1-modules";
+    changelog = "https://github.com/pyasn1/pyasn1-modules/releases/tag/v${version}";
     license = licenses.bsd3;
-    platforms = platforms.unix;  # same as pyasn1
+    maintainers = with maintainers; [ ];
   };
 }

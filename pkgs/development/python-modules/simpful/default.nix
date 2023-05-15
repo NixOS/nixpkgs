@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "simpful";
-  version = "2.10.0";
+  version = "2.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "aresio";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vT7Y/6bD+txEVEw/zelMogQ0V7BIHHRitrC1COByzhY=";
+    hash = "sha256-1CU/Iz83CKRx7dsOTGfdJm98TUfc2kxCHKIEUXP36HQ=";
   };
 
   propagatedBuildInputs = [

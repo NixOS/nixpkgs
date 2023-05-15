@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
 
     longDescription = ''
       gscreenshot provides a common frontend and expanded functionality to a
-      number of X11 and Wayland screenshot and region selection utilties.
+      number of X11 and Wayland screenshot and region selection utilities.
 
       In a nutshell, gscreenshot supports the following:
 

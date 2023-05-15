@@ -29,6 +29,9 @@ let
     procps
     usbutils
 
+    # It tries to execute xdg-user-dir and spams the log with command not founds
+    xdg-user-dirs
+
     # electron based launchers need newer versions of these libraries than what runtime provides
     mesa
     sqlite
@@ -113,6 +116,7 @@ in buildFHSEnv rec {
     SDL2
     libusb1
     dbus-glib
+    gsettings-desktop-schemas
     ffmpeg
     libudev0-shim
 
@@ -130,6 +134,9 @@ in buildFHSEnv rec {
     libidn
     tbb
     zlib
+
+    # SteamVR
+    udev
 
     # Other things from runtime
     glib
@@ -177,7 +184,6 @@ in buildFHSEnv rec {
     xorg.xkeyboardconfig
     xorg.libpciaccess
     xorg.libXScrnSaver # Dead Cells
-    udev # Shadow of the Tomb Raider
     icu # dotnet runtime, e.g. Stardew Valley
 
     # screeps dependencies
@@ -200,7 +206,6 @@ in buildFHSEnv rec {
     libidn2
     libpsl
     nghttp2.lib
-    openssl_1_1
     rtmpdump
   ] ++ steamPackages.steam-runtime-wrapped.overridePkgs
   ++ extraLibraries pkgs;

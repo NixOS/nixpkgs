@@ -1,4 +1,4 @@
-{ pkgs, nodejs_16, stdenv, lib, nixosTests }:
+{ pkgs, stdenv, lib, nixosTests }:
 
 let
   nodePackages = import ./node-composition.nix {
@@ -13,6 +13,7 @@ nodePackages.n8n.override {
 
   buildInputs = [
     pkgs.postgresql
+    pkgs.libmongocrypt
   ];
 
   # Oracle's official package on npm is binary only (WHY?!) and doesn't provide binaries for aarch64.
@@ -23,6 +24,9 @@ nodePackages.n8n.override {
   preRebuild = lib.optionalString stdenv.isAarch64 ''
     rm -rf node_modules/oracledb
   '';
+
+  # makes libmongocrypt bindings not look for static libraries in completely wrong places
+  BUILD_TYPE = "dynamic";
 
   dontNpmInstall = true;
 

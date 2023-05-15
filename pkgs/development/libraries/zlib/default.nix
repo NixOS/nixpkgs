@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     export CHOST=${stdenv.hostPlatform.config}
   '';
 
-  # For zlib's ./configure (as of verion 1.2.11), the order
+  # For zlib's ./configure (as of version 1.2.11), the order
   # of --static/--shared flags matters!
   # `--shared --static` builds only static libs, while
   # `--static --shared` builds both.

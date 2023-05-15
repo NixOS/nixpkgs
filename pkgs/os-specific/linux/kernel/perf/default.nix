@@ -148,7 +148,7 @@ stdenv.mkDerivation {
 
   preFixup = ''
     # Pull in 'objdump' into PATH to make annotations work.
-    # The embeded Python interpreter will search PATH to calculate the Python path configuration(Should be fixed by upstream).
+    # The embedded Python interpreter will search PATH to calculate the Python path configuration(Should be fixed by upstream).
     # Add python.interpreter to PATH for now.
     wrapProgram $out/bin/perf \
       --prefix PATH : ${lib.makeBinPath [ binutils-unwrapped python3 ]}

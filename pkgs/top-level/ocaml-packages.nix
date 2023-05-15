@@ -196,6 +196,8 @@ let
 
     class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
 
+    cmarkit = callPackage ../development/ocaml-modules/cmarkit { };
+
     # The 1.1.0 release broke a lot of packages and is not compatible with
     # OCaml < 4.08.
     cmdliner =
@@ -570,6 +572,11 @@ let
     git-unix = callPackage ../development/ocaml-modules/git/unix.nix {
       git-binary = pkgs.git;
     };
+
+    github = callPackage ../development/ocaml-modules/github {  };
+    github-data = callPackage ../development/ocaml-modules/github/data.nix {  };
+    github-jsoo = callPackage ../development/ocaml-modules/github/jsoo.nix {  };
+    github-unix = callPackage ../development/ocaml-modules/github/unix.nix {  };
 
     gluten = callPackage ../development/ocaml-modules/gluten { };
     gluten-lwt = callPackage ../development/ocaml-modules/gluten/lwt.nix { };
@@ -1102,10 +1109,7 @@ let
 
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
-    ocaml_expat =
-      if lib.versionAtLeast ocaml.version "4.02"
-        then callPackage ../development/ocaml-modules/expat { }
-        else callPackage ../development/ocaml-modules/expat/0.9.nix { };
+    ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
     ocaml-freestanding = callPackage ../development/ocaml-modules/ocaml-freestanding { };
 
@@ -1350,6 +1354,8 @@ let
     ppx_deriving_cmdliner = callPackage ../development/ocaml-modules/ppx_deriving_cmdliner {};
 
     ppx_deriving_protobuf = callPackage ../development/ocaml-modules/ppx_deriving_protobuf {};
+
+    ppx_deriving_qcheck = callPackage ../development/ocaml-modules/qcheck/ppx_deriving_qcheck.nix {};
 
     ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
 

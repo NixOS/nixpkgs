@@ -1023,6 +1023,13 @@ let self = {
     };
 
     inputs = [ zstd ];
+
+    meta = with lib; {
+      description = "Nginx modules for the Zstandard compression";
+      homepage = "https://github.com/tokers/zstd-nginx-module";
+      license = with licenses; [ bsd2 ];
+      maintainers = with maintainers; [ ];
+    };
   };
 }; in self // lib.optionalAttrs config.allowAliases {
   # deprecated or renamed packages

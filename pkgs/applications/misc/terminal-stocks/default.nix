@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "terminal-stocks";
-  version = "1.0.15";
+  version = "1.0.16";
 
   src = fetchFromGitHub {
     owner = "shweshi";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8n+Wpkiy+XTaIBO7nuxO2m3EkkaHsmYNqtUqMin6leg=";
+    hash = "sha256-tu6SKeTVEqIqDJXimoSkMK9+l0uGqWSrlIO0KHoROSQ=";
   };
 
-  npmDepsHash = "sha256-M9a33v1R/cAgUJJLHwPs8hpPtjzzKkMps/ACnWLqUZE=";
+  npmDepsHash = "sha256-13RiEBLhmKW04Tesg1s7c9rCYtRGOd/prnVARb6jpGQ=";
   dontNpmBuild = true;
 
   passthru.updateScript = nix-update-script {};

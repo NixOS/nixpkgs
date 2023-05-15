@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "openaiauth";
-  version = "0.3.2";
+  version = "0.3.6";
 
   src = fetchPypi {
     inherit version;
     pname = "OpenAIAuth";
-    hash = "sha256-CPcBgGvxRO677EdPI3lNtJXkCW7el6N6N2GeaDo5ApU=";
+    hash = "sha256-SaiTqs2HVv5ajUkrLJv24ed1+iJg5HqsCNe0IETkA00=";
   };
 
   propagatedBuildInputs = [ requests ];

@@ -101,7 +101,7 @@ let
     };
 
   trivialBuilders = self: super:
-    import ../build-support/trivial-builders.nix {
+    import ../build-support/trivial-builders {
       inherit lib;
       inherit (self) runtimeShell stdenv stdenvNoCC haskell;
       inherit (self.pkgsBuildHost) shellcheck;

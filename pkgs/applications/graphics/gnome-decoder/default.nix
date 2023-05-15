@@ -3,9 +3,11 @@
 , fetchFromGitLab
 , libclang
 , rustPlatform
+, cargo
 , meson
 , ninja
 , pkg-config
+, rustc
 , glib
 , gtk4
 , libadwaita
@@ -46,11 +48,10 @@ clangStdenv.mkDerivation rec {
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
-  ] ++ (with rustPlatform; [
-    rust.cargo
-    rust.rustc
-    cargoSetupHook
-  ]);
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
 
   buildInputs = [
     glib

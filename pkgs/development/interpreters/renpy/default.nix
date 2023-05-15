@@ -3,15 +3,16 @@
 , makeWrapper
 }:
 
-stdenv.mkDerivation rec {
-  pname = "renpy";
-
+let
   # https://renpy.org/doc/html/changelog.html#versioning
   # base_version is of the form major.minor.patch
   # vc_version is of the form YYMMDDCC
   # version corresponds to the tag on GitHub
   base_version = "8.0.3";
   vc_version = "22090809";
+in stdenv.mkDerivation rec {
+  pname = "renpy";
+
   version = "${base_version}.${vc_version}";
 
   src = fetchFromGitHub {
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace module/setup.py \
-      --replace "@fribidi@" "${fribidi}"
+      --replace "@fribidi@" "${fribidi.dev}"
 
     cp tutorial/game/tutorial_director.rpy{m,}
 
@@ -87,4 +88,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ shadowrz ];
   };
+
+  passthru = { inherit base_version vc_version; };
 }

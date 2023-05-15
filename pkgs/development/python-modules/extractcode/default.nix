@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, six
 , typecode
 }:
 
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     patch
     extractcode-libarchive
     extractcode-7z
+    six
   ];
 
   nativeCheckInputs = [
@@ -73,7 +75,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Universal archive extractor using z7zip, libarchve, other libraries and the Python standard library";
+    description = "Universal archive extractor using z7zip, libarchive, other libraries and the Python standard library";
     homepage = "https://github.com/nexB/extractcode";
     changelog = "https://github.com/nexB/extractcode/releases/tag/v${version}";
     license = licenses.asl20;

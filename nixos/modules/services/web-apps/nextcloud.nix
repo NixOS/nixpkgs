@@ -317,7 +317,7 @@ in {
 
       createLocally = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = lib.mdDoc ''
           Create the database and database user locally.
         '';
@@ -551,6 +551,19 @@ in {
       default = true;
     };
 
+    configureRedis = lib.mkOption {
+      type = lib.types.bool;
+      default = config.services.nextcloud.notify_push.enable;
+      defaultText = literalExpression "config.services.nextcloud.notify_push.enable";
+      description = lib.mdDoc ''
+        Wether to configure nextcloud to use the recommended redis settings for small instances.
+
+        ::: {.note}
+        The `notify_push` app requires redis to be configured. If this option is turned off, this must be configured manually.
+        :::
+      '';
+    };
+
     caching = {
       apcu = mkOption {
         type = types.bool;
@@ -741,9 +754,8 @@ in {
     { assertions = [
       { assertion = cfg.database.createLocally -> cfg.config.dbpassFile == null;
         message = ''
-          Using `services.nextcloud.database.createLocally` (that now defaults
-          to true) with database password authentication is no longer
-          supported.
+          Using `services.nextcloud.database.createLocally` with database
+          password authentication is no longer supported.
 
           If you use an external database (or want to use password auth for any
           other reason), set `services.nextcloud.database.createLocally` to
@@ -1042,6 +1054,25 @@ in {
           name = cfg.config.dbuser;
           ensurePermissions = { "DATABASE ${cfg.config.dbname}" = "ALL PRIVILEGES"; };
         }];
+      };
+
+      services.redis.servers.nextcloud = lib.mkIf cfg.configureRedis {
+        enable = true;
+        user = "nextcloud";
+      };
+
+      services.nextcloud = lib.mkIf cfg.configureRedis {
+        caching.redis = true;
+        extraOptions = {
+          memcache = {
+            distributed = ''\OC\Memcache\Redis'';
+            locking = ''\OC\Memcache\Redis'';
+          };
+          redis = {
+            host = config.services.redis.servers.nextcloud.unixSocket;
+            port = 0;
+          };
+        };
       };
 
       services.nginx.enable = mkDefault true;

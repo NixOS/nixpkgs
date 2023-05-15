@@ -522,6 +522,13 @@ let
           '';
         });
 
+        tokei = super.tokei.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace tokei.el \
+              --replace 'tokei-program "tokei"' 'tokei-program "${lib.getExe pkgs.tokei}"'
+          '';
+        });
+
         treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =

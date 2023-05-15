@@ -53,7 +53,7 @@ buildPythonPackage rec {
   # but not mlflow has a 'skinny' install option which does not require `shap`.
   nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRemoveDeps = [ "shap" ];
-  pythonRelaxDeps = [ "pytz" ];
+  pythonRelaxDeps = [ "pytz" "pyarrow" ];
 
   propagatedBuildInputs = [
     alembic

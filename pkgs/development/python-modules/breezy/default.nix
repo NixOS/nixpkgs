@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, cargo
 , configobj
 , cython
 , dulwich
@@ -18,6 +19,7 @@
 , pythonOlder
 , installShellFiles
 , rustPlatform
+, rustc
 , setuptools-gettext
 , setuptools-rust
 , testers
@@ -49,8 +51,8 @@ buildPythonPackage rec {
     cython
     installShellFiles
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     setuptools-gettext
     setuptools-rust
   ];

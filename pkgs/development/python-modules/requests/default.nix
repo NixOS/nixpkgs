@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.28.2";
+  version = "2.29.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mLGyeC48bEkEk4uEwOuTJyEGnf25E0MTvv98g8LfJL8=";
+    hash = "sha256-8uNKdfR0kBm7Dj7/tmaDYw5P/q91gZ+1G+vvG/Wu8Fk=";
   };
 
   propagatedBuildInputs = [

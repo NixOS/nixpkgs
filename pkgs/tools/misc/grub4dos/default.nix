@@ -39,5 +39,8 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
     license = licenses.gpl2;
+    # Needs a port to modern binutils:
+    #   https://github.com/chenall/grub4dos/issues/160
+    broken = true;
   };
 }

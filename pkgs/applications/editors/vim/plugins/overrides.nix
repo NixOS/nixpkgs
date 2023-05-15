@@ -114,6 +114,10 @@
 , iferr
 , impl
 , reftools
+
+# hurl dependencies
+, hurl
+
   # must be lua51Packages
 , luaPackages
 }:
@@ -516,6 +520,15 @@ self: super: {
       sha256 = "W+91hnNeS6WkDiR9r1s7xPTK9JlCWiVkI/nXVYbepY0=";
     };
   });
+  # https://hurl.dev/
+  hurl = buildVimPluginFrom2Nix {
+    pname = "hurl";
+    version = hurl.version;
+    # dontUnpack = true;
+
+    src = "${hurl.src}/contrib/vim";
+
+  };
 
   jedi-vim = super.jedi-vim.overrideAttrs (old: {
     # checking for python3 support in vim would be neat, too, but nobody else seems to care

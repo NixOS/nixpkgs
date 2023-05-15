@@ -101,9 +101,9 @@ in
   mkdir -p $out/bin
   makeWrapper '${immutableFlutter}' $out/bin/flutter \
     --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
-    --prefix PATH : '${lib.makeBinPath (tools ++ buildTools)}' \
-    --prefix PKG_CONFIG_PATH : "$FLUTTER_PKG_CONFIG_PATH" \
-    --prefix LIBRARY_PATH : '${lib.makeLibraryPath appStaticBuildDeps}' \
+    --suffix PATH : '${lib.makeBinPath (tools ++ buildTools)}' \
+    --suffix PKG_CONFIG_PATH : "$FLUTTER_PKG_CONFIG_PATH" \
+    --suffix LIBRARY_PATH : '${lib.makeLibraryPath appStaticBuildDeps}' \
     --prefix CXXFLAGS "''\t" '${builtins.concatStringsSep " " (includeFlags ++ extraCxxFlags)}' \
     --prefix CFLAGS "''\t" '${builtins.concatStringsSep " " (includeFlags ++ extraCFlags)}' \
     --prefix LDFLAGS "''\t" '${builtins.concatStringsSep " " (map (flag: "-Wl,${flag}") linkerFlags)}'

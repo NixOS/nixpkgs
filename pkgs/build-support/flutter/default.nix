@@ -16,11 +16,12 @@
 , customPackageOverrides ? { }
 , autoDepsList ? false
 , depsListFile ? null
-, vendorHash
+, vendorHash ? ""
 , pubspecLockFile ? null
 , nativeBuildInputs ? [ ]
 , preUnpack ? ""
 , postFixup ? ""
+, extraWrapProgramArgs ? ""
 , ...
 }@args:
 let
@@ -76,7 +77,7 @@ let
 
       mkdir -p build/flutter_assets/fonts
 
-      flutter packages get --offline -v
+      doPubGet flutter pub get --offline -v
       flutter build linux -v --release --split-debug-info="$debug" ${builtins.concatStringsSep " " (map (flag: "\"${flag}\"") finalAttrs.flutterBuildFlags)}
 
       runHook postBuild
@@ -121,7 +122,8 @@ let
       # which is not what application authors expect.
       for f in "$out"/bin/*; do
         wrapProgram "$f" \
-          --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath finalAttrs.runtimeDependencies}'
+          --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath finalAttrs.runtimeDependencies}' \
+          ${extraWrapProgramArgs}
       done
 
       ${postFixup}
@@ -135,11 +137,11 @@ let
   packageOverrideRepository = (callPackage ../../development/compilers/flutter/package-overrides { }) // customPackageOverrides;
   productPackages = builtins.filter (package: package.kind != "dev")
     (if autoDepsList
-    then builtins.fromJSON (builtins.readFile deps.depsListFile)
+    then lib.importJSON deps.depsListFile
     else
       if depsListFile == null
       then [ ]
-      else builtins.fromJSON (builtins.readFile depsListFile));
+      else lib.importJSON depsListFile);
 in
 builtins.foldl'
   (prev: package:

@@ -58,8 +58,26 @@
     patch = ./export-rt-sched-migrate.patch;
   };
 
+  make-maple-state-reusable-after-mas_empty_area = rec {
+    name = "make-maple-state-reusable-after-mas_empty_area";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/patch/?id=39bf07d812b888b23983a9443ad967ca9b61551d";
+      hash = "sha256-JHEFq+Gw8Dtl0M8pXcKXpwkaHhbbl5NwTSzvV5qP4hk=";
+    };
+  };
+
   fix-em-ice-bonding = {
     name = "fix-em-ice-bonding";
     patch = ./fix-em-ice-bonding.patch;
+  };
+
+  CVE-2023-32233 = rec {
+    name = "CVE-2023-32233";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=c1592a89942e9678f7d9c8030efa777c0d57edab";
+      hash = "sha256-DYPWgraXPNeFkjtuDYkFXHnCJ4yDewrukM2CCAqC2BE=";
+    };
   };
 }
