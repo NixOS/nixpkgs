@@ -5616,6 +5616,8 @@ self: super: with self; {
 
   libfvde-python = callPackage ../development/python-modules/libfvde-python { };
 
+  libfwnt-python = callPackage ../development/python-modules/libfwnt-python { };
+
   libgpiod = toPythonModule (pkgs.libgpiod.override {
     enablePython = true;
     python3 = python;
