@@ -7,7 +7,7 @@
 , pims
 , pytestCheckHook
 , pythonOlder
-, scikitimage
+, scikit-image
 , scipy
 }:
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    scikitimage
+    scikit-image
   ];
 
   postPatch = ''

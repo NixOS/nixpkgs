@@ -10783,7 +10783,7 @@ self: super: with self; {
 
   scikit-hep-testdata = callPackage ../development/python-modules/scikit-hep-testdata { };
 
-  scikitimage = callPackage ../development/python-modules/scikit-image { };
+  scikit-image = callPackage ../development/python-modules/scikit-image { };
 
   scikit-learn = callPackage ../development/python-modules/scikit-learn {
     inherit (pkgs) gfortran glibcLocales;

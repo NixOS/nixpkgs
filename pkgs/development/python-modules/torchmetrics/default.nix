@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cloudpickle
 , scikit-learn
-, scikitimage
+, scikit-image
 , packaging
 , psutil
 , py-deprecate
@@ -40,7 +40,7 @@ buildPythonPackage {
   nativeCheckInputs = [
     pytorch-lightning
     scikit-learn
-    scikitimage
+    scikit-image
     cloudpickle
     psutil
     pytestCheckHook

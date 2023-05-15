@@ -265,6 +265,7 @@ mapAliases ({
   ruamel_yaml_clib = ruamel-yaml-clib; # added 2021-11-01
   runway-python = throw "SDK has been deprecated and was archived by upstream"; # added 2023-05-03
   sapi-python-client = kbcstorage; # added 2022-04-20
+  scikitimage = scikit-image; # added 2023-05-14
   scikitlearn = scikit-learn; # added 2021-07-21
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
   setuptools_scm = setuptools-scm; # added 2021-06-03

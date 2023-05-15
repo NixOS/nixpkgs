@@ -9,7 +9,7 @@
 , pyclipper
 , python-bidi
 , torch
-, scikitimage
+, scikit-image
 , scipy
 , shapely
 , torchvision
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    scikitimage
+    scikit-image
     hdf5
     python-bidi
     numpy

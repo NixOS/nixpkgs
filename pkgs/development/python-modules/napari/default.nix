@@ -22,7 +22,7 @@
 , pillow
 , pythonOlder
 , pyyaml
-, scikitimage
+, scikit-image
 , scipy
 , setuptools-scm
 , sphinx
@@ -84,7 +84,7 @@ mkDerivationWith buildPythonPackage rec {
     pydantic
     pyopengl
     pyyaml
-    scikitimage
+    scikit-image
     scipy
     sphinx
     superqt

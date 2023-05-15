@@ -10,7 +10,7 @@
 , pydicom
 , pymedio
 , scikit-fuzzy
-, scikitimage
+, scikit-image
 , scikit-learn
 , scipy
 , simpleitk
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pydicom
     pymedio
     scikit-fuzzy
-    scikitimage
+    scikit-image
     scikit-learn
     scipy
     simpleitk
