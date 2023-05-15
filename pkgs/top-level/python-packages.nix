@@ -5706,6 +5706,8 @@ self: super: with self; {
 
   libphdi-python = callPackage ../development/python-modules/libphdi-python { };
 
+  libqcow-python = callPackage ../development/python-modules/libqcow-python { };
+
 
   libsixel = callPackage ../development/python-modules/libsixel {
     inherit (pkgs) libsixel;
