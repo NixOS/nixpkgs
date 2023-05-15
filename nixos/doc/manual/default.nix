@@ -35,7 +35,12 @@ let
     };
   };
 
-  nixos-lib = import ../../lib { };
+  nixos-lib = import ../../lib { featureFlags = {
+    # We use a minimal module list to evaluate the docs of the extra modules.
+    # This is significantly faster than loading all the modules, and we can pull
+    # this off because we don't require any dependencies to be loaded.
+    minimalModules = { }; };
+  };
 
   cleanupLocations = opt: opt // {
         # Clean up declaration sites to not refer to the NixOS source tree.
@@ -85,6 +90,10 @@ let
         optionIdPrefix = throw "optionIdPrefix not set";
       }
   ) {
+    # NOTE: These don't have to be paths. If a module needs dependencies to be loaded
+    #       for doc rendering, do something like
+    #           newModule = { imports = [ ../../modules/new.nix ../../modules/dep.nix ]; }
+    #       or import it transitively.
     readOnlyPkgs = ../../modules/misc/nixpkgs/read-only.nix;
     noLegacyPkgs = ../../modules/misc/nixpkgs/no-legacy.nix;
   };
