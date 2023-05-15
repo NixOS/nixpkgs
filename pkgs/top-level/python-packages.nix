@@ -500,8 +500,6 @@ self: super: with self; {
 
   ansible-later = callPackage ../development/python-modules/ansible-later { };
 
-  ansible-lint = callPackage ../development/python-modules/ansible-lint { };
-
   ansible-runner = callPackage ../development/python-modules/ansible-runner { };
 
   ansi = callPackage ../development/python-modules/ansi { };

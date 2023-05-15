@@ -17567,7 +17567,7 @@ with pkgs;
 
   ansible-later = with python3.pkgs; toPythonApplication ansible-later;
 
-  ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
+  ansible-lint = callPackage ../tools/admin/ansible/lint.nix { };
 
   antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
   antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix { };
