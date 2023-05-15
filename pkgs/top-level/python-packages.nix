@@ -632,6 +632,8 @@ self: super: with self; {
 
   arsenic = callPackage ../development/python-modules/arsenic { };
 
+  artifacts = callPackage ../development/python-modules/artifacts { };
+
   arviz = callPackage ../development/python-modules/arviz { };
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
