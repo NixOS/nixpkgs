@@ -5608,6 +5608,8 @@ self: super: with self; {
 
   libfsfat-python = callPackage ../development/python-modules/libfsfat-python { };
 
+  libfshfs-python = callPackage ../development/python-modules/libfshfs-python { };
+
   libgpiod = toPythonModule (pkgs.libgpiod.override {
     enablePython = true;
     python3 = python;
