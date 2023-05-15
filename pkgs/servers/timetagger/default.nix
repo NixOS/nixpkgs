@@ -19,10 +19,13 @@ python3.pkgs.buildPythonApplication {
   ];
 
   format = "custom";
+
   installPhase = ''
     mkdir -p $out/bin
     echo "#!${python3.interpreter}" >> $out/bin/timetagger
-    cat timetagger/__main__.py >> $out/bin/timetagger
+    cat ${python3.pkgs.timetagger.src}/timetagger/__main__.py >> $out/bin/timetagger
+    cat run.py >> $out/bin/timetagger
+    sed -Ei 's,0\.0\.0\.0:80,${addr}:${toString port},' $out/bin/timetagger
     chmod +x $out/bin/timetagger
     wrapProgram $out/bin/timetagger \
       --set TIMETAGGER_BIND "${addr}:${toString port}"
