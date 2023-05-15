@@ -3001,6 +3001,8 @@ self: super: with self; {
 
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
 
+  dtfabric = callPackage ../development/python-modules/dtfabric { };
+
   dtschema = callPackage ../development/python-modules/dtschema { };
 
   ducc0 = callPackage ../development/python-modules/ducc0 { };
