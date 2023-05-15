@@ -15,7 +15,7 @@ let
   };
 
 in python.pkgs.buildPythonApplication rec {
-  pname = "heisenbridge";
+  pname = "eisenbridge";
   version = "1.13.1";
 
   src = fetchFromGitHub {
