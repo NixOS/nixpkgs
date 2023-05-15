@@ -55,6 +55,7 @@ in stdenv.mkDerivation rec {
     description = "GTK-based Bluetooth Manager";
     license = licenses.gpl3;
     platforms = platforms.linux;
+    changelog = "https://github.com/blueman-project/blueman/releases/tag/${version}";
     maintainers = with maintainers; [ abbradar ];
   };
 }
