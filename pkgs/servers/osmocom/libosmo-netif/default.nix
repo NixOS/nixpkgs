@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
     homepage = "https://osmocom.org/projects/libosmo-netif/wiki";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [
+      janik
+      markuskowa
+    ];
   };
 }
