@@ -882,6 +882,8 @@ with pkgs;
 
   mod = callPackage ../development/tools/mod { };
 
+  mods = callPackage ../tools/misc/mods { };
+
   mongosh = callPackage ../development/tools/mongosh { };
 
   mysql-shell = callPackage ../development/tools/mysql-shell {
@@ -1962,6 +1964,8 @@ with pkgs;
   };
 
   git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs { });
+
+  git-mit = callPackage ../applications/version-management/git-mit { };
 
   git-my = callPackage ../applications/version-management/git-my { };
 
@@ -32515,6 +32519,8 @@ with pkgs;
 
   mpvScripts = recurseIntoAttrs {
     acompressor = callPackage ../applications/video/mpv/scripts/acompressor.nix {};
+    autocrop = callPackage ../applications/video/mpv/scripts/autocrop.nix { };
+    autodeint = callPackage ../applications/video/mpv/scripts/autodeint.nix { };
     autoload = callPackage ../applications/video/mpv/scripts/autoload.nix { };
     convert = callPackage ../applications/video/mpv/scripts/convert.nix { };
     inhibit-gnome = callPackage ../applications/video/mpv/scripts/inhibit-gnome.nix { };
