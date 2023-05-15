@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "keycloak";
-  version = "20.0.5";
+  version = "21.1.1";
 
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    hash = "sha256-4h3q9J1+KufMaSuzbX9qaBwXPR8zhVpxQAXDBY3uPjM=";
+    hash = "sha256-ZX5UKjU9BEtO/uA25WhSUmeO6jQ1FpKF1irFx2fwPBU=";
   };
 
   nativeBuildInputs = [ makeWrapper jre ];
