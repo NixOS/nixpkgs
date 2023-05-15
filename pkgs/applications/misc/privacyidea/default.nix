@@ -167,6 +167,9 @@ let
         sphinxHook = null;
         sphinx-rtd-theme = null;
       }).overridePythonAttrs dropDocOutput;
+      deprecated = (super.deprecated.override {
+        sphinxHook = null;
+      }).overridePythonAttrs dropDocOutput;
     };
   };
 in
