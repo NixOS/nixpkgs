@@ -2169,6 +2169,11 @@ self: super: with self; {
 
   css-html-js-minify = callPackage ../development/python-modules/css-html-js-minify { };
 
+  css-inline = callPackage ../development/python-modules/css-inline {
+    inherit (pkgs.darwin) libiconv;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+  };
+
   css-parser = callPackage ../development/python-modules/css-parser { };
 
   cssselect2 = callPackage ../development/python-modules/cssselect2 { };
