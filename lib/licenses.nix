@@ -204,6 +204,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  caossl = {
+    fullName = "Computer Associates Open Source Licence Version 1.0";
+    url = "http://jxplorer.org/licence.html";
+  };
+
   cal10 = {
     fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
     url = "https://opensource.org/licenses/CAL-1.0";

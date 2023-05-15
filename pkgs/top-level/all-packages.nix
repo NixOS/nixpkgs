@@ -264,6 +264,8 @@ with pkgs;
 
   asnmap = callPackage ../tools/security/asnmap { };
 
+  ast-grep = callPackage ../development/tools/misc/ast-grep { };
+
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
@@ -335,6 +337,8 @@ with pkgs;
   binserve = callPackage ../servers/binserve {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
+
+  bodyclose = callPackage ../development/tools/bodyclose { };
 
   bootstrap-studio = callPackage ../development/web/bootstrap-studio { };
 
@@ -7223,7 +7227,7 @@ with pkgs;
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   # When updating make sure to update all plugins or they will break!
-  elk7Version = "7.17.4";
+  elk7Version = "7.17.9";
 
   elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
     util-linux = util-linuxMinimal;
@@ -29252,6 +29256,8 @@ with pkgs;
 
   jnetmap = callPackage ../applications/networking/jnetmap { };
 
+  jxplorer  = callPackage ../applications/networking/jxplorer {};
+
   join-desktop = callPackage ../applications/misc/join-desktop { };
 
   json-plot = callPackage ../applications/graphics/json-plot { };
@@ -30773,6 +30779,8 @@ with pkgs;
     inherit (qt6) wrapQtAppsHook qtbase qtcharts;
   };
 
+  kemai = qt6Packages.callPackage ../applications/misc/kemai { };
+
   jetbrains = (recurseIntoAttrs (callPackages ../applications/editors/jetbrains {
     vmopts = config.jetbrains.vmopts or null;
     jdk = jetbrains.jdk;
@@ -31244,6 +31252,8 @@ with pkgs;
   smooth = callPackage ../development/libraries/smooth { };
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
+
+  sfwbar = callPackage ../applications/misc/sfwbar { };
 
   spot = callPackage ../applications/audio/spot { };
 
@@ -34006,8 +34016,6 @@ with pkgs;
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
 
   insync = callPackage ../applications/networking/insync { };
-
-  insync-v3 = libsForQt5.callPackage ../applications/networking/insync/v3.nix { };
 
   libstrangle = callPackage ../tools/X11/libstrangle {
     stdenv = stdenv_32bit;
