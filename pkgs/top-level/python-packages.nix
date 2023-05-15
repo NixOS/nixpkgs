@@ -5767,6 +5767,8 @@ self: super: with self; {
 
   libvmdk-python = callPackage ../development/python-modules/libvmdk-python { };
 
+  libvsgpt-python = callPackage ../development/python-modules/libvsgpt-python { };
+
   libxml2 = (toPythonModule (pkgs.libxml2.override {
     pythonSupport = true;
     inherit python;
