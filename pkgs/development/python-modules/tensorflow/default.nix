@@ -1,4 +1,4 @@
-{ stdenv, bazel_5, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
+{ stdenv, bazel_5, buildBazelPackage, lib, fetchFromGitHub, symlinkJoin
 , addOpenGLRunpath, fetchpatch
 # Python deps
 , buildPythonPackage, pythonOlder, python
@@ -9,10 +9,10 @@
 , termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator-bin
 , dill, flatbuffers-python, portpicker, tblib, typing-extensions
 # Common deps
-, git, pybind11, which, binutils, glibcLocales, cython, perl, coreutils
+, git, pybind11, which, binutils, glibcLocales, cython, perl
 # Common libraries
 , jemalloc, mpi, gast, grpc, sqlite, boringssl, jsoncpp, nsync
-, curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib, protobuf-core
+, curl, snappy, flatbuffers-core, icu, double-conversion, libpng, libjpeg_turbo, giflib, protobuf-core
 # Upstream by default includes cuda support since tensorflow 1.15. We could do
 # that in nix as well. It would make some things easier and less confusing, but
 # it would also make the default tensorflow package unfree. See
@@ -99,17 +99,17 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.11.1";
+  version = "2.13.0";
   variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
 
   pythonEnv = python.withPackages (_:
     [ # python deps needed during wheel build time (not runtime, see the buildPythonPackage part for that)
       # This list can likely be shortened, but each trial takes multiple hours so won't bother for now.
-      absl-py
+      # absl-py
       astunparse
       dill
-      flatbuffers-python
+      # flatbuffers-python
       gast
       google-pasta
       grpcio
@@ -208,14 +208,18 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "refs/tags/v${version}";
-      hash = "sha256-q59cUW6613byHk4LGl+sefO5czLSWxOrSyLbJ1pkNEY=";
+      hash = "sha256-Rq5pAVmxlWBVnph20fkAwbfy+iuBNlfFy14poDPd5h0=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sci-libs/tensorflow
 
     nativeBuildInputs = [
-      which pythonEnv cython perl protobuf-core
+      which
+      pythonEnv
+      cython
+      perl
+      # protobuf-core
     ] ++ lib.optional cudaSupport addOpenGLRunpath;
 
     buildInputs = [
@@ -228,7 +232,7 @@ let
       boringssl
       curl
       double-conversion
-      flatbuffers-core
+      # flatbuffers-core
       giflib
       grpc
       # Necessary to fix the "`GLIBCXX_3.4.30' not found" error
@@ -236,7 +240,6 @@ let
       jsoncpp
       libjpeg_turbo
       libpng
-      lmdb-core
       (pybind11.overridePythonAttrs (_: { inherit stdenv; }))
       snappy
       sqlite
@@ -261,22 +264,27 @@ let
     # list of valid syslibs in
     # https://github.com/tensorflow/tensorflow/blob/master/third_party/systemlibs/syslibs_configure.bzl
     TF_SYSTEM_LIBS = lib.concatStringsSep "," ([
-      "absl_py"
+      # ERROR: no such target '@absl_py//absl/flags:argparse_flags'
+      # absl_py"
       "astor_archive"
       "astunparse_archive"
       "boringssl"
       # Not packaged in nixpkgs
-      # "com_github_googleapis_googleapis"
       # "com_github_googlecloudplatform_google_cloud_cpp"
-      "com_github_grpc_grpc"
-      "com_google_protobuf"
+      # "com_github_grpc_grpc"
+      # "com_google_protobuf"
+      # ERROR: no such target '@com_google_protobuf//:well_known_types_py_pb2_genproto'
+      # https://github.com/tensorflow/tensorflow/issues/60667
+      # "com_google_protobuf"
+      # ERROR: no such target '@com_google_absl//absl/functional:any_invocable
+      # "com_google_absl"
       # Fails with the error: external/org_tensorflow/tensorflow/core/profiler/utils/tf_op_utils.cc:46:49: error: no matching function for call to 're2::RE2::FullMatch(absl::lts_2020_02_25::string_view&, re2::RE2&)'
       # "com_googlesource_code_re2"
       "curl"
       "cython"
       "dill_archive"
       "double_conversion"
-      "flatbuffers"
+      # "flatbuffers"
       "functools32_archive"
       "gast_archive"
       "gif"
@@ -284,7 +292,6 @@ let
       "icu"
       "jsoncpp_git"
       "libjpeg_turbo"
-      "lmdb"
       "nasm"
       "opt_einsum_archive"
       "org_sqlite"
@@ -307,7 +314,7 @@ let
     # This is needed for the Nix-provided protobuf dependency to work,
     # as otherwise the rule `link_proto_files` tries to create the links
     # to `/usr/include/...` which results in build failures.
-    PROTOBUF_INCLUDE_PATH = "${protobuf-core}/include";
+    # PROTOBUF_INCLUDE_PATH = "${protobuf-core}/include";
 
     PYTHON_BIN_PATH = pythonEnv.interpreter;
 
@@ -395,11 +402,11 @@ let
     fetchAttrs = {
       sha256 = {
       x86_64-linux = if cudaSupport
-        then "sha256-lURiR0Ra4kynDXyfuONG+A7CpxnAsfKzIdFTExKzp1o="
-        else "sha256-lDvRgj+UlaneRGZOO9UVCb6uyxcbRJfUhABf/sgKPi0=";
-      aarch64-linux = "sha256-z2d45fqHz5HW+qkv3fR9hMg3sEwUzJfxF54vng85bHk=";
-      x86_64-darwin = "sha256-AAvuz8o6ZRkaSYMgaep74lDDQcxOupDCX4vRaK/jnCU=";
-      aarch64-darwin = "sha256-kexRSvfQqb92ZRuUqAO070RnUUBidAqghiA7Y8do9vc=";
+        then ""
+        else "sha256-aTqHZRNlNQv4THPO81aerHvTjYqTDT87aj2WLIyMQVw=";
+      aarch64-linux = "";
+      x86_64-darwin = "";
+      aarch64-darwin = "";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
@@ -448,10 +455,7 @@ let
       license = licenses.asl20;
       maintainers = with maintainers; [ abbradar ];
       platforms = with platforms; linux ++ darwin;
-      # More vulnerabilities in 2.11.1 really; https://github.com/tensorflow/tensorflow/releases
-      knownVulnerabilities = [ "CVE-2023-33976" ];
-      broken = true || # most likely needs dealing with protobuf/abseil updates
-        !(xlaSupport -> cudaSupport) || python.pythonVersion == "3.11";
+      broken = !(xlaSupport -> cudaSupport);
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s
@@ -460,7 +464,7 @@ let
 
 in buildPythonPackage {
   inherit version pname;
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
   src = bazel-build.python;
 
@@ -497,7 +501,6 @@ in buildPythonPackage {
     flatbuffers-python
     gast
     google-pasta
-    grpcio
     h5py
     keras-preprocessing
     numpy
