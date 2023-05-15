@@ -1,4 +1,12 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, oniguruma
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "termbook-cli";
@@ -11,11 +19,36 @@ rustPlatform.buildRustPackage rec {
     sha256 = "Bo3DI0cMXIfP7ZVr8MAW/Tmv+4mEJBIQyLvRfVBDG8c=";
   };
 
-  cargoSha256 = "sha256-9fFvJJlDzBmbI7hes/wfjAk1Cl2H55T5n8HLnUmDw/c=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    oniguruma
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
+
+  env = {
+    RUSTONIG_SYSTEM_LIBONIG = true;
+  };
+
+  # update dependencies to fix build failure caused by unaligned packed structs
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd termbook \
+      --bash <($out/bin/termbook completions bash) \
+      --fish <($out/bin/termbook completions fish) \
+      --zsh <($out/bin/termbook completions zsh)
+  '';
 
   meta = with lib; {
     description = "A runner for `mdbooks` to keep your documentation tested";
