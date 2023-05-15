@@ -5583,6 +5583,8 @@ self: super: with self; {
 
   libcloud = callPackage ../development/python-modules/libcloud { };
 
+  libcreg-python = callPackage ../development/python-modules/libcreg-python { };
+
   libcst = callPackage ../development/python-modules/libcst { };
 
   libevdev = callPackage ../development/python-modules/libevdev { };
