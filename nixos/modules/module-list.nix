@@ -686,6 +686,7 @@
   ./services/misc/readarr.nix
   ./services/misc/redmine.nix
   ./services/misc/redpanda.nix
+  ./services/misc/redpanda-console.nix
   ./services/misc/ripple-data-api.nix
   ./services/misc/rippled.nix
   ./services/misc/rmfakecloud.nix

@@ -667,6 +667,7 @@ in
       localtimed = 325;
       automatic-timezoned = 326;
       # redpanda = 327; # TODO: Do we need this?
+      # redpanda-console = 328; # TODO: Do we need this?
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
