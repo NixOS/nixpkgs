@@ -196,6 +196,8 @@ let
 
     class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
 
+    cmarkit = callPackage ../development/ocaml-modules/cmarkit { };
+
     # The 1.1.0 release broke a lot of packages and is not compatible with
     # OCaml < 4.08.
     cmdliner =
@@ -1107,10 +1109,7 @@ let
 
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
-    ocaml_expat =
-      if lib.versionAtLeast ocaml.version "4.02"
-        then callPackage ../development/ocaml-modules/expat { }
-        else callPackage ../development/ocaml-modules/expat/0.9.nix { };
+    ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
     ocaml-freestanding = callPackage ../development/ocaml-modules/ocaml-freestanding { };
 

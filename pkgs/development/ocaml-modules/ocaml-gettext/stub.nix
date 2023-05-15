@@ -1,4 +1,4 @@
-{ buildDunePackage, ocaml_gettext, dune-configurator, ounit }:
+{ lib, buildDunePackage, ocaml, ocaml_gettext, dune-configurator, ounit }:
 
 buildDunePackage rec {
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ocaml_gettext ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   checkInputs = [ ounit ];
 

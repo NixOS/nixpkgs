@@ -17,11 +17,12 @@ and optionally supports
 
 For the database, you can set
 [`services.nextcloud.config.dbtype`](#opt-services.nextcloud.config.dbtype) to
-either `sqlite` (the default), `mysql`, or `pgsql`. For the last two, by
-default, a local database will be created and nextcloud will connect to it via
-socket; this can be disabled by setting
+either `sqlite` (the default), `mysql`, or `pgsql`. The simplest is `sqlite`,
+which will be automatically created and managed by the application. For the
+last two, you can easily create a local database by setting
 [`services.nextcloud.database.createLocally`](#opt-services.nextcloud.database.createLocally)
-to `false`.
+to `true`, Nextcloud will automatically be configured to connect to it through
+socket.
 
 A very basic configuration may look like this:
 ```
@@ -30,6 +31,7 @@ A very basic configuration may look like this:
   services.nextcloud = {
     enable = true;
     hostName = "nextcloud.tld";
+    database.createLocally = true;
     config = {
       dbtype = "pgsql";
       adminpassFile = "/path/to/admin-pass-file";

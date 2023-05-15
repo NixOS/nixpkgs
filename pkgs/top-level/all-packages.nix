@@ -1445,6 +1445,8 @@ with pkgs;
 
   albert = libsForQt5.callPackage ../applications/misc/albert { };
 
+  alice-lg = callPackage ../servers/alice-lg{ };
+
   alice-tools = callPackage ../tools/games/alice-tools {
     withGUI = false;
   };
@@ -11915,6 +11917,8 @@ with pkgs;
   rset = callPackage ../tools/admin/rset { };
 
   rshijack = callPackage ../tools/networking/rshijack { };
+
+  rshim-user-space = callPackage ../tools/misc/rshim-user-space { };
 
   rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
 
@@ -25065,6 +25069,8 @@ with pkgs;
 
   bird-lg = callPackage ../servers/bird-lg { };
 
+  birdwatcher = callPackage ../servers/birdwatcher { };
+
   bloat = callPackage ../servers/bloat { };
 
   bosun = callPackage ../servers/monitoring/bosun { };
@@ -29033,6 +29039,8 @@ with pkgs;
   pdfstudioviewer = callPackage ../applications/misc/pdfstudio {
     program = "pdfstudioviewer";
   };
+
+  abaddon = callPackage ../applications/networking/instant-messengers/abaddon { };
 
   aeolus = callPackage ../applications/audio/aeolus { };
   aeolus-stops = callPackage ../applications/audio/aeolus/stops.nix { };

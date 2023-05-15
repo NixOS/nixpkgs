@@ -317,7 +317,7 @@ in {
 
       createLocally = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = lib.mdDoc ''
           Create the database and database user locally.
         '';
@@ -754,9 +754,8 @@ in {
     { assertions = [
       { assertion = cfg.database.createLocally -> cfg.config.dbpassFile == null;
         message = ''
-          Using `services.nextcloud.database.createLocally` (that now defaults
-          to true) with database password authentication is no longer
-          supported.
+          Using `services.nextcloud.database.createLocally` with database
+          password authentication is no longer supported.
 
           If you use an external database (or want to use password auth for any
           other reason), set `services.nextcloud.database.createLocally` to
