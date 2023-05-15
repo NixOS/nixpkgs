@@ -17,6 +17,10 @@ buildPythonPackage rec {
     sha256 = "0c00730c74263a94e5a9919ade150dfc3b19c574389985446148402998287dae";
   };
 
+  patches = [
+    ./CVE-2023-30608.patch
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   checkInputs = [ pytestCheckHook ];
