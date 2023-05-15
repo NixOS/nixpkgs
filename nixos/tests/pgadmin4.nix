@@ -43,7 +43,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       machine.wait_for_unit("pgadmin")
       machine.wait_until_succeeds("curl -sS localhost:5051")
       machine.wait_until_succeeds("curl -sS localhost:5051/login | grep \"<title>pgAdmin 4</title>\" > /dev/null")
-      # check for missing support files (css, js etc). Should catch not-generated files during build. See e.g. Pull #229184
+      # check for missing support files (css, js etc). Should catch not-generated files during build. See e.g. https://github.com/NixOS/nixpkgs/pull/229184
       machine.succeed("wget -nv --level=1 --spider --recursive localhost:5051/login")
 
     # pgadmin4 module saves the configuration to /etc/pgadmin/config_system.py
