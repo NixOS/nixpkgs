@@ -11,6 +11,10 @@
 , makeWrapper
 , python3
 , extraPythonPackages ? ps: with ps; []
+
+# Allow overriding the Python and R used by Quarto
+, QUARTO_PYTHON ? "${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3"
+, QUARTO_R ? "${rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }}/bin/R"
 }:
 
 stdenv.mkDerivation rec {
@@ -44,8 +48,8 @@ stdenv.mkDerivation rec {
       --prefix QUARTO_PANDOC : ${pandoc}/bin/pandoc \
       --prefix QUARTO_ESBUILD : ${esbuild}/bin/esbuild \
       --prefix QUARTO_DART_SASS : ${nodePackages.sass}/bin/sass \
-      --prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }}/bin/R \
-      --prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3
+      --prefix QUARTO_R : ${lib.escapeShellArg QUARTO_R} \
+      --prefix QUARTO_PYTHON : ${lib.escapeShellArg QUARTO_PYTHON}
   '';
 
   installPhase = ''
@@ -58,7 +62,7 @@ stdenv.mkDerivation rec {
       mv bin/* $out/bin
       mv share/* $out/share
 
-      runHook preInstall
+      runHook postInstall
   '';
 
   meta = with lib; {
