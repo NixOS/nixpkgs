@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , makeWrapper
 , pkg-config
@@ -9,15 +10,17 @@
 , readline
 , which
 , musl-fts
-# options
+  # options
 , conf ? null
 , withIcons ? false
 , withNerdIcons ? false
+, withEmojis ? false
 }:
 
 # Mutually exclusive options
-assert withIcons -> withNerdIcons == false;
-assert withNerdIcons -> withIcons == false;
+assert withIcons -> (withNerdIcons == false && withEmojis == false);
+assert withNerdIcons -> (withIcons == false && withEmojis == false);
+assert withEmojis -> (withIcons == false && withNerdIcons == false);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nnn";
@@ -30,6 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QbKW2wjhUNej3zoX18LdeUHqjNLYhEKyvPH2MXzp/iQ=";
   };
 
+  patches = [
+    # FIXME: remove for next release
+    (fetchpatch {
+      url = "https://github.com/jarun/nnn/commit/20e944f5e597239ed491c213a634eef3d5be735e.patch";
+      hash = "sha256-RxG3AU8i3lRPCjRVZPnej4m1No/SKtsHwbghj9JQ7RQ=";
+    })
+  ];
+
   configFile = lib.optionalString (conf != null) (builtins.toFile "nnn.h" conf);
   preBuild = lib.optionalString (conf != null) "cp ${finalAttrs.configFile} src/nnn.h";
 
@@ -41,9 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ]
     ++ lib.optionals withIcons [ "O_ICONS=1" ]
-    ++ lib.optionals withNerdIcons [ "O_NERD=1" ];
+    ++ lib.optionals withNerdIcons [ "O_NERD=1" ]
+    ++ lib.optionals withEmojis [ "O_EMOJI=1" ];
 
   binPath = lib.makeBinPath [ file which ];
+
+  installTargets = [ "install" "install-desktop" ];
 
   postInstall = ''
     installShellCompletion --bash --name nnn.bash misc/auto-completion/bash/nnn-completion.bash

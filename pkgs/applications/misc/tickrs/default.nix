@@ -1,4 +1,12 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, perl, Security }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, zlib
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tickrs";
@@ -13,9 +21,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-fOYxOiVpgflwIz9Z6ePhQKDa7DX4D/ZCnPOwq9vWOSk=";
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [
+    openssl
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   meta = with lib; {
     description = "Realtime ticker data in your terminal";

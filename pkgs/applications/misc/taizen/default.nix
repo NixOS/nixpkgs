@@ -1,25 +1,46 @@
-{ rustPlatform, lib, fetchFromGitHub, ncurses, openssl, pkg-config, Security, stdenv }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, ncurses
+, openssl
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "taizen";
-  version = "0.1.0";
+  version = "unstable-2020-05-02";
 
   src = fetchFromGitHub {
     owner = "NerdyPepper";
     repo = pname;
-    rev = "5c1876429e2da7424e9d31b1e16f5a3147cc58d0";
-    sha256 = "09izgx7icvizskdy9kplk0am61p7550fsd0v42zcihq2vap2j92z";
+    rev = "5e88a55abaa2bf4356aa5bc783c2957e59c63216";
+    sha256 = "sha256-cMykIh5EDGYZMJ5EPTU6G8YDXxfUzzfRfEICWmDUdrA=";
   };
 
-  buildInputs = [ ncurses openssl ] ++ lib.optional stdenv.isDarwin Security;
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
+
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "1yqy5v02a4qshgb7k8rnn408k3n6qx3jc8zziwvv7im61n9sjynf";
+  buildInputs = [
+    ncurses
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  # update Cargo.lock to work with openssl 3
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   meta = with lib; {
-    homepage = "https://crates.io/crates/taizen";
-    license = licenses.mit;
     description = "curses based mediawiki browser";
-    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/nerdypepper/taizen";
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
   };
 }

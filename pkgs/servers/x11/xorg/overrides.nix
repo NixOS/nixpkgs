@@ -1,6 +1,6 @@
 { abiCompat ? null,
   callPackage,
-  lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages, substitute,
+  lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
   automake, autoconf, libiconv, libtool, intltool,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
@@ -771,11 +771,13 @@ self: super:
             name = "revert-fb-changes-2.patch";
           })
           ./darwin/bundle_main.patch
-          (substitute {
-            src = ./darwin/stub.patch;
-            replacements = ["--subst-var-by" "XQUARTZ_APP" "${placeholder "out"}/Applications/XQuartz.app"];
-          })
+          ./darwin/stub.patch
         ];
+
+        postPatch = attrs.postPatch + ''
+          substituteInPlace hw/xquartz/mach-startup/stub.c \
+            --subst-var-by XQUARTZ_APP "$out/Applications/XQuartz.app"
+        '';
 
         configureFlags = [
           # note: --enable-xquartz is auto

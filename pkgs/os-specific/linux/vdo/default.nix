@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vdo";
-  version = "8.2.0.2";  # kvdo uses this!
+  version = "8.2.0.2";  # bump this version with kvdo
 
   src = fetchFromGitHub {
     owner = "dm-vdo";

@@ -21,6 +21,7 @@
 , nativeBuildInputs ? [ ]
 , preUnpack ? ""
 , postFixup ? ""
+, extraWrapProgramArgs ? ""
 , ...
 }@args:
 let
@@ -121,7 +122,8 @@ let
       # which is not what application authors expect.
       for f in "$out"/bin/*; do
         wrapProgram "$f" \
-          --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath finalAttrs.runtimeDependencies}'
+          --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath finalAttrs.runtimeDependencies}' \
+          ${extraWrapProgramArgs}
       done
 
       ${postFixup}

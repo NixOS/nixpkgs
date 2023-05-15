@@ -90,12 +90,19 @@ let
   });
 
 in rustPlatform.buildRustPackage (commonDerivationAttrs // {
+
+  cargoBuildFlags = [ "-p" "lldap" "-p" "migration-tool" "-p" "lldap_set_password" ];
+
   patches = [
     ./static-frontend-path.patch
   ];
 
   postPatch = commonDerivationAttrs.postPatch + ''
     substituteInPlace server/src/infra/tcp_server.rs --subst-var-by frontend '${frontend}'
+  '';
+
+  postInstall = ''
+    mv $out/bin/migration-tool $out/bin/lldap_migration_tool
   '';
 
   passthru = {

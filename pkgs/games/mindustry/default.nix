@@ -15,6 +15,7 @@
 , alsa-lib
 , alsa-plugins
 , glew
+, glew-egl
 
 # for soloud
 , libpulseaudio ? null
@@ -30,12 +31,16 @@
 , makeBuildVersion ? (v: v)
 , enableClient ? true
 , enableServer ? true
+
+, enableWayland ? false
 }:
 
 let
   pname = "mindustry";
   version = "143.1";
   buildVersion = makeBuildVersion version;
+
+  selectedGlew = if enableWayland then glew-egl else glew;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
@@ -139,7 +144,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals enableClient [
     SDL2
-    glew
+    selectedGlew
     alsa-lib
   ];
   nativeBuildInputs = [
@@ -171,7 +176,7 @@ stdenv.mkDerivation rec {
     pushd ../Arc
     gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
     gradle --offline --no-daemon jnigenJarNativesDesktop -Pbuildversion=${buildVersion}
-    glewlib=${lib.getLib glew}/lib/libGLEW.so
+    glewlib=${lib.getLib selectedGlew}/lib/libGLEW.so
     sdllib=${lib.getLib SDL2}/lib/libSDL2.so
     patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
       --add-needed $glewlib \
@@ -194,7 +199,10 @@ stdenv.mkDerivation rec {
     makeWrapper ${jdk}/bin/java $out/bin/mindustry \
       --add-flags "-jar $out/share/mindustry.jar" \
       --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
-      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/
+      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + optionalString enableWayland '' \
+      --set SDL_VIDEODRIVER wayland \
+      --set SDL_VIDEO_WAYLAND_WMCLASS Mindustry
+    '' + ''
 
     # Retain runtime depends to prevent them from being cleaned up.
     # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
@@ -202,7 +210,7 @@ stdenv.mkDerivation rec {
     # This can cause issues.
     # See https://github.com/NixOS/nixpkgs/issues/109798.
     echo "# Retained runtime dependencies: " >> $out/bin/mindustry
-    for dep in ${SDL2.out} ${alsa-lib.out} ${glew.out}; do
+    for dep in ${SDL2.out} ${alsa-lib.out} ${selectedGlew.out}; do
       echo "# $dep" >> $out/bin/mindustry
     done
 
