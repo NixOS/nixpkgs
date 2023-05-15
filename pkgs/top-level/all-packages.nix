@@ -19263,6 +19263,8 @@ with pkgs;
 
   tideways-daemon = callPackage ../development/tools/misc/tideways/daemon.nix { };
 
+  tideways-cli = callPackage ../development/tools/misc/tideways/cli.nix { };
+
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
