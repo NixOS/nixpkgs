@@ -2934,6 +2934,8 @@ with pkgs;
 
   awscli2 = callPackage ../tools/admin/awscli2 { };
 
+  okta-aws-cli = callPackage ../tools/admin/okta-aws-cli { };
+
   awsebcli = callPackage ../tools/virtualization/awsebcli { };
 
   awslimitchecker = callPackage ../tools/admin/awslimitchecker { };
