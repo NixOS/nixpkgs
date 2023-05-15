@@ -1,35 +1,63 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest
+{ lib
+, buildPythonPackage
+, fetchPypi
 , pytest-xdist
-, six }:
+, pytestCheckHook
+, pythonOlder
+, six
+}:
 
 buildPythonPackage rec {
-  pname = "lazy_import";
+  pname = "lazy-import";
   version = "0.2.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0gca9xj60qr3aprj9qdc66crr4r7hl8wzv6gc9y40nclazwawj91";
+    pname = "lazy_import";
+    inherit version;
+    hash = "sha256-IUmu+FeUWUB8Ys/szxGFJ5OcmTGs4STzVSNjYGRPij0=";
   };
-
-  nativeCheckInputs = [
-    pytest
-    pytest-xdist
-  ];
 
   propagatedBuildInputs = [
     six
   ];
 
-  checkPhase = ''
-    cd lazy_import
-    pytest --boxed
-  '';
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "lazy_import"
+  ];
+
+  disabledTests = [
+    # Disable obsolete test parts (--boxed was replace by --forked)
+    "distutils"
+    "sched-errors12-fn1-lazy_callable"
+    "sched-errors13-fn1-lazy_callable"
+    "sched-errors14-fn1-lazy_callable"
+    "sched-errors15-fn1-lazy_callable"
+    "sched-errors16-fn1-lazy_callable"
+    "sched-errors17-fn1-lazy_callable"
+    "sched-errors18-cnames18-lazy_callable"
+    "sched-errors19-cnames19-lazy_callable"
+    "sched-errors20-cnames20-lazy_callable"
+    "sched-errors21-cnames21-lazy_callable"
+    "sched-errors22-cnames22-lazy_callable"
+    "sched-errors23-cnames23-lazy_callable"
+    "sched-None-cnames6-lazy_callable"
+    "sched-None-fn1-lazy_callable1"
+    "test_callable_missing"
+  ];
 
   meta = with lib; {
-    description = "lazy_import provides a set of functions that load modules, and related attributes, in a lazy fashion.";
+    description = "Module that load modules, and related attributes, in a lazy fashion";
     homepage = "https://github.com/mnmelo/lazy_import";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.marenz ];
+    changelog = "https://github.com/mnmelo/lazy_import/blob/v${version}/CHANGELOG";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ marenz ];
   };
 }
