@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "slimtoolkit";
     repo = "slim";
     rev = version;
-    hash = "sha256-pRIfIgEM0olUi0LL8maB7vczcq4p67eDuWssoeOT4Tk=";
+    hash = "sha256-byB7GTw0hHY4dp3CkMCl6ga/Zn82+K6qmyWy6ezCLoE=";
   };
 
   vendorHash = null;
