@@ -20,8 +20,6 @@ if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
-
-# Optionally filter out paths not refering to the store.
 expandResponseParams "$@"
 
 # NIX_LINK_TYPE is set if ld has been called through our cc wrapper. We take
@@ -33,6 +31,7 @@ else
     linkType=$(checkLinkType "${params[@]}")
 fi
 
+# Optionally filter out paths not refering to the store.
 if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
         && ( -z "$NIX_IGNORE_LD_THROUGH_GCC_@suffixSalt@" || -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ) ]]; then
     rest=()
