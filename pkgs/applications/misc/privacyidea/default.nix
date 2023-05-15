@@ -242,5 +242,6 @@ python3'.pkgs.buildPythonPackage rec {
     license = licenses.agpl3Plus;
     homepage = "http://www.privacyidea.org";
     maintainers = with maintainers; [ globin ma27 ];
+    platforms = platforms.linux;
   };
 }
