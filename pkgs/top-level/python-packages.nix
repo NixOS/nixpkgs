@@ -5765,6 +5765,8 @@ self: super: with self; {
     inherit (pkgs) libvirt;
   };
 
+  libvmdk-python = callPackage ../development/python-modules/libvmdk-python { };
+
   libxml2 = (toPythonModule (pkgs.libxml2.override {
     pythonSupport = true;
     inherit python;
