@@ -292,6 +292,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     swoole = callPackage ../development/php-packages/swoole { };
 
+    tideways = pkgs.callPackage ../development/tools/misc/tideways/php-probe.nix { inherit php; };
+
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };

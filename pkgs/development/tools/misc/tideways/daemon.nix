@@ -3,11 +3,28 @@
 , fetchurl
 }:
 
-stdenvNoCC.mkDerivation rec {
-  pname = "tideways-daemon";
+let
   version = "1.8.28";
+  sources = {
+    "x86_64-linux" = fetchurl {
+      url = "https://s3-eu-west-1.amazonaws.com/tideways/daemon/${version}/tideways-daemon_linux_amd64-${version}.tar.gz";
+      hash = "sha256-t84FP09LqmZbaJF4Jbd9bzcXt2G9uhY/ITeV5F3TWCY=";
+    };
+    "aarch64-linux" = fetchurl {
+      url = "https://s3-eu-west-1.amazonaws.com/tideways/daemon/${version}/tideways-daemon_linux_aarch64-${version}.tar.gz";
+      hash = "sha256-gMn9wXg2s8lFkhgDbajbCDvlIDwB0Sz1PcS/KOIzE28=";
+    };
+    "aarch64-darwin" = fetchurl {
+      url = "https://s3-eu-west-1.amazonaws.com/tideways/daemon/${version}/tideways-daemon_macos_arm64-${version}.tar.gz";
+      hash = "sha256-p+WKdBG1K3apeXfSqnpd2yGj87MWVTd5oJoFTIZAGL8=";
+    };
+  };
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "tideways-daemon";
+  inherit version;
 
-  src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported platform for tideways-daemon: ${stdenvNoCC.hostPlatform.system}");
+  src = sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported platform for tideways-daemon: ${stdenvNoCC.hostPlatform.system}");
 
   installPhase = ''
     runHook preInstall
@@ -19,23 +36,6 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru = {
-    sources = {
-      "x86_64-linux" = fetchurl {
-        url = "https://s3-eu-west-1.amazonaws.com/tideways/daemon/${version}/tideways-daemon_linux_amd64-${version}.tar.gz";
-        hash = "sha256-t84FP09LqmZbaJF4Jbd9bzcXt2G9uhY/ITeV5F3TWCY=";
-      };
-      "aarch64-linux" = fetchurl {
-        url = "https://s3-eu-west-1.amazonaws.com/tideways/daemon/${version}/tideways-daemon_linux_aarch64-${version}.tar.gz";
-        hash = "sha256-gMn9wXg2s8lFkhgDbajbCDvlIDwB0Sz1PcS/KOIzE28=";
-      };
-      "aarch64-darwin" = fetchurl {
-        url = "https://s3-eu-west-1.amazonaws.com/tideways/daemon/${version}/tideways-daemon_macos_arm64-${version}.tar.gz";
-        hash = "sha256-p+WKdBG1K3apeXfSqnpd2yGj87MWVTd5oJoFTIZAGL8=";
-      };
-    };
-  };
-
   meta = with lib; {
     description = "Tideways Profiler daemon";
     homepage = "https://tideways.com/";
@@ -44,4 +44,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [ shyim ];
     platforms = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
   };
-}
+})
