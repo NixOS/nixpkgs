@@ -15503,6 +15503,11 @@ with pkgs;
   jdk19 = openjdk19;
   jdk19_headless = openjdk19_headless;
 
+  openjdk20 = javaPackages.compiler.openjdk20;
+  openjdk20_headless = javaPackages.compiler.openjdk20.headless;
+  jdk20 = openjdk20;
+  jdk20_headless = openjdk20_headless;
+
   /* default JDK */
   jdk = jdk19;
   jdk_headless = jdk19_headless;

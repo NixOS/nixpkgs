@@ -204,6 +204,13 @@ in {
         openjfx = openjfx19;
       };
 
+    openjdk20 = mkOpenjdkLinuxOnly
+      ../development/compilers/openjdk/20.nix
+      {
+        openjdk20-bootstrap = temurin-bin.jdk-20;
+        # openjfx = openjfx20;
+      };
+
     temurin-bin = recurseIntoAttrs (callPackage (
       if stdenv.isLinux
       then ../development/compilers/temurin-bin/jdk-linux.nix
