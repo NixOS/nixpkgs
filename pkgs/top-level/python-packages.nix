@@ -494,8 +494,6 @@ self: super: with self; {
 
   ansible-core = callPackage ../development/python-modules/ansible/core.nix { };
 
-  ansible-doctor = callPackage ../development/python-modules/ansible-doctor { };
-
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
   ansible-later = callPackage ../development/python-modules/ansible-later { };
