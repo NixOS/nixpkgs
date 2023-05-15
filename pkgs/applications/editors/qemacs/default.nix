@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qemacs";
-  version = "5.4.1c";
+  version = "6.1.1b";
 
   src = fetchFromGitHub {
     owner = "qemacs";
     repo = "qemacs";
-    rev = "216b3ff8b77ff138aec22045522d5601b7390e58";
-    hash = "sha256-ngVaZZdr/Ym9YswLqzUtDytC0K7L9mKgORopLghGH3k=";
+    rev = "06b3d373bbcc52b51ccb438bf3cab38a49492ff0";
+    hash = "sha256-Z4BbA8W3bYdw+cHgI24r55OP1Olr3GwKLlfRxjy45i8=";
   };
 
   postPatch = ''
