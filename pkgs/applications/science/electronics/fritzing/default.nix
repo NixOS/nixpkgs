@@ -82,4 +82,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ robberer muscaln ];
     platforms = platforms.linux;
   };
+  Program = "Fritzing";
 }
