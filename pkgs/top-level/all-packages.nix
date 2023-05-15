@@ -1612,6 +1612,10 @@ with pkgs;
 
   mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
 
+  networkd-notify = python3Packages.callPackage ../tools/networking/networkd-notify {
+    systemd = pkgs.systemd;
+  };
+
   nominatim = callPackage ../servers/nominatim { };
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
