@@ -1,7 +1,7 @@
 { lib, ocaml, buildDunePackage, fetchurl, seq, stdlib-shims, ncurses }:
 
-buildDunePackage (rec {
-  minimalOCamlVersion = "4.04";
+buildDunePackage rec {
+  minimalOCamlVersion = "4.08";
 
   pname = "ounit2";
   version = "2.2.6";
@@ -14,7 +14,6 @@ buildDunePackage (rec {
   propagatedBuildInputs = [ seq stdlib-shims ];
 
   doCheck = true;
-  checkInputs = lib.optional (lib.versionOlder ocaml.version "4.07") ncurses;
 
   meta = with lib; {
     homepage = "https://github.com/gildor478/ounit";
@@ -22,6 +21,4 @@ buildDunePackage (rec {
     license = licenses.mit;
     maintainers = with maintainers; [ sternenseemann ];
   };
-} // lib.optionalAttrs (!lib.versionAtLeast ocaml.version "4.08") {
-  duneVersion = "1";
-})
+}

@@ -167,10 +167,11 @@ in {
         ETCD_LISTEN_CLIENT_URLS = concatStringsSep "," cfg.listenClientUrls;
         ETCD_LISTEN_PEER_URLS = concatStringsSep "," cfg.listenPeerUrls;
         ETCD_INITIAL_ADVERTISE_PEER_URLS = concatStringsSep "," cfg.initialAdvertisePeerUrls;
+        ETCD_PEER_CLIENT_CERT_AUTH = toString cfg.peerClientCertAuth;
         ETCD_PEER_TRUSTED_CA_FILE = cfg.peerTrustedCaFile;
         ETCD_PEER_CERT_FILE = cfg.peerCertFile;
         ETCD_PEER_KEY_FILE = cfg.peerKeyFile;
-        ETCD_CLIENT_CERT_AUTH = toString cfg.peerClientCertAuth;
+        ETCD_CLIENT_CERT_AUTH = toString cfg.clientCertAuth;
         ETCD_TRUSTED_CA_FILE = cfg.trustedCaFile;
         ETCD_CERT_FILE = cfg.certFile;
         ETCD_KEY_FILE = cfg.keyFile;

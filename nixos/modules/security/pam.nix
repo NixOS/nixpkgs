@@ -460,6 +460,15 @@ let
         };
       };
 
+      zfs = mkOption {
+        default = config.security.pam.zfs.enable;
+        defaultText = literalExpression "config.security.pam.zfs.enable";
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable unlocking and mounting of encrypted ZFS home dataset at login.
+        '';
+      };
+
       text = mkOption {
         type = types.nullOr types.lines;
         description = lib.mdDoc "Contents of the PAM service file.";
@@ -570,7 +579,8 @@ let
               || cfg.googleAuthenticator.enable
               || cfg.gnupg.enable
               || cfg.failDelay.enable
-              || cfg.duoSecurity.enable))
+              || cfg.duoSecurity.enable
+              || cfg.zfs))
             (
               optionalString config.services.homed.enable ''
                 auth optional ${config.systemd.package}/lib/security/pam_systemd_home.so
@@ -583,6 +593,9 @@ let
               '' +
               optionalString config.security.pam.enableFscrypt ''
                 auth optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
+              '' +
+              optionalString cfg.zfs ''
+                auth optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes}
               '' +
               optionalString cfg.pamMount ''
                 auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
@@ -645,6 +658,9 @@ let
           optionalString config.security.pam.enableFscrypt ''
             password optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
           '' +
+          optionalString cfg.zfs ''
+            password optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes}
+          '' +
           optionalString cfg.pamMount ''
             password optional ${pkgs.pam_mount}/lib/security/pam_mount.so
           '' +
@@ -701,6 +717,10 @@ let
             # See also https://github.com/google/fscrypt/issues/95
             session [success=1 default=ignore] pam_succeed_if.so service = systemd-user
             session optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
+          '' +
+          optionalString cfg.zfs ''
+            session [success=1 default=ignore] pam_succeed_if.so service = systemd-user
+            session optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes} ${optionalString config.security.pam.zfs.noUnmount "nounmount"}
           '' +
           optionalString cfg.pamMount ''
             session optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
@@ -1219,6 +1239,34 @@ in
       };
     };
 
+    security.pam.zfs = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable unlocking and mounting of encrypted ZFS home dataset at login.
+        '';
+      };
+
+      homes = mkOption {
+        example = "rpool/home";
+        default = "rpool/home";
+        type = types.str;
+        description = lib.mdDoc ''
+          Prefix of home datasets. This value will be concatenated with
+          `"/" + <username>` in order to determine the home dataset to unlock.
+        '';
+      };
+
+      noUnmount = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Do not unmount home dataset on logout.
+        '';
+      };
+    };
+
     security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
     security.pam.enableFscrypt = mkEnableOption (lib.mdDoc ''
       Enables fscrypt to automatically unlock directories with the user's login password.
@@ -1253,6 +1301,12 @@ in
         assertion = config.users.motd == null || config.users.motdFile == null;
         message = ''
           Only one of users.motd and users.motdFile can be set.
+        '';
+      }
+      {
+        assertion = config.security.pam.zfs.enable -> (config.boot.zfs.enabled || config.boot.zfs.enableUnstable);
+        message = ''
+          `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled` or `boot.zfs.enableUnstable`).
         '';
       }
     ];
@@ -1395,7 +1449,10 @@ in
         mr ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so,
       '' +
       optionalString config.virtualisation.lxc.lxcfs.enable ''
-        mr ${pkgs.lxc}/lib/security/pam_cgfs.so
+        mr ${pkgs.lxc}/lib/security/pam_cgfs.so,
+      '' +
+      optionalString (isEnabled (cfg: cfg.zfs)) ''
+        mr ${config.boot.zfs.package}/lib/security/pam_zfs_key.so,
       '' +
       optionalString config.services.homed.enable ''
         mr ${config.systemd.package}/lib/security/pam_systemd_home.so

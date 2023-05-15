@@ -10470,8 +10470,6 @@ self: super: with self; {
 
   returns = callPackage ../development/python-modules/returns { };
 
-  retworkx = callPackage ../development/python-modules/retworkx { };
-
   rfc3339 = callPackage ../development/python-modules/rfc3339 { };
 
   rfc3339-validator = callPackage ../development/python-modules/rfc3339-validator { };
@@ -12995,6 +12993,8 @@ self: super: with self; {
   xcffib = callPackage ../development/python-modules/xcffib { };
 
   xdg = callPackage ../development/python-modules/xdg { };
+
+  xdg-base-dirs = callPackage ../development/python-modules/xdg-base-dirs { };
 
   xdis = callPackage ../development/python-modules/xdis { };
 

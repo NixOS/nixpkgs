@@ -204,6 +204,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  caossl = {
+    fullName = "Computer Associates Open Source Licence Version 1.0";
+    url = "http://jxplorer.org/licence.html";
+  };
+
   cal10 = {
     fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
     url = "https://opensource.org/licenses/CAL-1.0";
@@ -227,6 +232,12 @@ in mkLicense lset) ({
   cc-by-nc-nd-30 = {
     spdxId = "CC-BY-NC-ND-3.0";
     fullName = "Creative Commons Attribution Non Commercial No Derivative Works 3.0 Unported";
+    free = false;
+  };
+
+  cc-by-nc-nd-40 = {
+    spdxId = "CC-BY-NC-ND-4.0";
+    fullName = "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International";
     free = false;
   };
 

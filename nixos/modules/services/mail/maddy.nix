@@ -206,7 +206,7 @@ in {
           Server configuration, see
           [https://maddy.email](https://maddy.email) for
           more information. The default configuration of this module will setup
-          minimal maddy instance for mail transfer without TLS encryption.
+          minimal Maddy instance for mail transfer without TLS encryption.
 
           ::: {.note}
           This should not be used in a production environment.
@@ -216,13 +216,24 @@ in {
 
       tls = {
         loader = mkOption {
-          type = with types; nullOr (enum [ "file" "off" ]);
+          type = with types; nullOr (enum [ "off" "file" "acme" ]);
           default = "off";
           description = lib.mdDoc ''
             TLS certificates are obtained by modules called "certificate
-            loaders". Currently only the file loader is supported which reads
-            certificates from files specifying the options `keyPaths` and
-            `certPaths`.
+            loaders".
+
+            The `file` loader module reads certificates from files specified by
+            the `certificates` option.
+
+            Alternatively the `acme` module can be used to automatically obtain
+            certificates using the ACME protocol.
+
+            Module configuration is done via the `tls.extraConfig` option.
+
+            Secrets such as API keys or passwords should not be supplied in
+            plaintext. Instead the `secrets` option can be used to read secrets
+            at runtime as environment variables. Secrets can be referenced with
+            `{env:VAR}`.
           '';
         };
 
@@ -261,11 +272,13 @@ in {
         extraConfig = mkOption {
           type = with types; nullOr lines;
           description = lib.mdDoc ''
-            Arguments for the specific certificate loader. Note that Maddy uses
-            secure defaults for the TLS configuration so there is no need to
-            change anything in most cases.
-            See [upstream manual](https://maddy.email/reference/tls/) for
-            available options.
+            Arguments for the specified certificate loader.
+
+            In case the `tls` loader is set, the defaults are considered secure
+            and there is no need to change anything in most cases.
+            For available options see [upstream manual](https://maddy.email/reference/tls/).
+
+            For ACME configuration, see [following page](https://maddy.email/reference/tls-acme).
           '';
           default = "";
         };
@@ -321,20 +334,41 @@ in {
         });
       };
 
+      secrets = lib.mkOption {
+        type = lib.types.path;
+        description = lib.mdDoc ''
+          A file containing the various secrets. Should be in the format
+          expected by systemd's `EnvironmentFile` directory. Secrets can be
+          referenced in the format `{env:VAR}`.
+        '';
+      };
+
     };
   };
 
   config = mkIf cfg.enable {
 
-    assertions = [{
-      assertion = cfg.tls.loader == "file" -> cfg.tls.certificates != [];
-      message = ''
-        If maddy is configured to use TLS, tls.certificates with attribute sets
-        of certPath and keyPath must be provided.
-        Read more about obtaining TLS certificates here:
-        https://maddy.email/tutorials/setting-up/#tls-certificates
-      '';
-    }];
+    assertions = [
+      {
+        assertion = cfg.tls.loader == "file" -> cfg.tls.certificates != [];
+        message = ''
+          If Maddy is configured to use TLS, tls.certificates with attribute sets
+          of certPath and keyPath must be provided.
+          Read more about obtaining TLS certificates here:
+          https://maddy.email/tutorials/setting-up/#tls-certificates
+        '';
+      }
+      {
+        assertion = cfg.tls.loader == "acme" -> cfg.tls.extraConfig != "";
+        message = ''
+          If Maddy is configured to obtain TLS certificates using the ACME
+          loader, extra configuration options must be supplied via
+          tls.extraConfig option.
+          See upstream documentation for more details:
+          https://maddy.email/reference/tls-acme
+        '';
+      }
+    ];
 
     systemd = {
 
@@ -345,6 +379,7 @@ in {
             User = cfg.user;
             Group = cfg.group;
             StateDirectory = [ "maddy" ];
+            EnvironmentFile = lib.mkIf (cfg.secrets != null) "${cfg.secrets}";
           };
           restartTriggers = [ config.environment.etc."maddy/maddy.conf".source ];
           wantedBy = [ "multi-user.target" ];
@@ -391,6 +426,12 @@ in {
           ) cfg.tls.certificates)} ${optionalString (cfg.tls.extraConfig != "") ''
             { ${cfg.tls.extraConfig} }
           ''}
+        '' else if (cfg.tls.loader == "acme") then ''
+          tls {
+            loader acme {
+              ${cfg.tls.extraConfig}
+            }
+          }
         '' else if (cfg.tls.loader == "off") then ''
           tls off
         '' else ""}

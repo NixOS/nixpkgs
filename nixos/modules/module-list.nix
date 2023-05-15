@@ -249,6 +249,7 @@
   ./programs/thunar.nix
   ./programs/tmux.nix
   ./programs/traceroute.nix
+  ./programs/trippy.nix
   ./programs/tsm-client.nix
   ./programs/turbovnc.nix
   ./programs/udevil.nix
@@ -688,6 +689,7 @@
   ./services/misc/ripple-data-api.nix
   ./services/misc/rippled.nix
   ./services/misc/rmfakecloud.nix
+  ./services/misc/rshim.nix
   ./services/misc/safeeyes.nix
   ./services/misc/sdrplay.nix
   ./services/misc/serviio.nix
@@ -805,6 +807,7 @@
   ./services/network-filesystems/yandex-disk.nix
   ./services/networking/3proxy.nix
   ./services/networking/adguardhome.nix
+  ./services/networking/alice-lg.nix
   ./services/networking/amuled.nix
   ./services/networking/antennas.nix
   ./services/networking/aria2.nix
@@ -819,6 +822,7 @@
   ./services/networking/bind.nix
   ./services/networking/bird-lg.nix
   ./services/networking/bird.nix
+  ./services/networking/birdwatcher.nix
   ./services/networking/bitcoind.nix
   ./services/networking/bitlbee.nix
   ./services/networking/blockbook-frontend.nix
