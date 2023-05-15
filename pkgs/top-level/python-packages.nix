@@ -5702,6 +5702,8 @@ self: super: with self; {
 
   libmsiecf-python = callPackage ../development/python-modules/libmsiecf-python { };
 
+  libolecf-python = callPackage ../development/python-modules/libolecf-python { };
+
 
   libsixel = callPackage ../development/python-modules/libsixel {
     inherit (pkgs) libsixel;
