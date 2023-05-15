@@ -5644,6 +5644,8 @@ self: super: with self; {
     inherit (pkgs) lzfse;
   };
 
+  libmodi-python = callPackage ../development/python-modules/libmodi-python { };
+
   libmodulemd = lib.pipe pkgs.libmodulemd [
     toPythonModule
     (p:
