@@ -1,4 +1,4 @@
-{ lib, buildFHSUserEnv, callPackage, julia, fetchurl }:
+{ lib, buildFHSEnv, callPackage, julia, fetchurl }:
 
 # The function `withPackages` can be used to create a Julia environment
 # with a specified set of packages as shown by the following example
@@ -25,7 +25,7 @@ let juliaPackages = lib.recurseIntoAttrs
         extraPackages = juliaPackages.computeRequiredJuliaPackages nixPackages;
       };
 
-    julia-env =  buildFHSUserEnv {
+    julia-env =  buildFHSEnv {
       name = "julia";
 
       targetPkgs = pkgs: (with pkgs; [ julia ]);
