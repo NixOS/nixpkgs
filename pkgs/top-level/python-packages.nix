@@ -5638,6 +5638,8 @@ self: super: with self; {
 
   liblnk-python = callPackage ../development/python-modules/liblnk-python { };
 
+  libluksde-python = callPackage ../development/python-modules/libluksde-python { };
+
   liblzfse = callPackage ../development/python-modules/liblzfse {
     inherit (pkgs) lzfse;
   };
