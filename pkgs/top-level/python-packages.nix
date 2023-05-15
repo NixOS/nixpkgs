@@ -7804,6 +7804,8 @@ self: super: with self; {
 
   plaid-python = callPackage ../development/python-modules/plaid-python { };
 
+  plaso = callPackage ../development/python-modules/plaso { };
+
   plantuml = callPackage ../development/python-modules/plantuml { };
 
   plantuml-markdown = callPackage ../development/python-modules/plantuml-markdown {
