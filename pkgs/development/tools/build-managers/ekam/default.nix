@@ -46,6 +46,9 @@ stdenv.mkDerivation {
     mkdir $out
     cp -r bin $out
 
+    mkdir --parents $out/share/ekam
+    cp -r src/ekam/rules $out/share/ekam
+
     # Remove capnproto tools; there's a separate nix package for that.
     rm $out/bin/capnp*
     # Don't distribute ekam-bootstrap, which is not needed outside this build.
