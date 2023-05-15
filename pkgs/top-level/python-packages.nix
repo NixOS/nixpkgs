@@ -5612,6 +5612,8 @@ self: super: with self; {
 
   libfsntfs-python = callPackage ../development/python-modules/libfsntfs-python { };
 
+  libfsxfs-python = callPackage ../development/python-modules/libfsxfs-python { };
+
   libgpiod = toPythonModule (pkgs.libgpiod.override {
     enablePython = true;
     python3 = python;
