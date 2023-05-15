@@ -8120,6 +8120,8 @@ self: super: with self; {
 
   pxml = callPackage ../development/python-modules/pxml { };
 
+  pytsk3 = callPackage ../development/python-modules/pytsk3 { };
+
   py-air-control = callPackage ../development/python-modules/py-air-control { };
 
   py-air-control-exporter = callPackage ../development/python-modules/py-air-control-exporter { };
