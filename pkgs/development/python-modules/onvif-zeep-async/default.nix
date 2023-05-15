@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, ciso8601
 , fetchPypi
 , httpx
 , pythonOlder
@@ -8,17 +9,18 @@
 
 buildPythonPackage rec {
   pname = "onvif-zeep-async";
-  version = "3.1.3";
+  version = "3.1.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Lq8jYLEJKluRfsuRghkp7VPIcrHn3qaJTyid9O8lriA=";
+    hash = "sha256-ra/1qKKmuWWvJCrr1uTCU5Awv5+GShgDHlHw0igLc4c=";
   };
 
   propagatedBuildInputs = [
+    ciso8601
     httpx
     zeep
   ];
