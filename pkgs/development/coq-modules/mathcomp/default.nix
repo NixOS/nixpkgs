@@ -12,7 +12,7 @@
 
 { lib, ncurses, graphviz, lua, fetchzip,
   mkCoqDerivation, recurseIntoAttrs, withDoc ? false, single ? false,
-  coqPackages, coq, version ? null }@args:
+  coqPackages, coq, hierarchy-builder, version ? null }@args:
 with builtins // lib;
 let
   repo  = "math-comp";
@@ -20,6 +20,7 @@ let
   withDoc = single && (args.withDoc or false);
   defaultVersion = with versions; lib.switch coq.coq-version [
       { case = range "8.13" "8.17"; out = "1.16.0"; }
+      { case = range "8.16" "8.17"; out = "2.0.0"; }
       { case = range "8.14" "8.16"; out = "1.15.0"; }
       { case = range "8.11" "8.15"; out = "1.14.0"; }
       { case = range "8.11" "8.15"; out = "1.13.0"; }
@@ -32,6 +33,7 @@ let
       { case = range "8.5" "8.7";   out = "1.6.4";  }
     ] null;
   release = {
+    "2.0.0".sha256 = "sha256-dpOmrHYUXBBS9kmmz7puzufxlbNpIZofpcTvJFLG5DI=";
     "1.16.0".sha256 = "sha256-gXTKhRgSGeRBUnwdDezMsMKbOvxdffT+kViZ9e1gEz0=";
     "1.15.0".sha256 = "1bp0jxl35ms54s0mdqky15w9af03f3i0n06qk12k4gw1xzvwqv21";
     "1.14.0".sha256 = "07yamlp1c0g5nahkd2gpfhammcca74ga2s6qr7a3wm6y6j5pivk9";
@@ -113,11 +115,18 @@ let
          o.version != null && o.version != "dev" && versions.isLt "1.7" o.version)
       { preBuild = ""; buildPhase = ""; installPhase = "echo doing nothing"; }
     );
-    patched-derivation = patched-derivation1.overrideAttrs (o:
+    patched-derivation2 = patched-derivation1.overrideAttrs (o:
       optionalAttrs (versions.isLe "8.7" coq.coq-version ||
             (o.version != "dev" && versions.isLe "1.7" o.version))
       {
         installFlags = o.installFlags ++ [ "-f Makefile.coq" ];
+      }
+    );
+    patched-derivation = patched-derivation2.overrideAttrs (o:
+      optionalAttrs (o.version != null
+        && (o.version == "dev" || versions.isGe "2.0.0" o.version))
+      {
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ hierarchy-builder ];
       }
     );
     in patched-derivation;
