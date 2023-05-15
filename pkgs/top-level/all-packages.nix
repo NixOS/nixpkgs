@@ -192,6 +192,10 @@ with pkgs;
     meta.platforms = lib.platforms.linux;
   } ../build-support/setup-hooks/auto-patchelf.sh;
 
+  autoPatchelfHookWithLibGcc = autoPatchelfHook.overrideAttrs(previousAttrs: {
+    propagatedBuildInputs = (previousAttrs.propagatedBuildInputs or []) ++ [ (stdenv.cc.cc.libgcc or null) ];
+  });
+
   appflowy = callPackage ../applications/office/appflowy { };
 
   appimageTools = callPackage ../build-support/appimage { };
