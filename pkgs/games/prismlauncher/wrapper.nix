@@ -13,15 +13,16 @@
 , openal
 , jdk8
 , jdk17
-, jdks ? [ jdk17 jdk8 ]
 , gamemode
+
+, msaClientID ? null
 , gamemodeSupport ? true
+, jdks ? [ jdk17 jdk8 ]
 , additionalLibs ? [ ]
 }:
 let
   prismlauncherFinal = prismlauncher-unwrapped.override {
-    inherit gamemodeSupport;
-    inherit gamemode;
+    inherit msaClientID gamemodeSupport;
   };
 in
 symlinkJoin {
