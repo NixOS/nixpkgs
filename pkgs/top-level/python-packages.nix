@@ -2691,7 +2691,7 @@ self: super: with self; {
 
   django-hierarkey = callPackage ../development/python-modules/django-hierarkey { };
 
-  django_hijack_admin = callPackage ../development/python-modules/django-hijack-admin { };
+  django-hijack-admin = callPackage ../development/python-modules/django-hijack-admin { };
 
   django-hijack = callPackage ../development/python-modules/django-hijack { };
 

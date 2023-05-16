@@ -86,6 +86,7 @@ mapAliases ({
   django_extensions = django-extensions; # added 2022-01-09
   django_guardian = django-guardian; # added 2022-05-19
   django_hijack = django-hijack; # added 2023-05-16
+  django_hijack_admin = django-hijack-admin; # added 2023-05-16
   django_modelcluster = django-modelcluster; # added 2022-04-02
   django_reversion = django-reversion; # added 2022-06-18
   django_polymorphic = django-polymorphic; # added 2022-05-24
