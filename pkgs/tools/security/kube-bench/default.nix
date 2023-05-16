@@ -1,5 +1,8 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
+builtins.trace
+("warning: kube-bench is being retired in favour of trivy - "
++ "https://github.com/aquasecurity/kube-bench/discussions/1432")
 buildGoModule rec {
   pname = "kube-bench";
   version = "0.6.13";
