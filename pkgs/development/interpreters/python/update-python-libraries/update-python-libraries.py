@@ -347,18 +347,19 @@ FORMATS = {
     'flit'              :   'tar.gz'
 }
 
+
+FETCHER_RE = re.compile(f'src = (?:\\w+\\.)*({"|".join([re.escape(fetcher) for fetcher in FETCHERS.keys()])})')
+
+
 def _determine_fetcher(text):
-    # Count occurrences of fetchers.
-    nfetchers = sum(text.count('src = {}'.format(fetcher)) for fetcher in FETCHERS.keys())
+    # Find occurrences of fetchers.
+    found = FETCHER_RE.findall(text)
+    nfetchers = len(found)
     if nfetchers == 0:
         raise ValueError("no fetcher.")
     elif nfetchers > 1:
         raise ValueError("multiple fetchers.")
-    else:
-        # Then we check which fetcher to use.
-        for fetcher in FETCHERS.keys():
-            if 'src = {}'.format(fetcher) in text:
-                return fetcher
+    return found[0]
 
 
 def _determine_extension(text, fetcher):
