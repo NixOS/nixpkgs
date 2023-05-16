@@ -20976,7 +20976,7 @@ with pkgs;
     inherit (stdenv.targetPlatform) libc;
   in     if libc == "msvcrt" then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
     else if libc == "nblibc" then targetPackages.netbsdCross.headers or netbsdCross.headers
-    else if libc == "serenity" then targetPackages.serenitylibc.headers or serenitylibc.headers
+    else if libc == "serenity" then targetPackages.serenitylibcCross.headers or serenitylibcCross.headers
     else if libc == "libSystem" && stdenv.targetPlatform.isAarch64 then targetPackages.darwin.LibsystemCross or darwin.LibsystemCross
     else null;
 
@@ -20996,7 +20996,7 @@ with pkgs;
     else if name == "newlib-nano" then targetPackages.newlib-nanoCross or newlib-nanoCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
-    else if name == "serenity" then targetPackages.serenitylibc or serenitylibc
+    else if name == "serenity" then targetPackages.serenitylibcCross or serenitylibcCross
     else if name == "libSystem" then
       if stdenv.targetPlatform.useiOSPrebuilt
       then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
@@ -40879,7 +40879,8 @@ with pkgs;
     stdenv = crossLibcStdenv;
   };
 
-  serenitylibc = callPackage ../os-specific/serenity/libc.nix {
+  serenitylibc = callPackage ../os-specific/serenity/libc.nix { };
+  serenitylibcCross = callPackage ../os-specific/serenity/libc.nix {
     stdenv = crossLibcStdenv;
   };
 
