@@ -15,7 +15,7 @@
 , mes-libc
 }:
 let
-  inherit (callPackage ./common.nix { }) buildTinyccMes;
+  inherit (callPackage ./common.nix { }) buildTinyccMes recompileLibc;
 
   version = "unstable-2023-04-20";
   rev = "80114c4da6b17fbaabb399cc29f427e368309bc8";
@@ -39,50 +39,54 @@ let
     platforms = [ "i686-linux" ];
   };
 
-  tinycc-boot-mes = kaem.runCommand "tinycc-boot-mes-${version}" {} ''
-    catm config.h
-    ${mes}/bin/mes --no-auto-compile -e main ${mes}/bin/mescc.scm -- \
-      -S \
-      -o tcc.s \
-      -I . \
-      -D BOOTSTRAP=1 \
-      -I ${src} \
-      -D TCC_TARGET_I386=1 \
-      -D inline= \
-      -D CONFIG_TCCDIR=\"''${out}/lib\" \
-      -D CONFIG_SYSROOT=\"\" \
-      -D CONFIG_TCC_CRTPREFIX=\"''${out}/lib\" \
-      -D CONFIG_TCC_ELFINTERP=\"/mes/loader\" \
-      -D CONFIG_TCC_SYSINCLUDEPATHS=\"${mes-libc}/include\" \
-      -D TCC_LIBGCC=\"${mes-libc}/lib/x86-mes/libc.a\" \
-      -D CONFIG_TCC_LIBTCC1_MES=0 \
-      -D CONFIG_TCCBOOT=1 \
-      -D CONFIG_TCC_STATIC=1 \
-      -D CONFIG_USE_LIBGCC=1 \
-      -D TCC_MES_LIBC=1 \
-      -D TCC_VERSION=\"${version}\" \
-      -D ONE_SOURCE=1 \
-      ${src}/tcc.c
-    mkdir -p ''${out}/bin
-    ${mes}/bin/mes --no-auto-compile -e main ${mes}/bin/mescc.scm -- \
-      -l c+tcc \
-      -o ''${out}/bin/tcc \
-      tcc.s
+  pname = "tinycc-boot-mes";
 
-    ''${out}/bin/tcc -version
+  tinycc-boot-mes = rec {
+    compiler = kaem.runCommand "${pname}-${version}" {
+      passthru.tests.get-version = result: kaem.runCommand "${pname}-get-version-${version}" {} ''
+        ${result}/bin/tcc -version
+        mkdir ''${out}
+      '';
+    } ''
+      catm config.h
+      ${mes.compiler}/bin/mes --no-auto-compile -e main ${mes.srcPost.bin}/bin/mescc.scm -- \
+        -S \
+        -o tcc.s \
+        -I . \
+        -D BOOTSTRAP=1 \
+        -I ${src} \
+        -D TCC_TARGET_I386=1 \
+        -D inline= \
+        -D CONFIG_TCCDIR=\"\" \
+        -D CONFIG_SYSROOT=\"\" \
+        -D CONFIG_TCC_CRTPREFIX=\"{B}\" \
+        -D CONFIG_TCC_ELFINTERP=\"/mes/loader\" \
+        -D CONFIG_TCC_LIBPATHS=\"{B}\" \
+        -D CONFIG_TCC_SYSINCLUDEPATHS=\"${mes-libc}/include\" \
+        -D TCC_LIBGCC=\"${mes-libc}/lib/x86-mes/libc.a\" \
+        -D CONFIG_TCC_LIBTCC1_MES=0 \
+        -D CONFIG_TCCBOOT=1 \
+        -D CONFIG_TCC_STATIC=1 \
+        -D CONFIG_USE_LIBGCC=1 \
+        -D TCC_MES_LIBC=1 \
+        -D TCC_VERSION=\"${version}\" \
+        -D ONE_SOURCE=1 \
+        ${src}/tcc.c
+      mkdir -p ''${out}/bin
+      ${mes.compiler}/bin/mes --no-auto-compile -e main ${mes.srcPost.bin}/bin/mescc.scm -- \
+        -L ${mes.libs}/lib \
+        -l c+tcc \
+        -o ''${out}/bin/tcc \
+        tcc.s
+    '';
 
-    # Recompile libc: crt{1,n,i}, libtcc.a, libc.a, libgetopt.a
-    mkdir -p ''${out}/lib
-    ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o ''${out}/lib/crt1.o ${mes-libc}/lib/crt1.c
-    ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o ''${out}/lib/crtn.o ${mes-libc}/lib/crtn.c
-    ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o ''${out}/lib/crti.o ${mes-libc}/lib/crti.c
-    ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o libc.o ${mes-libc}/lib/libc.c
-    ''${out}/bin/tcc -ar cr ''${out}/lib/libc.a libc.o
-    ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o libtcc1.o ${mes-libc}/lib/libtcc1.c
-    ''${out}/bin/tcc -ar cr ''${out}/lib/libtcc1.a libtcc1.o
-    ''${out}/bin/tcc ${mes-libc.CFLAGS} -c -o libgetopt.o ${mes-libc}/lib/libgetopt.c
-    ''${out}/bin/tcc -ar cr ''${out}/lib/libgetopt.a libgetopt.o
-  '';
+    libs = recompileLibc {
+      inherit pname version;
+      tcc = compiler;
+      src = mes-libc;
+      libtccOptions = mes-libc.CFLAGS;
+    };
+  };
 
   # Bootstrap stage build flags obtained from
   # https://gitlab.com/janneke/tinycc/-/blob/80114c4da6b17fbaabb399cc29f427e368309bc8/boot.sh
