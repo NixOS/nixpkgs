@@ -1,30 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx }:
+{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, pkgsStatic, xorg, binaryen }:
 
-stdenv.mkDerivation rec {
+let
+  version = "weekly.2023.19";
+  # Required for bootstrap.
+  vc = fetchFromGitHub {
+    owner = "vlang";
+    repo = "vc";
+    rev = "f7c2b5f2a0738d0d236161c9de9f31dd0280ac86";
+    sha256 = "sha256-xU3TvyNgc0o4RCsHtoC6cZTNaue2yuAiolEOvP37TKA=";
+  };
+  # Required for vdoc.
+  markdown = fetchFromGitHub {
+    owner = "vlang";
+    repo = "markdown";
+    rev = "6e970bd0a7459ad7798588f1ace4aa46c5e789a2";
+    hash = "sha256-hFf7c8ZNMU1j7fgmDakuO7tBVr12Wq0dgQddJnkMajE=";
+  };
+in
+stdenv.mkDerivation {
   pname = "vlang";
-  version = "weekly.2022.20";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "1isbyfs98bdbm2qjf7q4bqbpsmdiqlavn3gznwr12bkvhnsf4j3x";
-  };
-
-  # Required for bootstrap.
-  vc = fetchFromGitHub {
-    owner = "vlang";
-    repo = "vc";
-    rev = "167f262866090493650f58832d62d910999dd5a4";
-    sha256 = "1xax8355qkrccjcmx24gcab88xnrqj15mhqy0bgp3v2rb1hw1n3a";
-  };
-
-  # Required for vdoc.
-  markdown = fetchFromGitHub {
-    owner = "vlang";
-    repo = "markdown";
-    rev = "bbbd324a361e404ce0682fc00666df3a7877b398";
-    sha256 = "0cawzizr3rjz81blpvxvxrcvcdai1adj66885ss390444qq1fnv7";
+    sha256 = "sha256-fHn1z2q3LmSycCOa1ii4DoHvbEW4uJt3Psq3/VuZNVQ=";
   };
 
   propagatedBuildInputs = [ glfw freetype openssl ]
@@ -34,17 +35,28 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "local=1"
-    "VC=${vc}"
   ];
+
+  env.VC = vc;
+  # libX11.dev and xorg.xorgproto are needed because of
+  # builder error: Header file <X11/Xlib.h>, needed for module `clipboard.x11` was not found. Please install a package with the X11 development headers, for example: `apt-get install libx11-dev`.
+  # libXau, libxcb, libXdmcp need to be static if you use static gcc otherwise
+  # /nix/store/xnk2z26fqy86xahiz3q797dzqx96sidk-glibc-2.37-8/lib/libc.so.6: undefined reference to `_rtld_glob al_ro@GLIBC_PRIVATE'
+  env.VFLAGS = "-cc ${pkgsStatic.gcc}/bin/gcc -no-retry-compilation -cflags -I${xorg.libX11.dev}/include -cflags -I${xorg.xorgproto}/include -ldflags -L${binaryen}/lib -ldflags -L${pkgsStatic.xorg.libX11}/lib -ldflags -L${pkgsStatic.xorg.libxcb}/lib -ldflags -lxcb -ldflags -L${pkgsStatic.xorg.libXau}/lib -ldflags -lXau -ldflags -L${pkgsStatic.xorg.libXdmcp}/lib -ldflags -lXdmcp";
 
   preBuild = ''
     export HOME=$(mktemp -d)
+    mkdir -p ./thirdparty/tcc/lib
+    # this step is not needed it's just to silence a warning
+    # we don't use tcc at all since it fails on a missing libatomic
+    ln -s ${pkgsStatic.tinycc}/bin/tcc ./thirdparty/tcc/tcc.exe
+    cp -r ${pkgsStatic.boehmgc}/lib/* ./thirdparty/tcc/lib
   '';
 
   # vcreate_test.v requires git, so we must remove it when building the tools.
   # vtest.v fails on Darwin, so let's just disable it for now.
   preInstall = ''
-    mv cmd/tools/vcreate_test.v $HOME/vcreate_test.v
+    mv cmd/tools/vcreate/vcreate_test.v $HOME/vcreate_test.v
   '' + lib.optionalString stdenv.isDarwin ''
     mv cmd/tools/vtest.v $HOME/vtest.v
   '';
