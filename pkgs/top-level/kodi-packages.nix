@@ -100,6 +100,8 @@ let self = rec {
 
   vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
 
+  visualization-starburst = callPackage ../applications/video/kodi/addons/visualization-starburst { };
+
   visualization-waveform = callPackage ../applications/video/kodi/addons/visualization-waveform { };
 
   youtube = callPackage ../applications/video/kodi/addons/youtube { };
