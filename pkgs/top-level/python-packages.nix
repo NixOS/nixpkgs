@@ -6397,6 +6397,8 @@ self: super: with self; {
 
   msal-extensions = callPackage ../development/python-modules/msal-extensions { };
 
+  mscerts = callPackage ../development/python-modules/mscerts { };
+
   msgpack = callPackage ../development/python-modules/msgpack { };
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
