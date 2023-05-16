@@ -6,7 +6,7 @@
 , fixDarwinDylibNames
 , genBytecode ? false
 , bqn-path ? null
-, mbqn-source ? null
+, mbqn-source
 , enableReplxx ? false
 , enableSingeli ? stdenv.hostPlatform.avx2Support
 , enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx)
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   dontConfigure = true;
+  doInstallCheck = true;
 
   postPatch = ''
     sed -i '/SHELL =.*/ d' makefile
@@ -100,6 +101,26 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # main test suite from mlochbaum/BQN
+    $out/bin/BQN ${mbqn-source}/test/this.bqn
+
+    # CBQN tests that do not require compiling with test-only flags
+    $out/bin/BQN test/cmp.bqn
+    $out/bin/BQN test/equal.bqn
+    $out/bin/BQN test/copy.bqn
+    $out/bin/BQN test/bit.bqn
+    $out/bin/BQN test/hash.bqn
+    $out/bin/BQN test/squeezeValid.bqn
+    $out/bin/BQN test/squeezeExact.bqn
+    $out/bin/BQN test/various.bqn
+    $out/bin/BQN test/random.bqn
+
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
@@ -108,4 +129,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-# TODO: test suite
