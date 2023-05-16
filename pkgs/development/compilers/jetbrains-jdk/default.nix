@@ -30,7 +30,7 @@
 openjdk17.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk-jcef";
   javaVersion = "17.0.6";
-  build = "829.5";
+  build = "829.9";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
@@ -43,7 +43,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash = "sha256-LTwmuoKKwkuel0a1qcYNnb0d3HBFoABvmqCcrsPyh2I=";
+    hash = "sha256-E0pk2dz+iLKuQqMvczWNwy9ifLO8YGKXlKt3MQgiRXo=";
   };
 
   BOOT_JDK = openjdk17-bootstrap.home;
