@@ -1843,6 +1843,8 @@ self: super: with self; {
 
   clip = callPackage ../development/python-modules/clip { };
 
+  clip-anytorch = callPackage ../development/python-modules/clip-anytorch { };
+
   cock = callPackage ../development/python-modules/cock { };
 
   click = callPackage ../development/python-modules/click { };
