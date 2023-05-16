@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
-  version = "0.12";
+  version = "0.13";
 
   outputs = [ "out" "devdoc" ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "hadess";
     repo = "power-profiles-daemon";
     rev = version;
-    sha256 = "sha256-2eMFPGVLwTBIlaB1zM3BzHrhydgBEm+kvx+VIZdUDPM=";
+    sha256 = "sha256-ErHy+shxZQ/aCryGhovmJ6KmAMt9OZeQGDbHIkC0vUE=";
   };
 
   nativeBuildInputs = [
