@@ -10463,6 +10463,8 @@ self: super: with self; {
 
   resampy = callPackage ../development/python-modules/resampy { };
 
+  resize-right = callPackage ../development/python-modules/resize-right { };
+
   resolvelib = callPackage ../development/python-modules/resolvelib { };
 
   responses = callPackage ../development/python-modules/responses { };
