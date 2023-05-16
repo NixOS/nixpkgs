@@ -8,7 +8,7 @@
 , pathlib
 , numpy
 , requests
-, scikitimage
+, scikit-image
 , six
 , pytestCheckHook
 , isPy27
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     packaging
     numpy
     requests
-    scikitimage
+    scikit-image
     six
     tifffile
   ] ++ lib.optionals isPy27 [ pathlib enum34 ];

@@ -29,7 +29,7 @@
 , pytest-xdist
 , pytestCheckHook
 , requests
-, scikitimage
+, scikit-image
 , scipy
 , six
 , tensorflow
@@ -96,7 +96,7 @@ buildPythonPackage rec {
     pydub
     pytest-xdist
     pytestCheckHook
-    scikitimage
+    scikit-image
     scipy
     tensorflow
     tifffile

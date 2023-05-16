@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libre-graph-api-cpp-qt-client";
-  version = "0.13.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "owncloud";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-gbrA8P+ukQAiF2czC2szw3fJv1qoPJyMQ72t7PqB5/s=";
+    hash = "sha256-wbdamPi2XSLWeprrYZtBUDH1A2gdp6/5geFZv+ZqSWk=";
   };
 
   sourceRoot = "source/client";

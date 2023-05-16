@@ -489,7 +489,7 @@ in
      "/share/postgresql"
     ];
 
-    system.extraDependencies = lib.optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) configFileCheck;
+    system.checks = lib.optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) configFileCheck;
 
     systemd.services.postgresql =
       { description = "PostgreSQL Server";
