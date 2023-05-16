@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, pkgsStatic, xorg, binaryen, darwin }:
+{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, boehmgc, xorg, binaryen, darwin }:
 
 let
   version = "weekly.2023.19";
@@ -33,8 +33,8 @@ let
     rev = "6e970bd0a7459ad7798588f1ace4aa46c5e789a2";
     hash = "sha256-hFf7c8ZNMU1j7fgmDakuO7tBVr12Wq0dgQddJnkMajE=";
   };
-  boehmgcStatic = pkgsStatic.boehmgc.override {
-    enableStatic = stdenv.isDarwin;
+  boehmgcStatic = boehmgc.override {
+    enableStatic = true;
   };
 in
 stdenv.mkDerivation {
@@ -60,25 +60,28 @@ stdenv.mkDerivation {
   ];
 
   env.VC = vc;
-  env.VFLAGS = if stdenv.isDarwin then
-    # on darwin we need to add a manual link to libgc
-    "-cc ${stdenv.cc}/bin/cc -no-retry-compilation -ldflags -L${boehmgcStatic}/lib -ldflags -lgc -ldflags -L${binaryen}/lib"
-  else
-    # libX11.dev and xorg.xorgproto are needed because of
-    # builder error: Header file <X11/Xlib.h>, needed for module `clipboard.x11` was not found. Please install a package with the X11 development headers, for example: `apt-get install libx11-dev`.
-    # libXau, libxcb, libXdmcp need to be static if you use static gcc otherwise
-    # /nix/store/xnk2z26fqy86xahiz3q797dzqx96sidk-glibc-2.37-8/lib/libc.so.6: undefined reference to `_rtld_glob al_ro@GLIBC_PRIVATE'
-    "-cc ${pkgsStatic.gcc}/bin/gcc -no-retry-compilation -cflags -I${xorg.libX11.dev}/include -cflags -I${xorg.xorgproto}/include -ldflags -L${binaryen}/lib -ldflags -L${pkgsStatic.xorg.libX11}/lib -ldflags -L${pkgsStatic.xorg.libxcb}/lib -ldflags -lxcb -ldflags -L${pkgsStatic.xorg.libXau}/lib -ldflags -lXau -ldflags -L${pkgsStatic.xorg.libXdmcp}/lib -ldflags -lXdmcp";
+  env.VFLAGS = toString ([
+    "-cc ${stdenv.cc}/bin/cc"
+    "-no-retry-compilation"
+    "-ldflags -L${binaryen}/lib"
+  ]
+  # builder error: Header file <X11/Xlib.h>, needed for module `clipboard.x11` was not found.
+  ++ lib.optionals stdenv.isLinux [
+    "-cflags -I${xorg.libX11.dev}/include"
+    "-cflags -I${xorg.xorgproto}/include"
+    "-ldflags -L${xorg.libX11}/lib"
+    "-ldflags -L${xorg.libxcb}/lib"
+    "-ldflags -lxcb"
+    "-ldflags -L${xorg.libXau}/lib"
+    "-ldflags -lXau"
+    "-ldflags -L${xorg.libXdmcp}/lib"
+    "-ldflags -lXdmcp"
+  ]);
 
   preBuild = ''
     export HOME=$(mktemp -d)
     mkdir -p ./thirdparty/tcc/lib
     cp -r ${boehmgcStatic}/lib/* ./thirdparty/tcc/lib
-  ''
-  # this step is not needed it's just to silence a warning
-  # we don't use tcc at all since it fails on a missing libatomic
-  + lib.optionalString stdenv.isLinux ''
-    ln -s ${pkgsStatic.tinycc}/bin/tcc ./thirdparty/tcc/tcc.exe
   '';
 
   # vcreate_test.v requires git, so we must remove it when building the tools.
