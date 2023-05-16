@@ -26,23 +26,18 @@ let
     , configureFlags
     }:
     let
-      owner = "OpenSmalltalk";
-      repo = "opensmalltalk-vm";
-      version = "202206021410";
-      commitHash = "c9fd36530d2c4030649e33020b7b91272a465e31";
-      srcHash = "sha256-QqElPiJuqD5svFjWrLz1zL0Tf+pHxQ2fPvkVRn2lyBI=";
-
       src = fetchFromGitHub {
-        inherit owner repo;
-        rev = version;
-        hash = srcHash;
+        owner = "OpenSmalltalk";
+        repo = "opensmalltalk-vm";
+        rev = "202206021410";
+        hash = "sha256-QqElPiJuqD5svFjWrLz1zL0Tf+pHxQ2fPvkVRn2lyBI=";
       };
     in
     stdenv.mkDerivation {
       pname =
         let vmNameNoDots = builtins.replaceStrings [ "." ] [ "-" ] vmName;
         in "opensmalltalk-vm-${platformDir}-${vmNameNoDots}";
-      inherit version;
+      version = src.rev;
 
       inherit src;
 
@@ -53,8 +48,8 @@ let
             substituteInPlace "$vmVersionFile" \
               --replace "\$Date\$" "\$Date: Thu Jan 1 00:00:00 1970 +0000 \$" \
               --replace "\$URL\$" "\$URL: ${src.url} \$" \
-              --replace "\$Rev\$" "\$Rev: ${version} \$" \
-              --replace "\$CommitHash\$" "\$CommitHash: ${builtins.substring 0 12 commitHash} \$"
+              --replace "\$Rev\$" "\$Rev: ${src.rev} \$" \
+              --replace "\$CommitHash\$" "\$CommitHash: 000000000000 \$"
           done
           patchShebangs --build ./building/${platformDir} scripts
           substituteInPlace ./platforms/unix/config/mkmf \
@@ -74,7 +69,7 @@ let
 
       configureScript = "../../../../platforms/unix/config/configure";
 
-      configureFlags = ["--with-scriptname=${scriptName}" ] ++ configureFlags;
+      configureFlags = [ "--with-scriptname=${scriptName}" ] ++ configureFlags;
 
       buildFlags = "all";
 
