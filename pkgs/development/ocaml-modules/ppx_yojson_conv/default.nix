@@ -6,17 +6,30 @@
   ppx_yojson_conv_lib,
   ppxlib,
 }:
+
+let params =
+  if lib.versionAtLeast ppx_js_style.version "0.16" then {
+    version = "0.16.0";
+    hash = "sha256-8KpAwG0DCw9v4RtDcb3Y/BYX+ggqsRlSWAQ0NIFaIhk=";
+    minimalOCamlVersion = "4.14";
+  } else {
+    version = "0.15.1";
+    hash = "sha256-lSOUSMVgsRiArEhFTKpAj2yFBPbtaIc/SxdPA+24xXs=";
+    minimalOCamlVersion = "4.08";
+  };
+
+in
+
 buildDunePackage rec {
   pname = "ppx_yojson_conv";
-  version = "0.15.1";
+  inherit (params) version minimalOCamlVersion;
   duneVersion = "3";
-  minimumOCamlVersion = "4.08.0";
 
   src = fetchFromGitHub {
     owner = "janestreet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lSOUSMVgsRiArEhFTKpAj2yFBPbtaIc/SxdPA+24xXs=";
+    inherit (params) hash;
   };
 
   propagatedBuildInputs = [

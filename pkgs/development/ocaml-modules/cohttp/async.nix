@@ -57,6 +57,17 @@ buildDunePackage {
     core
   ];
 
+  postPatch = if lib.versionOlder "0.16" async.version then ''
+    substituteInPlace "cohttp-async/src/body_raw.ml" --replace \
+      "Deferred.List.iter" 'Deferred.List.iter ~how:`Sequential'
+
+    substituteInPlace "cohttp-async/bin/cohttp_server_async.ml" --replace \
+      "Deferred.List.map" 'Deferred.List.map ~how:`Sequential'
+
+    substituteInPlace "cohttp-async/src/client.ml" --replace \
+      "Deferred.Queue.map" 'Deferred.Queue.map ~how:`Sequential'
+  '' else "";
+
   meta = cohttp.meta // {
     description = "CoHTTP implementation for the Async concurrency library";
   };
