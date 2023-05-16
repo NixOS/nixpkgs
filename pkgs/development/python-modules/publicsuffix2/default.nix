@@ -4,6 +4,8 @@ let
 in
 buildPythonPackage {
   pname = "publicsuffix2";
+  # tags have dashes, while the library version does not
+  # see https://github.com/nexB/python-publicsuffix2/issues/12
   version = lib.replaceStrings ["-"] [""] tagVersion;
 
   src = fetchFromGitHub {
