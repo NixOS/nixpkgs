@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , setuptools
 , setuptools-scm
@@ -34,6 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pegen"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/we-like-parsers/pegen/issues/89
+    "test_invalid_def_stmt"
   ];
 
   meta = with lib; {
