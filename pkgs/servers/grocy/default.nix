@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ma27 ];
     description = "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home";
     homepage = "https://grocy.info/";
+    broken = true; # Not compatible with PHP 8.1
   };
 }
