@@ -33424,7 +33424,7 @@ with pkgs;
 
   polar-bookshelf1 = callPackage ../applications/misc/polar-bookshelf1 { };
 
-  poezio = python3Packages.poezio;
+  poezio = callPackage ../applications/networking/instant-messengers/poezio { };
 
   pommed_light = callPackage ../os-specific/linux/pommed-light { };
 
