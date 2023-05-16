@@ -16,6 +16,8 @@ in
 mixRelease  {
   inherit pname version src elixir;
 
+  stripDebug = true;
+
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
