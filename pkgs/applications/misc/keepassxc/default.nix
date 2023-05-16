@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.7.4";
+  version = "2.7.5";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    sha256 = "sha256-amedKK9nplLVJTldeabN3/c+g/QesrdH+qx+rba2/4s=";
+    sha256 = "sha256-OBEjczUIkY3pQXJfsuNj9Bm2TIbVWEHqMSolQnSfvLE=";
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
