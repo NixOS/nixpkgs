@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "A set of functions that load modules, and related attributes, in a lazy fashion";
     homepage = "https://github.com/mnmelo/lazy_import";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.marenz ];
+    maintainers = [ ];
   };
 }
