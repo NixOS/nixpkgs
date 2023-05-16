@@ -1,6 +1,8 @@
 { lib, buildPythonPackage, fetchPypi
-, pytest
-, pytest-xdist
+, pytestCheckHook
+, pytest-forked
+, py
+, python
 , six }:
 
 buildPythonPackage rec {
@@ -13,18 +15,23 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytest
-    pytest-xdist
+    pytestCheckHook
+    pytest-forked
+    py
   ];
 
   propagatedBuildInputs = [
     six
   ];
 
-  checkPhase = ''
-    cd lazy_import
-    pytest --boxed
+  preCheck = ''
+    # avoid AttributeError: module 'py' has no attribute 'process'
+    export PYTHONPATH=${py}/${python.sitePackages}:$PYTHONPATH
   '';
+
+  pytestFlagsArray = [
+    "--forked"
+  ];
 
   meta = with lib; {
     description = "lazy_import provides a set of functions that load modules, and related attributes, in a lazy fashion.";
