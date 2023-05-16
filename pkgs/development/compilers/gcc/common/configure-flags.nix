@@ -223,19 +223,17 @@ let
 
     # Platform-specific flags
     ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
-    ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.
+    ++ lib.optional (targetPlatform.isNetBSD || targetPlatform.isSerenity) "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
       "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
       # On Illumos/Solaris GNU as is preferred
       "--with-gnu-as" "--without-gnu-ld"
     ]
-    ++ lib.optionals (targetPlatform.libc == "serenity") [
+    ++ lib.optionals (targetPlatform.isSerenity) [
       "--enable-initfini-array"
       "--enable-threads=posix"
       "--with-linker-hash-style=gnu"
       "--disable-nls"
-      # provided by libc
-      "--disable-libssp"
     ]
     ++ lib.optional (targetPlatform.libc == "musl")
       # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
