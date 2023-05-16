@@ -12095,6 +12095,8 @@ with pkgs;
 
   scriptaculous = callPackage ../development/libraries/scriptaculous { };
 
+  script-directory = callPackage ../tools/misc/script-directory { };
+
   scrot = callPackage ../tools/graphics/scrot { };
 
   scrypt = callPackage ../tools/security/scrypt { };
