@@ -10899,6 +10899,8 @@ with pkgs;
 
   ostree = callPackage ../tools/misc/ostree { };
 
+  ostree-rs-ext = callPackage ../tools/misc/ostree-rs-ext { };
+
   otel-cli = callPackage ../tools/misc/otel-cli { };
 
   otfcc = callPackage ../tools/misc/otfcc { };
