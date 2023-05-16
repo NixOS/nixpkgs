@@ -6,14 +6,20 @@
 
 python.pkgs.buildPythonApplication rec {
   pname = "fdroidserver";
-  version = "2.1.1";
+  version = "2.2.1";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
     rev = "refs/tags/${version}";
-    sha256 = "0qg4vxjcgm05dqk3kyj8lry9wh5bxy0qwz70fiyxb5bi1kwai9ss";
+    sha256 = "sha256-+Y1YTgELsX834WIrhx/NX34yLMHdkKM+YUNvnHPiC/s=";
   };
+
+  pythonRelaxDeps = [
+    "pyasn1"
+    "pyasn1-modules"
+  ];
 
   postPatch = ''
     substituteInPlace fdroidserver/common.py \
@@ -28,6 +34,10 @@ python.pkgs.buildPythonApplication rec {
     patchShebangs gradlew-fdroid
     install -m 0755 gradlew-fdroid $out/bin
   '';
+
+  nativeBuildInputs = with python.pkgs; [
+    pythonRelaxDepsHook
+  ];
 
   buildInputs = with python.pkgs; [
     babel
@@ -52,7 +62,12 @@ python.pkgs.buildPythonApplication rec {
     yamllint
   ];
 
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${lib.makeBinPath [ apksigner ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ apksigner ]}"
+  ];
 
   # no tests
   doCheck = false;
