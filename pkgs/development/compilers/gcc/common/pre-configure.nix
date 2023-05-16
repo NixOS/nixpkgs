@@ -77,8 +77,12 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 #  - If GCC allowed implicit declaration of symbols, it would not fail during
 #    compilation even if the configure scripts did not check header presence.
 #
-+ lib.optionalString (hostPlatform.isDarwin) ''
-  export ac_cv_func_aligned_alloc=no
++ lib.optionalString (buildPlatform.isDarwin) ''
+    export build_configargs=ac_cv_func_aligned_alloc=no
+'' + lib.optionalString (hostPlatform.isDarwin) ''
+    export host_configargs=ac_cv_func_aligned_alloc=no
+'' + lib.optionalString (targetPlatform.isDarwin) ''
+    export target_configargs=ac_cv_func_aligned_alloc=no
 ''
 
 # In order to properly install libgccjit on macOS Catalina, strip(1)
