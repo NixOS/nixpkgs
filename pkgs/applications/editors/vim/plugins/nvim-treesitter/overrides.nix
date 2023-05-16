@@ -41,10 +41,16 @@ let
       ];
     in
 
-    runCommand "nvim-treesitter-grammar-${name}" { } ''
-      mkdir -p $out/parser
-      ln -s ${grammar}/parser $out/parser/${name}.so
-    '';
+    runCommand "nvim-treesitter-grammar-${name}"
+      {
+        meta = {
+          platforms = lib.platforms.all;
+        } // grammar.meta;
+      }
+      ''
+        mkdir -p $out/parser
+        ln -s ${grammar}/parser $out/parser/${name}.so
+      '';
 
   allGrammars = lib.attrValues generatedDerivations;
 
