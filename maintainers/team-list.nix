@@ -522,6 +522,7 @@ with lib.maintainers; {
 
   mate = {
     members = [
+      bobby285271
       j03
       romildo
     ];
@@ -828,6 +829,7 @@ with lib.maintainers; {
 
   xfce = {
     members = [
+      bobby285271
       romildo
       muscaln
     ];
