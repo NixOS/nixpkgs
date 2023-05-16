@@ -8712,6 +8712,8 @@ self: super: with self; {
 
   pylsp-mypy = callPackage ../development/python-modules/pylsp-mypy { };
 
+  pylsp-rope = callPackage ../development/python-modules/pylsp-rope { };
+
   pylpsd = callPackage ../development/python-modules/pylpsd { };
 
   pylti = callPackage ../development/python-modules/pylti { };
