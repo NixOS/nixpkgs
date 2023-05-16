@@ -1,4 +1,4 @@
-{ lib, fetchFromSourcehut, rustPlatform }:
+{ lib, fetchFromSourcehut, rustPlatform, makeWrapper, withPulseaudio ? false, pulseaudio }:
 
 rustPlatform.buildRustPackage rec {
   pname = "swayrbar";
@@ -16,8 +16,15 @@ rustPlatform.buildRustPackage rec {
   # don't build swayr
   buildAndTestSubdir = pname;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   preCheck = ''
     export HOME=$TMPDIR
+  '';
+
+  postInstall = lib.optionals withPulseaudio ''
+    wrapProgram "$out/bin/swayrbar" \
+      --prefix PATH : "$out/bin:${lib.makeBinPath [ pulseaudio ]}"
   '';
 
   meta = with lib; {
